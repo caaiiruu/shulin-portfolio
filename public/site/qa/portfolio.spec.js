@@ -150,3 +150,19 @@ for (const width of [1440,900,430,320]) {
     await expect(invoker).toBeFocused();
   });
 }
+
+
+test('project overview never compresses prose into narrow vertical columns', async ({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.goto('/work.html');
+  await page.locator('[data-project="booking"]').first().click();
+  const signals=page.locator('.project-signals-v45 > div');
+  await expect(signals).toHaveCount(3);
+  for (const signal of await signals.all()) {
+    const box=await signal.locator('dd').boundingBox();
+    expect(box.width).toBeGreaterThanOrEqual(180);
+    const wrapping=await signal.locator('dd').evaluate(el=>({wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap}));
+    expect(wrapping.wordBreak).not.toBe('break-all');
+    expect(wrapping.overflowWrap).not.toBe('anywhere');
+  }
+});
