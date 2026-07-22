@@ -1,7 +1,7 @@
 /* ExperimentCard — sole production owner. */
 .experiment-index-card-v36{min-height:var(--experiment-card-min-block);padding:var(--card-padding)}
 .experiment-index-card-v36 .kicker{margin-top:var(--space-6)}
-.experiment-index-card-v36 h3{max-width:13ch;margin-top:var(--space-4);font-size:var(--experiment-card-title);line-height:1.08;overflow-wrap:anywhere;text-wrap:balance}
+.experiment-index-card-v36 h3{max-width:13ch;margin-top:var(--space-4);font-size:var(--experiment-card-title);line-height:1.08;overflow-wrap:normal;word-break:normal;text-wrap:balance}
 .experiment-index-card-v38__learning{margin-top:var(--space-5)}
 .experiment-index-card-v36__meta{padding-top:var(--space-5)}
 .experiment-learning-preview-v38 small{color:var(--color-text-secondary);opacity:1}
