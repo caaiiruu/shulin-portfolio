@@ -7,8 +7,8 @@
 .work-card-v32:not(.work-card-v32--featured) .work-card-v32__button{grid-template-rows:var(--project-card-media-block) minmax(0,1fr)}
 .work-card-v32:not(.work-card-v32--featured) .work-artifact{min-height:0;height:var(--project-card-media-block)}
 .work-card-v32__content{display:flex;flex-direction:column;min-width:0;padding:var(--project-card-content-padding);overflow:visible}
-.work-card-v32__content h2{max-width:18ch;font-size:var(--project-card-title);line-height:1.04;overflow-wrap:anywhere;text-wrap:balance}
-.work-card-signals-v44>div{display:grid;grid-template-columns:var(--project-card-meta-label) minmax(0,1fr);gap:var(--space-4);align-items:start}
+.work-card-v32__content h2{max-width:18ch;font-size:var(--project-card-title);line-height:1.04;overflow-wrap:normal;word-break:normal;text-wrap:balance}
+.work-card-signals-v44>div{display:grid;grid-template-columns:var(--project-card-meta-label) minmax(0,1fr);gap:var(--space-4);align-items:start}.work-card-signals-v44 dd{overflow-wrap:normal;word-break:normal}
 .work-card-v32__action,.related-project-card__action,.detail-related-action-v46{order:99;width:fit-content;margin-top:auto;padding-top:var(--space-5);border-top:1px solid var(--color-border);font-weight:700}
 .work-card-v32__button:hover .work-card-v32__action,.work-card-v32__button:focus-visible .work-card-v32__action{background:var(--color-action-bg-hover);color:var(--color-action-text-hover)}
 .related-project-card-v45,.detail-related-card-v45{min-height:320px;padding:var(--card-padding);grid-template-rows:auto minmax(3.2em,auto) 1fr auto}
