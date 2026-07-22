@@ -1,0 +1,32 @@
+/* HorizontalRail — sole production owner for rail containers and controls. */
+:root {
+  --rail-gap: 12px;
+  --rail-edge: 0px;
+  --rail-card-project: clamp(252px,28vw,336px);
+  --rail-card-experiment: clamp(292px,29vw,372px);
+  --rail-card-profile: clamp(244px,25vw,304px);
+}
+.rail-heading{display:flex;align-items:end;justify-content:space-between;gap:var(--space-5);min-width:0}
+.rail-controls{display:flex;flex:0 0 auto;gap:var(--space-2)}
+.rail-button{inline-size:var(--control-height);block-size:var(--control-height);display:grid;place-items:center;border:1px solid var(--color-border-strong);border-radius:50%;background:var(--color-surface);color:var(--color-text-primary);cursor:pointer;transition:background-color var(--motion-fast),border-color var(--motion-fast),transform var(--motion-fast),opacity var(--motion-fast)}
+.rail-button:hover:not(:disabled){border-color:var(--color-focus);background:var(--brand-100);transform:translateY(-2px)}
+.rail-button:active:not(:disabled){transform:translateY(0) scale(.96)}
+.rail-button:disabled{opacity:.38;cursor:default}
+.rail-button[hidden]{display:none}
+:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scroll-padding-inline:var(--rail-edge);scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-mask-image:none;mask-image:none}
+:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32)::-webkit-scrollbar{display:none}
+:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32)>*{min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45){display:grid;grid-auto-flow:column;grid-auto-columns:var(--rail-card-project);gap:var(--rail-gap);padding:var(--space-2) var(--rail-edge) var(--space-5)}
+:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45)>*:last-child{scroll-snap-align:end}
+.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32{display:flex;gap:var(--rail-gap)}
+.experiment-index-rail-v36{align-items:stretch;padding:var(--space-2) 0 var(--space-5)}
+.experiment-index-rail-v36>*{flex:0 0 var(--rail-card-experiment)}
+.profile-side-rail-v34{padding:var(--space-2) 0 var(--space-5)}
+.profile-side-rail-v34>*{flex:0 0 var(--rail-card-profile)}
+.playground-grid{margin-top:var(--space-7);padding:var(--space-2) 0 var(--space-5)}
+.playground-grid>*{flex:0 0 var(--rail-card-experiment)}
+.work-filter-v32{padding:var(--space-1) 0 var(--space-3)}
+.work-filter-v32>*{flex:0 0 auto}
+@media(max-width:900px){:root{--rail-card-project:min(78vw,320px);--rail-card-experiment:min(76vw,324px);--rail-card-profile:min(72vw,284px)}}
+@media(max-width:600px){.rail-heading{align-items:center}.rail-controls{gap:var(--space-1)}:root{--rail-card-project:min(80vw,300px);--rail-card-experiment:min(82vw,304px);--rail-card-profile:min(78vw,276px)}}
+@media(prefers-reduced-motion:reduce){:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){scroll-behavior:auto}}

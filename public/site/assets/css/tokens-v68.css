@@ -1,0 +1,62 @@
+/* V68 governance extension. New selectors consume semantic/component tokens only. */
+:root{
+  /* Semantic opacity and borders */
+  --sys-color-surface-glass:rgba(255,255,255,.96);
+  --sys-color-surface-soft-glass:rgba(255,255,255,.86);
+  --sys-color-surface-fade:rgba(255,255,255,0);
+  --sys-color-overlay-scrim:rgba(21,23,24,.72);
+  --sys-border-width-thin:1px;
+  --sys-leading-summary:1.5;
+
+  /* Recruitment reading rhythm */
+  --cmp-reading-card-measure:62ch;
+  --cmp-reading-signal-measure:34ch;
+  --cmp-summary-role-measure:72ch;
+  --cmp-content-heading-gap:var(--ref-space-4);
+  --cmp-content-section-gap:var(--ref-space-7);
+  --cmp-content-action-gap:var(--ref-space-6);
+
+  /* Dialog and evidence media */
+  --cmp-dialog-control-backdrop:linear-gradient(180deg,var(--sys-color-surface-glass) 0%,rgba(255,255,255,.92) 68%,var(--sys-color-surface-fade) 100%);
+  --cmp-decision-media-min-height:220px;
+  --cmp-decision-crop-min-height:150px;
+  --cmp-decision-crop-flow-width:132%;
+  --cmp-decision-crop-scale:1.12;
+  --cmp-decision-crop-shift-alt:-12%;
+  --cmp-decision-crop-shift-reverse:8%;
+
+  /* Recruiter-facing work hierarchy */
+  --cmp-work-feature-columns:7fr 5fr;
+  --cmp-work-support-columns:repeat(2,minmax(0,1fr));
+  --cmp-work-card-min-height:360px;
+  --cmp-work-card-compact-min-height:300px;
+
+  /* V69 interaction, section rhythm, and supporting-card contracts */
+  --cmp-focus-border-color:var(--sys-color-action-accent);
+  --cmp-section-eyebrow-gap:var(--ref-space-3);
+  --cmp-org-group-padding-block:var(--ref-space-5);
+  --cmp-org-group-padding-inline:var(--ref-space-6);
+  --cmp-org-list-gap:var(--ref-space-6);
+  --cmp-supporting-card-visual-height:126px;
+
+  /* V70 matcher state and related-work contracts */
+  --cmp-matcher-control-size:44px;
+  --cmp-matcher-result-clearance:132px;
+  --cmp-related-card-columns:clamp(280px,38vw,390px);
+  --cmp-related-card-mobile-column:min(84vw,320px);
+  --cmp-related-card-meta-label:84px;
+  --cmp-related-card-title-size:clamp(1.35rem,2vw,1.7rem);
+  --cmp-related-card-label-size:.68rem;
+  --cmp-related-card-copy-size:.84rem;
+}
+
+@media(max-width:900px){
+  :root{
+    --cmp-work-feature-columns:1fr;
+    --cmp-work-support-columns:1fr;
+    --cmp-work-card-min-height:auto;
+    --cmp-work-card-compact-min-height:auto;
+    --cmp-org-group-padding-block:var(--ref-space-4);
+    --cmp-org-group-padding-inline:var(--ref-space-4);
+  }
+}

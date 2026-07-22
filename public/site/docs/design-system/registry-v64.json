@@ -1,0 +1,19 @@
+{
+  "version": 64,
+  "extends": "registry-v63.json",
+  "tokens": {
+    "rail.gap.standard": "--rail-gap-standard",
+    "rail.card.columns": "--rail-card-columns",
+    "rail.card.size": "--rail-card-size",
+    "rail.block.start": "--rail-block-start",
+    "rail.block.end": "--rail-block-end",
+    "rail.scrollbar.size": "--rail-scrollbar-size",
+    "rail.scrollbar.track": "--rail-scrollbar-track",
+    "rail.scrollbar.thumb": "--rail-scrollbar-thumb"
+  },
+  "contracts": {
+    "horizontalRail": "The scrolling element is the sole clipping boundary. It has no mask, gradient, pseudo-overlay, negative inline margin, or partial-card affordance.",
+    "visibleCards": "Card rails show three complete cards on desktop, two on tablet, and one on compact viewports.",
+    "scrollAffordance": "Navigation arrows and a real scrollbar communicate additional content; partial cards do not."
+  }
+}

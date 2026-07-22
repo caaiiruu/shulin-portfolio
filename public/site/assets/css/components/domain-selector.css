@@ -1,0 +1,17 @@
+/* DomainSelector — sole owner of domain entry controls and compact floating navigation. */
+.domain-selectors{display:grid;gap:var(--space-2);align-content:start}
+.domain-tab{width:100%;min-height:var(--control-height);display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:var(--space-3);padding:13px var(--space-4);border:1px solid transparent;border-radius:14px;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:background var(--motion-fast),border-color var(--motion-fast),transform var(--motion-fast)}
+.domain-tab:hover{background:color-mix(in srgb,var(--color-surface) 10%,transparent)}
+.domain-tab:active{transform:scale(.99)}
+.domain-tab[aria-selected="true"]{border-color:var(--color-focus);background:var(--color-surface);color:var(--color-text-primary)}
+.domain-stage{min-width:0}
+.domain-mobile-picker-v42,.domain-chip-rail-v56{display:none}
+.domain-floating-nav-v52{position:fixed;z-index:80;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));width:min(calc(100vw - 24px),720px);padding:4px;transform:translate(-50%,calc(100% + 28px));opacity:0;visibility:hidden;pointer-events:none;border:1px solid var(--color-border);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--color-surface) 96%,transparent);box-shadow:var(--shadow-raised);backdrop-filter:blur(16px);transition:transform var(--motion-base) var(--ease-standard),opacity var(--motion-base) var(--ease-standard),visibility 0s linear var(--motion-base)}
+.domain-floating-nav-v52.is-visible{transform:translate(-50%,0);opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+.domain-floating-nav-v52__rail{display:flex;gap:var(--space-2);overflow-x:auto;padding:2px;scrollbar-width:none;scroll-padding-inline:2px}
+.domain-floating-nav-v52__rail::-webkit-scrollbar{display:none}
+.domain-floating-chip-v52{flex:0 0 auto;min-height:40px;padding:9px 14px;border:0;border-radius:var(--radius-pill);background:transparent;color:var(--color-text-secondary);font:inherit;font-size:var(--text-sm);font-weight:750;white-space:nowrap;cursor:pointer}
+.domain-floating-chip-v52[aria-pressed="true"]{background:var(--color-text-primary);color:var(--color-surface)}
+@media(max-width:900px){.domain-selectors{display:none}.domain-mobile-picker-v42,.domain-chip-rail-v56{display:block}.domain-stage{margin-top:var(--space-5)}}
+@media(min-width:901px){.domain-floating-nav-v52{display:none!important}}
+@media(prefers-reduced-motion:reduce){.domain-floating-nav-v52{transition:none}}

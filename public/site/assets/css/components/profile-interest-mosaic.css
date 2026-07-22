@@ -1,0 +1,7 @@
+/* ProfileInterestMosaic — sole owner of the authored interests composition. */
+.profile-interests-v39__head{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.55fr);gap:clamp(24px,4vw,60px);align-items:start}
+.profile-interests-v39__head h2{margin-top:var(--space-3);max-width:16ch}
+.profile-interests-v39__head>p{max-width:48ch;color:var(--color-text-secondary)}
+.interest-mosaic-v39{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(180px,.7fr) minmax(180px,.7fr);gap:var(--space-3);margin-top:var(--space-7)}
+@media(max-width:900px){.profile-interests-v39__head{grid-template-columns:1fr}.interest-mosaic-v39{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:var(--space-6)}.interest-mosaic-v39>.interest-tile-v39--drawing,.interest-mosaic-v39>.interest-tile-v39--music{grid-column:auto}}
+@media(max-width:560px){.interest-mosaic-v39{grid-template-columns:1fr}.interest-mosaic-v39>.interest-tile-v39{grid-column:auto}}

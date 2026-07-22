@@ -1,0 +1,66 @@
+/* v66 — dialog navigation, content rhythm, image policy, and ranked work hierarchy. */
+
+/* A close action is always a close action. Back is a separate navigation action. */
+.modal-close{
+  position:fixed!important;top:var(--cmp-dialog-control-offset)!important;right:var(--cmp-dialog-control-offset)!important;left:auto!important;
+  z-index:8!important;width:52px!important;height:52px!important;min-width:52px!important;padding:0!important;
+  display:grid!important;place-items:center!important;border:1px solid var(--sys-color-border)!important;
+  border-radius:var(--ref-radius-round)!important;background:rgba(255,255,255,.96)!important;
+  color:var(--sys-color-text-primary)!important;box-shadow:var(--sys-elevation-rest)!important
+}
+.modal-close:hover{background:var(--sys-color-surface-subtle)!important;border-color:var(--sys-color-border-strong)!important;box-shadow:var(--sys-elevation-hover)!important}
+.modal-close__icon{font-size:1.75rem!important;line-height:1!important;font-weight:var(--sys-weight-medium)!important}
+.modal-back-v66{
+  position:fixed;top:var(--cmp-dialog-control-offset);left:var(--cmp-dialog-control-offset);z-index:8;
+  min-height:52px;padding:0 var(--ref-space-5);display:inline-flex;align-items:center;gap:var(--ref-space-2);
+  border:1px solid var(--sys-color-border);border-radius:var(--ref-radius-round);background:rgba(255,255,255,.96);
+  color:var(--sys-color-text-primary);font-weight:var(--sys-weight-bold);box-shadow:var(--sys-elevation-rest)
+}
+.modal-back-v66:hover{background:var(--sys-color-surface-subtle);border-color:var(--sys-color-border-strong)}
+.modal-back-v66[hidden]{display:none!important}
+
+/* Metadata is a single aligned sentence; separator participates in the same line box. */
+.modal-head-meta-v60{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:0!important;min-height:24px}
+.modal-head-meta-v60 .kicker,.detail-period-v60{display:inline-flex!important;align-items:center!important;min-height:24px;line-height:1.25!important;margin:0!important}
+.detail-period-v60::before{display:inline-block;line-height:1;margin-inline:var(--ref-space-3)!important}
+.modal-head-v45 h2{margin-top:var(--sys-space-eyebrow-to-heading)!important}
+.modal-classification-v45{margin-top:var(--sys-space-body-to-action)!important}
+
+/* One concise contribution statement replaces duplicated role/scope information. */
+.project-signals-v45>div:first-child{grid-column:1/-1}
+.project-signals-v45>div:first-child dd{max-width:62ch}
+.detail-dialog:not(.is-experiment) .info-grid-v45{grid-template-columns:1fr!important}
+
+/* Section rhythm is token-owned across both static and JS-rendered content. */
+.section-heading-v45{margin-bottom:var(--cmp-section-heading-gap)!important}
+.section-heading-v45 h3+p{margin-top:var(--sys-space-heading-to-body)!important}
+.impact-grid-v45>article>h3+#crossImpact,
+.impact-grid-v45>article>h3+p,
+.delivery-grid-v45>article>h3+.recruiter-proof,
+.delivery-grid-v45>article>h3+p,
+.experiment-sequence-v45>article>h3+p{margin-top:var(--cmp-section-heading-gap)!important}
+#crossImpact,.recruiter-proof{align-items:stretch}
+.team-impact-item-v47 p,.recruiter-proof-item-v46 strong,.delivery-grid-v45 article>p{
+  color:var(--sys-color-text-secondary)!important;font-weight:var(--sys-weight-regular)!important;line-height:var(--sys-leading-body)!important
+}
+.recruiter-proof-item-v46 small{color:var(--sys-color-text-muted)!important}
+
+/* Ranked evidence hierarchy: 7/5 pairings communicate priority without hiding work. */
+@media(min-width:1001px){
+  .work-gallery-v32{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:var(--ref-space-6)!important;align-items:stretch!important}
+  .work-gallery-v32>.work-card-v32{grid-column:span 5!important}
+  .work-gallery-v32>.work-card-v32[data-feature-rank="1"],
+  .work-gallery-v32>.work-card-v32[data-feature-rank="3"]{grid-column:span 7!important}
+  .work-card-v32--featured .work-card-v32__button{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;grid-template-rows:auto!important}
+  .work-card-v32:not(.work-card-v32--featured) .work-card-v32__button{grid-template-rows:minmax(240px,34vh) 1fr!important}
+  .work-card-v32[data-feature-rank="3"] .work-artifact{min-height:320px}
+}
+
+/* Native image performance defaults; critical media opts in with data-critical. */
+img{height:auto;content-visibility:auto;contain-intrinsic-size:640px 420px}
+
+@media(max-width:760px){
+  .modal-close{width:48px!important;height:48px!important;min-width:48px!important}
+  .modal-back-v66{min-height:48px;padding-inline:var(--ref-space-4)}
+  .modal-head-meta-v60{padding-right:56px!important}
+}

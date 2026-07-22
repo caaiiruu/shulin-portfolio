@@ -1,0 +1,29 @@
+{
+  "version": "53",
+  "active_style_owners": [
+    "assets/css/tokens-v52.css",
+    "assets/css/foundation-v52.css",
+    "assets/css/components-v52.css",
+    "assets/css/pages-v52.css",
+    "assets/css/portfolio-v53.css"
+  ],
+  "visual_thesis": "Evidence-first editorial portfolio with controlled organic background fields",
+  "section_order": [
+    "Hero",
+    "ExperienceProof",
+    "SelectedEvidence",
+    "Matcher",
+    "DomainExperience",
+    "Principles",
+    "Playground",
+    "Contact"
+  ],
+  "changes": {
+    "RecruiterHierarchy": "Selected work precedes the matcher and exposes role, scale, outcome, quick preview, and shareable case links",
+    "BackgroundLanguage": "Pale-blue organic fields and jagged chapter transitions create personality without lowering evidence clarity",
+    "Domain": "Dark-cyan immersive chapter with mobile native picker and desktop-only contextual rail",
+    "Dialog": "Keyboard-accessible quick decision view followed by full evidence",
+    "Accessibility": "Visible cyan focus rings, contrast-safe semantic colours, 44px controls, reduced-motion handling, and 320px containment",
+    "Recognition": "Unverified awards hidden; side-project award badges remain verification-gated"
+  }
+}

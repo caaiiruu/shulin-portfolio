@@ -1,0 +1,89 @@
+/* Portfolio Design System v65 — semantic contracts and component governance. */
+
+html{background:var(--sys-color-canvas);color:var(--sys-color-text-primary);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sys-font-body);font-size:var(--sys-type-body);font-weight:var(--sys-weight-regular);line-height:var(--sys-leading-body);color:var(--sys-color-text-primary);background:var(--sys-color-canvas)}
+h1,h2,h3,h4,h5,h6{font-family:var(--sys-font-display);font-weight:var(--sys-weight-heavy);line-height:var(--sys-leading-heading);letter-spacing:var(--sys-tracking-heading);text-wrap:balance}
+p,li,dd{color:var(--sys-color-text-secondary);max-width:var(--sys-measure-body)}
+.display{font-size:var(--sys-type-display)!important;line-height:var(--sys-leading-display)!important;letter-spacing:var(--sys-tracking-display)!important}
+.heading-1,.page-hero-grid h1,.modal-head-v45 h2{font-size:var(--sys-type-title)!important;line-height:var(--sys-leading-display)!important}
+.heading-2,.domain-statement,.principles-v38__head h2{font-size:var(--sys-type-heading-1)!important}
+.heading-3,.section-heading-v45 h3,.impact-grid-v45>article>h3,.ownership-section-v45>h3{font-size:var(--sys-type-heading-2)!important}
+.lead-copy,.body-copy,.domain-synthesis{font-size:var(--sys-type-body-lg)!important;line-height:1.5!important;color:var(--sys-color-text-secondary)!important;max-width:var(--sys-measure-lead)}
+.kicker,.project-context,.section-index-v45,.team-impact-role-v47,.modal-classification-v45__label,.work-card-signals-v44 dt,.project-signals-v45 dt,.info-grid-v45 small,.domain-panel-v30 h4{
+  font-size:var(--sys-type-label)!important;font-weight:var(--sys-weight-bold)!important;line-height:1.25!important;
+  letter-spacing:var(--sys-tracking-label)!important;text-transform:uppercase;color:var(--sys-color-text-accent)
+}
+
+/* Rhythm contract: adjacent content uses semantic gaps, not local magic numbers. */
+.kicker+*,.project-context+*,.section-index-v45+*{margin-top:var(--sys-space-eyebrow-to-heading)!important}
+h1+p,h2+p,h3+p,h4+p,.heading-1+.body-copy,.heading-2+.body-copy,.heading-3+.body-copy{margin-top:var(--sys-space-heading-to-body)}
+.section,.work-reference{padding-block:var(--sys-layout-section-block)}
+.page-shell{width:min(calc(100% - (2 * var(--sys-layout-gutter))),var(--sys-layout-content-max));margin-inline:auto}
+
+/* Interaction contract: visible focus, stable geometry, minimum 44px targets. */
+button,a,input,select,textarea{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:0!important;box-shadow:var(--sys-focus-ring)!important
+}
+.button,.rail-button,.chip,.work-filter-chip,.lang-toggle,.menu-toggle,.contact-bar-v42__action{
+  min-height:var(--sys-control-height-md);transition:background-color var(--sys-motion-fast) var(--sys-ease-standard),color var(--sys-motion-fast) var(--sys-ease-standard),border-color var(--sys-motion-fast) var(--sys-ease-standard),box-shadow var(--sys-motion-normal) var(--sys-ease-standard),transform var(--sys-motion-fast) var(--sys-ease-standard)
+}
+.button{padding-inline:var(--cmp-button-padding-inline);border-radius:var(--cmp-button-radius)}
+.button--dark{background:var(--sys-color-action-primary);color:var(--sys-color-text-inverse)}
+.button--dark:hover{background:var(--sys-color-action-primary-hover);box-shadow:var(--sys-elevation-rest)}
+.button--quiet{background:var(--sys-color-surface);border-color:var(--sys-color-border)}
+.button--quiet:hover{background:var(--sys-color-surface-subtle);border-color:var(--sys-color-border-strong)}
+.button:disabled,.rail-button:disabled,.chip:disabled{opacity:.42;cursor:not-allowed;box-shadow:none;transform:none}
+
+/* Form control contract. */
+.matcher-input,input:not([type=checkbox]):not([type=radio]),select,textarea{
+  color:var(--sys-color-text-primary);background:var(--sys-color-surface);border-color:var(--sys-color-border);
+  border-radius:var(--cmp-input-radius);caret-color:var(--sys-color-action-accent)
+}
+::placeholder{color:var(--sys-color-text-muted);opacity:1}
+.matcher-form{border-color:var(--ref-cyan-500);background:var(--sys-color-surface);border-radius:var(--cmp-input-radius)}
+
+/* Card contract: the container never clips hover elevation. Inner media owns clipping. */
+.work-card-v32__button,.related-project-card-v45,.detail-related-card-v45,.poster,.experiment-feature-card-v32,.experiment-index-card-v36,.profile-side-card-v34,.interest-tile-v39,.principle-card-v48,.team-impact-item-v47{
+  border-color:var(--sys-color-border);border-radius:var(--cmp-card-radius);
+  transition:background-color var(--sys-motion-fast) var(--sys-ease-standard),border-color var(--sys-motion-fast) var(--sys-ease-standard),box-shadow var(--sys-motion-normal) var(--sys-ease-standard),transform var(--sys-motion-fast) var(--sys-ease-standard)
+}
+.work-card-v32__button:hover,.related-project-card-v45:hover,.detail-related-card-v45:hover,.poster:hover,.experiment-feature-card-v32:hover,.experiment-index-card-v36:hover,.profile-side-card-v34:hover,.interest-tile-v39:hover{
+  box-shadow:var(--cmp-card-shadow-hover);border-color:var(--sys-color-border-strong)
+}
+.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid{overflow-y:visible!important}
+
+/* Header and overlay contract. */
+.site-header{height:var(--sys-layout-header-height);background:var(--cmp-header-backdrop);border-color:var(--cmp-header-border);backdrop-filter:blur(16px) saturate(1.15)}
+.detail-dialog{border-radius:var(--cmp-dialog-radius);box-shadow:var(--cmp-dialog-shadow)}
+.modal-content-v45{padding-inline:var(--cmp-dialog-padding)}
+
+/* Horizontal rail contract: a complete-card carousel with zero edge mask. */
+[data-rail],.domain-content-v41,.experience-orgs-v44__list{
+  -webkit-mask:none!important;mask:none!important;clip-path:none!important;background-image:none!important;
+  scroll-padding-inline:0!important;scrollbar-color:var(--cmp-rail-scrollbar-thumb) var(--cmp-rail-scrollbar-track)
+}
+[data-rail]::before,[data-rail]::after,.domain-content-v41::before,.domain-content-v41::after,.experience-orgs-v44__list::before,.experience-orgs-v44__list::after{content:none!important;display:none!important}
+[data-rail]::-webkit-scrollbar,.domain-content-v41::-webkit-scrollbar,.experience-orgs-v44__list::-webkit-scrollbar{display:block!important;height:var(--cmp-rail-scrollbar-size)!important}
+[data-rail]::-webkit-scrollbar-track,.domain-content-v41::-webkit-scrollbar-track,.experience-orgs-v44__list::-webkit-scrollbar-track{background:var(--cmp-rail-scrollbar-track);border-radius:var(--ref-radius-round)}
+[data-rail]::-webkit-scrollbar-thumb,.domain-content-v41::-webkit-scrollbar-thumb,.experience-orgs-v44__list::-webkit-scrollbar-thumb{background:var(--cmp-rail-scrollbar-thumb);border-radius:var(--ref-radius-round)}
+
+/* Brand expression is limited to deliberate accents, not structural inconsistency. */
+.hero-clear{color:var(--sys-color-action-human)}
+.project-context,.kicker{color:var(--sys-color-text-accent)}
+.profile-side-card-v34:nth-child(odd),.experiment-index-card-v36:nth-child(odd){transform:rotate(-.35deg)}
+.profile-side-card-v34:nth-child(even),.experiment-index-card-v36:nth-child(even){transform:rotate(.35deg)}
+.profile-side-card-v34:hover,.experiment-index-card-v36:hover{transform:translateY(-2px) rotate(0)}
+
+@media(max-width:760px){
+  .detail-dialog{border-radius:0}
+  .modal-content-v45{padding-inline:var(--cmp-dialog-padding)}
+  .profile-side-card-v34:nth-child(n),.experiment-index-card-v36:nth-child(n){transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+@media(forced-colors:active){
+  button,a,input,select,textarea{forced-color-adjust:auto}
+  [data-rail]{scrollbar-color:CanvasText Canvas}
+}

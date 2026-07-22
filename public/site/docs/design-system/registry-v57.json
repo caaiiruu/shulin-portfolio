@@ -1,0 +1,21 @@
+{
+  "version":"57",
+  "status":"active",
+  "inherits":"registry-v56.json",
+  "interactionTokens":{
+    "cardSpacing":"--v57-space-card",
+    "sectionToActionSpacing":"--v57-space-section-to-action",
+    "railPaintSafeArea":"--v57-rail-paint-safe",
+    "shadowRest":"--v57-shadow-rest",
+    "shadowHover":"--v57-shadow-hover",
+    "compactControlHeight":"--v57-compact-control"
+  },
+  "rules":[
+    "Organisation names are grouped by relationship and remain curated evidence, not a complete logo wall.",
+    "The project summary uses Decision thesis; the later decision section supplies alternatives, trade-offs, and outcomes.",
+    "Mobile matcher controls become compact and sticky only while a result and the matcher section are active.",
+    "Mobile domain controls transition from the in-section rail to the floating rail without overlap.",
+    "Elevated rails reserve tokenised paint space and their section wrappers never clip shadows.",
+    "Comparable cards use a flex-column contract with their primary action aligned to the card baseline."
+  ]
+}

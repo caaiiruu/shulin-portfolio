@@ -1,0 +1,41 @@
+{
+  "version": 68,
+  "status": "live-current-production",
+  "extends": "registry-v67.json",
+  "architecture": {
+    "referenceAndSemanticOwner": "assets/css/tokens-v65.css",
+    "governanceExtension": "assets/css/tokens-v68.css",
+    "authoritativeSelectorLayer": "assets/css/system-v68.css",
+    "rule": "New critical selectors contain no raw colour or length values; every value resolves through a semantic or component token."
+  },
+  "recruitmentHierarchy": {
+    "firstPass": ["problem", "role and contribution", "scale and reach", "outcome"],
+    "deepPass": ["constraints", "design decisions", "evidence", "team impact", "delivery and measurement"],
+    "casePriority": ["voucher", "dbs", "booking", "hours", "bandzo"]
+  },
+  "components": [
+    {
+      "component": "RecruiterWorkGrid",
+      "tokens": ["--cmp-work-feature-columns", "--cmp-work-support-columns", "--cmp-work-card-min-height", "--cmp-work-card-compact-min-height"],
+      "contract": "One dominant case, primary supporting cases, compact secondary proof."
+    },
+    {
+      "component": "RecruiterSummary",
+      "tokens": ["--cmp-reading-card-measure", "--cmp-reading-signal-measure", "--cmp-summary-role-measure"],
+      "contract": "Role and contribution uses owned responsibilities rather than repeating project scope."
+    },
+    {
+      "component": "GovernedEvidenceMedia",
+      "tokens": ["--cmp-decision-media-min-height", "--cmp-decision-crop-min-height", "--cmp-decision-crop-scale"],
+      "contract": "Evidence media sizing and cropping are component-owned and responsive."
+    }
+  ],
+  "releaseGates": [
+    "V68 token governance script",
+    "design-system stylesheet order lint",
+    "rendered-route tests",
+    "all routes and dialogs browser verified",
+    "no quick-preview terminology",
+    "zero horizontal page overflow"
+  ]
+}

@@ -1,0 +1,96 @@
+/* v57 — responsive state clarity, evidence hierarchy, and safe elevation. */
+:root{
+  --v57-space-card:clamp(20px,2.2vw,28px);
+  --v57-space-section-to-action:var(--space-5,24px);
+  --v57-rail-paint-safe:32px;
+  --v57-shadow-rest:0 8px 24px rgba(20,48,58,.055);
+  --v57-shadow-hover:0 16px 36px rgba(20,48,58,.12),0 4px 12px rgba(20,48,58,.06);
+  --v57-sticky-gap:8px;
+  --v57-compact-control:48px;
+}
+
+/* Organisation proof is curated and contextual, never an undifferentiated logo wall. */
+.experience-orgs-v57{display:grid!important;grid-template-columns:1fr 1fr;gap:0!important;padding:0!important;overflow:visible!important}
+.experience-org-group-v57{min-width:0;padding:18px 22px;display:grid;gap:12px}
+.experience-org-group-v57+.experience-org-group-v57{border-left:1px solid var(--c-line)}
+.experience-org-group-v57 .experience-orgs-v44__list{gap:22px;min-width:0}
+
+/* Every elevated rail owns a paint-safe zone; section wrappers never clip it. */
+.experiment-index-v36,.profile-side-projects-v34,.playground{overflow:visible!important}
+.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,
+.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid{
+  padding-block:var(--v57-rail-paint-safe)!important;
+  margin-block:calc(var(--v57-rail-paint-safe)*-1)!important;
+  scroll-padding-inline:var(--v57-rail-paint-safe)!important;
+}
+.work-card-v32__button,.related-project-card-v45,.detail-related-card-v45,.poster,
+.experiment-feature-card-v32,.experiment-index-card-v36,.profile-side-card-v34,
+.interest-tile-v39,.timeline-evidence-v34,.profile-credentials-v55__grid article{
+  box-shadow:var(--v57-shadow-rest)!important;
+}
+.work-card-v32__button:hover,.related-project-card-v45:hover,.detail-related-card-v45:hover,.poster:hover,
+.experiment-feature-card-v32:hover,.experiment-index-card-v36:hover,.profile-side-card-v34:hover,
+.interest-tile-v39:hover,.timeline-evidence-v34:hover,.profile-credentials-v55__grid article:hover{
+  box-shadow:var(--v57-shadow-hover)!important;
+}
+
+/* Comparable cards share one vertical contract: evidence first, action at baseline. */
+.work-card-v32__content,.related-project-card-v45,.detail-related-card-v45{height:100%;display:flex;flex-direction:column}
+.work-card-v32__action,.related-project-card__action,.detail-related-action-v46{margin-top:auto!important}
+
+/* Principle cards use tokenised rhythm between change statement and supporting case. */
+.principle-card-v48{padding:var(--v57-space-card)!important}
+.principle-card-v48>div{margin-top:var(--space-4,18px)!important}
+.principle-evidence-v48{margin-top:var(--v57-space-section-to-action)!important}
+
+/* Three non-duplicated details after the scan summary. */
+.detail-dialog:not(.is-experiment) .info-grid-v45{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.detail-dialog:not(.is-experiment) .info-grid-v45>div{grid-column:auto!important}
+
+@media(min-width:901px){
+  .domain-selectors{position:static!important}
+}
+
+@media(max-width:900px){
+  :root{--v57-rail-paint-safe:24px;--v57-compact-control:44px}
+  .experience-orgs-v57{grid-template-columns:1fr}
+  .experience-org-group-v57+.experience-org-group-v57{border-left:0;border-top:1px solid var(--c-line)}
+
+  /* Search becomes compact and sticky only after a result exists; section bounds release it. */
+  .matcher-chapter{overflow:visible!important}
+  .matcher-workspace.has-result .matcher-query-panel{
+    position:sticky!important;top:calc(var(--header-h) + var(--v57-sticky-gap))!important;z-index:42;
+    padding:8px;border:1px solid var(--c-line);border-radius:16px;background:rgba(255,255,255,.94);
+    box-shadow:var(--v57-shadow-rest);backdrop-filter:blur(14px)
+  }
+  .matcher-workspace.has-result .matcher-query-panel>h2,
+  .matcher-workspace.has-result .matcher-query-panel>.matcher-copy,
+  .matcher-workspace.has-result .matcher-query-panel>.chip-rail{display:none!important}
+  .matcher-workspace.has-result .matcher-form{margin:0!important;padding:5px!important;border-radius:12px!important}
+  .matcher-workspace.has-result .matcher-input{min-height:var(--v57-compact-control)!important;padding-inline:10px!important}
+  .matcher-workspace.has-result .matcher-submit-v45{width:var(--v57-compact-control)!important;min-width:var(--v57-compact-control)!important;height:var(--v57-compact-control)!important}
+
+  /* The in-section rail appears first. Floating navigation appears only after it leaves view. */
+  .domain-mobile-picker-v42{display:none!important}
+  .domain-selectors{display:flex!important;position:relative!important;top:auto!important;z-index:2!important;
+    margin:20px calc(var(--gutter)*-1) 0!important;padding:10px var(--gutter) 14px!important;
+    overflow-x:auto;scroll-snap-type:x proximity;background:transparent!important}
+  .domain-tab{scroll-snap-align:start}
+  .domain-chapter.has-floating-domain-nav .domain-selectors{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:none!important}
+  .domain-floating-nav-v52{display:block!important;width:min(calc(100vw - 24px),720px)!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;overflow:hidden}
+  .domain-floating-nav-v52__rail{padding:4px 58px 4px 4px!important}
+  .domain-floating-nav-v52::before{content:"";position:absolute;z-index:2;right:0;top:0;bottom:0;width:66px;pointer-events:none;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.96) 48%)}
+  .domain-floating-nav-v52::after{content:"→";position:absolute;z-index:3;right:16px;top:50%;transform:translateY(-50%);font-weight:900;color:var(--c-cyan-dark);pointer-events:none}
+
+  .detail-dialog:not(.is-experiment) .info-grid-v45{grid-template-columns:1fr!important}
+}
+
+@media(max-width:560px){
+  .experience-org-group-v57{padding:16px}
+  .experience-org-group-v57 .experience-orgs-v44__list{padding-bottom:6px}
+  .principle-evidence-v48{margin-top:var(--space-5,24px)!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .matcher-workspace.has-result .matcher-query-panel{backdrop-filter:none}
+}

@@ -1,0 +1,22 @@
+{
+  "version":"59",
+  "status":"active",
+  "inherits":"registry-v58.json",
+  "tokens":{
+    "headingToBody":"--content-heading-to-body",
+    "eyebrowToHeading":"--content-eyebrow-to-heading",
+    "cardPadding":"--content-card-pad",
+    "matcherIdleMinBlock":"--matcher-idle-min-block",
+    "loaderSize":"--loader-size",
+    "loaderCycle":"--loader-cycle",
+    "loaderBackdrop":"--loader-backdrop",
+    "loaderShadow":"--loader-shadow"
+  },
+  "rules":[
+    "Eyebrow, heading, and body spacing uses one semantic content-rhythm contract.",
+    "The matcher remains vertically and horizontally centred until a result state exists.",
+    "Decision visuals reuse the same gallery artifact model and open the matching gallery index.",
+    "Loading feedback appears for detail rendering and same-origin page transitions.",
+    "The loader is DOM-safe, dependency-free, and respects reduced-motion preferences."
+  ]
+}

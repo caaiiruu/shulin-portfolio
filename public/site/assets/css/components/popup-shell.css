@@ -1,0 +1,94 @@
+/* Popup shell — the sole production owner for dialog surface and navigation. */
+.detail-dialog-v45 {
+  width: min(1500px, calc(100vw - 32px));
+  max-width: none;
+  height: min(960px, calc(100dvh - 28px));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  overflow: visible;
+  box-shadow: var(--shadow-dialog);
+}
+.detail-dialog-v45::backdrop {
+  background: rgba(19,25,27,.72);
+  backdrop-filter: blur(5px);
+}
+.detail-dialog-v45[open]::backdrop { animation: popup-backdrop-in var(--motion-base) var(--ease-standard) both; }
+.detail-dialog-v45[open] .dialog-scroll { animation: popup-surface-in var(--motion-base) var(--ease-standard) both; }
+.detail-dialog-v45.is-closing::backdrop { animation: popup-backdrop-out var(--motion-fast) var(--ease-standard) both; }
+.detail-dialog-v45.is-closing .dialog-scroll { animation: popup-surface-out var(--motion-fast) var(--ease-standard) both; }
+
+.dialog-scroll {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  border-radius: inherit;
+  background: var(--color-surface);
+}
+.dialog-controls-v67 {
+  position: sticky;
+  inset: 0 0 auto;
+  z-index: 20;
+  min-height: var(--header-height);
+  padding: var(--space-2) var(--panel-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 96%, transparent);
+  backdrop-filter: blur(14px) saturate(1.12);
+}
+.modal-back-v66,.modal-close {
+  position: static;
+  float: none;
+  margin: 0;
+  min-width: var(--control-height);
+  min-height: var(--control-height);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 750;
+  line-height: 1;
+  box-shadow: none;
+  transition: background var(--motion-fast),border-color var(--motion-fast),transform var(--motion-fast);
+}
+.modal-back-v66 { width: auto; padding-inline: var(--space-4); }
+.modal-back-v66[hidden] { display: none; }
+.modal-close { width: var(--control-height); padding: 0; margin-left: auto; font-size: 0; }
+.modal-close::before { content: none; }
+.modal-close .modal-close__icon { font-size: 32px; font-weight: 450; line-height: 1; transform: translateY(-1px); }
+.modal-back-v66:hover,.modal-close:hover { background: var(--color-surface-subtle); border-color: var(--color-text-accent); transform: translateY(-1px); }
+.modal-back-v66:active,.modal-close:active { transform: translateY(0); }
+
+@keyframes popup-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popup-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes popup-surface-in { from { opacity: 0; transform: translateY(14px) scale(.99); } to { opacity: 1; transform: none; } }
+@keyframes popup-surface-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(8px) scale(.995); } }
+
+@media (max-width: 900px) {
+  .detail-dialog-v45 { width: 100vw; height: 100dvh; border-radius: 0; }
+  .dialog-scroll { height: 100dvh; }
+  .dialog-controls-v67 { padding-inline: var(--page-gutter); }
+}
+@media (max-width: 430px) {
+  .dialog-controls-v67 { padding-block: 7px; }
+  .modal-back-v66 { padding-inline: var(--space-3); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail-dialog-v45[open]::backdrop,.detail-dialog-v45[open] .dialog-scroll,
+  .detail-dialog-v45.is-closing::backdrop,.detail-dialog-v45.is-closing .dialog-scroll { animation: none; }
+}

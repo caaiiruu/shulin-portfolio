@@ -1,0 +1,23 @@
+{
+  "version": 63,
+  "extends": "registry-v62.json",
+  "typography": {
+    "display.xl": "--type-display-xl",
+    "display.lg": "--type-display-lg",
+    "heading.lg": "--type-heading-lg",
+    "heading.md": "--type-heading-md",
+    "heading.sm": "--type-heading-sm",
+    "body.lg": "--type-body-lg",
+    "body.md": "--type-body-md",
+    "body.sm": "--type-body-sm",
+    "label": "--type-label",
+    "color.primary": "--type-color-primary",
+    "color.secondary": "--type-color-secondary",
+    "color.label": "--type-color-label"
+  },
+  "contracts": {
+    "railAlignment": "Horizontal rails start flush with their containing content column; only vertical padding may provide hover-shadow clearance.",
+    "teamImpact": "At desktop, impact evidence is a three-card grid whose cards use a vertical label-and-copy flow.",
+    "domainDesktop": "Desktop uses a persistent vertical tab list beside the evidence panel; horizontal or floating navigation is compact-view only."
+  }
+}

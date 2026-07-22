@@ -1,0 +1,68 @@
+## Visual QA Handoff Rule
+
+For all future portfolio UI QA work, follow this screenshot handoff flow.
+
+### Core rule
+
+Do not ask the user to manually take screenshots.
+
+When visual QA is needed, generate screenshots through terminal commands, zip the screenshot folder, and automatically reveal the zip file in Finder so the user can drag it into ChatGPT.
+
+### Required QA flow
+
+1. Confirm the site is in a stable preview state first.
+   - Prefer production preview QA:
+     `npm run build` → `npm run start` → confirm key pages return `200 OK`.
+   - Do not run visual QA while build is failing.
+   - Do not run visual QA against a broken dev server.
+
+2. Generate screenshots through Playwright or the existing QA script.
+   - Use the established breakpoints:
+     - Desktop reference: `1419px`
+     - Tablet: `871px`
+     - Mobile: `430px`
+   - Capture at minimum:
+     - Homepage
+     - Work listing page
+     - DBS project detail page
+     - Voucher project detail page
+     - Results page
+
+3. Zip the generated screenshots folder.
+
+4. Automatically reveal the zip file in Finder using:
+   `open -R <zip-path>`
+
+5. Ask the user to drag the zip file into ChatGPT.
+
+6. Do not continue visual QA until the screenshots have been reviewed.
+
+### Safety rules
+
+- Do not ask the user to manually crop, annotate, or capture screenshots.
+- Do not clear `.next` while `next dev` or `next start` is running.
+- Do not run `rm -rf .next`, `npm install`, or `npm audit fix` during visual QA unless the issue is confirmed to be build/runtime related.
+- Do not run large automated scripts without first confirming the server is stable.
+- If a script fails, stop patching immediately, identify the root cause, and provide the smallest possible fix.
+- Never continue stacking overrides after a failed UI/code fix.
+
+### Design-system rule
+
+All UI fixes must follow this priority order:
+
+1. Confirm component ownership.
+2. Confirm existing design-system or library component reuse.
+3. Prefer token-level or component-style-level fixes.
+4. Avoid page-level one-off styling.
+5. Avoid duplicated selectors and duplicated components.
+6. Run build verification.
+7. Run screenshot zip handoff QA.
+8. Review screenshots before continuing to the next priority item.
+
+### Expected terminal handoff pattern
+
+Use this pattern after screenshots are generated:
+
+```bash
+zip -r <qa-folder>/screenshots.zip <qa-folder>/screenshots
+open -R <qa-folder>/screenshots.zip

@@ -1,0 +1,91 @@
+:root {
+  /* Primitive scale */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  --ink-950: #1d2021;
+  --ink-800: #34393b;
+  --ink-650: #565e61;
+  --ink-500: #6f777a;
+  --paper-0: #ffffff;
+  --paper-50: #f8faf9;
+  --paper-100: #f1f5f4;
+  --line-200: #d8dfdd;
+  --line-300: #bec9c6;
+  --brand-700: #176475;
+  --brand-100: #dceef2;
+  --accent-600: #d93f49;
+  --accent-100: #ffe5e6;
+
+  /* Semantic layer */
+  --color-text-primary: var(--ink-950);
+  --color-text-secondary: var(--ink-650);
+  --color-text-muted: var(--ink-500);
+  --color-text-accent: var(--brand-700);
+  --color-text-inverse: var(--paper-0);
+  --color-text-inverse-secondary: color-mix(in srgb, var(--paper-0) 78%, transparent);
+  --color-surface: var(--paper-0);
+  --color-surface-subtle: var(--paper-50);
+  --color-surface-raised: var(--paper-0);
+  --color-border: var(--line-200);
+  --color-border-strong: var(--line-300);
+  --color-focus: var(--brand-700);
+  --color-action-bg: var(--ink-950);
+  --color-action-text: var(--paper-0);
+  --color-action-bg-hover: var(--brand-700);
+  --color-action-text-hover: var(--paper-0);
+  --color-state-selected-bg: var(--ink-950);
+  --color-state-selected-text: var(--paper-0);
+  --color-state-selected-border: var(--ink-950);
+  --color-state-disabled-bg: var(--paper-100);
+  --color-state-disabled-text: var(--ink-650);
+  --color-state-disabled-border: var(--line-200);
+
+  --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-body: clamp(1rem, 0.97rem + 0.15vw, 1.125rem);
+  --text-lead: clamp(1.125rem, 1.04rem + 0.38vw, 1.375rem);
+  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+  --text-h2: clamp(2.25rem, 1.65rem + 2.4vw, 4rem);
+  --text-h1: clamp(3.5rem, 2.1rem + 5.5vw, 7.5rem);
+  --leading-tight: 0.94;
+  --leading-heading: 1.08;
+  --leading-body: 1.62;
+  --measure-body: 68ch;
+  --measure-heading: 18ch;
+
+  --page-gutter: clamp(20px, 4.2vw, 64px);
+  --page-max: 1280px;
+  --section-space: clamp(72px, 8vw, 112px);
+  --section-space-compact: clamp(56px, 6vw, 84px);
+  --panel-padding: clamp(24px, 3vw, 48px);
+  --card-padding: clamp(22px, 2.2vw, 32px);
+  --project-card-media-block: clamp(220px, 24vw, 300px);
+  --project-card-media-block-mobile: clamp(132px, 38vw, 180px);
+  --experiment-card-min-block: clamp(380px, 31vw, 420px);
+  --experiment-card-min-block-mobile: 360px;
+  --profile-card-min-block: 248px;
+  --experiment-card-title: clamp(1.9rem, 2.7vw, 2.75rem);
+  --profile-card-title: clamp(1.35rem, 1.6vw, 1.6rem);
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --header-height: 72px;
+  --control-height: 48px;
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus) 28%, transparent);
+  --shadow-raised: 0 18px 54px rgba(29, 32, 33, 0.10);
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --ease-standard: cubic-bezier(.2, .8, .2, 1);
+}

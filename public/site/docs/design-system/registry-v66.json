@@ -1,0 +1,55 @@
+{
+  "version": 66,
+  "status": "live-current-production",
+  "extends": "registry-v65.json",
+  "tokens": {
+    "section.heading.gap": "--cmp-section-heading-gap",
+    "section.content.gap": "--cmp-section-content-gap",
+    "dialog.control.offset": "--cmp-dialog-control-offset"
+  },
+  "componentChanges": [
+    {
+      "component": "DetailDialog",
+      "cssOwner": "assets/css/system-v66.css",
+      "interactionOwner": "assets/js/app.js",
+      "contract": "Close always exits the entire dialog stack and restores focus to the root invoker. Back is a separate labelled action that appears only for nested details.",
+      "states": ["root", "nested", "closing"],
+      "usageScope": ["Home", "Work", "Playground", "Profile"],
+      "forbiddenModifications": ["morph close into back", "move close between states", "close only one nested detail", "lose root focus"]
+    },
+    {
+      "component": "ProjectOverview",
+      "cssOwner": "assets/css/system-v66.css",
+      "interactionOwner": "assets/js/app.js",
+      "contract": "Role and functional scope are presented as one Role & contribution statement; detailed ownership is presented later as Ownership & collaboration.",
+      "usageScope": ["Project dialog"],
+      "forbiddenModifications": ["duplicate role and scope fields", "reduce contribution to job title only"]
+    },
+    {
+      "component": "WorkGallery",
+      "cssOwner": "assets/css/system-v66.css",
+      "interactionOwner": "assets/js/app.js",
+      "contract": "Ranked professional work uses a 12-column 7/5 evidence hierarchy on desktop and a single readable column on compact screens.",
+      "usageScope": ["Work"],
+      "forbiddenModifications": ["equal visual weight for all ranks", "content-order change without feature rank"]
+    },
+    {
+      "component": "EvidenceVisual",
+      "cssOwner": "assets/css/system-v66.css",
+      "interactionOwner": "assets/js/app.js",
+      "contract": "Decision visuals reuse the canonical gallery model and navigate to it; they do not download or request duplicate image assets.",
+      "usageScope": ["Project dialog decisions", "Project gallery"],
+      "performance": ["native lazy loading", "async decoding", "explicit dimensions", "low fetch priority below fold"]
+    }
+  ],
+  "releaseGates": [
+    "close-all returns to route that opened the root dialog",
+    "back returns exactly one nested detail",
+    "metadata baseline alignment",
+    "tokenized heading-to-content rhythm",
+    "secondary body colour consistency",
+    "ranked work-card layout",
+    "home navigation from every route",
+    "image dimension and loading policy"
+  ]
+}

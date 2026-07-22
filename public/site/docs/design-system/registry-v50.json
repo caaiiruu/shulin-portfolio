@@ -1,0 +1,51 @@
+{
+  "version": "50",
+  "status": "current",
+  "style_owners": {
+    "tokens": "assets/css/tokens-v49.css",
+    "foundation": "assets/css/foundation-v49.css",
+    "components": "assets/css/components-v49.css",
+    "pages": "assets/css/pages-v49.css"
+  },
+  "rules": [
+    "Only the four active stylesheets above may be loaded in production pages.",
+    "Component spacing must consume --card-pad, --panel-pad, --rail-gap, --rail-edge, --control-h, --section-y, and --gutter.",
+    "Page styles may compose components but may not redefine shared card hover, focus, pressed, dialog, rail, or control states.",
+    "Horizontal rails must scroll internally and may not increase document scrollWidth.",
+    "Mobile interfaces must recompose at 560px and remain usable at 320 CSS px.",
+    "Custom cursor labels are forbidden.",
+    "Runtime QA at 1440, 900, 768, 430, 375, and 320 CSS px is required before completion claims."
+  ],
+  "components": {
+    "ExperienceSignals": {
+      "css_owner": "assets/css/components-v49.css",
+      "tokens": ["--card-pad", "--rail-gap", "--c-subtle", "--fs-body"],
+      "usage": ["index.html"]
+    },
+    "ChallengeMatcher": {
+      "css_owner": "assets/css/components-v49.css",
+      "tokens": ["--control-h", "--rail-gap", "--gutter", "--c-cyan"],
+      "usage": ["index.html"]
+    },
+    "DomainSelector": {
+      "css_owner": "assets/css/components-v49.css",
+      "tokens": ["--control-h", "--rail-gap", "--header-h", "--c-cyan"],
+      "usage": ["index.html"]
+    },
+    "WorkCard": {
+      "css_owner": "assets/css/pages-v49.css",
+      "tokens": ["--card-pad", "--rail-gap", "--c-line", "--shadow-hover"],
+      "usage": ["work.html"]
+    },
+    "ExperimentCard": {
+      "css_owner": "assets/css/pages-v49.css",
+      "tokens": ["--card-pad", "--rail-gap", "--c-coral-soft", "--c-cyan", "--c-dark"],
+      "usage": ["index.html", "experiments.html"]
+    },
+    "DetailDialog": {
+      "css_owner": "assets/css/components-v49.css",
+      "tokens": ["--dialog-pad", "--panel-pad", "--section-y", "--c-subtle", "--shadow-dialog"],
+      "usage": ["index.html", "work.html", "experiments.html", "profile.html"]
+    }
+  }
+}

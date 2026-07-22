@@ -1,0 +1,23 @@
+{
+  "version":"61",
+  "status":"active",
+  "inherits":"registry-v60.json",
+  "tokens":{
+    "matcherStickyPadding":"--matcher-sticky-pad",
+    "matcherStickyGap":"--matcher-sticky-gap",
+    "matcherStickyLabelSize":"--matcher-sticky-label-size",
+    "matcherStickyRadius":"--matcher-sticky-radius",
+    "matcherStickyMaxWidth":"--matcher-sticky-max",
+    "railMask":"--rail-mask",
+    "detailMetadataSeparatorGap":"--detail-meta-separator-gap",
+    "dialogBackMinimumWidth":"--dialog-back-min-width"
+  },
+  "rules":[
+    "A new matcher session starts in the centred default state; only a submitted result activates compact sticky mode.",
+    "Compact sticky search retains a visible micro-label, editable input, and right-side submit action.",
+    "Horizontal rails must not use gradient masks, pseudo-element edge veils, or clipped navigation hints.",
+    "Project and experiment headers present category and period as one metadata sentence separated by a vertical bar.",
+    "Timeline is not repeated inside experiment details.",
+    "Nested-dialog back navigation uses a visible text label and a minimum 44-pixel target; close remains the conventional × action."
+  ]
+}

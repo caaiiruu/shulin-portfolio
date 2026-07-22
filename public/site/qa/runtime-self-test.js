@@ -1,0 +1,19 @@
+(()=>{
+const run=document.getElementById('run'), tests=document.getElementById('tests'), summary=document.getElementById('summary'), frame=document.getElementById('frame');
+const results=[]; const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function add(name,status,detail){results.push({name,status,detail})}
+function render(){tests.innerHTML='';for(const r of results){const row=document.createElement('div');row.className='test';row.innerHTML=`<strong class="${r.status}">${r.status.toUpperCase()}</strong><div><b>${r.name}</b><div>${r.detail}</div></div>`;tests.append(row)}const counts={pass:0,warn:0,fail:0};results.forEach(r=>counts[r.status]++);summary.innerHTML=Object.entries(counts).map(([k,v])=>`<div class="metric"><b class="${k}">${v} ${k}</b></div>`).join('')}
+async function load(path,width=430,height=844){frame.style.width=width+'px';frame.style.height=height+'px';frame.src=path+'?qa='+Date.now();await new Promise((res,rej)=>{const t=setTimeout(()=>rej(new Error('load timeout')),8000);frame.onload=()=>{clearTimeout(t);res()}});await sleep(250);return frame.contentWindow}
+async function checkPage(path,width){const w=await load(path,width);const d=w.document;const overflow=d.documentElement.scrollWidth-d.documentElement.clientWidth;add(`${path} ${width}px reflow`,overflow<=1?'pass':'fail',`horizontal overflow: ${overflow}px`);return w}
+run.addEventListener('click',async()=>{run.disabled=true;results.length=0;render();try{
+ for(const width of [1440,900,768,430,375,320])for(const path of ['index.html','work.html','experiments.html','profile.html'])await checkPage(path,width);
+ let w=await load('index.html',430);let d=w.document;
+ const domainPicker=d.querySelector('.domain-mobile-picker-v42');add('Mobile native domain picker',getComputedStyle(domainPicker).display!=='none'?'pass':'fail',`display: ${getComputedStyle(domainPicker).display}`);
+ const chips=[...d.querySelectorAll('.domain-tab')];chips[3]?.click();await sleep(250);add('Domain switch selects requested item',chips[3]?.getAttribute('aria-selected')==='true'?'pass':'fail',d.querySelector('#domainName')?.textContent||'missing title');
+ d.querySelector('[data-match="global"]')?.click();await sleep(350);add('Search chip fills query',d.querySelector('#matcherInput')?.value.includes('global')?'pass':'fail',d.querySelector('#matcherInput')?.value||'empty');add('Search result context receives focus',d.activeElement?.id==='matchResultAnnouncement'?'pass':'warn',`active element: ${d.activeElement?.id||d.activeElement?.tagName}`);
+ d.querySelector('[data-project="hours"]')?.click();await sleep(250);const dialog=d.querySelector('#detailDialog'), scroller=dialog?.querySelector('.dialog-scroll');if(scroller){scroller.scrollTop=600;d.querySelector('#detailRelatedRail [data-project]')?.click();await sleep(250);add('Related case resets popup scroll',scroller.scrollTop<5?'pass':'fail',`scrollTop: ${scroller.scrollTop}`)}else add('Project popup opens','fail','dialog not found');
+ add('Custom cursor removed',!d.querySelector('.cursor-feedback')?'pass':'fail','No floating Open / Explore label should exist.');
+ const work=await load('work.html',430);const cards=[...work.document.querySelectorAll('.work-card-v32__button')];const tooTall=cards.filter(c=>c.getBoundingClientRect().height>680);add('Mobile work cards fit decision viewport',tooTall.length===0?'pass':'warn',`${tooTall.length} cards exceed 680px`);
+ const exp=await load('experiments.html',430);const expCards=[...exp.document.querySelectorAll('.experiment-index-card-v36')];const invisible=expCards.filter(c=>{const cs=getComputedStyle(c);return cs.color===cs.backgroundColor});add('Experiment hover colour safety',invisible.length===0?'pass':'fail',`${invisible.length} cards have indistinguishable text/background`);
+ }catch(e){add('Runtime test execution','fail',e.message)}finally{render();run.disabled=false}});
+})();

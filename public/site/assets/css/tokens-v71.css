@@ -1,0 +1,16 @@
+:root{
+  --v71-header-height:72px;
+  --v71-page-gutter:clamp(20px,4.2vw,64px);
+  --v71-section-space:clamp(72px,8vw,120px);
+  --v71-panel-pad:clamp(24px,3vw,48px);
+  --v71-card-pad:clamp(22px,2.2vw,32px);
+  --v71-stack-xs:8px;
+  --v71-stack-sm:16px;
+  --v71-stack-md:24px;
+  --v71-stack-lg:40px;
+  --v71-control:48px;
+  --v71-toolbar:72px;
+  --v71-card-min:310px;
+  --v71-rail-card:min(420px,86vw);
+  --v71-focus:0 0 0 3px rgba(35,116,137,.28);
+}

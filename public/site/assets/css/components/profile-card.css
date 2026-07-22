@@ -1,0 +1,8 @@
+/* ProfileCard — sole production owner for side projects and interest tiles. */
+.profile-side-card-v34{min-height:var(--profile-card-min-block);padding:var(--card-padding)}
+.profile-side-card-v34 h3{margin-top:var(--space-5);font-size:var(--profile-card-title);line-height:1.12;overflow-wrap:anywhere;text-wrap:balance}
+.profile-side-card-v34 b{padding-top:var(--space-4)}
+.profile-side-card-v52__meta{color:var(--color-text-secondary);opacity:1}
+.interest-tile-v39{min-width:0;overflow:hidden;border-radius:var(--radius-lg)}
+.interest-tile-v39 :is(h3,p){overflow-wrap:anywhere}
+@media(max-width:560px){.profile-side-card-v34{padding:var(--space-5)}}

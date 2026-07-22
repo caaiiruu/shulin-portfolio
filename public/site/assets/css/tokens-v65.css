@@ -1,0 +1,231 @@
+/*
+ * Portfolio Design System v65
+ * Canonical token entry point.
+ * Traceability: reference -> semantic -> component -> selector.
+ */
+:root{
+  color-scheme:light;
+
+  /* Reference: neutral */
+  --ref-neutral-0:#ffffff;
+  --ref-neutral-25:#fbfcfc;
+  --ref-neutral-50:#f5f7f7;
+  --ref-neutral-100:#edf1f2;
+  --ref-neutral-200:#d9e0e3;
+  --ref-neutral-300:#bcc8cd;
+  --ref-neutral-500:#687176;
+  --ref-neutral-600:#555d61;
+  --ref-neutral-800:#2f3436;
+  --ref-neutral-900:#202223;
+  --ref-neutral-950:#151718;
+
+  /* Reference: brand */
+  --ref-cyan-50:#eef8fa;
+  --ref-cyan-100:#dceff3;
+  --ref-cyan-400:#65b5c8;
+  --ref-cyan-500:#4fa7bc;
+  --ref-cyan-700:#276f82;
+  --ref-cyan-800:#1f5a69;
+  --ref-coral-50:#fff2f1;
+  --ref-coral-100:#ffe2df;
+  --ref-coral-400:#ff7478;
+  --ref-coral-500:#ff575d;
+  --ref-coral-700:#c83d43;
+  --ref-warm-50:#faf7f1;
+
+  /* Reference: font families */
+  --ref-font-display:"Manrope","Inter","Noto Sans TC","PingFang TC",system-ui,-apple-system,sans-serif;
+  --ref-font-body:"Inter","Noto Sans TC","PingFang TC",system-ui,-apple-system,sans-serif;
+
+  /* Reference: fluid type scale */
+  --ref-type-100:.75rem;
+  --ref-type-200:.875rem;
+  --ref-type-300:1rem;
+  --ref-type-400:clamp(1.0625rem,1rem + .28vw,1.25rem);
+  --ref-type-500:clamp(1.25rem,1.08rem + .62vw,1.625rem);
+  --ref-type-600:clamp(1.625rem,1.25rem + 1.25vw,2.375rem);
+  --ref-type-700:clamp(2.125rem,1.55rem + 2.1vw,3.75rem);
+  --ref-type-800:clamp(2.75rem,1.8rem + 3.6vw,5.5rem);
+  --ref-type-900:clamp(3.5rem,2rem + 5.6vw,7.5rem);
+
+  /* Reference: spacing, 4px base with purposeful larger intervals */
+  --ref-space-0:0;
+  --ref-space-1:4px;
+  --ref-space-2:8px;
+  --ref-space-3:12px;
+  --ref-space-4:16px;
+  --ref-space-5:20px;
+  --ref-space-6:24px;
+  --ref-space-7:32px;
+  --ref-space-8:40px;
+  --ref-space-9:48px;
+  --ref-space-10:64px;
+  --ref-space-11:80px;
+  --ref-space-12:96px;
+  --ref-space-13:128px;
+
+  /* Reference: shape, elevation, motion */
+  --ref-radius-1:8px;
+  --ref-radius-2:12px;
+  --ref-radius-3:16px;
+  --ref-radius-4:24px;
+  --ref-radius-5:32px;
+  --ref-radius-round:999px;
+  --ref-shadow-1:0 1px 2px rgba(21,23,24,.04),0 8px 24px rgba(21,23,24,.06);
+  --ref-shadow-2:0 2px 4px rgba(21,23,24,.05),0 18px 48px rgba(21,23,24,.11);
+  --ref-shadow-3:0 4px 12px rgba(21,23,24,.08),0 32px 96px rgba(21,23,24,.20);
+  --ref-duration-instant:100ms;
+  --ref-duration-fast:160ms;
+  --ref-duration-normal:240ms;
+  --ref-duration-slow:400ms;
+  --ref-ease-standard:cubic-bezier(.2,0,0,1);
+  --ref-ease-enter:cubic-bezier(.16,1,.3,1);
+  --ref-ease-exit:cubic-bezier(.4,0,1,1);
+
+  /* Semantic: content and surfaces */
+  --sys-color-canvas:var(--ref-neutral-0);
+  --sys-color-surface:var(--ref-neutral-0);
+  --sys-color-surface-subtle:var(--ref-neutral-50);
+  --sys-color-surface-raised:var(--ref-neutral-0);
+  --sys-color-surface-warm:var(--ref-warm-50);
+  --sys-color-surface-system:var(--ref-cyan-50);
+  --sys-color-surface-human:var(--ref-coral-50);
+  --sys-color-text-primary:var(--ref-neutral-900);
+  --sys-color-text-secondary:var(--ref-neutral-600);
+  --sys-color-text-muted:var(--ref-neutral-500);
+  --sys-color-text-inverse:var(--ref-neutral-0);
+  --sys-color-text-accent:var(--ref-cyan-700);
+  --sys-color-border:var(--ref-neutral-200);
+  --sys-color-border-strong:var(--ref-neutral-300);
+  --sys-color-action-primary:var(--ref-neutral-900);
+  --sys-color-action-primary-hover:var(--ref-neutral-950);
+  --sys-color-action-accent:var(--ref-cyan-700);
+  --sys-color-action-human:var(--ref-coral-500);
+  --sys-color-focus:var(--ref-coral-500);
+  --sys-color-disabled:var(--ref-neutral-300);
+
+  /* Semantic: typography roles */
+  --sys-font-display:var(--ref-font-display);
+  --sys-font-body:var(--ref-font-body);
+  --sys-type-display:var(--ref-type-900);
+  --sys-type-title:var(--ref-type-800);
+  --sys-type-heading-1:var(--ref-type-700);
+  --sys-type-heading-2:var(--ref-type-600);
+  --sys-type-heading-3:var(--ref-type-500);
+  --sys-type-body-lg:var(--ref-type-400);
+  --sys-type-body:var(--ref-type-300);
+  --sys-type-body-sm:var(--ref-type-200);
+  --sys-type-label:var(--ref-type-100);
+  --sys-weight-regular:450;
+  --sys-weight-medium:620;
+  --sys-weight-bold:760;
+  --sys-weight-heavy:860;
+  --sys-leading-display:.92;
+  --sys-leading-heading:1.08;
+  --sys-leading-body:1.58;
+  --sys-leading-compact:1.35;
+  --sys-tracking-display:-.05em;
+  --sys-tracking-heading:-.032em;
+  --sys-tracking-label:.11em;
+  --sys-measure-body:68ch;
+  --sys-measure-lead:58ch;
+  --sys-measure-heading:22ch;
+
+  /* Semantic: layout and rhythm */
+  --sys-layout-content-max:1240px;
+  --sys-layout-reading-max:760px;
+  --sys-layout-dialog-max:1440px;
+  --sys-layout-gutter:clamp(20px,4vw,56px);
+  --sys-layout-section-block:clamp(64px,8vw,112px);
+  --sys-layout-header-height:72px;
+  --sys-space-inline:var(--ref-space-4);
+  --sys-space-stack-xs:var(--ref-space-2);
+  --sys-space-stack-sm:var(--ref-space-3);
+  --sys-space-stack-md:var(--ref-space-4);
+  --sys-space-stack-lg:var(--ref-space-6);
+  --sys-space-stack-xl:var(--ref-space-9);
+  --sys-space-eyebrow-to-heading:var(--ref-space-3);
+  --sys-space-heading-to-body:var(--ref-space-4);
+  --sys-space-body-to-action:var(--ref-space-6);
+
+  /* Semantic: interaction */
+  --sys-control-height-sm:40px;
+  --sys-control-height-md:44px;
+  --sys-control-height-lg:52px;
+  --sys-focus-ring:0 0 0 3px var(--sys-color-canvas),0 0 0 6px rgba(255,87,93,.72);
+  --sys-elevation-rest:var(--ref-shadow-1);
+  --sys-elevation-hover:var(--ref-shadow-2);
+  --sys-elevation-overlay:var(--ref-shadow-3);
+  --sys-motion-fast:var(--ref-duration-fast);
+  --sys-motion-normal:var(--ref-duration-normal);
+  --sys-motion-slow:var(--ref-duration-slow);
+  --sys-ease-standard:var(--ref-ease-standard);
+  --sys-ease-enter:var(--ref-ease-enter);
+  --sys-ease-exit:var(--ref-ease-exit);
+
+  /* Component tokens */
+  --cmp-button-height:var(--sys-control-height-md);
+  --cmp-button-padding-inline:var(--ref-space-5);
+  --cmp-button-radius:var(--ref-radius-round);
+  --cmp-card-padding:clamp(20px,2.2vw,32px);
+  --cmp-card-radius:var(--ref-radius-4);
+  --cmp-card-border:1px solid var(--sys-color-border);
+  --cmp-card-shadow-rest:var(--sys-elevation-rest);
+  --cmp-card-shadow-hover:var(--sys-elevation-hover);
+  --cmp-panel-padding:clamp(24px,3vw,40px);
+  --cmp-panel-radius:var(--ref-radius-5);
+  --cmp-dialog-padding:clamp(24px,4vw,56px);
+  --cmp-dialog-radius:var(--ref-radius-5);
+  --cmp-dialog-shadow:var(--sys-elevation-overlay);
+  --cmp-input-height:56px;
+  --cmp-input-padding-inline:var(--ref-space-5);
+  --cmp-input-radius:var(--ref-radius-3);
+  --cmp-chip-height:44px;
+  --cmp-chip-padding-inline:var(--ref-space-4);
+  --cmp-rail-gap:clamp(12px,1.4vw,20px);
+  --cmp-rail-block-start:var(--ref-space-3);
+  --cmp-rail-block-end:var(--ref-space-7);
+  --cmp-rail-scrollbar-size:6px;
+  --cmp-rail-scrollbar-track:rgba(39,111,130,.12);
+  --cmp-rail-scrollbar-thumb:rgba(39,111,130,.58);
+  --cmp-header-backdrop:rgba(255,255,255,.92);
+  --cmp-header-border:rgba(217,224,227,.82);
+  --cmp-section-heading-gap:var(--ref-space-6);
+  --cmp-section-content-gap:var(--ref-space-7);
+  --cmp-dialog-control-offset:clamp(14px,2vw,28px);
+  --cmp-dialog-control-bar-height:72px;
+  --cmp-evidence-section-padding:clamp(24px,3vw,40px);
+  --cmp-evidence-card-padding:clamp(18px,2vw,24px);
+  --cmp-evidence-card-gap:var(--ref-space-4);
+  --cmp-evidence-section-gap:var(--ref-space-7);
+  --cmp-summary-gap:var(--ref-space-4);
+
+  /* Compatibility aliases: legacy selectors resolve to canonical values. */
+  --font-display:var(--sys-font-display);--font-body:var(--sys-font-body);
+  --c-page:var(--sys-color-canvas);--c-surface:var(--sys-color-surface);--c-subtle:var(--sys-color-surface-subtle);
+  --c-warm:var(--sys-color-surface-warm);--c-ink:var(--sys-color-text-primary);--c-ink-2:var(--sys-color-text-secondary);
+  --c-muted:var(--sys-color-text-muted);--c-line:var(--sys-color-border);--c-cyan:var(--ref-cyan-500);
+  --c-cyan-dark:var(--sys-color-text-accent);--c-cyan-soft:var(--sys-color-surface-system);--c-coral:var(--ref-coral-500);
+  --c-coral-dark:var(--ref-coral-700);--c-coral-soft:var(--sys-color-surface-human);--c-dark:var(--sys-color-action-primary);
+  --fs-display:var(--sys-type-display);--fs-h1:var(--sys-type-title);--fs-h2:var(--sys-type-heading-1);--fs-h3:var(--sys-type-heading-2);
+  --fs-body-lg:var(--sys-type-body-lg);--fs-body:var(--sys-type-body);--fs-small:var(--sys-type-body-sm);--fs-micro:var(--sys-type-label);
+  --lh-display:var(--sys-leading-display);--lh-heading:var(--sys-leading-heading);--lh-body:var(--sys-leading-body);
+  --w-regular:var(--sys-weight-regular);--w-medium:var(--sys-weight-medium);--w-bold:var(--sys-weight-bold);--w-heavy:var(--sys-weight-heavy);
+  --s1:var(--ref-space-1);--s2:var(--ref-space-2);--s3:var(--ref-space-3);--s4:var(--ref-space-4);--s5:var(--ref-space-6);
+  --s6:var(--ref-space-7);--s7:var(--ref-space-9);--s8:var(--ref-space-10);--s9:var(--ref-space-12);--s10:var(--ref-space-13);
+  --section-y:var(--sys-layout-section-block);--gutter:var(--sys-layout-gutter);--content-max:var(--sys-layout-content-max);
+  --reading-max:var(--sys-layout-reading-max);--header-h:var(--sys-layout-header-height);--control-h:var(--sys-control-height-md);
+  --card-pad:var(--cmp-card-padding);--panel-pad:var(--cmp-panel-padding);--dialog-pad:var(--cmp-dialog-padding);
+  --r-sm:var(--ref-radius-1);--r-md:var(--ref-radius-3);--r-lg:var(--ref-radius-4);--r-xl:var(--ref-radius-5);--r-pill:var(--ref-radius-round);
+  --shadow-sm:var(--sys-elevation-rest);--shadow-hover:var(--sys-elevation-hover);--shadow-dialog:var(--sys-elevation-overlay);
+  --t-fast:var(--sys-motion-fast);--t:var(--sys-motion-normal);--ease:var(--sys-ease-standard);--ease-enter:var(--sys-ease-enter);
+  --rail-gap-standard:var(--cmp-rail-gap);--rail-block-start:var(--cmp-rail-block-start);--rail-block-end:var(--cmp-rail-block-end);
+  --rail-scrollbar-size:var(--cmp-rail-scrollbar-size);--rail-scrollbar-track:var(--cmp-rail-scrollbar-track);--rail-scrollbar-thumb:var(--cmp-rail-scrollbar-thumb);
+}
+
+@media(max-width:900px){
+  :root{--sys-layout-gutter:32px;--sys-layout-section-block:72px;--cmp-dialog-padding:26px}
+}
+@media(max-width:560px){
+  :root{--sys-layout-gutter:18px;--sys-layout-section-block:56px;--sys-layout-header-height:64px;--cmp-dialog-padding:18px}
+}

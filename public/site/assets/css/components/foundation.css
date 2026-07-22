@@ -1,0 +1,41 @@
+/* Canonical global foundation owner. No page or legacy stylesheet may redefine these contracts. */
+:root{
+  --foundation-content-max:1280px;
+  --foundation-focus-width:3px;
+  --foundation-focus-offset:3px;
+}
+.page-shell{
+  position:relative;
+  z-index:1;
+  width:min(calc(100% - (2 * var(--page-gutter))),var(--foundation-content-max));
+  margin-inline:auto;
+}
+.skip-link{
+  position:fixed;
+  inset-block-start:12px;
+  inset-inline-start:16px;
+  z-index:9999;
+  min-height:var(--control-height);
+  padding:10px 14px;
+  border-radius:var(--radius-control);
+  background:var(--color-text-primary);
+  color:var(--color-surface);
+  transform:translateY(-160%);
+}
+.skip-link:focus-visible{transform:none}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+  outline:var(--foundation-focus-width) solid var(--color-focus)!important;
+  outline-offset:var(--foundation-focus-offset)!important;
+  box-shadow:0 0 0 2px var(--color-surface)!important;
+}
+:where(button,[role="button"],a[data-pressable]){min-height:var(--control-height)}
+:where(button,[role="button"],a[data-pressable]):disabled{
+  cursor:not-allowed!important;
+  opacity:1!important;
+}
+@media(max-width:560px){
+  :root{--foundation-focus-offset:2px}
+}
+@media(forced-colors:active){
+  :where(a,button,input,select,textarea,[tabindex]):focus-visible{outline-color:Highlight!important;box-shadow:none!important}
+}

@@ -1,0 +1,108 @@
+{
+  "version": 65,
+  "status": "live-current-production",
+  "extends": "registry-v64.json",
+  "architecture": {
+    "dependencyChain": ["reference", "semantic", "component", "selector", "usage"],
+    "tokenOwner": "assets/css/tokens-v65.css",
+    "componentOwner": "assets/css/system-v65.css",
+    "legacyPolicy": "Existing aliases resolve to canonical v65 values. New code must use --ref-, --sys-, or --cmp- tokens only.",
+    "pageOverridePolicy": "Pages may compose components but may not redefine foundation values or component states."
+  },
+  "foundations": {
+    "color": ["canvas", "surface", "text", "border", "action", "focus", "disabled"],
+    "typography": ["display", "title", "heading-1", "heading-2", "heading-3", "lead", "body", "body-small", "label"],
+    "spacing": ["reference-4px-scale", "content-rhythm", "component-padding", "layout-gutter", "section-block"],
+    "shape": ["radius", "border", "elevation"],
+    "motion": ["duration", "easing", "reduced-motion"],
+    "accessibility": ["focus-ring", "target-size", "forced-colors", "text-measure"]
+  },
+  "components": [
+    {
+      "component": "Button",
+      "status": "live-current-production",
+      "source": "static HTML .button",
+      "cssOwner": "assets/css/system-v65.css",
+      "tokenDependencies": ["--cmp-button-height", "--cmp-button-padding-inline", "--cmp-button-radius", "--sys-color-action-primary", "--sys-focus-ring"],
+      "variants": ["dark", "quiet", "disabled"],
+      "states": ["default", "hover", "focus-visible", "active", "disabled"],
+      "usageScope": ["Home", "Work", "Playground", "Profile", "Project dialog"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Buttons", "status": "mapping-required"},
+      "allowedModifications": ["variant extension", "content", "icon slot"],
+      "forbiddenModifications": ["page-level colour override", "target below 44px", "invisible focus"]
+    },
+    {
+      "component": "Card",
+      "status": "live-current-production",
+      "source": "static HTML card families",
+      "cssOwner": "assets/css/system-v65.css",
+      "tokenDependencies": ["--cmp-card-padding", "--cmp-card-radius", "--cmp-card-border", "--cmp-card-shadow-hover"],
+      "variants": ["project", "experiment", "evidence", "related", "profile"],
+      "states": ["default", "hover", "focus-visible", "selected"],
+      "usageScope": ["Home", "Work", "Playground", "Profile", "Project dialog"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Cards", "status": "mapping-required"},
+      "allowedModifications": ["content layout", "approved brand surface", "media slot"],
+      "forbiddenModifications": ["clipped hover shadow", "raw elevation", "page-owned state styling"]
+    },
+    {
+      "component": "HorizontalRail",
+      "status": "live-current-production",
+      "source": "static HTML [data-rail]",
+      "cssOwner": "assets/css/portfolio-v64.css + assets/css/system-v65.css",
+      "tokenDependencies": ["--cmp-rail-gap", "--cmp-rail-block-start", "--cmp-rail-block-end", "--cmp-rail-scrollbar-thumb"],
+      "variants": ["three-card", "two-card", "one-card", "chip-wrap"],
+      "states": ["start", "middle", "end", "keyboard-focus"],
+      "usageScope": ["Home matcher", "Domain compact", "Playground", "Profile", "Related work"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Horizontal rail", "status": "mapping-required"},
+      "allowedModifications": ["card count breakpoint", "content type"],
+      "forbiddenModifications": ["edge mask", "gradient overlay", "negative inline gutter", "partial-card affordance"]
+    },
+    {
+      "component": "DetailDialog",
+      "status": "live-current-production",
+      "source": "static HTML .detail-dialog + assets/js/app.js",
+      "cssOwner": "assets/css/system-v65.css",
+      "tokenDependencies": ["--cmp-dialog-padding", "--cmp-dialog-radius", "--cmp-dialog-shadow"],
+      "variants": ["project", "experiment", "stacked"],
+      "states": ["closed", "opening", "open", "stacked", "closing"],
+      "usageScope": ["Home", "Work", "Playground", "Profile"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Project details popup", "status": "mapping-required"},
+      "allowedModifications": ["evidence sections", "media", "metadata"],
+      "forbiddenModifications": ["page scroll leakage", "missing focus return", "unregistered spacing"]
+    },
+    {
+      "component": "DomainSelector",
+      "status": "live-current-production",
+      "source": "static HTML .domain-selectors + assets/js/home.js",
+      "cssOwner": "assets/css/portfolio-v63.css + assets/css/portfolio-v64.css",
+      "tokenDependencies": ["--sys-layout-header-height", "--cmp-rail-gap", "--sys-color-action-primary"],
+      "variants": ["desktop-sticky-list", "compact-horizontal", "compact-floating"],
+      "states": ["default", "hover", "focus-visible", "selected"],
+      "usageScope": ["Home domains"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Domain navigation", "status": "mapping-required"},
+      "allowedModifications": ["label", "supporting evidence"],
+      "forbiddenModifications": ["desktop floating selector", "simultaneous compact selectors", "non-clickable option"]
+    },
+    {
+      "component": "Matcher",
+      "status": "live-current-production",
+      "source": "static HTML #matcherWorkspace + assets/js/home.js",
+      "cssOwner": "assets/css/system-v65.css",
+      "tokenDependencies": ["--cmp-input-height", "--cmp-input-radius", "--sys-space-body-to-action", "--sys-focus-ring"],
+      "variants": ["idle-centered", "result-sticky", "no-match"],
+      "states": ["idle", "typing", "submitting", "result", "no-match"],
+      "usageScope": ["Home matcher"],
+      "figmaSource": {"file": "Portfolio Website", "nodeId": null, "frame": "Experience matcher", "status": "mapping-required"},
+      "allowedModifications": ["query copy", "result content"],
+      "forbiddenModifications": ["sticky before result", "hidden query label", "unreachable resubmit"]
+    }
+  ],
+  "releaseGates": [
+    "token traceability",
+    "component registry completeness",
+    "keyboard and reduced-motion QA",
+    "desktop tablet mobile visual QA",
+    "no clipped elevation or rail masks",
+    "production build and rendered-route test"
+  ]
+}

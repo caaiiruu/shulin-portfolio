@@ -1,0 +1,60 @@
+/* v62 — route-safe assets, unobscured rails, stable matcher refinement, and explicit experiment cards. */
+:root{
+  --rail-end-space:max(var(--gutter),24px);
+  --rail-row-gap:var(--s4);
+  --matcher-result-clearance:calc(var(--header-h) + 168px);
+  --experiment-card-min-block:430px;
+  --experiment-card-pad:clamp(22px,2.2vw,30px);
+}
+
+/* A rail owns horizontal scrolling; its ancestors must not imitate an edge mask. */
+.matcher-chapter,.matcher-shell,.matcher-workspace,.experiment-index-v36,
+.experiment-index-v36>.page-shell,.profile-side-projects-v34,.playground,
+.playground>.page-shell,.detail-related-v45,.domain-experience,.domain-layout{
+  overflow:visible!important;clip-path:none!important
+}
+.domain-selectors,.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,
+.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,
+.playground-grid,.chip-rail,.work-filter-v32,.domain-floating-nav-v52__rail{
+  mask:none!important;-webkit-mask:none!important;background-image:none!important;
+  scroll-padding-inline:var(--rail-end-space)!important;scroll-snap-type:x mandatory!important;
+  padding-inline:var(--rail-end-space)!important;box-sizing:border-box!important
+}
+.domain-selectors::before,.domain-selectors::after,.project-card-rail::before,.project-card-rail::after,
+.experiment-index-rail-v36::before,.experiment-index-rail-v36::after,
+.profile-side-rail-v34::before,.profile-side-rail-v34::after,.playground-grid::before,.playground-grid::after,
+.chip-rail::before,.chip-rail::after,.work-filter-v32::before,.work-filter-v32::after{content:none!important;display:none!important}
+.domain-selectors>*:last-child,.project-card-rail>*:last-child,.experiment-index-rail-v36>*:last-child,
+.profile-side-rail-v34>*:last-child,.playground-grid>*:last-child,.chip-rail>*:last-child{margin-inline-end:0!important}
+
+/* Refining an existing result never repositions the document. */
+.matcher-workspace.has-result{overflow:visible!important}
+.matcher-result-content-v38,.matcher-no-result-v38{scroll-margin-top:var(--matcher-result-clearance)!important}
+@media(max-width:1000px){
+  .matcher-workspace.has-result .matcher-query-panel{
+    left:auto!important;right:auto!important;inset-inline:auto!important;box-sizing:border-box!important;
+    max-width:100%!important;overflow:visible!important
+  }
+  .matcher-workspace.has-result .matcher-form{grid-template-columns:minmax(0,1fr) 48px!important;box-sizing:border-box!important}
+  .matcher-workspace.has-result .matcher-submit-v45{display:grid!important;visibility:visible!important;opacity:1!important}
+  .matcher-result{padding-top:var(--s5)!important}
+}
+
+/* Experiment cards keep their playful tilt without sacrificing hierarchy or legibility. */
+.experiment-index-rail-v36{align-items:stretch!important;grid-auto-rows:1fr!important;padding-block:var(--rail-row-gap) var(--s7)!important}
+.experiment-index-card-v36{
+  min-height:var(--experiment-card-min-block)!important;height:auto!important;max-height:none!important;
+  padding:var(--experiment-card-pad)!important;overflow:hidden!important;box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;text-align:left!important
+}
+.experiment-index-card-v36 .kicker{margin:var(--s7) 0 0!important;color:inherit!important;opacity:.78!important}
+.experiment-index-card-v36 h3{margin:var(--s3) 0 0!important;color:inherit!important;font-size:clamp(2.15rem,3.4vw,3.35rem)!important;line-height:.96!important}
+.experiment-index-card-v36 p{margin:var(--s3) 0 0!important;color:inherit!important;opacity:.76!important;font-size:1rem!important;line-height:1.5!important}
+.experiment-index-card-v38__learning{margin:var(--s4) 0 0!important;padding-top:var(--s4)!important;border-top:1px solid currentColor!important;color:inherit!important;opacity:.9!important;font-size:1.05rem!important;line-height:1.45!important}
+.experiment-index-card-v36__meta{margin-top:auto!important;padding-top:var(--s6)!important;color:inherit!important}
+.experiment-index-card-v36--cyan,.experiment-index-card-v36--dark{color:#fff!important}
+.experiment-index-card-v36--cream{color:var(--c-ink)!important}
+@media(max-width:700px){
+  :root{--matcher-result-clearance:calc(var(--header-h) + 150px);--experiment-card-min-block:400px}
+  .experiment-index-rail-v36{grid-auto-columns:min(82vw,320px)!important}
+}

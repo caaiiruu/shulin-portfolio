@@ -1,0 +1,19 @@
+{
+  "version": "54",
+  "inherits": "53",
+  "final_style_owner": "assets/css/portfolio-v54.css",
+  "focus": [
+    "Dialog horizontal containment",
+    "Full-site spacing rhythm",
+    "Recruiter scan metadata",
+    "Responsive card and rail density",
+    "Keyboard and body-scroll behaviour"
+  ],
+  "responsive_breakpoints": [1100, 900, 700, 380],
+  "interaction_contracts": {
+    "dialog": "No horizontal scrolling; reset horizontal position on every project change",
+    "body_lock": "Prevent page movement while navigation or dialog overlays are open",
+    "mobile_dialog": "Full-height surface with fixed close control and one-column evidence hierarchy",
+    "availability": "Bilingual, recruitment-critical metadata immediately below the role"
+  }
+}

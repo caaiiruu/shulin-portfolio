@@ -1,0 +1,5 @@
+/* EditorialSection — sole production owner for cross-page section rhythm. */
+:is(.experience-overview-v42,.work-reference,.domain-chapter,.selected-work,.principles,.playground,.profile-chronology-v34,.profile-awards-v36,.profile-side-projects-v34,.profile-interests-v39,.work-page-v32,.playground-page-v32,.principles-section-v57,.experiments-chapter){padding-block:var(--section-space)}
+.section-heading-v45{display:grid;align-items:start;gap:var(--space-4);max-width:100%;margin-block:0 var(--space-7)}
+.section-heading-v45>p{max-width:62ch;margin-top:0;color:var(--color-text-secondary)}
+@media(max-width:900px){.section-heading-v45{margin-bottom:var(--space-6)}}

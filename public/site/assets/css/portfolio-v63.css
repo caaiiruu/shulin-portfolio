@@ -1,0 +1,107 @@
+/* v63 — semantic type system, flush rails, resilient evidence grids, and desktop domain navigation. */
+:root{
+  /* Semantic typography: components consume roles, never one-off values. */
+  --type-family-display:var(--font-display);
+  --type-family-body:var(--font-body);
+  --type-display-xl:clamp(3.4rem,7vw,7.2rem);
+  --type-display-lg:clamp(2.75rem,5vw,5.25rem);
+  --type-heading-lg:clamp(2rem,3.6vw,3.75rem);
+  --type-heading-md:clamp(1.5rem,2.3vw,2.35rem);
+  --type-heading-sm:clamp(1.15rem,1.55vw,1.45rem);
+  --type-body-lg:clamp(1.04rem,1.2vw,1.22rem);
+  --type-body-md:1rem;
+  --type-body-sm:.875rem;
+  --type-label:.72rem;
+  --type-leading-display:.94;
+  --type-leading-heading:1.08;
+  --type-leading-body:1.58;
+  --type-color-primary:var(--c-ink);
+  --type-color-secondary:var(--c-ink-2);
+  --type-color-label:var(--c-cyan-dark);
+  --rail-inline-space:0px;
+  --evidence-card-min:240px;
+}
+
+body{font-family:var(--type-family-body);font-size:var(--type-body-md);line-height:var(--type-leading-body);color:var(--type-color-primary)}
+h1,h2,h3,h4,h5,h6{font-family:var(--type-family-display);line-height:var(--type-leading-heading);color:inherit}
+.display{font-size:var(--type-display-xl)!important;line-height:var(--type-leading-display)!important}
+.heading-1,.page-hero-grid h1,.modal-head-v45 h2{font-size:var(--type-display-lg)!important;line-height:var(--type-leading-display)!important}
+.heading-2,.domain-statement,.principles-v38__head h2{font-size:var(--type-heading-lg)!important}
+.heading-3,.section-heading-v45 h3,.impact-grid-v45>article>h3,.ownership-section-v45>h3{font-size:var(--type-heading-md)!important}
+.lead-copy,.body-copy,.domain-synthesis{font-size:var(--type-body-lg)!important;line-height:1.5!important;color:var(--type-color-secondary)!important}
+p,li,dd{color:var(--type-color-secondary);overflow-wrap:normal;word-break:normal;hyphens:none}
+.kicker,.project-context,.section-index-v45,.team-impact-role-v47,
+.modal-classification-v45__label,.work-card-signals-v44 dt,.project-signals-v45 dt,
+.info-grid-v45 small,.domain-panel-v30 h4{
+  font-size:var(--type-label)!important;line-height:1.25!important;font-weight:var(--w-bold)!important;
+  letter-spacing:.1em!important;text-transform:uppercase;color:var(--type-color-label)
+}
+
+/* Horizontal content starts flush with its containing grid. Shadow breathing is vertical only. */
+.domain-selectors,.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,
+.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,
+.playground-grid,.chip-rail,.work-filter-v32,.domain-floating-nav-v52__rail,.gallery-thumbs-v45{
+  padding-inline:var(--rail-inline-space)!important;scroll-padding-inline:var(--rail-inline-space)!important;
+  margin-inline:0!important
+}
+.domain-selectors>*:first-child,.project-card-rail>*:first-child,.no-match-project-list-v45>*:first-child,
+.domain-project-list-v30>*:first-child,.detail-related-rail-v45>*:first-child,
+.experiment-index-rail-v36>*:first-child,.profile-side-rail-v34>*:first-child,
+.playground-grid>*:first-child,.chip-rail>*:first-child,.work-filter-v32>*:first-child{margin-inline-start:0!important}
+
+/* Team impact is three readable vertical cards, not three miniature two-column tables. */
+#crossImpact{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:var(--s3)!important;width:100%!important}
+.team-impact-item-v47{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+  gap:var(--s3)!important;min-width:0!important;min-height:var(--evidence-card-min)!important;
+  padding:var(--card-pad)!important
+}
+.team-impact-item-v47 p{width:100%!important;max-width:36ch!important;font-size:var(--type-body-md)!important;line-height:1.55!important;overflow-wrap:normal!important;word-break:normal!important}
+
+/* Desktop domain navigation: persistent, compact, and directly clickable beside the changing evidence. */
+@media(min-width:1001px){
+  .domain-layout{grid-template-columns:minmax(300px,360px) minmax(0,1fr)!important;gap:clamp(32px,4vw,56px)!important;align-items:start!important}
+  .domain-intro{position:sticky!important;top:calc(var(--header-h) + var(--s5))!important;z-index:2!important}
+  .domain-selectors{
+    display:grid!important;grid-template-columns:1fr!important;gap:var(--s2)!important;
+    width:100%!important;overflow:visible!important;padding:0!important;margin:var(--s5) 0 0!important;
+    pointer-events:auto!important;opacity:1!important;visibility:visible!important;transform:none!important
+  }
+  .domain-tab-v38{
+    display:grid!important;grid-template-columns:32px minmax(0,1fr) 18px!important;
+    width:100%!important;min-height:52px!important;flex:none!important;padding:10px 14px!important;
+    border-radius:14px!important;pointer-events:auto!important;cursor:pointer!important
+  }
+  .domain-tab-v38::after{content:'›';justify-self:end;font-size:1.2rem;opacity:.55}
+  .domain-tab-v38:hover{transform:translateX(3px)!important}
+  .domain-tab-v38[aria-selected=true]{box-shadow:var(--shadow-sm)!important}
+  .domain-stage{min-width:0!important}
+}
+
+/* Work remains a complete reviewable grid even when animation or filtering JS is unavailable. */
+.work-gallery-v32{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:var(--s5)!important;align-items:stretch!important}
+.work-card-v32,.work-card-v32__button,.work-card-v32__content{min-width:0!important}
+.work-card-v32__button{display:grid!important;grid-template-rows:auto 1fr!important;width:100%!important;height:100%!important;visibility:visible!important}
+.work-card-v32--featured{grid-column:1/-1!important}
+.work-card-v32__content{display:flex!important;flex-direction:column!important}
+.work-card-v32__content>p{font-size:var(--type-body-md)!important;line-height:1.55!important}
+.work-card-v32__action{margin-top:auto!important}
+
+/* Decorative hero geometry never competes with copy. */
+.page-hero-grid>*{position:relative;z-index:1}
+.page-hero-mark-v45{z-index:0!important;opacity:.72!important;pointer-events:none!important}
+.page-hero-grid>p{
+  align-self:end!important;max-width:34ch!important;padding:var(--s4)!important;
+  border:1px solid rgba(217,224,227,.75);border-radius:var(--r-md);
+  background:rgba(255,255,255,.9);backdrop-filter:blur(6px)
+}
+
+@media(max-width:1000px){
+  #crossImpact{grid-template-columns:1fr!important}
+  .team-impact-item-v47{min-height:0!important}
+}
+@media(max-width:760px){
+  .work-gallery-v32{grid-template-columns:1fr!important;gap:var(--s4)!important}
+  .work-card-v32--featured{grid-column:auto!important}
+  .domain-selectors{padding-inline:0!important}
+}

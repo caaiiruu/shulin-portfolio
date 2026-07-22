@@ -1,0 +1,82 @@
+/* v61 — explicit matcher states, unmasked rails, concise popup metadata, and semantic back navigation. */
+:root{
+  --matcher-sticky-pad:var(--s3);
+  --matcher-sticky-gap:var(--s2);
+  --matcher-sticky-label-size:.72rem;
+  --matcher-sticky-radius:18px;
+  --matcher-sticky-max:760px;
+  --rail-mask:none;
+  --detail-meta-separator-gap:var(--s3);
+  --dialog-back-min-width:108px;
+}
+
+/* A new matcher session begins centred. Result state alone enables the compact sticky control. */
+.matcher-workspace:not(.has-result){
+  display:grid!important;grid-template-columns:1fr!important;min-height:var(--matcher-idle-min-block)!important;
+  align-content:center!important;justify-items:center!important
+}
+.matcher-workspace:not(.has-result) .matcher-query-panel{
+  width:100%!important;max-width:var(--matcher-sticky-max)!important;position:static!important;
+  align-self:center!important;justify-self:center!important;text-align:center!important
+}
+
+@media(max-width:1000px){
+  .matcher-workspace.has-result .matcher-query-panel{
+    position:sticky!important;top:calc(var(--header-h) + var(--v57-sticky-gap))!important;z-index:42!important;
+    display:grid!important;gap:var(--matcher-sticky-gap)!important;width:100%!important;max-width:none!important;
+    padding:var(--matcher-sticky-pad)!important;border:1px solid var(--c-line)!important;
+    border-radius:var(--matcher-sticky-radius)!important;background:rgba(255,255,255,.96)!important;
+    box-shadow:var(--v57-shadow-rest)!important;text-align:left!important
+  }
+  .matcher-workspace.has-result .matcher-query-panel>h2{
+    display:block!important;margin:0!important;font-size:var(--matcher-sticky-label-size)!important;
+    line-height:1.2!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--c-cyan-dark)
+  }
+  .matcher-workspace.has-result .matcher-query-panel>.matcher-copy,
+  .matcher-workspace.has-result .matcher-query-panel>.chip-rail{display:none!important}
+  .matcher-workspace.has-result .matcher-form{
+    display:grid!important;grid-template-columns:minmax(0,1fr) var(--v57-compact-control)!important;
+    gap:var(--s2)!important;width:100%!important;margin:0!important;padding:5px!important;border-radius:12px!important
+  }
+  .matcher-workspace.has-result .matcher-input{width:100%!important;min-width:0!important;min-height:var(--v57-compact-control)!important}
+  .matcher-workspace.has-result .matcher-submit-v45{
+    display:grid!important;place-items:center!important;width:var(--v57-compact-control)!important;
+    min-width:var(--v57-compact-control)!important;height:var(--v57-compact-control)!important;padding:0!important
+  }
+  .matcher-workspace.has-result .matcher-submit-label-v45{
+    position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important
+  }
+  .matcher-workspace.has-result .matcher-submit-arrow-v45{display:block!important}
+}
+
+/* Rails expose content directly. No gradient, mask, pseudo-overlay, or edge veil. */
+.domain-selectors,.domain-floating-nav-v52,.domain-floating-nav-v52__rail,
+.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,
+.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.chip-rail,.work-filter-v32{
+  -webkit-mask-image:var(--rail-mask)!important;mask-image:var(--rail-mask)!important
+}
+.domain-floating-nav-v52::before,.domain-floating-nav-v52::after{content:none!important;display:none!important}
+.domain-floating-nav-v52{overflow:visible!important}
+.domain-floating-nav-v52__rail{overflow-x:auto!important;padding-inline:var(--s2)!important}
+
+/* Category and period form one concise metadata sentence, never a split header. */
+.modal-head-meta-v60{justify-content:flex-start!important;gap:0!important;padding-right:0!important}
+.detail-period-v60{display:inline-flex;align-items:center}
+.detail-period-v60::before{content:"|";margin-inline:var(--detail-meta-separator-gap);color:var(--c-line)}
+.detail-dialog.is-experiment .info-grid-v45--experiment{grid-template-columns:1fr!important}
+
+/* Back is a labelled navigation action; Close remains a conventional icon button. */
+.modal-close{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+.modal-close.is-back{
+  width:auto!important;min-width:var(--dialog-back-min-width)!important;padding-inline:16px!important;
+  border-radius:999px!important;font-size:1rem!important;font-weight:var(--w-bold)!important
+}
+.modal-close__icon{font-size:1.7rem;line-height:1}
+.modal-close.is-back .modal-close__icon{font-size:1.45rem}
+.modal-close__label{font-size:.82rem;line-height:1}
+
+@media(max-width:560px){
+  .modal-head-meta-v60{flex-direction:row!important;align-items:center!important;flex-wrap:wrap!important}
+  .detail-period-v60::before{margin-inline:var(--s2)}
+  .modal-close.is-back{min-width:96px!important;padding-inline:13px!important}
+}

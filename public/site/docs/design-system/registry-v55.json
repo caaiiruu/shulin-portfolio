@@ -1,0 +1,19 @@
+{
+  "version": "55",
+  "status": "active",
+  "inherits": "registry-v54.json",
+  "scope": [
+    "CV-backed profile chronology",
+    "verified awards and education",
+    "recruitment actions",
+    "project leadership evidence"
+  ],
+  "tokens": {
+    "cardPadding": "--v55-card-pad"
+  },
+  "contentRules": [
+    "Employment dates and titles follow the supplied CV.",
+    "Quantitative claims must be supported by the CV or explicitly supplied evidence.",
+    "Leadership evidence is expressed as mechanism, collaboration, and team impact."
+  ]
+}
