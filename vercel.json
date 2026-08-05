@@ -32,31 +32,23 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/site/index.html"
+      "destination": "/site/index"
     },
     {
       "source": "/site",
-      "destination": "/site/index.html"
+      "destination": "/site/index"
     },
     {
       "source": "/site/",
-      "destination": "/site/index.html"
+      "destination": "/site/index"
     },
     {
-      "source": "/site/work",
-      "destination": "/site/work.html"
-    },
-    {
-      "source": "/site/work/:projectId*",
-      "destination": "/site/work.html"
-    },
-    {
-      "source": "/site/profile",
-      "destination": "/site/profile.html"
+      "source": "/site/work/:projectId",
+      "destination": "/site/work"
     },
     {
       "source": "/site/playground",
-      "destination": "/site/experiments.html"
+      "destination": "/site/experiments"
     }
   ]
 }
