@@ -85,11 +85,36 @@ jobs:
           fi
 
       - name: Deploy preview
+        id: deploy
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -euo pipefail
-          vercel deploy --yes --token="$VERCEL_TOKEN" 2>&1 | tee deployment-url.txt
+          DEPLOYMENT_URL=$(vercel deploy --yes --token="$VERCEL_TOKEN")
+          printf '%s\n' "$DEPLOYMENT_URL" | tee deployment-url.txt
+          echo "url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Verify preview routes through Vercel auth
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+
+          verify_route() {
+            route="$1"
+            expected="$2"
+            output_file="$3"
+
+            vercel curl "$route" --deployment "$DEPLOYMENT_URL" --token="$VERCEL_TOKEN" > "$output_file"
+            grep -Fq "$expected" "$output_file"
+            echo "Verified $route"
+          }
+
+          verify_route "/" "Shulin Chou" /tmp/home.html
+          verify_route "/site/work" "Work" /tmp/work.html
+          verify_route "/site/work/voucher-center" "voucher" /tmp/voucher.html
+          verify_route "/site/profile" "Shulin Chou" /tmp/profile.html
 
       - name: Upload deployment URL
         uses: actions/upload-artifact@v4
