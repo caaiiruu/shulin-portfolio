@@ -1,4 +1,5 @@
 **/*.mov
+!public/site/assets/validation/payment/validation-payment-video-order-details-r77.mov
 **/*.mp4
 **/*.webm
 **/*.m4v
