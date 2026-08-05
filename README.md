@@ -4,6 +4,10 @@ A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
 Drizzle support.
 
+## Deployment checkpoint
+
+The `deploy/vercel-preview-2026-08-05` branch contains the recovered v247 static portfolio artifact. Vercel serves `public/` directly using the rewrites in `vercel.json`; large validation videos are intentionally excluded and represented by static poster evidence.
+
 ## Prerequisites
 
 - Node.js `>=22.13.0`
