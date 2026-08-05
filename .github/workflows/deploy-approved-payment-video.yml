@@ -115,7 +115,7 @@ jobs:
           verify_page /site 'Shulin Chou' evidence/site.html
           verify_page /site/work 'Work — Shulin Chou' evidence/work.html
           verify_page /site/work/voucher-center 'Work — Shulin Chou' evidence/voucher-center.html
-          verify_page /site/experiments 'Playground — Shulin Chou' evidence/experiments.html
+          verify_page /site/experiments 'Experiment — Shulin Chou' evidence/experiments.html
           verify_page /site/profile 'Profile — Shulin Chou' evidence/profile.html
 
           curl -fsSL --retry 3 "$ORIGINAL/$VIDEO_PATH" -o evidence/original.mov
