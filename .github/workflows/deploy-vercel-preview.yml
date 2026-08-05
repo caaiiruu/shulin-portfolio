@@ -35,12 +35,63 @@ jobs:
           mkdir -p .vercel
           printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
 
-      - name: Validate Vercel token
+      - name: Diagnose and validate Vercel token
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -euo pipefail
           test -n "$VERCEL_TOKEN"
+
+          RAW_LENGTH=$(printf '%s' "$VERCEL_TOKEN" | wc -c | tr -d ' ')
+          TRIMMED_TOKEN=$(printf '%s' "$VERCEL_TOKEN" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+          TRIMMED_LENGTH=$(printf '%s' "$TRIMMED_TOKEN" | wc -c | tr -d ' ')
+
+          case "$TRIMMED_TOKEN" in
+            vcp_*) TOKEN_KIND="personal-auth-token-vcp" ;;
+            vca_*) TOKEN_KIND="oauth-access-token-vca" ;;
+            tok_*) TOKEN_KIND="token-id-not-secret-value" ;;
+            *) TOKEN_KIND="unrecognised-prefix" ;;
+          esac
+
+          echo "Token length: $RAW_LENGTH"
+          echo "Trimmed token length: $TRIMMED_LENGTH"
+          echo "Detected token kind: $TOKEN_KIND"
+
+          if [ "$RAW_LENGTH" != "$TRIMMED_LENGTH" ]; then
+            echo "::error::VERCEL_TOKEN contains leading or trailing whitespace/newline."
+            exit 1
+          fi
+
+          HTTP_STATUS=$(curl --silent --show-error \
+            --output /tmp/vercel-user.json \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            https://api.vercel.com/v2/user)
+
+          echo "Vercel /v2/user HTTP status: $HTTP_STATUS"
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('/tmp/vercel-user.json').read_text())
+          user = payload.get('user') if isinstance(payload, dict) else None
+          if isinstance(user, dict):
+              print('Authenticated Vercel username:', user.get('username') or user.get('name') or '(present)')
+          elif isinstance(payload, dict):
+              error = payload.get('error')
+              if isinstance(error, dict):
+                  print('Vercel API error code:', error.get('code'))
+                  print('Vercel API error message:', error.get('message'))
+              else:
+                  print('Vercel API response keys:', ', '.join(sorted(payload.keys())))
+          PY
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "::error::Vercel rejected the token at the official /v2/user API."
+            exit 1
+          fi
+
           vercel whoami --token="$VERCEL_TOKEN"
 
       - name: Deploy preview
