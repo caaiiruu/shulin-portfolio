@@ -1,6 +1,9 @@
 name: Deploy Vercel production
 
 on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
   workflow_dispatch:
 
 permissions:
