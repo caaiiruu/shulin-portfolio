@@ -35,6 +35,7 @@ jobs:
           import os
 
           origin = os.environ['ORIGINAL_ORIGIN'].rstrip('/')
+          runner_temp = Path(os.environ['RUNNER_TEMP'])
           paths = [
               'site/index.html',
               'site/work.html',
@@ -46,7 +47,7 @@ jobs:
               'site/content/portfolio-content.json',
               'site/content/portfolio-asset-manifest.json',
           ]
-          mirror = Path('parity-mirror')
+          mirror = runner_temp / 'parity-mirror'
           mirror.mkdir(exist_ok=True)
           manifest = {}
           for relative in paths:
@@ -63,7 +64,7 @@ jobs:
                   'bytes': len(body),
                   'sha256': hashlib.sha256(body).hexdigest(),
               }
-          Path('parity-remote-manifest.json').write_text(
+          (runner_temp / 'parity-remote-manifest.json').write_text(
               json.dumps(manifest, indent=2), encoding='utf-8'
           )
           PY
@@ -75,9 +76,9 @@ jobs:
           from pathlib import Path
           import hashlib
           import json
-          import re
+          import os
 
-          mirror = Path('parity-mirror')
+          mirror = Path(os.environ['RUNNER_TEMP']) / 'parity-mirror'
           public = Path('public')
 
           identical_required = [
@@ -117,10 +118,10 @@ jobs:
         run: |
           set -euo pipefail
           for name in index.html work.html experiments.html profile.html; do
-            cp "parity-mirror/site/$name" "public/site/$name"
+            cp "$RUNNER_TEMP/parity-mirror/site/$name" "public/site/$name"
           done
           mkdir -p public/site/assets/validation/payment
-          cp parity-mirror/site/assets/validation/payment/validation-payment-video-order-details-r77.mov \
+          cp "$RUNNER_TEMP/parity-mirror/site/assets/validation/payment/validation-payment-video-order-details-r77.mov" \
              public/site/assets/validation/payment/validation-payment-video-order-details-r77.mov
 
       - name: Verify only approved parity paths changed
@@ -247,12 +248,15 @@ jobs:
           test "$remote_video_bytes" -gt 3000000
           echo "Production validation video bytes: $remote_video_bytes"
 
+      - name: Prepare parity evidence
+        run: |
+          mkdir -p parity-evidence
+          cp "$RUNNER_TEMP/parity-remote-manifest.json" parity-evidence/parity-remote-manifest.json
+          cp production-url.txt deployment.json parity-evidence/
+
       - name: Upload parity evidence
         uses: actions/upload-artifact@v4
         with:
           name: original-gpt-site-parity-release
-          path: |
-            parity-remote-manifest.json
-            production-url.txt
-            deployment.json
+          path: parity-evidence
           retention-days: 2
