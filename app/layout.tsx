@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shulin Chou — Senior Product Designer",
+  title: "Shulin Chou — Product Designer operating at Principal scope",
   description:
-    "Senior product designer turning complex workflows into clear, scalable systems.",
+    "Product designer operating at Principal scope, turning complex workflows into clear, scalable systems.",
   other: {
     "codex-preview": "development",
   },

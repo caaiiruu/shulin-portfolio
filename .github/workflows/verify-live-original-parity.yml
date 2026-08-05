@@ -1,0 +1,97 @@
+name: Verify live original parity
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/verify-live-original-parity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      ORIGINAL: https://shulin-portfolio-v53.dr-piipii.chatgpt.site
+      LIVE: https://shulinchou.com
+    steps:
+      - name: Compare original and live files byte-for-byte
+        run: |
+          set -euo pipefail
+          mkdir -p verify/original verify/live
+          : > verify/parity-report.txt
+
+          compare_pair() {
+            label="$1"
+            original_url="$2"
+            live_url="$3"
+            safe_name=$(printf '%s' "$label" | tr '/ ' '__')
+            original_file="verify/original/$safe_name"
+            live_file="verify/live/$safe_name"
+
+            curl --fail --silent --show-error --location --retry 3 \
+              -H 'Cache-Control: no-cache' "$original_url" -o "$original_file"
+            curl --fail --silent --show-error --location --retry 3 \
+              -H 'Cache-Control: no-cache' "$live_url" -o "$live_file"
+
+            original_sha=$(sha256sum "$original_file" | cut -d' ' -f1)
+            live_sha=$(sha256sum "$live_file" | cut -d' ' -f1)
+            original_bytes=$(wc -c < "$original_file" | tr -d ' ')
+            live_bytes=$(wc -c < "$live_file" | tr -d ' ')
+
+            printf '%s\n  original: %s bytes %s\n  live:     %s bytes %s\n' \
+              "$label" "$original_bytes" "$original_sha" "$live_bytes" "$live_sha" \
+              | tee -a verify/parity-report.txt
+
+            cmp "$original_file" "$live_file"
+            echo '  result: MATCH' | tee -a verify/parity-report.txt
+          }
+
+          compare_pair 'index.html' \
+            "$ORIGINAL/site/index.html" "$LIVE/site"
+          compare_pair 'work.html' \
+            "$ORIGINAL/site/work.html" "$LIVE/site/work"
+          compare_pair 'voucher-center-route' \
+            "$ORIGINAL/site/work.html" "$LIVE/site/work/voucher-center"
+          compare_pair 'experiments.html' \
+            "$ORIGINAL/site/experiments.html" "$LIVE/site/experiments"
+          compare_pair 'profile.html' \
+            "$ORIGINAL/site/profile.html" "$LIVE/site/profile"
+          compare_pair 'production-js' \
+            "$ORIGINAL/site/assets/js/production.c3e1b4d6a1eb213d.js" \
+            "$LIVE/site/assets/js/production.c3e1b4d6a1eb213d.js"
+          compare_pair 'production-css' \
+            "$ORIGINAL/site/assets/css/production.e6ab1a6b71ba8928.css" \
+            "$LIVE/site/assets/css/production.e6ab1a6b71ba8928.css"
+          compare_pair 'portfolio-content-r119' \
+            "$ORIGINAL/site/content/portfolio-content.json" \
+            "$LIVE/site/content/portfolio-content.json"
+          compare_pair 'asset-manifest' \
+            "$ORIGINAL/site/content/portfolio-asset-manifest.json" \
+            "$LIVE/site/content/portfolio-asset-manifest.json"
+          compare_pair 'payment-validation-video' \
+            "$ORIGINAL/site/assets/validation/payment/validation-payment-video-order-details-r77.mov" \
+            "$LIVE/site/assets/validation/payment/validation-payment-video-order-details-r77.mov"
+
+      - name: Verify www permanent redirect
+        run: |
+          set -euo pipefail
+          headers=$(curl --silent --show-error --head https://www.shulinchou.com/site)
+          printf '%s\n' "$headers" | tee verify/www-headers.txt
+          status=$(printf '%s\n' "$headers" | head -n 1 | awk '{print $2}')
+          location=$(printf '%s\n' "$headers" | awk 'BEGIN{IGNORECASE=1} /^location:/{sub(/\r$/, ""); print $2}')
+          test "$status" = "308"
+          case "$location" in
+            https://shulinchou.com/site|https://shulinchou.com/site/) ;;
+            *) echo "Unexpected redirect location: $location"; exit 1 ;;
+          esac
+
+      - name: Upload exact parity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-original-parity-evidence
+          path: verify
+          retention-days: 2

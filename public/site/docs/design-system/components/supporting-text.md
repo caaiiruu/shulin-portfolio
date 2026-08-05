@@ -1,8 +1,8 @@
 # Supporting Text
 
-Status: Live / Current Production  
-CSS Owner: `assets/css/system-v72.css`  
-Token Source: `assets/css/tokens-v72.css`
+Status: Live / Current Production
+CSS Owner: `assets/css/base.css`
+Token Source: `assets/css/tokens.css`
 
 ## Variants
 

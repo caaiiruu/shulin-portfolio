@@ -1,0 +1,41 @@
+/* ArrowIcon — sole owner for the canonical SVG affordance and direction variants. */
+.icon-arrow{
+  display:block;
+  flex:0 0 var(--dimension-16px);
+  width:var(--dimension-16px);
+  height:var(--dimension-16px);
+  margin:0;
+  background-color:currentColor;
+  -webkit-mask:url("/site/assets/img/arrow.svg") center/contain no-repeat;
+  mask:url("/site/assets/img/arrow.svg") center/contain no-repeat;
+  transform:rotate(var(--arrow-rotation,var(--arrow-rotate-down)));
+  transform-origin:center;
+  transition:transform var(--motion-fast) var(--ease-standard);
+}
+.icon-arrow--inline{margin-inline-start:var(--space-1)}
+.icon-download{
+  display:inline-block;
+  flex:0 0 var(--dimension-16px);
+  width:var(--dimension-16px);
+  height:var(--dimension-16px);
+  margin-inline-start:var(--space-1);
+  background-color:currentColor;
+  -webkit-mask:url("/site/assets/img/download.svg") center/contain no-repeat;
+  mask:url("/site/assets/img/download.svg") center/contain no-repeat;
+  transition:transform var(--motion-fast) var(--ease-standard);
+}
+.icon-arrow--down{--arrow-rotation:var(--arrow-rotate-down)}
+.icon-arrow--right{--arrow-rotation:var(--arrow-rotate-right)}
+.icon-arrow--up{--arrow-rotation:var(--arrow-rotate-up)}
+.icon-arrow--left{--arrow-rotation:var(--arrow-rotate-left)}
+.icon-arrow--up-right{--arrow-rotation:var(--arrow-rotate-up-right)}
+.icon-arrow--down-right{--arrow-rotation:var(--arrow-rotate-down-right)}
+.icon-arrow--down-left{--arrow-rotation:var(--arrow-rotate-down-left)}
+.icon-arrow--up-left{--arrow-rotation:var(--arrow-rotate-up-left)}
+:where(a,button):hover:not(:disabled)>.icon-arrow--right{transform:translateX(var(--dimension-2px)) rotate(var(--arrow-rotate-right))}
+:where(a,button):hover:not(:disabled)>.icon-arrow--left{transform:translateX(var(--dimension-neg-2px)) rotate(var(--arrow-rotate-left))}
+:where(a,button):hover:not(:disabled)>.icon-arrow--down{transform:translateY(var(--dimension-2px)) rotate(var(--arrow-rotate-down))}
+:where(a,button):hover:not(:disabled)>.icon-arrow--up{transform:translateY(var(--dimension-neg-2px)) rotate(var(--arrow-rotate-up))}
+:where(a,button):hover:not(:disabled)>.icon-arrow--up-right{transform:translate(var(--dimension-1px),var(--dimension-neg-1px)) rotate(var(--arrow-rotate-up-right))}
+:where(a,button):hover:not(:disabled)>.icon-download{transform:translateY(var(--dimension-2px))}
+@media(prefers-reduced-motion:reduce){.icon-arrow,.icon-download{transition:none}}

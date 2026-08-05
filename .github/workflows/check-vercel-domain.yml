@@ -1,0 +1,64 @@
+name: Check Vercel domain configuration
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/check-vercel-domain.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-domain:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_nD9NNfDwlkTJJ2wtplVSaxHO
+      VERCEL_PROJECT_ID: prj_XJxTzDxihUexNiSzUmFHNzXBBwUk
+    steps:
+      - name: Query Vercel domain configuration
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          curl --silent --show-error --fail \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/domains?teamId=$VERCEL_ORG_ID" \
+            > project-domains.json
+
+          curl --silent --show-error \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v6/domains/shulinchou.com/config?teamId=$VERCEL_ORG_ID" \
+            > apex-config.json
+
+          curl --silent --show-error \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v6/domains/www.shulinchou.com/config?teamId=$VERCEL_ORG_ID" \
+            > www-config.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          for label, path in [
+              ('PROJECT DOMAINS', 'project-domains.json'),
+              ('APEX CONFIG', 'apex-config.json'),
+              ('WWW CONFIG', 'www-config.json'),
+          ]:
+              print(f'\n=== {label} ===')
+              payload = json.loads(Path(path).read_text())
+              print(json.dumps(payload, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Upload domain diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-domain-diagnostics
+          path: |
+            project-domains.json
+            apex-config.json
+            www-config.json
+          retention-days: 1

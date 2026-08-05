@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "status": "Live / Current Production",
+  "owners": {
+    "tokens": "assets/css/tokens.css",
+    "globalLayout": "assets/css/base.css",
+    "componentRegistry": "docs/design-system/registry.json",
+    "content": "content/portfolio-content.json",
+    "assetManifest": "content/portfolio-asset-manifest.json",
+    "runtime": "assets/js/runtime.js",
+    "productionBuilder": "../../scripts/build-production-assets.mjs",
+    "ssotValidator": "qa/ssot-governance.mjs"
+  },
+  "rules": {
+    "generatedBundlesAreReadOnly": true,
+    "versionedActiveSourcesForbidden": true,
+    "alternateRegistriesForbidden": true,
+    "alternateTokenSourcesForbidden": true,
+    "historyLivesInGit": true
+  },
+  "zeroDebtGate": {
+    "baseCssVersionedSourceMarkers": 0,
+    "baseCssVersionedCustomProperties": 0,
+    "baseCssSameContextDuplicateSelectors": 0,
+    "baseCssComponentSelectors": 0,
+    "sameRulePropertyOverrides": 0,
+    "policy": "Canonical source must remain free of historical layers, release-named tokens, component leakage, duplicate selector owners, and same-rule property overrides."
+  }
+}

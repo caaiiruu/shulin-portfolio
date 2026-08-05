@@ -1,0 +1,678 @@
+{
+  "schemaVersion": 1,
+  "status": "Live / Current Production",
+  "architecture": {
+    "tokenOwner": "assets/css/tokens.css",
+    "layoutOwner": "assets/css/base.css",
+    "runtimeOwner": "assets/js/runtime.js",
+    "contentOwner": "content/portfolio-content.json",
+    "dependencyChain": [
+      "primitive",
+      "semantic",
+      "component",
+      "selector",
+      "rendered usage"
+    ]
+  },
+  "policy": {
+    "singleLiveEntry": true,
+    "versionedLiveOwnersForbidden": true,
+    "legacyRuntimeImportsForbidden": true,
+    "generatedBundlesAreNotSources": true,
+    "interactiveContrastContract": "Every default, hover, active, selected and focus state must pair its foreground and background tokens. Inverse text may not remain on a light hover surface.",
+    "stageCaseCardContract": "Use one related-case hierarchy: matching title, explicitly labelled problem solved, explicitly labelled reusable result, and one contrast-safe action."
+  },
+  "components": [
+    {
+      "component": "Foundation",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates",
+      "cssOwner": "assets/css/components/foundation.css",
+      "tokenDependencies": [
+        "page-gutter",
+        "control-height",
+        "color-focus",
+        "font-sans",
+        "text-body",
+        "text-h1",
+        "text-h2",
+        "text-h3",
+        "leading-body",
+        "measure-body",
+        "interactive-state-safe-area",
+        "interactive-organic-radius",
+        "shadow-organic-hover"
+      ],
+      "variants": [
+        "Global typography",
+        "Page shell",
+        "Keyboard focus",
+        "Parent-managed keyboard focus",
+        "Organic interaction state"
+      ],
+      "interactionContract": [
+        "Controls receive the canonical visible keyboard focus by default",
+        "A control may opt out only with data-focus-managed when its registered parent component renders the complete visible focus frame"
+      ],
+      "usageScope": [
+        "Homepage",
+        "Work",
+        "Experiments",
+        "Profile"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ArrowIcon",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates and assets/js/app.js",
+      "cssOwner": "assets/css/components/arrow-icon.css",
+      "tokenDependencies": [
+        "arrow-rotate-down",
+        "arrow-rotate-right",
+        "arrow-rotate-up",
+        "arrow-rotate-left",
+        "arrow-rotate-up-right",
+        "arrow-rotate-down-right",
+        "arrow-rotate-down-left",
+        "arrow-rotate-up-left",
+        "motion-fast"
+      ],
+      "variants": [
+        "Down",
+        "Right",
+        "Up",
+        "Left",
+        "Diagonal",
+        "Download"
+      ],
+      "interactionContract": [
+        "Arrow SVGs have no intrinsic inline margin so circular icon surfaces remain geometrically centred",
+        "Text-adjacent arrows opt into the explicit inline-spacing variant",
+        "Directional hover motion preserves the canonical rotation"
+      ],
+      "usageScope": [
+        "Homepage",
+        "Work",
+        "Experiments",
+        "Profile",
+        "Project details"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "SiteChrome",
+      "status": "Live / Current Production",
+      "renderSource": "Shared static header and footer templates plus assets/js/app.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/site-chrome.css",
+      "tokenDependencies": [
+        "header-height",
+        "control-height",
+        "color-focus",
+        "shadow-focus",
+        "chrome-header-surface",
+        "chrome-menu-surface",
+        "chrome-search-backdrop",
+        "chrome-footer-surface",
+        "chrome-footer-text",
+        "chrome-footer-text-secondary",
+        "chrome-footer-rule",
+        "chrome-action-surface",
+        "chrome-action-surface-hover",
+        "chrome-action-text",
+        "chrome-footer-title",
+        "chrome-footer-title-mobile",
+        "chrome-footer-pad-block-start",
+        "chrome-footer-pad-block-end",
+        "interactive-organic-radius"
+      ],
+      "variants": [
+        "Desktop navigation",
+        "Transparent homepage navigation",
+        "Mobile navigation",
+        "Global search dialog",
+        "Contact footer"
+      ],
+      "interactionContract": [
+        "The homepage header remains in layout at the canonical header height: transparent at the top and white with a divider and blur after scrolling",
+        "Opening the mobile menu gives the transparent homepage header an opaque surface",
+        "The compact menu trigger is borderless at rest and exposes its pale-cyan state only on hover, focus, or open",
+        "Language changes preserve route, scroll position, selected domain, matcher result, open project, and media position",
+        "Every public Project Popup resolves to one canonical reload-safe /site/work/{project-slug} route; programme children extend that route without a nested dialog",
+        "Global search is available from every public route",
+        "Global search title, instructions, placeholder, suggestions, query and rendered results always use the active site language",
+        "The global search form is the sole visual focus owner at every breakpoint; the input never draws an independent inner focus border",
+        "The global search clear control appears only for a non-empty query and exposes pointer, hover, focus and pressed states",
+        "The global search close control reuses the canonical PopupShell close component and inset",
+        "Search query, suggestions and result cards use the canonical Content SSOT",
+        "Search restores trigger focus on close and moves focus to updated results",
+        "The homepage matcher remains only as a no-JavaScript fallback"
+      ],
+      "usageScope": [
+        "Homepage",
+        "Work",
+        "Experiments",
+        "Profile"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "Hero",
+      "status": "Live / Current Production",
+      "renderSource": "index.html, assets/img/hero-clarity-system.svg and assets/img/hero-transformation-system.svg",
+      "cssOwner": "assets/css/components/hero.css",
+      "tokenDependencies": [
+        "hero-surface",
+        "hero-ink",
+        "hero-accent",
+        "hero-pad-inline",
+        "hero-pad-block",
+        "hero-title-size",
+        "hero-title-leading",
+        "hero-title-size-zh-wide",
+        "hero-title-scale-zh-compact",
+        "hero-title-measure-zh",
+        "hero-outcome-top-zh",
+        "hero-outcome-line-offset",
+        "hero-bottom-safe",
+        "hero-transformation-shift-mobile",
+        "hero-artwork-start-narrow",
+        "radius-control",
+        "radius-icon",
+        "hero-cta-shadow-rest",
+        "hero-cta-shadow-hover"
+      ],
+      "interactionContract": [
+        "The transparent homepage header reveals the Hero surface at the top of the page and gains the shared chrome surface only after scrolling or opening the mobile menu",
+        "The English outcome begins on the same typographic baseline as the final line of the opening statement",
+        "The Chinese opening statement keeps the intentional two-line phrase break 把混亂／轉化為, reaches 140pt at wide-desktop scale, uses a three-CJK-character measure rather than Latin ch units, and returns to the compact responsive scale at 1100px and below",
+        "The CTA and supporting copy share one viewport-safe bottom inset on wide screens",
+        "The CTA uses the shared pill action radius, cyan hover surface, coral depth cue, centred circular ArrowIcon, visible focus and pressed feedback",
+        "The hand enters from left to right before the five supplied cloud silhouettes converge into the palm-centre anchor",
+        "The post-convergence grip intermediary remains hidden; the sequence cuts directly to the three-shape flame morph loop",
+        "The resolved flame sits behind the fist with its lower body obscured by the hand and sleeve, matching the supplied overlap reference",
+        "Compact viewports preserve the same hand-first, cloud-second, flame-loop sequence",
+        "Reduced-motion skips entrance and cloud movement and renders the resolved hand-and-static-flame state immediately",
+        "Chinese and English preserve the same composition without fixed line-height containers or artwork covering essential words"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "SearchMatcher",
+      "status": "Retired from homepage",
+      "renderSource": "index.html and assets/js/home.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/search.css",
+      "tokenDependencies": [
+        "page-gutter",
+        "color-focus",
+        "motion-fast"
+      ],
+      "interactionContract": [
+        "The shared global-search dialog is the only visible search surface"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "PopupShell",
+      "status": "Live / Current Production",
+      "renderSource": "assets/js/app.js",
+      "cssOwner": "assets/css/components/popup-shell.css",
+      "tokenDependencies": [
+        "panel-padding",
+        "header-height",
+        "radius-lg",
+        "dialog-control-inset-block",
+        "popup-control-inset-inline"
+      ],
+      "interactionContract": [
+        "Opening any project from an already open detail pushes the current detail, reading position and invoker onto one reversible stack",
+        "Every nested programme view resolves its parent from the canonical parentKey",
+        "Back restores the previous popup and its reading position; Close exits the complete stack",
+        "Child cases expose exactly one explicit return in the sticky header",
+        "Browser Back and Forward resolve parent and child URL state without nested dialogs",
+        "Legacy stage links resolve to the approved child case when one exists or safely return to the parent overview",
+        "Close restores the originating page position and focus and removes detail URL parameters",
+        "Project and global-search Close controls share the canonical block and inline inset tokens at every breakpoint"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ProjectDetailOverview",
+      "status": "Live / Current Production",
+      "renderSource": "Static detail template and assets/js/app.js · standard, programme and stage-evidence states",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/project-detail-overview.css",
+      "tokenDependencies": [
+        "panel-padding",
+        "space-4",
+        "space-6",
+        "text-h3",
+        "leading-body",
+        "color-surface-evidence-item",
+        "info-card-padding",
+        "section-heading-content-gap",
+        "interactive-state-safe-area",
+        "work-card-hover-border",
+        "work-card-hover-radius",
+        "work-card-hover-shadow",
+        "control-height",
+        "cmp-popup-page-title-size",
+        "cmp-popup-page-title-size-compact",
+        "cmp-popup-section-title-size",
+        "cmp-popup-card-title-size",
+        "cmp-popup-metric-size",
+        "cmp-popup-outcome-metric-size",
+        "cmp-popup-value-headline-size",
+        "cmp-popup-value-supporting-size",
+        "cmp-popup-body-size",
+        "cmp-popup-label-size",
+        "type-page-title",
+        "type-section-title",
+        "type-subsection-title",
+        "type-body",
+        "type-meta",
+        "type-eyebrow",
+        "type-outcome-metric",
+        "type-color-heading",
+        "type-color-body",
+        "type-color-meta",
+        "type-color-eyebrow",
+        "type-color-metric",
+        "dimension-90deg"
+      ],
+      "variants": [
+        "Standard project",
+        "Programme decision journey",
+        "Stage evidence detail",
+        "Programme system-evidence gallery",
+        "Key Intervention Map",
+        "Recruiter section navigator",
+        "Outcome metric evidence",
+      "Structured case evidence",
+      "Two-stage product validation path",
+      "Voucher Center r119 popup composition"
+      ],
+    "interactionContract": [
+      "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
+      "The Voucher Center navigator is generated from the seven stable section IDs in popupComposition, never from an index or generic fallback; other projects retain the default shared navigator contract",
+      "Unresolved Voucher Center media retains its canonical Asset ID in a labelled Product image pending placeholder inside the existing media surface; it does not simulate shipped evidence and can be replaced without changing composition",
+      "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
+        "Until both public derivatives exist, the validation-path media slots use clearly labelled non-evidentiary placeholders and never expose private source boards, fabricated product proof or conversion metrics",
+        "Professional cases with at least two available chapters expose one compact, content-width, bottom-floating four-destination anchor navigator as a direct dialog child outside the transformed scroll container; it remains stationary throughout the popup and never uses tab semantics or hides content panels",
+        "Mobile replaces the horizontal navigator with one Jump to section disclosure and a vertical link list",
+        "Every navigator destination is calculated from the dialog scroll root after the mobile disclosure closes, with the sticky control inset applied exactly once",
+        "Navigator active state, keyboard focus and visible section are separate runtime states: the latest cancellable click transaction owns active state until its target is aligned and focused, while manual scrolling cancels the transaction and restores scroll-spy",
+        "Outcome cards promote verified leading values through the shared popup metric token while preserving evidence tier, attribution and measurement boundaries",
+        "Structured case evidence uses one claim-led intro, semantic metric pairs, capability-group cards and a subtle public boundary; internal completeness notes, authoring reasons and publication instructions never enter the rendered page",
+        "Verified projects pair At a glance and one Key Intervention Map inside the same governed overview container, with matched card treatment and balanced height; Before, Key intervention and After stay in DOM order without a heading above the visual, while the semantic section heading sits directly above the supporting copy below",
+        "Key Intervention Map renders only verified SSOT content; unverified projects show no placeholder",
+        "Desktop and readable tablet widths use a three-node row; mobile uses a vertical sequence without horizontal scrolling",
+        "Professional project images render only beside the content they prove; detached project-wide galleries are not rendered",
+        "Executive-summary data never repeats the opening decision filter; system-evidence items retain labelled Before and After relationships",
+        "The intervention node carries an explicit label, stronger border and higher-contrast surface so meaning never depends on colour alone",
+        "Connectors are decorative and hidden from assistive technology",
+        "Every complete professional parent case opens with one shared decision filter: transformation title, up to three problem types, The value I brought, At a glance, Why it mattered, Business impact, context grid, and an evidence-bound confidentiality note",
+        "The value I brought renders only its approved headline and supporting statement; internal company value, team value, evidence and review status never render publicly",
+        "Every parent project overview renders Type, Scope, Audience, and Timeline only in the context grid; title metadata never duplicates them",
+        "Voucher / Offer Customer Journey, Voucher Center, and Game Center are independent parent projects; Voucher Center names only the internal operations system",
+        "Voucher Wallet remains a cross-journey surface; embedded initiative evidence must not become a duplicate top-level project",
+        "Programme content integrates breakpoint, design direction, representative shipped work and delivery status in one five-stage scan path",
+        "Every journey chapter uses one hierarchy: stage label, transformation, breakpoint, design direction, representative shipped work, delivery status and View stage evidence action",
+        "All five approved journey chapters open readable evidence in the same popup and expose exactly one parent return in the sticky header",
+        "The four-foundation gallery uses one accessible tablist and panel with click and Left/Right Arrow navigation; diagrams are labelled system evidence and never shipped screenshots",
+        "Before and shared-system comparisons use equal columns, aligned labels and one body line-height",
+        "Cross-functional enablement names the team, decision context, reusable capability and repeated work or ambiguity removed; Marketing is not labelled CRM",
+        "Delivery maturity explicitly separates delivered, selected-case, and future-not-shipped scope",
+        "Programme responsibility uses only accountable outcome and shared decisions as responsibility levels, with aligned label, heading and body rows",
+        "At a glance carries role, action, scale and outcome; Why it mattered contains business urgency only; Business impact contains system-level value only",
+        "Unapproved value content keeps the governed pending state and never falls back to company value, team value, evidence or review metadata",
+        "The shared five-stage journey is the only programme navigation taxonomy and never uses progress-bar semantics",
+        "Empty asset placeholders are not rendered; a shipped product visual may render only after a public Asset ID is registered",
+        "Related work resolves from the parent project for nested views",
+        "Desktop, tablet and mobile preserve complete stage names, keyboard focus, minimum 48px primary controls and zero page-level horizontal overflow"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "DomainSelector",
+      "status": "Live / Current Production",
+      "renderSource": "index.html and assets/js/home.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/domain-selector.css",
+      "tokenDependencies": [
+        "control-height",
+        "color-focus",
+        "motion-base",
+        "section-space",
+        "page-gutter",
+        "domain-anchor-gap"
+      ],
+      "interactionContract": [
+        "Domain experience is the first recruiter decision surface after experience proof",
+        "The Hero CTA aligns the Domain content viewport below the measured sticky Header with a responsive reading gap at desktop and compact widths",
+        "Each domain explains recurring problems and transferable design responses before exposing supporting project evidence",
+        "Domain content follows a direct summary-to-problem-to-response-to-evidence sequence without an intermediate cross-project model"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "HorizontalRail",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates and assets/js/app.js",
+      "cssOwner": "assets/css/components/horizontal-rail.css",
+      "tokenDependencies": [
+        "page-gutter",
+        "space-2",
+        "space-5",
+        "experiment-card-state-safe-block",
+        "rail-gap",
+        "rail-domain-pad-block-start",
+        "rail-domain-pad-block-end"
+      ],
+      "interactionContract": [
+        "All rails and native horizontal scrollers have hard, visible, unmasked edges with no gradient, scrim, inset-shadow or pseudo-element cover",
+        "Horizontal scrollers remain within the owning content container and never use negative inline margins or expanded widths",
+        "Card rails show only complete cards: three on desktop, two on tablet and one on mobile; partially clipped cards are forbidden as a scrolling affordance",
+        "A token-owned inline safety inset keeps rotated, focused and hovered card edges visible at the first and last snap positions",
+        "Overflow is measured from untransformed layout geometry; decorative card rotation never creates a false extra view or residual final click",
+        "Previous and next controls move to exact adjacent card snap anchors and disappear when no alternate card view exists",
+        "Previous/next controls and the native scrollbar communicate continuation",
+        "Domain supporting-work rails use compact symmetrical block padding because the Domain panel already owns the outer section inset",
+        "Touch scrolling, snap alignment and operable previous/next controls remain available",
+        "Page components may not redefine rail width, gap or edge treatment"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "WorkLibrary",
+      "status": "Live / Current Production",
+      "renderSource": "work.html and assets/js/work.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/work-library.css",
+      "tokenDependencies": [
+        "section-space",
+        "page-gutter",
+        "control-height",
+        "color-focus"
+      ],
+      "variants": [
+        "Filter controls",
+        "Archive grid"
+      ],
+      "usageScope": [
+        "Work"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ProjectCard",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates and assets/js/app.js",
+      "cssOwner": "assets/css/components/project-card.css",
+      "tokenDependencies": [
+        "card-padding",
+        "project-card-media-block",
+        "project-card-media-block-mobile",
+        "project-card-related-media-block",
+        "project-card-related-media-block-mobile",
+        "project-card-compact-title",
+        "project-card-compact-body",
+        "project-card-compact-action",
+        "radius-lg",
+        "work-card-hover-border",
+        "work-card-hover-radius",
+        "work-card-hover-shadow",
+        "work-card-hover-transform"
+      ],
+      "variants": [
+        "Work featured card",
+        "Work compact card",
+        "Related card",
+        "Global search result"
+      ],
+      "layoutContract": [
+        "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
+        "featured cards use the shared horizontal desktop structure; compact cards use the shared stacked structure with a 22–26px title and 14px body/action tier",
+        "compact cards explicitly reset the general media minimum height so the visual remains inside its grid row and cannot overlap metadata or copy",
+        "compact media and content are separated by the shared card boundary",
+        "both Work variants collapse to one stacked column on compact viewports",
+        "related-experiment titles use a compact responsive tier and wider measure for readable mixed Chinese/English wrapping",
+        "explicit internal grid or flex owner",
+        "token-owned media height",
+        "bottom-aligned CTA",
+        "search-result eyebrow reserves one stable row whether company metadata is populated or intentionally absent",
+        "company names are indivisible max-content metadata and never wrap across Work, Related, Domain, or Search variants; adjacent context owns any necessary wrapping",
+        "compact Work and Related variants omit redundant Domain metadata; the featured Work and Search variants retain context when it improves relevance",
+        "search-result titles remain scan-friendly while preserving SSOT copy",
+        "search-result CTA label and directional arrow are separate inline elements and remain on one line",
+        "shared Work hover contract across routes"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ArtifactVisual",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates and assets/js/app.js",
+      "cssOwner": "assets/css/components/artifact-visual.css",
+      "tokenDependencies": [
+        "space-2",
+        "space-3",
+        "space-4",
+        "radius-sm",
+        "radius-lg",
+        "color-border",
+        "color-text-accent"
+      ],
+      "variants": [
+        "Flow model",
+        "Browser state",
+        "Rollout map",
+        "Tracker",
+        "Learning model"
+      ],
+      "usageScope": [
+        "Homepage",
+        "Work",
+        "Project details"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ExperimentExperience",
+      "status": "Live / Current Production",
+      "renderSource": "index.html, experiments.html, profile.html, and assets/js/app.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/experiment-card.css",
+      "tokenDependencies": [
+        "experiment-card-min-block",
+        "experiment-card-min-block-mobile",
+        "experiment-card-title",
+        "card-padding",
+        "control-height",
+        "experiment-card-rest-odd",
+        "experiment-card-rest-even",
+        "experiment-card-rest-third",
+        "experiment-card-hover-shadow",
+        "experiment-card-hover-transform",
+        "experiment-card-cta-hover",
+        "experiment-card-cta-hover-inverse",
+        "experiment-card-cta-underline-inverse",
+        "experiment-card-state-safe-block"
+      ],
+      "variants": [
+        "Homepage poster",
+        "Featured experiment",
+        "Experiment index",
+        "Experiment detail",
+        "Related experiment",
+        "Awarded exploration"
+      ],
+      "usageScope": [
+        "Homepage",
+        "Experiment page",
+        "Profile",
+        "Detail popup"
+      ],
+      "interactionContract": [
+        "three intentionally varied resting angles and offsets",
+        "only an interactive card levels on hover or focus",
+        "surface-aware CTA emphasis without Work-card hover",
+        "reduced-motion removes resting tilt"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ProfileExperience",
+      "status": "Live / Current Production",
+      "renderSource": "Profile static shell and assets/js/app.js SSOT renderer",
+      "cssOwner": "assets/css/components/profile-card.css",
+      "tokenDependencies": [
+        "section-space",
+        "panel-padding",
+        "profile-hero-title",
+        "profile-hero-title-mobile",
+        "profile-value-title",
+        "profile-hero-title-zh",
+        "profile-value-title-zh",
+        "profile-timeline-date",
+        "profile-timeline-title",
+        "profile-border-width",
+        "profile-availability",
+        "card-padding",
+        "control-height",
+        "shadow-raised"
+      ],
+      "variants": [
+        "Positioning hero",
+        "Value panel",
+        "Design leadership evidence",
+        "Experience timeline"
+      ],
+      "usageScope": [
+        "Profile"
+      ],
+      "interactionContract": [
+        "Traditional Chinese profile positioning uses a balanced editorial headline scale with complete phrase grouping; it must not dominate the value panel or fill the full viewport height"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "ProfileInterestMosaic",
+      "status": "Live / Current Production",
+      "renderSource": "Profile static template",
+      "cssOwner": "assets/css/components/profile-interest-mosaic.css",
+      "tokenDependencies": [
+        "section-space",
+        "space-4",
+        "radius-lg",
+        "profile-border-width",
+        "profile-track-label"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "EditorialSection",
+      "status": "Live / Current Production",
+      "renderSource": "Static page templates",
+      "cssOwner": "assets/css/components/editorial-section.css",
+      "tokenDependencies": [
+        "section-space",
+        "space-7",
+        "color-text-secondary",
+        "hero-surface",
+        "experience-proof-surface",
+        "experience-proof-cloud-height",
+        "experience-proof-pad-block-start",
+        "experience-proof-cloud-height-mobile"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "SupportingPageLayout",
+      "status": "Live / Current Production",
+      "renderSource": "work.html and experiments.html",
+      "cssOwner": "assets/css/components/supporting-page-layout.css",
+      "tokenDependencies": [
+        "section-space",
+        "page-gutter",
+        "measure-body",
+        "text-body",
+        "leading-body"
+      ],
+      "variants": [
+        "Work page opening",
+        "Experiment page opening"
+      ],
+      "usageScope": [
+        "Work",
+        "Experiments"
+      ],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "SelectedEvidence",
+      "status": "Retired from homepage",
+      "renderSource": "index.html",
+      "cssOwner": "assets/css/components/selected-evidence.css",
+      "tokenDependencies": [
+        "evidence-section-gap",
+        "evidence-content-gap",
+        "evidence-item-gap",
+        "evidence-copy-measure",
+        "evidence-title-measure",
+        "evidence-visual-surface",
+        "evidence-meta-surface",
+        "evidence-visual-radius",
+        "evidence-rule",
+        "evidence-hover-surface"
+      ],
+      "variants": [
+        "Featured",
+        "Supporting"
+      ],
+      "usageScope": [],
+      "exclusiveOwner": true
+    },
+    {
+      "component": "HomepageEvidence",
+      "status": "Live / Current Production",
+      "renderSource": "index.html and assets/js/home.js",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/homepage-evidence.css",
+      "tokenDependencies": [
+        "homepage-evidence-rule-width",
+        "homepage-evidence-metric",
+        "homepage-principle-title",
+        "homepage-principle-rail-width",
+        "homepage-principle-layout-duration",
+        "control-height",
+        "color-focus",
+        "color-surface-subtle",
+        "radius-md"
+      ],
+      "variants": [
+        "Experience metrics",
+        "Text-first organisation proof",
+        "Principle Constellation",
+        "Wide desktop focus and vertical rail",
+        "Mobile vertical numbered rail"
+      ],
+      "interactionContract": [
+        "All four principles remain visible at first glance and represent parallel decision lenses rather than sequential steps",
+        "At most one principle is expanded; activating the open principle collapses it and Escape returns to the fully collapsed state",
+        "The active stable ID survives language changes because copy is rerendered from the bilingual SSOT without replacing interaction state",
+        "Every In practice example resolves its canonical projectId from the SSOT and exposes the shared View case CTA to the existing Project popup",
+        "Wide desktop uses one left focus card and a narrower three-card vertical rail; selecting a rail card exchanges it with the focus card",
+        "Tablet uses a two-column constellation with a full-width detail region; compact viewports use a vertical numbered rail",
+        "Stable card IDs use a 300ms shared layout transition, removed under prefers-reduced-motion",
+        "No carousel, horizontal scrolling, modal, hover-only content, inline style or duplicated per-principle markup"
+      ],
+      "usageScope": [
+        "Homepage"
+      ],
+      "exclusiveOwner": true
+    }
+  ]
+}

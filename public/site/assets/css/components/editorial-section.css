@@ -1,5 +1,49 @@
 /* EditorialSection — sole production owner for cross-page section rhythm. */
-:is(.experience-overview-v42,.work-reference,.domain-chapter,.selected-work,.principles,.playground,.profile-chronology-v34,.profile-awards-v36,.profile-side-projects-v34,.profile-interests-v39,.work-page-v32,.playground-page-v32,.principles-section-v57,.experiments-chapter){padding-block:var(--section-space)}
-.section-heading-v45{display:grid;align-items:start;gap:var(--space-4);max-width:100%;margin-block:0 var(--space-7)}
-.section-heading-v45>p{max-width:62ch;margin-top:0;color:var(--color-text-secondary)}
-@media(max-width:900px){.section-heading-v45{margin-bottom:var(--space-6)}}
+:is(.experience-overview-v42,.work-reference,.domain-chapter,.selected-work,.principles,.playground,.work-page-v32,.playground-page-v32,.principles-section-v57,.experiments-chapter){padding-block:var(--section-space)}
+.home-page :is(.matcher-chapter,.domain-chapter,.playground){background:var(--color-surface)}
+.domain-chapter{scroll-margin-top:var(--header-height)}
+.section-heading-v45{display:grid;align-items:start;gap:var(--section-heading-gap);max-width:100%;margin-block:0 var(--section-heading-content-gap)}
+.section-heading-v45>p{max-width:var(--dimension-62ch);margin-top:0;color:var(--color-text-secondary)}
+@media(max-width:900px){.section-heading-v45{margin-bottom:var(--section-heading-content-gap)}}
+/* Experience proof owns the single cloud transition inside the second section. */
+.experience-overview-v42 {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding-top: calc(var(--experience-proof-cloud-height) + var(--experience-proof-pad-block-start));
+  background: var(--hero-surface);
+  isolation: isolate;
+}
+
+.experience-overview-v42::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  width: 100%;
+  height: var(--experience-proof-cloud-height);
+  background: var(--experience-proof-surface);
+  content: "";
+  -webkit-mask: var(--experience-proof-cloud-shape) center top / 100% 100% no-repeat;
+  mask: var(--experience-proof-cloud-shape) center top / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.experience-overview-v42::after {
+  position: absolute;
+  z-index: -1;
+  inset: var(--experience-proof-cloud-height) 0 0;
+  background: var(--experience-proof-surface);
+  content: "";
+  pointer-events: none;
+}
+
+.experience-overview-v42 > .page-shell {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 760px) {
+  .experience-overview-v42 {
+    padding-top: calc(var(--experience-proof-cloud-height) + var(--space-7));
+  }
+}

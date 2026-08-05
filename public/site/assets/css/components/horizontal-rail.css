@@ -1,32 +1,71 @@
 /* HorizontalRail — sole production owner for rail containers and controls. */
 :root {
-  --rail-gap: 12px;
-  --rail-edge: 0px;
-  --rail-card-project: clamp(252px,28vw,336px);
-  --rail-card-experiment: clamp(292px,29vw,372px);
-  --rail-card-profile: clamp(244px,25vw,304px);
+  --rail-gap: var(--dimension-12px);
+  --rail-edge: var(--space-2);
+  --rail-scrollbar-size: var(--dimension-6px);
+  --rail-scrollbar-track: var(--color-border);
+  --rail-scrollbar-thumb: var(--color-text-accent);
+  --rail-visible-columns:3;
+  --rail-card-project:calc((100% - (var(--rail-visible-columns) - 1) * var(--rail-gap)) / var(--rail-visible-columns));
+  --rail-card-experiment: var(--rail-card-project);
+  --rail-card-profile: var(--rail-card-project);
+  --rail-domain-pad-block-start: var(--space-3);
+  --rail-domain-pad-block-end: var(--space-3);
 }
-.rail-heading{display:flex;align-items:end;justify-content:space-between;gap:var(--space-5);min-width:0}
+[data-rail]{position:relative;width:100%;min-width:0;max-width:100%;margin-inline:0;padding-inline:var(--rail-edge);overflow-x:auto;overflow-y:visible;overscroll-behavior-inline:contain;scroll-padding-inline:var(--rail-edge);scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--rail-scrollbar-thumb) var(--rail-scrollbar-track);-webkit-mask-image:none;mask-image:none;clip-path:none;background-image:none}
+[data-rail]::before,[data-rail]::after{content:none;display:none}
+
+/* Every native horizontal scroller keeps a hard, unobscured content edge.
+   Continuation is communicated by card geometry and controls, never overlays. */
+:where(
+  [data-rail],
+  .domain-floating-nav-v52__rail,
+  .domain-selectors,
+  .chip-rail,
+  .match-project-grid,
+  .modal-head-meta-v60,
+  .gallery-thumbs-v45,
+  .programme-chapters-v116,
+  .programme-journey-map-v106,
+  .programme-evolution-v106,
+  .voucher-foundation-gallery__tabs
+){
+  -webkit-mask-image:none;
+  mask-image:none;
+  clip-path:none;
+  background-image:none;
+}
+[data-rail]::-webkit-scrollbar{height:var(--rail-scrollbar-size)}
+[data-rail]::-webkit-scrollbar-track{background:var(--rail-scrollbar-track);border-radius:var(--dimension-999px)}
+[data-rail]::-webkit-scrollbar-thumb{background:var(--rail-scrollbar-thumb);border-radius:var(--dimension-999px)}
+[data-rail]>*{min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+[data-rail] :is(.related-project-card-v45,.detail-related-card-v45):is(:hover,:focus-visible){
+  transform:none;
+  box-shadow:inset 0 0 0 var(--dimension-2px) var(--work-card-hover-border);
+}
+.rail-heading{display:flex;align-items:center;justify-content:space-between;gap:var(--space-5);min-width:0}
 .rail-controls{display:flex;flex:0 0 auto;gap:var(--space-2)}
-.rail-button{inline-size:var(--control-height);block-size:var(--control-height);display:grid;place-items:center;border:1px solid var(--color-border-strong);border-radius:50%;background:var(--color-surface);color:var(--color-text-primary);cursor:pointer;transition:background-color var(--motion-fast),border-color var(--motion-fast),transform var(--motion-fast),opacity var(--motion-fast)}
-.rail-button:hover:not(:disabled){border-color:var(--color-focus);background:var(--brand-100);transform:translateY(-2px)}
+.rail-button{inline-size:var(--control-height);block-size:var(--control-height);display:grid;place-items:center;border:var(--dimension-1px) solid var(--color-border-strong);border-radius:50%;background:var(--color-surface);color:var(--color-text-primary);cursor:pointer;transition:background-color var(--motion-fast),border-color var(--motion-fast),color var(--motion-fast),transform var(--motion-fast)}
+.rail-button .icon-arrow{margin:0}
+.rail-button:hover:not(:disabled){border-color:var(--color-focus);background:var(--brand-100);color:var(--color-text-primary);transform:translateY(var(--dimension-neg-2px))}
 .rail-button:active:not(:disabled){transform:translateY(0) scale(.96)}
-.rail-button:disabled{opacity:.38;cursor:default}
+.rail-button:disabled{border-color:var(--color-state-disabled-border);background:var(--color-state-disabled-bg);color:var(--color-state-disabled-text);cursor:not-allowed}
 .rail-button[hidden]{display:none}
-:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scroll-padding-inline:var(--rail-edge);scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-mask-image:none;mask-image:none}
-:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32)::-webkit-scrollbar{display:none}
-:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32)>*{min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
-:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45){display:grid;grid-auto-flow:column;grid-auto-columns:var(--rail-card-project);gap:var(--rail-gap);padding:var(--space-2) var(--rail-edge) var(--space-5)}
-:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45)>*:last-child{scroll-snap-align:end}
+:is(.project-card-rail,.no-match-project-list-v45,.detail-related-rail-v45){display:grid;grid-auto-flow:column;grid-auto-columns:var(--rail-card-project);gap:var(--rail-gap);padding-block:var(--experiment-card-state-safe-block) var(--space-8)}
+:is(.domain-project-list-v30){display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - var(--rail-gap))/2);gap:var(--rail-gap);padding-block:var(--rail-domain-pad-block-start) var(--rail-domain-pad-block-end)}
+:is(.project-card-rail,.no-match-project-list-v45,.detail-related-rail-v45)>*:last-child{scroll-snap-align:end}
 .experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32{display:flex;gap:var(--rail-gap)}
-.experiment-index-rail-v36{align-items:stretch;padding:var(--space-2) 0 var(--space-5)}
+.experiment-index-rail-v36,.playground-grid,.detail-related-rail-v45{padding-block:var(--space-6);overflow-y:visible}
+.experiment-index-rail-v36{align-items:stretch;padding-block:var(--experiment-card-state-safe-block) var(--space-7)}
 .experiment-index-rail-v36>*{flex:0 0 var(--rail-card-experiment)}
-.profile-side-rail-v34{padding:var(--space-2) 0 var(--space-5)}
-.profile-side-rail-v34>*{flex:0 0 var(--rail-card-profile)}
-.playground-grid{margin-top:var(--space-7);padding:var(--space-2) 0 var(--space-5)}
+.profile-side-rail-v34{padding-block:var(--experiment-card-state-safe-block) var(--space-7)}
+.profile-side-rail-v34>*{flex:0 0 var(--rail-card-experiment)}
+.playground-grid{margin-top:var(--space-7);padding-block:var(--experiment-card-state-safe-block) var(--space-7)}
 .playground-grid>*{flex:0 0 var(--rail-card-experiment)}
 .work-filter-v32{padding:var(--space-1) 0 var(--space-3)}
 .work-filter-v32>*{flex:0 0 auto}
-@media(max-width:900px){:root{--rail-card-project:min(78vw,320px);--rail-card-experiment:min(76vw,324px);--rail-card-profile:min(72vw,284px)}}
-@media(max-width:600px){.rail-heading{align-items:center}.rail-controls{gap:var(--space-1)}:root{--rail-card-project:min(80vw,300px);--rail-card-experiment:min(82vw,304px);--rail-card-profile:min(78vw,276px)}}
-@media(prefers-reduced-motion:reduce){:is(.project-card-rail,.no-match-project-list-v45,.domain-project-list-v30,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){scroll-behavior:auto}}
+@media(max-width:900px){:root{--rail-visible-columns:2}.domain-project-list-v30{grid-auto-columns:calc((100% - var(--rail-gap))/2)}}
+@media(max-width:700px){.work-filter-v32{padding-inline:var(--page-gutter);scroll-padding-inline:var(--page-gutter)}}
+@media(max-width:600px){.rail-heading{align-items:center}.rail-controls{gap:var(--space-1)}:root{--rail-visible-columns:1}.domain-project-list-v30{grid-auto-columns:100%}}
+@media(prefers-reduced-motion:reduce){:is(.project-card-rail,.no-match-project-list-v45,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){scroll-behavior:auto}}
+@media(forced-colors:active){[data-rail]{scrollbar-color:CanvasText Canvas}.rail-button{forced-color-adjust:auto}}

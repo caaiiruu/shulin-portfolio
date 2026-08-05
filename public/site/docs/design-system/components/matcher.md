@@ -3,7 +3,7 @@
 Status: Live / Current production mockup
 
 JS Owner: `assets/js/home.js`
-CSS Owner: `assets/css/components-v47.css`
+CSS Owner: `assets/css/components/search.css`
 Token Dependencies: control height, rail gap, surface, focus
 Variants: Idle, Loading, Matched, No-match
 Usage Scope: Homepage

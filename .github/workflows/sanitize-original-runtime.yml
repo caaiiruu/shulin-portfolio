@@ -1,0 +1,213 @@
+name: Sanitize restored original runtime
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/sanitize-original-runtime.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sanitize-deploy-verify:
+    runs-on: ubuntu-latest
+    env:
+      ORIGINAL: https://shulin-portfolio-v53.dr-piipii.chatgpt.site
+      LIVE: https://shulinchou.com
+      VERCEL_ORG_ID: team_nD9NNfDwlkTJJ2wtplVSaxHO
+      VERCEL_PROJECT_ID: prj_XJxTzDxihUexNiSzUmFHNzXBBwUk
+    steps:
+      - name: Checkout deployment branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove Cloudflare response injection only
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [
+              Path('public/site/index.html'),
+              Path('public/site/work.html'),
+              Path('public/site/experiments.html'),
+              Path('public/site/profile.html'),
+          ]
+
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              marker = "window.__CF$cv$params"
+              assert marker in text, f'Expected Cloudflare marker missing: {path}'
+              marker_index = text.index(marker)
+              script_start = text.rfind('<script>', 0, marker_index)
+              script_end = text.find('</script>', marker_index)
+              assert script_start >= 0 and script_end >= 0, f'Could not isolate injected script: {path}'
+              script_end += len('</script>')
+              cleaned = text[:script_start] + text[script_end:]
+
+              assert marker not in cleaned
+              assert '/cdn-cgi/challenge-platform/' not in cleaned
+              assert cleaned.count('/site/assets/js/production.c3e1b4d6a1eb213d.js') == 1
+              assert '/site/assets/js/app.js' not in cleaned
+              assert cleaned.rstrip().endswith('</body></html>')
+
+              path.write_text(cleaned, encoding='utf-8')
+              print('Sanitized:', path)
+          PY
+
+      - name: Guard approved source changes
+        run: |
+          set -euo pipefail
+          git status --short
+          python - <<'PY'
+          import subprocess
+          allowed = {
+              'public/site/index.html',
+              'public/site/work.html',
+              'public/site/experiments.html',
+              'public/site/profile.html',
+          }
+          output = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
+          changed = {line[3:] for line in output.splitlines() if line.strip()}
+          assert changed == allowed, (sorted(changed), sorted(allowed))
+          print('Approved sanitized paths:', sorted(changed))
+          PY
+
+      - name: Commit sanitized full runtime
+        run: |
+          set -euo pipefail
+          git config user.name "caiiru"
+          git config user.email "63276875+caaiiruu@users.noreply.github.com"
+          git add public/site/index.html public/site/work.html public/site/experiments.html public/site/profile.html
+          git commit -m "Keep full original runtime without Cloudflare response injection"
+          git push origin HEAD:deploy/vercel-preview-2026-08-05
+
+      - name: Install and link Vercel CLI
+        run: |
+          npm install --global vercel@58.5.1
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Deploy sanitized parity build
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          url=$(vercel deploy --prod --yes --token="$VERCEL_TOKEN")
+          printf '%s\n' "$url" | tee production-url.txt
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Verify normalized original-to-live parity
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PRODUCTION_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          mkdir -p parity/original parity/live parity/normalized
+
+          host=${PRODUCTION_URL#https://}
+          status=$(curl --silent --show-error \
+            --output parity/deployment.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$host?teamId=$VERCEL_ORG_ID")
+          test "$status" = '200'
+          python - <<'PY'
+          import json
+          payload = json.load(open('parity/deployment.json'))
+          assert (payload.get('readyState') or payload.get('state')) == 'READY'
+          assert payload.get('target') == 'production'
+          print('Production deployment READY:', payload.get('url'))
+          PY
+
+          fetch_pair() {
+            label="$1"
+            original_url="$2"
+            live_url="$3"
+            curl -fsSL --retry 3 -H 'Cache-Control: no-cache' "$original_url" -o "parity/original/$label"
+            curl -fsSL --retry 3 -H 'Cache-Control: no-cache' "$live_url" -o "parity/live/$label"
+          }
+
+          fetch_pair index.html "$ORIGINAL/site/index.html" "$LIVE/site"
+          fetch_pair work.html "$ORIGINAL/site/work.html" "$LIVE/site/work"
+          fetch_pair voucher-center.html "$ORIGINAL/site/work.html" "$LIVE/site/work/voucher-center"
+          fetch_pair experiments.html "$ORIGINAL/site/experiments.html" "$LIVE/site/experiments"
+          fetch_pair profile.html "$ORIGINAL/site/profile.html" "$LIVE/site/profile"
+
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          pairs = [
+              ('index.html', 'index.html'),
+              ('work.html', 'work.html'),
+              ('work.html', 'voucher-center.html'),
+              ('experiments.html', 'experiments.html'),
+              ('profile.html', 'profile.html'),
+          ]
+
+          def strip_cf(text: str) -> str:
+              marker = "window.__CF$cv$params"
+              if marker not in text:
+                  return text
+              marker_index = text.index(marker)
+              start = text.rfind('<script>', 0, marker_index)
+              end = text.find('</script>', marker_index)
+              assert start >= 0 and end >= 0
+              return text[:start] + text[end + len('</script>'):]
+
+          report = []
+          for original_name, live_name in pairs:
+              original = Path('parity/original', original_name).read_text(encoding='utf-8')
+              live = Path('parity/live', live_name).read_text(encoding='utf-8')
+              normalized = strip_cf(original)
+              Path('parity/normalized', original_name).write_text(normalized, encoding='utf-8')
+
+              assert '/site/assets/js/production.c3e1b4d6a1eb213d.js' in live
+              assert '/site/assets/js/app.js' not in live
+              assert "window.__CF$cv$params" not in live
+              assert '/cdn-cgi/challenge-platform/' not in live
+              assert normalized.encode() == live.encode(), f'Normalized HTML mismatch: {original_name} -> {live_name}'
+
+              digest = hashlib.sha256(live.encode()).hexdigest()
+              report.append(f'{original_name} -> {live_name}: MATCH {len(live.encode())} bytes {digest}')
+
+          Path('parity/parity-report.txt').write_text('\n'.join(report) + '\n', encoding='utf-8')
+          print('\n'.join(report))
+          PY
+
+          compare_asset() {
+            label="$1"
+            path="$2"
+            curl -fsSL --retry 3 "$ORIGINAL/$path" -o "parity/original/$label"
+            curl -fsSL --retry 3 "$LIVE/$path" -o "parity/live/$label"
+            cmp "parity/original/$label" "parity/live/$label"
+            echo "$label: MATCH $(wc -c < "parity/live/$label" | tr -d ' ') bytes" | tee -a parity/parity-report.txt
+          }
+
+          compare_asset production-js site/assets/js/production.c3e1b4d6a1eb213d.js
+          compare_asset production-css site/assets/css/production.e6ab1a6b71ba8928.css
+          compare_asset portfolio-content site/content/portfolio-content.json
+          compare_asset asset-manifest site/content/portfolio-asset-manifest.json
+          compare_asset payment-video site/assets/validation/payment/validation-payment-video-order-details-r77.mov
+
+          headers=$(curl --silent --show-error --head https://www.shulinchou.com/site)
+          printf '%s\n' "$headers" > parity/www-headers.txt
+          redirect_status=$(printf '%s\n' "$headers" | head -n 1 | awk '{print $2}')
+          test "$redirect_status" = '308'
+
+      - name: Upload sanitized parity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanitized-live-original-parity
+          path: |
+            parity/parity-report.txt
+            parity/deployment.json
+            parity/www-headers.txt
+            production-url.txt
+          retention-days: 2

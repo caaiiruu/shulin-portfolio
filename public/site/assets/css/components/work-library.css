@@ -1,0 +1,137 @@
+/* WorkLibrary — sole production owner for the Work index header and filters. */
+.work-library-v32 {
+  padding-bottom: var(--section-space);
+}
+
+.work-library-v32__head {
+  display: grid;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+.work-library-v32__head .heading-3{
+  font-size:var(--dimension-1-25rem);
+  line-height:1.25;
+}
+
+.work-library-v44__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.work-filter-controls-v44 {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-2);
+}
+
+.work-filter-shell-v44 {
+  min-width: 0;
+  margin-top: var(--space-3);
+}
+.work-filter-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-4);
+  border: var(--dimension-1px) solid var(--sys-color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--sys-color-surface);
+  color: var(--sys-color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--sys-weight-bold);
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-standard);
+}
+
+.work-filter-chip:hover {
+  border-color: var(--sys-color-action-accent);
+  background: var(--sys-color-surface-soft);
+  color: var(--sys-color-text-accent);
+}
+
+.work-filter-chip:active {
+  transform: scale(.98);
+}
+
+.work-filter-chip:focus-visible {
+  outline: var(--dimension-3px) solid var(--color-focus);
+  outline-offset: var(--dimension-3px);
+}
+
+.work-filter-chip[aria-pressed="true"] {
+  border-color: var(--sys-color-action-primary);
+  background: var(--sys-color-action-primary);
+  color: var(--sys-color-on-action);
+}
+
+.work-archive-v33 {
+  margin-top: var(--space-7);
+}
+
+.work-archive-v33__head {
+  margin-bottom: var(--space-6);
+}
+
+.work-archive-v33__head h2 {
+  margin: 0;
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+}
+
+.work-archive-v33__grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: var(--space-4);
+}
+
+@media(max-width:700px) {
+  .work-library-v44__title {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .work-library-v32__head {
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .work-filter-shell-v44 {
+    width: calc(100% + (var(--page-gutter) * 2));
+    margin-inline: calc(-1 * var(--page-gutter));
+  }
+
+  .work-filter-controls-v44 { gap: var(--space-1); }
+
+  .work-archive-v33__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width:380px) {
+  .work-filter-chip {
+    padding-inline: var(--space-3);
+    font-size: var(--text-xs);
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .work-filter-chip {
+    transition: none;
+  }
+}
+
+@media(forced-colors:active) {
+  .work-filter-chip[aria-pressed="true"] {
+    border: var(--dimension-2px) solid ButtonText;
+  }
+}

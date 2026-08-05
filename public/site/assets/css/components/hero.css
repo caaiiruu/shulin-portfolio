@@ -1,0 +1,197 @@
+/* Hero — the single owner for homepage hero layout, artwork, and motion. */
+.hero {
+  position: relative;
+  min-height: min(var(--hero-min-block), calc(100svh - var(--header-height)));
+  overflow: clip;
+  background: var(--hero-surface);
+  color: var(--hero-ink);
+}
+
+.hero__layout {
+  position: relative;
+  width: min(100%, var(--hero-max-inline));
+  min-height: min(var(--hero-min-block), calc(100svh - var(--header-height)));
+  margin-inline: auto;
+  padding: var(--hero-pad-block) var(--hero-pad-inline);
+}
+
+@media (min-width: 1101px) {
+  .hero,
+  .hero__layout {
+    height: clamp(var(--hero-min-wide-block), calc(100svh - var(--header-height)), var(--hero-wide-max-block));
+    min-height: 0;
+  }
+
+  @media (max-height: 760px) {
+    .hero { --hero-title-size: var(--hero-short-title-size); --hero-pad-block: var(--hero-short-pad-block); }
+    .hero__outcome { top: 39%; }
+    .hero__artwork { width: min(var(--hero-short-art-width), var(--dimension-760px)); }
+  }
+}
+
+.hero__title {
+  position: relative;
+  z-index: 2;
+  max-width: var(--dimension-6-5ch);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--hero-title-size);
+  font-weight: var(--sys-weight-heavy);
+  line-height: var(--hero-title-leading);
+  letter-spacing: var(--dimension-neg--055em);
+  text-wrap: balance;
+}
+html:lang(zh) .hero__title,
+html:lang(zh) .hero__outcome{
+  font-size:var(--hero-title-size-zh-wide);
+  letter-spacing:var(--tracking-cjk);
+  line-height:1.02;
+}
+html:lang(zh) .hero__outcome{top:var(--hero-outcome-top-zh)}
+html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
+
+.hero__outcome {
+  position: absolute;
+  z-index: 2;
+  left: 57%;
+  top: calc(var(--hero-pad-block) + var(--hero-outcome-line-offset));
+  width: min(calc(43% - var(--space-5)), var(--hero-copy-measure));
+  font-family: var(--font-sans);
+  font-size: var(--hero-title-size);
+  font-weight: var(--sys-weight-heavy);
+  line-height: var(--hero-title-leading);
+  letter-spacing: var(--dimension-neg--055em);
+}
+
+.hero__accent {
+  display: block;
+  color: var(--hero-accent);
+  font-style: italic;
+}
+
+.hero__artwork {
+  position: absolute;
+  z-index: 1;
+  inset: auto auto 0 -4%;
+  width: min(var(--dimension-68vw), var(--dimension-760px));
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero.is-ready .hero__artwork {
+  animation: hero-hand-enter var(--dimension-900ms) var(--ease-standard) both;
+}
+
+@keyframes hero-hand-enter {
+  from { opacity: 0; transform: translateX(calc(var(--dimension-120px) * -1)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hero__transformation {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__support {
+  position: absolute;
+  z-index: 3;
+  left: 57%;
+  bottom: var(--hero-bottom-safe);
+  width: min(calc(42% - var(--hero-pad-inline)), var(--hero-copy-measure));
+}
+
+.hero__support p {
+  margin: 0;
+  font-size: var(--hero-copy-size);
+  font-weight: var(--sys-weight-bold);
+  line-height: 1.45;
+}
+
+.hero__cta {
+  position: absolute;
+  z-index: 3;
+  left: var(--hero-pad-inline);
+  bottom: var(--hero-bottom-safe);
+  display: inline-flex;
+  min-height: var(--control-height);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border: var(--dimension-1px) solid var(--hero-ink);
+  border-radius: var(--radius-control);
+  background: var(--hero-ink);
+  color: var(--color-text-inverse);
+  font-weight: var(--sys-weight-bold);
+  text-decoration: none;
+  box-shadow: var(--hero-cta-shadow-rest);
+  transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.hero__cta:hover { border-color: var(--hero-ink); background: var(--portfolio-cyan-500); color: var(--hero-ink); box-shadow: var(--hero-cta-shadow-hover); transform: translateY(var(--dimension-neg-3px)); }
+.hero__cta:active { box-shadow: var(--hero-cta-shadow-rest); transform: translateY(var(--dimension-1px)); }
+.hero__cta:focus-visible { outline: var(--dimension-3px) solid var(--color-focus); outline-offset: var(--dimension-4px); }
+.hero__cta-icon { display: grid; flex:0 0 var(--dimension-28px); width: var(--dimension-28px); height: var(--dimension-28px); place-items: center; border-radius: var(--radius-icon); background: var(--color-text-inverse); color: var(--hero-ink); transform-origin:center; transition:transform var(--motion-fast) var(--ease-standard),background-color var(--motion-fast) var(--ease-standard); }
+.hero__cta:hover .hero__cta-icon{transform:scale(1.06)}
+.hero__cta:active .hero__cta-icon{transform:scale(.96)}
+
+.hero.is-ready .hero__outcome { animation: hero-outcome-in var(--dimension-620ms) var(--ease-standard) var(--dimension-180ms) both; }
+@keyframes hero-outcome-in { from { opacity: 0; transform: translateY(var(--dimension-12px)); } }
+
+@media (max-width: 1100px) {
+  .hero { --hero-min-block: var(--dimension-700px); --hero-title-size: clamp(var(--dimension-4-4rem), var(--dimension-10vw), var(--dimension-7rem)); }
+  .hero__outcome { left: 56%; width:min(calc(44% - var(--space-5)),var(--hero-copy-measure)); }
+  .hero__artwork { inset-inline-start: -22%; width: min(var(--dimension-68vw), var(--dimension-760px)); }
+  .hero__support { left:56%; width:min(calc(44% - var(--hero-pad-inline)),var(--hero-copy-measure)); }
+  html:lang(zh) .hero__title,
+  html:lang(zh) .hero__outcome { font-size:calc(var(--hero-title-size) * var(--hero-title-scale-zh-compact)); }
+  html:lang(zh) .hero__outcome { top: 39%; }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    --hero-min-block: auto;
+    --hero-pad-inline: clamp(var(--space-5), var(--dimension-6vw), var(--space-7));
+    --hero-pad-block: clamp(var(--space-6), var(--dimension-8vw), var(--space-8));
+    --hero-title-size: clamp(var(--dimension-3-4rem), var(--dimension-15-8vw), var(--dimension-6-2rem));
+    --domain-anchor-gap: var(--space-5);
+  }
+  .hero { min-height: auto; overflow: hidden; }
+  .hero__layout { display: grid; min-height: var(--dimension-700px); padding-bottom: var(--space-7); grid-template-rows: auto minmax(var(--dimension-260px), 1fr) auto auto; }
+  .hero__title { max-width: var(--dimension-6-5ch); }
+  .hero__outcome { position: relative; left:auto; top: auto; z-index: 2; justify-self: start; align-self: end; width:auto; max-width:min(100%,var(--dimension-5-6ch)); margin-top: var(--dimension-neg-1-2em); }
+  .hero__transformation {
+    inset-block-start: var(--space-2);
+    height: calc(100% - var(--space-2));
+    object-position: left center;
+    transform: translateX(var(--hero-transformation-shift-mobile));
+  }
+  .hero__artwork { inset: 23% auto auto -45%; width: 128%; min-width: var(--dimension-640px); }
+  .hero__support { position: relative; left:auto; right: auto; bottom: auto; width: min(100%, var(--dimension-38ch)); margin-top: var(--space-6); }
+  .hero__cta { position: relative; left: auto; bottom: auto; justify-self: start; margin-top: var(--space-5); }
+  html:lang(zh) .hero__outcome { top: auto; margin-top: var(--dimension-neg-1-2em); }
+  html:lang(zh) .hero__support { margin-top: var(--space-5); }
+}
+
+@media (max-width: 430px) {
+  .hero { --hero-title-size: clamp(var(--dimension-2-75rem), var(--dimension-15-8vw), var(--dimension-4rem)); }
+  .hero__layout { min-height: var(--dimension-650px); grid-template-rows: auto minmax(var(--dimension-230px), 1fr) auto auto; }
+  .hero__artwork { inset-block-start: 24%; inset-inline-start: var(--hero-artwork-start-narrow); width: 172%; min-width: var(--dimension-640px); }
+  .hero__support p { font-size: var(--dimension-1rem); line-height: 1.5; }
+  .hero__cta { width: 100%; justify-content: space-between; border-radius:var(--radius-control); }
+  .hero__outcome{max-width:100%;letter-spacing:var(--dimension-neg--05em)}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero.is-ready .hero__outcome { animation: none; }
+  .hero.is-ready .hero__artwork { animation: none; }
+  .hero__cta,
+  .hero__cta-icon { transition: none; }
+}

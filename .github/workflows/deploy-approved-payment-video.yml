@@ -1,0 +1,156 @@
+name: Deploy approved payment video
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/deploy-approved-payment-video.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-verify:
+    runs-on: ubuntu-latest
+    env:
+      ORIGINAL: https://shulin-portfolio-v53.dr-piipii.chatgpt.site
+      LIVE: https://shulinchou.com
+      VERCEL_ORG_ID: team_nD9NNfDwlkTJJ2wtplVSaxHO
+      VERCEL_PROJECT_ID: prj_XJxTzDxihUexNiSzUmFHNzXBBwUk
+      VIDEO_PATH: site/assets/validation/payment/validation-payment-video-order-details-r77.mov
+    steps:
+      - name: Checkout deployment branch
+        uses: actions/checkout@v4
+
+      - name: Guard exact video allowlist and source state
+        run: |
+          set -euo pipefail
+          test -f "public/$VIDEO_PATH"
+          test "$(wc -c < "public/$VIDEO_PATH" | tr -d ' ')" = "3687284"
+
+          cat > /tmp/expected-vercelignore <<'EOF'
+          **/*.mov
+          !public/site/assets/validation/payment/validation-payment-video-order-details-r77.mov
+          **/*.mp4
+          **/*.webm
+          **/*.m4v
+          EOF
+          cmp /tmp/expected-vercelignore .vercelignore
+
+          for page in index.html work.html experiments.html profile.html; do
+            grep -Fq '/site/assets/js/production.c3e1b4d6a1eb213d.js' "public/site/$page"
+            ! grep -Fq '/site/assets/js/app.js' "public/site/$page"
+            ! grep -Fq 'window.__CF$cv$params' "public/site/$page"
+          done
+
+          python - <<'PY'
+          import json
+          payload = json.load(open('public/site/content/portfolio-content.json'))
+          assert payload.get('contentVersion') == '2026-08-04-r119'
+          print('Source contentVersion:', payload.get('contentVersion'))
+          PY
+
+      - name: Install and link Vercel CLI
+        run: |
+          npm install --global vercel@58.5.1
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Deploy final parity build
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          url=$(vercel deploy --prod --yes --token="$VERCEL_TOKEN")
+          printf '%s\n' "$url" | tee production-url.txt
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Verify production state and public parity
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PRODUCTION_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+
+          host=${PRODUCTION_URL#https://}
+          status=$(curl --silent --show-error \
+            --output evidence/deployment.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$host?teamId=$VERCEL_ORG_ID")
+          test "$status" = '200'
+          python - <<'PY'
+          import json
+          payload = json.load(open('evidence/deployment.json'))
+          assert (payload.get('readyState') or payload.get('state')) == 'READY'
+          assert payload.get('target') == 'production'
+          print('Production deployment READY:', payload.get('url'))
+          PY
+
+          verify_page() {
+            route="$1"
+            expected="$2"
+            output="$3"
+            for attempt in 1 2 3 4 5 6; do
+              status=$(curl -sSL -H 'Cache-Control: no-cache' \
+                -o "$output" -w '%{http_code}' "$LIVE$route")
+              if [ "$status" = '200' ] && \
+                 grep -Fq '/site/assets/js/production.c3e1b4d6a1eb213d.js' "$output" && \
+                 ! grep -Fq '/site/assets/js/app.js' "$output" && \
+                 ! grep -Fq 'window.__CF$cv$params' "$output" && \
+                 grep -Fq "$expected" "$output"; then
+                echo "Verified page: $route"
+                return 0
+              fi
+              sleep 10
+            done
+            echo "::error::Page verification failed: $route"
+            return 1
+          }
+
+          verify_page /site 'Shulin Chou' evidence/site.html
+          verify_page /site/work 'Work — Shulin Chou' evidence/work.html
+          verify_page /site/work/voucher-center 'Work — Shulin Chou' evidence/voucher-center.html
+          verify_page /site/experiments 'Experiment — Shulin Chou' evidence/experiments.html
+          verify_page /site/profile 'Profile — Shulin Chou' evidence/profile.html
+
+          curl -fsSL --retry 3 "$ORIGINAL/$VIDEO_PATH" -o evidence/original.mov
+          curl -fsSL --retry 3 "$LIVE/$VIDEO_PATH" -o evidence/live.mov
+          cmp evidence/original.mov evidence/live.mov
+          original_sha=$(sha256sum evidence/original.mov | cut -d' ' -f1)
+          live_sha=$(sha256sum evidence/live.mov | cut -d' ' -f1)
+          video_bytes=$(wc -c < evidence/live.mov | tr -d ' ')
+          test "$video_bytes" = '3687284'
+          printf 'Payment validation video: MATCH\nbytes: %s\noriginal_sha256: %s\nlive_sha256: %s\n' \
+            "$video_bytes" "$original_sha" "$live_sha" | tee evidence/video-parity.txt
+
+          curl -fsSL "$LIVE/site/content/portfolio-content.json" -o evidence/content.json
+          python - <<'PY'
+          import json
+          payload = json.load(open('evidence/content.json'))
+          assert payload.get('contentVersion') == '2026-08-04-r119'
+          print('Live contentVersion:', payload.get('contentVersion'))
+          PY
+
+          headers=$(curl --silent --show-error --head https://www.shulinchou.com/site)
+          printf '%s\n' "$headers" > evidence/www-headers.txt
+          redirect_status=$(printf '%s\n' "$headers" | head -n 1 | awk '{print $2}')
+          test "$redirect_status" = '308'
+
+          cp production-url.txt evidence/
+
+      - name: Upload final parity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-original-site-parity
+          path: |
+            evidence/deployment.json
+            evidence/video-parity.txt
+            evidence/content.json
+            evidence/www-headers.txt
+            evidence/production-url.txt
+          retention-days: 2

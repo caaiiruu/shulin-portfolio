@@ -1,0 +1,86 @@
+name: Deploy Vercel production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_nD9NNfDwlkTJJ2wtplVSaxHO
+      VERCEL_PROJECT_ID: prj_XJxTzDxihUexNiSzUmFHNzXBBwUk
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify complete static artifact
+        run: |
+          set -euo pipefail
+          test -f vercel.json
+          test -f public/site/index.html
+          test -f public/site/work.html
+          test -f public/site/profile.html
+          test -f public/site/content/portfolio-content.json
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@58.1.0
+
+      - name: Link project
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Validate token against linked project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          HTTP_STATUS=$(curl --silent --show-error \
+            --output /tmp/vercel-project.json \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID?teamId=$VERCEL_ORG_ID")
+          test "$HTTP_STATUS" = "200"
+
+      - name: Deploy production
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          PRODUCTION_URL=$(vercel deploy --prod --yes --token="$VERCEL_TOKEN")
+          printf '%s\n' "$PRODUCTION_URL" | tee production-url.txt
+          echo "url=$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Verify production deployment state
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PRODUCTION_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          HOSTNAME=${PRODUCTION_URL#https://}
+          HTTP_STATUS=$(curl --silent --show-error \
+            --output /tmp/deployment.json \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$HOSTNAME?teamId=$VERCEL_ORG_ID")
+          test "$HTTP_STATUS" = "200"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/deployment.json').read_text())
+          state = payload.get('readyState') or payload.get('state')
+          assert state == 'READY'
+          assert payload.get('target') == 'production'
+          PY
+
+      - name: Upload production URL
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-production-url
+          path: production-url.txt
+          retention-days: 1

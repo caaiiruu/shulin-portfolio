@@ -1,0 +1,270 @@
+name: Audit original GPT Site
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/audit-original-gpt-site.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout recovered repository
+        uses: actions/checkout@v4
+
+      - name: Mirror original public site and compare
+        env:
+          ORIGINAL_ORIGIN: https://shulin-portfolio-v53.dr-piipii.chatgpt.site
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import hashlib
+          import json
+          import mimetypes
+          import os
+          import re
+          import sys
+          from collections import deque
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import unquote, urljoin, urlparse, urlunparse
+          from urllib.request import Request, urlopen
+
+          origin = os.environ['ORIGINAL_ORIGIN'].rstrip('/')
+          origin_host = urlparse(origin).netloc
+          output_root = Path('original-mirror')
+          local_root = Path('public')
+          output_root.mkdir(parents=True, exist_ok=True)
+
+          seeds = [
+              '/site/',
+              '/site/index.html',
+              '/site/work.html',
+              '/site/experiments.html',
+              '/site/profile.html',
+              '/site/content/portfolio-content.json',
+              '/site/content/portfolio-asset-manifest.json',
+          ]
+
+          class AssetParser(HTMLParser):
+              def __init__(self) -> None:
+                  super().__init__()
+                  self.urls: set[str] = set()
+
+              def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+                  attrs_dict = dict(attrs)
+                  for key in ('src', 'href', 'poster', 'data-src'):
+                      value = attrs_dict.get(key)
+                      if value:
+                          self.urls.add(value)
+                  srcset = attrs_dict.get('srcset')
+                  if srcset:
+                      for item in srcset.split(','):
+                          candidate = item.strip().split(' ')[0]
+                          if candidate:
+                              self.urls.add(candidate)
+
+          css_url_re = re.compile(r"url\(\s*(['\"]?)([^)'\"]+)\1\s*\)", re.I)
+          import_re = re.compile(r"@import\s+(?:url\()?\s*['\"]?([^'\"\)\s;]+)", re.I)
+          quoted_site_re = re.compile(r"['\"]((?:https?://[^'\"]+)?/site/[^'\"?#\s]+(?:\?[^'\"#\s]*)?)['\"]")
+
+          def canonical_url(raw: str, base: str) -> str | None:
+              raw = raw.strip()
+              if not raw or raw.startswith(('data:', 'blob:', 'mailto:', 'tel:', 'javascript:', '#')):
+                  return None
+              absolute = urljoin(base, raw)
+              parsed = urlparse(absolute)
+              if parsed.netloc != origin_host or not parsed.path.startswith('/site'):
+                  return None
+              return urlunparse((parsed.scheme or 'https', parsed.netloc, parsed.path, '', parsed.query, ''))
+
+          def local_path_for(url: str, content_type: str) -> Path:
+              parsed = urlparse(url)
+              path = unquote(parsed.path).lstrip('/')
+              if parsed.path.endswith('/'):
+                  path += 'index.html'
+              elif not Path(path).suffix and 'text/html' in content_type:
+                  path += '.html'
+              if parsed.query:
+                  digest = hashlib.sha256(parsed.query.encode()).hexdigest()[:10]
+                  p = Path(path)
+                  path = str(p.with_name(f'{p.stem}__q_{digest}{p.suffix}'))
+              return output_root / path
+
+          queue: deque[str] = deque(urljoin(origin + '/', seed.lstrip('/')) for seed in seeds)
+          queued = set(queue)
+          fetched: dict[str, dict[str, object]] = {}
+          errors: list[dict[str, object]] = []
+
+          while queue:
+              url = queue.popleft()
+              try:
+                  req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PortfolioMirrorAudit/1.0'})
+                  with urlopen(req, timeout=40) as response:
+                      status = int(getattr(response, 'status', 200))
+                      final_url = response.geturl()
+                      content_type = response.headers.get_content_type()
+                      charset = response.headers.get_content_charset() or 'utf-8'
+                      body = response.read()
+              except Exception as exc:
+                  errors.append({'url': url, 'error': repr(exc)})
+                  continue
+
+              if status != 200:
+                  errors.append({'url': url, 'status': status})
+                  continue
+
+              save_path = local_path_for(url, content_type)
+              save_path.parent.mkdir(parents=True, exist_ok=True)
+              save_path.write_bytes(body)
+              sha = hashlib.sha256(body).hexdigest()
+              fetched[url] = {
+                  'url': url,
+                  'finalUrl': final_url,
+                  'path': str(save_path.relative_to(output_root)),
+                  'contentType': content_type,
+                  'bytes': len(body),
+                  'sha256': sha,
+              }
+
+              links: set[str] = set()
+              text: str | None = None
+              if content_type in ('text/html', 'text/css', 'application/javascript', 'text/javascript', 'application/json'):
+                  try:
+                      text = body.decode(charset, errors='replace')
+                  except LookupError:
+                      text = body.decode('utf-8', errors='replace')
+
+              if text is not None and content_type == 'text/html':
+                  parser = AssetParser()
+                  parser.feed(text)
+                  links.update(parser.urls)
+              if text is not None and content_type == 'text/css':
+                  links.update(match.group(2) for match in css_url_re.finditer(text))
+                  links.update(match.group(1) for match in import_re.finditer(text))
+              if text is not None and content_type in ('text/html', 'text/css', 'application/javascript', 'text/javascript', 'application/json'):
+                  links.update(match.group(1) for match in quoted_site_re.finditer(text))
+
+              for raw in links:
+                  candidate = canonical_url(raw, final_url)
+                  if candidate and candidate not in queued and len(queued) < 2500:
+                      queued.add(candidate)
+                      queue.append(candidate)
+
+          remote_files = {}
+          for item in fetched.values():
+              path = str(item['path'])
+              remote_files[path] = item
+
+          local_files: dict[str, dict[str, object]] = {}
+          if local_root.exists():
+              for path in local_root.rglob('*'):
+                  if not path.is_file():
+                      continue
+                  rel = path.relative_to(local_root).as_posix()
+                  data = path.read_bytes()
+                  local_files[rel] = {
+                      'bytes': len(data),
+                      'sha256': hashlib.sha256(data).hexdigest(),
+                  }
+
+          missing_locally = sorted(path for path in remote_files if path not in local_files)
+          changed = sorted(
+              path for path in remote_files
+              if path in local_files and remote_files[path]['sha256'] != local_files[path]['sha256']
+          )
+          identical = sorted(
+              path for path in remote_files
+              if path in local_files and remote_files[path]['sha256'] == local_files[path]['sha256']
+          )
+          local_only = sorted(path for path in local_files if path not in remote_files)
+
+          metadata: dict[str, object] = {}
+          content_path = output_root / 'site/content/portfolio-content.json'
+          if content_path.exists():
+              try:
+                  payload = json.loads(content_path.read_text(encoding='utf-8'))
+                  metadata['remoteContentVersion'] = payload.get('contentVersion')
+                  metadata['remoteSupersedes'] = payload.get('supersedes')
+              except Exception as exc:
+                  metadata['remoteContentParseError'] = repr(exc)
+
+          for html_name in ('index.html', 'work.html', 'experiments.html', 'profile.html'):
+              path = output_root / 'site' / html_name
+              if path.exists():
+                  text = path.read_text(encoding='utf-8', errors='replace')
+                  body_version = re.search(r'data-version=["\']([^"\']+)', text)
+                  scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)', text, re.I)
+                  styles = re.findall(r'<link[^>]+rel=["\']stylesheet["\'][^>]+href=["\']([^"\']+)', text, re.I)
+                  metadata[f'remote:{html_name}'] = {
+                      'dataVersion': body_version.group(1) if body_version else None,
+                      'scripts': scripts,
+                      'styles': styles,
+                      'bytes': path.stat().st_size,
+                  }
+
+          report = {
+              'origin': origin,
+              'remoteFetchedCount': len(remote_files),
+              'remoteFetchedBytes': sum(int(v['bytes']) for v in remote_files.values()),
+              'fetchErrorCount': len(errors),
+              'metadata': metadata,
+              'missingLocallyCount': len(missing_locally),
+              'changedCount': len(changed),
+              'identicalCount': len(identical),
+              'localOnlyCount': len(local_only),
+              'missingLocally': missing_locally,
+              'changed': changed,
+              'identical': identical,
+              'localOnly': local_only,
+              'errors': errors,
+              'remoteManifest': remote_files,
+          }
+          Path('original-site-audit.json').write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding='utf-8')
+
+          summary = [
+              f"Original origin: {origin}",
+              f"Remote files fetched: {len(remote_files)}",
+              f"Remote bytes fetched: {report['remoteFetchedBytes']}",
+              f"Fetch errors: {len(errors)}",
+              f"Missing locally: {len(missing_locally)}",
+              f"Changed: {len(changed)}",
+              f"Identical: {len(identical)}",
+              f"Local only: {len(local_only)}",
+              f"Metadata: {json.dumps(metadata, ensure_ascii=False)}",
+              '',
+              '=== MISSING LOCALLY ===',
+              *missing_locally[:300],
+              '',
+              '=== CHANGED ===',
+              *changed[:300],
+              '',
+              '=== FETCH ERRORS ===',
+              *(json.dumps(item, ensure_ascii=False) for item in errors[:100]),
+          ]
+          Path('original-site-audit.txt').write_text('\n'.join(summary), encoding='utf-8')
+          print('\n'.join(summary[:20]))
+
+          if len(remote_files) < 10:
+              print('::error::Original site mirror fetched too few files; refusing to treat audit as complete.')
+              sys.exit(1)
+          PY
+
+      - name: Upload original mirror and audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-gpt-site-audit
+          path: |
+            original-mirror
+            original-site-audit.json
+            original-site-audit.txt
+          if-no-files-found: error
+          retention-days: 2

@@ -1,0 +1,58 @@
+name: Configure Vercel www domain
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+    paths:
+      - .github/workflows/configure-vercel-www-domain.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_nD9NNfDwlkTJJ2wtplVSaxHO
+      VERCEL_PROJECT_ID: prj_XJxTzDxihUexNiSzUmFHNzXBBwUk
+    steps:
+      - name: Add www redirect domain
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          STATUS=$(curl --silent --show-error \
+            --output /tmp/www-domain.json \
+            --write-out '%{http_code}' \
+            --request POST \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data '{"name":"www.shulinchou.com","redirect":"shulinchou.com","redirectStatusCode":308}' \
+            "https://api.vercel.com/v10/projects/$VERCEL_PROJECT_ID/domains?teamId=$VERCEL_ORG_ID")
+
+          if [ "$STATUS" = "409" ]; then
+            STATUS=$(curl --silent --show-error \
+              --output /tmp/www-domain.json \
+              --write-out '%{http_code}' \
+              --request PATCH \
+              --header "Authorization: Bearer $VERCEL_TOKEN" \
+              --header "Content-Type: application/json" \
+              --data '{"redirect":"shulinchou.com","redirectStatusCode":308}' \
+              "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/domains/www.shulinchou.com?teamId=$VERCEL_ORG_ID")
+          fi
+
+          cat /tmp/www-domain.json
+          test "$STATUS" = "200"
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/www-domain.json').read_text())
+          assert payload.get('name') == 'www.shulinchou.com'
+          assert payload.get('redirect') == 'shulinchou.com'
+          assert int(payload.get('redirectStatusCode')) == 308
+          print('Configured www redirect:', payload.get('name'), '->', payload.get('redirect'))
+          PY

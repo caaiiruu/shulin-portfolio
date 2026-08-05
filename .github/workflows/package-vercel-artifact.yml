@@ -1,0 +1,40 @@
+name: Package Vercel artifact
+
+on:
+  push:
+    branches:
+      - deploy/vercel-preview-2026-08-05
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify deployment source
+        run: |
+          test -f vercel.json
+          test -f public/site/index.html
+          test -f public/site/work.html
+          test -f public/site/profile.html
+          test -f public/site/content/portfolio-content.json
+
+      - name: Create deployment package
+        run: |
+          mkdir -p artifact
+          cp vercel.json artifact/vercel.json
+          cp -R public artifact/public
+          (cd artifact && zip -qr ../shulin-portfolio-vercel.zip .)
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shulin-portfolio-vercel
+          path: shulin-portfolio-vercel.zip
+          if-no-files-found: error
+          retention-days: 1

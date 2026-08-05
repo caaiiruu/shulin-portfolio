@@ -1,6 +1,6 @@
+import { defineConfig, devices } from '@playwright/test';
 
-const { defineConfig, devices } = require('@playwright/test');
-module.exports = defineConfig({
+export default defineConfig({
   testDir: '.', timeout: 30000, fullyParallel: false,
   use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
   projects: [
