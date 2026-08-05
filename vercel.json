@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'Static v247 artifact: dependency install not required'",
+  "buildCommand": "echo 'Static v247 artifact: build already verified'",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/site/index.html"
+    },
+    {
+      "source": "/site",
+      "destination": "/site/index.html"
+    },
+    {
+      "source": "/site/",
+      "destination": "/site/index.html"
+    },
+    {
+      "source": "/site/work",
+      "destination": "/site/work.html"
+    },
+    {
+      "source": "/site/work/:projectId*",
+      "destination": "/site/work.html"
+    },
+    {
+      "source": "/site/profile",
+      "destination": "/site/profile.html"
+    },
+    {
+      "source": "/site/playground",
+      "destination": "/site/experiments.html"
+    }
+  ]
+}
