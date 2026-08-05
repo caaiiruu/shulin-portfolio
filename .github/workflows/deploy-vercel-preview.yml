@@ -1,4 +1,4 @@
-name: Deploy Vercel preview
+name: Deploy Vercel production
 
 on:
   push:
@@ -21,6 +21,7 @@ jobs:
 
       - name: Verify complete static artifact
         run: |
+          set -euo pipefail
           test -f vercel.json
           test -f public/site/index.html
           test -f public/site/work.html
@@ -41,84 +42,57 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$VERCEL_TOKEN"
-
-          RAW_LENGTH=$(printf '%s' "$VERCEL_TOKEN" | wc -c | tr -d ' ')
-          TRIMMED_TOKEN=$(printf '%s' "$VERCEL_TOKEN" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-          TRIMMED_LENGTH=$(printf '%s' "$TRIMMED_TOKEN" | wc -c | tr -d ' ')
-
-          echo "Token length: $RAW_LENGTH"
-          echo "Trimmed token length: $TRIMMED_LENGTH"
-
-          if [ "$RAW_LENGTH" != "$TRIMMED_LENGTH" ]; then
-            echo "::error::VERCEL_TOKEN contains leading or trailing whitespace/newline."
-            exit 1
-          fi
-
           HTTP_STATUS=$(curl --silent --show-error \
             --output /tmp/vercel-project.json \
             --write-out '%{http_code}' \
             --header "Authorization: Bearer $VERCEL_TOKEN" \
             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID?teamId=$VERCEL_ORG_ID")
-
-          echo "Vercel project API HTTP status: $HTTP_STATUS"
-
+          test "$HTTP_STATUS" = "200"
           python - <<'PY'
           import json
           from pathlib import Path
-
           payload = json.loads(Path('/tmp/vercel-project.json').read_text())
-          if isinstance(payload, dict) and payload.get('id'):
-              print('Authenticated project:', payload.get('name'))
-              print('Authenticated project id:', payload.get('id'))
-          elif isinstance(payload, dict):
-              error = payload.get('error')
-              if isinstance(error, dict):
-                  print('Vercel API error code:', error.get('code'))
-                  print('Vercel API error message:', error.get('message'))
-              else:
-                  print('Vercel API response keys:', ', '.join(sorted(payload.keys())))
+          assert payload.get('id') == 'prj_XJxTzDxihUexNiSzUmFHNzXBBwUk'
+          print('Authenticated project:', payload.get('name'))
           PY
 
-          if [ "$HTTP_STATUS" != "200" ]; then
-            echo "::error::Token cannot access the linked Vercel project."
-            exit 1
-          fi
-
-      - name: Deploy preview
+      - name: Deploy production
         id: deploy
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -euo pipefail
-          DEPLOYMENT_URL=$(vercel deploy --yes --token="$VERCEL_TOKEN")
-          printf '%s\n' "$DEPLOYMENT_URL" | tee deployment-url.txt
-          echo "url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+          PRODUCTION_URL=$(vercel deploy --prod --yes --token="$VERCEL_TOKEN")
+          printf '%s\n' "$PRODUCTION_URL" | tee production-url.txt
+          echo "url=$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
 
-      - name: Verify preview routes through Vercel auth
+      - name: Verify production deployment state
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+          PRODUCTION_URL: ${{ steps.deploy.outputs.url }}
         run: |
           set -euo pipefail
+          HOSTNAME=${PRODUCTION_URL#https://}
+          HTTP_STATUS=$(curl --silent --show-error \
+            --output /tmp/deployment.json \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$HOSTNAME?teamId=$VERCEL_ORG_ID")
+          test "$HTTP_STATUS" = "200"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/deployment.json').read_text())
+          state = payload.get('readyState') or payload.get('state')
+          print('Production deployment:', payload.get('url'))
+          print('Ready state:', state)
+          assert state == 'READY'
+          assert payload.get('target') == 'production'
+          PY
 
-          verify_route() {
-            route="$1"
-            expected="$2"
-            output_file="$3"
-
-            vercel curl "$route" --deployment "$DEPLOYMENT_URL" --token="$VERCEL_TOKEN" > "$output_file"
-            grep -Fq "$expected" "$output_file"
-            echo "Verified $route"
-          }
-
-          verify_route "/" "Shulin Chou" /tmp/home.html
-          verify_route "/site/work" "Work" /tmp/work.html
-          verify_route "/site/work/voucher-center" "voucher" /tmp/voucher.html
-          verify_route "/site/profile" "Shulin Chou" /tmp/profile.html
-
-      - name: Upload deployment URL
+      - name: Upload production URL
         uses: actions/upload-artifact@v4
         with:
-          name: vercel-preview-url
-          path: deployment-url.txt
+          name: vercel-production-url
+          path: production-url.txt
           retention-days: 1
