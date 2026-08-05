@@ -1,17 +1,71 @@
 /* ProjectCard — sole production owner for Work, Related and Detail card internals. */
-:root{--project-card-title:clamp(2rem,2.6vw,2.75rem);--project-card-content-padding:clamp(24px,2.2vw,34px);--project-card-meta-label:104px}
-.work-gallery-v32{align-items:stretch}
-.work-card-v32__button,.related-project-card-v45,.detail-related-card-v45{border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface-raised);transition:transform var(--motion-base) var(--ease-standard),border-color var(--motion-fast),box-shadow var(--motion-base)}
-.work-card-v32__button:hover,.related-project-card-v45:hover,.detail-related-card-v45:hover{border-color:var(--color-border-strong);box-shadow:var(--shadow-raised);transform:translateY(-3px)}
-.work-card-v32__button{min-height:0}
-.work-card-v32:not(.work-card-v32--featured) .work-card-v32__button{grid-template-rows:var(--project-card-media-block) minmax(0,1fr)}
-.work-card-v32:not(.work-card-v32--featured) .work-artifact{min-height:0;height:var(--project-card-media-block)}
+:root{--project-card-title:clamp(var(--dimension-2rem),var(--dimension-2-6vw),var(--dimension-2-75rem));--project-card-compact-title:clamp(var(--dimension-1-35rem),var(--dimension-1-55vw),var(--dimension-1-55rem));--project-card-compact-body:var(--text-sm);--project-card-compact-action:var(--text-sm);--project-card-content-padding:clamp(var(--dimension-24px),var(--dimension-2-2vw),var(--dimension-34px));--project-card-meta-label:var(--dimension-104px);--project-card-gallery-gap:var(--space-6);--project-card-feature-columns:minmax(0,7fr) minmax(0,5fr);--project-card-support-columns:repeat(2,minmax(0,1fr));--project-card-media-surface:var(--color-surface-subtle);--project-card-copy-measure:var(--dimension-52ch)}
+.work-gallery-v32{display:grid;grid-template-columns:var(--project-card-support-columns);gap:var(--project-card-gallery-gap);align-items:stretch}
+.work-card-v32{display:block;min-width:0;grid-column:1/-1}
+.work-card-v32--compact{grid-column:auto}
+.work-card-v32__button,.related-project-card-v45,.detail-related-card-v45{border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface-raised);transition:transform var(--motion-base) var(--ease-standard),border-color var(--motion-fast),border-radius var(--motion-base),box-shadow var(--motion-base)}
+.work-card-v32__button:hover,.related-project-card-v45:hover,.detail-related-card-v45:not(.detail-experiment-card-v101):hover{border-color:var(--work-card-hover-border);border-radius:var(--work-card-hover-radius);box-shadow:var(--work-card-hover-shadow);transform:var(--work-card-hover-transform)}
+.work-card-v32__button{display:grid;width:100%;height:100%;min-height:0;overflow:hidden;color:var(--color-text-primary);text-align:left;cursor:pointer}
+.work-card-v32__button{grid-template-columns:var(--project-card-feature-columns)}
+.work-card-v32--compact .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:var(--project-card-media-block-mobile) minmax(0,1fr)}
+.work-card-v32--compact .work-card-v32__content h2{max-width:var(--dimension-22ch);font-size:var(--project-card-compact-title);line-height:1.12;letter-spacing:var(--dimension-neg--025em)}
+.work-card-v32--compact .work-card-v32__content>p{max-width:var(--dimension-44ch);font-size:var(--project-card-compact-body);line-height:1.5}
+.work-card-v32--compact .work-card-v32__action{font-size:var(--project-card-compact-action)}
+.work-card-v32--compact .work-card-signals-v44{display:none}
+.work-artifact{display:grid;min-width:0;min-height:var(--project-card-media-block);place-items:center;padding:var(--project-card-content-padding);overflow:hidden;background:var(--project-card-media-surface)}
+.work-card-v32 .work-artifact{min-height:var(--project-card-media-block);height:auto}
+.work-card-v32--compact .work-artifact{box-sizing:border-box;min-height:0;height:var(--project-card-media-block-mobile)}
+.work-card-v32--compact .work-card-v32__content{border-top:var(--dimension-1px) solid var(--color-border)}
 .work-card-v32__content{display:flex;flex-direction:column;min-width:0;padding:var(--project-card-content-padding);overflow:visible}
-.work-card-v32__content h2{max-width:18ch;font-size:var(--project-card-title);line-height:1.04;overflow-wrap:anywhere;text-wrap:balance}
+.work-card-v32__content h2{min-width:0;max-width:min(100%,var(--dimension-24ch));margin-top:var(--space-3);font-size:clamp(var(--dimension-1-75rem),var(--dimension-2-2vw),var(--dimension-2-25rem));line-height:1.08;letter-spacing:var(--dimension-neg--035em);overflow-wrap:break-word;word-break:normal;line-break:strict;text-wrap:balance}
+.work-card-v32__content>p{max-width:var(--project-card-copy-measure);margin-top:var(--space-4);color:var(--color-text-secondary);line-height:var(--leading-body)}
+.work-card-signals-v44{display:grid;gap:var(--space-3);margin-top:var(--space-6);padding-top:var(--space-5);border-top:var(--dimension-1px) solid var(--color-border)}
 .work-card-signals-v44>div{display:grid;grid-template-columns:var(--project-card-meta-label) minmax(0,1fr);gap:var(--space-4);align-items:start}
-.work-card-v32__action,.related-project-card__action,.detail-related-action-v46{order:99;width:fit-content;margin-top:auto;padding-top:var(--space-5);border-top:1px solid var(--color-border);font-weight:700}
-.work-card-v32__button:hover .work-card-v32__action,.work-card-v32__button:focus-visible .work-card-v32__action{background:var(--color-action-bg-hover);color:var(--color-action-text-hover)}
-.related-project-card-v45,.detail-related-card-v45{min-height:320px;padding:var(--card-padding);grid-template-rows:auto minmax(3.2em,auto) 1fr auto}
-@media(max-width:900px){.work-gallery-v32{grid-template-columns:1fr}.work-card-v32,.work-card-v32--featured{grid-column:auto}.work-card-v32__button,.work-card-v32--featured .work-card-v32__button{height:auto;grid-template-columns:1fr;grid-template-rows:var(--project-card-media-block-mobile) auto}.work-card-v32 .work-artifact,.work-card-v32--featured .work-artifact{min-height:0;height:var(--project-card-media-block-mobile)}}
-@media(max-width:560px){:root{--project-card-meta-label:88px}.work-card-v32__content{padding:var(--space-5)}.work-card-v32__content h2{max-width:none;font-size:clamp(1.75rem,8vw,2.15rem)}.work-card-signals-v44{padding:var(--space-4)}.work-card-signals-v44>div{gap:var(--space-3)}}
+.work-card-signals-v44>div:first-child{display:none}
+.work-card-signals-v44 dt{padding-top:var(--dimension-4px);color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);line-height:var(--leading-body);text-transform:uppercase}
+.work-card-signals-v44 dd{min-width:0;margin:0;color:var(--color-text-secondary);line-height:var(--leading-body);overflow-wrap:normal;word-break:normal}
+.work-card-v32__action,.related-project-card__action,.detail-related-action-v46{order:99;width:fit-content;margin-top:auto;padding-top:var(--space-5);font-weight:var(--sys-weight-bold)}
+.work-card-v32__action{display:inline-flex;align-items:center;gap:var(--space-2);line-height:1.25;white-space:nowrap}
+.work-card-v32__action>.icon-arrow{align-self:center}
+.related-project-card__action,.detail-related-action-v46{display:inline-flex;align-items:center;gap:var(--space-2);white-space:nowrap}
+.work-card-v32__button:hover .work-card-v32__action,.work-card-v32__button:focus-visible .work-card-v32__action{background:transparent;color:var(--color-text-accent);text-decoration:underline;text-underline-offset:var(--space-2)}
+.related-project-card-v45:is(:hover,:focus-visible) .related-project-card__action,.detail-related-card-v45:not(.detail-experiment-card-v101):is(:hover,:focus-visible) .detail-related-action-v46{color:var(--color-text-accent);text-decoration:underline;text-decoration-thickness:var(--dimension-1px);text-underline-offset:var(--space-2)}
+.related-project-card__top-v45{display:flex;flex-wrap:nowrap;align-items:baseline;align-content:flex-start;gap:var(--space-2) var(--space-3);min-width:0;min-height:var(--dimension-24px)}
+.related-project-card__company-v135{flex:0 0 auto;min-width:max-content;color:var(--color-text-primary);font-size:var(--text-sm);font-weight:var(--sys-weight-heavy);line-height:1.35;overflow-wrap:normal;word-break:keep-all;text-wrap:nowrap;white-space:nowrap}
+.related-project-card__context{color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-08em);text-transform:uppercase}
+.related-project-card__meta-v45{margin-top:var(--space-4)}
+.related-project-card__meta-v45>div{display:grid;gap:var(--space-2)}
+.related-project-card__meta-v45 dt{color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-08em);line-height:1.2;text-transform:uppercase}
+.related-project-card__meta-v45 dd{margin:0;color:var(--color-text-secondary);line-height:1.5}
+.related-project-card-v45,.detail-related-card-v45{display:grid;min-height:var(--dimension-300px);padding:clamp(var(--space-5),var(--dimension-2-2vw),var(--space-6));grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:var(--space-5);align-items:start;text-align:left;color:var(--color-text-primary);overflow:visible}
+.global-search-v114__projects .related-project-card--search{min-height:clamp(var(--dimension-300px),var(--dimension-35vw),var(--dimension-420px));padding:clamp(var(--space-4),var(--dimension-2vw),var(--space-6));grid-template-rows:auto minmax(0,1fr) auto;gap:var(--space-5)}
+.global-search-v114__projects .related-project-card__intro-v81{display:grid;grid-template-rows:var(--dimension-24px) auto;align-content:start;gap:var(--space-4);min-width:0}
+.global-search-v114__projects .related-project-card__top-v45{min-height:var(--dimension-24px)}
+.global-search-v114__projects .related-project-card__title{max-width:var(--dimension-18ch);margin-top:0;font-size:clamp(var(--dimension-1-7rem),var(--dimension-2-4vw),var(--dimension-2-25rem));line-height:1.08;letter-spacing:var(--dimension-neg--035em);text-wrap:balance}
+.global-search-v114__projects .related-project-card__meta-v45{align-self:start;margin-top:0}
+.global-search-v114__projects .related-project-card__action{display:inline-flex;white-space:nowrap}
+.related-project-card__action-arrow{display:inline-grid;flex:0 0 auto;width:var(--dimension-20px);height:var(--dimension-20px);place-items:center;line-height:1;transition:transform var(--motion-fast) var(--ease-standard)}
+.related-project-card-v45:is(:hover,:focus-visible) .related-project-card__action-arrow{transform:translate(var(--dimension-2px),var(--dimension-neg-2px))}
+.detail-related-card-v45:not(.detail-experiment-card-v101){overflow:hidden}
+.match-project-grid .related-project-card-v45{grid-template-rows:auto minmax(0,1fr) auto;gap:var(--space-4);min-height:100%;padding:var(--space-5);overflow:visible;border-color:var(--color-border-strong);border-radius:var(--radius-md);background:var(--color-surface-raised)}
+.match-project-grid .related-project-card__intro-v81{min-width:0}
+.match-project-grid .related-project-card__top-v45,.match-project-grid .related-project-card__title,.match-project-grid .related-project-card__meta-v45{padding:0}
+.match-project-grid .related-project-card__title{max-width:var(--dimension-24ch);margin-top:var(--space-2);font-size:clamp(var(--dimension-1-35rem),var(--dimension-2vw),var(--dimension-1-7rem));line-height:1.12;letter-spacing:var(--dimension-neg--035em);text-wrap:balance}
+.match-project-grid .related-project-card__meta-v45{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);margin-top:0}
+.match-project-grid .related-project-card__meta-v45>div{display:grid;grid-template-columns:1fr;gap:var(--space-2);padding:var(--space-3) 0;border-top:var(--dimension-1px) solid var(--color-border)}
+.match-project-grid .related-project-card__meta-v45 dt{font-size:var(--dimension-0-68rem);line-height:1.35}
+.match-project-grid .related-project-card__meta-v45 dd{margin:0;color:var(--color-text-primary);font-size:var(--dimension-0-9rem);line-height:1.5}
+.match-project-grid .related-project-card__action{grid-column:1/-1;align-self:end;margin-top:auto;padding-top:var(--space-2);white-space:nowrap}
+.related-project-card-v45 :is(.related-project-card__context,.detail-related-card-v45__context),.detail-related-card-v45__context{display:flex;align-items:baseline;min-width:0;color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-06em);white-space:normal}
+:is(.related-project-card-v45,.detail-related-card-v45) :is(.related-project-card__context,.detail-related-card-v45__context) .company-name-v132{min-width:max-content;font-size:var(--text-sm);line-height:1.35;overflow-wrap:normal;word-break:keep-all;text-wrap:nowrap;white-space:nowrap}
+.related-project-card-v45 :is(h4,h5),.detail-related-card-v45 h4{min-width:0;max-width:min(100%,var(--dimension-24ch));margin-top:0;font-size:min(var(--project-card-related-title),var(--dimension-1-75rem));line-height:1.2;letter-spacing:var(--dimension-neg--025em);text-wrap:balance;overflow-wrap:break-word;word-break:normal;line-break:strict}
+.detail-related-card-v45__visual{height:var(--project-card-related-media-block);min-height:var(--project-card-related-media-block);margin:calc(var(--space-5) * -1) calc(var(--space-5) * -1) var(--space-5);padding:var(--space-4);overflow:hidden;background:var(--color-surface-subtle);border-bottom:var(--dimension-1px) solid var(--color-border)}
+.detail-related-card-v45__brand{display:block;color:var(--color-text-primary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
+.detail-related-card-v45__flow{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-top:var(--space-3)}
+.detail-related-card-v45__flow b{font-size:var(--text-xs);font-weight:var(--sys-weight-bold);line-height:1.35}
+.detail-related-card-v45__flow i{display:block;flex:0 0 var(--dimension-16px);height:var(--dimension-1px);background:var(--color-border-strong)}
+@media(max-width:900px){.work-gallery-v32{grid-template-columns:1fr}.work-card-v32,.work-card-v32--featured,.work-card-v32--compact{grid-column:auto}.work-card-v32__button,.work-card-v32--featured .work-card-v32__button,.work-card-v32--compact .work-card-v32__button{height:auto;grid-template-columns:1fr;grid-template-rows:var(--project-card-media-block-mobile) auto}.work-card-v32 .work-artifact,.work-card-v32--featured .work-artifact,.work-card-v32--compact .work-artifact{min-height:0;height:var(--project-card-media-block-mobile)}}
+@media(max-width:700px){.match-project-grid .related-project-card-v45{gap:var(--space-3)}.match-project-grid .related-project-card__meta-v45{grid-template-columns:1fr;margin-top:var(--space-1)}.match-project-grid .related-project-card__action{justify-self:start;margin-top:var(--space-2)}}
+@media(max-width:600px){.global-search-v114__projects .related-project-card--search{min-height:0;padding:var(--space-5);gap:var(--space-4)}.global-search-v114__projects .related-project-card__intro-v81{gap:var(--space-3)}.global-search-v114__projects .related-project-card__title{max-width:none;font-size:clamp(var(--dimension-1-55rem),var(--dimension-7vw),var(--dimension-2rem))}}
+@media(max-width:560px){:root{--project-card-meta-label:var(--dimension-88px);--project-card-gallery-gap:var(--space-5)}.work-card-v32__content,.work-artifact{padding:var(--space-5)}.work-card-v32__content h2{max-width:none;font-size:clamp(var(--dimension-1-65rem),var(--dimension-7vw),var(--dimension-2rem))}.work-card-signals-v44{gap:var(--space-2);margin-top:var(--space-5);padding-top:var(--space-4)}.work-card-signals-v44>div{grid-template-columns:1fr;gap:var(--space-1)}.work-card-v32__action{padding-top:var(--space-4)}.match-project-grid .related-project-card-v45{padding:var(--space-4)}.detail-related-card-v45__visual{height:var(--project-card-related-media-block-mobile);min-height:var(--project-card-related-media-block-mobile)}}
 @media(prefers-reduced-motion:reduce){.work-card-v32__button,.related-project-card-v45,.detail-related-card-v45{transition:none}}

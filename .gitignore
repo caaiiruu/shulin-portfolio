@@ -41,3 +41,5 @@ next-env.d.ts
 /outputs/
 /work/
 /public/site/qa/node_modules/
+/public/site/qa/report/
+/public/site/qa/test-results/

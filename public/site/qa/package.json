@@ -1,6 +1,7 @@
 {
-  "name": "portfolio-v47-browser-qa",
+  "name": "portfolio-browser-qa",
   "private": true,
+  "type": "module",
   "scripts": {
     "qa": "playwright test"
   },

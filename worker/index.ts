@@ -40,7 +40,32 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    // Keep one Work document and one shared dialog owner while allowing every
+    // project detail path to survive direct navigation and reload.
+    if (/^\/site\/work\/[^/]+(?:\/[^/]+)?\/?$/.test(url.pathname)) {
+      const workDocumentUrl = new URL("/site/work.html", request.url);
+      const assetResponse = await env.ASSETS.fetch(new Request(workDocumentUrl, {
+        method: "GET",
+        headers: request.headers,
+      }));
+      if (assetResponse.ok) {
+        const routedResponse = new Response(assetResponse.body, assetResponse);
+        routedResponse.headers.set("Content-Location", "/site/work.html");
+        return routedResponse;
+      }
+    }
+
+    const response = await handler.fetch(request, env, ctx);
+    const secured = new Response(response.body, response);
+    secured.headers.set("Content-Security-Policy", "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' mailto:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self'; script-src 'self'; frame-src https://www.figma.com; connect-src 'self'; font-src 'self'; upgrade-insecure-requests");
+    secured.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    secured.headers.set("X-Content-Type-Options", "nosniff");
+    secured.headers.set("X-Frame-Options", "DENY");
+    secured.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+    secured.headers.set("Cross-Origin-Resource-Policy", "same-origin");
+    secured.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    secured.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()");
+    return secured;
   },
 };
 

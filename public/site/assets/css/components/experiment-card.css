@@ -1,10 +1,145 @@
-/* ExperimentCard — sole production owner. */
-.experiment-index-card-v36{min-height:var(--experiment-card-min-block);padding:var(--card-padding)}
+/* ExperimentExperience — sole production owner for experiment entry cards and experiment-only popup content. */
+.playground-hero-v32{padding-block:var(--section-space-compact)}
+.playground-hero-v32__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(var(--dimension-280px),.46fr);gap:var(--space-7);align-items:center}
+.playground-hero-v32 .lead-copy{max-width:var(--dimension-54ch);margin-top:var(--space-5)}
+.playground-hero-v32__art{position:relative;min-height:var(--dimension-220px)}
+.play-shape{position:absolute;display:block;border:var(--dimension-2px) solid var(--color-text-primary)}
+.play-shape--circle{inset:auto auto var(--space-5) 0;width:var(--dimension-130px);height:var(--dimension-130px);border-radius:50%;background:var(--color-surface)}
+.play-shape--pill{inset:auto auto 0 var(--dimension-90px);width:var(--dimension-180px);height:var(--dimension-90px);border-radius:var(--radius-pill);background:var(--accent-100)}
+.play-shape--small{inset:auto 0 var(--space-8) auto;width:var(--dimension-58px);height:var(--dimension-58px);border-radius:50%;background:var(--brand-100)}
+.play-line{position:absolute;inset:auto var(--space-7) var(--space-8) var(--dimension-210px);height:var(--dimension-2px);background:var(--color-text-primary);transform:rotate(var(--dimension-neg-8deg))}
+
+.experiment-feature-v32{padding-bottom:var(--section-space-compact)}
+.poster,.experiment-feature-card-v32,.experiment-index-card-v36{position:relative;min-width:0;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);text-align:left;box-shadow:none;transition:transform var(--motion-fast) var(--ease-standard),box-shadow var(--motion-base) var(--ease-standard),border-color var(--motion-fast) var(--ease-standard),border-radius var(--motion-base) var(--ease-standard),background-color var(--motion-fast) var(--ease-standard)}
+.poster:nth-child(odd),.experiment-index-card-v36:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
+.poster:nth-child(even),.experiment-index-card-v36:nth-child(even),.detail-experiment-card-v101:nth-child(even),.experiment-feature-card-v32{transform:var(--experiment-card-rest-even)}
+.poster:nth-child(3n),.experiment-index-card-v36:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
+/* Reveal owns the entrance only. Once visible, the experiment composition owns
+   the resting angle so the global reveal reset cannot flatten every rail. */
+.motion-ready [data-motion-reveal].is-inview.poster:nth-child(odd),
+.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(odd),
+.motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
+.motion-ready [data-motion-reveal].is-inview.poster:nth-child(even),
+.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(even),
+.motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(even),
+.motion-ready [data-motion-reveal].is-inview.experiment-feature-card-v32{transform:var(--experiment-card-rest-even)}
+.motion-ready [data-motion-reveal].is-inview.poster:nth-child(3n),
+.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(3n),
+.motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
+.poster:is(:hover,:focus-visible),.experiment-feature-card-v32:is(:hover,:focus-visible),.experiment-index-card-v36:is(:hover,:focus-visible),.detail-experiment-card-v101:is(:hover,:focus-visible){transform:var(--experiment-card-hover-transform);border-color:var(--color-border-strong);border-radius:var(--interactive-organic-radius);box-shadow:var(--experiment-card-hover-shadow)}
+.motion-ready [data-motion-reveal].is-inview:is(.poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101):is(:hover,:focus-visible){transform:var(--experiment-card-hover-transform)}
+.poster:active,.experiment-feature-card-v32:active,.experiment-index-card-v36:active,.detail-experiment-card-v101:active{transform:translateY(0) scale(.99)}
+.experiment-feature-card-v32{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(var(--dimension-320px),.92fr);width:100%;min-height:var(--dimension-460px);padding:0;background:var(--accent-100)}
+.experiment-feature-card-v32__copy{display:flex;flex-direction:column;min-width:0;padding:clamp(var(--space-5),var(--dimension-4vw),var(--space-8))}
+.experiment-feature-card-v32__copy h2{max-width:var(--dimension-16ch);margin-top:var(--space-2);font-size:clamp(var(--dimension-2-2rem),var(--dimension-4vw),var(--dimension-4rem));line-height:1.02}
+.experiment-feature-card-v32__copy>p{max-width:var(--dimension-54ch);margin-top:var(--space-4);color:var(--color-text-secondary)}
+.experiment-learning-preview-v38{display:grid;gap:var(--space-2);margin-top:var(--space-6);padding-top:var(--space-5);border-top:var(--dimension-1px) solid color-mix(in srgb,var(--color-text-primary) 18%,transparent)}
+.experiment-learning-preview-v38 small,.experiment-index-card-v38__learning small{color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-1em);text-transform:uppercase}
+.experiment-learning-preview-v38 strong{max-width:var(--dimension-44ch);font-size:var(--text-body);line-height:1.45}
+.experiment-feature-card-v32__copy>span:last-child,.experiment-card-action,.poster-action{display:inline-flex;align-items:center;width:max-content;max-width:100%;min-height:var(--control-height);margin-top:auto;padding-top:var(--space-5);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
+.poster:is(:hover,:focus-visible) .poster-action,.experiment-feature-card-v32:is(:hover,:focus-visible) .experiment-card-action,.experiment-index-card-v36:is(:hover,:focus-visible) .experiment-card-action,.detail-experiment-card-v101:is(:hover,:focus-visible) .experiment-card-action{color:var(--experiment-card-cta-hover);text-decoration:underline;text-decoration-color:currentColor;text-decoration-thickness:var(--dimension-1px);text-underline-offset:var(--space-2)}
+.poster:nth-child(2):is(:hover,:focus-visible) .poster-action,.experiment-index-card-v36:is(.experiment-index-card-v36--cyan,.experiment-index-card-v36--dark):is(:hover,:focus-visible) .experiment-card-action,.detail-experiment-card-v101:nth-child(3n+1):is(:hover,:focus-visible) .experiment-card-action,.detail-experiment-card-v101:nth-child(3n):is(:hover,:focus-visible) .experiment-card-action{color:var(--experiment-card-cta-hover-inverse);text-decoration-color:var(--experiment-card-cta-underline-inverse)}
+.experiment-feature-card-v32__visual{position:relative;min-height:var(--dimension-330px);overflow:hidden;border-radius:0 var(--radius-lg) var(--radius-lg) 0;background:color-mix(in srgb,var(--color-surface) 38%,transparent)}
+.experiment-feature-card-v32__visual i,.experiment-feature-card-v32__visual b,.experiment-feature-card-v32__visual em{position:absolute;display:block;border:var(--dimension-3px) solid var(--color-text-primary)}
+.experiment-feature-card-v32__visual i{left:16%;bottom:20%;width:var(--dimension-150px);height:var(--dimension-150px);border-radius:50%;background:var(--color-surface)}
+.experiment-feature-card-v32__visual b{left:42%;bottom:25%;width:var(--dimension-190px);height:var(--dimension-88px);border-radius:var(--radius-pill);background:var(--portfolio-coral-500)}
+.experiment-feature-card-v32__visual em{right:10%;bottom:22%;width:var(--dimension-74px);height:var(--dimension-74px);border-radius:50%;background:var(--portfolio-cyan-500)}
+.experiment-feature-card-v32:hover .experiment-feature-card-v32__visual{filter:saturate(1.04)}
+
+.experiment-index-v36{padding-bottom:var(--section-space)}
+.experiment-index-v36__head{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-7);align-items:end;margin-bottom:var(--space-5)}
+.experiment-index-v36__head h2{font-size:var(--text-h2)}
+.experiment-index-v36__head>p{max-width:var(--dimension-44ch)}
+.experiment-index-card-v36{display:flex;flex-direction:column;min-height:var(--experiment-card-min-block);padding:var(--card-padding);overflow:visible;background:var(--color-surface)}
+.experiment-index-card-v36--cyan{background:var(--brand-700);color:var(--color-text-inverse)}
+.experiment-index-card-v36--cream{background:var(--color-surface-soft)}
+.experiment-index-card-v36--dark{background:var(--ink-950);color:var(--color-text-inverse)}
+.experiment-index-card-v36__top{display:flex;justify-content:space-between;gap:var(--space-3);font-size:var(--text-xs);letter-spacing:var(--dimension-0-08em);text-transform:uppercase}
 .experiment-index-card-v36 .kicker{margin-top:var(--space-6)}
-.experiment-index-card-v36 h3{max-width:13ch;margin-top:var(--space-4);font-size:var(--experiment-card-title);line-height:1.08;overflow-wrap:anywhere;text-wrap:balance}
-.experiment-index-card-v38__learning{margin-top:var(--space-5)}
-.experiment-index-card-v36__meta{padding-top:var(--space-5)}
-.experiment-learning-preview-v38 small{color:var(--color-text-secondary);opacity:1}
-.experiment-index-card-v36--cyan :is(p,.experiment-index-card-v38__learning,.experiment-index-card-v36__meta),.experiment-index-card-v36--dark :is(p,.experiment-index-card-v38__learning,.experiment-index-card-v36__meta){color:var(--color-text-inverse-secondary);opacity:1}
-.experiment-index-card-v36--cream :is(p,.experiment-index-card-v38__learning,.experiment-index-card-v36__meta){color:var(--color-text-secondary);opacity:1}
-@media(max-width:560px){.experiment-index-card-v36{min-height:var(--experiment-card-min-block-mobile);padding:var(--space-5)}.experiment-index-card-v36 .kicker{margin-top:var(--space-5)}.experiment-index-card-v36 h3{max-width:12ch;font-size:clamp(1.75rem,9vw,2.15rem)}.experiment-index-card-v38__learning{margin-top:var(--space-4)}}
+.experiment-index-card-v36 h3{max-width:var(--dimension-13ch);margin-top:var(--space-3);font-size:var(--experiment-card-title);line-height:1.08;overflow-wrap:normal;word-break:normal;text-wrap:balance}
+.experiment-index-card-v36 h3+p{max-width:var(--dimension-44ch);margin-top:var(--space-3);line-height:1.5}
+.experiment-index-card-v38__learning{display:grid;gap:var(--space-2);margin-top:var(--space-5);padding-top:var(--space-4);border-top:var(--dimension-1px) solid currentColor}
+.experiment-index-card-v38__learning strong{max-width:var(--dimension-44ch);font-size:var(--text-sm);line-height:1.45}
+.experiment-index-card-v36--cyan :is(p,.experiment-index-card-v38__learning small),.experiment-index-card-v36--dark :is(p,.experiment-index-card-v38__learning small){color:var(--color-text-inverse-secondary);opacity:1}
+.experiment-index-card-v36--cream :is(p,.experiment-index-card-v38__learning small){color:var(--color-text-secondary);opacity:1}
+.experiment-index-card-v36__shapes{position:absolute;inset:auto var(--space-5) var(--space-5) auto;display:flex;align-items:center;gap:var(--space-2);opacity:.22;pointer-events:none}
+.experiment-index-card-v36__shapes :is(i,b,em),.poster-shapes :is(span){display:block;border:var(--dimension-2px) solid currentColor}
+.experiment-index-card-v36__shapes i{width:var(--dimension-26px);height:var(--dimension-26px);border-radius:50%}
+.experiment-index-card-v36__shapes b{width:var(--dimension-40px);height:var(--dimension-20px);border-radius:var(--radius-pill)}
+.experiment-index-card-v36__shapes em{width:var(--dimension-16px);height:var(--dimension-16px);border-radius:50%}
+.experiment-index-v36__controls{margin-top:0;margin-bottom:var(--space-3)}
+
+.detail-experiment-card-v101{display:flex;flex-direction:column;min-height:var(--experiment-card-min-block);padding:var(--card-padding);overflow:visible;color:var(--color-text-primary);text-align:left}
+.detail-experiment-card-v101:nth-child(3n+1){background:var(--brand-700);color:var(--color-text-inverse)}
+.detail-experiment-card-v101:nth-child(3n+2){background:var(--color-surface-soft)}
+.detail-experiment-card-v101:nth-child(3n){background:var(--ink-950);color:var(--color-text-inverse)}
+.detail-experiment-card-v101 .detail-related-card-v45__visual{display:none}
+.detail-experiment-card-v101 .detail-related-card-v45__context{color:inherit;opacity:.76}
+.detail-experiment-card-v101 h4{max-width:var(--dimension-16ch);margin-top:var(--space-5);font-size:clamp(var(--dimension-1-55rem),var(--dimension-2vw),var(--dimension-2-15rem));line-height:1.1;text-wrap:balance;overflow-wrap:normal;word-break:normal}
+.detail-experiment-card-v101__question{max-width:var(--dimension-44ch);margin-top:var(--space-4);color:inherit;line-height:1.5;opacity:.78}
+.detail-experiment-card-v101__learning{display:grid;gap:var(--space-2);margin-top:var(--space-5);padding-top:var(--space-4);border-top:var(--dimension-1px) solid currentColor}
+.detail-experiment-card-v101__learning small{color:inherit;font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-1em);text-transform:uppercase;opacity:.72}
+.detail-experiment-card-v101__learning strong{max-width:var(--dimension-44ch);font-size:var(--text-sm);line-height:1.45}
+.detail-experiment-card-v101 .experiment-card-action{color:inherit}
+
+.poster{display:flex;flex-direction:column;justify-content:space-between;min-height:var(--dimension-300px);padding:var(--card-padding);background:var(--accent-100)}
+.poster:nth-child(2){background:var(--brand-700);color:var(--color-text-inverse)}
+.poster:nth-child(3){background:var(--brand-100)}
+.poster>div:first-child{min-width:0}
+.poster-title{max-width:var(--dimension-13ch);margin-top:var(--space-3);font-size:clamp(var(--dimension-1-7rem),var(--dimension-2-8vw),var(--dimension-2-8rem));line-height:1.04}
+.poster p{max-width:var(--dimension-38ch);margin-top:var(--space-3);color:inherit;opacity:.82;line-height:1.5}
+.poster:nth-child(2) :is(p,.poster-kicker){color:var(--color-text-inverse);opacity:1}
+.poster-shapes{display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-5);transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
+.poster:hover .poster-shapes{transform:scale(1.012);filter:saturate(1.04)}
+.quick-view-v51--experiment{grid-template-columns:1fr;gap:var(--space-4)}
+.quick-view-v51--experiment>.info-grid-v45{grid-column:auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+.experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}
+.experiment-overview-v45__question>span,.experiment-overview-v45__build>span{color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-1em);text-transform:uppercase}
+.experiment-overview-v45__question h3{max-width:var(--dimension-18ch);margin-top:var(--space-2);font-size:var(--text-h3);line-height:1.08}
+.experiment-overview-v45__question h3+p,.experiment-overview-v45__build>span+p{max-width:var(--dimension-58ch);margin-top:var(--space-3);line-height:1.55}
+.detail-dialog.is-experiment .detail-commerce-v45{align-items:start}
+.detail-dialog.is-experiment .quick-view-v51--experiment{height:auto;align-self:start}
+.detail-dialog.is-experiment .gallery-stage-v45{height:auto;min-height:var(--dimension-300px);aspect-ratio:16/10;padding:clamp(var(--space-5),var(--dimension-3vw),var(--space-7))}
+.detail-dialog.is-experiment .gallery-art{width:min(100%,var(--dimension-560px))}
+.detail-dialog.is-experiment .gallery-art>.window-top{width:100%}
+.detail-dialog.is-experiment .gallery-art>.flow{width:100%;margin-top:var(--space-6)}
+.detail-dialog.is-experiment .gallery-thumbs-v45[hidden],.detail-dialog.is-experiment .gallery-count-v45[hidden]{display:none}
+.info-grid-v45--experiment{grid-template-columns:repeat(2,minmax(0,1fr));padding:0;border:0;border-radius:0;background:transparent}
+.experiment-sequence-v45{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5);min-width:0;margin-top:var(--space-7)}
+.experiment-sequence-v45 article{min-width:0;padding:var(--space-6);border-radius:var(--radius-lg);background:var(--color-surface-subtle)}
+.experiment-sequence-v45 article+article{padding-left:var(--space-6)}
+.experiment-sequence-v45 h3{margin-top:var(--space-2);font-size:var(--text-h3);line-height:1.08}
+.experiment-sequence-v45 h3+p{margin-top:var(--space-3);line-height:1.55}
+
+@media(max-width:900px){
+  .playground-hero-v32__grid{grid-template-columns:1fr}.playground-hero-v32__art{display:none}
+  .experiment-feature-card-v32{grid-template-columns:1fr}.experiment-feature-card-v32__visual{order:-1;min-height:var(--dimension-240px);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+  .experiment-index-v36__head{grid-template-columns:1fr;gap:var(--space-4);align-items:start}
+  .detail-dialog.is-experiment .gallery-stage-v45{min-height:var(--dimension-260px);aspect-ratio:16/9}
+}
+@media(max-width:560px){
+  .experiment-feature-card-v32{min-height:0}.experiment-feature-card-v32__copy{padding:var(--space-5)}
+  .experiment-feature-card-v32__copy h2{font-size:var(--dimension-2rem)}
+  .experiment-feature-card-v32__visual{min-height:var(--dimension-150px)}
+  .experiment-feature-card-v32__visual i{left:13%;bottom:18%;width:var(--dimension-72px);height:var(--dimension-72px)}
+  .experiment-feature-card-v32__visual b{left:37%;bottom:23%;width:var(--dimension-94px);height:var(--dimension-48px)}
+  .experiment-feature-card-v32__visual em{right:8%;bottom:22%;width:var(--dimension-42px);height:var(--dimension-42px)}
+  .experiment-index-card-v36{min-height:var(--experiment-card-min-block-mobile);padding:var(--space-5)}
+  .experiment-index-card-v36 .kicker{margin-top:var(--space-5)}
+  .experiment-index-card-v36 h3{max-width:var(--dimension-12ch);font-size:clamp(var(--dimension-1-75rem),var(--dimension-9vw),var(--dimension-2-15rem))}
+  .experiment-index-card-v38__learning{margin-top:var(--space-4)}
+  .poster{min-height:var(--dimension-286px);padding:var(--space-5)}
+  .poster:nth-child(odd),.experiment-index-card-v36:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
+  .poster:nth-child(even),.experiment-index-card-v36:nth-child(even),.detail-experiment-card-v101:nth-child(even){transform:var(--experiment-card-rest-even)}
+  .poster:nth-child(3n),.experiment-index-card-v36:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
+  .experiment-feature-card-v32{transform:none}
+  .detail-experiment-card-v101{min-height:var(--experiment-card-min-block-mobile);padding:var(--space-5)}
+  .experiment-sequence-v45{grid-template-columns:1fr;margin-top:var(--space-6)}
+  .experiment-sequence-v45 article,
+  .experiment-sequence-v45 article+article{padding:var(--space-5)}
+  .quick-view-v51--experiment>.info-grid-v45{grid-template-columns:1fr}
+  .detail-dialog.is-experiment .gallery-stage-v45{min-height:var(--dimension-220px);aspect-ratio:auto;padding:var(--space-4)}
+}
+@media(prefers-reduced-motion:reduce){
+  .poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101,.poster-shapes,.experiment-feature-card-v32__visual{transition:none;transform:none}
+}
