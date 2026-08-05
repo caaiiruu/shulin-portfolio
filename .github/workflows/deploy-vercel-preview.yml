@@ -1,9 +1,6 @@
 name: Deploy Vercel production
 
 on:
-  push:
-    branches:
-      - deploy/vercel-preview-2026-08-05
   workflow_dispatch:
 
 permissions:
@@ -48,13 +45,6 @@ jobs:
             --header "Authorization: Bearer $VERCEL_TOKEN" \
             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID?teamId=$VERCEL_ORG_ID")
           test "$HTTP_STATUS" = "200"
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          payload = json.loads(Path('/tmp/vercel-project.json').read_text())
-          assert payload.get('id') == 'prj_XJxTzDxihUexNiSzUmFHNzXBBwUk'
-          print('Authenticated project:', payload.get('name'))
-          PY
 
       - name: Deploy production
         id: deploy
@@ -84,8 +74,6 @@ jobs:
           from pathlib import Path
           payload = json.loads(Path('/tmp/deployment.json').read_text())
           state = payload.get('readyState') or payload.get('state')
-          print('Production deployment:', payload.get('url'))
-          print('Ready state:', state)
           assert state == 'READY'
           assert payload.get('target') == 'production'
           PY
