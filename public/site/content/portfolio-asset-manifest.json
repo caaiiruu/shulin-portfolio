@@ -727,8 +727,7 @@
       "productionUrl": null,
       "usageStatus": "source-reference-only",
       "usedIn": [
-        "projects.voucher-center.productEvolution.flashVoucher2024",
-        "projects.voucher-center.strategicValidationPath.stages[0].asset"
+        "projects.voucher-center.productEvolution.flashVoucher2024"
       ],
       "imageBlock": "product-evolution-source",
       "publicBuild": false,
@@ -795,15 +794,14 @@
       "productionUrl": null,
       "usageStatus": "source-evidence-private",
       "usedIn": [
-        "projects.voucher-center.productEvolution.flashVoucher2024",
-        "projects.voucher-center.strategicValidationPath.stages[0].asset"
+        "projects.voucher-center.productEvolution.flashVoucher2024"
       ],
       "imageBlock": "product-evolution-overview",
       "publicBuild": false,
       "doNotPublish": true,
       "redaction": "public-redraw-required",
-      "alt": "Flash Voucher pilot flow showing targeted entry, limited-time collection, shopping and reward progression.",
-      "alt_zh": "Flash Voucher 前導流程，呈現分眾入口、限時領取、購物與獎勵進程。",
+      "alt": "Flash Voucher overview from promotional entry to saving and campaign shopping.",
+      "alt_zh": "Flash Voucher 從促銷入口、儲存到活動購物的概覽。",
       "contentStatus": "approved",
       "implementationStatus": "source-registered",
       "note": "Contains yellow internal annotations. Do not publish raw.",
@@ -6335,9 +6333,7 @@
       "productionUrl": null,
       "usageStatus": "public-derivative-planned",
       "usedIn": [
-        "projects.voucher-center.heroVisualBrief",
-        "projects.voucher-center.strategicValidationPath.stages[1].asset",
-        "projects.voucher-center.visualEvidenceSelection.hero"
+        "projects.voucher-center.heroVisualBrief"
       ],
       "imageBlock": "project-hero",
       "publicBuild": false,
@@ -6356,8 +6352,8 @@
       "desktopCropIntent": "Preserve the dominant product/system surface and keep the problem and outcome cues readable at 16:9.",
       "mobileCropIntent": "Use a purpose-built vertical composition; do not centre-crop the desktop hero.",
       "focalArea": "Dominant system surface, then problem cue, then outcome/status cue.",
-      "alt": "Voucher Center product showing a permanent destination for Voucher discovery and claiming.",
-      "alt_zh": "Voucher Center 產品畫面，呈現常設的優惠券探索與領取入口。",
+      "alt": "voucher-center project hero showing homepage entry, centralised listing, count and claim-to-view states in response to vouchers scattered across entry points and states.",
+      "alt_zh": "voucher-center 專案 Hero，呈現「Homepage entry, centralised listing, count and Claim-to-View states」，回應「Vouchers scattered across entry points and states」。",
       "contentStatus": "approved"
     },
     "dbs-hero-exception-operating-system-public-v1": {
@@ -6538,40 +6534,6 @@
       "decisionIds": [
         "voucher-decision-rule-mapped-operations-reuse"
       ]
-    },
-    "voucher-center-framework-wallet-checkout-task-model-public-v1": {
-      "id": "voucher-center-framework-wallet-checkout-task-model-public-v1",
-      "projectId": "voucher-center",
-      "type": "framework",
-      "sourceAssetIds": [
-        "voucher-center-source-wallet-filter-ut-report-2023-v1",
-        "voucher-center-source-prototype-variants-2025-v1"
-      ],
-      "usedIn": [
-        "projects.voucher-center.visualEvidenceSelection.primaryDecisions[0]"
-      ],
-      "publicBuild": false,
-      "doNotPublish": false,
-      "implementationStatus": "asset-needed",
-      "usageStatus": "public-derivative-planned",
-      "contentStatus": "review"
-    },
-    "voucher-center-evidence-phase1-research-to-shipped-public-v1": {
-      "id": "voucher-center-evidence-phase1-research-to-shipped-public-v1",
-      "projectId": "voucher-center",
-      "type": "evidence",
-      "sourceAssetIds": [
-        "voucher-center-source-usability-test-2025-02-v1",
-        "voucher-center-source-prototype-variants-2025-v1"
-      ],
-      "usedIn": [
-        "projects.voucher-center.visualEvidenceSelection.primaryDecisions[1]"
-      ],
-      "publicBuild": false,
-      "doNotPublish": false,
-      "implementationStatus": "asset-needed",
-      "usageStatus": "public-derivative-planned",
-      "contentStatus": "review"
     }
   },
   "contentVersion": "2026-07-31-r83",
