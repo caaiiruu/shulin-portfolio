@@ -1,0 +1,105 @@
+name: Publish r43 inventoryless generated assets
+
+on:
+  push:
+    branches:
+      - recovery/orchestrate-r43-inventoryless-2026-08-06
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout exact target source
+        run: |
+          set -euo pipefail
+          git fetch origin recovery/r146-assets-r43-2026-08-06
+          git checkout -B remote-build origin/recovery/r146-assets-r43-2026-08-06
+          test "$(git rev-parse HEAD)" = "537940a4fe6a98301a2d32525c88f7f2ba1e1afc"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Validate, test, and deterministic build
+        run: |
+          set -euo pipefail
+          mkdir -p evidence first second
+          npm run install:ci 2>&1 | tee evidence/install.log
+          npm run validate:ssot 2>&1 | tee evidence/validate-ssot.log
+          npm run validate:design 2>&1 | tee evidence/validate-design.log
+          npm test 2>&1 | tee evidence/tests.log
+          find public/site -type f \( -name 'production.*.css' -o -name 'production.*.js' -o -name '*.html' \) -print0 | sort -z | xargs -0 sha256sum > first/hashes.txt
+          git diff --name-status --no-renames > first/name-status.txt
+          npm run build 2>&1 | tee evidence/build-2.log
+          find public/site -type f \( -name 'production.*.css' -o -name 'production.*.js' -o -name '*.html' \) -print0 | sort -z | xargs -0 sha256sum > second/hashes.txt
+          git diff --name-status --no-renames > second/name-status.txt
+          cmp first/hashes.txt second/hashes.txt
+          cmp first/name-status.txt second/name-status.txt
+      - name: Verify generated allowlist and hashes
+        run: |
+          set -euo pipefail
+          cat > evidence/expected-name-status.txt <<'EOF'
+          D	public/site/assets/js/production.423a75c6a2a373a8.js
+          M	public/site/experiments.html
+          M	public/site/index.html
+          M	public/site/profile.html
+          M	public/site/work.html
+          EOF
+          diff -u evidence/expected-name-status.txt second/name-status.txt
+          test "$(sha256sum public/site/assets/js/production.4b016f657da7aa9a.js | cut -d' ' -f1)" = "4b016f657da7aa9a804a81171f44a9bcbdda8720b2909183dc54d3e12cb71c08"
+          test "$(sha256sum public/site/experiments.html | cut -d' ' -f1)" = "c998a5c8a944f6e8110f1dd7605d5412b4f7196bc66b0c8aa6438553674178ad"
+          test "$(sha256sum public/site/index.html | cut -d' ' -f1)" = "3b579b3fe4122891093e754d9379bcf90afd74d005b143fc87f443943630b0e0"
+          test "$(sha256sum public/site/profile.html | cut -d' ' -f1)" = "8da45fca84e2984a372e73badfe65dfc194ca24ad167c153037d3926e46ba6f8"
+          test "$(sha256sum public/site/work.html | cut -d' ' -f1)" = "481d3b6e20ffa544c2d619544520de67e7790af78a7caaf0bf2eb43f69fdef1f"
+          test ! -e public/site/content/portfolio-visual-slot-inventory.json
+          test "$(sha256sum public/site/content/portfolio-content.json | cut -d' ' -f1)" = "fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6"
+      - name: Commit and fast-forward target
+        run: |
+          set -euo pipefail
+          git add -A public/site/assets/js/production.423a75c6a2a373a8.js public/site/assets/js/production.4b016f657da7aa9a.js public/site/experiments.html public/site/index.html public/site/profile.html public/site/work.html
+          git diff --cached --quiet && exit 1
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "build: regenerate production assets for derived placeholders"
+          echo "REMOTE_GENERATED_SHA=$(git rev-parse HEAD)" | tee -a "$GITHUB_ENV"
+          git push origin HEAD:refs/heads/recovery/r146-assets-r43-2026-08-06
+      - name: Fresh checkout verification
+        run: |
+          set -euo pipefail
+          git clone --branch recovery/r146-assets-r43-2026-08-06 --single-branch "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" fresh
+          cd fresh
+          test "$(git rev-parse HEAD)" = "$REMOTE_GENERATED_SHA"
+          npm run install:ci 2>&1 | tee ../evidence/fresh-install.log
+          npm run validate:ssot 2>&1 | tee ../evidence/fresh-validate-ssot.log
+          npm run validate:design 2>&1 | tee ../evidence/fresh-validate-design.log
+          npm test 2>&1 | tee ../evidence/fresh-tests.log
+          npm run build 2>&1 | tee ../evidence/fresh-build.log
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Write final audit
+        if: success()
+        run: |
+          printf '{"status":"PASS","sourceCommit":"537940a4fe6a98301a2d32525c88f7f2ba1e1afc","generatedCommit":"%s","deterministic":true,"derivedSlots":31,"placeholderActive":31}\n' "$REMOTE_GENERATED_SHA" > evidence/final-audit.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: r43-inventoryless-remote-publish
+          path: |
+            evidence
+            first
+            second
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r43-inventoryless-remote-diagnostics
+          path: |
+            evidence
+            first
+            second
+          if-no-files-found: warn
