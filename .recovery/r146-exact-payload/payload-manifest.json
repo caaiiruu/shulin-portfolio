@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "archiveFilename": "r146-exact-payload.zip",
+  "archiveSha256": "b18b728a3f707b9e014022ec1334d592f22b85d5e423017e3fdb4ba3b62ebbab",
+  "archiveByteSize": 784534,
+  "inventory": [
+    "public/site/assets/css/production.bd5f236c3619ac41.css",
+    "public/site/assets/js/app.js",
+    "public/site/assets/js/home.js",
+    "public/site/assets/js/production.824aade590d20212.js",
+    "public/site/content/portfolio-content.json",
+    "public/site/qa/ssot-governance.mjs",
+    "scripts/build-production-assets.mjs",
+    "tests/rendered-html.test.mjs"
+  ],
+  "base64CharacterCount": 1046048,
+  "chunkSize": 90000,
+  "chunkCount": 12,
+  "chunks": [
+    {
+      "filename": "chunk-0000.b64",
+      "characterCount": 90000,
+      "sha256": "7706446c1a02aa5a664e7381200399e253c3f7796f51d51438138fed8ba768af"
+    },
+    {
+      "filename": "chunk-0001.b64",
+      "characterCount": 90000,
+      "sha256": "57f2322cd97548fb8013b6b149a175ab22a7823914ed0f7260b1ce46dc36109c"
+    },
+    {
+      "filename": "chunk-0002.b64",
+      "characterCount": 90000,
+      "sha256": "424b619c208424db36f7b80e11adee5dc70e78d548928e439fdbcb8d30d6b0fc"
+    },
+    {
+      "filename": "chunk-0003.b64",
+      "characterCount": 90000,
+      "sha256": "1503c15f0a2e4496595cbeaa0f794814500435e886aed82ae87fdec19ea80438"
+    },
+    {
+      "filename": "chunk-0004.b64",
+      "characterCount": 90000,
+      "sha256": "6b2db4baa49349f63cb559af540377d1a907250c2eff1610fc1c8babe22e14e6"
+    },
+    {
+      "filename": "chunk-0005.b64",
+      "characterCount": 90000,
+      "sha256": "0ac2d40bb68b0e31dd2f34195a4a3d91585fb123ac2898ed92374e952b082f20"
+    },
+    {
+      "filename": "chunk-0006.b64",
+      "characterCount": 90000,
+      "sha256": "f3fe17573cb2316d3a29643f4f28689bef530dacd09b6ab63f488b0c7924eb7d"
+    },
+    {
+      "filename": "chunk-0007.b64",
+      "characterCount": 90000,
+      "sha256": "6b7e4990f801668456b7e38ff53c76d7abf44f6ff5a2c188d5c1b9a87a537758"
+    },
+    {
+      "filename": "chunk-0008.b64",
+      "characterCount": 90000,
+      "sha256": "e298a31a931c5483cd4c3d169abd145a24c87356f0b62c75ba4e32e115fe6c71"
+    },
+    {
+      "filename": "chunk-0009.b64",
+      "characterCount": 90000,
+      "sha256": "5a124125ec4cf07739bf27ffde72e44357dea4ef6aba765cf3e7cb3f24db787c"
+    },
+    {
+      "filename": "chunk-0010.b64",
+      "characterCount": 90000,
+      "sha256": "31c7b2a0c9297c6407b68bcbf590700439106b99b5b1ec00a12a3d98fcdf7157"
+    },
+    {
+      "filename": "chunk-0011.b64",
+      "characterCount": 56048,
+      "sha256": "8afdb2a3b9d986ccc23f97b160f78061b08930b148efc26d4a3c028734ab8d13"
+    }
+  ],
+  "files": [
+    {
+      "path": "public/site/content/portfolio-content.json",
+      "sha256": "fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6",
+      "byteSize": 1246926,
+      "gitBlobSha": "2c12c67606c7264686c87f387698dbbf482174fd",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "scripts/build-production-assets.mjs",
+      "sha256": "6c28c80fc6394373735529d4a6b3edce0d1fbe14056832d7f01c322f8c9ef0f3",
+      "byteSize": 17631,
+      "gitBlobSha": "8fabd91b52cf71edae54220f628d7b3d6315ccd8",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "public/site/assets/js/app.js",
+      "sha256": "67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a",
+      "byteSize": 150496,
+      "gitBlobSha": "a08f7f30deec6f60b797504ecf7d369028be728b",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "public/site/assets/js/home.js",
+      "sha256": "6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d",
+      "byteSize": 28151,
+      "gitBlobSha": "fce6e662015e3abf5826fa2575cb0650c3c208d6",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "public/site/qa/ssot-governance.mjs",
+      "sha256": "f0948e7e172338646c3b105fde8722c16922a574a76b421751f37ce219c0f5ec",
+      "byteSize": 12663,
+      "gitBlobSha": "ddf79299c238f1a812cb4c7ed85054931fe1d960",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "tests/rendered-html.test.mjs",
+      "sha256": "9519938c1969ad934d7cde38c2180de0fb795784b9e9c5c74e3ee1e40b0b73bb",
+      "byteSize": 78700,
+      "gitBlobSha": "b031b487e4432b2790e04d667c80aea178d936dc",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "public/site/assets/js/production.824aade590d20212.js",
+      "sha256": "824aade590d20212c87527ff4509090bbbdd8f449da0ef46a44ba829752477ba",
+      "byteSize": 1364837,
+      "gitBlobSha": "de5be3866597a46c000407d9126cad40a03f9bea",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    },
+    {
+      "path": "public/site/assets/css/production.bd5f236c3619ac41.css",
+      "sha256": "bd5f236c3619ac41bfb68803617f0c45847c5213f3c542381f21393a8ca18bc1",
+      "byteSize": 281212,
+      "gitBlobSha": "f1716af8e90ce251a1344d21a2ac6befa624f101",
+      "utf8Valid": true,
+      "fileMode": "100644"
+    }
+  ],
+  "contentVersion": "2026-08-06-r146",
+  "projectCount": 13,
+  "baseCommit": "6fb96ba299789374ad5356d109e10c2d496d8041"
+}
