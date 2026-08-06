@@ -224,6 +224,73 @@ jobs:
           fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-runtime-commit-audit.json'),JSON.stringify({result:'PASS',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),parent:process.env.EXACT_CONTENT_SHA,changedFiles:files},null,2)+'\n');
           NODE
 
+      - name: Create ProjectCard compatibility commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          test "$(git rev-parse HEAD)" = "$EXACT_RUNTIME_SHA"
+          test -z "$(git status --porcelain)"
+          app=public/site/assets/js/app.js
+          home=public/site/assets/js/home.js
+          test "$(sha256sum "$app" | cut -d' ' -f1)" = 67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a
+          test "$(sha256sum "$home" | cut -d' ' -f1)" = 6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os
+          replacements = {
+            Path('public/site/assets/js/app.js'): [
+              ("if(project.domain)top.append(element('span','related-project-card__context',localize(project.domain)));", "if(project.domain_label)top.append(element('span','related-project-card__context',localize(project.domain_label)));"),
+              ("const domain=localize(project.domain);", "const domain=localize(project.domain_label);")
+            ],
+            Path('public/site/assets/js/home.js'): [
+              ("return localize(project?.domain)||''", "return localize(project?.domain_label)||''")
+            ]
+          }
+          counts={}
+          for path,pairs in replacements.items():
+              raw=path.read_bytes(); text=raw.decode('utf-8'); counts[str(path)]=[]
+              for before,after in pairs:
+                  count=text.count(before)
+                  if count != 1: raise SystemExit(f'{path}: expected exactly one before string, found {count}')
+                  text=text.replace(before,after,1)
+                  if before in text or text.count(after) != 1: raise SystemExit(f'{path}: replacement postcondition failed')
+                  counts[str(path)].append({'beforeCount':count,'afterCount':1})
+              encoded=text.encode('utf-8')
+              if raw.endswith(b'\n') != encoded.endswith(b'\n'): raise SystemExit(f'{path}: terminal newline changed')
+              path.write_bytes(encoded)
+          Path(os.environ['EVIDENCE_DIR'],'compatibility-replacement-counts.json').write_text(json.dumps(counts,indent=2)+'\n')
+          PY
+          test "$(sha256sum "$app" | cut -d' ' -f1)" = 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693
+          test "$(sha256sum "$home" | cut -d' ' -f1)" = 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa
+          node --check "$app"
+          node --check "$home"
+          node - <<'NODE'
+          const fs=require('fs'),assert=require('assert/strict');
+          const data=JSON.parse(fs.readFileSync(process.env.CONTENT_PATH,'utf8'));
+          const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
+          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
+          for(const s of ['related-project-card__company-v135','localize(project.company)','localize(project.domain_label)','2026-08-06-r146','adaptContent','canonicalProjectId','projectAliasRegistry']) assert.ok(app.includes(s),s);
+          assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
+          assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
+          assert.ok(!app.includes("contentVersion === '2026-08-03-r108'")&&!app.includes('contentVersion === "2026-08-03-r108"'));
+          for(const s of ['localize(project?.company)','localize(project?.domain_label)']) assert.ok(home.includes(s),s);
+          assert.ok(!home.includes('localize([p.context,p.context_zh])'));
+          NODE
+          git add -- "$app" "$home"
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          test "$(git diff --cached --name-only | sort | tr '\n' ' ')" = "public/site/assets/js/app.js public/site/assets/js/home.js "
+          git commit -m 'runtime: restore ProjectCard company and domain contract'
+          compatibility_sha="$(git rev-parse HEAD)"
+          printf 'COMPATIBILITY_SHA=%s\n' "$compatibility_sha" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$EXACT_RUNTIME_SHA"
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),cp=require('child_process');
+          const counts=JSON.parse(fs.readFileSync(path.join(process.env.EVIDENCE_DIR,'compatibility-replacement-counts.json')));
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'project-card-compatibility-commit-audit.json'),JSON.stringify({result:'PASS',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),parent:process.env.EXACT_RUNTIME_SHA,changedPaths:['public/site/assets/js/app.js','public/site/assets/js/home.js'],beforeSha256:{app:'67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a',home:'6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d'},afterSha256:{app:'7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693',home:'6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa'},replacementCounts:counts,appContract:'PASS',homeContract:'PASS',r146ContractsPreserved:'PASS',b2:{runId:31077477718,artifactId:8958084360,digest:'sha256:ead5b4b50bc943d9fd6bc32c361dc63373b5a941ca6ea9ed0f6fb7724a2d51b0'}},null,2)+'\n');
+          NODE
+
       - name: Install dependencies
         shell: bash
         run: |
@@ -265,11 +332,16 @@ jobs:
           assert.ok(data.sourceArchives&&!projected.some(id=>Object.hasOwn(data.sourceArchives,id)));
           assert.ok(!app.includes("contentVersion === '2026-08-03-r108'")&&!app.includes('contentVersion === "2026-08-03-r108"'));
           assert.ok(app.includes('2026-08-06-r146'));
+          assert.ok(app.includes('localize(project.company)'));
+          assert.ok(app.includes('localize(project.domain_label)'));
+          assert.ok(home.includes('localize(project?.company)'));
+          assert.ok(home.includes('localize(project?.domain_label)'));
           assert.equal(crypto.createHash('sha256').update(fs.readFileSync(process.env.CONTENT_PATH)).digest('hex'),process.env.EXPECTED_CONTENT_SHA256);
           assert.equal(JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json')).packageVersion,'r42');
           console.log(JSON.stringify({result:'PASS',contentVersion:data.contentVersion,projectCount:13,canonicalProjectsResolved:13,bookingTaxiRoute:true,onlineAuctionRedirect:'taishin-p2p-marketplace-platform',searchProjection:'13/13',sourceArchivesPublicSearch:false,r108OnlyGuard:false,r146Guard:true},null,2));
           NODE
-          sha256sum -c "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+          test "$(sha256sum public/site/assets/js/app.js | cut -d' ' -f1)" = 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693
+          test "$(sha256sum public/site/assets/js/home.js | cut -d' ' -f1)" = 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa
           test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- public/site/content/portfolio-asset-manifest.json package.json package-lock.json)"
 
       - name: Run production build
@@ -278,6 +350,10 @@ jobs:
           set -euo pipefail
           cd "$EXACT_WORKTREE"
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build.log"
+          git diff --binary > "$EVIDENCE_DIR/build-first.diff"
+          npm run build 2>&1 | tee -a "$EVIDENCE_DIR/build.log"
+          git diff --binary > "$EVIDENCE_DIR/build-second.diff"
+          cmp "$EVIDENCE_DIR/build-first.diff" "$EVIDENCE_DIR/build-second.diff"
 
       - name: Verify clean tracked worktree
         shell: bash
@@ -285,19 +361,50 @@ jobs:
           set -euo pipefail
           cd "$EXACT_WORKTREE"
           git diff --check
-          git status --porcelain --untracked-files=no | tee "$EVIDENCE_DIR/tracked-status.log"
-          test ! -s "$EVIDENCE_DIR/tracked-status.log"
-          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -eq 2
+          git status --porcelain --untracked-files=all | tee "$EVIDENCE_DIR/tracked-status.log"
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          status=(evidence/'tracked-status.log').read_text().splitlines()
+          paths=sorted({line[3:] for line in status if line and ' -> ' not in line[3:]})
+          (evidence/'generated-paths.txt').write_text(''.join(p+'\n' for p in paths))
+          allowed=[]; unexpected=[]
+          for p in paths:
+              if re.fullmatch(r'public/site/assets/(js|css)/production\.[0-9a-f]+\.(js|css)',p) or (p.startswith('public/site/') and p.endswith('.html')):
+                  allowed.append(p)
+              else: unexpected.append(p)
+          report={'result':'PASS' if not unexpected else 'BLOCKED — UNEXPECTED BUILD TRACKED DIFF','owner':'scripts/build-production-assets.mjs','generatedPaths':allowed,'unexpectedSourceChanges':unexpected,'deterministic':True}
+          (evidence/'generated-output-audit.json').write_text(json.dumps(report,indent=2)+'\n')
+          if unexpected: raise SystemExit('BLOCKED — UNEXPECTED BUILD TRACKED DIFF: '+', '.join(unexpected))
+          PY
+          if test -s "$EVIDENCE_DIR/generated-paths.txt"; then
+            xargs -d '\n' git add -A -- < "$EVIDENCE_DIR/generated-paths.txt"
+            git diff --cached --name-only | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
+            git commit -m 'build: regenerate production assets after ProjectCard compatibility'
+            generated_sha="$(git rev-parse HEAD)"
+            printf 'GENERATED_SHA=%s\n' "$generated_sha" >> "$GITHUB_ENV"
+            test "$(git rev-parse HEAD^)" = "$COMPATIBILITY_SHA"
+          else
+            printf 'GENERATED_SHA=\n' >> "$GITHUB_ENV"
+          fi
+          test -z "$(git status --porcelain --untracked-files=no)"
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -ge 3
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -le 4
           test "$(git rev-parse "$EXACT_CONTENT_SHA^")" = "$BASE_SHA"
           test "$(git rev-parse "$EXACT_RUNTIME_SHA^")" = "$EXACT_CONTENT_SHA"
+          test "$(git rev-parse "$COMPATIBILITY_SHA^")" = "$EXACT_RUNTIME_SHA"
           {
             printf '%s  %s\n' "$EXPECTED_CONTENT_SHA256" "$CONTENT_PATH"
-            cat "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+            grep -v 'public/site/assets/js/app.js\|public/site/assets/js/home.js' "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+            printf '%s  %s\n' 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693 public/site/assets/js/app.js
+            printf '%s  %s\n' 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa public/site/assets/js/home.js
           } > "$EVIDENCE_DIR/exact-file-hashes.txt"
           node - <<'NODE'
           const fs=require('fs'),path=require('path');
-          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',dependenciesChanged:false},null,2)+'\n');
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,compatibilityCommitSha:process.env.COMPATIBILITY_SHA,generatedCommitSha:process.env.GENERATED_SHA||null,finalHead:require('child_process').execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',dependenciesChanged:false},null,2)+'\n');
           NODE
+          cp "$EVIDENCE_DIR/exact-verification-report.json" "$EVIDENCE_DIR/final-verification-report.json"
 
       - name: Push exact staging branch
         shell: bash
@@ -325,8 +432,11 @@ jobs:
           path: |
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/recovery-r146-exact-2026-08-06.bundle
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-verification-report.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/final-verification-report.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-content-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-runtime-commit-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/project-card-compatibility-commit-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-output-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/runtime-assertions.log
