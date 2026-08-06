@@ -1544,7 +1544,13 @@ jobs:
           mapfile -t generated_paths < "$EVIDENCE_DIR/generated-paths.txt"
           test "${#generated_paths[@]}" -eq 10
           test "$(printf '%s\n' "${generated_paths[@]}" | sed '/^$/d' | wc -l)" -eq 10
-          git add -A -- "${generated_paths[@]}"
+          for generated_path in "${generated_paths[@]}"; do
+            if [[ -e "$generated_path" || -L "$generated_path" ]]; then
+              git add -- "$generated_path"
+            else
+              git add -u -- "$generated_path"
+            fi
+          done
           git diff --cached --name-only | sort > "$EVIDENCE_DIR/staged-generated-paths.txt"
           git diff --cached --name-status > "$EVIDENCE_DIR/staged-generated-name-status.txt"
           diff -u "$EVIDENCE_DIR/generated-paths.txt" "$EVIDENCE_DIR/staged-generated-paths.txt" || {
