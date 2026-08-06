@@ -1318,10 +1318,49 @@ jobs:
             appCompact.includes('DATA.projects[key]'),
             'search projection must resolve canonical project keys'
           );
+          const openDetailDefinition=app.match(
+            /function\s+openDetail\s*\(\s*([A-Za-z_$][\w$]*)\s*,\s*([A-Za-z_$][\w$]*)[^)]*\)\s*\{([\s\S]*?)\n\s{2}\}/
+          );
+          assert.ok(openDetailDefinition,'project detail owner function must exist');
+          const detailTypeParameter=openDetailDefinition[1];
+          const detailKeyParameter=openDetailDefinition[2];
+          const openDetailBody=openDetailDefinition[3];
+          const compactOpenDetailBody=openDetailBody.replace(/\s+/g,'');
           assert.ok(
-            appCompact.includes("openDetail('project',key)")&&
-            appCompact.includes('source=DATA.projects[key]'),
-            'detail route lookup must resolve canonical project keys'
+            compactOpenDetailBody.includes(detailTypeParameter+"==='project'?DATA.projects["+detailKeyParameter+"]"),
+            'project detail identity must resolve through the canonical key parameter'
+          );
+          const projectClickPath=app.match(
+            /const\s+([A-Za-z_$][\w$]*)=event\.target\.closest\(\s*['"]\[data-project\]['"]\s*\);[\s\S]*?openDetail\(\s*['"]project['"]\s*,\s*\1\.dataset\.project\s*,\s*\1\s*\)/
+          );
+          assert.ok(projectClickPath,'card/search project identity must flow from data-project to openDetail');
+          const slugResolver=app.match(
+            /const\s+projectKeyFromSlug\s*=\s*\([^)]*\)\s*=>\s*Object\.keys\(DATA\.projects\)\.find\([^;]+\)\|\|['"]{2}/
+          );
+          assert.ok(slugResolver,'detail URL slug must normalize through canonical project keys');
+          assert.ok(
+            appCompact.includes("return{type:'project',key:parentKey}")&&
+            appCompact.includes('openDetail(initialDetail.type,initialDetail.key,'),
+            'normalized detail route key must flow into openDetail'
+          );
+          const detailRouteAudit={
+            result:'PASS',
+            canonicalOwner:'data.projects object key',
+            runtimeProjectionOwner:'searchIndexV2.canonicalId',
+            projectOpenOwner:'openDetail',
+            canonicalLookupOwner:'openDetail project branch',
+            capturedRouteVariables:[detailTypeParameter,detailKeyParameter],
+            directCanonicalLookups:['DATA.projects['+detailKeyParameter+']'],
+            aliasCanonicalLookups:['DATA.projects[alias.canonicalProjectId]'],
+            searchToDetailContract:'PASS',
+            cardToDetailContract:'PASS',
+            aliasToDetailContract:'PASS',
+            projectCount:projectEntries.length,
+            runtimeProjectionMatches
+          };
+          fs.writeFileSync(
+            require('path').join(process.env.EVIDENCE_DIR,'detail-route-identity-audit.json'),
+            JSON.stringify(detailRouteAudit,null,2)+'\n'
           );
           assert.ok(
             appCompact.includes('DATA.projects[alias.canonicalProjectId]'),
