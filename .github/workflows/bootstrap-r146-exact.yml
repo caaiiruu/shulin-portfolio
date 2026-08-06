@@ -1127,6 +1127,7 @@ jobs:
             'public/site/assets/js/home.js',
             'utf8'
           );
+          const projectDetailCss=fs.readFileSync('public/site/assets/css/components/project-detail-overview.css','utf8');
           assert.equal(
             data.contentVersion,
             '2026-08-06-r146'
@@ -1159,6 +1160,62 @@ jobs:
           const fs=require('fs'),path=require('path'),cp=require('child_process');
           const counts=JSON.parse(fs.readFileSync(path.join(process.env.EVIDENCE_DIR,'compatibility-replacement-counts.json')));
           fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'project-card-compatibility-commit-audit.json'),JSON.stringify({result:'PASS',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),parent:process.env.EXACT_RUNTIME_SHA,changedPaths:['public/site/assets/js/app.js','public/site/assets/js/home.js'],beforeSha256:{app:'67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a',home:'6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d'},afterSha256:{app:'7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693',home:'6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa'},replacementCounts:counts,appContract:'PASS',homeContract:'PASS',r146ContractsPreserved:'PASS',b2:{runId:31077477718,artifactId:8958084360,digest:'sha256:ead5b4b50bc943d9fd6bc32c361dc63373b5a941ca6ea9ed0f6fb7724a2d51b0'}},null,2)+'\n');
+          NODE
+
+      - name: Create Voucher placeholder CSS compatibility commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          css=public/site/assets/css/components/project-detail-overview.css
+          test "$(git rev-parse HEAD)" = "$COMPATIBILITY_SHA"
+          test -z "$(git status --porcelain)"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os
+          path = Path('public/site/assets/css/components/project-detail-overview.css')
+          before = '.voucher-composition-v119__placeholder strong{max-width:var(--dimension-32ch);color:var(--color-text-muted);font-size:var(--text-xs);overflow-wrap:anywhere}'
+          after = '.voucher-composition-v119__placeholder strong{max-width:var(--dimension-32ch);color:var(--color-text-muted);font-size:var(--text-xs)}'
+          raw = path.read_bytes()
+          text = raw.decode('utf-8')
+          if text.count(before) != 1:
+              raise SystemExit(f'expected exactly one approved Voucher placeholder declaration, found {text.count(before)}')
+          canonical = list(Path('public/site/assets/css').rglob('*.css'))
+          owners = [str(candidate) for candidate in canonical if 'overflow-wrap:anywhere' in candidate.read_text('utf-8')]
+          if owners != [str(path)]:
+              raise SystemExit('BLOCKED — MULTIPLE FORCED WRAP OWNERS FOUND: ' + ', '.join(owners))
+          text = text.replace(before, after, 1)
+          encoded = text.encode('utf-8')
+          if raw.endswith(b'\n') != encoded.endswith(b'\n'):
+              raise SystemExit('terminal newline changed')
+          path.write_bytes(encoded)
+          remaining = [str(candidate) for candidate in canonical if 'overflow-wrap:anywhere' in candidate.read_text('utf-8')]
+          if remaining:
+              raise SystemExit('canonical CSS still contains overflow-wrap:anywhere: ' + ', '.join(remaining))
+          if text.count(after) != 1 or before in text:
+              raise SystemExit('Voucher placeholder postcondition failed')
+          audit = {'result':'PASS','canonicalOwner':str(path),'selector':'.voucher-composition-v119__placeholder strong','changedSelectorCount':1,'declarationsRemoved':['overflow-wrap:anywhere'],'declarationsAdded':[],'forcedWrapOwnerCountBefore':1,'forcedWrapOwnerCountAfter':0}
+          Path(os.environ['EVIDENCE_DIR'],'css-compatibility-static-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+          PY
+          test -z "$(grep -RIl --include='*.css' 'overflow-wrap:anywhere' public/site/assets/css || true)"
+          git diff --check
+          git add -- "$css"
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          test "$(git diff --cached --name-only)" = "$css"
+          git diff --cached -- "$css" | grep -F -- '-.voucher-composition-v119__placeholder strong{max-width:var(--dimension-32ch);color:var(--color-text-muted);font-size:var(--text-xs);overflow-wrap:anywhere}'
+          git diff --cached -- "$css" | grep -F -- '+.voucher-composition-v119__placeholder strong{max-width:var(--dimension-32ch);color:var(--color-text-muted);font-size:var(--text-xs)}'
+          git commit -m 'style: remove forced wrapping from Voucher placeholder copy'
+          css_compatibility_sha="$(git rev-parse HEAD)"
+          printf 'CSS_COMPATIBILITY_SHA=%s\n' "$css_compatibility_sha" >> "$GITHUB_ENV"
+          printf 'CSS_COMPATIBILITY_FILE_SHA256=%s\n' "$(sha256sum "$css" | cut -d' ' -f1)" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$COMPATIBILITY_SHA"
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD | wc -l)" -eq 1
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD)" = "$css"
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),cp=require('child_process');
+          const audit=JSON.parse(fs.readFileSync(path.join(process.env.EVIDENCE_DIR,'css-compatibility-static-audit.json')));
+          audit.commit=cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();audit.parent=process.env.COMPATIBILITY_SHA;audit.changedPaths=['public/site/assets/css/components/project-detail-overview.css'];audit.fileSha256=process.env.CSS_COMPATIBILITY_FILE_SHA256;
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'css-compatibility-commit-audit.json'),JSON.stringify(audit,null,2)+'\n');
           NODE
 
       - name: Install dependencies
@@ -1209,6 +1266,9 @@ jobs:
           assert.ok(app.includes('localize(project.domain_label)'));
           assert.ok(home.includes('localize(project?.company)'));
           assert.ok(home.includes('localize(project?.domain_label)'));
+          assert.ok(projectDetailCss.includes('.voucher-composition-v119__placeholder strong{max-width:var(--dimension-32ch);color:var(--color-text-muted);font-size:var(--text-xs)}'));
+          assert.ok(!projectDetailCss.includes('overflow-wrap:anywhere'));
+          assert.ok(!projectDetailCss.includes('word-break:break-all'));
           assert.equal(crypto.createHash('sha256').update(fs.readFileSync(process.env.CONTENT_PATH)).digest('hex'),process.env.EXPECTED_CONTENT_SHA256);
           const manifestBytes=fs.readFileSync(process.env.MANIFEST_PATH);
           const manifest=JSON.parse(manifestBytes);
@@ -1225,6 +1285,7 @@ jobs:
           test "$(sha256sum public/site/assets/js/app.js | cut -d' ' -f1)" = 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693
           test "$(sha256sum public/site/assets/js/home.js | cut -d' ' -f1)" = 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa
           test "$(sha256sum "$MANIFEST_PATH" | cut -d' ' -f1)" = "$APPROVED_R42_SHA256"
+          test "$(sha256sum public/site/assets/css/components/project-detail-overview.css | cut -d' ' -f1)" = "$CSS_COMPATIBILITY_FILE_SHA256"
           test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- package.json package-lock.json)"
 
       - name: Run production build
@@ -1264,30 +1325,32 @@ jobs:
           if test -s "$EVIDENCE_DIR/generated-paths.txt"; then
             xargs -d '\n' git add -A -- < "$EVIDENCE_DIR/generated-paths.txt"
             git diff --cached --name-only | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
-            git commit -m 'build: regenerate production assets after ProjectCard compatibility'
+            git commit -m 'build: regenerate production assets after recovery compatibility'
             generated_sha="$(git rev-parse HEAD)"
             printf 'GENERATED_SHA=%s\n' "$generated_sha" >> "$GITHUB_ENV"
-            test "$(git rev-parse HEAD^)" = "$COMPATIBILITY_SHA"
+            test "$(git rev-parse HEAD^)" = "$CSS_COMPATIBILITY_SHA"
           else
             printf 'GENERATED_SHA=\n' >> "$GITHUB_ENV"
           fi
           test -z "$(git status --porcelain --untracked-files=no)"
-          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -ge 4
-          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -le 5
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -ge 5
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -le 6
           test "$(git rev-parse "$EXACT_CONTENT_SHA^")" = "$BASE_SHA"
           test "$(git rev-parse "$CANONICAL_MANIFEST_SHA^")" = "$EXACT_CONTENT_SHA"
           test "$(git rev-parse "$EXACT_RUNTIME_SHA^")" = "$CANONICAL_MANIFEST_SHA"
           test "$(git rev-parse "$COMPATIBILITY_SHA^")" = "$EXACT_RUNTIME_SHA"
+          test "$(git rev-parse "$CSS_COMPATIBILITY_SHA^")" = "$COMPATIBILITY_SHA"
           {
             printf '%s  %s\n' "$EXPECTED_CONTENT_SHA256" "$CONTENT_PATH"
             printf '%s  %s\n' "$APPROVED_R42_SHA256" "$MANIFEST_PATH"
             grep -v 'public/site/assets/js/app.js\|public/site/assets/js/home.js' "$EVIDENCE_DIR/runtime-expected-sha256.txt"
             printf '%s  %s\n' 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693 public/site/assets/js/app.js
             printf '%s  %s\n' 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa public/site/assets/js/home.js
+            printf '%s  %s\n' "$CSS_COMPATIBILITY_FILE_SHA256" public/site/assets/css/components/project-detail-overview.css
           } > "$EVIDENCE_DIR/exact-file-hashes.txt"
           node - <<'NODE'
           const fs=require('fs'),path=require('path');
-          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,canonicalManifestCommitSha:process.env.CANONICAL_MANIFEST_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,compatibilityCommitSha:process.env.COMPATIBILITY_SHA,generatedCommitSha:process.env.GENERATED_SHA||null,finalHead:require('child_process').execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',assetManifestContentVersion:'2026-07-31-r83',assetManifestItems:250,assetManifestUniqueIds:250,assetManifestSha256:process.env.APPROVED_R42_SHA256,dependenciesChanged:false},null,2)+'\n');
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,canonicalManifestCommitSha:process.env.CANONICAL_MANIFEST_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,compatibilityCommitSha:process.env.COMPATIBILITY_SHA,cssCompatibilityCommitSha:process.env.CSS_COMPATIBILITY_SHA,generatedCommitSha:process.env.GENERATED_SHA||null,finalHead:require('child_process').execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',assetManifestContentVersion:'2026-07-31-r83',assetManifestItems:250,assetManifestUniqueIds:250,assetManifestSha256:process.env.APPROVED_R42_SHA256,cssForcedWrapAbsent:true,dependenciesChanged:false},null,2)+'\n');
           NODE
           cp "$EVIDENCE_DIR/exact-verification-report.json" "$EVIDENCE_DIR/final-verification-report.json"
 
@@ -1322,6 +1385,7 @@ jobs:
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/canonical-manifest-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-runtime-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/project-card-compatibility-commit-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/css-compatibility-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-output-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
