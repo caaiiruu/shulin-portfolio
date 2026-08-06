@@ -1127,10 +1127,6 @@ jobs:
             'public/site/assets/js/home.js',
             'utf8'
           );
-          const projectDetailCss=fs.readFileSync(
-            'public/site/assets/css/components/project-detail-overview.css',
-            'utf8'
-          );
           const projectDetailCss=fs.readFileSync('public/site/assets/css/components/project-detail-overview.css','utf8');
           assert.equal(
             data.contentVersion,
@@ -1277,6 +1273,10 @@ jobs:
           const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
           const home = fs.readFileSync(
             'public/site/assets/js/home.js',
+            'utf8'
+          );
+          const projectDetailCss=fs.readFileSync(
+            'public/site/assets/css/components/project-detail-overview.css',
             'utf8'
           );
           assert.equal(data.contentVersion,'2026-08-06-r146');
