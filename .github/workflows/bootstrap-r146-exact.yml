@@ -1,0 +1,346 @@
+name: Bootstrap exact r146 recovery
+
+on:
+  push:
+    branches:
+      - recovery/bootstrap-r146-exact-2026-08-06
+    paths:
+      - .github/workflows/bootstrap-r146-exact.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: r146-exact-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap-exact-recovery:
+    runs-on: ubuntu-latest
+    env:
+      BASE_SHA: 6fb96ba299789374ad5356d109e10c2d496d8041
+      BOOTSTRAP_BRANCH: recovery/bootstrap-r146-exact-2026-08-06
+      EXACT_BRANCH: recovery/staging-r146-exact-2026-08-06
+      CONTENT_PATH: public/site/content/portfolio-content.json
+      EXPECTED_CONTENT_SHA256: fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6
+    steps:
+      - name: Checkout bootstrap repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Node 22.13.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: Initialize external directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'EVIDENCE_DIR=%s\n' \
+            "$RUNNER_TEMP/r146-exact-bootstrap-evidence" \
+            >> "$GITHUB_ENV"
+          printf 'PAYLOAD_DIR=%s\n' \
+            "$RUNNER_TEMP/r146-exact-payload" \
+            >> "$GITHUB_ENV"
+          printf 'EXACT_WORKTREE=%s\n' \
+            "$RUNNER_TEMP/r146-exact-worktree" \
+            >> "$GITHUB_ENV"
+
+      - name: Verify bootstrap source state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$EVIDENCE_DIR" "$PAYLOAD_DIR" "$EXACT_WORKTREE"
+          mkdir -p "$EVIDENCE_DIR" "$PAYLOAD_DIR"
+          test "$(git branch --show-current)" = "$BOOTSTRAP_BRANCH"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse --verify "$BASE_SHA^{commit}" > /dev/null
+          git fsck --full 2>&1 | tee "$EVIDENCE_DIR/git-fsck.log"
+          test -d .recovery/r146-exact-payload
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path('.recovery/r146-exact-payload')
+          expected = [root / f'chunk-{i:04d}.b64' for i in range(12)]
+          missing = [str(p) for p in expected if not p.is_file()]
+          if missing:
+              raise SystemExit(f'missing chunks: {missing}')
+          if not (root / 'payload-manifest.json').is_file():
+              raise SystemExit('payload-manifest.json is missing')
+          actual = sorted(root.glob('chunk-*.b64'))
+          if len(actual) != 12:
+              raise SystemExit(f'chunk count is {len(actual)}, expected 12')
+          PY
+          test -z "$(git status --porcelain --untracked-files=no)"
+          if git ls-remote --exit-code --heads origin "refs/heads/$EXACT_BRANCH"; then
+            printf '%s\n' 'Exact staging branch already exists' >&2
+            exit 1
+          fi
+
+      - name: Reconstruct and verify payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, hashlib, json, os, shutil, zipfile
+          from pathlib import Path, PurePosixPath
+
+          source = Path('.recovery/r146-exact-payload')
+          payload = Path(os.environ['PAYLOAD_DIR'])
+          evidence = Path(os.environ['EVIDENCE_DIR'])
+          manifest = json.loads((source / 'payload-manifest.json').read_text('utf-8'))
+          expected_names = [f'chunk-{i:04d}.b64' for i in range(12)]
+          chunks = manifest['chunks']
+          names = [item['filename'] for item in chunks]
+          if names != expected_names or manifest['chunkCount'] != 12:
+              raise SystemExit('manifest chunk ordering/count mismatch')
+          checks = []
+          encoded_parts = []
+          for item in chunks:
+              path = source / item['filename']
+              raw = path.read_bytes()
+              raw.decode('ascii')
+              digest = hashlib.sha256(raw).hexdigest()
+              if digest != item['sha256'] or len(raw) != item['characterCount']:
+                  raise SystemExit(f'chunk verification failed: {path.name}')
+              checks.append({'filename': path.name, 'characterCount': len(raw), 'sha256': digest})
+              encoded_parts.append(raw)
+          encoded = b''.join(encoded_parts)
+          if len(encoded) != manifest['base64CharacterCount'] or len(encoded) != 1046048:
+              raise SystemExit('base64 character count mismatch')
+          archive = base64.b64decode(encoded, validate=True)
+          archive_sha = hashlib.sha256(archive).hexdigest()
+          if len(archive) != manifest['archiveByteSize']:
+              raise SystemExit('archive byte size mismatch')
+          if archive_sha != manifest['archiveSha256'] or archive_sha != 'b18b728a3f707b9e014022ec1334d592f22b85d5e423017e3fdb4ba3b62ebbab':
+              raise SystemExit('archive SHA-256 mismatch')
+          archive_path = Path(os.environ['RUNNER_TEMP']) / manifest['archiveFilename']
+          archive_path.write_bytes(archive)
+          if not zipfile.is_zipfile(archive_path):
+              raise SystemExit('reconstructed archive is not a ZIP')
+          with zipfile.ZipFile(archive_path) as zf:
+              for info in zf.infolist():
+                  pure = PurePosixPath(info.filename)
+                  if pure.is_absolute() or '..' in pure.parts:
+                      raise SystemExit(f'unsafe ZIP path: {info.filename}')
+                  target = (payload / pure).resolve()
+                  if payload.resolve() not in target.parents and target != payload.resolve():
+                      raise SystemExit(f'ZIP traversal: {info.filename}')
+              zf.extractall(payload)
+          extracted = []
+          for item in manifest['files']:
+              path = payload / item['path']
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              if digest != item['sha256']:
+                  raise SystemExit(f'extracted hash mismatch: {item["path"]}')
+              extracted.append((digest, item['path']))
+          if len(extracted) != 8:
+              raise SystemExit('extracted file count mismatch')
+          content = json.loads((payload / 'public/site/content/portfolio-content.json').read_text('utf-8'))
+          if content.get('contentVersion') != '2026-08-06-r146' or len(content.get('projects', {})) != 13:
+              raise SystemExit('content semantic verification failed')
+          (evidence / 'chunk-verification.json').write_text(json.dumps({'result':'PASS','chunks':checks}, indent=2)+'\n')
+          (evidence / 'archive-verification.json').write_text(json.dumps({'result':'PASS','byteSize':len(archive),'sha256':archive_sha}, indent=2)+'\n')
+          (evidence / 'extracted-file-hashes.txt').write_text(''.join(f'{h}  {p}\n' for h,p in extracted))
+          (evidence / 'payload-reconstruction-report.json').write_text(json.dumps({'result':'PASS','contentVersion':content['contentVersion'],'projectCount':13,'filesVerified':'8/8'}, indent=2)+'\n')
+          PY
+
+      - name: Create clean exact worktree from base
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$EXACT_WORKTREE" "$BASE_SHA"
+          cd "$EXACT_WORKTREE"
+          test "$(git rev-parse HEAD)" = "$BASE_SHA"
+          test -z "$(git status --porcelain)"
+          git switch -c "$EXACT_BRANCH"
+          test "$(node -p "JSON.parse(require('fs').readFileSync('public/site/content/portfolio-asset-manifest.json')).packageVersion")" = r42
+          git show "$BASE_SHA:package.json" | cmp - package.json
+          git show "$BASE_SHA:package-lock.json" | cmp - package-lock.json
+          git config user.name "r146 Recovery Bootstrap"
+          git config user.email "63276875+caaiiruu@users.noreply.github.com"
+
+      - name: Create exact Content commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          install -D -m 0644 "$PAYLOAD_DIR/$CONTENT_PATH" "$CONTENT_PATH"
+          test "$(sha256sum "$CONTENT_PATH" | cut -d' ' -f1)" = "$EXPECTED_CONTENT_SHA256"
+          git add -- "$CONTENT_PATH"
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          test "$(git diff --cached --name-only)" = "$CONTENT_PATH"
+          git commit -m 'content: preserve exact r146 canonical SSOT'
+          exact_content_sha="$(git rev-parse HEAD)"
+          printf 'EXACT_CONTENT_SHA=%s\n' "$exact_content_sha" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD | wc -l)" -eq 1
+          git cat-file blob "$exact_content_sha:$CONTENT_PATH" | sha256sum | cut -d' ' -f1 | grep -Fx "$EXPECTED_CONTENT_SHA256"
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),cp=require('child_process');
+          const out=process.env.EVIDENCE_DIR;
+          fs.writeFileSync(path.join(out,'exact-content-commit-audit.json'),JSON.stringify({result:'PASS',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),parent:process.env.BASE_SHA,changedFiles:[process.env.CONTENT_PATH],sha256:process.env.EXPECTED_CONTENT_SHA256},null,2)+'\n');
+          NODE
+
+      - name: Create exact Runtime commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          cat > "$EVIDENCE_DIR/runtime-expected-sha256.txt" <<'EOF'
+          6c28c80fc6394373735529d4a6b3edce0d1fbe14056832d7f01c322f8c9ef0f3  scripts/build-production-assets.mjs
+          67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a  public/site/assets/js/app.js
+          6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d  public/site/assets/js/home.js
+          f0948e7e172338646c3b105fde8722c16922a574a76b421751f37ce219c0f5ec  public/site/qa/ssot-governance.mjs
+          9519938c1969ad934d7cde38c2180de0fb795784b9e9c5c74e3ee1e40b0b73bb  tests/rendered-html.test.mjs
+          824aade590d20212c87527ff4509090bbbdd8f449da0ef46a44ba829752477ba  public/site/assets/js/production.824aade590d20212.js
+          bd5f236c3619ac41bfb68803617f0c45847c5213f3c542381f21393a8ca18bc1  public/site/assets/css/production.bd5f236c3619ac41.css
+          EOF
+          while read -r hash file; do
+            install -D -m 0644 "$PAYLOAD_DIR/$file" "$file"
+            test "$(sha256sum "$file" | cut -d' ' -f1)" = "$hash"
+          done < "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+          cut -d' ' -f3 "$EVIDENCE_DIR/runtime-expected-sha256.txt" > "$EVIDENCE_DIR/runtime-paths.txt"
+          xargs -d '\n' git add -- < "$EVIDENCE_DIR/runtime-paths.txt"
+          git diff --cached --name-only | sort > "$EVIDENCE_DIR/runtime-staged.txt"
+          sort "$EVIDENCE_DIR/runtime-paths.txt" > "$EVIDENCE_DIR/runtime-paths-sorted.txt"
+          diff -u "$EVIDENCE_DIR/runtime-paths-sorted.txt" "$EVIDENCE_DIR/runtime-staged.txt"
+          git commit -m 'runtime: preserve exact r146 reader migration'
+          exact_runtime_sha="$(git rev-parse HEAD)"
+          printf 'EXACT_RUNTIME_SHA=%s\n' "$exact_runtime_sha" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$EXACT_CONTENT_SHA"
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD | wc -l)" -eq 7
+          while read -r hash file; do
+            test "$(git cat-file blob "$exact_runtime_sha:$file" | sha256sum | cut -d' ' -f1)" = "$hash"
+          done < "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+          test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- public/site/content/portfolio-asset-manifest.json package.json package-lock.json)"
+          git show "$BASE_SHA:package.json" | cmp - package.json
+          git show "$BASE_SHA:package-lock.json" | cmp - package-lock.json
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),cp=require('child_process');
+          const files=fs.readFileSync(path.join(process.env.EVIDENCE_DIR,'runtime-paths.txt'),'utf8').trim().split('\n');
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-runtime-commit-audit.json'),JSON.stringify({result:'PASS',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),parent:process.env.EXACT_CONTENT_SHA,changedFiles:files},null,2)+'\n');
+          NODE
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install.log"
+
+      - name: Validate SSOT
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          npm run validate:ssot 2>&1 | tee "$EVIDENCE_DIR/validate-ssot.log"
+
+      - name: Run tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          npm test 2>&1 | tee "$EVIDENCE_DIR/tests.log"
+
+      - name: Run Runtime assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          node <<'NODE' 2>&1 | tee "$EVIDENCE_DIR/runtime-assertions.log"
+          const fs=require('fs'),assert=require('assert/strict'),crypto=require('crypto');
+          const data=JSON.parse(fs.readFileSync(process.env.CONTENT_PATH,'utf8'));
+          const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          assert.equal(data.contentVersion,'2026-08-06-r146');
+          assert.equal(Object.keys(data.projects).length,13);
+          for(const [id,p] of Object.entries(data.projects)){assert.equal(p.id,id);assert.ok(p.searchIndexV2,`${id} search projection`);}
+          assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
+          assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
+          assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].routePolicy,'permanent-redirect');
+          const projected=Object.entries(data.projects).filter(([,p])=>p.searchIndexV2).map(([id])=>id);
+          assert.equal(projected.length,13);assert.equal(new Set(projected).size,13);
+          assert.ok(data.sourceArchives&&!projected.some(id=>Object.hasOwn(data.sourceArchives,id)));
+          assert.ok(!app.includes("contentVersion === '2026-08-03-r108'")&&!app.includes('contentVersion === "2026-08-03-r108"'));
+          assert.ok(app.includes('2026-08-06-r146'));
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync(process.env.CONTENT_PATH)).digest('hex'),process.env.EXPECTED_CONTENT_SHA256);
+          assert.equal(JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json')).packageVersion,'r42');
+          console.log(JSON.stringify({result:'PASS',contentVersion:data.contentVersion,projectCount:13,canonicalProjectsResolved:13,bookingTaxiRoute:true,onlineAuctionRedirect:'taishin-p2p-marketplace-platform',searchProjection:'13/13',sourceArchivesPublicSearch:false,r108OnlyGuard:false,r146Guard:true},null,2));
+          NODE
+          sha256sum -c "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+          test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- public/site/content/portfolio-asset-manifest.json package.json package-lock.json)"
+
+      - name: Run production build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/build.log"
+
+      - name: Verify clean tracked worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          git diff --check
+          git status --porcelain --untracked-files=no | tee "$EVIDENCE_DIR/tracked-status.log"
+          test ! -s "$EVIDENCE_DIR/tracked-status.log"
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -eq 2
+          test "$(git rev-parse "$EXACT_CONTENT_SHA^")" = "$BASE_SHA"
+          test "$(git rev-parse "$EXACT_RUNTIME_SHA^")" = "$EXACT_CONTENT_SHA"
+          {
+            printf '%s  %s\n' "$EXPECTED_CONTENT_SHA256" "$CONTENT_PATH"
+            cat "$EVIDENCE_DIR/runtime-expected-sha256.txt"
+          } > "$EVIDENCE_DIR/exact-file-hashes.txt"
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path');
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',dependenciesChanged:false},null,2)+'\n');
+          NODE
+
+      - name: Push exact staging branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          if git ls-remote --exit-code --heads origin "refs/heads/$EXACT_BRANCH"; then
+            printf '%s\n' 'Exact staging branch appeared before push' >&2
+            exit 1
+          fi
+          git push origin "HEAD:refs/heads/$EXACT_BRANCH" 2>&1 | tee "$EVIDENCE_DIR/push.log"
+
+      - name: Create and verify Git bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          git bundle create "$EVIDENCE_DIR/recovery-r146-exact-2026-08-06.bundle" "refs/heads/$EXACT_BRANCH"
+          git bundle verify "$EVIDENCE_DIR/recovery-r146-exact-2026-08-06.bundle" 2>&1 | tee "$EVIDENCE_DIR/bundle-verification.log"
+
+      - name: Upload success recovery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r146-exact-recovery-bridge
+          path: |
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/recovery-r146-exact-2026-08-06.bundle
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-verification-report.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-content-commit-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-runtime-commit-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/runtime-assertions.log
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/build.log
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/push.log
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/bundle-verification.log
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload diagnostics artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r146-exact-bootstrap-diagnostics
+          path: ${{ runner.temp }}/r146-exact-bootstrap-evidence
+          retention-days: 7
+          if-no-files-found: warn
