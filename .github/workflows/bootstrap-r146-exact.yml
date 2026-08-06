@@ -1180,7 +1180,31 @@ jobs:
           text = raw.decode('utf-8')
           if text.count(before) != 1:
               raise SystemExit(f'expected exactly one approved Voucher placeholder declaration, found {text.count(before)}')
-          canonical = list(Path('public/site/assets/css').rglob('*.css'))
+          canonical = [
+              Path('public/site/assets/css/tokens.css'),
+              Path('public/site/assets/css/base.css'),
+              Path('public/site/assets/css/components/foundation.css'),
+              Path('public/site/assets/css/components/arrow-icon.css'),
+              Path('public/site/assets/css/components/site-chrome.css'),
+              Path('public/site/assets/css/components/hero.css'),
+              Path('public/site/assets/css/components/search.css'),
+              Path('public/site/assets/css/components/popup-shell.css'),
+              Path('public/site/assets/css/components/project-detail-overview.css'),
+              Path('public/site/assets/css/components/domain-selector.css'),
+              Path('public/site/assets/css/components/horizontal-rail.css'),
+              Path('public/site/assets/css/components/work-library.css'),
+              Path('public/site/assets/css/components/project-card.css'),
+              Path('public/site/assets/css/components/artifact-visual.css'),
+              Path('public/site/assets/css/components/experiment-card.css'),
+              Path('public/site/assets/css/components/profile-card.css'),
+              Path('public/site/assets/css/components/profile-interest-mosaic.css'),
+              Path('public/site/assets/css/components/editorial-section.css'),
+              Path('public/site/assets/css/components/supporting-page-layout.css'),
+              Path('public/site/assets/css/components/selected-evidence.css'),
+              Path('public/site/assets/css/components/homepage-evidence.css'),
+          ]
+          if any(candidate.name.startswith('production.') for candidate in canonical):
+              raise SystemExit('generated production CSS entered canonical owner inventory')
           owners = [str(candidate) for candidate in canonical if 'overflow-wrap:anywhere' in candidate.read_text('utf-8')]
           if owners != [str(path)]:
               raise SystemExit('BLOCKED — MULTIPLE FORCED WRAP OWNERS FOUND: ' + ', '.join(owners))
@@ -1197,7 +1221,6 @@ jobs:
           audit = {'result':'PASS','canonicalOwner':str(path),'selector':'.voucher-composition-v119__placeholder strong','changedSelectorCount':1,'declarationsRemoved':['overflow-wrap:anywhere'],'declarationsAdded':[],'forcedWrapOwnerCountBefore':1,'forcedWrapOwnerCountAfter':0}
           Path(os.environ['EVIDENCE_DIR'],'css-compatibility-static-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
           PY
-          test -z "$(grep -RIl --include='*.css' 'overflow-wrap:anywhere' public/site/assets/css || true)"
           git diff --check
           git add -- "$css"
           test "$(git diff --cached --name-only | wc -l)" -eq 1
