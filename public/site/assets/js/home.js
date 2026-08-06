@@ -50,7 +50,7 @@ function projectBrand(key){
 }
 function projectContext(key){
  const project=DATA.projects[key];
- return localize(project?.domain)||'';
+ return localize(project?.domain_label)||'';
 }
 function projectVisualLabels(key){
  const map={

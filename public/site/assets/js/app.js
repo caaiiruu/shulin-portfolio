@@ -538,7 +538,7 @@
       const intro=element('div','related-project-card__intro-v81');
       const top=element('div','related-project-card__top-v45');
       top.append(element('strong','related-project-card__company-v135',localize(project.company)));
-      if(project.domain)top.append(element('span','related-project-card__context',localize(project.domain)));
+      if(project.domain_label)top.append(element('span','related-project-card__context',localize(project.domain_label)));
       intro.append(top,element('h5','related-project-card__title',localize(project.title_pair)));
       const meta=element('dl','related-project-card__meta-v45');
       const row=element('div');
@@ -845,7 +845,7 @@
     const content=element('div','work-card-v32__content');
     const top=element('div','work-card-v32__top related-project-card__top-v45');
     top.append(element('strong','related-project-card__company-v135',localize(project.company)));
-    const domain=localize(project.domain);
+    const domain=localize(project.domain_label);
     if(index===0&&domain)top.append(element('span','project-context related-project-card__context',domain));
     const title=element('h2','',localize(project.title_pair));
     const summary=element('p','',localize(project.at_a_glance_pair));
