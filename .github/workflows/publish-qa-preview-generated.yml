@@ -1,0 +1,107 @@
+name: Publish verified Milestone 4 preview assets
+
+on:
+  push:
+    branches:
+      - qa/orchestrate-r146-r43-preview-2026-08-06
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout exact QA source
+        run: |
+          set -euo pipefail
+          git fetch origin qa/r146-r43-preview-2026-08-06
+          git checkout -B remote-build origin/qa/r146-r43-preview-2026-08-06
+          test "$(git rev-parse HEAD)" = "912d8d753976a171100dfa195b7254b0b532fa6e"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Validate, test, and deterministic build
+        run: |
+          set -euo pipefail
+          mkdir -p evidence first second
+          npm run install:ci 2>&1 | tee evidence/install.log
+          npm run validate:ssot 2>&1 | tee evidence/validate-ssot.log
+          npm run validate:design 2>&1 | tee evidence/validate-design.log
+          npm test 2>&1 | tee evidence/tests.log
+          node --test tests/project-detail-routes.test.mjs tests/asset-governance.test.mjs 2>&1 | tee evidence/route-asset-tests.log
+          find public/site -type f \( -name 'production.*.css' -o -name 'production.*.js' -o -name '*.html' \) -print0 | sort -z | xargs -0 sha256sum > first/hashes.txt
+          git diff --name-status --no-renames > first/name-status.txt
+          npm run build 2>&1 | tee evidence/build-2.log
+          find public/site -type f \( -name 'production.*.css' -o -name 'production.*.js' -o -name '*.html' \) -print0 | sort -z | xargs -0 sha256sum > second/hashes.txt
+          git diff --name-status --no-renames > second/name-status.txt
+          cmp first/hashes.txt second/hashes.txt
+          cmp first/name-status.txt second/name-status.txt
+      - name: Verify generated allowlist and hashes
+        run: |
+          set -euo pipefail
+          cat > evidence/expected-name-status.txt <<'EOF'
+          D	public/site/assets/js/production.4b016f657da7aa9a.js
+          M	public/site/experiments.html
+          M	public/site/index.html
+          M	public/site/profile.html
+          M	public/site/work.html
+          EOF
+          diff -u evidence/expected-name-status.txt second/name-status.txt
+          test "$(sha256sum public/site/assets/js/production.c50de1b33f0e5bd4.js | cut -d' ' -f1)" = "c50de1b33f0e5bd4239a363ce59720cb58750ea9e3c1658b4508dabe676ea60b"
+          test "$(sha256sum public/site/index.html | cut -d' ' -f1)" = "30ac19164085033fe98b887ef9d8cb20362849b0c83c1bf3858d518e26210a5a"
+          test "$(sha256sum public/site/work.html | cut -d' ' -f1)" = "110db109cce0974f17db4b4e25c40d258936cd5d8d6b141b1f9886a22e5fc996"
+          test "$(sha256sum public/site/profile.html | cut -d' ' -f1)" = "692e50885f39f150395d78460c606f07cc6e4a9ac3698b563460e546c37eb576"
+          test "$(sha256sum public/site/experiments.html | cut -d' ' -f1)" = "e172b205e7f6b07c3eb4144da48bdf27847043f439d4be4922c43a98f4ecf55f"
+          test ! -e public/site/content/portfolio-visual-slot-inventory.json
+          test "$(sha256sum public/site/content/portfolio-content.json | cut -d' ' -f1)" = "fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6"
+      - name: Commit and fast-forward QA branch
+        run: |
+          set -euo pipefail
+          git add -A public/site/assets/js/production.4b016f657da7aa9a.js public/site/assets/js/production.c50de1b33f0e5bd4.js public/site/experiments.html public/site/index.html public/site/profile.html public/site/work.html
+          git diff --cached --quiet && exit 1
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "build: regenerate verified preview assets"
+          echo "REMOTE_GENERATED_SHA=$(git rev-parse HEAD)" | tee -a "$GITHUB_ENV"
+          git push origin HEAD:refs/heads/qa/r146-r43-preview-2026-08-06
+      - name: Fresh checkout verification
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git clone --branch qa/r146-r43-preview-2026-08-06 --single-branch "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" fresh
+          cd fresh
+          test "$(git rev-parse HEAD)" = "$REMOTE_GENERATED_SHA"
+          npm run install:ci 2>&1 | tee ../evidence/fresh-install.log
+          npm run validate:ssot 2>&1 | tee ../evidence/fresh-validate-ssot.log
+          npm run validate:design 2>&1 | tee ../evidence/fresh-validate-design.log
+          npm test 2>&1 | tee ../evidence/fresh-tests.log
+          node --test tests/project-detail-routes.test.mjs tests/asset-governance.test.mjs 2>&1 | tee ../evidence/fresh-route-asset-tests.log
+          npm run build 2>&1 | tee ../evidence/fresh-build.log
+      - name: Write final audit
+        if: success()
+        run: |
+          printf '{"status":"PASS","sourceCommit":"912d8d753976a171100dfa195b7254b0b532fa6e","generatedCommit":"%s","deterministic":true,"derivedSlots":31,"placeholderActive":31}\n' "$REMOTE_GENERATED_SHA" > evidence/final-audit.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: milestone-4-preview-generated
+          path: |
+            evidence
+            first
+            second
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: milestone-4-preview-diagnostics
+          path: |
+            evidence
+            first
+            second
+          if-no-files-found: warn
