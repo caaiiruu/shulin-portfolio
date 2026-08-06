@@ -11,8 +11,6 @@ permissions:
 jobs:
   verify-and-bundle:
     runs-on: ubuntu-latest
-    env:
-      EVIDENCE_DIR: ${{ runner.temp }}/r146-recovery-evidence
     steps:
       - name: Checkout full repository
         uses: actions/checkout@v4
@@ -24,18 +22,31 @@ jobs:
         with:
           node-version: 22.13.0
 
+      - name: Initialize external evidence directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'EVIDENCE_DIR=%s\n' \
+            "$RUNNER_TEMP/r146-recovery-evidence" \
+            >> "$GITHUB_ENV"
+
       - name: A. Verify Git integrity
         shell: bash
         run: |
           set -euo pipefail
+          test -n "${EVIDENCE_DIR:-}"
           test -z "$(git status --porcelain)"
           rm -rf "$EVIDENCE_DIR"
           mkdir -p "$EVIDENCE_DIR"
-          git rev-parse HEAD | tee $EVIDENCE_DIR/head.txt
-          git log --oneline --decorate -10 | tee $EVIDENCE_DIR/git-log.txt
-          git fsck --full 2>&1 | tee $EVIDENCE_DIR/git-fsck.log
-          git status --porcelain | tee $EVIDENCE_DIR/git-status-before.txt
-          test ! -s $EVIDENCE_DIR/git-status-before.txt
+          git rev-parse HEAD \
+            | tee "$EVIDENCE_DIR/head.txt"
+          git log --oneline --decorate -10 \
+            | tee "$EVIDENCE_DIR/git-log.txt"
+          git fsck --full 2>&1 \
+            | tee "$EVIDENCE_DIR/git-fsck.log"
+          git status --porcelain \
+            | tee "$EVIDENCE_DIR/git-status-before.txt"
+          test ! -s "$EVIDENCE_DIR/git-status-before.txt"
 
       - name: B. Verify ancestry and commit separation
         shell: bash
@@ -47,12 +58,28 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse "$CONTENT_SHA^")" = "$BASE_SHA"
           test "$(git rev-parse "$RUNTIME_SHA^")" = "$CONTENT_SHA"
-          test "$(git rev-parse HEAD^)" = "$RUNTIME_SHA"
-          git diff-tree --no-commit-id --name-only -r "$CONTENT_SHA" | sort > $EVIDENCE_DIR/content-files.txt
-          printf '%s\n' public/site/content/portfolio-content.json > $EVIDENCE_DIR/content-allowlist.txt
-          diff -u $EVIDENCE_DIR/content-allowlist.txt $EVIDENCE_DIR/content-files.txt
-          git diff-tree --no-commit-id --name-only -r "$RUNTIME_SHA" | sort > $EVIDENCE_DIR/runtime-files.txt
-          cat > $EVIDENCE_DIR/runtime-allowlist.txt <<'EOF'
+          git merge-base --is-ancestor "$RUNTIME_SHA" "$GITHUB_SHA"
+          git diff --name-only "$RUNTIME_SHA"..HEAD \
+            | sort \
+            > "$EVIDENCE_DIR/ci-files.txt"
+          printf '%s\n' \
+            .github/workflows/verify-r146-recovery.yml \
+            > "$EVIDENCE_DIR/ci-allowlist.txt"
+          diff -u \
+            "$EVIDENCE_DIR/ci-allowlist.txt" \
+            "$EVIDENCE_DIR/ci-files.txt"
+          git diff-tree --no-commit-id --name-only -r "$CONTENT_SHA" \
+            | sort \
+            > "$EVIDENCE_DIR/content-files.txt"
+          printf '%s\n' public/site/content/portfolio-content.json \
+            > "$EVIDENCE_DIR/content-allowlist.txt"
+          diff -u \
+            "$EVIDENCE_DIR/content-allowlist.txt" \
+            "$EVIDENCE_DIR/content-files.txt"
+          git diff-tree --no-commit-id --name-only -r "$RUNTIME_SHA" \
+            | sort \
+            > "$EVIDENCE_DIR/runtime-files.txt"
+          cat > "$EVIDENCE_DIR/runtime-allowlist.txt" <<'EOF'
           public/site/assets/css/production.bd5f236c3619ac41.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
@@ -61,25 +88,33 @@ jobs:
           scripts/build-production-assets.mjs
           tests/rendered-html.test.mjs
           EOF
-          diff -u $EVIDENCE_DIR/runtime-allowlist.txt $EVIDENCE_DIR/runtime-files.txt
+          diff -u \
+            "$EVIDENCE_DIR/runtime-allowlist.txt" \
+            "$EVIDENCE_DIR/runtime-files.txt"
           node - <<'NODE'
-          const fs=require('fs');
-          fs.writeFileSync('$EVIDENCE_DIR/commit-separation-audit.json', JSON.stringify({
-            baseSha:process.env.BASE_SHA,
-            contentCommitSha:process.env.CONTENT_SHA,
-            runtimeCommitSha:process.env.RUNTIME_SHA,
-            ciCommitSha:process.env.GITHUB_SHA,
-            contentFiles:fs.readFileSync('$EVIDENCE_DIR/content-files.txt','utf8').trim().split('\n'),
-            runtimeFiles:fs.readFileSync('$EVIDENCE_DIR/runtime-files.txt','utf8').trim().split('\n'),
-            result:'PASS'
-          },null,2)+'\n');
+          const fs = require('fs');
+          const path = require('path');
+          const evidenceDir = process.env.EVIDENCE_DIR;
+          if (!evidenceDir) throw new Error('EVIDENCE_DIR is unavailable');
+          fs.writeFileSync(
+            path.join(evidenceDir, 'commit-separation-audit.json'),
+            JSON.stringify({
+              baseSha: process.env.BASE_SHA,
+              contentCommitSha: process.env.CONTENT_SHA,
+              runtimeCommitSha: process.env.RUNTIME_SHA,
+              ciCommitSha: process.env.GITHUB_SHA,
+              contentFiles: fs.readFileSync(path.join(evidenceDir, 'content-files.txt'), 'utf8').trim().split('\n'),
+              runtimeFiles: fs.readFileSync(path.join(evidenceDir, 'runtime-files.txt'), 'utf8').trim().split('\n'),
+              result: 'PASS'
+            }, null, 2) + '\n'
+          );
           NODE
 
       - name: C. Verify immutable snapshot hashes
         shell: bash
         run: |
           set -euo pipefail
-          cat > $EVIDENCE_DIR/restored-file-sha256.txt <<'EOF'
+          cat > "$EVIDENCE_DIR/restored-file-sha256.txt" <<'EOF'
           fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6  public/site/content/portfolio-content.json
           6c28c80fc6394373735529d4a6b3edce0d1fbe14056832d7f01c322f8c9ef0f3  scripts/build-production-assets.mjs
           67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a  public/site/assets/js/app.js
@@ -89,7 +124,7 @@ jobs:
           824aade590d20212c87527ff4509090bbbdd8f449da0ef46a44ba829752477ba  public/site/assets/js/production.824aade590d20212.js
           bd5f236c3619ac41bfb68803617f0c45847c5213f3c542381f21393a8ca18bc1  public/site/assets/css/production.bd5f236c3619ac41.css
           EOF
-          sha256sum -c $EVIDENCE_DIR/restored-file-sha256.txt
+          sha256sum -c "$EVIDENCE_DIR/restored-file-sha256.txt"
 
       - name: D. Guard unchanged dependency and asset owners
         shell: bash
@@ -104,25 +139,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm run install:ci 2>&1 | tee $EVIDENCE_DIR/install.log
+          npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install.log"
 
       - name: F. Validate SSOT
         shell: bash
         run: |
           set -euo pipefail
-          npm run validate:ssot 2>&1 | tee $EVIDENCE_DIR/validate-ssot.log
+          npm run validate:ssot 2>&1 | tee "$EVIDENCE_DIR/validate-ssot.log"
 
       - name: G. Run tests
         shell: bash
         run: |
           set -euo pipefail
-          npm test 2>&1 | tee $EVIDENCE_DIR/tests.log
+          npm test 2>&1 | tee "$EVIDENCE_DIR/tests.log"
 
       - name: H. Run recorded Milestone 2 runtime assertions
         shell: bash
         run: |
           set -euo pipefail
-          node <<'NODE' 2>&1 | tee $EVIDENCE_DIR/runtime-assertions.log
+          node <<'NODE' 2>&1 | tee "$EVIDENCE_DIR/runtime-assertions.log"
           const fs=require('fs'); const assert=require('assert/strict');
           const data=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
           const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
@@ -144,7 +179,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm run build 2>&1 | tee $EVIDENCE_DIR/build.log
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/build.log"
 
       - name: Verify clean tracked worktree after build
         shell: bash
@@ -159,16 +194,38 @@ jobs:
 
       - name: J. Create and verify recovery bundle
         shell: bash
+        env:
+          RUNTIME_SHA: 10d28748b420b2d9fe9239572a58d30efc69e205
         run: |
           set -euo pipefail
-          git branch -f recovery/staging-r146-2026-08-06 "$GITHUB_SHA"
-          git branch -f recovery/r146-runtime-verified 10d28748b420b2d9fe9239572a58d30efc69e205
-          git bundle create $EVIDENCE_DIR/recovery-r146-2026-08-06.bundle recovery/staging-r146-2026-08-06 recovery/r146-runtime-verified
-          git bundle verify $EVIDENCE_DIR/recovery-r146-2026-08-06.bundle 2>&1 | tee $EVIDENCE_DIR/bundle-verification.log
+          test "$(git branch --show-current)" = \
+            "recovery/staging-r146-2026-08-06"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git branch -f \
+            recovery/r146-runtime-verified \
+            "$RUNTIME_SHA"
+          git bundle create \
+            "$EVIDENCE_DIR/recovery-r146-2026-08-06.bundle" \
+            refs/heads/recovery/staging-r146-2026-08-06 \
+            refs/heads/recovery/r146-runtime-verified
+          git bundle verify \
+            "$EVIDENCE_DIR/recovery-r146-2026-08-06.bundle" \
+            2>&1 \
+            | tee "$EVIDENCE_DIR/bundle-verification.log"
           node - <<'NODE'
-          const fs=require('fs');
-          const hashes={}; for(const line of fs.readFileSync('$EVIDENCE_DIR/restored-file-sha256.txt','utf8').trim().split('\n')){const [hash,...parts]=line.trim().split(/\s+/);hashes[parts.join(' ')]=hash;}
-          fs.writeFileSync('$EVIDENCE_DIR/github-action-verification-report.json',JSON.stringify({repository:process.env.GITHUB_REPOSITORY,stagingBranch:'recovery/staging-r146-2026-08-06',baseSha:'6fb96ba299789374ad5356d109e10c2d496d8041',contentCommitSha:'97b324d99d561a216850c7ddda96d2550f190f94',runtimeCommitSha:'10d28748b420b2d9fe9239572a58d30efc69e205',ciCommitSha:process.env.GITHUB_SHA,canonicalSha256:'fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6',runtimeFileHashes:hashes,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',fsck:'PASS',bundleVerification:'PASS'},null,2)+'\n');
+          const fs = require('fs');
+          const path = require('path');
+          const evidenceDir = process.env.EVIDENCE_DIR;
+          if (!evidenceDir) throw new Error('EVIDENCE_DIR is unavailable');
+          const hashes = {};
+          for (const line of fs.readFileSync(path.join(evidenceDir, 'restored-file-sha256.txt'), 'utf8').trim().split('\n')) {
+            const [hash, ...parts] = line.trim().split(/\s+/);
+            hashes[parts.join(' ')] = hash;
+          }
+          fs.writeFileSync(
+            path.join(evidenceDir, 'github-action-verification-report.json'),
+            JSON.stringify({repository:process.env.GITHUB_REPOSITORY,stagingBranch:'recovery/staging-r146-2026-08-06',baseSha:'6fb96ba299789374ad5356d109e10c2d496d8041',contentCommitSha:'97b324d99d561a216850c7ddda96d2550f190f94',runtimeCommitSha:process.env.RUNTIME_SHA,ciCommitSha:process.env.GITHUB_SHA,canonicalSha256:'fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6',runtimeFileHashes:hashes,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',fsck:'PASS',bundleVerification:'PASS'},null,2) + '\n'
+          );
           NODE
 
       - name: Upload verified recovery bridge
