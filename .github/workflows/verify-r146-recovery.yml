@@ -1,0 +1,164 @@
+name: Verify r146 recovery bridge
+
+on:
+  push:
+    branches:
+      - recovery/staging-r146-2026-08-06
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node 22.13.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: A. Verify Git integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p recovery-evidence
+          git rev-parse HEAD | tee recovery-evidence/head.txt
+          git log --oneline --decorate -10 | tee recovery-evidence/git-log.txt
+          git fsck --full 2>&1 | tee recovery-evidence/git-fsck.log
+          git status --porcelain | tee recovery-evidence/git-status-before.txt
+          test ! -s recovery-evidence/git-status-before.txt
+
+      - name: B. Verify ancestry and commit separation
+        shell: bash
+        env:
+          BASE_SHA: 6fb96ba299789374ad5356d109e10c2d496d8041
+          CONTENT_SHA: 97b324d99d561a216850c7ddda96d2550f190f94
+          RUNTIME_SHA: 10d28748b420b2d9fe9239572a58d30efc69e205
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse "$CONTENT_SHA^")" = "$BASE_SHA"
+          test "$(git rev-parse "$RUNTIME_SHA^")" = "$CONTENT_SHA"
+          test "$(git rev-parse HEAD^)" = "$RUNTIME_SHA"
+          git diff-tree --no-commit-id --name-only -r "$CONTENT_SHA" | sort > recovery-evidence/content-files.txt
+          printf '%s\n' public/site/content/portfolio-content.json > recovery-evidence/content-allowlist.txt
+          diff -u recovery-evidence/content-allowlist.txt recovery-evidence/content-files.txt
+          git diff-tree --no-commit-id --name-only -r "$RUNTIME_SHA" | sort > recovery-evidence/runtime-files.txt
+          cat > recovery-evidence/runtime-allowlist.txt <<'EOF'
+          public/site/assets/css/production.bd5f236c3619ac41.css
+          public/site/assets/js/app.js
+          public/site/assets/js/home.js
+          public/site/assets/js/production.824aade590d20212.js
+          public/site/qa/ssot-governance.mjs
+          scripts/build-production-assets.mjs
+          tests/rendered-html.test.mjs
+          EOF
+          diff -u recovery-evidence/runtime-allowlist.txt recovery-evidence/runtime-files.txt
+          node - <<'NODE'
+          const fs=require('fs');
+          fs.writeFileSync('recovery-evidence/commit-separation-audit.json', JSON.stringify({
+            baseSha:process.env.BASE_SHA,
+            contentCommitSha:process.env.CONTENT_SHA,
+            runtimeCommitSha:process.env.RUNTIME_SHA,
+            ciCommitSha:process.env.GITHUB_SHA,
+            contentFiles:fs.readFileSync('recovery-evidence/content-files.txt','utf8').trim().split('\n'),
+            runtimeFiles:fs.readFileSync('recovery-evidence/runtime-files.txt','utf8').trim().split('\n'),
+            result:'PASS'
+          },null,2)+'\n');
+          NODE
+
+      - name: C. Verify immutable snapshot hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > recovery-evidence/restored-file-sha256.txt <<'EOF'
+          fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6  public/site/content/portfolio-content.json
+          6c28c80fc6394373735529d4a6b3edce0d1fbe14056832d7f01c322f8c9ef0f3  scripts/build-production-assets.mjs
+          67a01134213cd22d3cfe78d2bb12ab87ca4d9cce1eb37e8d0d4d59d5b231326a  public/site/assets/js/app.js
+          6fd1c42c8add11ff5cc366a5e659382ade669330709785a90ba23caee536882d  public/site/assets/js/home.js
+          f0948e7e172338646c3b105fde8722c16922a574a76b421751f37ce219c0f5ec  public/site/qa/ssot-governance.mjs
+          9519938c1969ad934d7cde38c2180de0fb795784b9e9c5c74e3ee1e40b0b73bb  tests/rendered-html.test.mjs
+          824aade590d20212c87527ff4509090bbbdd8f449da0ef46a44ba829752477ba  public/site/assets/js/production.824aade590d20212.js
+          bd5f236c3619ac41bfb68803617f0c45847c5213f3c542381f21393a8ca18bc1  public/site/assets/css/production.bd5f236c3619ac41.css
+          EOF
+          sha256sum -c recovery-evidence/restored-file-sha256.txt
+
+      - name: D. Guard unchanged dependency and asset owners
+        shell: bash
+        env:
+          BASE_SHA: 6fb96ba299789374ad5356d109e10c2d496d8041
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- public/site/content/portfolio-asset-manifest.json package.json package-lock.json)"
+          test "$(node -p "JSON.parse(require('fs').readFileSync('public/site/content/portfolio-asset-manifest.json')).packageVersion")" = r42
+
+      - name: E. Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run install:ci 2>&1 | tee recovery-evidence/install.log
+
+      - name: F. Validate SSOT
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run validate:ssot 2>&1 | tee recovery-evidence/validate-ssot.log
+
+      - name: G. Run tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm test 2>&1 | tee recovery-evidence/tests.log
+
+      - name: H. Run recorded Milestone 2 runtime assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE' 2>&1 | tee recovery-evidence/runtime-assertions.log
+          const fs=require('fs'); const assert=require('assert/strict');
+          const data=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
+          const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          assert.equal(data.contentVersion,'2026-08-06-r146');
+          assert.equal(Object.keys(data.projects).length,13);
+          for(const [id,p] of Object.entries(data.projects)){ assert.equal(p.id,id); assert.ok(p.searchIndexV2,`${id} search projection`); }
+          assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
+          assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
+          assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].routePolicy,'permanent-redirect');
+          const projected=Object.entries(data.projects).filter(([,p])=>p.searchIndexV2).map(([id])=>id);
+          assert.equal(projected.length,13); assert.equal(new Set(projected).size,13);
+          assert.ok(data.sourceArchives && !projected.some(id=>Object.hasOwn(data.sourceArchives,id)));
+          assert.ok(!app.includes("contentVersion === '2026-08-03-r108'") && !app.includes('contentVersion === "2026-08-03-r108"'));
+          assert.ok(app.includes('2026-08-06-r146'));
+          console.log(JSON.stringify({contentVersion:data.contentVersion,projectCount:13,canonicalProjectsResolved:projected,bookingTaxiRoute:true,onlineAuctionRedirect:'taishin-p2p-marketplace-platform',sourceArchivesPublicSearch:false,r108OnlyGuard:false,r146Guard:true,result:'PASS'},null,2));
+          NODE
+
+      - name: I. Build production
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build 2>&1 | tee recovery-evidence/build.log
+
+      - name: J. Create and verify recovery bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          git branch -f recovery/staging-r146-2026-08-06 "$GITHUB_SHA"
+          git bundle create recovery-evidence/recovery-r146-2026-08-06.bundle recovery/staging-r146-2026-08-06
+          git bundle verify recovery-evidence/recovery-r146-2026-08-06.bundle 2>&1 | tee recovery-evidence/bundle-verification.log
+          node - <<'NODE'
+          const fs=require('fs');
+          const hashes={}; for(const line of fs.readFileSync('recovery-evidence/restored-file-sha256.txt','utf8').trim().split('\n')){const [hash,...parts]=line.trim().split(/\s+/);hashes[parts.join(' ')]=hash;}
+          fs.writeFileSync('recovery-evidence/github-action-verification-report.json',JSON.stringify({repository:process.env.GITHUB_REPOSITORY,stagingBranch:'recovery/staging-r146-2026-08-06',baseSha:'6fb96ba299789374ad5356d109e10c2d496d8041',contentCommitSha:'97b324d99d561a216850c7ddda96d2550f190f94',runtimeCommitSha:'10d28748b420b2d9fe9239572a58d30efc69e205',ciCommitSha:process.env.GITHUB_SHA,canonicalSha256:'fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6',runtimeFileHashes:hashes,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',fsck:'PASS',bundleVerification:'PASS'},null,2)+'\n');
+          NODE
+
+      - name: Upload verified recovery bridge
+        uses: actions/upload-artifact@v4
+        with:
+          name: r146-recovery-bridge
+          path: recovery-evidence/
+          retention-days: 7
+          if-no-files-found: error
