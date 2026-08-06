@@ -18,26 +18,9 @@ const allowedProjectTypes = new Set([
   "Marketplace Platform",
   "0→1 Product",
 ]);
-const projectTypeZh = {
-  "Internal System": "內部系統",
-  "Incentive System": "獎勵系統",
-  "Transaction System": "交易系統",
-  "Marketplace Platform": "市場平台",
-  "0→1 Product": "0→1 產品",
-};
-const pairValue = (value, locale) => value && typeof value === "object" && !Array.isArray(value) ? value[locale] : value;
 for (const [id, project] of Object.entries(content.projects || {})) {
-  const canonicalType = pairValue(project.infoGrid?.type, "en") || project.type;
+  const canonicalType = project.infoGrid?.type?.value;
   if (!allowedProjectTypes.has(canonicalType)) failures.push(`project type: ${id} must use one approved Type`);
-  const representations = [
-    ["projects.type", project.type, project.type_zh],
-    ["projects.infoGrid.type", pairValue(project.infoGrid?.type, "en"), typeof project.infoGrid?.type === "object" ? project.infoGrid.type.zh : project.infoGrid?.type_zh],
-    ["projects.publicContent.hero.infoGrid.type", pairValue(project.publicContent?.hero?.infoGrid?.type, "en"), typeof project.publicContent?.hero?.infoGrid?.type === "object" ? project.publicContent.hero.infoGrid.type.zh : undefined],
-  ];
-  for (const [owner, en, zh] of representations) {
-    if (en && en !== canonicalType) failures.push(`project type: ${id} has conflicting ${owner} (${en} vs ${canonicalType})`);
-    if (zh && zh !== projectTypeZh[canonicalType]) failures.push(`project type: ${id} has conflicting ${owner} Chinese label (${zh})`);
-  }
   const audiences = [project.infoGrid?.audience, project.publicContent?.hero?.infoGrid?.audience];
   for (const audience of audiences) {
     if (!audience || typeof audience !== "object" || Array.isArray(audience) || !audience.en || !audience.zh) continue;
@@ -116,6 +99,8 @@ const approvedZhCardTerms = [
   "NTUC FairPrice",
   "Booking.com",
   "Voucher Center",
+  "Voucher",
+  "Game Center",
   "DBS",
   "CTBC Bank",
   "Bandzo",
@@ -130,6 +115,8 @@ const approvedZhCardTerms = [
   "PDF",
   "CRM",
   "CCU",
+  "RM",
+  "LinkPoints",
   "App-to-POS",
   "App",
   "POS",
@@ -140,10 +127,10 @@ const removeApprovedZhCardTerms = (value) => approvedZhCardTerms.reduce(
 );
 for (const [projectId, project] of Object.entries(content.projects || {})) {
   const zhCardFields = {
-    title: project.title?.zh || project.transformation_zh,
-    summary: project.atAGlance?.zh || project.at_glance_zh,
+    title: project.title?.zh,
+    summary: project.atAGlance?.zh,
   };
-  const problemTypes = project.problemTypes_zh || project.problem_types_zh;
+  const problemTypes = project.problemTypes?.zh;
   for (const [field, value] of Object.entries(zhCardFields)) {
     if (!value) {
       failures.push(`localization: missing projects.${projectId}.${field}.zh`);
@@ -165,13 +152,13 @@ for (const [projectId, project] of Object.entries(content.projects || {})) {
     });
   }
   const firstScreenFields = {
-    scope: project.infoGrid?.scope_zh || project.scope_zh,
+    scope: project.infoGrid?.scope?.zh,
     audience: [
-      project.infoGrid?.audience?.primary_zh,
-      ...(project.infoGrid?.audience?.secondary_zh || []),
-    ].filter(Boolean).join(" ") || project.audience_zh,
-    whyItMattered: project.whyItMattered?.zh || project.why_zh,
-    businessImpact: project.businessImpact?.zh || project.impact_zh,
+      project.infoGrid?.audience?.primary?.zh,
+      ...(project.infoGrid?.audience?.secondary?.zh || []),
+    ].filter(Boolean).join(" "),
+    whyItMattered: project.whyItMattered?.zh,
+    businessImpact: project.businessImpact?.zh,
   };
   for (const [field, value] of Object.entries(firstScreenFields)) {
     if (!value) {

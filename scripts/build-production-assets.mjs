@@ -114,15 +114,49 @@ for (const component of live.filter((entry) => entry.contentOwner)) {
 }
 const content = JSON.parse(fs.readFileSync(path.join(root, contentOwner), "utf8"));
 const assetManifest = JSON.parse(fs.readFileSync(path.join(root, assetManifestOwner), "utf8"));
-if (content.contentVersion !== "2026-08-04-r119") throw new Error("The active Content SSOT must be r119");
-if (Object.keys(content.projects || {}).length !== 12) throw new Error("The active Content SSOT must contain 12 projects");
+const expectedProjectIds = [
+  "voucher",
+  "voucher-center",
+  "game-center",
+  "dbs",
+  "booking",
+  "bandzo",
+  "taishin-p2p-marketplace-platform",
+  "cathay-mortgage-assistant",
+  "payment",
+  "cathay-sit-online-account-opening",
+  "cathay-sit-review-remediation-operations",
+  "ctbc-mortgage-self-service-app",
+  "booking-taxi-pickup-service-strategy",
+];
+if (content.contentVersion !== "2026-08-06-r146") throw new Error("The active Content SSOT must be r146");
+if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
+if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
+const projectIds = Object.keys(content.projects || {});
+if (projectIds.length !== 13 || new Set(projectIds).size !== 13) {
+  throw new Error("The active Content SSOT must contain 13 unique projects");
+}
+if (projectIds.some((id, index) => id !== expectedProjectIds[index])) {
+  throw new Error("The active Content SSOT project roster or order does not match the approved r146 contract");
+}
+for (const [projectId, project] of Object.entries(content.projects)) {
+  const type = project.infoGrid?.type?.value;
+  const problemTypes = project.problemTypes;
+  if (!Array.isArray(project.sectionOrder) || !project.sectionOrder.length) throw new Error(`Project ${projectId} has no canonical root sectionOrder`);
+  if (!project.company) throw new Error(`Project ${projectId} has no canonical company`);
+  if (!project.domain) throw new Error(`Project ${projectId} has no canonical domain`);
+  if (!type) throw new Error(`Project ${projectId} has no canonical Info Grid Type`);
+  if (!problemTypes || !Array.isArray(problemTypes.en) || !Array.isArray(problemTypes.zh) || problemTypes.en.length < 1 || problemTypes.en.length > 3 || problemTypes.zh.length !== problemTypes.en.length) {
+    throw new Error(`Project ${projectId} must have 1–3 bilingual canonical problemTypes`);
+  }
+}
 const publicExplorations = [...Object.values(content.sideProjects || {}), ...Object.values(content.experiments || {})]
   .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review"));
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r42" || Object.keys(assetManifest.items || {}).length !== 252) {
-  throw new Error("The active Asset Manifest must be r42 with 252 records");
+if (assetManifest.packageVersion !== "r42" || Object.keys(assetManifest.items || {}).length !== 250) {
+  throw new Error("The active Asset Manifest must be r42 with 250 records");
 }
 
 function fingerprint(contents) {
@@ -221,12 +255,24 @@ for (const file of componentCssSources) {
   });
 }
 const css = `/* Generated production stylesheet. Edit canonical sources, not this file. */\n${canonicalCss}\n${componentCss}`;
-const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(content)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};`;
+function createRuntimeContentProjection(source) {
+  const runtimeContent = structuredClone(source);
+  delete runtimeContent.sourceArchives;
+  for (const project of Object.values(runtimeContent.projects || {})) {
+    for (const legacyField of [
+      "transformation", "transformation_zh", "problem_types", "problem_types_zh",
+      "at_glance", "at_glance_zh", "type", "type_zh", "legacyAliasStatus",
+    ]) delete project[legacyField];
+  }
+  return runtimeContent;
+}
+const runtimeContent = createRuntimeContentProjection(content);
+const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(runtimeContent)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};`;
 const js = `${bundle([], "/* Generated production runtime. Edit canonical sources, not this file. */")}\n${contentRuntime}\n${jsSources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
 for (const [key, project] of Object.entries(content.projects || {})) {
-  if (!(project.title || project.transformation)) throw new Error(`Project ${key} has no approved title`);
-  if (!(project.problemTypes || project.problem_types)) throw new Error(`Project ${key} has no approved problem types`);
-  if (!(project.atAGlance || project.at_glance)) throw new Error(`Project ${key} has no approved at-a-glance content`);
+  if (!project.title?.en || !project.title?.zh) throw new Error(`Project ${key} has no bilingual canonical title`);
+  if (!project.problemTypes?.en || !project.problemTypes?.zh) throw new Error(`Project ${key} has no bilingual canonical problemTypes`);
+  if (!project.atAGlance?.en || !project.atAGlance?.zh) throw new Error(`Project ${key} has no bilingual canonical atAGlance`);
 }
 const cssFile = `production.${fingerprint(css)}.css`;
 const jsFile = `production.${fingerprint(js)}.js`;
