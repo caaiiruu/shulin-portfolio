@@ -1334,14 +1334,93 @@ jobs:
             /const\s+([A-Za-z_$][\w$]*)=event\.target\.closest\(\s*['"]\[data-project\]['"]\s*\);[\s\S]*?openDetail\(\s*['"]project['"]\s*,\s*\1\.dataset\.project\s*,\s*\1\s*\)/
           );
           assert.ok(projectClickPath,'card/search project identity must flow from data-project to openDetail');
-          const slugResolver=app.match(
-            /const\s+projectKeyFromSlug\s*=\s*\([^)]*\)\s*=>\s*Object\.keys\(DATA\.projects\)\.find\([^;]+\)\|\|['"]{2}/
+          const escapeRegExp=value=>value.replace(/[.*+?^$\{\}()|[\]\\]/g,'\\$&');
+          const routeFunctions=[...app.matchAll(
+            /function\s+([A-Za-z_$][\w$]*)\s*\(\s*([A-Za-z_$][\w$]*)\s*\)\s*\{([\s\S]*?)\n\s{2}\}/g
+          )];
+          const slugResolverCandidates=routeFunctions
+            .map(match=>({name:match[1],input:match[2],body:match[3]}))
+            .filter(({input,body})=>
+              new RegExp(
+                'DATA\\.projectAliasRegistry\\?\\.\\[\\s*'+escapeRegExp(input)+'\\s*\\]'
+              ).test(body)&&body.includes('.canonicalProjectId')
+            );
+          assert.equal(
+            slugResolverCandidates.length,
+            1,
+            'exactly one canonical project URL identity resolver must exist'
           );
-          assert.ok(slugResolver,'detail URL slug must normalize through canonical project keys');
+          const slugResolver=slugResolverCandidates[0];
+          const aliasBinding=slugResolver.body.match(
+            new RegExp(
+              'const\\s+([A-Za-z_$][\\w$]*)\\s*=\\s*DATA\\.projectAliasRegistry\\?\\.\\[\\s*'+
+              escapeRegExp(slugResolver.input)+
+              '\\s*\\]'
+            )
+          );
+          assert.ok(aliasBinding,'URL identity resolver must read alias registry by its input');
+          const aliasVariable=aliasBinding[1];
+          const compactSlugResolver=slugResolver.body.replace(/\s+/g,'');
           assert.ok(
-            appCompact.includes("return{type:'project',key:parentKey}")&&
-            appCompact.includes('openDetail(initialDetail.type,initialDetail.key,'),
-            'normalized detail route key must flow into openDetail'
+            compactSlugResolver.includes(
+              'DATA.projects['+aliasVariable+'.canonicalProjectId]'
+            ),
+            'alias resolution must verify the canonical DATA.projects key'
+          );
+          assert.ok(
+            compactSlugResolver.includes(
+              '?'+aliasVariable+'.canonicalProjectId:'+slugResolver.input
+            ),
+            'URL identity resolver must return alias canonicalProjectId or its canonical input'
+          );
+          const slugRouteChain=app.match(
+            new RegExp(
+              "const\\s+([A-Za-z_$][\\w$]*)\\s*=\\s*new\\s+URLSearchParams\\([^;]+\\)\\.get\\(\\s*['\"]case['\"]\\s*\\)\\s*;"+
+              "\\s*const\\s+([A-Za-z_$][\\w$]*)\\s*=\\s*"+
+              escapeRegExp(slugResolver.name)+
+              "\\(\\s*\\1\\s*\\)\\s*;"+
+              "[\\s\\S]*?if\\(\\s*\\2\\s*&&\\s*DATA\\.projects\\[\\s*\\2\\s*\\]\\s*\\)"+
+              "[\\s\\S]*?openDetail\\(\\s*['\"]project['\"]\\s*,\\s*\\2\\s*,"
+            )
+          );
+          assert.ok(
+            slugRouteChain,
+            'URL identity must resolve and flow to openDetail as a canonical project key'
+          );
+          const rawSlugVariable=slugRouteChain[1];
+          const canonicalSlugVariable=slugRouteChain[2];
+          const directRawSlugLookup=new RegExp(
+            'DATA\\.projects\\[\\s*'+escapeRegExp(rawSlugVariable)+'\\s*\\]'
+          ).test(app);
+          assert.equal(
+            directRawSlugLookup,
+            false,
+            'raw URL identity must not index DATA.projects'
+          );
+          const legacyIdOwnerUsed=new RegExp(
+            '\\.id\\s*===?\\s*'+escapeRegExp(rawSlugVariable)
+          ).test(slugResolver.body);
+          assert.equal(legacyIdOwnerUsed,false,'legacy p.id must not own URL resolution');
+          const slugRouteAudit={
+            result:'PASS',
+            slugInputOwner:'URLSearchParams case parameter',
+            slugResolverOwner:slugResolver.name,
+            slugResolverInput:slugResolver.input,
+            canonicalInventoryOwner:'DATA.projects object keys',
+            canonicalResultVariable:canonicalSlugVariable,
+            aliasFallbackOwner:aliasVariable+'.canonicalProjectId',
+            initialDetailOwner:'deep-link requestAnimationFrame branch',
+            initialDetailKeyOwner:canonicalSlugVariable,
+            detailOpenOwner:'openDetail',
+            directRawSlugLookup,
+            legacyIdOwnerUsed,
+            canonicalSlugResolution:'PASS',
+            aliasSlugResolution:'PASS',
+            initialDetailKeyFlow:'PASS'
+          };
+          fs.writeFileSync(
+            require('path').join(process.env.EVIDENCE_DIR,'slug-route-identity-audit.json'),
+            JSON.stringify(slugRouteAudit,null,2)+'\n'
           );
           const detailRouteAudit={
             result:'PASS',
@@ -1502,6 +1581,8 @@ jobs:
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/runtime-assertions.log
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/detail-route-identity-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/slug-route-identity-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/build.log
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/push.log
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/bundle-verification.log
