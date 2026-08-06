@@ -39,19 +39,18 @@ queryPanel?.addEventListener('focusout',event=>{
 function safeText(node,text){if(node)node.textContent=text??''}
 function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node}
 function projectTitle(project){return localize(project?.cardTitle||project?.title)||''}
-function projectSummary(project){return localize(project?.atAGlance||project?.at_glance||project?.summary)||''}
+function projectSummary(project){return localize(project?.at_a_glance_pair)||''}
 function animateShift(before){
  if(!before||!queryPanel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  requestAnimationFrame(()=>{const after=queryPanel.getBoundingClientRect();queryPanel.animate([{transform:`translate(${before.left-after.left}px,${before.top-after.top}px)`},{transform:'translate(0,0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'});result?.animate([{opacity:0,transform:'translateX(22px)'},{opacity:1,transform:'translateX(0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'})});
 }
 function projectBrand(key){
  const project=DATA.projects[key];
- return localize(project?.company)||String(project?.context||'Project').split('·')[0].trim();
+ return localize(project?.company)||'';
 }
 function projectContext(key){
  const project=DATA.projects[key];
- const types=project?.problemTypes||project?.problem_types||[];
- return localize(project?.domain_label)||localize(types[0])||'';
+ return localize(project?.domain)||'';
 }
 function projectVisualLabels(key){
  const map={
@@ -88,12 +87,12 @@ function createProjectCard(key,variant){
  const meta=element('dl','related-project-card__meta-v45');
  const rows=variant==='search'
   ?[
-    [ui("why-it-fits-3421d244"),localize([p.search_relevance,p.search_relevance_zh])||projectSummary(p)],
+    [ui("why-it-fits-3421d244"),localize(p.search_relevance_pair)||projectSummary(p)],
     [ui("evidence-1111eae0"),localize([p.card_outcome,p.card_outcome_zh])]
    ]
   :variant==='domain'
    ?[[ui("what-this-proves-bfb1a5d4"),localize([p.domain_proof,p.domain_proof_zh])||projectSummary(p)]]
-   :[[ui("direction-b41b4458"),localize([p.search_relevance,p.search_relevance_zh])||projectSummary(p)]];
+   :[[ui("direction-b41b4458"),localize(p.search_relevance_pair)||projectSummary(p)]];
  rows.forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
  const action=element('span','related-project-card__action',ui("view-case-ca67a135"));
  if(variant==='search'){
