@@ -1490,7 +1490,7 @@ jobs:
           git diff --binary > "$EVIDENCE_DIR/build-second.diff"
           cmp "$EVIDENCE_DIR/build-first.diff" "$EVIDENCE_DIR/build-second.diff"
 
-      - name: Verify clean tracked worktree
+      - name: Audit and normalize generated paths
         shell: bash
         run: |
           set -euo pipefail
@@ -1499,11 +1499,30 @@ jobs:
           git status --porcelain --untracked-files=all | tee "$EVIDENCE_DIR/tracked-status.log"
           python3 - <<'PY'
           import json, os, re
-          from pathlib import Path
+          from pathlib import Path, PurePosixPath
           evidence=Path(os.environ['EVIDENCE_DIR'])
           status=(evidence/'tracked-status.log').read_text().splitlines()
           paths=sorted({line[3:] for line in status if line and ' -> ' not in line[3:]})
-          (evidence/'generated-paths.txt').write_text(''.join(p+'\n' for p in paths))
+          approved=[
+            'public/site/assets/css/production.00a07bd722657abc.css',
+            'public/site/assets/css/production.bd5f236c3619ac41.css',
+            'public/site/assets/css/production.e6ab1a6b71ba8928.css',
+            'public/site/assets/js/production.423a75c6a2a373a8.js',
+            'public/site/assets/js/production.824aade590d20212.js',
+            'public/site/assets/js/production.c3e1b4d6a1eb213d.js',
+            'public/site/experiments.html',
+            'public/site/index.html',
+            'public/site/profile.html',
+            'public/site/work.html',
+          ]
+          unsafe=[]
+          for p in paths:
+              pure=PurePosixPath(p)
+              if not p or p != p.strip() or '\r' in p or pure.is_absolute() or '..' in pure.parts or not p.startswith('public/site/'):
+                  unsafe.append(p)
+          if len(paths)!=10 or len(set(paths))!=10 or paths!=sorted(paths) or unsafe or paths!=approved:
+              raise SystemExit('BLOCKED — GENERATED PATH ALLOWLIST MISMATCH')
+          (evidence/'generated-paths.txt').write_text(''.join(p+'\n' for p in paths),newline='\n')
           allowed=[]; unexpected=[]
           for p in paths:
               if re.fullmatch(r'public/site/assets/(js|css)/production\.[0-9a-f]+\.(js|css)',p) or (p.startswith('public/site/') and p.endswith('.html')):
@@ -1511,21 +1530,68 @@ jobs:
               else: unexpected.append(p)
           report={'result':'PASS' if not unexpected else 'BLOCKED — UNEXPECTED BUILD TRACKED DIFF','owner':'scripts/build-production-assets.mjs','generatedPaths':allowed,'unexpectedSourceChanges':unexpected,'deterministic':True}
           (evidence/'generated-output-audit.json').write_text(json.dumps(report,indent=2)+'\n')
+          normalization={'result':'PASS','pathCount':len(paths),'uniquePathCount':len(set(paths)),'sorted':paths==sorted(paths),'allowlistMatch':paths==approved,'unsafePaths':unsafe}
+          (evidence/'generated-path-normalization.json').write_text(json.dumps(normalization,indent=2)+'\n')
+          (evidence/'deterministic-build-audit.json').write_text(json.dumps({'result':'PASS','deterministic':True,'comparison':'build-first.diff equals build-second.diff'},indent=2)+'\n')
           if unexpected: raise SystemExit('BLOCKED — UNEXPECTED BUILD TRACKED DIFF: '+', '.join(unexpected))
           PY
-          if test -s "$EVIDENCE_DIR/generated-paths.txt"; then
-            xargs -d '\n' git add -A -- < "$EVIDENCE_DIR/generated-paths.txt"
-            git diff --cached --name-only | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
-            git commit -m 'build: regenerate production assets after recovery compatibility'
-            generated_sha="$(git rev-parse HEAD)"
-            printf 'GENERATED_SHA=%s\n' "$generated_sha" >> "$GITHUB_ENV"
-            test "$(git rev-parse HEAD^)" = "$CSS_COMPATIBILITY_SHA"
-          else
-            printf 'GENERATED_SHA=\n' >> "$GITHUB_ENV"
-          fi
-          test -z "$(git status --porcelain --untracked-files=no)"
-          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -ge 5
-          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -le 6
+
+      - name: Stage and verify generated paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          mapfile -t generated_paths < "$EVIDENCE_DIR/generated-paths.txt"
+          test "${#generated_paths[@]}" -eq 10
+          test "$(printf '%s\n' "${generated_paths[@]}" | sed '/^$/d' | wc -l)" -eq 10
+          git add -A -- "${generated_paths[@]}"
+          git diff --cached --name-only | sort > "$EVIDENCE_DIR/staged-generated-paths.txt"
+          git diff --cached --name-status > "$EVIDENCE_DIR/staged-generated-name-status.txt"
+          diff -u "$EVIDENCE_DIR/generated-paths.txt" "$EVIDENCE_DIR/staged-generated-paths.txt" || {
+            printf '%s\n' 'BLOCKED — GENERATED STAGED PATHS DO NOT MATCH AUDIT' >&2
+            exit 1
+          }
+          python3 - <<'PY'
+          import json, os
+          from collections import Counter
+          from pathlib import Path
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          rows=[line.split('\t',1) for line in (evidence/'staged-generated-name-status.txt').read_text().splitlines() if line]
+          counts=Counter(row[0] for row in rows)
+          if len(rows)!=10 or counts != Counter({'M':4,'D':4,'A':2}):
+              raise SystemExit(f'BLOCKED — GENERATED STAGED PATHS DO NOT MATCH AUDIT: {dict(counts)}')
+          if any(status in {'R','C','T','U'} for status in counts):
+              raise SystemExit('BLOCKED — forbidden staged status')
+          (evidence/'staged-path-audit.json').write_text(json.dumps({'result':'PASS','pathCount':len(rows),'auditPathsMatch':True,'additions':counts['A'],'deletions':counts['D'],'modifications':counts['M'],'forbiddenStatuses':[]},indent=2)+'\n')
+          PY
+          test "$(sha256sum "$CONTENT_PATH" | cut -d' ' -f1)" = "$EXPECTED_CONTENT_SHA256"
+          test "$(sha256sum "$MANIFEST_PATH" | cut -d' ' -f1)" = "$APPROVED_R42_SHA256"
+          test "$(sha256sum public/site/assets/js/app.js | cut -d' ' -f1)" = 7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693
+          test "$(sha256sum public/site/assets/js/home.js | cut -d' ' -f1)" = 6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa
+          test "$(sha256sum public/site/assets/css/components/project-detail-overview.css | cut -d' ' -f1)" = "$CSS_COMPATIBILITY_FILE_SHA256"
+          test -z "$(git diff --name-only "$BASE_SHA"..HEAD -- package.json package-lock.json)"
+
+      - name: Create and verify Generated commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          test "$(git rev-parse HEAD)" = "$CSS_COMPATIBILITY_SHA"
+          git commit -m 'build: regenerate production assets after recovery compatibility'
+          generated_sha="$(git rev-parse HEAD)"
+          export GENERATED_SHA="$generated_sha"
+          printf 'GENERATED_SHA=%s\n' "$generated_sha" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$CSS_COMPATIBILITY_SHA"
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD | sort | wc -l)" -eq 10
+          git diff-tree --no-commit-id --name-only -r HEAD | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          audit={'result':'PASS','commit':os.environ['GENERATED_SHA'],'parent':os.environ['CSS_COMPATIBILITY_SHA'],'changedPathCount':10,'additions':2,'deletions':4,'modifications':4,'unexpectedSourceChanges':[],'contentChanged':False,'manifestChanged':False,'appChanged':False,'homeChanged':False,'canonicalCssChanged':False,'packageJsonChanged':False,'lockfileChanged':False,'deterministic':True}
+          (evidence/'generated-commit-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+          PY
+          test "$(git rev-list --count "$BASE_SHA"..HEAD)" -eq 6
           test "$(git rev-parse "$EXACT_CONTENT_SHA^")" = "$BASE_SHA"
           test "$(git rev-parse "$CANONICAL_MANIFEST_SHA^")" = "$EXACT_CONTENT_SHA"
           test "$(git rev-parse "$EXACT_RUNTIME_SHA^")" = "$CANONICAL_MANIFEST_SHA"
@@ -1541,9 +1607,39 @@ jobs:
           } > "$EVIDENCE_DIR/exact-file-hashes.txt"
           node - <<'NODE'
           const fs=require('fs'),path=require('path');
-          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,canonicalManifestCommitSha:process.env.CANONICAL_MANIFEST_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,compatibilityCommitSha:process.env.COMPATIBILITY_SHA,cssCompatibilityCommitSha:process.env.CSS_COMPATIBILITY_SHA,generatedCommitSha:process.env.GENERATED_SHA||null,finalHead:require('child_process').execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',assetManifestVersion:'r42',assetManifestContentVersion:'2026-07-31-r83',assetManifestItems:250,assetManifestUniqueIds:250,assetManifestSha256:process.env.APPROVED_R42_SHA256,cssForcedWrapAbsent:true,dependenciesChanged:false},null,2)+'\n');
+          fs.writeFileSync(path.join(process.env.EVIDENCE_DIR,'exact-verification-report.json'),JSON.stringify({result:'PASS',baseSha:process.env.BASE_SHA,contentCommitSha:process.env.EXACT_CONTENT_SHA,canonicalManifestCommitSha:process.env.CANONICAL_MANIFEST_SHA,runtimeCommitSha:process.env.EXACT_RUNTIME_SHA,compatibilityCommitSha:process.env.COMPATIBILITY_SHA,cssCompatibilityCommitSha:process.env.CSS_COMPATIBILITY_SHA,generatedCommitSha:process.env.GENERATED_SHA,finalHead:process.env.GENERATED_SHA,contentVersion:'2026-08-06-r146',projectCount:13,tests:'PASS',runtimeAssertions:'PASS',build:'PASS',deterministicBuild:'PASS',generatedOutputAudit:'PASS',generatedPathNormalization:'PASS',stagedPathEquality:'PASS',assetManifestVersion:'r42',assetManifestContentVersion:'2026-07-31-r83',assetManifestItems:250,assetManifestUniqueIds:250,assetManifestSha256:process.env.APPROVED_R42_SHA256,cssForcedWrapAbsent:true,dependenciesChanged:false},null,2)+'\n');
           NODE
           cp "$EVIDENCE_DIR/exact-verification-report.json" "$EVIDENCE_DIR/final-verification-report.json"
+
+      - name: Verify clean tracked worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$EXACT_WORKTREE"
+          test "$(git rev-parse HEAD)" = "$GENERATED_SHA"
+          status="$(git status --porcelain --untracked-files=no)"
+          if test -n "$status"; then
+            printf '%s\n' 'BLOCKED — TRACKED WORKTREE DIRTY AFTER GENERATED COMMIT' >&2
+            git status
+            git diff --name-status
+            git diff --cached --name-status
+            exit 1
+          fi
+          git diff --check
+          test -f public/site/assets/css/production.00a07bd722657abc.css
+          test -f public/site/assets/js/production.423a75c6a2a373a8.js
+          for html in public/site/experiments.html public/site/index.html public/site/profile.html public/site/work.html; do
+            test "$(grep -o 'assets/css/production\.[0-9a-f]*\.css' "$html" | sort -u | wc -l)" -eq 1
+            test "$(grep -o 'assets/js/production\.[0-9a-f]*\.js' "$html" | sort -u | wc -l)" -eq 1
+            grep -F 'assets/css/production.00a07bd722657abc.css' "$html" > /dev/null
+            grep -F 'assets/js/production.423a75c6a2a373a8.js' "$html" > /dev/null
+            ! grep -E 'production\.(bd5f236c3619ac41|e6ab1a6b71ba8928|824aade590d20212|c3e1b4d6a1eb213d)\.(css|js)' "$html"
+          done
+          ! grep -F 'overflow-wrap:anywhere' public/site/assets/css/production.00a07bd722657abc.css
+          grep -F 'searchIndexV2' public/site/assets/js/production.423a75c6a2a373a8.js > /dev/null
+          grep -F 'localize(project.company)' public/site/assets/js/production.423a75c6a2a373a8.js > /dev/null
+
+
 
       - name: Push exact staging branch
         shell: bash
@@ -1578,6 +1674,13 @@ jobs:
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/project-card-compatibility-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/css-compatibility-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-output-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/deterministic-build-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-path-normalization.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-paths.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-paths.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-name-status.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-path-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/runtime-assertions.log
