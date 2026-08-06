@@ -242,6 +242,23 @@
       ?alias.canonicalProjectId
       :projectId;
   }
+  function projectIdFromPath(pathname=window.location.pathname){
+    const match=String(pathname).match(/^\/site\/work\/([^/]+)\/?$/);
+    if(!match)return null;
+    try{return decodeURIComponent(match[1])}catch{return match[1]}
+  }
+  function canonicalProjectUrl(projectId,url=new URL(window.location.href)){
+    url.pathname=`/site/work/${encodeURIComponent(canonicalProjectId(projectId))}`;
+    url.searchParams.delete('case');
+    return url;
+  }
+  function workIndexUrl(url=new URL(window.location.href)){
+    url.pathname='/site/work.html';
+    url.searchParams.delete('case');
+    url.searchParams.delete('initiative');
+    url.searchParams.delete('stage');
+    return url;
+  }
   const doc=document;
   const body=doc.body;
   const root=doc.documentElement;
@@ -1203,10 +1220,11 @@
       return;
     }
   }
-  function closeDialog(){
+  function closeDialog(options={}){
+    const syncHistory=options?.syncHistory!==false;
     if(!dialog?.open)return;
     dialog.classList.add('is-closing');
-    const finish=()=>{dialog.classList.remove('is-closing');dialog.close();setDialogOpenState(false);safeText(dialogStatus,ui("details-closed-8df67313"));rootInvoker?.focus();detailStack.length=0;rootInvoker=null;currentInvoker=null;currentDetail=null;const url=new URL(window.location.href);url.searchParams.delete('case');url.searchParams.delete('initiative');url.searchParams.delete('stage');history.replaceState({},'',url);updateCloseControl()};
+    const finish=()=>{dialog.classList.remove('is-closing');dialog.close();setDialogOpenState(false);safeText(dialogStatus,ui("details-closed-8df67313"));rootInvoker?.focus();detailStack.length=0;rootInvoker=null;currentInvoker=null;currentDetail=null;if(syncHistory)history.replaceState({},'',workIndexUrl());updateCloseControl()};
     if(prefersReduced.matches)finish();else window.setTimeout(finish,140);
   }
   dialogClose?.addEventListener('click',closeDialog);
@@ -2648,7 +2666,13 @@
     const initiative=event.target.closest('[data-initiative]');
     if(initiative){event.preventDefault();openInitiative(initiative.dataset.parentProject||'voucher',initiative.dataset.initiative,initiative);return}
     const project=event.target.closest('[data-project]');
-    if(project){event.preventDefault();openDetail('project',project.dataset.project,project);return}
+    if(project){
+      event.preventDefault();
+      const key=canonicalProjectId(project.dataset.project);
+      openDetail('project',key,project);
+      history.pushState({detail:{type:'project',key}},'',canonicalProjectUrl(key));
+      return;
+    }
     const experiment=event.target.closest('[data-experiment]');
     if(experiment){event.preventDefault();openDetail('experiment',experiment.dataset.experiment,experiment)}
   });
@@ -2662,14 +2686,14 @@
     const url=new URL(window.location.href);url.searchParams.set('case',parentKey);url.searchParams.set('initiative',key);
     history.pushState({detail:{type:'initiative',key,parentKey}},'',url);
   }
-  const requestedDeepLinkedCase=new URLSearchParams(window.location.search).get('case');
+  const requestedDeepLinkedCase=new URLSearchParams(window.location.search).get('case')||projectIdFromPath();
   const deepLinkedCase=canonicalProjectId(requestedDeepLinkedCase);
   const deepLinkedInitiative=new URLSearchParams(window.location.search).get('initiative');
   const deepLinkedStage=new URLSearchParams(window.location.search).get('stage');
   if(deepLinkedCase&&DATA.projects[deepLinkedCase]){
     if(requestedDeepLinkedCase!==deepLinkedCase){
       const canonicalUrl=new URL(window.location.href);
-      canonicalUrl.searchParams.set('case',deepLinkedCase);
+      canonicalProjectUrl(deepLinkedCase,canonicalUrl);
       history.replaceState({detail:{type:'project',key:deepLinkedCase}},'',canonicalUrl);
     }
     window.requestAnimationFrame(()=>{
@@ -2684,14 +2708,23 @@
     });
   }
   window.addEventListener('popstate',()=>{
-    if(!dialog?.open)return;
     const params=new URLSearchParams(window.location.search);
-    const parent=canonicalProjectId(params.get('case')||'voucher');
+    const requestedParent=params.get('case')||projectIdFromPath();
+    const parent=canonicalProjectId(requestedParent);
+    if(!parent||!DATA.projects[parent]){
+      if(dialog?.open)closeDialog({syncHistory:false});
+      return;
+    }
+    if(!dialog?.open){
+      openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`));
+      return;
+    }
     const initiative=params.get('initiative');
     const stage=params.get('stage');
     if(stage&&(currentDetail?.type!=='stage'||currentDetail.key!==stage))openDetail('stage',stage,currentInvoker,parent);
     else if(initiative&&currentDetail?.type!=='initiative')openDetail('initiative',initiative,currentInvoker,parent);
     else if(!stage&&!initiative&&(currentDetail?.type==='initiative'||currentDetail?.type==='stage')){suppressHistorySync=true;returnToPreviousDetail();suppressHistorySync=false}
+    else if(!stage&&!initiative&&(currentDetail?.type!=='project'||currentDetail.key!==parent))openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`));
   });
   doc.addEventListener('keydown',event=>{if(!dialog?.open)return;if(event.key==='ArrowLeft'){event.preventDefault();doc.getElementById('galleryPrev').click()}if(event.key==='ArrowRight'){event.preventDefault();doc.getElementById('galleryNext').click()}});
   doc.querySelectorAll('img').forEach(image=>{
