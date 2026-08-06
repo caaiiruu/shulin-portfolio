@@ -155,8 +155,30 @@ const publicExplorations = [...Object.values(content.sideProjects || {}), ...Obj
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r42" || Object.keys(assetManifest.items || {}).length !== 250) {
-  throw new Error("The active Asset Manifest must be r42 with 250 records");
+if (assetManifest.packageVersion !== "r43" || assetManifest.contentVersion !== "2026-08-06-r146") {
+  throw new Error("The active Asset Manifest must be r43 aligned to Content r146");
+}
+const derivedVisualSlots = [];
+function deriveVisualSlots(value, projectId, location = []) {
+  if (Array.isArray(value)) return value.forEach((entry, index) => deriveVisualSlots(entry, projectId, [...location, index]));
+  if (!value || typeof value !== "object") return;
+  for (const [key, child] of Object.entries(value)) {
+    const next = [...location, key];
+    if ((key === "assetId" || key === "publicAssetId") && typeof child === "string") {
+      derivedVisualSlots.push({ projectId, slotId: next.join("."), assetId: child });
+    } else if (key !== "sourceArchives") deriveVisualSlots(child, projectId, next);
+  }
+}
+for (const [projectId, project] of Object.entries(content.projects)) deriveVisualSlots(project, projectId);
+if (derivedVisualSlots.length !== 31 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 30) {
+  throw new Error("Content must derive exactly 31 runtime visual slots and 30 unique asset IDs");
+}
+for (const slot of derivedVisualSlots) {
+  const record = assetManifest.items?.[slot.assetId];
+  const fallback = assetManifest.items?.[record?.placeholderFallbackAssetId];
+  if (!record || (record.assetStatus !== "production" && !fallback?.publicPath?.startsWith("/site/"))) {
+    throw new Error(`Derived visual slot cannot resolve safely: ${slot.projectId}/${slot.slotId}`);
+  }
 }
 
 function fingerprint(contents) {

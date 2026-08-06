@@ -84,14 +84,18 @@
     const company=typeof p.company==='string'?[p.company,p.company]:pair(p.company);
     const domain=pair(p.domain);
     const problemTypes=p.problemTypes?.en||[];const problemTypesZh=p.problemTypes?.zh||[];
-    const decisions=decisionList(p.decisionNarrative?.primaryDecisions).map(adaptDecision);
+    const decisions=decisionList(p.decisionNarrative?.primaryDecisions).map(item=>{
+      const decision=adaptDecision(item);
+      const evidence=p.decisionEvidenceMap?.[decision.id];
+      return {...decision,evidenceAssetId:evidence?.publicAssetId||null};
+    });
     const gallery=id==='payment'?[
-      {title:['Self-checkout entry','自助結帳入口'],text:['Responsive evidence with a reserved aspect ratio and deferred loading.','保留固定比例並延後載入的 Responsive evidence。'],src:'/site/assets/validation/payment/validation-payment-sco-entry-final-r77.jpg',alt:['The self-checkout loyalty and discount screen with a FairPrice app payment entry.','Self-checkout 會員與折扣畫面中的 FairPrice App 支付入口。']},
-      {title:['Operational transaction review','營運交易檢視'],text:['A representative internal payment-operations view.','代表性的內部 Payment operations 畫面。'],src:'/site/assets/validation/payment/validation-payment-internal-portal-list-r77.jpg',alt:['An internal payment transaction review list.','內部 Payment transaction review 清單。']},
+      {assetId:'payment-evidence-sco-entry-public-v2',title:['Self-checkout entry','自助結帳入口'],text:['Responsive evidence with a reserved aspect ratio and deferred loading.','保留固定比例並延後載入的 Responsive evidence。'],src:'/site/assets/validation/payment/validation-payment-sco-entry-final-r77.jpg',alt:['The self-checkout loyalty and discount screen with a FairPrice app payment entry.','Self-checkout 會員與折扣畫面中的 FairPrice App 支付入口。']},
+      {assetId:'payment-evidence-operational-recovery-public-v2',title:['Operational transaction review','營運交易檢視'],text:['A representative internal payment-operations view.','代表性的內部 Payment operations 畫面。'],src:'/site/assets/validation/payment/validation-payment-internal-portal-list-r77.jpg',alt:['An internal payment transaction review list.','內部 Payment transaction review 清單。']},
       ...['01','02','03','04','05'].map((step,index)=>({title:[`Refund state ${index+1}`,`退款狀態 ${index+1}`],text:['A deferred-loading state from the cross-channel refund flow.','跨通路退款流程中延後載入的狀態畫面。'],src:`/site/assets/validation/payment/validation-payment-refund-state-${step}-r77.jpg`,alt:[`Refund flow state ${index+1}.`,`退款流程狀態 ${index+1}。`]})),
       {title:['Payment receipt','付款收據'],text:['Supporting customer communication loaded only with this evidence section.','僅在此證據區塊載入的顧客溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-receipt-email-mobile-r77.jpg',alt:['Mobile payment receipt email.','Mobile 付款收據 Email。']},
       {title:['Refund receipt','退款收據'],text:['Supporting refund communication loaded only with this evidence section.','僅在此證據區塊載入的退款溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-refund-email-mobile-r77.jpg',alt:['Mobile refund receipt email.','Mobile 退款收據 Email。']},
-      {title:['Order-details interaction','訂單詳情互動'],text:['Poster-first video; media mounts only on demand.','Poster-first 影片；媒體僅在需要時掛載。'],poster:'/site/assets/validation/payment/validation-payment-video-order-details-poster-r77.png',video:'/site/assets/validation/payment/validation-payment-video-order-details-r77.mov',alt:['Order details interaction preview.','Order details 互動預覽。']}
+      {assetId:'payment-video-core-app-pos-public-v1',title:['Order-details interaction','訂單詳情互動'],text:['Poster-first video; media mounts only on demand.','Poster-first 影片；媒體僅在需要時掛載。'],poster:'/site/assets/validation/payment/validation-payment-video-order-details-poster-r77.png',video:'/site/assets/validation/payment/validation-payment-video-order-details-r77.mov',alt:['Order details interaction preview.','Order details 互動預覽。']}
     ]:[[title[0],atGlance[0],title[1],atGlance[1]]];
     const status=String(p.status||p.publicStatus||p.contentStatus||'');
     const confidentiality=pair(
@@ -214,6 +218,24 @@
     };
   }
   const DATA=adaptContent(window.PORTFOLIO_DATA||{});
+  const ASSET_MANIFEST=window.PORTFOLIO_ASSET_MANIFEST?.items||{};
+  function resolveProjectAsset(assetId){
+    if(!assetId)return null;
+    const record=ASSET_MANIFEST[assetId];
+    if(!record)throw new Error(`Asset governance: unknown runtime asset ${assetId}`);
+    if(record.assetStatus==='production'&&record.implementationStatus==='real-active'){
+      const src=record.productionUrl||record.publicPath;
+      if(!src||!src.startsWith('/site/'))throw new Error(`Asset governance: invalid public production path for ${assetId}`);
+      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||'']};
+    }
+    if(record.assetStatus==='awaiting-user-asset'&&record.placeholderFallbackAssetId){
+      const fallback=ASSET_MANIFEST[record.placeholderFallbackAssetId];
+      if(!fallback?.publicPath?.startsWith('/site/'))throw new Error(`Asset governance: invalid placeholder fallback for ${assetId}`);
+      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。']};
+    }
+    throw new Error(`Asset governance: public runtime asset has no real file or placeholder: ${assetId}`);
+  }
+  window.resolveProjectAsset=resolveProjectAsset;
   function canonicalProjectId(projectId){
     const alias=DATA.projectAliasRegistry?.[projectId];
     return alias?.routePolicy==='permanent-redirect'&&DATA.projects[alias.canonicalProjectId]
@@ -1192,12 +1214,26 @@
   dialog?.addEventListener('click',event=>{if(event.target===dialog)closeDialog()});
   dialog?.addEventListener('cancel',event=>{event.preventDefault();closeDialog()});
 
-  function renderArtifact(labels){
+  function renderArtifact(labels,assetId=''){
     const art=doc.getElementById('galleryArt');clear(art);
+    const resolved=assetId?resolveProjectAsset(assetId):null;
+    if(resolved){
+      const image=doc.createElement('img');
+      image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
+      image.sizes='(max-width: 720px) 92vw, 56vw';
+      if(resolved.isPlaceholder){image.dataset.assetStatus='placeholder-active';image.setAttribute('aria-label',localize(resolved.alt));}
+      art.append(image);return;
+    }
     appendArtifactContents(art,labels);
   }
   function renderGalleryMedia(item){
     const art=doc.getElementById('galleryArt');clear(art);
+    const resolved=item.assetId?resolveProjectAsset(item.assetId):null;
+    if(resolved){
+      const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
+      if(resolved.isPlaceholder){image.dataset.assetStatus='placeholder-active';image.setAttribute('aria-label',localize(resolved.alt));}
+      art.append(image);return;
+    }
     if(item.video){
       const video=doc.createElement('video');
       video.className='portfolio-media portfolio-media--video';
@@ -1279,7 +1315,7 @@
       }else{
         safeText(doc.getElementById('galleryTitle'),localize([item[0],item[2]]));
         safeText(doc.getElementById('galleryText'),localize([item[1],item[3]]));
-        renderArtifact(projectArtifactLabels(key));
+        renderArtifact(projectArtifactLabels(key),data.hero_visual_brief?.assetId);
       }
     }else{
       safeText(doc.getElementById('galleryTitle'),localize(item[0]));
@@ -1918,7 +1954,12 @@
     if(showVisual&&projectKey){
       const visual=element('figure','decision-visual-v58');
       const visualArt=element('div','decision-visual-v67__crop');
-      appendArtifactContents(visualArt,projectArtifactLabels(projectKey));
+      const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
+      if(resolved){
+        const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
+        if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
+        visualArt.append(image);
+      }else appendArtifactContents(visualArt,projectArtifactLabels(projectKey));
       visual.append(
         element('span','decision-visual-v58__eyebrow',`${ui("related-visual-5a70e92c")} ${String(index+1).padStart(2,'0')}`),
         visualArt,
