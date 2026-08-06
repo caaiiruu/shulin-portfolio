@@ -266,11 +266,22 @@ jobs:
           node --check "$app"
           node --check "$home"
           node - <<'NODE'
-          const fs=require('fs'),assert=require('assert/strict');
-          const data=JSON.parse(fs.readFileSync(process.env.CONTENT_PATH,'utf8'));
-          const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
-          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
-          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
+          const fs = require('fs');
+          const assert = require('assert/strict');
+
+          const data = JSON.parse(
+            fs.readFileSync(process.env.CONTENT_PATH, 'utf8')
+          );
+
+          const app = fs.readFileSync(
+            'public/site/assets/js/app.js',
+            'utf8'
+          );
+
+          const home = fs.readFileSync(
+            'public/site/assets/js/home.js',
+            'utf8'
+          );
           for(const s of ['related-project-card__company-v135','localize(project.company)','localize(project.domain_label)','2026-08-06-r146','adaptContent','canonicalProjectId','projectAliasRegistry']) assert.ok(app.includes(s),s);
           assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
           assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
@@ -321,6 +332,10 @@ jobs:
           const fs=require('fs'),assert=require('assert/strict'),crypto=require('crypto');
           const data=JSON.parse(fs.readFileSync(process.env.CONTENT_PATH,'utf8'));
           const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          const home = fs.readFileSync(
+            'public/site/assets/js/home.js',
+            'utf8'
+          );
           assert.equal(data.contentVersion,'2026-08-06-r146');
           assert.equal(Object.keys(data.projects).length,13);
           for(const [id,p] of Object.entries(data.projects)){assert.equal(p.id,id);assert.ok(p.searchIndexV2,`${id} search projection`);}
