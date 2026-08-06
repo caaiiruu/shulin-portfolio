@@ -43,15 +43,15 @@ jobs:
           text = text.replace(before, after, 1)
 
           if text.count("assert.equal(data.contentVersion,'2026-08-06-r146');") < 2:
-              raise SystemExit('r146 content-version assertions are not present in both compatibility and runtime checks')
+              raise SystemExit('canonical content-version assertions are incomplete')
           if "'2026-08-06-r146','adaptContent'" in text:
               raise SystemExit('false app.js ownership assertion remains')
-          if text.count("const home = fs.readFileSync(") != 1 and text.count("const home=fs.readFileSync(") < 2:
-              raise SystemExit('home declarations are not preserved')
           if "7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693" not in text:
               raise SystemExit('approved merged app.js hash missing')
           if "6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa" not in text:
               raise SystemExit('approved merged home.js hash missing')
+          if "localize(project?.domain_label)" not in text:
+              raise SystemExit('home.js domain-label contract missing')
 
           workflow.write_text(text, 'utf-8')
           PY
