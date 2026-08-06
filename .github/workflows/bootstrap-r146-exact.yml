@@ -282,7 +282,21 @@ jobs:
             'public/site/assets/js/home.js',
             'utf8'
           );
-          for(const s of ['related-project-card__company-v135','localize(project.company)','localize(project.domain_label)','2026-08-06-r146','adaptContent','canonicalProjectId','projectAliasRegistry']) assert.ok(app.includes(s),s);
+          assert.equal(
+            data.contentVersion,
+            '2026-08-06-r146'
+          );
+
+          for(const s of [
+            'related-project-card__company-v135',
+            'localize(project.company)',
+            'localize(project.domain_label)',
+            'adaptContent',
+            'canonicalProjectId',
+            'projectAliasRegistry'
+          ]) {
+            assert.ok(app.includes(s),s);
+          }
           assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
           assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
           assert.ok(!app.includes("contentVersion === '2026-08-03-r108'")&&!app.includes('contentVersion === "2026-08-03-r108"'));
@@ -346,7 +360,6 @@ jobs:
           assert.equal(projected.length,13);assert.equal(new Set(projected).size,13);
           assert.ok(data.sourceArchives&&!projected.some(id=>Object.hasOwn(data.sourceArchives,id)));
           assert.ok(!app.includes("contentVersion === '2026-08-03-r108'")&&!app.includes('contentVersion === "2026-08-03-r108"'));
-          assert.ok(app.includes('2026-08-06-r146'));
           assert.ok(app.includes('localize(project.company)'));
           assert.ok(app.includes('localize(project.domain_label)'));
           assert.ok(home.includes('localize(project?.company)'));
