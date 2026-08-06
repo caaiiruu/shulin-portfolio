@@ -1127,6 +1127,10 @@ jobs:
             'public/site/assets/js/home.js',
             'utf8'
           );
+          const projectDetailCss=fs.readFileSync(
+            'public/site/assets/css/components/project-detail-overview.css',
+            'utf8'
+          );
           const projectDetailCss=fs.readFileSync('public/site/assets/css/components/project-detail-overview.css','utf8');
           assert.equal(
             data.contentVersion,
@@ -1276,8 +1280,54 @@ jobs:
             'utf8'
           );
           assert.equal(data.contentVersion,'2026-08-06-r146');
-          assert.equal(Object.keys(data.projects).length,13);
-          for(const [id,p] of Object.entries(data.projects)){assert.equal(p.id,id);assert.ok(p.searchIndexV2,`${id} search projection`);}
+          const projectEntries=Object.entries(data.projects);
+          assert.equal(projectEntries.length,13);
+          const projectIds=projectEntries.map(([id])=>id);
+          assert.equal(new Set(projectIds).size,13);
+          const recordsWithLegacyId=[];
+          const recordsWithoutLegacyId=[];
+          let runtimeProjectionMatches=0;
+          for(const [id,p] of projectEntries){
+            assert.equal(typeof id,'string');
+            assert.ok(id.length>0,`${id} canonical project key`);
+            assert.ok(p&&typeof p==='object',`${id} project record`);
+            assert.ok(p.searchIndexV2&&typeof p.searchIndexV2==='object',`${id} search projection`);
+            const sourceProjectionId=p.searchIndexV2.canonicalId??p.searchIndexV2.canonicalProjectId;
+            assert.equal(sourceProjectionId,id,`${id} projection source identity`);
+            runtimeProjectionMatches+=1;
+            if(Object.hasOwn(p,'id')){
+              assert.equal(p.id,id,`${id} optional legacy identity must match canonical key`);
+              recordsWithLegacyId.push(id);
+            }else{
+              recordsWithoutLegacyId.push(id);
+            }
+          }
+          assert.deepEqual(recordsWithoutLegacyId.sort(),['booking','dbs','voucher','voucher-center']);
+          assert.equal(recordsWithLegacyId.length,9);
+          const appCompact=app.replace(/\s+/g,'');
+          assert.ok(
+            appCompact.includes('Object.fromEntries(Object.entries(raw.projects||{}).map(([id,p])=>'),
+            'adaptContent must preserve Object.entries project keys'
+          );
+          assert.ok(
+            appCompact.includes('searchIndexV2={...searchIndex,canonicalId:id,'),
+            'Runtime canonicalId must come from the entry key'
+          );
+          assert.ok(
+            appCompact.includes('Object.entries(DATA.projects).map(([key,item])=>')&&
+            appCompact.includes('DATA.projects[key]'),
+            'search projection must resolve canonical project keys'
+          );
+          assert.ok(
+            appCompact.includes("openDetail('project',key)")&&
+            appCompact.includes('source=DATA.projects[key]'),
+            'detail route lookup must resolve canonical project keys'
+          );
+          assert.ok(
+            appCompact.includes('DATA.projects[alias.canonicalProjectId]'),
+            'route aliases must resolve to canonical project keys'
+          );
+          assert.equal(runtimeProjectionMatches,13);
           assert.ok(data.projects['booking-taxi-pickup-service-strategy']);
           assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].canonicalProjectId,'taishin-p2p-marketplace-platform');
           assert.equal(data.projectAliasRegistry['online-auction-payment-platform'].routePolicy,'permanent-redirect');
