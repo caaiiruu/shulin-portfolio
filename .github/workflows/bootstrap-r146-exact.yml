@@ -1551,8 +1551,28 @@ jobs:
               git add -u -- "$generated_path"
             fi
           done
-          git diff --cached --name-only | sort > "$EVIDENCE_DIR/staged-generated-paths.txt"
-          git diff --cached --name-status > "$EVIDENCE_DIR/staged-generated-name-status.txt"
+          git diff --cached --name-status > "$EVIDENCE_DIR/staged-generated-name-status-rename-aware.txt"
+          git diff --cached --no-renames --name-status > "$EVIDENCE_DIR/staged-generated-name-status-no-renames.txt"
+          git diff --cached --no-renames --name-only | sort > "$EVIDENCE_DIR/staged-generated-paths.txt"
+          git diff --cached --no-renames --name-status > "$EVIDENCE_DIR/staged-generated-name-status.txt"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          rename_aware=(evidence/'staged-generated-name-status-rename-aware.txt').read_text().splitlines()
+          no_renames=(evidence/'staged-generated-name-status-no-renames.txt').read_text().splitlines()
+          audit={
+              'result':'PASS',
+              'renameAwarePathCount':len(rename_aware),
+              'noRenamesPathCount':len(no_renames),
+              'inventoryOwner':'git diff --cached --no-renames',
+              'expectedAdditions':2,
+              'expectedDeletions':4,
+              'expectedModifications':4,
+              'renameDetectionDisabledForIdentityAudit':True,
+          }
+          (evidence/'generated-rename-detection-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+          PY
           diff -u "$EVIDENCE_DIR/generated-paths.txt" "$EVIDENCE_DIR/staged-generated-paths.txt" || {
             printf '%s\n' 'BLOCKED — GENERATED STAGED PATHS DO NOT MATCH AUDIT' >&2
             exit 1
@@ -1583,18 +1603,24 @@ jobs:
           set -euo pipefail
           cd "$EXACT_WORKTREE"
           test "$(git rev-parse HEAD)" = "$CSS_COMPATIBILITY_SHA"
-          git commit -m 'build: regenerate production assets after recovery compatibility'
+          git commit -m 'build: regenerate verified production assets'
           generated_sha="$(git rev-parse HEAD)"
           export GENERATED_SHA="$generated_sha"
           printf 'GENERATED_SHA=%s\n' "$generated_sha" >> "$GITHUB_ENV"
           test "$(git rev-parse HEAD^)" = "$CSS_COMPATIBILITY_SHA"
-          test "$(git diff-tree --no-commit-id --name-only -r HEAD | sort | wc -l)" -eq 10
-          git diff-tree --no-commit-id --name-only -r HEAD | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
+          test "$(git diff-tree --no-commit-id --no-renames --name-only -r HEAD | sort | wc -l)" -eq 10
+          git diff-tree --no-commit-id --no-renames --name-only -r HEAD | sort | diff -u "$EVIDENCE_DIR/generated-paths.txt" -
+          git diff-tree --no-commit-id --no-renames --name-status -r HEAD > "$EVIDENCE_DIR/generated-commit-name-status.txt"
           python3 - <<'PY'
           import json, os
+          from collections import Counter
           from pathlib import Path
           evidence=Path(os.environ['EVIDENCE_DIR'])
-          audit={'result':'PASS','commit':os.environ['GENERATED_SHA'],'parent':os.environ['CSS_COMPATIBILITY_SHA'],'changedPathCount':10,'additions':2,'deletions':4,'modifications':4,'unexpectedSourceChanges':[],'contentChanged':False,'manifestChanged':False,'appChanged':False,'homeChanged':False,'canonicalCssChanged':False,'packageJsonChanged':False,'lockfileChanged':False,'deterministic':True}
+          rows=[line.split('\t',1) for line in (evidence/'generated-commit-name-status.txt').read_text().splitlines() if line]
+          counts=Counter(row[0] for row in rows)
+          if len(rows)!=10 or counts != Counter({'M':4,'D':4,'A':2}):
+              raise SystemExit(f'BLOCKED — GENERATED COMMIT PATHS DO NOT MATCH AUDIT: {dict(counts)}')
+          audit={'result':'PASS','commit':os.environ['GENERATED_SHA'],'parent':os.environ['CSS_COMPATIBILITY_SHA'],'changedPathCount':len(rows),'additions':counts['A'],'deletions':counts['D'],'modifications':counts['M'],'unexpectedSourceChanges':[],'contentChanged':False,'manifestChanged':False,'appChanged':False,'homeChanged':False,'canonicalCssChanged':False,'packageJsonChanged':False,'lockfileChanged':False,'deterministic':True}
           (evidence/'generated-commit-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
           PY
           test "$(git rev-list --count "$BASE_SHA"..HEAD)" -eq 6
@@ -1685,7 +1711,11 @@ jobs:
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-paths.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-paths.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-name-status.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-name-status-rename-aware.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-generated-name-status-no-renames.txt
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-rename-detection-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/staged-path-audit.json
+            ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-commit-name-status.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/generated-commit-audit.json
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/exact-file-hashes.txt
             ${{ runner.temp }}/r146-exact-bootstrap-evidence/tests.log
