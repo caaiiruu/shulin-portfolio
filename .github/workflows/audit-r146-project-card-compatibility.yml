@@ -1,0 +1,217 @@
+name: Audit r146 ProjectCard compatibility
+
+on:
+  push:
+    branches:
+      - recovery/bootstrap-r146-exact-2026-08-06
+    paths:
+      - .github/workflows/audit-r146-project-card-compatibility.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit-project-card-compatibility:
+    runs-on: ubuntu-latest
+    env:
+      BASE_SHA: 6fb96ba299789374ad5356d109e10c2d496d8041
+    steps:
+      - name: Checkout bootstrap repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Initialize audit directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'AUDIT_ROOT=%s\n' "$RUNNER_TEMP/r146-project-card-audit" >> "$GITHUB_ENV"
+          printf 'PAYLOAD_DIR=%s\n' "$RUNNER_TEMP/r146-project-card-audit/payload" >> "$GITHUB_ENV"
+          printf 'OUTPUT_DIR=%s\n' "$RUNNER_TEMP/r146-project-card-audit/output" >> "$GITHUB_ENV"
+          printf 'MERGED_DIR=%s\n' "$RUNNER_TEMP/r146-project-card-audit/merged" >> "$GITHUB_ENV"
+
+      - name: Verify and reconstruct immutable payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$PAYLOAD_DIR" "$OUTPUT_DIR" "$MERGED_DIR"
+          python3 - <<'PY'
+          import base64, hashlib, json, os, zipfile
+          from pathlib import Path, PurePosixPath
+
+          source=Path('.recovery/r146-exact-payload')
+          payload=Path(os.environ['PAYLOAD_DIR'])
+          manifest=json.loads((source/'payload-manifest.json').read_text('utf-8'))
+          expected=[f'chunk-{i:04d}.b64' for i in range(12)]
+          chunks=manifest['chunks']
+          if manifest['chunkCount'] != 12 or [x['filename'] for x in chunks] != expected:
+              raise SystemExit('12-chunk manifest contract failed')
+          parts=[]
+          for item in chunks:
+              raw=(source/item['filename']).read_bytes()
+              if hashlib.sha256(raw).hexdigest()!=item['sha256'] or len(raw)!=item['characterCount']:
+                  raise SystemExit(f'chunk verification failed: {item["filename"]}')
+              parts.append(raw)
+          encoded=b''.join(parts)
+          if len(encoded)!=manifest['base64CharacterCount']:
+              raise SystemExit('base64 character count mismatch')
+          archive=base64.b64decode(encoded,validate=True)
+          if len(archive)!=manifest['archiveByteSize'] or hashlib.sha256(archive).hexdigest()!=manifest['archiveSha256']:
+              raise SystemExit('archive verification failed')
+          archive_path=Path(os.environ['AUDIT_ROOT'])/manifest['archiveFilename']
+          archive_path.write_bytes(archive)
+          with zipfile.ZipFile(archive_path) as zf:
+              for info in zf.infolist():
+                  p=PurePosixPath(info.filename)
+                  if p.is_absolute() or '..' in p.parts:
+                      raise SystemExit(f'unsafe archive path: {info.filename}')
+              zf.extractall(payload)
+          checked=[]
+          for item in manifest['files']:
+              p=payload/item['path']
+              digest=hashlib.sha256(p.read_bytes()).hexdigest()
+              if digest!=item['sha256']:
+                  raise SystemExit(f'extracted hash mismatch: {item["path"]}')
+              checked.append(item['path'])
+          if len(checked)!=8:
+              raise SystemExit('8/8 extracted file verification failed')
+          PY
+
+      - name: Audit ProjectCard compatibility and create candidate patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git show "$BASE_SHA:public/site/assets/js/app.js" > "$AUDIT_ROOT/base-app.js"
+          git show "$BASE_SHA:public/site/assets/js/home.js" > "$AUDIT_ROOT/base-home.js"
+          git show "$BASE_SHA:public/site/qa/design-system-lint.mjs" > "$AUDIT_ROOT/design-system-lint.mjs"
+          git show "$BASE_SHA:scripts/build-production-assets.mjs" > "$AUDIT_ROOT/build-production-assets.mjs"
+          python3 - <<'PY'
+          import difflib, hashlib, json, os, re, shutil, subprocess
+          from pathlib import Path
+
+          root=Path(os.environ['AUDIT_ROOT']); out=Path(os.environ['OUTPUT_DIR']); merged=Path(os.environ['MERGED_DIR']); payload=Path(os.environ['PAYLOAD_DIR'])
+          paths={'app.js':'public/site/assets/js/app.js','home.js':'public/site/assets/js/home.js'}
+          base={'app.js':(root/'base-app.js').read_text('utf-8'),'home.js':(root/'base-home.js').read_text('utf-8')}
+          snap={name:(payload/path).read_text('utf-8') for name,path in paths.items()}
+
+          anchors={
+            'app.js':['related-project-card__company-v135','localize(project.company)','localize(project.domain_label)','related-project-card__context','const appendProject=','function createWorkCard','function relatedCard'],
+            'home.js':['function projectBrand','function projectContext','function createProjectCard','localize(project?.company)','localize(project?.domain_label)','localize([p.context,p.context_zh])']}
+          def owner(lines,i):
+              for j in range(i,-1,-1):
+                  m=re.search(r'(?:function\s+([\w$]+)|const\s+([\w$]+)\s*=)',lines[j])
+                  if m:return m.group(1) or m.group(2)
+              return '<module>'
+          def excerpts(text,needles):
+              lines=text.splitlines(); blocks=[]; seen=set()
+              for needle in needles:
+                  for i,line in enumerate(lines):
+                      if needle in line:
+                          key=(max(0,i-5),min(len(lines),i+6))
+                          if key in seen:continue
+                          seen.add(key); blocks.append(f'### {needle} | owner={owner(lines,i)} | line={i+1}\n'+ '\n'.join(f'{n+1:5d}: {lines[n]}' for n in range(*key)))
+              return '\n\n'.join(blocks)+'\n'
+          for name in paths:
+              (out/f'base-{name[:-3]}-project-card-excerpts.txt').write_text(excerpts(base[name],anchors[name]))
+              (out/f'snapshot-{name[:-3]}-project-card-excerpts.txt').write_text(excerpts(snap[name],anchors[name]))
+              diff=''.join(difflib.unified_diff(base[name].splitlines(True),snap[name].splitlines(True),fromfile=f'base/{paths[name]}',tofile=f'snapshot/{paths[name]}'))
+              (out/f'{name[:-3]}-project-card.diff').write_text(diff)
+
+          failures=[
+            'ProjectCard: Work cards must reuse the homepage company-first metadata hierarchy',
+            'ProjectCard: related cards must render company first and domain second from SSOT'
+          ]
+          audit={
+            'exactContractFailures':failures,
+            'baseContracts':{
+              'appCompanyFirst':"related-project-card__company-v135',localize(project.company)" in base['app.js'],
+              'appDomainSecond':'localize(project.domain_label)' in base['app.js'],
+              'homeCompanySSOT':'localize(project?.company)' in base['home.js'],
+              'homeDomainSSOT':'localize(project?.domain_label)' in base['home.js'],
+              'homeLegacyContextAbsent':'localize([p.context,p.context_zh])' not in base['home.js']},
+            'snapshotContracts':{
+              'appCompanyFirst':"related-project-card__company-v135',localize(project.company)" in snap['app.js'],
+              'appDomainSecond':'localize(project.domain_label)' in snap['app.js'],
+              'homeCompanySSOT':'localize(project?.company)' in snap['home.js'],
+              'homeDomainSSOT':'localize(project?.domain_label)' in snap['home.js'],
+              'homeLegacyContextAbsent':'localize([p.context,p.context_zh])' not in snap['home.js']}}
+          (out/'project-card-contract-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+
+          app=snap['app.js']; home=snap['home.js']
+          app_replacements=[
+            ("if(project.domain)top.append(element('span','related-project-card__context',localize(project.domain)));","if(project.domain_label)top.append(element('span','related-project-card__context',localize(project.domain_label)));",'appendProject'),
+            ("const domain=localize(project.domain);","const domain=localize(project.domain_label);",'createWorkCard')]
+          home_replacements=[("return localize(project?.domain)||''","return localize(project?.domain_label)||''",'projectContext')]
+          selected=[]
+          for before,after,own in app_replacements:
+              if app.count(before)!=1: raise SystemExit(f'candidate app replacement is not singular: {own}')
+              app=app.replace(before,after); selected.append({'file':paths['app.js'],'owner':own,'baseExcerpt':after,'snapshotExcerpt':before,'classification':'GitHub base ProjectCard design contract','decision':'manual merge','reason':'Restore company-first/domain-second SSOT metadata without replacing r146 reader logic.','risk':'Low; one metadata field lookup changes.'})
+          for before,after,own in home_replacements:
+              if home.count(before)!=1: raise SystemExit(f'candidate home replacement is not singular: {own}')
+              home=home.replace(before,after); selected.append({'file':paths['home.js'],'owner':own,'baseExcerpt':after,'snapshotExcerpt':before,'classification':'GitHub base ProjectCard design contract','decision':'manual merge','reason':'Restore domain_label SSOT lookup while preserving r146 card copy readers.','risk':'Low; one metadata field lookup changes.'})
+          (merged/'app.js').write_text(app); (merged/'home.js').write_text(home)
+
+          content=json.loads((payload/'public/site/content/portfolio-content.json').read_text('utf-8'))
+          projects=content.get('projects',{})
+          aliases=content.get('projectAliasRegistry',{})
+          archives=content.get('sourceArchives',{})
+          preserved=[
+            {'contract':'contentVersion r146 guard','preserved':content.get('contentVersion')=='2026-08-06-r146' and 'function adaptContent(raw)' in app},
+            {'contract':'r108-only guard absent','preserved':"contentVersion === '2026-08-03-r108'" not in app and 'contentVersion === "2026-08-03-r108"' not in app},
+            {'contract':'13 project projection','preserved':len(projects)==13 and 'Object.entries(raw.projects||{})' in app and 'searchIndexV2' in app},
+            {'contract':'Booking Taxi route','preserved':'booking-taxi-pickup-service-strategy' in projects and 'function canonicalProjectId(projectId)' in app},
+            {'contract':'Online Auction alias','preserved':aliases.get('online-auction-payment-platform',{}).get('canonicalProjectId')=='taishin-p2p-marketplace-platform' and 'DATA.projectAliasRegistry?.[projectId]' in app},
+            {'contract':'sourceArchives search exclusion','preserved':bool(archives) and 'Object.entries({...(raw.experiments||{}),...(raw.sideProjects||{})})' in app and not set(archives).intersection(projects)},
+            {'contract':'r146 schema adaptation','preserved':'function adaptProject(id,p,raw)' in app and 'title_pair' in app+home},
+            {'contract':'Runtime navigation and popup logic','preserved':'function renderProject' in app and 'function relatedCard' in app}]
+          contract={
+            'appCompanyFirst':"related-project-card__company-v135',localize(project.company)" in app,
+            'appDomainSecond':'localize(project.domain_label)' in app,
+            'appR146Guard':content.get('contentVersion')=='2026-08-06-r146' and 'function adaptContent(raw)' in app,
+            'appR108OnlyGuardAbsent':"contentVersion === '2026-08-03-r108'" not in app,
+            'homeProjectCompanySSOT':'localize(project?.company)' in home,
+            'homeProjectDomainSSOT':'localize(project?.domain_label)' in home,
+            'homeLegacyContextAbsent':'localize([p.context,p.context_zh])' not in home}
+          if not all(contract.values()) or not all(x['preserved'] for x in preserved): raise SystemExit('candidate static contract failed')
+
+          def changed_stats(old,new):
+              sm=difflib.SequenceMatcher(a=old,b=new); changed_bytes=sum(max(i2-i1,j2-j1) for tag,i1,i2,j1,j2 in sm.get_opcodes() if tag!='equal')
+              ud=list(difflib.unified_diff(old.splitlines(),new.splitlines(),n=0)); changed_lines=sum(1 for x in ud if (x.startswith('+') or x.startswith('-')) and not x.startswith(('+++','---')))
+              return {'changedLineCount':changed_lines,'changedByteCount':changed_bytes}
+          stats={'app.js':changed_stats(snap['app.js'],app),'home.js':changed_stats(snap['home.js'],home),'changedFunctionCount':len({x['owner'] for x in selected})}
+          allowed={'appendProject','createWorkCard','projectContext'}
+          broad=any(x['owner'] not in allowed for x in selected)
+          classification={'selectedHunks':selected,'preservedR146Hunks':preserved,'categories':[
+            {'classification':'r146 reader migration','decision':'keep snapshot'},
+            {'classification':'GitHub base ProjectCard design contract','decision':'manual merge'},
+            {'classification':'Unrelated GitHub-base UI changes','decision':'keep snapshot'},
+            {'classification':'Generated-output difference','decision':'regenerate by build owner'}], 'scope':stats,'tooBroad':broad}
+          (out/'project-card-diff-classification.json').write_text(json.dumps(classification,indent=2)+'\n')
+          if broad:
+              (out/'audit-summary.md').write_text('# BLOCKED — COMPATIBILITY PATCH TOO BROAD\n')
+              raise SystemExit('BLOCKED — COMPATIBILITY PATCH TOO BROAD')
+
+          patch=''.join(difflib.unified_diff(snap['app.js'].splitlines(True),app.splitlines(True),fromfile='a/'+paths['app.js'],tofile='b/'+paths['app.js']))
+          patch+=''.join(difflib.unified_diff(snap['home.js'].splitlines(True),home.splitlines(True),fromfile='a/'+paths['home.js'],tofile='b/'+paths['home.js']))
+          (out/'project-card-compatibility.patch').write_text(patch)
+          appsha=hashlib.sha256(app.encode()).hexdigest(); homesha=hashlib.sha256(home.encode()).hexdigest()
+          (out/'merged-app-sha256.txt').write_text(appsha+'  '+paths['app.js']+'\n'); (out/'merged-home-sha256.txt').write_text(homesha+'  '+paths['home.js']+'\n')
+          build=(root/'build-production-assets.mjs').read_text('utf-8')
+          generated={'owner':'scripts/build-production-assets.mjs','expectedTypes':['public/site/assets/js/production.<fingerprint>.js','public/site/index.html','public/site/work.html','public/site/experiments.html','public/site/profile.html'],'directPatchForbidden':['public/site/assets/js/production.*.js','public/site/assets/css/production.*.css'],'nextSequence':['apply source patch','npm run build','audit tracked diff allowlist']}
+          plan={'status':'PASS','exactContractFailures':failures,'selectedBaseHunks':selected,'preservedR146Hunks':preserved,'outputSha256':{'app.js':appsha,'home.js':homesha,'patch':hashlib.sha256(patch.encode()).hexdigest()},'expectedSourceChangedPaths':list(paths.values()),'expectedGeneratedBuildOwner':generated,'risks':['domain_label must exist on all 13 canonical project records','generated production filenames and HTML references will change after build'],'recommendation':'Apply only this source patch in Milestone 2.9B3, then run npm run build and audit the tracked allowlist.'}
+          (out/'project-card-compatibility-plan.json').write_text(json.dumps(plan,indent=2)+'\n')
+          summary=f'''# r146 ProjectCard Compatibility Audit\n\nStatus: PASS\n\n- Candidate source functions changed: {stats['changedFunctionCount']}\n- app.js changed lines: {stats['app.js']['changedLineCount']}\n- home.js changed lines: {stats['home.js']['changedLineCount']}\n- r146 contracts preserved: YES\n- Design-system contracts restored: YES\n- Generated output owner: scripts/build-production-assets.mjs\n- Do not patch production.*.js or production.*.css directly.\n- Next: apply the source patch, run npm run build, then inspect the tracked diff allowlist.\n'''
+          (out/'audit-summary.md').write_text(summary)
+          PY
+          node --check "$MERGED_DIR/app.js"
+          node --check "$MERGED_DIR/home.js"
+          test "$(find "$OUTPUT_DIR" -maxdepth 1 -type f | wc -l)" -eq 13
+
+      - name: Upload compatibility audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r146-project-card-compatibility-audit
+          path: ${{ runner.temp }}/r146-project-card-audit/output
+          retention-days: 7
+          if-no-files-found: error
