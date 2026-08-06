@@ -1,0 +1,92 @@
+name: Repair r146 bootstrap assertions
+
+on:
+  push:
+    branches:
+      - recovery/bootstrap-r146-exact-2026-08-06
+    paths:
+      - .github/workflows/repair-r146-bootstrap-assertions.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: r146-bootstrap-assertion-repair
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout bootstrap branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Repair and statically verify assertion heredocs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          workflow = Path('.github/workflows/bootstrap-r146-exact.yml')
+          text = workflow.read_text('utf-8')
+
+          duplicate = """const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
+          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');"""
+          single = """const home=fs.readFileSync('public/site/assets/js/home.js','utf8');"""
+          if text.count(duplicate) != 1:
+              raise SystemExit(f'expected one duplicate home declaration block, found {text.count(duplicate)}')
+          text = text.replace(duplicate, single, 1)
+
+          marker = """const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          assert.equal(data.contentVersion,'2026-08-06-r146');"""
+          replacement = """const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
+          assert.equal(data.contentVersion,'2026-08-06-r146');"""
+          if text.count(marker) != 1:
+              raise SystemExit(f'expected one Runtime assertion insertion marker, found {text.count(marker)}')
+          text = text.replace(marker, replacement, 1)
+
+          if text.count("const home=fs.readFileSync('public/site/assets/js/home.js','utf8');") != 2:
+              raise SystemExit('expected exactly one home declaration in each of two independent Node heredocs')
+          if "const home=fs.readFileSync('public/site/assets/js/home.js','utf8');\n          const home=" in text:
+              raise SystemExit('duplicate home declaration remains')
+          if text.count("localize(project?.domain_label)") < 2:
+              raise SystemExit('approved ProjectCard and Runtime assertion contracts are not preserved')
+          if "7dfbf56f5f61a3ba175d9568501c4586af4bc647e0dff0ae7fdbc60b16e60693" not in text:
+              raise SystemExit('approved merged app.js hash missing')
+          if "6b68abb20c7c0750126e9bf4f85ba71239be330474a9106c653d639fd3cbfbaa" not in text:
+              raise SystemExit('approved merged home.js hash missing')
+
+          workflow.write_text(text, 'utf-8')
+          PY
+
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path('.github/workflows/bootstrap-r146-exact.yml').read_text('utf-8')
+          if text.count("const home=fs.readFileSync('public/site/assets/js/home.js','utf8');") != 2:
+              raise SystemExit('static declaration count failed')
+          if text.count("const app=fs.readFileSync('public/site/assets/js/app.js','utf8');") < 2:
+              raise SystemExit('static app declaration count failed')
+          if "const home=fs.readFileSync('public/site/assets/js/home.js','utf8');\n          const home=" in text:
+              raise SystemExit('duplicate declaration static check failed')
+          if text.count("permissions:\n  contents: write") != 1:
+              raise SystemExit('workflow permission contract changed unexpectedly')
+          PY
+
+          git diff --check
+          test "$(git diff --name-only | wc -l)" -eq 1
+          test "$(git diff --name-only)" = '.github/workflows/bootstrap-r146-exact.yml'
+
+      - name: Commit repaired bootstrap workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'r146 Recovery Bootstrap'
+          git config user.email '63276875+caaiiruu@users.noreply.github.com'
+          git add .github/workflows/bootstrap-r146-exact.yml
+          git commit -m 'ci: fix r146 compatibility assertion scripts'
+          git push origin HEAD:recovery/bootstrap-r146-exact-2026-08-06
