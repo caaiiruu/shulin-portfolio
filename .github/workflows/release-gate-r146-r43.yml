@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 8
+# orchestration revision: 9
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ permissions:
 
 concurrency:
   group: release-gate-r146-r43
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   release-gate:
