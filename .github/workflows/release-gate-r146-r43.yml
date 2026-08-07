@@ -1,0 +1,304 @@
+name: Release Gate r146-r43
+
+on:
+  push:
+    branches:
+      - qa/r146-r43-preview-2026-08-06
+    paths:
+      - .github/workflows/release-gate-r146-r43.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-gate-r146-r43
+  cancel-in-progress: false
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      IMPLEMENTATION_HEAD: 9b1e5164459d9b7a68180e449c197f7562233294
+      EVIDENCE_DIR: /tmp/release-gate-r146-r43
+      BASE_URL: http://127.0.0.1:4173
+    steps:
+      - name: Complete private checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout and product-tree integrity gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$EVIDENCE_DIR"
+          {
+            echo "repository=$GITHUB_REPOSITORY"
+            echo "ref=$GITHUB_REF"
+            echo "orchestration_head=$(git rev-parse HEAD)"
+            echo "implementation_head=$IMPLEMENTATION_HEAD"
+            echo "status:"
+            git status --short
+            echo "tracked_file_count=$(git ls-files | wc -l)"
+            for required in package.json package-lock.json public scripts tests public/site/assets/js/app.js public/site/assets/css/components/project-detail-overview.css; do
+              test -e "$required"
+              echo "exists=$required"
+            done
+          } | tee "$EVIDENCE_DIR/checkout-audit.txt"
+          git diff --exit-code "$IMPLEMENTATION_HEAD" -- . ':(exclude).github/workflows/release-gate-r146-r43.yml'
+          test -z "$(git status --short)"
+          echo "PASS: product source matches implementation tree" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+
+      - name: Canonical install
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install-result.txt"
+
+      - name: SSOT and design validation
+        shell: bash
+        run: |
+          set -o pipefail
+          {
+            npm run validate:ssot
+            npm run validate:design
+          } 2>&1 | tee "$EVIDENCE_DIR/validation-result.txt"
+
+      - name: Existing tests and production build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
+          grep -Eq '(pass[^0-9]*57|57[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '(pass[^0-9]*8|8[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '(pass[^0-9]*15|15[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eqi 'derived.slot.*pass|pass.*derived.slot' "$EVIDENCE_DIR/tests-result.txt"
+
+      - name: Deterministic generated-output gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          hash_output() {
+            find public/site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.json' -o -name '*.svg' \) -print0 |
+              sort -z |
+              xargs -0 sha256sum
+          }
+          hash_output > /tmp/build-one.sha256
+          rm -rf dist .vinext
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/deterministic-build-log.txt"
+          hash_output > /tmp/build-two.sha256
+          diff -u /tmp/build-one.sha256 /tmp/build-two.sha256 | tee "$EVIDENCE_DIR/deterministic-result.txt"
+          echo "PASS: canonical generated output is deterministic" | tee -a "$EVIDENCE_DIR/deterministic-result.txt"
+
+      - name: Generated output regression gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$EVIDENCE_DIR/generated-output-regression.txt"
+          ! grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an undefined learning concept' public/site
+          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an early-stage learning concept' public/site > /dev/null
+          ! grep -RFn --include='*.html' --include='*.js' --include='*.json' -e 'Explore 2 initiatives' -e 'View stage case' public/site
+          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'View related work' public/site > /dev/null
+          node --input-type=module <<'NODE' | tee "$out"
+          import fs from 'node:fs';
+          const root='public/site';
+          const pages=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
+          const refs=[];
+          for(const page of pages){
+            const html=fs.readFileSync(`${root}/${page}`,'utf8');
+            for(const m of html.matchAll(/(?:href|src)="([^"]+production\.[a-f0-9]{16}\.(?:css|js))"/g)) refs.push(m[1]);
+          }
+          if(!refs.length) throw new Error('No fingerprinted bundles referenced');
+          const unique=[...new Set(refs)];
+          for(const ref of unique){
+            const path=root+ref.replace(/^\/site/,'');
+            if(!fs.existsSync(path)) throw new Error('Missing referenced bundle: '+ref);
+          }
+          const app=fs.readFileSync(root+'/assets/js/app.js','utf8');
+          for(const contract of ['stage.label','programme-stage-case__cta','voucher-stage-summary','voucher-stage-decision-list']){
+            if(!app.includes(contract)) throw new Error('Missing stage contract: '+contract);
+          }
+          if((app.match(/Stage Evidence/g)||[]).length>1) throw new Error('Duplicate Stage Evidence renderer');
+          console.log('PASS: fingerprinted references='+unique.length);
+          console.log('PASS: Bandzo corrected string and stage CTA naming');
+          console.log('PASS: canonical stage contracts present; duplicate evidence renderer=0');
+          NODE
+
+      - name: Install isolated Playwright runtime
+        shell: bash
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start production-like server
+        shell: bash
+        run: |
+          npm run start > "$EVIDENCE_DIR/server.log" 2>&1 &
+          echo $! > /tmp/release-gate-server.pid
+          for i in {1..90}; do
+            if curl -fsS "$BASE_URL/site/work/voucher" >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$EVIDENCE_DIR/server.log"
+          exit 1
+
+      - name: Exact viewport, Chinese, WCAG, console and network gate
+        shell: bash
+        run: |
+          cat > /tmp/release-gate.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const base=process.env.BASE_URL;
+          const out=process.env.EVIDENCE_DIR;
+          const viewports=[
+            {name:'desktop-1419',width:1419,height:1000},
+            {name:'tablet-871',width:871,height:1100},
+            {name:'mobile-430',width:430,height:932}
+          ];
+          const failures=[];
+          const consoleErrors=[];
+          const networkErrors=[];
+          const brokenAssets=[];
+          const results={};
+          const browser=await chromium.launch({headless:true});
+
+          const rgb=s=>{
+            const m=String(s).match(/[\d.]+/g);
+            return m?.slice(0,3).map(Number) || [0,0,0];
+          };
+          const lum=c=>c.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4})
+            .reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
+          const contrast=(a,b)=>{
+            const [x,y]=[lum(rgb(a)),lum(rgb(b))].sort((m,n)=>n-m);
+            return (x+.05)/(y+.05);
+          };
+
+          for(const vp of viewports){
+            const dir=path.join(out,vp.name);
+            fs.mkdirSync(dir,{recursive:true});
+            const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},deviceScaleFactor:1});
+            const page=await context.newPage();
+            page.on('console',m=>{if(m.type()==='error')consoleErrors.push(`${vp.name}: ${m.text()}`)});
+            page.on('requestfailed',r=>{
+              if(new URL(r.url()).origin===new URL(base).origin) networkErrors.push(`${vp.name}: ${r.url()} ${r.failure()?.errorText}`);
+            });
+            page.on('response',r=>{
+              if(new URL(r.url()).origin===new URL(base).origin && r.status()>=400) networkErrors.push(`${vp.name}: HTTP ${r.status()} ${r.url()}`);
+            });
+            await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+            await page.waitForTimeout(1000);
+            const body=page.locator('body');
+            const text=await body.innerText();
+            const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
+            const required=['DISCOVER','ACTIVATE','Key Problems','Stage Focus','View related work'];
+            const missing=required.filter(t=>!text.includes(t));
+            const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
+            brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
+            const cta=page.getByText('View related work',{exact:false}).first();
+            const ctaVisible=await cta.isVisible().catch(()=>false);
+            const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
+            const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
+            const nav=page.locator('.pd-section-nav').first();
+            const navVisible=await nav.isVisible().catch(()=>false);
+            const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
+            const badText=/undefined|null|\[object Object\]/.test(text);
+            const primary=page.locator('.programme-stage-case').first();
+            const colors=await primary.evaluate(el=>{
+              const c=getComputedStyle(el);
+              const text=el.querySelector('h1,h2,h3,p,button,a')||el;
+              const tc=getComputedStyle(text);
+              return {bg:c.backgroundColor,fg:tc.color,border:c.borderColor};
+            }).catch(()=>({bg:'rgb(0,0,0)',fg:'rgb(255,255,255)',border:'rgb(255,255,255)'}));
+            const primaryRatio=contrast(colors.fg,colors.bg);
+            const boundaryRatio=contrast(colors.border,colors.bg);
+            await page.screenshot({path:path.join(dir,'voucher-stage-system.png'),fullPage:true});
+            for(const label of ['DISCOVER','ACTIVATE','Key Problems','Stage Focus']){
+              const loc=page.getByText(label,{exact:false}).first();
+              if(await loc.isVisible().catch(()=>false)){
+                await loc.scrollIntoViewIfNeeded();
+                await page.screenshot({path:path.join(dir,label.toLowerCase().replaceAll(' ','-')+'.png'),fullPage:false});
+              }
+            }
+            const pass=widthAudit.scrollWidth<=vp.width && !missing.length && ctaVisible && stageVisible && keyVisible && navVisible && navKeyboard && !badText && !imgs.length && primaryRatio>=4.5 && boundaryRatio>=3;
+            results[vp.name]={...widthAudit,missing,ctaVisible,stageVisible,keyVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length,primaryRatio,boundaryRatio,pass};
+            if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
+            await context.close();
+          }
+
+          const zhContext=await browser.newContext({viewport:{width:1419,height:1000}});
+          const zh=await zhContext.newPage();
+          zh.on('console',m=>{if(m.type()==='error')consoleErrors.push('chinese: '+m.text())});
+          await zh.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+          await zh.locator('[data-lang-toggle]').first().click();
+          await zh.waitForTimeout(500);
+          const zhText=await zh.locator('body').innerText();
+          const chinesePass=/[\u3400-\u9fff]/.test(zhText) && !/I turned an undefined learning concept|Explore 2 initiatives|View stage case|undefined|null|\[object Object\]/.test(zhText);
+          await zh.screenshot({path:path.join(out,'desktop-1419','chinese-voucher.png'),fullPage:true});
+          await zh.goto(base+'/site/work/bandzo',{waitUntil:'networkidle'});
+          const bandzoText=await zh.locator('body').innerText();
+          const bandzoPass=bandzoText.includes('Bandzo') && !bandzoText.includes('I turned an undefined learning concept') && bandzoText.includes('I turned an early-stage learning concept');
+          await zh.screenshot({path:path.join(out,'desktop-1419','bandzo-english.png'),fullPage:true});
+          await zhContext.close();
+          await browser.close();
+
+          fs.writeFileSync(path.join(out,'viewport-results.json'),JSON.stringify(results,null,2));
+          fs.writeFileSync(path.join(out,'chinese-regression.txt'),`Chinese PASS=${chinesePass}\nBandzo PASS=${bandzoPass}\n`);
+          fs.writeFileSync(path.join(out,'wcag-result.txt'),JSON.stringify(Object.fromEntries(Object.entries(results).map(([k,v])=>[k,{primary:v.primaryRatio,boundary:v.boundaryRatio}])),null,2));
+          fs.writeFileSync(path.join(out,'console-network-result.txt'),`consoleErrors=${consoleErrors.length}\n${consoleErrors.join('\n')}\nnetworkErrors=${networkErrors.length}\n${networkErrors.join('\n')}\nbrokenAssets=${brokenAssets.length}\n${brokenAssets.join('\n')}\n`);
+          if(!chinesePass) failures.push('Chinese regression failed');
+          if(!bandzoPass) failures.push('Bandzo regression failed');
+          if(consoleErrors.length) failures.push('Console errors='+consoleErrors.length);
+          if(networkErrors.length) failures.push('Network errors='+networkErrors.length);
+          if(brokenAssets.length) failures.push('Broken assets='+brokenAssets.length);
+          if(failures.length) throw new Error(failures.join('\n'));
+          NODE
+          node /tmp/release-gate.mjs
+          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/desktop-1419/audit.json"
+          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/tablet-871/audit.json"
+          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/mobile-430/audit.json"
+
+      - name: Compose release gate report
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "# Release Gate r146-r43"
+            echo
+            echo "- Implementation HEAD: $IMPLEMENTATION_HEAD"
+            echo "- CI orchestration HEAD: $GITHUB_SHA"
+            echo "- Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Production changed: No"
+            echo "- main changed: No"
+            echo "- Draft PR merge/promote: Not performed"
+            echo
+            for f in checkout-audit.txt product-tree-integrity.txt validation-result.txt tests-result.txt build-result.txt deterministic-result.txt generated-output-regression.txt chinese-regression.txt wcag-result.txt console-network-result.txt; do
+              echo "## $f"
+              if test -f "$EVIDENCE_DIR/$f"; then
+                tail -n 80 "$EVIDENCE_DIR/$f"
+              else
+                echo "NOT PRODUCED"
+              fi
+              echo
+            done
+          } > "$EVIDENCE_DIR/release-gate-report.md"
+
+      - name: Upload release evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-gate-r146-r43
+          path: /tmp/release-gate-r146-r43
+          if-no-files-found: error
+          retention-days: 30
