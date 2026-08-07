@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 22
+# orchestration revision: 21
 
 on:
   pull_request:
@@ -57,10 +57,7 @@ jobs:
             ':(exclude)vercel.json' \
             ':(exclude)tests/rendered-html.test.mjs' \
             ':(exclude)tests/project-detail-routes.test.mjs' \
-            ':(exclude)public/site/qa/asset-governance.mjs' \
-            ':(exclude)public/site/*.html' \
-            ':(exclude)public/site/work/*.html' \
-            ':(exclude)public/site/assets/js/production.*.js'
+            ':(exclude)public/site/qa/asset-governance.mjs'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
             public/site/content/portfolio-content.json \
             public/site/assets/js/app.js \
