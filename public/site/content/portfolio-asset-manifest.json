@@ -418,6 +418,18 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true
+    },
+    "voucher-stage-review-post-use-public-v1": {
+      "id": "voucher-stage-review-post-use-public-v1",
+      "projectId": "voucher",
+      "type": "image",
+      "publicPath": null,
+      "aspectRatio": "wide",
+      "assetStatus": "awaiting-user-asset",
+      "implementationStatus": "placeholder-active",
+      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
+      "replacementRequired": true,
+      "publicBuild": true
     }
   }
 }
