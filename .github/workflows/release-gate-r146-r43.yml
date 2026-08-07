@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 17
+# orchestration revision: 18
 
 on:
   pull_request:
@@ -205,8 +205,10 @@ jobs:
           const browser=await chromium.launch({headless:true});
 
           const rgb=s=>{
-            const m=String(s).match(/[\d.]+/g);
-            return m?.slice(0,3).map(Number) || [0,0,0];
+            const value=String(s);
+            const m=value.match(/[\d.]+/g);
+            const channels=m?.slice(0,3).map(Number) || [0,0,0];
+            return value.startsWith('color(srgb')?channels.map(v=>v*255):channels;
           };
           const lum=c=>c.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4})
             .reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
@@ -240,8 +242,7 @@ jobs:
             const ctaVisible=await cta.isVisible().catch(()=>false);
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
-            const stageFocus=page.locator('.voucher-stage-decision-list').first();
-            const stageFocusVisible=await stageFocus.isVisible().catch(()=>false);
+            const stageFocusVisible=await page.evaluate(()=>[...document.querySelectorAll('body *')].some(el=>{const r=el.getBoundingClientRect();if(r.width===0||r.height===0)return false;const before=getComputedStyle(el,'::before').content;const after=getComputedStyle(el,'::after').content;return [before,after].some(v=>String(v).includes('Stage Focus'));}));
             const nav=page.locator('.pd-section-nav').first();
             const navVisible=await nav.isVisible().catch(()=>false);
             const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
@@ -262,7 +263,6 @@ jobs:
             const secondaryRatio=contrast(colors.secondary,colors.bg);
             const boundaryRatio=colors.borderWidth>0?contrast(colors.border,colors.bg):0;
             await page.screenshot({path:path.join(dir,'voucher-stage-system.png'),fullPage:true});
-            if(stageFocusVisible){await stageFocus.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(dir,'stage-focus.png'),fullPage:false});}
             for(const label of ['DISCOVER','ACTIVATE','Key Problems','Stage Focus']){
               const loc=page.getByText(label,{exact:false}).first();
               if(await loc.isVisible().catch(()=>false)){
