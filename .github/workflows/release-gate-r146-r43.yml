@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 16
+# orchestration revision: 17
 
 on:
   pull_request:
@@ -240,18 +240,23 @@ jobs:
             const ctaVisible=await cta.isVisible().catch(()=>false);
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
-            const stageFocus=page.locator('.voucher-stage-summary').first();
+            const stageFocus=page.locator('.voucher-stage-decision-list').first();
             const stageFocusVisible=await stageFocus.isVisible().catch(()=>false);
             const nav=page.locator('.pd-section-nav').first();
             const navVisible=await nav.isVisible().catch(()=>false);
             const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
             const badText=/undefined|null|\[object Object\]/.test(text);
-            const darkCard=page.locator('.voucher-stage-summary article.is-response').first();
-            const colors=await darkCard.evaluate(el=>{
-              const c=getComputedStyle(el);
-              const primary=getComputedStyle(el.querySelector('p')||el);
-              const secondary=getComputedStyle(el.querySelector('small')||el);
-              return {bg:c.backgroundColor,primary:primary.color,secondary:secondary.color,border:c.borderTopColor,borderWidth:parseFloat(c.borderTopWidth)||0};
+            const colors=await page.evaluate(()=>{
+              const probe=document.createElement('div');
+              const primary=document.createElement('p');
+              const secondary=document.createElement('small');
+              probe.style.cssText='position:fixed;left:-9999px;background:var(--color-surface-dark);border:1px solid var(--color-border-on-dark)';
+              primary.style.color='var(--color-text-on-dark-primary)';
+              secondary.style.color='var(--color-text-on-dark-secondary)';
+              probe.append(primary,secondary);document.body.append(probe);
+              const c=getComputedStyle(probe),p=getComputedStyle(primary),s=getComputedStyle(secondary);
+              const result={bg:c.backgroundColor,primary:p.color,secondary:s.color,border:c.borderTopColor,borderWidth:parseFloat(c.borderTopWidth)||0};
+              probe.remove();return result;
             });
             const primaryRatio=contrast(colors.primary,colors.bg);
             const secondaryRatio=contrast(colors.secondary,colors.bg);
