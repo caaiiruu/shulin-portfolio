@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: 9b1e5164459d9b7a68180e449c197f7562233294
+      IMPLEMENTATION_HEAD: ca2286252cb7a1c0f765f9de31a7c56f36b887fd
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -44,29 +44,38 @@ jobs:
             echo "status:"
             git status --short
             echo "tracked_file_count=$(git ls-files | wc -l)"
-            for required in package.json package-lock.json public scripts tests public/site/assets/js/app.js public/site/assets/css/components/project-detail-overview.css; do
-              test -e "$required"
-              echo "exists=$required"
-            done
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
-            ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
-            ':(exclude)public/site/assets/js/app.js'
+            ':(exclude)public/site/content/portfolio-content.json' \
+            ':(exclude)public/site/assets/js/app.js' \
+            ':(exclude)worker/index.ts' \
+            ':(exclude)scripts/build-production-assets.mjs' \
+            ':(exclude)scripts/generate-project-pages.mjs' \
+            ':(exclude)vercel.json' \
+            ':(exclude)tests/rendered-html.test.mjs' \
+            ':(exclude)tests/project-detail-routes.test.mjs' \
+            ':(exclude)public/site/qa/asset-governance.mjs'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
-            public/site/assets/css/components/project-detail-overview.css \
-            public/site/assets/js/app.js
-          git diff "$IMPLEMENTATION_HEAD" -- \
-            public/site/assets/css/components/project-detail-overview.css \
-            public/site/assets/js/app.js | tee "$EVIDENCE_DIR/p1-fix-diff.txt"
-          grep -Fq -- 'align-items:center' "$EVIDENCE_DIR/p1-fix-diff.txt"
-          grep -Fq -- 'align-items:start' "$EVIDENCE_DIR/p1-fix-diff.txt"
-          grep -Fq -- 'padding-block:var(--dimension-4px)' public/site/assets/css/components/project-detail-overview.css
-          grep -Fq -- "programme-stage-case__identity" "$EVIDENCE_DIR/p1-fix-diff.txt"
-          grep -Fq -- 'stage-focus-16475437' "$EVIDENCE_DIR/p1-fix-diff.txt"
-          ! grep -E '^\+.*(sr-only|hidden)' "$EVIDENCE_DIR/p1-fix-diff.txt"
+            public/site/content/portfolio-content.json \
+            public/site/assets/js/app.js \
+            worker/index.ts \
+            scripts/build-production-assets.mjs \
+            scripts/generate-project-pages.mjs \
+            vercel.json \
+            tests/rendered-html.test.mjs \
+            tests/project-detail-routes.test.mjs \
+            public/site/qa/asset-governance.mjs
+          grep -Fq 'From fragmented campaign discovery to a persistent Voucher claim product' public/site/content/portfolio-content.json
+          grep -Fq 'proposal-era modelled targets—not actual results' public/site/content/portfolio-content.json
+          grep -Fq 'Original white Voucher Card' public/site/content/portfolio-content.json
+          grep -Fq 'Reusable Tangram component' public/site/content/portfolio-content.json
+          grep -Fq 'generate-project-pages.mjs' scripts/build-production-assets.mjs
+          grep -Fq 'Object.entries(content.projects' scripts/generate-project-pages.mjs
+          ! test -e public/site/work/voucher-center-only.html
+          ! grep -E '^\+.*(sr-only|hidden)' <(git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/js/app.js scripts/generate-project-pages.mjs)
           test -z "$(git status --short)"
-          echo "PASS: product source matches implementation tree plus one audited P1 alignment fix" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
+          echo "PASS: product source matches the approved five-commit Voucher Center implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -95,9 +104,10 @@ jobs:
           set -o pipefail
           npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
+          node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 57' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 57' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 58' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 58' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
           grep -Fq 'Asset governance passed: 13 projects, 31 derived slots, 34 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
@@ -173,6 +183,10 @@ jobs:
           http.createServer((req,res)=>{
             const pathname=decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname);
             let file=path.resolve(root,'.'+pathname);
+            if(file.startsWith(root) && (!fs.existsSync(file) || fs.statSync(file).isDirectory())){
+              const cleanFile=file+'.html';
+              if(cleanFile.startsWith(root) && fs.existsSync(cleanFile) && fs.statSync(cleanFile).isFile()) file=cleanFile;
+            }
             if(!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file=path.join(root,'site/index.html');
             try{
               res.writeHead(200,{'content-type':types[path.extname(file)]||'application/octet-stream','cache-control':'no-store'});
@@ -279,8 +293,17 @@ jobs:
                 await page.screenshot({path:path.join(dir,label.toLowerCase().replaceAll(' ','-')+'.png'),fullPage:false});
               }
             }
-            const pass=widthAudit.scrollWidth<=vp.width && !missing.length && ctaVisible && stageVisible && keyVisible && stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
-            results[vp.name]={...widthAudit,missing,ctaVisible,stageVisible,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
+            await page.goto(base+'/site/work/voucher-center',{waitUntil:'networkidle'});
+            await page.waitForTimeout(500);
+            const voucherCenterText=await page.locator('body').innerText();
+            const voucherCenterRequired=['From fragmented campaign discovery to a persistent Voucher claim product','proposal-era modelled targets—not actual results','Separate participation from application','Preserve the target architecture without blocking launch','Original white Voucher Card','Reusable Tangram component'];
+            const voucherCenterMissing=voucherCenterRequired.filter(t=>!voucherCenterText.includes(t));
+            const voucherCenterWidth=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
+            const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
+            brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
+            await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
+            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyVisible && stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
+            results[vp.name]={...widthAudit,missing,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
             if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
             await context.close();
           }

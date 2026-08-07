@@ -21,15 +21,29 @@ test("serves the portfolio root through a server redirect", async () => {
   assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
   assert.match(response.headers.get("strict-transport-security") ?? "", /max-age=31536000/);
 });
-
 test("loads one fingerprinted stylesheet and runtime on every page", () => {
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
-    assert.equal((html.match(/<link[^>]+\.css/g) ?? []).length, 1);
-    assert.equal((html.match(/<script[^>]+src=/g) ?? []).length, 1);
-    assert.match(html, /production\.[a-f0-9]{16}\.css/);
-    assert.match(html, /production\.[a-f0-9]{16}\.js/);
+    assert.equal(html.split("<link").length - 1, 1);
+    assert.equal(html.split("<script").length - 1, 1);
+    assert.match(html, /production[.][a-f0-9]{16}[.]css/);
+    assert.match(html, /production[.][a-f0-9]{16}[.]js/);
     assert.match(html, /id="detailDialog"/);
+  }
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  assert.equal(Object.keys(ssot.projects).length, 13);
+  for (const [id, project] of Object.entries(ssot.projects)) {
+    const html = read(`work/${id}.html`);
+    assert.ok(html.includes(`<title>${project.title.en} — Shulin Chou</title>`));
+    assert.ok(html.includes('name="description" content="'));
+    assert.ok(html.includes(`rel="canonical" href="https://shulinchou.com/site/work/${id}"`));
+    assert.ok(html.includes('property="og:title"'));
+    assert.ok(html.includes('property="og:description"'));
+    assert.ok(html.includes(`property="og:url" content="https://shulinchou.com/site/work/${id}"`));
+    assert.ok(!html.includes("<title>Work — Shulin Chou</title>"));
+    assert.ok(html.includes(`data-project-route-summary="${id}"`));
+    assert.ok(html.includes(project.title.en));
+    assert.ok(html.includes(project.criticalProblem.en));
   }
 });
 
@@ -74,6 +88,28 @@ test("hydrates all six domain selectors from the canonical SSOT without legacy s
     assert.equal(domain.howITypicallyAddressThem.zh.length, 3);
     assert.equal(domain.problemSpaces, undefined);
     assert.equal(domain.designResponses, undefined);
+  }
+});
+
+test("keeps Voucher Center evidence and listing boundaries canonical", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects["voucher-center"];
+  const serialized = JSON.stringify({ research: voucher.publicContent.researchChangedTheModel, decisions: voucher.publicContent.decisionNarrative.primaryDecisions, scope: voucher.publicContent.productScope });
+  assert.deepEqual(voucher.problemTypes.en, ["Voucher discovery", "Claim-state clarity", "Campaign operations"]);
+  assert.deepEqual(voucher.heroVisualBrief.problemSignal, { en: "Voucher discovery", zh: "優惠券探索" });
+  assert.match(voucher.publicContent.phasedValidationPath.stages[0].boundary.en, /proposal-era modelled targets—not actual results/);
+  assert.equal(voucher.flashVoucherEvidence.businessCase.status, "modelled-proposal-targets-not-achieved-outcomes");
+  assert.equal(voucher.flashVoucherEvidence.businessCase.actualResult, undefined);
+  assert.doesNotMatch(serialized, /9\s*\+\s*9|Applicable \/ Not applicable|Select all|Checkout research|Search decision/i);
+  assert.equal(voucher.publicContent.decisionNarrative.primaryDecisions[0].title.en, "Separate participation from application");
+  assert.equal(voucher.publicContent.decisionNarrative.primaryDecisions[1].title.en, "Preserve the target architecture without blocking launch");
+  assert.deepEqual(voucher.publicContent.productScope.notShipped, ["Claim all", "Complete consolidated navigation"]);
+  assert.match(voucher.publicContent.systemFoundation.ownership.en, /did not create the original Voucher Card system from scratch/);
+  assert.match(voucher.publicContent.systemFoundation.evolution[0].title.en, /Original white Voucher Card/);
+  assert.match(voucher.publicContent.systemFoundation.evolution[2].title.en, /Reusable Tangram component/);
+  assert.equal(voucher.localizationStatus.traditionalChinese, "complete-no-runtime-fallback");
+  for (const value of [voucher.title.zh, voucher.atAGlance.zh, ...voucher.problemTypes.zh]) {
+    assert.doesNotMatch(value, /phased validation path|research changed the model/i);
   }
 });
 
