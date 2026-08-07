@@ -51,12 +51,20 @@ jobs:
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
-            ':(exclude)public/site/assets/css/components/project-detail-overview.css'
-          git diff --check "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css
-          git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css | tee "$EVIDENCE_DIR/p1-fix-diff.txt"
+            ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
+            ':(exclude)public/site/assets/js/app.js'
+          git diff --check "$IMPLEMENTATION_HEAD" -- \
+            public/site/assets/css/components/project-detail-overview.css \
+            public/site/assets/js/app.js
+          git diff "$IMPLEMENTATION_HEAD" -- \
+            public/site/assets/css/components/project-detail-overview.css \
+            public/site/assets/js/app.js | tee "$EVIDENCE_DIR/p1-fix-diff.txt"
           grep -Fq -- 'align-items:center' "$EVIDENCE_DIR/p1-fix-diff.txt"
           grep -Fq -- 'align-items:start' "$EVIDENCE_DIR/p1-fix-diff.txt"
           grep -Fq -- 'padding-block:var(--dimension-4px)' public/site/assets/css/components/project-detail-overview.css
+          grep -Fq -- "programme-stage-case__identity" "$EVIDENCE_DIR/p1-fix-diff.txt"
+          grep -Fq -- 'stage-focus-16475437' "$EVIDENCE_DIR/p1-fix-diff.txt"
+          ! grep -E '^\+.*(sr-only|hidden)' "$EVIDENCE_DIR/p1-fix-diff.txt"
           test -z "$(git status --short)"
           echo "PASS: product source matches implementation tree plus one audited P1 alignment fix" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
 
