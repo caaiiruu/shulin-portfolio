@@ -1,6 +1,11 @@
 name: Release Gate r146-r43
 
 on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/release-gate-r146-r43.yml
   push:
     branches:
       - qa/r146-r43-preview-2026-08-06
