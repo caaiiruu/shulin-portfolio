@@ -2309,12 +2309,41 @@
       const stageItems=p.initiative_map.filter(entry=>(entry.primary_stage||entry.range?.[0])===index+1);
       const item=stageItems.find(entry=>entry.initiative_id)||stageItems[0]||{};
       const body=element('div','programme-stage-case__body');
-      body.append(
-        element('small','',ui("breakpoint-d033a58e")),
-        element('p','',localizedField(item,'problem')),
+      const breakpoint=element('div','programme-stage-case__breakpoint');
+      breakpoint.append(
+        element('small','',lang==='zh'?'顧客斷點':'CUSTOMER BREAKPOINT'),
+        element('p','',localizedField(item,'problem'))
+      );
+      const shift=element('div','programme-stage-case__shift');
+      shift.append(
+        element('small','',lang==='zh'?'設計轉變':'DESIGN SHIFT'),
+        element('p','',localizedField(stage,'transformation'))
+      );
+      const decision=element('div','programme-stage-case__decision');
+      decision.append(
         element('small','',ui("design-decision-03f71542")),
         element('strong','',localizedField(item,'capability'))
       );
+      body.append(breakpoint,shift,decision);
+      const visualContract=stage.visualEvidence?.primary;
+      let visualEvidence=null;
+      if(visualContract?.assetId){
+        const asset=resolveProjectAsset(visualContract.assetId);
+        visualEvidence=element('figure',`programme-stage-visual programme-stage-visual--${visualContract.layoutVariant||'single-screen'}`);
+        visualEvidence.dataset.evidenceRole=visualContract.evidenceRole||'decision-proof';
+        visualEvidence.dataset.mobileBehavior=visualContract.mobileBehavior||'single-screen';
+        if(asset?.isPlaceholder)visualEvidence.dataset.placeholder='true';
+        const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
+        const frame=element('div','programme-stage-visual__frame');
+        const image=doc.createElement('img');
+        image.src=asset.src;
+        image.alt=localizedField(visualContract,'alt')||localize(asset.alt);
+        image.loading='lazy';
+        image.decoding='async';
+        frame.append(image);
+        const caption=element('figcaption','programme-stage-visual__caption',localizedField(visualContract,'caption'));
+        visualEvidence.append(label,frame,caption);
+      }
       const proof=element('div','programme-stage-case__proof');
       const shippedTitle=localizedField(item,'title');
       const distinctEvidence=stageEvidenceItems(p,stage.id)
@@ -2354,7 +2383,9 @@
       cta.setAttribute('aria-label',`${lang==='zh'?'查看相關作品':'View related work'}: ${localizedField(stage,'label')}`);
       action.append(cta);proof.append(action);
       proof.dataset.columns=String(Math.min(4,Math.max(2,proof.childElementCount)));
-      chapter.append(heading,body,proof);chapters.append(chapter);
+      chapter.append(heading,body);
+      if(visualEvidence)chapter.append(visualEvidence);
+      chapter.append(proof);chapters.append(chapter);
     });
     map.append(chapters);
     const system=createProgrammeSection(ui("one-shared-system-behind-all-five-journey--b10e730d"),ui("switch-between-the-four-foundations-to-see-ac2a3130"));
