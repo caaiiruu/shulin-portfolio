@@ -251,7 +251,7 @@ jobs:
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
             const stageFocusDom=page.getByText('Stage Focus',{exact:false}).first();
-  const stageFocusVisible=await stageFocusDom.isVisible().catch(()=>false) || await page.evaluate(()=>[...document.querySelectorAll('body *')].some(el=>{const r=el.getBoundingClientRect();if(r.width===0||r.height===0)return false;const before=getComputedStyle(el,'::before').content;const after=getComputedStyle(el,'::after').content;return [before,after].some(v=>String(v).toLowerCase().includes('stage focus'));}));
+            const stageFocusVisible=await stageFocusDom.isVisible().catch(()=>false) || await page.evaluate(()=>[...document.querySelectorAll('body *')].some(el=>{const r=el.getBoundingClientRect();if(r.width===0||r.height===0)return false;const before=getComputedStyle(el,'::before').content;const after=getComputedStyle(el,'::after').content;return [before,after].some(v=>String(v).toLowerCase().includes('stage focus'));}));
             const nav=page.locator('.pd-section-nav').first();
             const navVisible=await nav.isVisible().catch(()=>false);
             const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
