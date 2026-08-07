@@ -218,6 +218,7 @@
       }
     };
   }
+  document.querySelector('[data-project-route-summary]')?.remove();
   const DATA=adaptContent(window.PORTFOLIO_DATA||{});
   const ASSET_MANIFEST=window.PORTFOLIO_ASSET_MANIFEST?.items||{};
   function resolveProjectAsset(assetId){
@@ -1292,8 +1293,8 @@
   }
   function projectArtifactLabels(key){
     const brief=DATA.projects?.[key]?.hero_visual_brief;
-    if(brief&&lang!=='zh'){
-      const concise=value=>String(value||'')
+    if(brief){
+      const concise=value=>String(localize(value)||'')
         .split(/\s+(?:and|across|with)\s+|,/i)[0]
         .trim()
         .split(/\s+/)
@@ -1303,7 +1304,6 @@
       if(signals.every(Boolean))return signals;
     }
     if(key==='voucher')return lang==='zh'?['探索','可重用規則','兌換']:['Discovery','Reusable rules','Redemption'];
-    if(key==='voucher-center')return lang==='zh'?['內部入口','營運資料庫','治理']:['Internal entry','Operations repository','Governance'];
     if(key==='game-center')return lang==='zh'?['參與','進程','獎勵']:['Participation','Progress','Reward'];
     if(key==='payment')return lang==='zh'?['探索','交易狀態','營運']:['Discovery','Transaction states','Operations'];
     if(key==='booking')return lang==='zh'?['市場限制','準備度模型','上線決策']:['Market constraint','Readiness model','Launch decision'];
@@ -1452,6 +1452,7 @@
   };
   const toCamel=value=>String(value).replace(/-([a-z])/g,(_,letter)=>letter.toUpperCase());
   function publicSectionValue(project,sectionId){
+    if(sectionId==='reusable-system')return project.publicContent?.systemFoundation??project.systemFoundation;
     const key=toCamel(sectionId);
     return project.publicContent?.[key]??project[key];
   }
@@ -1579,10 +1580,17 @@
       grid.appendChild(guardrails);
     }
     if(sectionId==='system-foundation'){
-      const card=storyCard('',localize(value.title),'');
-      appendTextList(card,value.items,'project-story-v198__capabilities');
-      grid.appendChild(card);
-      const boundary=localize(value.contentBoundary);
+      list(value.evolution).forEach((item,index)=>{
+        const card=storyCard(localize(item.label),localize(item.title),localize(item.content));
+        card.dataset.sequence=String(index+1).padStart(2,'0');
+        grid.appendChild(card);
+      });
+      if(!grid.childElementCount){
+        const card=storyCard('',localize(value.title),'');
+        appendTextList(card,value.items,'project-story-v198__capabilities');
+        grid.appendChild(card);
+      }
+      const boundary=localize(value.ownership||value.contentBoundary);
       if(boundary)section.appendChild(element('p','project-story-v198__boundary',boundary));
     }
     if(grid.childElementCount)section.insertBefore(grid,section.querySelector('.project-story-v198__boundary'));
@@ -1789,6 +1797,54 @@
       deliverySection.hidden=!node.childElementCount;
     }
   }
+  function renderVoucherPhaseSection(value){
+    if(!value||!list(value.stages).length)return null;
+    const section=element('section','project-section-v81 project-story-v198 project-story-v198--phased-validation-path');
+    section.dataset.projectSection='phased-validation-path';
+    section.appendChild(element('h3','',localize(value.title)));
+    const grid=element('div','project-story-v198__grid');
+    list(value.stages).forEach((stage,index)=>{
+      const card=storyCard(localize(stage.label),localize(stage.role),localize(stage.evidence));
+      const boundary=localize(stage.boundary);
+      if(boundary)card.appendChild(element('p','project-story-v198__boundary',boundary));
+      card.dataset.sequence=String(index+1).padStart(2,'0');
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);return section;
+  }
+  function renderVoucherResearchSection(value){
+    if(!value||!value.study)return null;
+    const section=element('section','project-section-v81 structured-evidence-v223');
+    section.dataset.projectSection='research-changed-the-model';
+    section.appendChild(element('h3','',localize(value.title)));
+    const metrics=element('dl','structured-evidence-v223__metrics');
+    list(value.study.evidence).forEach(item=>{
+      const row=element('div','structured-evidence-v223__metric');
+      row.append(element('dt','',item.value),element('dd','',localize(item)));
+      metrics.appendChild(row);
+    });
+    section.appendChild(metrics);
+    const grid=element('div','project-story-v198__grid');
+    grid.append(
+      storyCard('',ui("interpretation-90a60677"),localize(value.interpretation)),
+      storyCard('',ui("decision-2b39b948"),localize(value.productChange))
+    );
+    section.appendChild(grid);return section;
+  }
+  function renderProductScopeSection(value){
+    if(!value)return null;
+    const section=element('section','project-section-v81 project-story-v198 project-story-v198--product-scope');
+    section.dataset.projectSection='product-scope';
+    const grid=element('div','project-story-v198__grid');
+    const shipped=storyCard('',localize(SECTION_LABELS['shipped-scope']),'');
+    appendTextList(shipped,value.confirmedShipped);
+    grid.appendChild(shipped);
+    const next=storyCard('',localize(SECTION_LABELS['future-direction']),'');
+    list(value.nextDirection).forEach(item=>next.appendChild(storyCard(item.evidence,'',localize(item))));
+    appendTextList(next,value.notShipped);
+    grid.appendChild(next);
+    section.appendChild(grid);return section;
+  }
   function renderRegisteredProjectSections(project){
     const host=doc.getElementById('projectSupplementalSections');
     if(!host)return;
@@ -1803,6 +1859,21 @@
         'validated-outcomes','shipped-outcomes','delivery-proof','delivery-and-measurement',
         'outcome','outcomes','primary-outcome','delivery-evolution','selected-shipped-proofs','shipped-scope'
       ].includes(sectionId))return;
+      if(sectionId==='phased-validation-path'){
+        const section=renderVoucherPhaseSection(publicSectionValue(project,sectionId));
+        if(section)host.appendChild(section);
+        return;
+      }
+      if(sectionId==='research-changed-the-model'){
+        const section=renderVoucherResearchSection(publicSectionValue(project,sectionId));
+        if(section)host.appendChild(section);
+        return;
+      }
+      if(sectionId==='product-scope'){
+        const section=renderProductScopeSection(publicSectionValue(project,sectionId));
+        if(section)host.appendChild(section);
+        return;
+      }
       if(sectionId==='research-scale'){
         const section=renderResearchScaleSection(publicSectionValue(project,sectionId));
         if(section)host.appendChild(section);
@@ -1844,8 +1915,9 @@
         host.appendChild(section);
         return;
       }
-      if(['product-evolution','research-evolution','future-direction','visual-system-guardrail','system-foundation'].includes(sectionId)){
-        const section=renderNarrativeProjectSection(sectionId,publicSectionValue(project,sectionId));
+      if(['product-evolution','research-evolution','future-direction','visual-system-guardrail','system-foundation','reusable-system'].includes(sectionId)){
+        const narrativeId=sectionId==='reusable-system'?'system-foundation':sectionId;
+        const section=renderNarrativeProjectSection(narrativeId,publicSectionValue(project,sectionId));
         if(section)host.appendChild(section);
         return;
       }

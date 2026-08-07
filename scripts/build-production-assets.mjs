@@ -307,3 +307,5 @@ for (const page of pages) {
 }
 
 console.log(`Production assets: ${cssFile}, ${jsFile}`);
+
+await import("./generate-project-pages.mjs");
