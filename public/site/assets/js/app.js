@@ -2229,7 +2229,11 @@
       const chapter=element('li','programme-stage-case');
       chapter.dataset.stageCard=stage.id;
       const heading=element('header','programme-stage-case__header');
-      heading.append(element('span','programme-stage-case__number',String(index+1).padStart(2,'0')),element('h3','',localizedField(stage,'label')));
+      heading.append(
+        element('span','programme-stage-case__number',String(index+1).padStart(2,'0')),
+        element('small','programme-stage-case__identity',ui("stage-focus-16475437")),
+        element('h3','',localizedField(stage,'label'))
+      );
       const stageItems=p.initiative_map.filter(entry=>(entry.primary_stage||entry.range?.[0])===index+1);
       const item=stageItems.find(entry=>entry.initiative_id)||stageItems[0]||{};
       const body=element('div','programme-stage-case__body');
