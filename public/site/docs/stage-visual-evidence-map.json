@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "owner": "public/site/content/portfolio-content.json",
+  "manifestOwner": "public/site/content/portfolio-asset-manifest.json",
+  "resolverOwner": "public/site/assets/js/app.js#resolveProjectAsset",
+  "entries": [
+    {
+      "parent": "voucher",
+      "stage": "discover",
+      "initiative": "pdp-voucher-contextual-discovery-2024",
+      "assetId": "voucher-framework-pdp-contextual-discovery-public-v1",
+      "evidenceRole": "before-after",
+      "layoutVariant": "before-after",
+      "duplicatedUsage": true,
+      "approvedDuplicateReason": "The same governed asset is the PDP decision proof and the DISCOVER stage proof; it is not used as the parent hero."
+    },
+    {
+      "parent": "voucher",
+      "stage": "qualify",
+      "initiative": "voucher-details-shoppable-journey-2024-2025",
+      "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+      "evidenceRole": "system-rule",
+      "layoutVariant": "system-visual",
+      "duplicatedUsage": true,
+      "approvedDuplicateReason": "The condition/action matrix directly proves the QUALIFY rule model and its nested optimisation."
+    },
+    {
+      "parent": "voucher",
+      "stage": "activate",
+      "initiative": null,
+      "assetId": "voucher-framework-mechanism-transition-public-v1",
+      "evidenceRole": "flow",
+      "layoutVariant": "flow-strip",
+      "duplicatedUsage": true,
+      "approvedDuplicateReason": "The mechanism transition is shared strategic evidence for ACTIVATE and the future-direction decision."
+    },
+    {
+      "parent": "voucher",
+      "stage": "redeem",
+      "initiative": "voucher-error-recovery-2023",
+      "assetId": "voucher-framework-error-recovery-public-v1",
+      "evidenceRole": "flow",
+      "layoutVariant": "flow-strip",
+      "duplicatedUsage": true,
+      "approvedDuplicateReason": "The recovery framework is the direct nested proof for the REDEEM breakpoint."
+    },
+    {
+      "parent": "voucher",
+      "stage": "review",
+      "initiative": null,
+      "assetId": "voucher-stage-review-post-use-public-v1",
+      "evidenceRole": "shipped-state",
+      "layoutVariant": "single-screen",
+      "duplicatedUsage": false,
+      "approvedDuplicateReason": null
+    }
+  ]
+}
