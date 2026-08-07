@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "echo 'Static v247 artifact: dependency install not required'",
-  "buildCommand": "node scripts/generate-project-pages.mjs",
+  "installCommand": "npm run install:ci",
+  "buildCommand": "node scripts/build-production-assets.mjs",
   "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
