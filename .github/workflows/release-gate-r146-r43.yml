@@ -1,15 +1,10 @@
 name: Release Gate r146-r43
-# orchestration revision: 11
+# orchestration revision: 12
 
 on:
   pull_request:
     branches:
       - recovery/r146-runtime-2026-08-06
-    paths:
-      - .github/workflows/release-gate-r146-r43.yml
-  push:
-    branches:
-      - qa/r146-r43-preview-2026-08-06
     paths:
       - .github/workflows/release-gate-r146-r43.yml
   workflow_dispatch:
