@@ -4663,8 +4663,8 @@
     "voucher-center": {
       "context": "NTUC FairPrice Group",
       "context_zh": "NTUC FairPrice Group",
-      "home_title": "From fragmented campaign discovery to a persistent Voucher claim product",
-      "home_title_zh": "從分散的活動型探索，到常設優惠券領取產品",
+      "home_title": "Persistent Voucher discovery and claiming",
+      "home_title_zh": "常設優惠券探索與領取",
       "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
       "transformation_zh": "從分散的活動型探索，到常設優惠券領取產品",
       "problem_types": [
@@ -4677,8 +4677,8 @@
         "領取狀態清晰度",
         "活動營運"
       ],
-      "summary": "A permanent Voucher Center replaced fragmented campaign destinations and passive visibility with one active discovery and claim model.",
-      "summary_zh": "常設 Voucher Center 以單一主動探索與領取模式，取代分散活動目的地與被動曝光。",
+      "summary": "A persistent Voucher Center made discovery, claiming and post-claim states explicit beyond campaign-specific destinations.",
+      "summary_zh": "常設 Voucher Center 讓探索、領取與領取後狀態清楚可見，不再只仰賴活動專屬目的地。",
       "role": "Senior Product Designer",
       "role_zh": "資深產品設計師",
       "owned": "End-to-end Voucher Center discovery and claim model, research synthesis, interaction states and shipped-scope definition",
@@ -5066,16 +5066,16 @@
       },
       "searchIndex": {
         "title": {
-          "en": "From scattered voucher entry points to one permanent discovery and claim model",
-          "zh": "從分散的優惠券入口，到常設的探索與領取模式"
+          "en": "Persistent Voucher discovery and claiming",
+          "zh": "常設優惠券探索與領取"
         },
         "keywords": [
           "Voucher Center",
-          "Flash Voucher",
           "voucher discovery",
-          "claimable count",
-          "Claim → View",
-          "campaign-to-product evolution"
+          "claim-state clarity",
+          "Voucher claiming",
+          "campaign operations",
+          "Claim → View"
         ]
       },
       "relations": {
@@ -5529,14 +5529,38 @@
         "canonicalProjectId": "voucher-center",
         "aliases": [
           "Voucher Center",
-          "Flash Voucher precursor"
+          "Persistent Voucher claim product"
         ],
         "problemIntents": [
           "improve-voucher-discovery",
           "clarify-claim-states",
-          "turn-campaign-into-product"
+          "support-campaign-operations"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-listing-detail-consistency",
+        "problemTags": {
+          "en": [
+            "Voucher discovery",
+            "Claim-state clarity",
+            "Campaign operations"
+          ],
+          "zh": [
+            "優惠券探索",
+            "領取狀態清晰度",
+            "活動營運"
+          ]
+        },
+        "capabilityTags": {
+          "en": [
+            "Persistent entry",
+            "Explicit claiming",
+            "Post-claim states"
+          ],
+          "zh": [
+            "常設入口",
+            "明確領取",
+            "領取後狀態"
+          ]
+        }
       },
       "confidentialityNote": {
         "en": "*Metrics are rounded or abstracted for confidentiality.*",
@@ -5544,8 +5568,8 @@
       },
       "localizationStatus": {
         "english": "complete-for-required-core-sections",
-        "traditionalChinese": "complete-for-required-core-sections",
-        "auditVersion": "r82"
+        "traditionalChinese": "complete-no-runtime-fallback",
+        "auditVersion": "voucher-center-implementation-2026-08-07"
       },
       "ownershipModel": {
         "publicSummary": {
@@ -5630,14 +5654,23 @@
       ],
       "heroVisualBrief": {
         "assetId": "voucher-center-hero-centralised-discovery-public-v1",
-        "problemSignal": "Vouchers scattered across entry points and states",
-        "systemSignal": "Homepage entry, centralised listing, count and Claim-to-View states",
-        "outcomeSignal": "Shipped phase-one discovery and claim model",
+        "problemSignal": {
+          "en": "Voucher discovery",
+          "zh": "優惠券探索"
+        },
+        "systemSignal": {
+          "en": "Claim-state clarity",
+          "zh": "領取狀態清晰"
+        },
+        "outcomeSignal": {
+          "en": "Persistent claiming",
+          "zh": "常設領取"
+        },
         "sourceAssetIds": [
           "voucher-center-source-usability-test-2025-02-v1",
           "voucher-center-source-prototype-variants-2025-v1"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-bilingual-listing-signals"
       },
       "type_zh": "獎勵系統",
       "keyInterventionMap": {
@@ -5664,8 +5697,8 @@
         }
       },
       "cardTitle": {
-        "en": "Creating one permanent home for voucher discovery",
-        "zh": "建立常設的優惠券探索入口"
+        "en": "Persistent Voucher discovery and claiming",
+        "zh": "常設優惠券探索與領取"
       },
       "cardTitleProtectedPhrases_zh": [
         "優惠券探索入口"
