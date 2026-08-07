@@ -4663,19 +4663,19 @@
     "voucher-center": {
       "context": "NTUC FairPrice Group",
       "context_zh": "NTUC FairPrice Group",
-      "home_title": "Creating one permanent home for voucher discovery",
-      "home_title_zh": "建立常設的優惠券探索入口",
-      "transformation": "From scattered voucher entry points to one permanent discovery and claim model",
-      "transformation_zh": "從分散的優惠券入口，到常設的探索與領取模式",
+      "home_title": "From fragmented campaign discovery to a persistent Voucher claim product",
+      "home_title_zh": "從分散的活動型探索，到常設優惠券領取產品",
+      "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
+      "transformation_zh": "從分散的活動型探索，到常設優惠券領取產品",
       "problem_types": [
-        "Scattered voucher entry",
-        "Claim-state ambiguity",
-        "Campaign-only discovery"
+        "Voucher discovery",
+        "Claim-state clarity",
+        "Campaign operations"
       ],
       "problem_types_zh": [
-        "優惠券入口分散",
-        "領取狀態模糊",
-        "探索侷限於活動"
+        "優惠券探索",
+        "領取狀態清晰度",
+        "活動營運"
       ],
       "summary": "A permanent Voucher Center replaced fragmented campaign destinations and passive visibility with one active discovery and claim model.",
       "summary_zh": "常設 Voucher Center 以單一主動探索與領取模式，取代分散活動目的地與被動曝光。",
@@ -4683,18 +4683,18 @@
       "role_zh": "資深產品設計師",
       "owned": "End-to-end Voucher Center discovery and claim model, research synthesis, interaction states and shipped-scope definition",
       "owned_zh": "端到端 Voucher Center 探索與領取模型、研究統整、互動狀態與上線範圍定義",
-      "at_glance": "Led end-to-end design of a permanent Voucher Center, evolving a shipped Flash Voucher precursor into one persistent discovery and claim model validated with 20 participants.",
-      "at_glance_zh": "主導常設 Voucher Center 的端到端設計，將已上線的 Flash Voucher 前導經驗，發展為經 20 位參與者驗證的持續探索與領取模式。",
+      "at_glance": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
+      "at_glance_zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。",
       "type": "Incentive System",
-      "scope": "End-to-end discovery and claim experience covering persistent entry, claimable-value visibility, category access and claimed-state behaviour",
-      "scope_zh": "涵蓋常設入口、可領取價值可見性、分類存取與領取後狀態的端到端探索與領取體驗",
+      "scope": "Persistent Voucher discovery and claiming, from homepage entry to category access and explicit Claim → View states.",
+      "scope_zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。",
       "audience": "Primary: Customers discovering and claiming Vouchers\nSecondary: Campaign / Voucher Operations, Business / Sponsor stakeholders",
       "audience_zh": "主要：探索並領取優惠券的顧客\n次要：活動／優惠券營運、商務／贊助利害關係人",
       "timeline": "5 months",
       "timeline_zh": "5 個月",
       "timelineStatus": "user-confirmed",
-      "why": "Separate campaign destinations and passive auto-deposit made vouchers difficult to discover and left customers unaware of available value before shopping.",
-      "why_zh": "分散的活動入口與被動存入方式，使顧客難以探索優惠券，也無法在購物前察覺可使用的價值。",
+      "why": "Voucher discovery depended on campaign destinations and passive deposits, making claimable value easy to miss before shopping and forcing new programmes to rely on another campaign-specific entry point.",
+      "why_zh": "優惠券探索仰賴活動目的地與被動存入，使可領取價值在購物前容易被忽略，也迫使新計畫再次依賴活動專屬入口。",
       "impact": "Established a scalable entry, eligibility, and state model that supported multiple voucher campaigns without creating another disconnected customer journey.",
       "impact_zh": "建立可擴充的入口、資格與狀態模型，支援多種優惠券活動，不必持續新增彼此分離的使用旅程。",
       "projectModel": {
@@ -4723,8 +4723,8 @@
       "publicContent": {
         "phasedValidationPath": {
           "title": {
-            "en": "From a shipped precursor to a permanent product",
-            "zh": "從已上線前導，到常設產品"
+            "en": "From pilot to persistent product",
+            "zh": "從前導驗證到常設產品"
           },
           "stages": [
             {
@@ -4734,16 +4734,16 @@
                 "zh": "階段 1・FLASH VOUCHER"
               },
               "role": {
-                "en": "Shipped campaign-scoped precursor",
-                "zh": "已上線的活動型前導"
+                "en": "Shipped in-market precursor and sponsor proof point",
+                "zh": "已上線的市場前導與贊助論證"
               },
               "evidence": {
-                "en": "Validated that a targeted voucher journey, clear availability states and direct shopping actions could operate in production.",
-                "zh": "驗證聚焦的優惠券旅程、清楚的可用狀態與直接購物操作能在正式環境運作。"
+                "en": "Flash Voucher showed that a focused Voucher journey, explicit availability states and direct shopping actions could ship in production.",
+                "zh": "Flash Voucher 證明聚焦的優惠券旅程、明確可用狀態與直接購物操作能在正式環境上線。"
               },
               "boundary": {
-                "en": "No verified performance metric is published, and the full Flash Voucher experience did not become Voucher Center unchanged.",
-                "zh": "未公開缺少驗證的成效數據；完整 Flash Voucher 體驗也未原樣成為 Voucher Center。"
+                "en": "~S$1.5M GMV and ~15× ROI are proposal-era modelled targets—not actual results, post-launch performance or measured ROI.",
+                "zh": "約 150 萬新幣 GMV 與約 15 倍 ROI 是提案階段的模型化目標，並非實際成果、上線後成效或實測 ROI。"
               },
               "status": "shipped-precursor"
             },
@@ -4754,8 +4754,8 @@
                 "zh": "階段 2・VOUCHER CENTER"
               },
               "role": {
-                "en": "Permanent discovery and claim product",
-                "zh": "常設探索與領取產品"
+                "en": "Persistent Voucher discovery and claim product",
+                "zh": "常設優惠券探索與領取產品"
               },
               "evidence": {
                 "en": "A 20-participant architecture study informed the shipped homepage entry, claimable count, red/green hierarchy and Claim → View card states.",
@@ -4786,8 +4786,8 @@
         },
         "researchChangedTheModel": {
           "title": {
-            "en": "Research clarified the permanent product model",
-            "zh": "研究釐清常設產品模型"
+            "en": "Research changed the architecture",
+            "zh": "研究改變了產品架構"
           },
           "study": {
             "participants": 20,
@@ -4799,90 +4799,99 @@
             },
             "evidence": [
               {
-                "value": "12/20",
-                "en": "preferred the bold Voucher Center entry",
-                "zh": "偏好高可見度 Voucher Center 入口"
+                "value": "12 / 20",
+                "en": "preferred the stronger Voucher Center entry",
+                "zh": "偏好更醒目的 Voucher Center 入口"
               },
               {
-                "value": "8 vs 6",
-                "en": "completed the savings task on the first try with the entry versus without it",
-                "zh": "有入口時首次完成優惠任務的人數，相較無入口時為 8 比 6"
+                "value": "18 / 20",
+                "en": "preferred an explicit Claim action",
+                "zh": "偏好明確的領取操作"
               },
               {
                 "value": "7 vs 4",
-                "en": "preferred the one-page tab model over separate pages",
-                "zh": "偏好單頁分頁模式，相較獨立頁面為 7 比 4"
-              },
-              {
-                "value": "18/20",
-                "en": "misread Use now as an automatic later action",
-                "zh": "誤解立即使用會在之後自動執行"
-              },
-              {
-                "value": "18/20",
-                "en": "preferred visible Claim actions",
-                "zh": "偏好清楚顯示領取操作"
+                "en": "preferred consolidated navigation among the architecture alternatives",
+                "zh": "在架構方案中偏好整合式導覽，相較分開頁面為 7 比 4"
               }
             ]
           },
           "productChange": {
-            "en": "The evidence supported a permanent entry, visible claimable count, explicit Claim → View states and a narrower first release.",
-            "zh": "研究證據支持常設入口、可見的可領取數量、明確的領取 → 查看狀態，以及較聚焦的第一階段。"
+            "en": "The evidence established a persistent entry and explicit Claim → View states for the first release, while preserving consolidated navigation as the target architecture.",
+            "zh": "研究證據促成第一階段的常設入口與明確領取 → 查看狀態，並將整合式導覽保留為目標架構。"
           },
-          "contentStatus": "approved-source-evidence"
+          "contentStatus": "approved-source-evidence",
+          "interpretation": {
+            "en": "Customers needed a visible place to discover claimable value, a clear participation action and a coherent way to move across Voucher categories.",
+            "zh": "顧客需要可見的入口來探索可領取價值、清楚的參與操作，以及一致的優惠券分類導覽方式。"
+          }
         },
         "decisionNarrative": {
           "primaryDecisions": [
             {
               "id": "voucher-center-decision-01",
               "title": {
-                "en": "From campaign destinations to one persistent discovery and claim entry",
-                "zh": "從活動型目的地，到單一常設探索與領取入口"
+                "en": "Separate participation from application",
+                "zh": "將參與領取與購買套用分開"
+              },
+              "principle": {
+                "en": "Claiming creates ownership; application remains contextual to purchase.",
+                "zh": "領取建立擁有狀態；套用仍保留在購買情境中。"
               },
               "whatIDecided": {
-                "en": "Established a permanent homepage Voucher Center entry with a claimable count and explicit Claim → View actions, replacing reliance on separate campaign pages and passive voucher visibility.",
-                "zh": "建立首頁常設 Voucher Center 入口、可領取數量與明確的領取 → 查看操作，取代對分散活動頁與被動優惠券曝光的依賴。"
+                "en": "Defined Claim as the participation action and View as the post-claim state, creating a reusable Claim → View model while keeping Voucher application contextual to purchase.",
+                "zh": "將「領取」定義為參與操作，將「查看」定義為領取後狀態，形成可重用的領取 → 查看模型；優惠券套用仍留在購買情境中。"
               },
               "whyThisChoice": {
-                "en": "In the 20-participant architecture study, 12 preferred the bold entry concept and 18 preferred visible Claim actions, showing that discoverability and precise action semantics mattered before broader consolidation.",
-                "zh": "在 20 位參與者的架構研究中，12 位偏好高可見度入口，18 位偏好清楚的領取操作，顯示在擴大整合前，必須先解決可探索性與操作語意。"
+                "en": "18 / 20 participants misunderstood “Use now” as an automatic later action, showing that one CTA could not truthfully represent both ownership and application.",
+                "zh": "18／20 位參與者誤解「立即使用」會在之後自動執行，顯示單一操作無法如實代表擁有與套用兩種狀態。"
               },
               "evidenceSummary": {
-                "en": "12/20 preferred the bold entry; 18/20 preferred visible Claim actions.",
-                "zh": "12／20 偏好高可見度入口；18／20 偏好清楚顯示領取操作。"
+                "en": "18 / 20 misunderstood “Use now”.",
+                "zh": "18／20 誤解「立即使用」。"
               },
-              "status": "research-informed-and-shipped-entry",
-              "contentStatus": "approved-facts-copy-review-2026-08-05"
+              "resultingModel": {
+                "en": "Claim → View state model",
+                "zh": "領取 → 查看狀態模型"
+              },
+              "status": "research-informed-shipped-state-model",
+              "contentStatus": "approved"
             },
             {
-              "id": "voucher-center-decision-03",
+              "id": "voucher-center-decision-02",
               "title": {
-                "en": "From full consolidation to a focused first release",
-                "zh": "從完整整合方向，到聚焦的第一階段上線"
+                "en": "Preserve the target architecture without blocking launch",
+                "zh": "不阻礙上線，同時保留目標架構"
               },
               "whatIDecided": {
-                "en": "Shipped a permanent homepage Voucher Center entry with the number of claimable Vouchers, replaced the purple visual language with a red/green hierarchy, and defined Claim → View card states. Claim all remained out of scope while the broader consolidated architecture stayed as the target direction.",
-                "zh": "上線永久性的首頁 Voucher Center 入口與可領取優惠券數量，將紫色視覺語言改為紅色／綠色層級，並定義領取 → 查看的卡片狀態。全部領取未納入上線範圍，較完整的整合架構則保留為目標方向。"
+                "en": "Shipped the persistent entry, claimable count and Claim → View states within available launch capacity, while preserving consolidated navigation as the next product direction.",
+                "zh": "在可用上線資源內交付常設入口、可領取數量與領取 → 查看狀態，同時將整合式導覽保留為下一階段產品方向。"
               },
               "whyThisChoice": {
-                "en": "The entry and count addressed discovery, while state-specific actions clarified what happened after claiming. Retail Media placement and Engineering delivery constraints required a narrower first release than the research-preferred consolidated model.",
-                "zh": "入口與數量解決探索；依狀態變化的操作則清楚說明領取後結果。零售媒體版位與工程團隊交付限制，使第一階段必須比研究偏好的整合模型更聚焦。"
+                "en": "Paid retail-media homepage placement had already been committed as the first priority, while Engineering capacity could not support the complete target architecture for launch.",
+                "zh": "付費零售媒體首頁版位已承諾並需維持第一順位；工程資源無法在上線時支援完整目標架構。"
+              },
+              "constraintManaged": {
+                "en": "Commercial homepage placement had to remain first priority, and Engineering capacity limited the first-release architecture.",
+                "zh": "商業首頁版位必須維持第一順位，且工程資源限制第一階段可交付的架構。"
               },
               "optionalBlock": {
                 "type": "TRADE-OFF ACCEPTED",
                 "type_zh": "接受的取捨",
                 "content": {
-                  "en": "Accepted a narrower Phase 1 than the research-preferred consolidated model in exchange for protecting commercial placement and meeting the Engineering delivery window.",
-                  "zh": "接受第一階段範圍小於研究偏好的整合模型，換取保留商業版位並符合工程交付時程。"
-                },
-                "content_zh": "接受比研究偏好整合模型更精簡的階段 1，以換取保留商業版位並符合工程團隊交付時程。"
+                  "en": "We chose to ship within launch capacity, accepting lower entry prominence and some cross-page navigation to protect existing commercial commitments and avoid blocking launch on the complete architecture.",
+                  "zh": "我們選擇在現實上線資源內交付，接受較低的入口醒目度與部分跨頁導覽，以保護既有商業承諾，並避免完整架構阻礙上線。"
+                }
               },
               "tradeOff": {
-                "chosen": "A focused first release with a permanent entry, claimable count and explicit card states",
-                "notChosen": "The complete research-preferred consolidated architecture at launch",
-                "acceptedLoss": "Some navigation and claiming efficiency remained unresolved in the first release",
-                "protectedValue": "Commercial placement and delivery feasibility",
-                "constraint": "Retail Media placement and Engineering timeline"
+                "chosen": "Ship within available launch capacity",
+                "notChosen": "Complete consolidated architecture at launch",
+                "acceptedLoss": "Lower entry prominence and some cross-page navigation",
+                "protectedValue": "Existing commercial commitments and an unblocked launch",
+                "constraint": "Committed paid retail-media homepage placement and limited Engineering capacity"
+              },
+              "preservedDirection": {
+                "en": "Consolidated navigation remained the target architecture for the next phase.",
+                "zh": "整合式導覽仍保留為下一階段目標架構。"
               },
               "shippedOutcome": [
                 "Homepage Voucher Center entry",
@@ -4891,9 +4900,10 @@
                 "Claim → View Voucher Card state"
               ],
               "notShipped": [
-                "Claim all"
+                "Claim all",
+                "Complete consolidated navigation"
               ],
-              "status": "shipped-product-foundation-exact-page-architecture-unconfirmed",
+              "status": "shipped-with-preserved-target-direction",
               "contentStatus": "approved"
             }
           ],
@@ -4915,14 +4925,23 @@
             "Red/green Voucher Center visual hierarchy",
             "Claim → View Voucher Card state"
           ],
+          "nextDirection": [
+            {
+              "evidence": "16 / 20",
+              "en": "supported Claim all",
+              "zh": "支持全部領取"
+            },
+            {
+              "evidence": "4 spontaneous requests",
+              "en": "asked for Claim all without prompting",
+              "zh": "在未提示下主動提出全部領取"
+            }
+          ],
           "notShipped": [
             "Claim all",
-            "Complete research-preferred consolidated architecture"
+            "Complete consolidated navigation"
           ],
-          "unconfirmed": [
-            "Exact final one-page versus separate-page production architecture"
-          ],
-          "contentStatus": "approved"
+          "contentStatus": "approved-shipped-next-boundary"
         },
         "systemFoundation": {
           "title": {
@@ -5622,28 +5641,28 @@
         "優惠券探索入口"
       ],
       "title": {
-        "en": "From scattered voucher entry points to one permanent discovery and claim model",
-        "zh": "從分散的優惠券入口，到常設的探索與領取模式"
+        "en": "From fragmented campaign discovery to a persistent Voucher claim product",
+        "zh": "從分散的活動型探索，到常設優惠券領取產品"
       },
       "atAGlance": {
-        "en": "Led end-to-end design of a permanent Voucher Center, evolving a shipped Flash Voucher precursor into one persistent discovery and claim model validated with 20 participants.",
-        "zh": "主導常設 Voucher Center 的端到端設計，將已上線的 Flash Voucher 前導經驗，發展為經 20 位參與者驗證的持續探索與領取模式。"
+        "en": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
+        "zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。"
       },
       "problemTypes": {
         "en": [
-          "Scattered voucher entry",
-          "Claim-state ambiguity",
-          "Campaign-only discovery"
+          "Voucher discovery",
+          "Claim-state clarity",
+          "Campaign operations"
         ],
         "zh": [
-          "優惠券入口分散",
-          "領取狀態模糊",
-          "探索侷限於活動"
+          "優惠券探索",
+          "領取狀態清晰度",
+          "活動營運"
         ]
       },
       "whyItMattered": {
-        "en": "Separate campaign destinations and passive auto-deposit made vouchers difficult to discover and left customers unaware of available value before shopping.",
-        "zh": "分散的活動入口與被動存入方式，使顧客難以探索優惠券，也無法在購物前察覺可使用的價值。"
+        "en": "Voucher discovery depended on campaign destinations and passive deposits, making claimable value easy to miss before shopping and forcing new programmes to rely on another campaign-specific entry point.",
+        "zh": "優惠券探索仰賴活動目的地與被動存入，使可領取價值在購物前容易被忽略，也迫使新計畫再次依賴活動專屬入口。"
       },
       "businessImpact": {
         "en": "Established a scalable entry, eligibility, and state model that supported multiple voucher campaigns without creating another disconnected customer journey.",
@@ -5659,8 +5678,8 @@
           }
         },
         "scope": {
-          "en": "End-to-end discovery and claim experience covering persistent entry, claimable-value visibility, category access and claimed-state behaviour.",
-          "zh": "涵蓋常設入口、可領取價值可見性、分類存取與領取後狀態的端到端探索與領取體驗。"
+          "en": "Persistent Voucher discovery and claiming, from homepage entry to category access and explicit Claim → View states.",
+          "zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。"
         },
         "audience": {
           "primary": {
@@ -5692,73 +5711,88 @@
         "schemaVersion": "2026-08-06-r142"
       },
       "criticalProblem": {
-        "en": "Separate campaign destinations and passive auto-deposit made vouchers difficult to discover and left customers unaware of available value before shopping.",
-        "zh": "分散的活動入口與被動存入方式，使顧客難以探索優惠券，也無法在購物前察覺可使用的價值。"
+        "en": "Voucher discovery depended on campaign destinations and passive deposits, making claimable value easy to miss before shopping and forcing new programmes to rely on another campaign-specific entry point.",
+        "zh": "優惠券探索仰賴活動目的地與被動存入，使可領取價值在購物前容易被忽略，也迫使新計畫再次依賴活動專屬入口。"
       },
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "valueIBrought": {
         "headline": {
-          "en": "I shipped a focused Flash Voucher POC backed by a modelled ~S$1.5M GMV / ~15× ROI business case, then used a 20-participant architecture study to define the permanent Voucher Center.",
-          "zh": "我上線聚焦型 Flash Voucher 前導驗證，並以約 150 萬新幣 GMV／約 15 倍 ROI 的模型化商業案例作為依據；再透過 20 位參與者的架構研究定義常設 Voucher Center。"
+          "en": "Defined the reusable Claim → View state model and the launch boundary that separated shipped capability from research-supported next steps.",
+          "zh": "定義可重用的領取 → 查看狀態模型與上線邊界，清楚區分已上線能力和研究支持的下一步。"
         },
         "supportingStatement": {
-          "en": "The POC established delivery mechanics and credible in-market evidence for sponsor conversations; its numeric values remain proposal targets because the uploaded sources contain no post-launch performance result.",
-          "zh": "此前導驗證建立交付機制，並為贊助提案提供可信的市場證據；由於上傳來源未含上線後成效，相關數字仍明確標示為提案目標。"
+          "en": "Kept Flash Voucher as in-market precursor evidence while preserving ~S$1.5M GMV and ~15× ROI strictly as proposal-era modelled targets.",
+          "zh": "將 Flash Voucher 保持為市場前導證據，並嚴格把約 150 萬新幣 GMV 與約 15 倍 ROI 標示為提案階段的模型化目標。"
         },
-        "contentStatus": "approved-with-measurement-boundary"
+        "contentStatus": "approved-distinct-contribution-proof"
       },
       "decisionNarrative": {
         "primaryDecisions": [
           {
             "id": "voucher-center-decision-01",
             "title": {
-              "en": "From campaign destinations to one persistent discovery and claim entry",
-              "zh": "從活動型目的地，到單一常設探索與領取入口"
+              "en": "Separate participation from application",
+              "zh": "將參與領取與購買套用分開"
+            },
+            "principle": {
+              "en": "Claiming creates ownership; application remains contextual to purchase.",
+              "zh": "領取建立擁有狀態；套用仍保留在購買情境中。"
             },
             "whatIDecided": {
-              "en": "Established a permanent homepage Voucher Center entry with a claimable count and explicit Claim → View actions, replacing reliance on separate campaign pages and passive voucher visibility.",
-              "zh": "建立首頁常設 Voucher Center 入口、可領取數量與明確的領取 → 查看操作，取代對分散活動頁與被動優惠券曝光的依賴。"
+              "en": "Defined Claim as the participation action and View as the post-claim state, creating a reusable Claim → View model while keeping Voucher application contextual to purchase.",
+              "zh": "將「領取」定義為參與操作，將「查看」定義為領取後狀態，形成可重用的領取 → 查看模型；優惠券套用仍留在購買情境中。"
             },
             "whyThisChoice": {
-              "en": "In the 20-participant architecture study, 12 preferred the bold entry concept and 18 preferred visible Claim actions, showing that discoverability and precise action semantics mattered before broader consolidation.",
-              "zh": "在 20 位參與者的架構研究中，12 位偏好高可見度入口，18 位偏好清楚的領取操作，顯示在擴大整合前，必須先解決可探索性與操作語意。"
+              "en": "18 / 20 participants misunderstood “Use now” as an automatic later action, showing that one CTA could not truthfully represent both ownership and application.",
+              "zh": "18／20 位參與者誤解「立即使用」會在之後自動執行，顯示單一操作無法如實代表擁有與套用兩種狀態。"
             },
             "evidenceSummary": {
-              "en": "12/20 preferred the bold entry; 18/20 preferred visible Claim actions.",
-              "zh": "12／20 偏好高可見度入口；18／20 偏好清楚顯示領取操作。"
+              "en": "18 / 20 misunderstood “Use now”.",
+              "zh": "18／20 誤解「立即使用」。"
             },
-            "status": "research-informed-and-shipped-entry",
-            "contentStatus": "approved-facts-copy-review-2026-08-05"
+            "resultingModel": {
+              "en": "Claim → View state model",
+              "zh": "領取 → 查看狀態模型"
+            },
+            "status": "research-informed-shipped-state-model",
+            "contentStatus": "approved"
           },
           {
-            "id": "voucher-center-decision-03",
+            "id": "voucher-center-decision-02",
             "title": {
-              "en": "From full consolidation to a focused first release",
-              "zh": "從完整整合方向，到聚焦的第一階段上線"
+              "en": "Preserve the target architecture without blocking launch",
+              "zh": "不阻礙上線，同時保留目標架構"
             },
             "whatIDecided": {
-              "en": "Shipped a permanent homepage Voucher Center entry with the number of claimable Vouchers, replaced the purple visual language with a red/green hierarchy, and defined Claim → View card states. Claim all remained out of scope while the broader consolidated architecture stayed as the target direction.",
-              "zh": "上線永久性的首頁 Voucher Center 入口與可領取優惠券數量，將紫色視覺語言改為紅色／綠色層級，並定義領取 → 查看的卡片狀態。全部領取未納入上線範圍，較完整的整合架構則保留為目標方向。"
+              "en": "Shipped the persistent entry, claimable count and Claim → View states within available launch capacity, while preserving consolidated navigation as the next product direction.",
+              "zh": "在可用上線資源內交付常設入口、可領取數量與領取 → 查看狀態，同時將整合式導覽保留為下一階段產品方向。"
             },
             "whyThisChoice": {
-              "en": "The entry and count addressed discovery, while state-specific actions clarified what happened after claiming. Retail Media placement and Engineering delivery constraints required a narrower first release than the research-preferred consolidated model.",
-              "zh": "入口與數量解決探索；依狀態變化的操作則清楚說明領取後結果。零售媒體版位與工程團隊交付限制，使第一階段必須比研究偏好的整合模型更聚焦。"
+              "en": "Paid retail-media homepage placement had already been committed as the first priority, while Engineering capacity could not support the complete target architecture for launch.",
+              "zh": "付費零售媒體首頁版位已承諾並需維持第一順位；工程資源無法在上線時支援完整目標架構。"
+            },
+            "constraintManaged": {
+              "en": "Commercial homepage placement had to remain first priority, and Engineering capacity limited the first-release architecture.",
+              "zh": "商業首頁版位必須維持第一順位，且工程資源限制第一階段可交付的架構。"
             },
             "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
               "type_zh": "接受的取捨",
               "content": {
-                "en": "Accepted a narrower Phase 1 than the research-preferred consolidated model in exchange for protecting commercial placement and meeting the Engineering delivery window.",
-                "zh": "接受第一階段範圍小於研究偏好的整合模型，換取保留商業版位並符合工程交付時程。"
-              },
-              "content_zh": "接受比研究偏好整合模型更精簡的階段 1，以換取保留商業版位並符合工程團隊交付時程。"
+                "en": "We chose to ship within launch capacity, accepting lower entry prominence and some cross-page navigation to protect existing commercial commitments and avoid blocking launch on the complete architecture.",
+                "zh": "我們選擇在現實上線資源內交付，接受較低的入口醒目度與部分跨頁導覽，以保護既有商業承諾，並避免完整架構阻礙上線。"
+              }
             },
             "tradeOff": {
-              "chosen": "A focused first release with a permanent entry, claimable count and explicit card states",
-              "notChosen": "The complete research-preferred consolidated architecture at launch",
-              "acceptedLoss": "Some navigation and claiming efficiency remained unresolved in the first release",
-              "protectedValue": "Commercial placement and delivery feasibility",
-              "constraint": "Retail Media placement and Engineering timeline"
+              "chosen": "Ship within available launch capacity",
+              "notChosen": "Complete consolidated architecture at launch",
+              "acceptedLoss": "Lower entry prominence and some cross-page navigation",
+              "protectedValue": "Existing commercial commitments and an unblocked launch",
+              "constraint": "Committed paid retail-media homepage placement and limited Engineering capacity"
+            },
+            "preservedDirection": {
+              "en": "Consolidated navigation remained the target architecture for the next phase.",
+              "zh": "整合式導覽仍保留為下一階段目標架構。"
             },
             "shippedOutcome": [
               "Homepage Voucher Center entry",
@@ -5767,9 +5801,10 @@
               "Claim → View Voucher Card state"
             ],
             "notShipped": [
-              "Claim all"
+              "Claim all",
+              "Complete consolidated navigation"
             ],
-            "status": "shipped-product-foundation-exact-page-architecture-unconfirmed",
+            "status": "shipped-with-preserved-target-direction",
             "contentStatus": "approved"
           }
         ],
@@ -5901,16 +5936,12 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
-        "what-made-this-hard",
         "phased-validation-path",
         "research-changed-the-model",
         "key-decisions",
         "product-scope",
         "reusable-system",
-        "business-impact",
         "ownership-and-evidence",
-        "delivery-and-measurement",
         "continue-exploring"
       ],
       "flashVoucherEvidence": {
@@ -6021,14 +6052,14 @@
       },
       "keyProblems": {
         "en": [
-          "Scattered voucher entry",
-          "Claim-state ambiguity",
-          "Campaign-only discovery"
+          "Voucher discovery",
+          "Claim-state clarity",
+          "Campaign operations"
         ],
         "zh": [
-          "優惠券入口分散",
-          "領取狀態模糊",
-          "探索侷限於活動"
+          "優惠券探索",
+          "領取狀態清晰度",
+          "活動營運"
         ]
       },
       "legacyAliasStatus": "synchronised-non-canonical-r142",
@@ -6053,6 +6084,31 @@
         ],
         "parentProjectId": "voucher",
         "contentStatus": "approved"
+      },
+      "productScope": {
+        "confirmedShipped": [
+          "Homepage Voucher Center entry",
+          "Number of Vouchers available to claim",
+          "Red/green Voucher Center visual hierarchy",
+          "Claim → View Voucher Card state"
+        ],
+        "nextDirection": [
+          {
+            "evidence": "16 / 20",
+            "en": "supported Claim all",
+            "zh": "支持全部領取"
+          },
+          {
+            "evidence": "4 spontaneous requests",
+            "en": "asked for Claim all without prompting",
+            "zh": "在未提示下主動提出全部領取"
+          }
+        ],
+        "notShipped": [
+          "Claim all",
+          "Complete consolidated navigation"
+        ],
+        "contentStatus": "approved-shipped-next-boundary"
       }
     },
     "game-center": {
