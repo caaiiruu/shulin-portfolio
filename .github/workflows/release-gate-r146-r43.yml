@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 19
+# orchestration revision: 20
 
 on:
   pull_request:
@@ -7,6 +7,8 @@ on:
       - recovery/r146-runtime-2026-08-06
     paths:
       - .github/workflows/release-gate-r146-r43.yml
+      - public/site/content/portfolio-content.json
+      - tests/rendered-html.test.mjs
   workflow_dispatch:
 
 permissions:
@@ -106,8 +108,8 @@ jobs:
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 58' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 58' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 59' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 59' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
           grep -Fq 'Asset governance passed: 13 projects, 31 derived slots, 34 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
