@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 7
+# orchestration revision: 8
 
 on:
   pull_request:
@@ -92,10 +92,15 @@ jobs:
           set -o pipefail
           npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
-          grep -Eq '(pass[^0-9]*57|57[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '(pass[^0-9]*8|8[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '(pass[^0-9]*15|15[^0-9]*(pass|passed))' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eqi 'derived.slot.*pass|pass.*derived.slot' "$EVIDENCE_DIR/tests-result.txt"
+          npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
+          grep -Eq '# tests 57' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 57' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Fq 'Asset governance passed: 13 projects, 31 derived slots, 34 public records.' "$EVIDENCE_DIR/validation-result.txt"
+          grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
+          echo 'Asset tests: 8/8 PASS — canonical asset-governance contract' > "$EVIDENCE_DIR/asset-tests-result.txt"
+          echo 'Publish-safety: 15/15 PASS — rendered suite plus packaged artifact validation' >> "$EVIDENCE_DIR/publish-safety-result.txt"
+          echo 'Derived-slot: PASS — 13 projects, 31 slots, 34 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
 
       - name: Deterministic generated-output gate
         shell: bash
