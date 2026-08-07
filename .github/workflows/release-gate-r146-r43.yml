@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 12
+# orchestration revision: 13
 
 on:
   pull_request:
@@ -185,9 +185,10 @@ jobs:
         shell: bash
         run: |
           cat > /tmp/release-gate.mjs <<'NODE'
-          import { chromium } from 'playwright';
           import fs from 'node:fs';
           import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          const { chromium }=await import(pathToFileURL(path.resolve('node_modules/playwright/index.mjs')).href);
 
           const base=process.env.BASE_URL;
           const out=process.env.EVIDENCE_DIR;
