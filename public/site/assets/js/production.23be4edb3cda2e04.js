@@ -127,7 +127,8 @@ window.PORTFOLIO_ASSET_MANIFEST={"manifestType":"portfolio-public-runtime-asset-
     }).filter(Boolean);
     const journeyStages=list(programmeContent.journeyChapters).map(stage=>({
       ...stage,
-      label:stage.title||stage.label,
+      label:stage.label,
+      transformation:stage.title,
       stage_label:stage.label,
       direction:stage.direction,
       signal:stage.representativeShippedSignal,
@@ -2243,32 +2244,44 @@ window.PORTFOLIO_ASSET_MANIFEST={"manifestType":"portfolio-public-runtime-asset-
         element('strong','',localizedField(item,'capability'))
       );
       const proof=element('div','programme-stage-case__proof');
-      const proofHeading=element('div','programme-stage-case__proof-heading');
-      proofHeading.append(
-        element('span','programme-card-meta-v103',ui("stage-evidence-6c01b468")),
-        element('h4','',localizedField(item,'title'))
-      );
-      const facts=element('div','programme-stage-case__facts');
-      const delivery=element('div','programme-stage-case__fact');
-      delivery.append(
-        element('small','',ui("delivery-status-0fd5a08d")),
-        element('p','programme-stage-case__problem',formatStatus(localizedField(item,'status')))
-      );
-      const work=element('div','programme-stage-case__fact');
-      work.append(
-        element('small','',ui("representative-shipped-work-94a1458e")),
-        element('strong','programme-stage-case__capability',localizedField(item,'title'))
-      );
-      facts.append(work,delivery);
-      proof.append(proofHeading,facts);
+      const shippedTitle=localizedField(item,'title');
+      const distinctEvidence=stageEvidenceItems(p,stage.id)
+        .map(stageEvidenceTitle)
+        .map(value=>localize(value))
+        .find(value=>value&&value.trim().toLocaleLowerCase()!==shippedTitle.trim().toLocaleLowerCase());
+      if(distinctEvidence){
+        const evidence=element('div','programme-stage-case__fact');
+        evidence.append(
+          element('small','',ui("stage-evidence-6c01b468")),
+          element('strong','programme-stage-case__capability',distinctEvidence)
+        );
+        proof.append(evidence);
+      }
+      if(shippedTitle){
+        const work=element('div','programme-stage-case__fact');
+        work.append(
+          element('small','',ui("representative-shipped-work-94a1458e")),
+          element('strong','programme-stage-case__capability',shippedTitle)
+        );
+        proof.append(work);
+      }
+      const deliveryStatus=formatStatus(localizedField(item,'status'));
+      if(deliveryStatus){
+        const delivery=element('div','programme-stage-case__fact');
+        delivery.append(
+          element('small','',ui("delivery-status-0fd5a08d")),
+          element('p','programme-stage-case__problem',deliveryStatus)
+        );
+        proof.append(delivery);
+      }
       const evidenceCount=stageEvidenceItems(p,stage.id).length;
-      const ctaLabel=evidenceCount
-        ?(lang==='zh'?`閱讀 ${evidenceCount} 個子專案 →`:`Explore ${evidenceCount} initiative${evidenceCount>1?'s':''} →`)
-        :(ui("view-stage-case-297e5a01"));
-      const cta=element('button','button button--dark programme-stage-case__cta',ctaLabel);
+      const action=element('div','programme-stage-case__action');
+      if(evidenceCount>1)action.append(element('span','programme-stage-case__count',lang==='zh'?`${evidenceCount} 個子專案`:`${evidenceCount} initiatives`));
+      const cta=element('button','button button--dark programme-stage-case__cta',lang==='zh'?'查看相關作品 →':'View related work →');
       cta.type='button';cta.dataset.stage=stage.id;cta.dataset.parentProject=key;
-      cta.setAttribute('aria-label',`${ui("view-stage-case-2434e1aa")}: ${localizedField(stage,'label')}`);
-      proof.append(cta);
+      cta.setAttribute('aria-label',`${lang==='zh'?'查看相關作品':'View related work'}: ${localizedField(stage,'label')}`);
+      action.append(cta);proof.append(action);
+      proof.dataset.columns=String(Math.min(4,Math.max(2,proof.childElementCount)));
       chapter.append(heading,body,proof);chapters.append(chapter);
     });
     map.append(chapters);
@@ -2786,19 +2799,18 @@ queryPanel?.addEventListener('focusout',event=>{
 function safeText(node,text){if(node)node.textContent=text??''}
 function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node}
 function projectTitle(project){return localize(project?.cardTitle||project?.title)||''}
-function projectSummary(project){return localize(project?.atAGlance||project?.at_glance||project?.summary)||''}
+function projectSummary(project){return localize(project?.at_a_glance_pair)||''}
 function animateShift(before){
  if(!before||!queryPanel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  requestAnimationFrame(()=>{const after=queryPanel.getBoundingClientRect();queryPanel.animate([{transform:`translate(${before.left-after.left}px,${before.top-after.top}px)`},{transform:'translate(0,0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'});result?.animate([{opacity:0,transform:'translateX(22px)'},{opacity:1,transform:'translateX(0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'})});
 }
 function projectBrand(key){
  const project=DATA.projects[key];
- return localize(project?.company)||String(project?.context||'Project').split('·')[0].trim();
+ return localize(project?.company)||'';
 }
 function projectContext(key){
  const project=DATA.projects[key];
- const types=project?.problemTypes||project?.problem_types||[];
- return localize(project?.domain_label)||localize(types[0])||'';
+ return localize(project?.domain_label)||'';
 }
 function projectVisualLabels(key){
  const map={
@@ -2835,12 +2847,12 @@ function createProjectCard(key,variant){
  const meta=element('dl','related-project-card__meta-v45');
  const rows=variant==='search'
   ?[
-    [ui("why-it-fits-3421d244"),localize([p.search_relevance,p.search_relevance_zh])||projectSummary(p)],
+    [ui("why-it-fits-3421d244"),localize(p.search_relevance_pair)||projectSummary(p)],
     [ui("evidence-1111eae0"),localize([p.card_outcome,p.card_outcome_zh])]
    ]
   :variant==='domain'
    ?[[ui("what-this-proves-bfb1a5d4"),localize([p.domain_proof,p.domain_proof_zh])||projectSummary(p)]]
-   :[[ui("direction-b41b4458"),localize([p.search_relevance,p.search_relevance_zh])||projectSummary(p)]];
+   :[[ui("direction-b41b4458"),localize(p.search_relevance_pair)||projectSummary(p)]];
  rows.forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
  const action=element('span','related-project-card__action',ui("view-case-ca67a135"));
  if(variant==='search'){
