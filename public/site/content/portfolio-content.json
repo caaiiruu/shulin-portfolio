@@ -403,7 +403,25 @@
               "en": "PDP and contextual offer visibility",
               "zh": "PDP 與情境式優惠顯示"
             },
-            "status": "partially-realised"
+            "status": "partially-realised",
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-pdp-contextual-discovery-public-v1",
+                "evidenceRole": "before-after",
+                "layoutVariant": "before-after",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Contextual Voucher visibility moved discovery closer to the product and shopping task.",
+                  "zh": "情境式優惠券顯示，讓探索更靠近商品與購物任務。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for before-and-after evidence of Wallet-dependent exposure and contextual Voucher discovery.",
+                  "zh": "預留給從依賴錢包曝光到情境式優惠券探索之前後對照證據。"
+                },
+                "mobileBehavior": "stack",
+                "placeholderState": "governed-placeholder"
+              }
+            }
           },
           {
             "id": "qualify",
@@ -427,7 +445,25 @@
               "en": "Applicability and cart-matching states",
               "zh": "適用性與購物車匹配狀態"
             },
-            "status": "shipped-and-used"
+            "status": "shipped-and-used",
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+                "evidenceRole": "system-rule",
+                "layoutVariant": "system-visual",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Eligibility evidence connects product, channel, threshold and action rules before commitment.",
+                  "zh": "資格判斷證據在顧客投入前，連結商品、通路、門檻與操作規則。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a system visual showing Voucher eligibility and applicable-state rules.",
+                  "zh": "預留給呈現優惠券資格與適用狀態規則的系統視覺。"
+                },
+                "mobileBehavior": "single-screen",
+                "placeholderState": "governed-placeholder"
+              }
+            }
           },
           {
             "id": "activate",
@@ -451,7 +487,25 @@
               "en": "Selected campaign and limited-value participation models",
               "zh": "特定活動與限量價值的參與模式"
             },
-            "status": "partially-realised"
+            "status": "partially-realised",
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-mechanism-transition-public-v1",
+                "evidenceRole": "flow",
+                "layoutVariant": "flow-strip",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Participation actions changed with the incentive mechanic instead of using one generic collection action.",
+                  "zh": "參與操作依獎勵機制改變，而不是套用單一通用領取行為。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a flow showing mechanic-specific Save, Claim, Add item or participation actions.",
+                  "zh": "預留給呈現依機制使用儲存、領取、加入商品或參與操作的流程。"
+                },
+                "mobileBehavior": "horizontal-rail",
+                "placeholderState": "governed-placeholder"
+              }
+            }
           },
           {
             "id": "redeem",
@@ -475,7 +529,25 @@
               "en": "Select all, code application and cart matching",
               "zh": "全選、代碼套用與購物車匹配"
             },
-            "status": "shipped-and-used"
+            "status": "shipped-and-used",
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-error-recovery-public-v1",
+                "evidenceRole": "flow",
+                "layoutVariant": "flow-strip",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Explicit application and recovery states reduced trial-and-error during redemption.",
+                  "zh": "明確的套用與復原狀態，降低兌換過程中的反覆試錯。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a redemption and recovery flow with explicit application states.",
+                  "zh": "預留給具明確套用狀態的兌換與復原流程。"
+                },
+                "mobileBehavior": "horizontal-rail",
+                "placeholderState": "governed-placeholder"
+              }
+            }
           },
           {
             "id": "review",
@@ -499,7 +571,25 @@
               "en": "Selected savings and post-transaction communication",
               "zh": "部分節省與交易後溝通"
             },
-            "status": "partially-realised-and-future-state"
+            "status": "partially-realised-and-future-state",
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-stage-review-post-use-public-v1",
+                "evidenceRole": "shipped-state",
+                "layoutVariant": "single-screen",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Post-use evidence should confirm savings, usage or returned value without overstating future-state coverage.",
+                  "zh": "使用後證據應確認節省、使用或退回價值，且不誇大尚未全面實現的狀態。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a post-use Voucher state confirming savings, usage or returned value.",
+                  "zh": "預留給確認節省、使用或退回價值的使用後優惠券狀態。"
+                },
+                "mobileBehavior": "single-screen",
+                "placeholderState": "governed-placeholder"
+              }
+            }
           }
         ],
         "selectedShippedProofs": [
@@ -3604,8 +3694,8 @@
           },
           "status": "implemented-internal-component-and-operations-enabled",
           "title": {
-            "en": "From one-off Voucher cards to an Operations-configured component system",
-            "zh": "從一次性的優惠券卡片，到營運團隊可配置的元件系統"
+            "en": "From an existing Voucher Card to a reusable state-aware component model",
+            "zh": "從既有 Voucher Card，到可重用的狀態化元件模型"
           },
           "problemTypes": [
             "Design-system infrastructure",
@@ -3621,7 +3711,7 @@
             "status": "confirmed-by-user",
             "role": "design-lead-and-component-system-owner",
             "personallyOwned": [
-              "Identified the need for a reusable Voucher Card pattern",
+              "Evolved the existing Voucher Card into a reusable state-aware pattern",
               "Planned and designed the Voucher Card usability study",
               "Defined information hierarchy and card behaviour",
               "Designed horizontal and vertical component variants",
@@ -3638,8 +3728,8 @@
               "publicClaimRule": "Credit Shulin with system ownership and cross-functional alignment; do not imply she wrote production code."
             },
             "publicAttribution": {
-              "en": "Led the research, component architecture and cross-functional implementation model for a reusable Voucher Card system, then connected it to the Operations setup workflow.",
-              "zh": "主導可重用優惠券卡片系統的研究、元件架構與跨職能落地模式，並將其銜接至營運設定流程。"
+              "en": "Led the research and state-aware evolution of an existing Voucher Card, aligned the updated interaction contract with Engineering and Operations, and pushed for its abstraction into a reusable Tangram component.",
+              "zh": "主導既有 Voucher Card 的研究與狀態化演進，與工程及營運對齊更新後的互動契約，並推動其抽象為可重用的 Tangram 元件。"
             },
             "contentStatus": "approved"
           },
@@ -3948,6 +4038,19 @@
                 "zh": "是否有追蹤設定 time、工程團隊 tickets、交接或重工的下降？"
               }
             }
+          ],
+          "history": {
+            "en": "The original white Voucher Card already existed in the Design System. Voucher Center evolved that component with stronger differentiation and explicit Claim → View states; I then pushed for the updated model to be abstracted into a reusable Tangram component.",
+            "zh": "原始白色 Voucher Card 早已存在於 Design System。Voucher Center 在既有元件上強化視覺區分與明確的 Claim → View 狀態；之後我進一步推動更新後的模型抽象為可重用的 Tangram 元件。"
+          },
+          "atAGlance": {
+            "en": "Evolved an existing Voucher Card into state-aware variants for Voucher Center, then aligned the updated model with Engineering and Operations so it could be reused through shared component rules.",
+            "zh": "將既有 Voucher Card 演進為支援 Voucher Center 狀態的多版本模型，再與工程與營運對齊，使其能透過共享元件規則重用。"
+          },
+          "forbiddenClaims": [
+            "I created the Voucher Card system from scratch.",
+            "The original white Voucher Card was created for Voucher Center.",
+            "Colour alone was the system innovation."
           ]
         }
       },
@@ -18886,6 +18989,12 @@
         "Recovered r140 hierarchy structure and recorded missing r138/r139 payloads."
       ],
       "contentStatus": "review-candidate-not-canonical"
+    },
+    "voucherOfferVision20260807": {
+      "packageId": "CP-VOUCHER-OFFER-VISION-2026-08-07",
+      "mode": "merge-only",
+      "scope": "Voucher / Offer hierarchy, Stage visual evidence slots and Voucher Card historical correction",
+      "source": "User-approved content package"
     }
   },
   "implementationContracts": {
