@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 21
+# orchestration revision: 22
 
 on:
   pull_request:
@@ -9,6 +9,15 @@ on:
       - .github/workflows/release-gate-r146-r43.yml
       - public/site/content/portfolio-content.json
       - tests/rendered-html.test.mjs
+      - tests/asset-governance.test.mjs
+      - tests/publish-safety.test.mjs
+      - public/site/content/portfolio-asset-manifest.json
+      - public/site/assets/js/app.js
+      - public/site/assets/css/components/project-detail-overview.css
+      - public/site/qa/asset-governance.mjs
+      - public/site/docs/stage-visual-evidence-map.json
+      - public/site/docs/voucher-content-merge-audit.json
+      - scripts/build-production-assets.mjs
   workflow_dispatch:
 
 permissions:
@@ -51,21 +60,33 @@ jobs:
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
             ':(exclude)public/site/content/portfolio-content.json' \
             ':(exclude)public/site/assets/js/app.js' \
+            ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
+            ':(exclude)public/site/content/portfolio-asset-manifest.json' \
+            ':(exclude)public/site/docs/stage-visual-evidence-map.json' \
+            ':(exclude)public/site/docs/voucher-content-merge-audit.json' \
             ':(exclude)worker/index.ts' \
             ':(exclude)scripts/build-production-assets.mjs' \
             ':(exclude)scripts/generate-project-pages.mjs' \
             ':(exclude)vercel.json' \
             ':(exclude)tests/rendered-html.test.mjs' \
+            ':(exclude)tests/asset-governance.test.mjs' \
+            ':(exclude)tests/publish-safety.test.mjs' \
             ':(exclude)tests/project-detail-routes.test.mjs' \
             ':(exclude)public/site/qa/asset-governance.mjs'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
             public/site/content/portfolio-content.json \
             public/site/assets/js/app.js \
+            public/site/assets/css/components/project-detail-overview.css \
+            public/site/content/portfolio-asset-manifest.json \
+            public/site/docs/stage-visual-evidence-map.json \
+            public/site/docs/voucher-content-merge-audit.json \
             worker/index.ts \
             scripts/build-production-assets.mjs \
             scripts/generate-project-pages.mjs \
             vercel.json \
             tests/rendered-html.test.mjs \
+            tests/asset-governance.test.mjs \
+            tests/publish-safety.test.mjs \
             tests/project-detail-routes.test.mjs \
             public/site/qa/asset-governance.mjs
           grep -Fq 'From fragmented campaign discovery to a persistent Voucher claim product' public/site/content/portfolio-content.json
@@ -77,7 +98,7 @@ jobs:
           ! test -e public/site/work/voucher-center-only.html
           ! grep -E '^\+.*(sr-only|hidden)' <(git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/js/app.js scripts/generate-project-pages.mjs)
           test -z "$(git status --short)"
-          echo "PASS: product source matches the approved five-commit Voucher Center implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
+          echo "PASS: product source matches the approved Voucher content and Stage visual evidence implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -108,14 +129,14 @@ jobs:
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 59' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 59' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 61' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 61' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Fq 'Asset governance passed: 13 projects, 31 derived slots, 34 public records.' "$EVIDENCE_DIR/validation-result.txt"
+          grep -Fq 'Asset governance passed: 13 projects, 36 derived slots, 35 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
           echo 'Asset tests: 8/8 PASS — canonical asset-governance contract' > "$EVIDENCE_DIR/asset-tests-result.txt"
           echo 'Publish-safety: 15/15 PASS — rendered suite plus packaged artifact validation' >> "$EVIDENCE_DIR/publish-safety-result.txt"
-          echo 'Derived-slot: PASS — 13 projects, 31 slots, 34 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
+          echo 'Derived-slot: PASS — 13 projects, 36 slots, 35 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
 
       - name: Deterministic generated-output gate
         shell: bash
@@ -258,7 +279,7 @@ jobs:
             const body=page.locator('body');
             const text=await body.innerText();
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const required=['DISCOVER','ACTIVATE','View related work'];
+            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','CUSTOMER BREAKPOINT','DESIGN SHIFT','VISUAL EVIDENCE','View related work'];
             const missing=required.filter(t=>!text.includes(t));
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
@@ -288,7 +309,7 @@ jobs:
             const secondaryRatio=contrast(colors.secondary,colors.bg);
             const boundaryRatio=colors.borderWidth>0?contrast(colors.border,colors.bg):0;
             await page.screenshot({path:path.join(dir,'voucher-stage-system.png'),fullPage:true});
-            for(const label of ['DISCOVER','ACTIVATE','Key Problems','Stage Focus']){
+            for(const label of ['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','Key Problems','Stage Focus']){
               const loc=page.getByText(label,{exact:false}).first();
               if(await loc.isVisible().catch(()=>false)){
                 await loc.scrollIntoViewIfNeeded();
