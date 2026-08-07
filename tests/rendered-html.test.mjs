@@ -1229,3 +1229,13 @@ test("preserves localized arrays and structured values during Chinese copy clean
   assert.match(publicCopyNormalizer, /\.normalize\('NFC'\)/);
   assert.doesNotMatch(publicCopyNormalizer, /\.normalize\('NFKC'\)/);
 });
+
+
+test("removes obsolete Stage CTA copy from SSOT and fingerprinted output", () => {
+  const forbidden = /Explore \\d+ initiatives|View stage case|Explore initiatives/;
+  const ssot = read("content/portfolio-content.json");
+  assert.doesNotMatch(ssot, forbidden);
+  const bundleNames = fs.readdirSync(new URL("assets/js/", site)).filter(name => /^production\\.[a-f0-9]{16}\\.js$/.test(name));
+  assert.ok(bundleNames.length > 0, "Expected at least one fingerprinted production bundle");
+  for (const name of bundleNames) assert.doesNotMatch(read(`assets/js/${name}`), forbidden, name);
+});
