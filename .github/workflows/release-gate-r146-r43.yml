@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 9
+# orchestration revision: 10
 
 on:
   pull_request:
@@ -28,7 +28,7 @@ jobs:
     env:
       IMPLEMENTATION_HEAD: 9b1e5164459d9b7a68180e449c197f7562233294
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
-      BASE_URL: http://127.0.0.1:4173
+      BASE_URL: http://127.0.0.1:3000
     steps:
       - name: Complete private checkout
         uses: actions/checkout@v4
