@@ -361,7 +361,11 @@
     const scrollY=window.scrollY;
     lang=next==='zh'?'zh':'en';root.lang=lang;
     try{localStorage.setItem('portfolioLang',lang)}catch{}
-    doc.querySelectorAll('[data-copy-key]').forEach(node=>{safeText(node,staticCopy(node.dataset.copyKey));decorateArrow(node)});
+    doc.querySelectorAll('[data-copy-key]').forEach(node=>{
+      safeText(node,staticCopy(node.dataset.copyKey));
+      if(node.hasAttribute('data-career-context-only'))safeText(node,node.textContent.split(' · ').at(-1).trim());
+      decorateArrow(node);
+    });
     doc.querySelectorAll('[data-copy-html-key]').forEach(node=>renderLimitedRichText(node,staticCopy(node.dataset.copyHtmlKey)));
     doc.querySelectorAll('[data-aria-key]').forEach(node=>node.setAttribute('aria-label',staticCopy(node.dataset.ariaKey)));
     doc.querySelectorAll('[data-lang-toggle]').forEach(node=>{
@@ -923,18 +927,19 @@
         element('p','',localize(item.content))
       );
       const links=element('div','profile-leadership-v81__links');
-      list(item.evidenceLinks).forEach(link=>{
+      list(item.evidenceLinks).slice(0,1).forEach(link=>{
         const source=link.type==='project'?DATA.projects[link.id]:DATA.experiments[link.id];
         if(!source)return;
         const fullTitle=link.type==='project'
           ?localize(source.cardTitle)||localize(source.title_pair)
           :localize(source.title);
-        const linkTitle=link.type==='project'?ui("view-case-a62dd0ad"):ui("view-experiment-8788e030");
+        const rawLinkTitle=link.type==='project'?ui("view-case-a62dd0ad"):ui("view-experiment-8788e030");
+        const linkTitle=rawLinkTitle.replace(/\s*[→↗]\s*$/,'');
         const button=element('button','text-cta profile-leadership-v81__link',linkTitle);
         button.type='button';button.dataset.pressable='';
         button.dataset[link.type]=link.id;
         button.setAttribute('aria-label',`${linkTitle}: ${fullTitle}`);
-        button.appendChild(element('span','icon-arrow icon-arrow--right'));
+        button.appendChild(element('span',`icon-arrow ${link.type==='project'?'icon-arrow--right':'icon-arrow--up-right'}`));
         links.appendChild(button);
       });
       if(links.childElementCount)card.appendChild(links);
