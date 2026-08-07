@@ -4945,36 +4945,65 @@
         },
         "systemFoundation": {
           "title": {
-            "en": "What became reusable",
-            "zh": "哪些能力成為可重用基礎"
+            "en": "Turning product evolution into shared infrastructure",
+            "zh": "將產品演進轉化為共享基礎"
           },
-          "items": [
+          "thesis": {
+            "en": "A feature-specific evolution became a reusable shared capability.",
+            "zh": "將功能情境中的演進，轉化為可重用的共享能力。"
+          },
+          "evolution": [
             {
-              "en": "Persistent voucher-discovery entry",
-              "zh": "常設優惠券探索入口"
+              "id": "existing-white-card",
+              "label": {
+                "en": "EXISTING FOUNDATION",
+                "zh": "既有基礎"
+              },
+              "title": {
+                "en": "Original white Voucher Card",
+                "zh": "原有白色優惠券卡片"
+              },
+              "content": {
+                "en": "The white Voucher Card already existed in the Design System before Voucher Center.",
+                "zh": "白色優惠券卡片在 Voucher Center 之前已存在於設計系統中。"
+              }
             },
             {
-              "en": "Visible claimable-value count",
-              "zh": "清楚顯示可領取價值數量"
+              "id": "voucher-center-evolution",
+              "label": {
+                "en": "PRODUCT EVOLUTION",
+                "zh": "產品演進"
+              },
+              "title": {
+                "en": "Voucher Center state expression",
+                "zh": "Voucher Center 狀態表達"
+              },
+              "content": {
+                "en": "I evolved the existing component with stronger visual differentiation, explicit Claim → View states and campaign / Voucher state expression.",
+                "zh": "我將既有元件演進為更清楚的視覺區分、明確的領取 → 查看狀態，以及活動／優惠券狀態表達。"
+              }
             },
             {
-              "en": "Explicit Claim → View state transition",
-              "zh": "明確的領取 → 查看狀態轉換"
-            },
-            {
-              "en": "Red/green hierarchy for action and status",
-              "zh": "用紅綠層級區分操作與狀態"
-            },
-            {
-              "en": "Campaign-to-product evolution boundary",
-              "zh": "活動機制轉化為產品時的邊界"
+              "id": "tangram-abstraction",
+              "label": {
+                "en": "SHARED CAPABILITY",
+                "zh": "共享能力"
+              },
+              "title": {
+                "en": "Reusable Tangram component",
+                "zh": "可重用的 Tangram 元件"
+              },
+              "content": {
+                "en": "I persuaded the team to abstract the updated model into a reusable Tangram component for cross-product reuse.",
+                "zh": "我推動團隊將更新後的模型抽象成可重用的 Tangram 元件，支援跨產品使用。"
+              }
             }
           ],
-          "boundary": {
-            "en": "These are selected behaviours generalised into Voucher Center—not proof that every Flash Voucher screen shipped again.",
-            "zh": "這些是被一般化到 Voucher Center 的特定行為，不代表所有 Flash Voucher 畫面再次上線。"
+          "ownership": {
+            "en": "I led the feature-specific evolution and influenced the team-level abstraction; I did not create the original Voucher Card system from scratch.",
+            "zh": "我主導功能情境中的元件演進，並推動團隊層級的抽象；原始優惠券卡片系統並非由我從零建立。"
           },
-          "contentStatus": "approved"
+          "contentStatus": "approved-user-confirmed-history"
         },
         "businessImpactRef": "projects.voucher-center.businessImpact",
         "ownershipRef": "projects.voucher-center.ownershipModel",
@@ -5010,7 +5039,8 @@
         },
         "contentStatus": "approved",
         "sectionOrderRef": "projects.voucher-center.sectionOrder",
-        "flashVoucherEvidenceRef": "projects.voucher-center.flashVoucherEvidence"
+        "flashVoucherEvidenceRef": "projects.voucher-center.flashVoucherEvidence",
+        "systemFoundationRef": "projects.voucher-center.publicContent.systemFoundation"
       },
       "research": {
         "competitiveVisualAudit2025": {
@@ -6109,6 +6139,68 @@
           "Complete consolidated navigation"
         ],
         "contentStatus": "approved-shipped-next-boundary"
+      },
+      "systemFoundation": {
+        "title": {
+          "en": "Turning product evolution into shared infrastructure",
+          "zh": "將產品演進轉化為共享基礎"
+        },
+        "thesis": {
+          "en": "A feature-specific evolution became a reusable shared capability.",
+          "zh": "將功能情境中的演進，轉化為可重用的共享能力。"
+        },
+        "evolution": [
+          {
+            "id": "existing-white-card",
+            "label": {
+              "en": "EXISTING FOUNDATION",
+              "zh": "既有基礎"
+            },
+            "title": {
+              "en": "Original white Voucher Card",
+              "zh": "原有白色優惠券卡片"
+            },
+            "content": {
+              "en": "The white Voucher Card already existed in the Design System before Voucher Center.",
+              "zh": "白色優惠券卡片在 Voucher Center 之前已存在於設計系統中。"
+            }
+          },
+          {
+            "id": "voucher-center-evolution",
+            "label": {
+              "en": "PRODUCT EVOLUTION",
+              "zh": "產品演進"
+            },
+            "title": {
+              "en": "Voucher Center state expression",
+              "zh": "Voucher Center 狀態表達"
+            },
+            "content": {
+              "en": "I evolved the existing component with stronger visual differentiation, explicit Claim → View states and campaign / Voucher state expression.",
+              "zh": "我將既有元件演進為更清楚的視覺區分、明確的領取 → 查看狀態，以及活動／優惠券狀態表達。"
+            }
+          },
+          {
+            "id": "tangram-abstraction",
+            "label": {
+              "en": "SHARED CAPABILITY",
+              "zh": "共享能力"
+            },
+            "title": {
+              "en": "Reusable Tangram component",
+              "zh": "可重用的 Tangram 元件"
+            },
+            "content": {
+              "en": "I persuaded the team to abstract the updated model into a reusable Tangram component for cross-product reuse.",
+              "zh": "我推動團隊將更新後的模型抽象成可重用的 Tangram 元件，支援跨產品使用。"
+            }
+          }
+        ],
+        "ownership": {
+          "en": "I led the feature-specific evolution and influenced the team-level abstraction; I did not create the original Voucher Card system from scratch.",
+          "zh": "我主導功能情境中的元件演進，並推動團隊層級的抽象；原始優惠券卡片系統並非由我從零建立。"
+        },
+        "contentStatus": "approved-user-confirmed-history"
       }
     },
     "game-center": {
