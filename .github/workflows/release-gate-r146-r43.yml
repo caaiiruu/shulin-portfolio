@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 15
+# orchestration revision: 16
 
 on:
   pull_request:
@@ -240,24 +240,24 @@ jobs:
             const ctaVisible=await cta.isVisible().catch(()=>false);
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
-            const stageFocusVisible=await page.getByText('Stage Focus',{exact:false}).first().isVisible().catch(()=>false);
+            const stageFocus=page.locator('.voucher-stage-summary').first();
+            const stageFocusVisible=await stageFocus.isVisible().catch(()=>false);
             const nav=page.locator('.pd-section-nav').first();
             const navVisible=await nav.isVisible().catch(()=>false);
             const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
             const badText=/undefined|null|\[object Object\]/.test(text);
-            const primary=page.locator('.programme-stage-case').first();
-            const colors=await primary.evaluate(el=>{
+            const darkCard=page.locator('.voucher-stage-summary article.is-response').first();
+            const colors=await darkCard.evaluate(el=>{
               const c=getComputedStyle(el);
-              const text=el.querySelector('h1,h2,h3,p,button,a')||el;
-              const tc=getComputedStyle(text);
-              return {bg:c.backgroundColor,fg:tc.color,border:c.borderColor};
-            }).catch(()=>({bg:'rgb(0,0,0)',fg:'rgb(255,255,255)',border:'rgb(255,255,255)'}));
-            const primaryRatio=contrast(colors.fg,colors.bg);
-            const secondaryColors=await primary.locator('p').first().evaluate(el=>({fg:getComputedStyle(el).color,bg:getComputedStyle(el.closest('.programme-stage-case')||el).backgroundColor})).catch(()=>colors);
-            const secondaryRatio=contrast(secondaryColors.fg,secondaryColors.bg);
-            const boundaryPairs=await primary.locator('*').evaluateAll(elements=>elements.map(el=>{const s=getComputedStyle(el);return {width:parseFloat(s.borderTopWidth)||0,border:s.borderTopColor,bg:s.backgroundColor}}).filter(x=>x.width>0 && !/rgba\([^)]*,\s*0\)/.test(x.border)));
-            const boundaryRatio=Math.max(0,...boundaryPairs.map(x=>contrast(x.border,x.bg)));
+              const primary=getComputedStyle(el.querySelector('p')||el);
+              const secondary=getComputedStyle(el.querySelector('small')||el);
+              return {bg:c.backgroundColor,primary:primary.color,secondary:secondary.color,border:c.borderTopColor,borderWidth:parseFloat(c.borderTopWidth)||0};
+            });
+            const primaryRatio=contrast(colors.primary,colors.bg);
+            const secondaryRatio=contrast(colors.secondary,colors.bg);
+            const boundaryRatio=colors.borderWidth>0?contrast(colors.border,colors.bg):0;
             await page.screenshot({path:path.join(dir,'voucher-stage-system.png'),fullPage:true});
+            if(stageFocusVisible){await stageFocus.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(dir,'stage-focus.png'),fullPage:false});}
             for(const label of ['DISCOVER','ACTIVATE','Key Problems','Stage Focus']){
               const loc=page.getByText(label,{exact:false}).first();
               if(await loc.isVisible().catch(()=>false)){
