@@ -57,7 +57,12 @@ jobs:
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
             ':(exclude)public/site/assets/css/components/project-detail-overview.css'
           git diff --check "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css
-          test "$(git diff --numstat "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css)" = 
+          git diff --numstat "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css | awk '$1 == 1 && $2 == 1 && $3 == "public/site/assets/css/components/project-detail-overview.css" { ok=1 } END { exit(ok ? 0 : 1) }'
+          git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/css/components/project-detail-overview.css | tee "$EVIDENCE_DIR/p1-fix-diff.txt"
+          grep -Fq -- 'align-items:center' "$EVIDENCE_DIR/p1-fix-diff.txt"
+          grep -Fq -- 'align-items:start' "$EVIDENCE_DIR/p1-fix-diff.txt"
+          test -z "$(git status --short)"
+          echo "PASS: product source matches implementation tree plus one audited P1 alignment fix" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
