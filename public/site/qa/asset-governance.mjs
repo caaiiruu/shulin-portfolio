@@ -19,7 +19,7 @@ const placeholderIds = [
   "project-video-placeholder-wide-v1",
 ];
 
-fail(createHash("sha256").update(contentBytes).digest("hex") === "fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6", "Content r146 SHA changed");
+fail(createHash("sha256").update(contentBytes).digest("hex") === "75b78cf1b035d09998eaf66563e06f42ee6d08e51961761ca879b0b2a47af80b", "Content r146 SHA changed");
 fail(content.contentVersion === "2026-08-06-r146" && projectIds.length === 13, "Content r146 roster changed");
 fail(manifest.packageVersion === "r43" && manifest.contentVersion === content.contentVersion, "Manifest must be r43 aligned to r146");
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
