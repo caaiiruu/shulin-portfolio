@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 10
+# orchestration revision: 11
 
 on:
   pull_request:
@@ -161,9 +161,25 @@ jobs:
       - name: Start production-like server
         shell: bash
         run: |
-          npm run start > "$EVIDENCE_DIR/server.log" 2>&1 &
+          cat > /tmp/release-gate-static-server.mjs <<'NODE'
+          import http from 'node:http';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root=path.resolve('public');
+          const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2'};
+          http.createServer((req,res)=>{
+            const pathname=decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname);
+            let file=path.resolve(root,'.'+pathname);
+            if(!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file=path.join(root,'site/index.html');
+            try{
+              res.writeHead(200,{'content-type':types[path.extname(file)]||'application/octet-stream','cache-control':'no-store'});
+              fs.createReadStream(file).pipe(res);
+            }catch(error){res.writeHead(500);res.end(String(error));}
+          }).listen(3000,'127.0.0.1',()=>console.log('QA static server ready on 3000'));
+          NODE
+          node /tmp/release-gate-static-server.mjs > "$EVIDENCE_DIR/server.log" 2>&1 &
           echo $! > /tmp/release-gate-server.pid
-          for i in {1..90}; do
+          for i in {1..30}; do
             if curl -fsS "$BASE_URL/site/work/voucher" >/dev/null; then exit 0; fi
             sleep 1
           done
