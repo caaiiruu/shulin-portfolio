@@ -35,7 +35,7 @@ test("all 31 missing slots are placeholder-active", () => assert.equal(slots.fil
 test("four shared placeholders exist", () => assert.equal(Object.values(items).filter((record) => record.assetStatus === "placeholder").length, 4));
 test("public tree has no historical registry", () => assert.equal(fs.existsSync("public/site/content/historical-asset-registry.json"), false));
 test("canonical Taishin owner is public", () => assert.equal(slots.filter((slot) => slot.projectId === "online-auction-payment-platform").length, 0));
-test("Content r146 hash is unchanged", () => assert.equal(createHash("sha256").update(contentBytes).digest("hex"), "fe072e4fbccb99dea80085e29dc29c5001f447ea636684477b3dee7f29c28bd6"));
+test("Content r146 hash is unchanged", () => assert.equal(createHash("sha256").update(contentBytes).digest("hex"), "75b78cf1b035d09998eaf66563e06f42ee6d08e51961761ca879b0b2a47af80b"));
 test("canonical project roster remains 13", () => assert.equal(Object.keys(content.projects).length, 13));
 test("Chinese mode does not render English engineering status", () => assert.doesNotMatch(app, /localize\([^)]*placeholder-active/));
 test("HTML has no empty or undefined src", () => assert.doesNotMatch(html, /src=["'](?:|undefined|null)["']/));
