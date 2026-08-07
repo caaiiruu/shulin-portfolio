@@ -57,7 +57,7 @@ test("legacy auction runtime ownership uses canonical Taishin identity", () => {
 
 test("all 13 projects own unique visual slots with no broken src assignment", () => {
   assert.equal(Object.keys(content.projects).length, 13);
-  assert.equal(slots.length, 31);
+  assert.equal(slots.length, 36);
   assert.equal(new Set(slots.map((slot) => `${slot.projectId}/${slot.slotId}`)).size, slots.length);
   assert.doesNotMatch(app, /\.src\s*=\s*(?:''|null|undefined)/);
 });
