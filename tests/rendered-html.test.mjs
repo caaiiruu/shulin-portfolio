@@ -1236,3 +1236,48 @@ test("removes obsolete Stage CTA copy from canonical source", () => {
   assert.doesNotMatch(read("content/portfolio-content.json"), forbidden);
   assert.doesNotMatch(read("assets/js/app.js"), forbidden);
 });
+
+
+test("renders governed Stage visual evidence from canonical Voucher journey contracts", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const stages = ssot.projects.voucher.publicContent.journeyChapters;
+  assert.deepEqual(stages.map((stage) => stage.label.en), ["DISCOVER", "QUALIFY", "ACTIVATE", "REDEEM", "REVIEW"]);
+  const allowedRoles = new Set(["decision-proof", "shipped-state", "before-after", "flow", "system-rule"]);
+  const allowedLayouts = new Set(["single-screen", "before-after", "flow-strip", "system-visual"]);
+  assert.equal(stages.length, 5);
+  for (const stage of stages) {
+    const visual = stage.visualEvidence?.primary;
+    assert.ok(visual, stage.id);
+    assert.ok(allowedRoles.has(visual.evidenceRole), stage.id);
+    assert.ok(allowedLayouts.has(visual.layoutVariant), stage.id);
+    assert.ok(visual.caption.en && visual.caption.zh, stage.id);
+    assert.ok(visual.alt.en && visual.alt.zh, stage.id);
+    assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
+    assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+  }
+  assert.match(app, /localizedField\(stage,'transformation'\)/);
+  assert.match(app, /stage\.visualEvidence\?\.primary/);
+  assert.match(app, /resolveProjectAsset\(visualContract\.assetId\)/);
+  assert.match(app, /programme-stage-visual__caption/);
+  assert.match(css, /\.programme-stage-visual\{/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{/);
+  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.programme-stage-visual--before-after/);
+});
+
+test("locks the existing Voucher Card history and independent-project boundaries", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects.voucher;
+  const card = voucher.systemFoundations.voucherCardComponentSystem2024_2025;
+  assert.match(card.history.en, /original white Voucher Card already existed/);
+  assert.match(card.history.en, /Claim → View/);
+  assert.match(card.history.en, /reusable Tangram component/);
+  assert.doesNotMatch(card.title.en, /one-off Voucher cards/);
+  assert.ok(card.forbiddenClaims.includes("I created the Voucher Card system from scratch."));
+  assert.equal(voucher.publicContent.publicArchitecture.voucherCenterIsIndependentProject, true);
+  assert.equal(voucher.publicContent.continueExploring.independentProjectCards.some((item) => item.projectId === "game-center"), true);
+  assert.deepEqual(voucher.publicContent.selectedInitiatives.order, ["save-everyday-digital-campaign-2023", "brand-challenges"]);
+  assert.equal(voucher.publicContent.voucherWalletEvidence.forbiddenProjection.includes("voucher-center"), true);
+});
