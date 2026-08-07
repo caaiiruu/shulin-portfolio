@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 13
+# orchestration revision: 14
 
 on:
   pull_request:
@@ -270,8 +270,10 @@ jobs:
           const zhContext=await browser.newContext({viewport:{width:1419,height:1000}});
           const zh=await zhContext.newPage();
           zh.on('console',m=>{if(m.type()==='error')consoleErrors.push('chinese: '+m.text())});
-          await zh.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+          await zh.goto(base+'/site',{waitUntil:'networkidle'});
           await zh.locator('[data-lang-toggle]').first().click();
+          await zh.waitForTimeout(300);
+          await zh.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
           await zh.waitForTimeout(500);
           const zhText=await zh.locator('body').innerText();
           const chinesePass=/[\u3400-\u9fff]/.test(zhText) && !/I turned an undefined learning concept|Explore 2 initiatives|View stage case|undefined|null|\[object Object\]/.test(zhText);
