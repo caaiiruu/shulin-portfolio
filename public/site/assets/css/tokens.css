@@ -39,6 +39,11 @@
   --color-text-accent: var(--brand-700);
   --color-text-inverse: var(--paper-0);
   --color-text-inverse-secondary: color-mix(in srgb, var(--paper-0) 78%, transparent);
+  --color-surface-dark: var(--ink-950);
+  --color-text-on-dark-primary: var(--paper-0);
+  --color-text-on-dark-secondary: color-mix(in srgb, var(--paper-0) 82%, transparent);
+  --color-border-on-dark: color-mix(in srgb, var(--paper-0) 38%, var(--ink-950));
+  --color-focus-on-dark: var(--paper-0);
   --color-surface: var(--paper-0);
   --color-surface-subtle: var(--paper-50);
   --color-surface-soft: var(--paper-50);
