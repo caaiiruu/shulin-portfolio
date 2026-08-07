@@ -20,7 +20,7 @@
     "legacyRuntimeImportsForbidden": true,
     "generatedBundlesAreNotSources": true,
     "interactiveContrastContract": "Every default, hover, active, selected and focus state must pair its foreground and background tokens. Inverse text may not remain on a light hover surface.",
-    "stageCaseCardContract": "Use one related-case hierarchy: matching title, explicitly labelled problem solved, explicitly labelled reusable result, and one contrast-safe action."
+    "stageCaseCardContract": "Use one canonical stage identity and one View related work action; keep multi-item count separate, suppress duplicate evidence, and render only populated evidence columns."
   },
   "components": [
     {
@@ -280,7 +280,12 @@
         "type-color-meta",
         "type-color-eyebrow",
         "type-color-metric",
-        "dimension-90deg"
+        "dimension-90deg",
+        "color-surface-dark",
+        "color-text-on-dark-primary",
+        "color-text-on-dark-secondary",
+        "color-border-on-dark",
+        "color-focus-on-dark"
       ],
       "variants": [
         "Standard project",
@@ -290,15 +295,15 @@
         "Key Intervention Map",
         "Recruiter section navigator",
         "Outcome metric evidence",
-      "Structured case evidence",
-      "Two-stage product validation path",
-      "Voucher Center r119 popup composition"
+        "Structured case evidence",
+        "Two-stage product validation path",
+        "Voucher Center r119 popup composition"
       ],
-    "interactionContract": [
-      "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
-      "The Voucher Center navigator is generated from the seven stable section IDs in popupComposition, never from an index or generic fallback; other projects retain the default shared navigator contract",
-      "Unresolved Voucher Center media retains its canonical Asset ID in a labelled Product image pending placeholder inside the existing media surface; it does not simulate shipped evidence and can be replaced without changing composition",
-      "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
+      "interactionContract": [
+        "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
+        "The Voucher Center navigator is generated from the seven stable section IDs in popupComposition, never from an index or generic fallback; other projects retain the default shared navigator contract",
+        "Unresolved Voucher Center media retains its canonical Asset ID in a labelled Product image pending placeholder inside the existing media surface; it does not simulate shipped evidence and can be replaced without changing composition",
+        "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
         "Until both public derivatives exist, the validation-path media slots use clearly labelled non-evidentiary placeholders and never expose private source boards, fabricated product proof or conversion metrics",
         "Professional cases with at least two available chapters expose one compact, content-width, bottom-floating four-destination anchor navigator as a direct dialog child outside the transformed scroll container; it remains stationary throughout the popup and never uses tab semantics or hides content panels",
         "Mobile replaces the horizontal navigator with one Jump to section disclosure and a vertical link list",
@@ -319,8 +324,8 @@
         "Voucher / Offer Customer Journey, Voucher Center, and Game Center are independent parent projects; Voucher Center names only the internal operations system",
         "Voucher Wallet remains a cross-journey surface; embedded initiative evidence must not become a duplicate top-level project",
         "Programme content integrates breakpoint, design direction, representative shipped work and delivery status in one five-stage scan path",
-        "Every journey chapter uses one hierarchy: stage label, transformation, breakpoint, design direction, representative shipped work, delivery status and View stage evidence action",
-        "All five approved journey chapters open readable evidence in the same popup and expose exactly one parent return in the sticky header",
+        "Every journey chapter uses one hierarchy: canonical stage identity, breakpoint, design decision, distinct stage evidence when available, representative shipped work, delivery status, a separate multi-item count when needed, and one View related work action",
+        "All five approved journey chapters use the same View related work vocabulary, open readable evidence in the same popup, and expose exactly one parent return in the sticky header",
         "The four-foundation gallery uses one accessible tablist and panel with click and Left/Right Arrow navigation; diagrams are labelled system evidence and never shipped screenshots",
         "Before and shared-system comparisons use equal columns, aligned labels and one body line-height",
         "Cross-functional enablement names the team, decision context, reusable capability and repeated work or ambiguity removed; Marketing is not labelled CRM",
@@ -331,7 +336,10 @@
         "The shared five-stage journey is the only programme navigation taxonomy and never uses progress-bar semantics",
         "Empty asset placeholders are not rendered; a shipped product visual may render only after a public Asset ID is registered",
         "Related work resolves from the parent project for nested views",
-        "Desktop, tablet and mobile preserve complete stage names, keyboard focus, minimum 48px primary controls and zero page-level horizontal overflow"
+        "Desktop, tablet and mobile preserve complete stage names, keyboard focus, minimum 48px primary controls and zero page-level horizontal overflow",
+        "Stage cards use one shared grid owner across desktop, tablet and mobile; stage number, identity, reasoning, evidence, delivery status and action never rely on positional transforms, absolute calibration or page-level overrides",
+        "Stage Evidence renders only when it is semantically distinct from Representative Shipped Work; the evidence strip supports two, three or four populated columns without empty placeholders",
+        "Dark Stage Focus surfaces use the registered on-dark primary, secondary, border and focus semantic tokens and meet WCAG AA contrast"
       ],
       "exclusiveOwner": true
     },
