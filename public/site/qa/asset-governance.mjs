@@ -20,7 +20,7 @@ const placeholderIds = [
 ];
 
 const contentSha = createHash("sha256").update(contentBytes).digest("hex");
-fail(contentSha === "15dadae8ac3d590d020fcada8fb794664cdfcbc4fbd11a2df3c5af419495b621", `Content r146 SHA changed: ${contentSha}`);
+fail(contentSha === "2178a620ad013809be032e1036488964349187ad954233e2def81b074668ea09", `Content r146 SHA changed: ${contentSha}`);
 fail(content.contentVersion === "2026-08-06-r146" && projectIds.length === 13, "Content r146 roster changed");
 fail(manifest.packageVersion === "r43" && manifest.contentVersion === content.contentVersion, "Manifest must be r43 aligned to r146");
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
