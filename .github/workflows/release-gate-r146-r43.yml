@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 20
+# orchestration revision: 21
 
 on:
   pull_request:
@@ -378,6 +378,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-gate-r146-r43
-          path: /tmp/release-gate-r146-r43
+          path: |
+            /tmp/release-gate-r146-r43
+            public/site
           if-no-files-found: error
           retention-days: 30
