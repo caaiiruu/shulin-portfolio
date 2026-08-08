@@ -6,7 +6,7 @@ const base=process.env.BASE_URL||'http://127.0.0.1:3000';
 const out=process.env.EVIDENCE_DIR||'/tmp/case-study-evidence';
 const projects=[
   ['voucher','/site/work/voucher'],
-  ['pdp-initiative','/site/work/voucher/discover'],
+  ['pdp-initiative','/site/work/voucher?initiative=pdpVoucher2024'],
   ['voucher-center','/site/work/voucher-center'],
   ['payment','/site/work/payment'],
   ['dbs','/site/work/dbs'],
@@ -26,10 +26,10 @@ const audit=async page=>page.evaluate(()=>{
     let depth=0,node=leaf;
     while(node&&node.matches('.case-study-section *')){if(visual(node))depth++;else depth=0;maxDepth=Math.max(maxDepth,depth);node=node.parentElement}
   }
-  const sections=[...document.querySelectorAll('.case-study-section')].filter(visible).map(el=>({id:el.dataset.caseStudySection||'',surface:[...el.classList].find(x=>x.startsWith('case-study-section--'))?.replace('case-study-section--','')||'',heading:el.querySelector(':scope > .case-study-section__header h2')?.textContent.trim()||''}));
+  const sections=[...document.querySelectorAll('.case-study-section')].filter(visible).map(el=>({id:el.dataset.caseStudySection||'',surface:[...el.classList].find(x=>x.startsWith('case-study-section--'))?.replace('case-study-section--','')||'',heading:el.querySelector('.case-study-section__header h2')?.textContent.trim()||''}));
   const cells=[...document.querySelectorAll('.info-grid-v45>div')].filter(visible).map(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,radius:s.borderRadius}});
   const ownership=[...document.querySelectorAll('.ownership-grid-v45>article')].filter(visible).map(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,radius:s.borderRadius}});
-  return {majorSectionCount:sections.length,sectionOrder:sections.map(x=>x.id),surfaceVariants:sections.map(x=>`${x.id}:${x.surface}`),maxVisualContainerDepth:maxDepth,headersComplete:sections.every(x=>x.heading),decisionStructure:{count:document.querySelectorAll('.decision-card-v46').length,nestedCards:document.querySelectorAll('.decision-card-v46 .decision-card-v46').length,effects:document.querySelectorAll('.decision-effect-v147').length},impactVariant:document.querySelector('[data-impact-variant]')?.dataset.impactVariant||'none',infoGridCells:cells,ownershipBlocks:ownership,canonicalOrder:document.querySelector('.project-detail-v45')?.dataset.canonicalSectionOrder||''};
+  return {majorSectionCount:sections.length,sectionOrder:sections.map(x=>x.id),surfaceVariants:sections.map(x=>`${x.id}:${x.surface}`),maxVisualContainerDepth:maxDepth,headersComplete:sections.every(x=>x.heading),decisionStructure:{count:document.querySelectorAll('.decision-card-v46').length,nestedCards:document.querySelectorAll('.decision-card-v46 .decision-card-v46').length,effects:document.querySelectorAll('.decision-effect-v147').length},impactVariant:document.querySelector('[data-impact-variant]')?.dataset.impactVariant||'none',infoGridCells:cells,ownershipBlocks:ownership,canonicalOrder:document.querySelector('[data-canonical-section-order]')?.dataset.canonicalSectionOrder||''};
 });
 for(const [id,url] of projects){
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
