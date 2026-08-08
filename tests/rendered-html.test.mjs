@@ -1046,10 +1046,9 @@ test("prevents narrow-column recruiter content and forced word breaking", () => 
   assert.match(overview, /\.ownership-section-v45 \.section-heading-v45\+\*\{margin-top:var\(--cmp-popup-subtitle-content-gap\)/);
   assert.match(tokens, /--color-surface-evidence-neutral: var\(--paper-50\)/);
   assert.match(tokens, /--color-surface-evidence-accent: var\(--paper-50\)/);
-  assert.match(overview, /\.impact-grid-v45>article\{background:var\(--color-surface-evidence-neutral\)\}/);
-  assert.match(overview, /\.ownership-section-v45,\.delivery-grid-v45 article\{background:var\(--color-surface-evidence-accent\)\}/);
+  assert.match(overview, /\.impact-grid-v45>article,\.ownership-section-v45,\.delivery-grid-v45 article\{background:transparent\}/);
   assert.match(tokens, /--color-surface-evidence-item: var\(--paper-0\)/);
-  assert.match(overview, /\.ownership-grid-v45>article\{[^}]*background:var\(--color-surface-evidence-item\)/);
+  assert.match(overview, /\.ownership-grid-v45>article\{[^}]*border-radius:0;[^}]*background:transparent/);
   assert.match(overview, /\.team-impact-item-v47,\.recruiter-proof-item-v46\{[^}]*background:var\(--color-surface-evidence-item\)/);
   assert.match(overview, /\.detail-related-v45__head h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
   assert.match(cards, /\.related-project-card-v45,.detail-related-card-v45\{display:grid;[^}]*grid-template-rows:auto minmax\(0,1fr\) auto/);
@@ -1099,7 +1098,8 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /appendEvidenceValue\(card,value\)/);
   assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
   assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
-  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch[^}]*border-block:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
+  assert.match(overview, /\.case-study-section\{[^}]*border-top:var\(--dimension-1px\) solid var\(--color-border\)[^}]*border-radius:0/);
+  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
   assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
@@ -1310,4 +1310,28 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
   assert.equal(real.filter(item=>item.projectId==='voucher').length,2);
+});
+
+test("converges every project on one SSOT-ordered CaseStudySection system", () => {
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /const CASE_STUDY_SECTION_REGISTRY=\{/);
+  assert.doesNotMatch(app, /PROJECT_SECTION_REGISTRY/);
+  assert.match(app, /project\.section_order\|\|\[\]/);
+  assert.match(app, /Unknown canonical section/);
+  assert.match(app, /applyCaseStudySectionSystem\(p\)/);
+  for (const variant of ["canvas", "soft", "emphasis"]) {
+    assert.match(css, new RegExp(`\\.case-study-section--${variant}\\{`));
+  }
+  assert.match(css, /\.case-study-section__header\{/);
+  assert.match(css, /\.case-study-section__eyebrow\{[^}]*color:var\(--color-text-secondary\)/);
+  assert.match(css, /\.project-value-v207\{[^}]*background:transparent/);
+  assert.doesNotMatch(css, /\.project-value-v207\{[^}]*border-radius:/);
+  assert.match(css, /\.info-grid-v45 small\{[^}]*color:var\(--color-text-secondary\)/);
+  assert.match(css, /\.info-grid-v45>div\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.project-context-v45--decision-band\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.ownership-grid-v45>article\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.gallery-copy-v45\{[^}]*background:transparent/);
+  assert.match(css, /\.gallery-thumbs-v45\{[^}]*background:transparent/);
+  assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--space-5\);width:100%\}/);
 });

@@ -139,8 +139,8 @@ jobs:
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 62' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 62' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 63' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 63' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
           grep -Fq 'Asset governance passed: 13 projects, 37 derived slots, 37 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
@@ -384,6 +384,10 @@ jobs:
           for viewport in desktop-1440 desktop-1280 tablet-1024 tablet-768 mobile-430 mobile-390 mobile-375 mobile-320; do
             cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/$viewport/audit.json"
           done
+
+      - name: Rendered CaseStudySection DOM and screenshot gate
+        shell: bash
+        run: node scripts/case-study-dom-audit.mjs
 
       - name: Compose release gate report
         if: always()

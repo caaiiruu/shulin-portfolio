@@ -1488,11 +1488,9 @@
       .replace(/^(曾考慮方案|接受的取捨|取捨)\s*[—–：:\-]\s*/,'')
       .trim();
   }
-  const PROJECT_SECTION_REGISTRY={
-    hero:'overview','at-a-glance':'overview','info-grid':'overview','why-it-mattered':'overview','business-impact':'overview',
-    'key-decisions':'decisions','my-contribution':'ownership','ownership-collaboration':'ownership',
-    'confidentiality-note':'overview','continue-exploring':'related'
-  };
+  const sectionContract=(owner,surface='canvas',required=false)=>({owner,surface,headingLevel:2,required});
+  const CASE_STUDY_SECTION_REGISTRY={hero:sectionContract('hero','canvas',true),'value-i-brought':sectionContract('value','canvas',true),overview:sectionContract('overview','soft',true),'at-a-glance':sectionContract('overview','soft',true),'info-grid':sectionContract('overview','soft',true),'critical-problem':sectionContract('problem','canvas',true),'why-it-mattered':sectionContract('problem'),'what-made-this-hard':sectionContract('complexity'),'key-decisions':sectionContract('decisions','soft'),'key-design-decisions':sectionContract('decisions','soft'),'business-impact':sectionContract('impact','soft'),'team-impact':sectionContract('impact','soft'),'validated-outcomes':sectionContract('impact','soft'),'shipped-outcomes':sectionContract('impact','soft'),'shipped-proof':sectionContract('impact','soft'),'conversion-evidence':sectionContract('impact','soft'),'delivery-proof':sectionContract('impact','soft'),'validation-and-launch':sectionContract('impact','soft'),'recommendation-evidence':sectionContract('impact','soft'),'delivery-and-measurement':sectionContract('delivery'),'confidentiality-note':sectionContract('delivery'),'status-and-disclosure':sectionContract('delivery'),'ownership-and-collaboration':sectionContract('ownership'),'ownership-and-evidence':sectionContract('ownership'),'my-contribution':sectionContract('ownership'),'continue-exploring':sectionContract('related','soft'),prototype:sectionContract('evidence','soft')};
+  ['system-coverage-map','selected-shipped-evidence','future-vision','system-foundation','phased-validation-path','research-changed-the-model','product-scope','reusable-system','task-and-reward-model','shipped-experience','completion-evidence','operating-model','connected-trip-model','learning-and-entitlement-model','research-and-validation','released-product-scope','taishin-research-definition-model','research-and-specification-evidence','consultation-model','transaction-model','voucher-and-loyalty-integration','recognition','multi-route-transaction-model','five-phase-journey-map','initial-strategies','confidence-model','booking-pickup-research-strategy'].forEach((id,index)=>{CASE_STUDY_SECTION_REGISTRY[id]=sectionContract('supplemental',index%2?'canvas':'soft')});
   const SECTION_LABELS={
     'core-system-insight':['Core system insight','核心系統洞察'],
     'evidence-to-strategy':['Evidence to strategy','從證據到策略'],
@@ -1779,7 +1777,7 @@
     const model=project.impact_evidence;
     if(!model)return false;
     const labels=DATA.implementationContracts?.impactEvidenceLabels||{};
-    const shell=element('section',`impact-evidence-v147 impact-evidence-v147--${model.variant||'scale-and-system-change'}`);
+    const shell=element('div',`impact-evidence-v147 impact-evidence-v147--${model.variant||'scale-and-system-change'}`);
     shell.dataset.impactVariant=model.variant||'';
     const heading=element('div','impact-evidence-v147__heading');
     heading.append(
@@ -1975,10 +1973,11 @@
   function renderRegisteredProjectSections(project){
     const host=doc.getElementById('projectSupplementalSections');
     if(!host)return;
+    doc.querySelectorAll('#projectEvidence > [data-project-section]').forEach(node=>node.remove());
     clear(host);
     const order=project.section_order||[];
     order.forEach(sectionId=>{
-      if(PROJECT_SECTION_REGISTRY[sectionId])return;
+      const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);return}if(contract.owner!=='supplemental')return;
       // The project overview already owns the five-second summary. Repeating the
       // same problem / strategy / outcome as detached cards weakens the scan path.
       if(sectionId==='executive-summary')return;
@@ -2065,6 +2064,9 @@
     });
     host.hidden=!host.childElementCount;
   }
+  function caseStudySection(node,id,surface='canvas'){if(!node)return null;node.classList.remove('case-study-section--canvas','case-study-section--soft','case-study-section--emphasis');node.classList.add('case-study-section',`case-study-section--${surface}`);node.dataset.caseStudySection=id;return node}
+  function caseStudyHeader(node,index=''){if(!node)return;const governed=node.matches('.case-study-section__header')?node:node.querySelector(':scope > .case-study-section__header');if(governed){const eyebrow=governed.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);return}const existing=node.matches('.section-heading-v45')?node:node.querySelector(':scope > .section-heading-v45');const header=existing||node.querySelector(':scope > h2, :scope > h3')||node.querySelector('h2, h3');if(!header)return;if(existing){existing.classList.add('case-study-section__header');const eyebrow=existing.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);else if(index)existing.prepend(element('span','case-study-section__eyebrow',index));const title=existing.querySelector('h3');if(title){const h2=element('h2',title.className,title.textContent);for(const attr of title.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);title.replaceWith(h2)}return}if(header.matches('h3')){const h2=element('h2',header.className,header.textContent);for(const attr of header.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);header.replaceWith(h2)}const title=node.querySelector(':scope > h2')||node.querySelector('h2');if(!title)return;const wrapper=element('div','case-study-section__header');if(index)wrapper.appendChild(element('span','case-study-section__eyebrow',index));node.prepend(wrapper);wrapper.appendChild(title)}
+  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},appended=new Set(),ordered=[];for(const sectionId of project.section_order||[]){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract||['hero','value','overview'].includes(contract.owner))continue;if(contract.owner==='supplemental'){const node=supplemental.find(item=>item.dataset.projectSection===sectionId);if(node&&!appended.has(node)){ordered.push(node);appended.add(node)}continue}const node=owners[contract.owner];if(node&&!appended.has(node)){ordered.push(node);appended.add(node)}}[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery].forEach(node=>{if(node&&!appended.has(node)){ordered.push(node);appended.add(node)}});ordered.forEach(node=>evidence.appendChild(node));ordered.filter(node=>!node.hidden).forEach((node,index)=>caseStudyHeader(node,String(index+3).padStart(2,'0')));caseStudyHeader(value,'01 · VALUE I BROUGHT');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'02 · OVERVIEW');evidence.dataset.canonicalSectionOrder=(project.section_order||[]).join(' ')}
   function renderKeyInterventionMap(project){
     const section=doc.getElementById('projectKeyIntervention');
     const flow=doc.getElementById('projectKeyInterventionFlow');
@@ -2315,6 +2317,7 @@
     safeText(doc.getElementById('projectImpact'),localize(p.impact_pair));
     doc.getElementById('projectEvidence')?.setAttribute('data-section-order',(p.section_order||[]).join(' '));
     renderRegisteredProjectSections(p);
+    doc.querySelectorAll('#projectImpactSection > .impact-evidence-v147').forEach(node=>node.remove());
     renderDeliveryOutcomes(p);
     const hardList=doc.getElementById('projectHard');clear(hardList);
     list(p.hard).forEach((item,index)=>{
@@ -2339,7 +2342,7 @@
     const ledArticle=doc.getElementById('projectLed')?.closest('article');
     const contributedArticle=doc.getElementById('projectContributed')?.closest('article');
     if(p.ownership_model){
-      safeText(doc.querySelector('.ownership-section-v45 .section-heading-v45 h3'),detailLabel('ownershipAndCollaboration'));
+      safeText(doc.querySelector('.ownership-section-v45 .section-heading-v45 :is(h2,h3)'),detailLabel('ownershipAndCollaboration'));
       safeText(ledArticle?.querySelector('h4'),detailLabel('iLed'));
       safeText(contributedArticle?.querySelector('h4'),detailLabel('coDecided'));
       const ownershipIntro=doc.querySelector('.ownership-section-v45 .section-heading-v45 p');
@@ -2355,6 +2358,7 @@
     if(hardSection)hardSection.hidden=!doc.getElementById('projectHard')?.childElementCount;
     renderTeamImpact(key,p);
     safeText(doc.getElementById('projectReflection'),localize(p.recruiter.reflection));
+    applyCaseStudySectionSystem(p);
   }
   function localizedField(item,key){
     if(!item)return '';
@@ -2405,10 +2409,10 @@
       '';
   }
   function createProgrammeSection(title,copy,className='programme-section-v103'){
-    const section=element('section',className);
-    const head=element('div','section-heading-v45');
+    const section=element('section',`${className} case-study-section case-study-section--canvas`);
+    const head=element('div','section-heading-v45 case-study-section__header');
     const wrap=element('div');
-    wrap.append(element('h3','',title));
+    wrap.append(element('h2','',title));
     if(copy)wrap.append(element('p','',copy));
     head.append(wrap);section.append(head);return section;
   }
