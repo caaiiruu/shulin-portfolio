@@ -1320,6 +1320,8 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.match(app, /project\.section_order\|\|\[\]/);
   assert.match(app, /Unknown canonical section/);
   assert.match(app, /mappedCanonicalSectionOrder/);
+  assert.match(app, /programmeOwner:'journey'/);
+  assert.match(app, /candidates\.forEach\(node=>\{node\.hidden=true/);
   assert.match(app, /dataset\.canonicalSectionId=sectionId/);
   assert.doesNotMatch(app, /\[problem,complexity,\.\.\.supplemental,decisions,gallery,impact,ownership,delivery\]/);
   assert.match(app, /applyCaseStudySectionSystem\(p\)/);
