@@ -109,7 +109,7 @@ for (const token of ["--cmp-popup-page-title-size", "--cmp-popup-section-title-s
 }
 if (/font-size:clamp\(/.test(projectDetail)) errors.push("ProjectDetailOverview: popup typography must use semantic component tokens instead of local clamp scales");
 if (!canonicalCss.includes('.gallery-thumbs-v45>*[aria-selected="true"]') || !canonicalCss.includes("border:var(--dimension-2px) solid var(--color-state-selected-ring)")) errors.push("DetailDialog: selected thumbnail must use a non-clipping 2px inset state");
-if (/\.decision-(?:result-block-v58|considerations-v46)[^{]*\{[^}]*border-top/s.test(canonicalCss)) errors.push("DetailDialog: decision information hierarchy must not use divider lines");
+if (!canonicalCss.includes(".decision-number-v48{align-self:start;display:inline-flex;width:max-content;padding:var(--space-1) var(--space-2);border:var(--dimension-1px) solid var(--color-text-accent)")) errors.push("DetailDialog: Decision must use the shared semantic tag surface");
 if (!app.includes("if(tradeoffText)") || !app.includes("if(considerations.childElementCount)")) errors.push("DetailDialog: trade-off must be conditional on real SSOT content");
 if (!canonicalCss.includes(".rail-button:disabled{border-color:var(--color-state-disabled-border);background:var(--color-state-disabled-bg);color:var(--color-state-disabled-text)")) errors.push("HorizontalRail: disabled state must use semantic surface, border, and text");
 
@@ -122,7 +122,7 @@ if (/timeline-evidence-v34[^<]*[\s\S]{0,240}<b>→<\/b>/.test(fs.readFileSync(pa
 if (!canonicalCss.includes(".ownership-grid-v45>article{padding:var(--space-5);border-radius:var(--radius-md);background:var(--color-surface-evidence-item)}")) errors.push("ProjectDetailOverview: parent and child evidence surfaces must use the neutral hierarchy");
 if (!app.includes("'button button--dark programme-stage-case__cta'")) errors.push("ProjectDetailOverview: stage-case CTA must reuse the canonical primary button contract");
 if (/\.programme-stage-case__cta:(?:hover|active)\{/.test(canonicalCss)) errors.push("ProjectDetailOverview: stage-case CTA must not maintain a parallel hover or active contract");
-if (!app.includes("voucher-stage-summary") || !app.includes('ui("customer-breakpoint-') || !app.includes('ui("system-response-')) errors.push("ProjectDetailOverview: stage summary must keep one SSOT-localized breakpoint-to-system-response hierarchy");
+if (!app.includes("stage-focus-v148__statement") || !app.includes("This initiative advances") || app.includes("renderDeliveryStatus(localizedField(item,'status'))")) errors.push("ProjectDetailOverview: stage and child views must use one compact Stage Focus and no Hero delivery status");
 if (!app.includes("createDecisionCard") || !app.includes("voucher-stage-decision-list")) errors.push("ProjectDetailOverview: stage deep dives must reuse the canonical Design Decision renderer");
 if (/\.home-page\s+:is\([^)]*\.principles/.test(editorial)) errors.push("HomepageEvidence: EditorialSection must not override the dark Principles surface");
 if (!homeRuntime.includes("localize(project?.company)") || !homeRuntime.includes("localize(project?.domain_label)")) errors.push("ProjectCard: related cards must render company first and domain second from SSOT");
