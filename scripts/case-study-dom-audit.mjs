@@ -30,8 +30,8 @@ const audit=async page=>page.evaluate(()=>{
   let maxDepth=0,maxPath=[];
   for(const leaf of document.querySelectorAll('.case-study-section *')){
     if(!visible(leaf)||leaf.closest('.evidence-lightbox-v147,[data-interactive-prototype],.decision-visual-v58,.gallery-stage-v45,.gallery-thumbs-v45'))continue;
-    let depth=0,node=leaf;
-    while(node&&node.closest('.case-study-section')){if(majorContainer(node))depth++;if(depth>maxDepth){maxDepth=depth;maxPath=[];let trace=node;while(trace&&trace.closest('.case-study-section')){if(majorContainer(trace))maxPath.push(trace.className||trace.tagName);trace=trace.parentElement}}node=node.parentElement}
+    let depth=0,node=leaf,encountered=[];
+    while(node&&node.closest('.case-study-section')){if(majorContainer(node)){depth++;encountered.push(node.className||node.tagName)}if(depth>maxDepth){maxDepth=depth;maxPath=[...encountered]}node=node.parentElement}
   }
   const sections=[...document.querySelectorAll('.case-study-section')].filter(visible).map(el=>({id:el.dataset.caseStudySection||'',canonicalId:el.dataset.canonicalSectionId||'',surface:[...el.classList].find(x=>x.startsWith('case-study-section--'))?.replace('case-study-section--','')||'',heading:el.querySelector('.case-study-section__header h2')?.textContent.trim()||''}));
   const renderedOrder=sections.filter(x=>x.canonicalId).map(x=>x.canonicalId);
