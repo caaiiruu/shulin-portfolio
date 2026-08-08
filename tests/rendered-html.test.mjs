@@ -1339,6 +1339,7 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.match(css, /\.gallery-copy-v45\{[^}]*background:transparent/);
   assert.match(css, /\.gallery-thumbs-v45\{[^}]*background:transparent/);
   assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--space-5\);width:100%\}/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{[^}]*border-radius:0;[^}]*background:transparent/);
   for (const forbidden of [
     /\.project-context-v45--decision-band\{grid-template-columns:1fr;padding:var\(--space-5\)\}/,
     /\.quick-view-v51\{display:grid;grid-template-columns:1fr;gap:var\(--space-5\);padding:var\(--space-5\)\}/,
