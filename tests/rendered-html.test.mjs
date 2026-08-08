@@ -1253,15 +1253,27 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
     assert.ok(visual, stage.id);
     assert.ok(allowedRoles.has(visual.evidenceRole), stage.id);
     assert.ok(allowedLayouts.has(visual.layoutVariant), stage.id);
-    assert.ok(visual.caption.en && visual.caption.zh, stage.id);
-    assert.ok(visual.alt.en && visual.alt.zh, stage.id);
-    assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
-    assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+    if(stage.id==="discover"){
+      assert.ok(visual.copy.en.beforeCaption && visual.copy.zh.shippedCaption);
+      assert.equal(manifest.items[visual.beforeAssetId].implementationStatus, "real-active");
+      assert.equal(manifest.items[visual.shippedAssetId].implementationStatus, "real-active");
+    }else{
+      assert.ok(visual.caption.en && visual.caption.zh, stage.id);
+      assert.ok(visual.alt.en && visual.alt.zh, stage.id);
+      assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+    }
   }
+  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
+  assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
   assert.match(app, /localizedField\(stage,'transformation'\)/);
   assert.match(app, /stage\.visualEvidence\?\.primary/);
   assert.match(app, /resolveProjectAsset\(visualContract\.assetId\)/);
   assert.match(app, /programme-stage-visual__caption/);
+  assert.match(app, /before-after-evidence-v147/);
+  assert.match(app, /evidence-lightbox-v147/);
+  assert.match(app, /impact-evidence-v147/);
   assert.match(css, /\.programme-stage-visual\{/);
   assert.match(css, /\.programme-stage-case__breakpoint\{/);
   assert.match(css, /@media\(max-width:700px\)[\s\S]*\.programme-stage-visual--before-after/);
