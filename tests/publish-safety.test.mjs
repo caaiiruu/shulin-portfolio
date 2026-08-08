@@ -15,7 +15,7 @@ function derive(value, projectId, location = []) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
     const next = [...location, key];
-    if ((key === "assetId" || key === "publicAssetId") && typeof child === "string") slots.push({ projectId, slotId: next.join("."), assetId: child });
+    if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") slots.push({ projectId, slotId: next.join("."), assetId: child });
     else if (key !== "sourceArchives") derive(child, projectId, next);
   }
 }
@@ -27,15 +27,22 @@ test("public Manifest contains no do-not-publish metadata", () => assert.doesNot
 test("public Manifest contains no source archive paths", () => assert.doesNotMatch(manifestText, /sourceArchives?|source archive|handoffPath|sourceFilename/i));
 test("public Manifest contains no workspace or local paths", () => assert.doesNotMatch(manifestText, /file:\/\/|workspace|mnt\/data/i));
 test("Manifest contains only runtime records", () => assert.equal(Object.keys(items).length, new Set(slots.map((slot) => slot.assetId)).size + 4));
-test("all 36 slots resolve to a public placeholder", () => {
-  assert.equal(slots.length, 36);
-  for (const slot of slots) assert.match(items[items[slot.assetId].placeholderFallbackAssetId].publicPath, /^\/site\//);
+test("all 37 slots resolve to a public asset", () => {
+  assert.equal(slots.length, 37);
+  for (const slot of slots) {
+    const record=items[slot.assetId];
+    const path=record.assetStatus==="production"?record.publicPath:items[record.placeholderFallbackAssetId].publicPath;
+    assert.match(path, /^\/site\//);
+  }
 });
-test("all 36 missing slots are placeholder-active", () => assert.equal(slots.filter((slot) => items[slot.assetId].assetStatus === "awaiting-user-asset" && items[slot.assetId].implementationStatus === "placeholder-active").length, 36));
+test("35 missing slots remain placeholder-active and 2 PDP slots are production", () => {
+  assert.equal(slots.filter((slot) => items[slot.assetId].assetStatus === "awaiting-user-asset" && items[slot.assetId].implementationStatus === "placeholder-active").length, 35);
+  assert.equal(slots.filter((slot) => items[slot.assetId].assetStatus === "production" && items[slot.assetId].implementationStatus === "real-active").length, 2);
+});
 test("four shared placeholders exist", () => assert.equal(Object.values(items).filter((record) => record.assetStatus === "placeholder").length, 4));
 test("public tree has no historical registry", () => assert.equal(fs.existsSync("public/site/content/historical-asset-registry.json"), false));
 test("canonical Taishin owner is public", () => assert.equal(slots.filter((slot) => slot.projectId === "online-auction-payment-platform").length, 0));
-test("Content r146 hash is unchanged", () => assert.equal(createHash("sha256").update(contentBytes).digest("hex"), "75b78cf1b035d09998eaf66563e06f42ee6d08e51961761ca879b0b2a47af80b"));
+test("Content r147 hash is unchanged", () => assert.equal(createHash("sha256").update(contentBytes).digest("hex"), "1eda19c29abfe81fe5185d28ce2656ec75d3627b9edbe5e44a04f6a9f32e92eb"));
 test("canonical project roster remains 13", () => assert.equal(Object.keys(content.projects).length, 13));
 test("Chinese mode does not render English engineering status", () => assert.doesNotMatch(app, /localize\([^)]*placeholder-active/));
 test("HTML has no empty or undefined src", () => assert.doesNotMatch(html, /src=["'](?:|undefined|null)["']/));
