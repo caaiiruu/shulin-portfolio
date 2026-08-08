@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 22
+# orchestration revision: 23
 
 on:
   pull_request:
@@ -15,6 +15,8 @@ on:
       - public/site/assets/js/app.js
       - public/site/assets/css/components/project-detail-overview.css
       - public/site/qa/asset-governance.mjs
+      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png
+      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png
       - public/site/docs/stage-visual-evidence-map.json
       - public/site/docs/voucher-content-merge-audit.json
       - scripts/build-production-assets.mjs
@@ -32,7 +34,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: ca2286252cb7a1c0f765f9de31a7c56f36b887fd
+      IMPLEMENTATION_HEAD: fba2cf33bb7fa95283acd46f79aa14c85170b6ed
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -72,7 +74,9 @@ jobs:
             ':(exclude)tests/asset-governance.test.mjs' \
             ':(exclude)tests/publish-safety.test.mjs' \
             ':(exclude)tests/project-detail-routes.test.mjs' \
-            ':(exclude)public/site/qa/asset-governance.mjs'
+            ':(exclude)public/site/qa/asset-governance.mjs' \
+            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png' \
+            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
             public/site/content/portfolio-content.json \
             public/site/assets/js/app.js \
@@ -132,11 +136,11 @@ jobs:
           grep -Eq '# tests 61' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# pass 61' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Fq 'Asset governance passed: 13 projects, 36 derived slots, 35 public records.' "$EVIDENCE_DIR/validation-result.txt"
+          grep -Fq 'Asset governance passed: 13 projects, 37 derived slots, 37 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
           echo 'Asset tests: 8/8 PASS — canonical asset-governance contract' > "$EVIDENCE_DIR/asset-tests-result.txt"
           echo 'Publish-safety: 15/15 PASS — rendered suite plus packaged artifact validation' >> "$EVIDENCE_DIR/publish-safety-result.txt"
-          echo 'Derived-slot: PASS — 13 projects, 36 slots, 35 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
+          echo 'Derived-slot: PASS — 13 projects, 37 slots, 37 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
 
       - name: Deterministic generated-output gate
         shell: bash
