@@ -1,6 +1,7 @@
 (function(){
 'use strict';
 const DATA=window.PORTFOLIO_DATA;
+const ASSETS=window.PORTFOLIO_ASSET_MANIFEST?.items||{};
 const lang=()=>window.getPortfolioLanguage?window.getPortfolioLanguage():'en';
 const localize=value=>{
  if(Array.isArray(value))return value[lang()==='zh'?1:0];
@@ -64,6 +65,19 @@ function projectVisualLabels(key){
 }
 function createProjectVisual(key){
  const visual=element('div','related-project-card__visual-v45');
+ const preferredAssetId=key==='voucher'?'voucher-offer-stage-discover-pdp-shipped-01':DATA.projects[key]?.heroVisualBrief?.assetId;
+ const record=ASSETS[preferredAssetId];
+ const isReal=record?.assetStatus==='production'&&record?.implementationStatus==='real-active';
+ const fallback=ASSETS[record?.placeholderFallbackAssetId];
+ const src=isReal?(record.productionUrl||record.publicPath):fallback?.publicPath;
+ if(src){
+  const image=element('img','related-project-card__image-v148');
+  image.src=src;image.loading='lazy';image.decoding='async';
+  image.alt=isReal?(lang()==='zh'?(record.alt_zh||record.alt||''):(record.alt||'')):(lang()==='zh'?'專案視覺素材待補。':'Project visual pending.');
+  image.dataset.assetStatus=isReal?'real-active':'placeholder-active';
+  visual.dataset.assetStatus=image.dataset.assetStatus;
+  visual.append(image);return visual;
+ }
  visual.setAttribute('aria-hidden','true');
  const brand=element('span','related-project-card__brand-v45',projectBrand(key));
  const flow=element('div','related-project-card__flow-v45');
