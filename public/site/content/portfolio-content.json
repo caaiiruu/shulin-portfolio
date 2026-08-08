@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-06-r146",
-  "supersedes": "2026-08-06-r145",
+  "contentVersion": "2026-08-08-r147",
+  "supersedes": "2026-08-06-r146",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -75,8 +75,8 @@
           "zh": "我以 27% 加入購物車、62% 兌換率、2.4% 適用商品到購物車，以及 1.8% 商品頁到購物車等基準，排定情境式曝光、直接操作與錯誤復原的優先順序，涵蓋商品、購物車、結帳、票券錢包與門市旅程。"
         }
       },
-      "context": "NTUC FairPrice Group",
-      "context_zh": "NTUC FairPrice Group",
+      "context": "FairPrice Group",
+      "context_zh": "FairPrice Group",
       "transformation": "From fragmented campaign logic to a reusable incentive system",
       "transformation_zh": "從分散的活動規則，到可重用的獎勵系統",
       "problem_types": [
@@ -406,20 +406,27 @@
             "status": "partially-realised",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-pdp-contextual-discovery-public-v1",
                 "evidenceRole": "before-after",
                 "layoutVariant": "before-after",
-                "aspectRatio": "wide",
-                "caption": {
-                  "en": "Contextual Voucher visibility moved discovery closer to the product and shopping task.",
-                  "zh": "情境式優惠券顯示，讓探索更靠近商品與購物任務。"
-                },
-                "alt": {
-                  "en": "Placeholder reserved for before-and-after evidence of Wallet-dependent exposure and contextual Voucher discovery.",
-                  "zh": "預留給從依賴錢包曝光到情境式優惠券探索之前後對照證據。"
+                "beforeAssetId": "voucher-offer-stage-discover-pdp-before-01",
+                "shippedAssetId": "voucher-offer-stage-discover-pdp-shipped-01",
+                "copy": {
+                  "en": {
+                    "beforeLabel": "Before",
+                    "beforeCaption": "No Voucher discovery",
+                    "shippedLabel": "Shipped",
+                    "shippedCaption": "Eligible Voucher discovery"
+                  },
+                  "zh": {
+                    "beforeLabel": "調整前",
+                    "beforeCaption": "PDP 未呈現 Voucher",
+                    "shippedLabel": "已上線",
+                    "shippedCaption": "PDP 呈現適用 Voucher"
+                  }
                 },
                 "mobileBehavior": "stack",
-                "placeholderState": "governed-placeholder"
+                "captionsAreHTML": true,
+                "placeholderState": "production"
               }
             }
           },
@@ -4736,7 +4743,7 @@
         "continue-exploring"
       ],
       "heroMetadata": {
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "domain": {
           "en": "Retail incentives",
           "zh": "零售獎勵"
@@ -4760,12 +4767,63 @@
         ]
       },
       "legacyAliasStatus": "synchronised-non-canonical-r142",
-      "company": "NTUC FairPrice Group",
-      "legacyContextStatus": "company-only-non-canonical-r144"
+      "company": "FairPrice Group",
+      "legacyContextStatus": "company-only-non-canonical-r144",
+      "whatThisProves": {
+        "en": "Turning fragmented incentive rules into a reusable cross-channel product model.",
+        "zh": "將分散的獎勵規則，轉化為可跨通路重用的產品模型。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "scale-and-system-change",
+        "primaryMetrics": [
+          {
+            "value": "3 years",
+            "label": "programme"
+          },
+          {
+            "value": "400+",
+            "label": "in-app Vouchers in Save Everyday"
+          },
+          {
+            "value": "125.2K",
+            "label": "digital redemptions in final 3 weeks"
+          },
+          {
+            "value": "30.6%",
+            "label": "digital redemption share"
+          }
+        ],
+        "supportingSignals": [
+          "27% Add-to-Cart baseline",
+          "62% redemption baseline",
+          "2.4% eligible-item-to-cart baseline",
+          "1.8% PDP-to-cart baseline"
+        ],
+        "recommendedHeadline": "Established a reusable cross-channel incentive model, with shipped programmes reaching 400+ Vouchers and 125.2K digital redemptions.",
+        "boundary": "Programme baselines are prioritisation evidence, not design uplift.",
+        "subProjectOverrides": {
+          "voucher-details-2024-2025": {
+            "variant": "observational-trend",
+            "primaryTrend": "~1.5% → ~4% Add-to-Cart",
+            "derivedRelativeChange": "~+167% / ~2.7×",
+            "requiredBoundary": "Observed dashboard comparison only; not an A/B test and not causal."
+          },
+          "save-everyday-digital-campaign": {
+            "variant": "measured-outcome",
+            "metrics": [
+              "10 → 400+ app-available Vouchers (40×+ inventory)",
+              "125.2K digital redemptions in final three weeks",
+              "30.6% digital redemption share",
+              "51.1K digital customers across 64.1K transactions in final three weeks"
+            ]
+          }
+        }
+      }
     },
     "voucher-center": {
-      "context": "NTUC FairPrice Group",
-      "context_zh": "NTUC FairPrice Group",
+      "context": "FairPrice Group",
+      "context_zh": "FairPrice Group",
       "home_title": "Persistent Voucher discovery and claiming",
       "home_title_zh": "常設優惠券探索與領取",
       "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
@@ -5921,7 +5979,11 @@
               "zh": "領取 → 查看狀態模型"
             },
             "status": "research-informed-shipped-state-model",
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": "Claim → View state model",
+              "zh": "領取 → 查看狀態模型"
+            }
           },
           {
             "id": "voucher-center-decision-02",
@@ -5971,7 +6033,11 @@
               "Complete consolidated navigation"
             ],
             "status": "shipped-with-preserved-target-direction",
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": "Consolidated navigation remained the target architecture for the next phase.",
+              "zh": "整合式導覽仍保留為下一階段目標架構。"
+            }
           }
         ],
         "sourcePaths": [
@@ -6205,7 +6271,7 @@
         }
       },
       "heroMetadata": {
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "domain": {
           "en": "Retail incentives",
           "zh": "零售獎勵"
@@ -6229,7 +6295,7 @@
         ]
       },
       "legacyAliasStatus": "synchronised-non-canonical-r142",
-      "company": "NTUC FairPrice Group",
+      "company": "FairPrice Group",
       "legacyContextStatus": "company-only-non-canonical-r144",
       "contentOwnershipBoundary": {
         "canonicalOwner": "voucher-center",
@@ -6337,13 +6403,46 @@
           "zh": "我主導功能情境中的元件演進，並推動團隊層級的抽象；原始優惠券卡片系統並非由我從零建立。"
         },
         "contentStatus": "approved-user-confirmed-history"
+      },
+      "whatThisProves": {
+        "en": "Turning campaign-based discovery into a persistent claiming product through evidence-led release decisions.",
+        "zh": "透過證據導向的上線決策，將活動型探索轉化為常設領取產品。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "research-decision-signal",
+        "primaryMetrics": [
+          {
+            "value": "20",
+            "label": "participants"
+          },
+          {
+            "value": "12/20",
+            "label": "preferred stronger entry"
+          },
+          {
+            "value": "18/20",
+            "label": "preferred explicit Claim"
+          },
+          {
+            "value": "7 vs 4",
+            "label": "preferred consolidated architecture"
+          }
+        ],
+        "decisionSignals": [
+          "18/20 misunderstood Use now",
+          "16/20 wanted Claim all",
+          "4 spontaneous Claim-all requests"
+        ],
+        "recommendedHeadline": "Research directly changed the first release: stronger entry, explicit Claim states and a preserved consolidated architecture.",
+        "boundary": "Research ratios are decision evidence, not business growth."
       }
     },
     "game-center": {
       "id": "game-center",
       "projectRelationship": "independent-project",
       "parentProject": null,
-      "company": "NTUC FairPrice Group",
+      "company": "FairPrice Group",
       "year": 2025,
       "status": "shipped-with-future-phases",
       "publicStatus": "principal-ready-zero-to-one-incentive-product",
@@ -7192,7 +7291,7 @@
         "zh": "零售遊戲化"
       },
       "heroMetadata": {
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "domain": {
           "en": "Retail gamification",
           "zh": "零售遊戲化"
@@ -7216,7 +7315,29 @@
         ]
       },
       "type": "0→1 Product",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Structuring effort, progression and rewards across multiple incentive mechanics in a 0→1 product.",
+        "zh": "在 0→1 產品中，統整不同獎勵機制的投入、進度與回饋關係。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "measured-outcome",
+        "primaryMetrics": [
+          {
+            "value": "~50%",
+            "label": "user completion"
+          }
+        ],
+        "supportingMetrics": [
+          {
+            "value": "3",
+            "label": "task types"
+          }
+        ],
+        "recommendedHeadline": "Launched a 0→1 reward product with ~50% user completion across a shared effort-to-reward model.",
+        "boundary": "Exact denominator and observation window remain private."
+      }
     },
     "dbs": {
       "valueIBrought": {
@@ -8232,6 +8353,10 @@
             "evidence": {
               "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
               "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
+            },
+            "effectOrResult": {
+              "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
+              "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
             }
           },
           {
@@ -8252,6 +8377,10 @@
             "evidence": {
               "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
               "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
+            },
+            "effectOrResult": {
+              "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
+              "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
             }
           },
           {
@@ -8270,6 +8399,10 @@
             },
             "status": "delivered-and-used-for-alignment",
             "evidence": {
+              "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
+              "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
+            },
+            "effectOrResult": {
               "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
               "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
             }
@@ -8344,7 +8477,35 @@
           "跨市場處理不一致"
         ]
       },
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Standardising multi-market operations through shared decision states, ownership and escalation rules.",
+        "zh": "透過共享決策狀態、責任與升級規則，標準化多市場營運流程。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "scale-and-system-change",
+        "primaryMetrics": [
+          {
+            "value": "6",
+            "label": "markets launched"
+          },
+          {
+            "value": "50+",
+            "label": "participants in source-reported research scale"
+          },
+          {
+            "value": "4",
+            "label": "personas"
+          },
+          {
+            "value": "3",
+            "label": "co-creation workshops"
+          }
+        ],
+        "recommendedHeadline": "Standardised one excess-management operating model across 6 markets, aligning shared decision states, ownership and escalation.",
+        "boundary": "Do not invent efficiency or turnaround uplift."
+      }
     },
     "booking": {
       "valueIBrought": {
@@ -9500,7 +9661,59 @@
         ]
       },
       "legacyAliasStatus": "synchronised-non-canonical-r142",
-      "company": "Booking.com"
+      "company": "Booking.com",
+      "whatThisProves": {
+        "en": "Turning localisation and usability risk into explicit launch decisions across 40+ countries.",
+        "zh": "將在地化與可用性風險轉化為明確決策，支援 40+ 國家的同步上線。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "measured-outcome",
+        "primaryMetrics": [
+          {
+            "value": "~150",
+            "label": "additional rides per day",
+            "window": "within two weeks of launch"
+          }
+        ],
+        "supportingMetrics": [
+          {
+            "value": "40+",
+            "label": "countries"
+          },
+          {
+            "value": "18",
+            "label": "interviews/tests"
+          },
+          {
+            "value": "12",
+            "label": "workshops"
+          },
+          {
+            "value": "14",
+            "label": "analysis reports"
+          }
+        ],
+        "conditionalMetrics": [
+          {
+            "value": "~7%",
+            "label": "desktop conversion movement",
+            "status": "definition needs confirmation"
+          },
+          {
+            "value": "~2.6%",
+            "label": "mobile conversion movement",
+            "status": "definition needs confirmation"
+          },
+          {
+            "value": "~10.4%",
+            "label": "tablet conversion movement",
+            "status": "definition needs confirmation"
+          }
+        ],
+        "recommendedHeadline": "Added ~150 rides per day within two weeks while supporting a 40+ country rollout.",
+        "boundary": "Do not publish the device-level conversion figures as final uplift until relative-vs-percentage-point meaning is confirmed."
+      }
     },
     "bandzo": {
       "valueIBrought": {
@@ -10269,7 +10482,11 @@
               "en": "Owned the information architecture, flows, wireframes and UX specifications; phase prioritisation was developed with the consulting team and client.",
               "zh": "負責資訊架構、流程、線框稿與 UX 規格；階段優先順序則與顧問團隊及客戶共同完成。"
             },
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": "The released scope covered mobile and tablet content exploration, store and sheet lists, examination-category levels, practice and an initial friend-invitation reward feature.",
+              "zh": "已上線範圍涵蓋行動裝置／平板的內容探索、商店與樂譜列表、檢定分類程度、練習，以及初版好友邀請獎勵功能。"
+            }
           },
           {
             "id": "bandzo-decision-connected-content-practice",
@@ -10300,7 +10517,11 @@
               "en": "Owned the architecture and detailed UX delivery; content, business and technical constraints were resolved with the client and consulting team.",
               "zh": "負責架構與詳細 UX 交付；內容、商業與技術限制則與客戶及顧問團隊共同解決。"
             },
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": "The engagement delivered UX specifications across 12 core functions and flows and released the mobile and tablet redesign.",
+              "zh": "專案完成 12 個核心功能與流程的 UX 規格，並正式上架行動裝置與平板改版。"
+            }
           }
         ],
         "sourcePaths": [
@@ -10377,7 +10598,32 @@
           "練習流程分散"
         ]
       },
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Connecting lesson content, practice progression and feedback into one cross-device learning journey.",
+        "zh": "將課程內容、練習進度與回饋，串成一致的跨裝置學習旅程。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [
+          {
+            "value": "8",
+            "label": "interview + usability-testing sessions"
+          },
+          {
+            "value": "12",
+            "label": "core function/flow specifications"
+          },
+          {
+            "value": "5 months",
+            "label": "delivery timeline"
+          }
+        ],
+        "shippedProof": "Content discovery, sheet-music practice and level-based learning journeys shipped.",
+        "recommendedHeadline": "Turned 8 research sessions into 12 implementation-ready core flows and a shipped cross-device learning journey.",
+        "boundary": "Legacy claims about bounce, awareness and sales conversion remain blocked as unverified."
+      }
     },
     "taishin-p2p-marketplace-platform": {
       "id": "taishin-p2p-marketplace-platform",
@@ -11224,7 +11470,31 @@
         ]
       },
       "type": "Marketplace Platform",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Defining an ambiguous two-sided marketplace through transaction logic and detailed platform rules.",
+        "zh": "透過交易邏輯與平台規則，定義模糊的雙邊市場模式。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [
+          {
+            "value": "30",
+            "label": "interviews"
+          },
+          {
+            "value": "7",
+            "label": "shared logic-flow sheets"
+          },
+          {
+            "value": "25",
+            "label": "functional documents"
+          }
+        ],
+        "recommendedHeadline": "Converted 30 interviews into a governed marketplace transaction model, 7 shared logic flows and 25 implementation documents.",
+        "boundary": "No verified adoption/revenue uplift."
+      }
     },
     "cathay-mortgage-assistant": {
       "id": "cathay-mortgage-assistant",
@@ -11890,7 +12160,19 @@
               "zh": "我主導概念、原型、線框稿與開發交接；改版後的 App 已正式上線供內部使用。"
             },
             "status": "launched",
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": [
+                "Interview transcripts and empathy maps",
+                "Scenario-based concept report",
+                "Four-task usability test"
+              ],
+              "zh": [
+                "訪談逐字稿與 Empathy maps",
+                "情境式概念報告",
+                "四項任務的可用性測試"
+              ]
+            }
           },
           {
             "id": "cathay-mortgage-decision-02-shared-consultation-structure",
@@ -11930,7 +12212,19 @@
               "zh": "我建立 UX 架構與交付規格，供 UI 設計師、客戶與開發團隊共同使用。"
             },
             "status": "launched",
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": [
+                "App structure and sitemap",
+                "Function flows and function tree",
+                "Annotated wireframes for development"
+              ],
+              "zh": [
+                "App 架構與 Sitemap",
+                "功能流程與功能樹",
+                "供開發使用的註解式 Wireframe"
+              ]
+            }
           },
           {
             "id": "cathay-mortgage-decision-03-validated-system-handoff",
@@ -11970,7 +12264,19 @@
               "zh": "我負責 UX 概念、原型、線框稿與交接，並與 UI 設計師協作視覺執行。"
             },
             "status": "launched",
-            "contentStatus": "approved"
+            "contentStatus": "approved",
+            "effectOrResult": {
+              "en": [
+                "Client ideation and alignment workshops",
+                "Marvel prototype",
+                "Developer-ready state and flow descriptions"
+              ],
+              "zh": [
+                "客戶 Ideation 與 Alignment workshops",
+                "Marvel Prototype",
+                "可供開發使用的狀態與流程說明"
+              ]
+            }
           }
         ],
         "sourcePaths": [
@@ -12089,7 +12395,24 @@
         ]
       },
       "type": "Internal System",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Restructuring rigid internal tools around real frontline consultation scenarios.",
+        "zh": "依前線真實諮詢情境，重構僵化的內部工具。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "launch-and-coverage-proof",
+        "primaryMetrics": [
+          {
+            "value": "4",
+            "label": "usability-test tasks"
+          }
+        ],
+        "shippedProof": "Internal tablet product launched; implementation-ready structure and wireframes delivered.",
+        "recommendedHeadline": "Turned rigid consultation tooling into a launched tablet workflow validated across four usability tasks.",
+        "boundary": "Employee adoption, consultation-efficiency improvement and mortgage-sales outcome remain unverified."
+      }
     },
     "payment": {
       "valueIBrought": {
@@ -12108,7 +12431,7 @@
         "contentStatus": "approved-source-backed-r143"
       },
       "id": "payment",
-      "company": "NTUC FairPrice Group",
+      "company": "FairPrice Group",
       "period": "Dec 2020–Nov 2021",
       "status": "shipped-and-scaled",
       "projectRelationship": "independent-project",
@@ -12356,7 +12679,7 @@
         "award": {
           "programme": "Asian Experience Awards 2021",
           "title": "Singapore User Experience Award of the Year - Retail",
-          "recipient": "NTUC FairPrice Group",
+          "recipient": "FairPrice Group",
           "sourceStatus": "Confirmed by the interview deck award slide"
         },
         "confidentialityNote": "For confidentiality reasons, public metrics use approximate values."
@@ -12565,7 +12888,7 @@
         "award": {
           "programme": "Asian Experience Awards 2021",
           "title": "Singapore User Experience Award of the Year - Retail",
-          "recipient": "NTUC FairPrice Group / Pay via FP App feature",
+          "recipient": "FairPrice Group / Pay via FP App feature",
           "contributionBoundary": "Present as product-team recognition; the internal announcement gives special mention to Shulin Chou and Yong Hwa Liow, but the award was not an individual award.",
           "publicSourceAssetId": "payment-source-award-article-2021-v1"
         },
@@ -12577,7 +12900,7 @@
         "contentStatus": "approved",
         "recognition": {
           "publicAward": "Asian Experience Awards 2021 - Singapore User Experience Award of the Year, Retail",
-          "recipient": "NTUC FairPrice Group / Pay via FP App product team",
+          "recipient": "FairPrice Group / Pay via FP App product team",
           "personalContributionEvidence": "The internal award announcement gave special mention to Shulin Chou and the Design CoE lead for the experience contribution.",
           "publicTreatment": "State that the product team won the award and that the internal announcement gave the user special mention; do not present it as an individual award or publish the raw internal screenshot.",
           "sourceAssetIds": [
@@ -13819,7 +14142,7 @@
         "zh": "零售支付"
       },
       "heroMetadata": {
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "domain": {
           "en": "Retail payments",
           "zh": "零售支付"
@@ -13886,7 +14209,7 @@
       },
       "recognition": {
         "award": "Asian Experience Awards 2021 — Singapore User Experience Award of the Year, Retail",
-        "recipient": "NTUC FairPrice Group / product team",
+        "recipient": "FairPrice Group / product team",
         "publicTreatment": {
           "en": "Present as a team award. The source screenshot does not support describing it as an individual award.",
           "zh": "以團隊獎項呈現；來源截圖不足以支持將其描述為個人獎項。"
@@ -13926,6 +14249,47 @@
         ],
         "privacyAndQualityRule": "Create cropped and rewritten public-safe derivatives. Do not publish raw screenshots containing internal wording, identifiers or confidential details.",
         "contentStatus": "approved"
+      },
+      "whatThisProves": {
+        "en": "Orchestrating app, checkout and Voucher states into one coherent in-store payment journey.",
+        "zh": "整合 App、結帳與優惠券狀態，形成一致的門市付款旅程。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "measured-outcome",
+        "primaryMetrics": [
+          {
+            "value": "~230K",
+            "label": "monthly transactions",
+            "period": "Sep 2021"
+          },
+          {
+            "value": "~99%",
+            "label": "payment success"
+          },
+          {
+            "value": "~57K",
+            "label": "users"
+          }
+        ],
+        "supportingMetrics": [
+          {
+            "value": "~70",
+            "label": "NPS",
+            "detail": "1,798 responses"
+          },
+          {
+            "value": "80%",
+            "label": "used the app at least twice per month"
+          },
+          {
+            "value": "~190",
+            "label": "stores"
+          }
+        ],
+        "additionalProof": "2021 Singapore User Experience Award of the Year — Retail (product-team recognition).",
+        "recommendedHeadline": "Scaled a new in-store payment system to ~230K monthly transactions at ~99% payment success.",
+        "attributionBoundary": "Present as product outcomes delivered by the cross-functional team; do not attribute the metrics to design alone."
       }
     },
     "cathay-sit-online-account-opening": {
@@ -14875,6 +15239,10 @@
             "evidence": {
               "en": "The journey separated applicant, referral-agent and Customer Service responsibilities and recorded confirmed pain points, opportunities and unresolved dependencies by stage.",
               "zh": "旅程依階段拆分申請人、推薦人與客服責任，並記錄已確認痛點、改善機會與尚未解決的依賴。"
+            },
+            "effectOrResult": {
+              "en": "The journey separated applicant, referral-agent and Customer Service responsibilities and recorded confirmed pain points, opportunities and unresolved dependencies by stage.",
+              "zh": "旅程依階段拆分申請人、推薦人與客服責任，並記錄已確認痛點、改善機會與尚未解決的依賴。"
             }
           },
           {
@@ -14923,6 +15291,10 @@
             },
             "status": "aligned-and-delivered-for-development",
             "evidence": {
+              "en": "The target flow documented mobile/tablet and desktop behaviour, error thresholds, external redirects and application-status outcomes before detailed UI specification.",
+              "zh": "目標流程在詳細介面規格前，已定義行動裝置、平板與桌面版行為、錯誤門檻、外部重新導向與申請狀態結果。"
+            },
+            "effectOrResult": {
               "en": "The target flow documented mobile/tablet and desktop behaviour, error thresholds, external redirects and application-status outcomes before detailed UI specification.",
               "zh": "目標流程在詳細介面規格前，已定義行動裝置、平板與桌面版行為、錯誤門檻、外部重新導向與申請狀態結果。"
             }
@@ -15029,7 +15401,19 @@
         ]
       },
       "type": "Transaction System",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Translating account-opening research into an end-to-end transaction flow and implementation-ready specification.",
+        "zh": "將開戶研究轉化為端到端交易流程與可直接落地的設計規格。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [],
+        "shippedProof": "Research/journey, end-to-end user flow and UI specification delivered.",
+        "recommendedHeadline": "Translated account-opening research into an end-to-end transaction flow and implementation-ready UI specification.",
+        "boundary": "No verified completion/conversion metric in current evidence."
+      }
     },
     "cathay-sit-review-remediation-operations": {
       "id": "cathay-sit-review-remediation-operations",
@@ -16197,7 +16581,31 @@
         ]
       },
       "type": "Internal System",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Diagnosing operational breakdowns across screens, system logic, inputs and handoffs before solutioning.",
+        "zh": "在進入解法前，辨識畫面、系統邏輯、輸入與交接中的營運斷點。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [
+          {
+            "value": "1",
+            "label": "cross-functional workshop"
+          },
+          {
+            "value": "2",
+            "label": "one-hour interviews"
+          },
+          {
+            "value": "3",
+            "label": "core participants: 2 users + 1 manager"
+          }
+        ],
+        "recommendedHeadline": "Mapped the end-to-end remediation operation and separated screen issues from system, input and handoff breakdowns.",
+        "boundary": "Recommendation/definition outcome; no verified efficiency uplift."
+      }
     },
     "ctbc-mortgage-self-service-app": {
       "id": "ctbc-mortgage-self-service-app",
@@ -17278,6 +17686,26 @@
           "zh": "設計合作範圍內無法取得"
         },
         "contentStatus": "approved"
+      },
+      "whatThisProves": {
+        "en": "Structuring a high-stakes mortgage application around progress, resumption and clear next actions.",
+        "zh": "以進度、續填與清楚下一步，重構高風險房貸申請流程。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [
+          {
+            "value": "5",
+            "label": "journey stages"
+          },
+          {
+            "value": "2 months",
+            "label": "engagement"
+          }
+        ],
+        "recommendedHeadline": "Defined a 0→1 five-stage mortgage self-service model with resumable progress and multi-system handoffs.",
+        "boundary": "No post-launch UI or business KPI attribution."
       }
     },
     "booking-taxi-pickup-service-strategy": {
@@ -17940,7 +18368,18 @@
       "at_glance": "Led nine months of research and strategy for Booking.com’s taxi pre-booking expansion, combining customer, supplier, market and performance evidence to redefine the proposition and recommend a lower-cost Phase 1 experiment in selected target markets.",
       "at_glance_zh": "主導 Booking.com 計程車預約服務為期九個月的研究與策略，整合顧客、供應商、市場與產品表現證據，重新定義服務主張，並建議在選定目標市場進行低成本的第一階段實驗。",
       "type": "0→1 Product",
-      "legacyAliasStatus": "synchronised-non-canonical-r142"
+      "legacyAliasStatus": "synchronised-non-canonical-r142",
+      "whatThisProves": {
+        "en": "Translating ambiguous pickup behaviour and service constraints into a phased product strategy.",
+        "zh": "將模糊的接送行為與服務限制，轉化為分階段產品策略。",
+        "contentStatus": "approved-domain-copy-2026-08-07"
+      },
+      "impactEvidence": {
+        "variant": "delivery-and-definition-proof",
+        "primaryMetrics": [],
+        "recommendedHeadline": "Converted pickup uncertainty across passenger, luggage and location constraints into a phased product strategy.",
+        "boundary": "Strategy/research case; no launch or growth claim."
+      }
     }
   },
   "assetRegistry": {
@@ -18995,6 +19434,12 @@
       "mode": "merge-only",
       "scope": "Voucher / Offer hierarchy, Stage visual evidence slots and Voucher Card historical correction",
       "source": "User-approved content package"
+    },
+    "2026-08-08-r147": {
+      "version": "2026-08-08-r147",
+      "date": "2026-08-08",
+      "summary": "Merged approved recruiter proof, FairPrice Group naming, ImpactEvidence contracts, shared case-study hierarchy and PDP before/shipped evidence.",
+      "sourcePackage": "PORTFOLIO-CONSOLIDATED-PENDING-APPROVED-2026-08-08"
     }
   },
   "implementationContracts": {
@@ -19192,6 +19637,225 @@
         "rule": "Do not delete useful evidence. Change its information level. Do not list every evidence type as equal-weight outer-page content.",
         "contentStatus": "approved"
       }
+    },
+    "consolidatedCaseStudyDesignSystem": {
+      "projectHero": {
+        "eyebrowStyle": "Neutral metadata; do not use blue accent by default.",
+        "mobileProblemRule": "On compact/mobile hero, suppress problem/classification directly under H1 when it repeats the next section or hurts scanability.",
+        "sectionHeadingSeparation": "Major popup sections need stronger visual separation and one shared hierarchy."
+      },
+      "stageCard": {
+        "identity": "Canonical stage name only: DISCOVER / QUALIFY / ACTIVATE / REDEEM / REVIEW.",
+        "show": [
+          "stageNumber",
+          "stageName",
+          "customerBreakpoint",
+          "designShift",
+          "designDecision",
+          "stageEvidence",
+          "cta"
+        ],
+        "hide": [
+          "outerDeliveryStatus",
+          "duplicateRepresentativeShippedWork"
+        ],
+        "cta": "Use one consistent CTA grammar across all stages, e.g. View related work →.",
+        "stageEvidenceRule": "Keep one Stage Evidence heading only when duplicate proof exists."
+      },
+      "subProjectHero": {
+        "eyebrowPattern": "FairPrice Group · {STAGE_NAME}",
+        "doNotShow": [
+          "Voucher / Offer as child-case stage label",
+          "delivery status in hero"
+        ],
+        "h1Rule": "H1 is the child initiative transformation, not the parent stage transformation."
+      },
+      "stageFocus": {
+        "purpose": "Explain how this child initiative advances the parent journey stage.",
+        "format": "Compact contextual block, not another large feature card.",
+        "contrast": "WCAG AA text contrast; non-text boundaries/controls >=3:1 where applicable.",
+        "contentLimit": "One stage label + one concise relation statement. No duplicated contribution, metrics, delivery status or parent summary."
+      },
+      "designDecision": {
+        "sharedComponent": true,
+        "label": {
+          "example": "DECISION 01",
+          "style": "Small colored semantic label/tag using existing design tokens."
+        },
+        "title": "Stronger, outcome-oriented decision title.",
+        "structure": [
+          "decisionLabel",
+          "decisionTitle",
+          "problemOrConstraint",
+          "whatIDecided",
+          "visualEvidence",
+          "effectOrResult",
+          "deliveryBoundaryOrTradeoffWhenApplicable"
+        ],
+        "effectRequired": "Every decision must state the effect, improvement, resulting behavior/state, or measurable/observable consequence.",
+        "visualEvidenceRequired": "Provide a governed visual slot directly after the decision when evidence exists."
+      },
+      "deliveryBoundary": {
+        "sharedPattern": true,
+        "rule": "Standard compact subsection/status treatment within the shared decision or ownership system; no project-specific special container."
+      },
+      "popupSectionSystem": {
+        "goal": "One shared section grammar and stronger separation across all project popups.",
+        "majorSectionTreatment": [
+          "clear H2/H3 hierarchy",
+          "consistent top spacing",
+          "shared divider or surface change where useful",
+          "restrained section background alternation",
+          "consistent eyebrow/label treatment"
+        ],
+        "containerRule": "Avoid container-in-container stacking; prefer one section surface with internal grid/layout.",
+        "backgroundRule": "Use section background/surface changes strategically for grouping, not unique cards for every subsection."
+      },
+      "expandableImages": {
+        "required": true,
+        "behavior": "Evidence images can be clicked/tapped to open a larger lightbox/dialog and closed without losing scroll context.",
+        "accessibility": [
+          "keyboard operable",
+          "Escape closes",
+          "visible close control",
+          "focus trap and return focus",
+          "alt/caption remain available",
+          "no hover-only interaction"
+        ],
+        "mobile": "Tap-to-expand with viewport-safe sizing."
+      },
+      "domainCards": {
+        "imageRequired": true,
+        "rule": "Homepage/Work domain project cards should include meaningful governed project imagery.",
+        "assetGovernance": "Use governed project assets/manifest and responsive image delivery.",
+        "contentPriority": [
+          "company",
+          "caseTitle",
+          "whatThisProves",
+          "image",
+          "cta"
+        ]
+      }
+    },
+    "metricIntegrity": {
+      "principle": "Never present benchmark, assumed, synthetic, inferred, or industry-average uplift as a project outcome.",
+      "confidentialityRule": "Approximate values may be used only when they are derived from real project measurements and intentionally rounded/abstracted for confidentiality.",
+      "benchmarkRule": "Industry benchmarks may appear only as explicitly labeled external context or opportunity sizing, never as 'result', 'impact', 'growth', or 'improvement' from the user's work.",
+      "allowedOutcomeEvidenceTypes": [
+        "verified post-launch KPI",
+        "verified observational trend with non-causal wording",
+        "verified usage/adoption/share",
+        "verified shipped scale",
+        "verified research result",
+        "verified workflow or system reduction",
+        "verified market/team/surface coverage"
+      ],
+      "whenNoOutcomeMetric": "Use the strongest verifiable evidence signal instead of inventing a percentage.",
+      "recommendedPublicNote": {
+        "en": "Selected figures are rounded or abstracted for confidentiality.",
+        "zh": "部分數據基於保密需求採約略值或抽象化呈現。"
+      },
+      "forbiddenPatterns": [
+        "Estimated +20% growth presented as project result",
+        "Industry-average conversion uplift relabeled as confidential project performance",
+        "Unmeasured improvement phrased as a causal KPI change"
+      ]
+    },
+    "impactEvidenceSystem": {
+      "sharedComponent": "ImpactEvidence",
+      "variants": {
+        "measured-outcome": {
+          "useWhen": "Verified shipped KPI / adoption / quality metric exists.",
+          "visualGrammar": "1 primary metric + up to 2 supporting metrics + short interpretation + attribution/confidentiality note if needed.",
+          "heading": "Measured impact"
+        },
+        "observational-trend": {
+          "useWhen": "Verified before/after or cohort trend exists but causality is not established.",
+          "visualGrammar": "Trend or before→after figure + explicit non-causal boundary + interpretation.",
+          "heading": "Observed signal"
+        },
+        "research-decision-signal": {
+          "useWhen": "Research ratios/counts directly changed architecture or interaction decisions.",
+          "visualGrammar": "2–3 research signals + what changed because of the evidence.",
+          "heading": "Evidence that changed the product"
+        },
+        "scale-and-system-change": {
+          "useWhen": "No reliable uplift exists, but rollout scale / system standardisation is verified.",
+          "visualGrammar": "Scale signal + system change + why it matters.",
+          "heading": "System change"
+        },
+        "delivery-and-definition-proof": {
+          "useWhen": "Project proves strategy, definition, workflow architecture or implementation readiness rather than post-launch business impact.",
+          "visualGrammar": "Research/delivery scale + complexity resolved + resulting capability + clear delivery boundary.",
+          "heading": "What became possible"
+        },
+        "launch-and-coverage-proof": {
+          "useWhen": "Launch / shipped coverage is verified but KPI measurement is unavailable.",
+          "visualGrammar": "Launch status + validated scope + delivered product capability; no fake uplift.",
+          "heading": "Shipped proof"
+        }
+      },
+      "globalRules": [
+        "Do not force a percentage into every project.",
+        "Do not show research sample size as business impact.",
+        "Do not use external industry benchmarks as project results.",
+        "Use approximate metrics only when sourced from real project measurements.",
+        "Every impact block must include an interpretation, not just numbers."
+      ]
+    },
+    "impactEvidenceLabels": {
+      "measured-outcome": {
+        "en": "Measured impact",
+        "zh": "量化成果"
+      },
+      "observational-trend": {
+        "en": "Observed signal",
+        "zh": "觀察趨勢"
+      },
+      "research-decision-signal": {
+        "en": "Evidence that changed the product",
+        "zh": "改變產品的證據"
+      },
+      "scale-and-system-change": {
+        "en": "System change",
+        "zh": "系統改變"
+      },
+      "delivery-and-definition-proof": {
+        "en": "What became possible",
+        "zh": "建立的產品能力"
+      },
+      "launch-and-coverage-proof": {
+        "en": "Shipped proof",
+        "zh": "上線證據"
+      },
+      "interpretation": {
+        "en": "Why it matters",
+        "zh": "這代表什麼"
+      },
+      "boundary": {
+        "en": "Evidence boundary",
+        "zh": "證據界線"
+      }
+    },
+    "whatThisProvesLabel": {
+      "en": "WHAT THIS PROVES",
+      "zh": "此專案證明的能力"
+    },
+    "designDecisionLabels": {
+      "effect": {
+        "en": "EFFECT / RESULT",
+        "zh": "效果／結果"
+      }
+    },
+    "expandableImageLabels": {
+      "close": {
+        "en": "Close expanded image",
+        "zh": "關閉放大圖片"
+      },
+      "expand": {
+        "en": "Expand image",
+        "zh": "放大圖片"
+      }
     }
   },
   "portfolioPositioning": {
@@ -19357,6 +20021,16 @@
         "Unverified launch or performance claims"
       ],
       "contentStatus": "approved"
+    },
+    "companyNaming": {
+      "status": "approved-by-user-2026-08-07",
+      "publicDisplayRule": "Whenever the employer / organisation identity is displayed, use exactly 'FairPrice Group'.",
+      "doNotRewriteProductNames": [
+        "FairPrice App",
+        "FairPrice Pay",
+        "FairPrice Group App"
+      ],
+      "historicalArchiveRule": "Raw source archives may retain historical source wording only when excluded from runtime."
     }
   },
   "home": {
@@ -20312,8 +20986,8 @@
       },
       "fairprice-payment-2020-2021": {
         "company": {
-          "en": "NTUC FairPrice Group",
-          "zh": "NTUC FairPrice Group"
+          "en": "FairPrice Group",
+          "zh": "FairPrice Group"
         },
         "title": {
           "en": "Product Designer",
@@ -20368,8 +21042,8 @@
       },
       "fairprice-voucher-2022-2025": {
         "company": {
-          "en": "NTUC FairPrice Group",
-          "zh": "NTUC FairPrice Group"
+          "en": "FairPrice Group",
+          "zh": "FairPrice Group"
         },
         "title": {
           "en": "Senior Product Designer",
@@ -25902,8 +26576,8 @@
           "practice": {
             "projectId": "voucher",
             "companyProduct": {
-              "en": "NTUC FairPrice | Voucher & Incentive System",
-              "zh": "NTUC FairPrice｜優惠券與獎勵系統"
+              "en": "FairPrice Group | Voucher & Incentive System",
+              "zh": "FairPrice Group｜優惠券與獎勵系統"
             },
             "summary": {
               "en": "Turned cross-channel voucher rules, states, and components into shared product capability.",
@@ -25948,8 +26622,8 @@
           "practice": {
             "projectId": "payment",
             "companyProduct": {
-              "en": "NTUC FairPrice | App-to-POS Payment",
-              "zh": "NTUC FairPrice｜App × POS 付款產品"
+              "en": "FairPrice Group | App-to-POS Payment",
+              "zh": "FairPrice Group｜App × POS 付款產品"
             },
             "summary": {
               "en": "Used existing payment behaviour to shape a new in-store payment experience.",
@@ -25992,8 +26666,8 @@
           "practice": {
             "projectId": "voucher",
             "companyProduct": {
-              "en": "NTUC FairPrice | Voucher Eligibility & Redemption",
-              "zh": "NTUC FairPrice｜優惠券資格與兌換"
+              "en": "FairPrice Group | Voucher Eligibility & Redemption",
+              "zh": "FairPrice Group｜優惠券資格與兌換"
             },
             "summary": {
               "en": "Mapped eligibility, stacking, removal, and redemption failures into a phased resolution plan.",
@@ -26287,82 +26961,81 @@
       "AI",
       "AJA",
       "AJA Creative",
-      "API",
       "Android",
+      "API",
       "App",
       "Asana",
       "Asian Experience Awards",
       "Bandzo",
       "Booking.com",
       "Brand Challenges",
+      "Cathay SIT",
+      "Cathay United Bank",
       "CCU",
+      "Chattermill",
+      "count",
       "CRM",
       "CTA",
       "CTBC Bank",
-      "Cathay SIT",
-      "Cathay United Bank",
-      "Chattermill",
       "DBS",
       "Design CoE",
       "Digitized Offering Tickets",
       "EDM",
       "FairPrice",
       "FairPrice App",
+      "FairPrice Group",
       "FairPrice Group App",
       "FairPrice Pay",
       "Flash Voucher",
-      "GMV",
       "Game Center",
+      "GMV",
       "Google Analytics",
       "Hotjar",
-      "KYC",
+      "iOS",
       "Kopitiam",
+      "KYC",
+      "LinkedIn",
       "LinkPay",
       "LinkPoints",
-      "LinkedIn",
+      "Marvel",
       "MAU",
       "MTD",
       "MVP",
-      "Marvel",
       "NPS",
-      "NTUC FairPrice",
-      "NTUC FairPrice Group",
       "OCR",
       "Omni",
       "Online Grocery",
       "PDF",
       "PDP",
+      "Playground",
       "POS",
       "PRD",
-      "Playground",
       "QR",
       "QR Code",
       "RM",
       "ROI",
       "S$",
       "SAP",
-      "SCO",
-      "SEC",
-      "SEO",
-      "SSOT",
       "Save Everyday",
       "Scan & Go",
       "Scan@Door",
+      "SCO",
+      "SEC",
+      "SEO",
       "Singapore User Experience Award of the Year - Retail",
       "Singapore User Experience Award of the Year — Retail",
       "Spotify",
+      "SSOT",
       "UI",
-      "UX",
-      "UXArmy",
       "UserTesting.com",
       "UserZoom",
+      "UX",
+      "UXArmy",
       "Voucher Center",
       "WAU",
       "WCAG",
       "Web",
       "YTD",
-      "count",
-      "iOS",
       "zh-Hant"
     ],
     "publicZhRule": "Runtime public fields use Traditional Chinese values from project root canonical owners. Historical or source-only English content must not be rendered as fallback.",
@@ -27119,8 +27792,8 @@
         "zh": "每個案例優先呈現問題、責任、決策、產品材料與成果。"
       },
       "index.ntuc-fairprice-incentive-systems-409e75ba": {
-        "en": "NTUC FairPrice · Incentive systems",
-        "zh": "NTUC FairPrice · 獎勵系統"
+        "en": "FairPrice Group · Incentive systems",
+        "zh": "FairPrice Group · 獎勵系統"
       },
       "index.promotion-rules-became-a-reusable-product-mo-4900a13a": {
         "en": "Promotion rules became a reusable product model.",
@@ -28412,7 +29085,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-06",
+  "lastUpdated": "2026-08-08",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",
@@ -28617,7 +29290,7 @@
     "changes": [
       {
         "projectId": "voucher",
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "paths": [
           "projects.voucher.company",
           "projects.voucher.heroMetadata.company",
@@ -28627,7 +29300,7 @@
       },
       {
         "projectId": "voucher-center",
-        "company": "NTUC FairPrice Group",
+        "company": "FairPrice Group",
         "paths": [
           "projects.voucher-center.company",
           "projects.voucher-center.heroMetadata.company",
