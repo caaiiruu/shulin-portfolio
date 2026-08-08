@@ -337,7 +337,7 @@
 .voucher-foundation-gallery__copy>strong{font-size:var(--text-sm);line-height:1.45}
 .voucher-foundation-gallery__copy>p{color:var(--color-text-secondary);font-size:var(--text-sm);line-height:1.5}
 .voucher-foundation-gallery__change{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);align-items:stretch;margin-top:var(--space-4)}
-.voucher-foundation-gallery__change>div{display:grid;grid-template-rows:auto auto;align-content:start;gap:var(--space-2);min-width:0;padding:var(--space-4);border-radius:var(--radius-sm);background:var(--color-surface-evidence-item)}
+.voucher-foundation-gallery__change>div{display:grid;grid-template-rows:auto auto;align-content:start;gap:var(--space-2);min-width:0;padding:var(--space-3) 0;border-top:var(--dimension-1px) solid var(--color-border);border-radius:0;background:transparent}
 .voucher-foundation-gallery__change small{color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold)}
 .voucher-foundation-gallery__change p{margin:0;color:var(--color-text-secondary);font-size:var(--text-xs);line-height:var(--leading-body)}
 .voucher-subsection-heading{display:grid;gap:var(--space-2);max-width:var(--dimension-68ch);margin-top:var(--space-7)}
