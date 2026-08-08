@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: fba2cf33bb7fa95283acd46f79aa14c85170b6ed
+      IMPLEMENTATION_HEAD: 4f3eba60e43f250526a13ffde289e6578d2beabc
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
