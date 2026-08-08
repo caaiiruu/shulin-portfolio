@@ -12,7 +12,7 @@ function derive(value, projectId, location = []) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
     const next = [...location, key];
-    if ((key === "assetId" || key === "publicAssetId") && typeof child === "string") slots.push({ projectId, slotId: next.join("."), assetId: child });
+    if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") slots.push({ projectId, slotId: next.join("."), assetId: child });
     else if (key !== "sourceArchives") derive(child, projectId, next);
   }
 }
@@ -32,7 +32,7 @@ test("real production asset wins over placeholder metadata", () => {
 });
 
 test("missing real runtime assets resolve to shared placeholders", () => {
-  const slot = slots[0];
+  const slot = slots.find(slot=>items[slot.assetId]?.assetStatus==="awaiting-user-asset");
   assert.equal(resolve(slot.assetId).placeholder, true);
 });
 
@@ -57,7 +57,7 @@ test("legacy auction runtime ownership uses canonical Taishin identity", () => {
 
 test("all 13 projects own unique visual slots with no broken src assignment", () => {
   assert.equal(Object.keys(content.projects).length, 13);
-  assert.equal(slots.length, 36);
+  assert.equal(slots.length, 37);
   assert.equal(new Set(slots.map((slot) => `${slot.projectId}/${slot.slotId}`)).size, slots.length);
   assert.doesNotMatch(app, /\.src\s*=\s*(?:''|null|undefined)/);
 });
