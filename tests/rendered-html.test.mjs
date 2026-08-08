@@ -1198,3 +1198,98 @@ test("renders complex project sections as recruiter narratives, not flattened SS
 test("keeps downloads outside the blocking page-navigation loader", () => {
   const runtime = read("assets/js/runtime.js");
   const profile = read("profile.html");
+  const tokens = read("assets/css/tokens.css");
+  const chrome = read("assets/css/components/site-chrome.css");
+  assert.match(profile, /download href="\/site\/assets\/docs\/Shulin-Chou-CV\.pdf"/);
+  assert.match(runtime, /link\.hasAttribute\('download'\)\|\|link\.target==='_blank'/);
+  assert.match(runtime, /\\\.\(\?:pdf\|zip\|docx\?\)/);
+  assert.match(runtime, /safetyTimer=window\.setTimeout\(hide,8000\)/);
+  assert.match(runtime, /countSequence=\[1,2,3,4,5,4,3,2\]/);
+  assert.match(runtime, /show\(runtimeCopy\('loading'\)\)/);
+  assert.match(runtime, /doc\.body\.setAttribute\('aria-busy','true'\)/);
+  assert.match(runtime, /doc\.body\.removeAttribute\('aria-busy'\)/);
+  assert.match(chrome, /data-count="5"/);
+  assert.match(chrome, /@media\(forced-colors:active\)\{\.portfolio-loader-v59__palm/);
+  assert.doesNotMatch(tokens, /--loader-(?:cycle|shadow):/);
+});
+
+test("preserves localized arrays and structured values during Chinese copy cleanup", () => {
+  const app = read("assets/js/app.js");
+  assert.match(
+    app,
+    /if\(Array\.isArray\(value\)\)return value\.map\(normalizePublicCopy\)/,
+    "Project problem types must remain arrays for the shared tag renderer"
+  );
+  assert.match(
+    app,
+    /if\(typeof value==='object'\)return value/,
+    "Structured values must not be coerced into [object Object]"
+  );
+  const publicCopyNormalizer = app.match(/const normalizePublicCopy=[\s\S]*?\n  \};/)?.[0] ?? "";
+  assert.match(publicCopyNormalizer, /\.normalize\('NFC'\)/);
+  assert.doesNotMatch(publicCopyNormalizer, /\.normalize\('NFKC'\)/);
+});
+
+
+test("removes obsolete Stage CTA copy from canonical source", () => {
+  const forbidden = /Explore \\d+ initiatives|View stage case|Explore initiatives/;
+  assert.doesNotMatch(read("content/portfolio-content.json"), forbidden);
+  assert.doesNotMatch(read("assets/js/app.js"), forbidden);
+});
+
+
+test("renders governed Stage visual evidence from canonical Voucher journey contracts", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const stages = ssot.projects.voucher.publicContent.journeyChapters;
+  assert.deepEqual(stages.map((stage) => stage.label.en), ["DISCOVER", "QUALIFY", "ACTIVATE", "REDEEM", "REVIEW"]);
+  const allowedRoles = new Set(["decision-proof", "shipped-state", "before-after", "flow", "system-rule"]);
+  const allowedLayouts = new Set(["single-screen", "before-after", "flow-strip", "system-visual"]);
+  assert.equal(stages.length, 5);
+  for (const stage of stages) {
+    const visual = stage.visualEvidence?.primary;
+    assert.ok(visual, stage.id);
+    assert.ok(allowedRoles.has(visual.evidenceRole), stage.id);
+    assert.ok(allowedLayouts.has(visual.layoutVariant), stage.id);
+    if(stage.id==="discover"){
+      assert.ok(visual.copy.en.beforeCaption && visual.copy.zh.shippedCaption);
+      assert.equal(manifest.items[visual.beforeAssetId].implementationStatus, "real-active");
+      assert.equal(manifest.items[visual.shippedAssetId].implementationStatus, "real-active");
+    }else{
+      assert.ok(visual.caption.en && visual.caption.zh, stage.id);
+      assert.ok(visual.alt.en && visual.alt.zh, stage.id);
+      assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+    }
+  }
+  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
+  assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
+  assert.match(app, /localizedField\(stage,'transformation'\)/);
+  assert.match(app, /stage\.visualEvidence\?\.primary/);
+  assert.match(app, /resolveProjectAsset\(visualContract\.assetId\)/);
+  assert.match(app, /programme-stage-visual__caption/);
+  assert.match(app, /before-after-evidence-v147/);
+  assert.match(app, /evidence-lightbox-v147/);
+  assert.match(app, /impact-evidence-v147/);
+  assert.match(css, /\.programme-stage-visual\{/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{/);
+  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.programme-stage-visual--before-after/);
+});
+
+test("locks the existing Voucher Card history and independent-project boundaries", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects.voucher;
+  const card = voucher.systemFoundations.voucherCardComponentSystem2024_2025;
+  assert.match(card.history.en, /original white Voucher Card already existed/);
+  assert.match(card.history.en, /Claim → View/);
+  assert.match(card.history.en, /reusable Tangram component/);
+  assert.doesNotMatch(card.title.en, /one-off Voucher cards/);
+  assert.ok(card.forbiddenClaims.includes("I created the Voucher Card system from scratch."));
+  assert.equal(voucher.publicContent.publicArchitecture.voucherCenterIsIndependentProject, true);
+  assert.equal(voucher.publicContent.continueExploring.independentProjectCards.some((item) => item.projectId === "game-center"), true);
+  assert.deepEqual(voucher.publicContent.selectedInitiatives.order, ["save-everyday-digital-campaign-2023", "brand-challenges"]);
+  assert.equal(voucher.publicContent.voucherWalletEvidence.forbiddenProjection.includes("voucher-center"), true);
+});
