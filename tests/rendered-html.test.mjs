@@ -898,3 +898,398 @@ test("preserves fractional negative design tokens without tenfold magnification"
 });
 
 test("keeps the homepage Hero as one accessible, responsive owner", () => {
+  const html = read("index.html");
+  const base = read("assets/css/base.css");
+  const hero = read("assets/css/components/hero.css");
+  const transformation = read("assets/img/hero-transformation-system.svg");
+  const resolvedArtwork = read("assets/img/hero-clarity-system.svg");
+  assert.equal((html.match(/<section class="hero"/g) ?? []).length, 1);
+  assert.equal((html.match(/hero-clarity-system\.svg/g) ?? []).length, 1);
+  const heroCopy=Object.values(JSON.parse(read("content/portfolio-content.json")).localizationRegistry.staticPageCopy);
+  assert.ok(heroCopy.some(value=>value.en==='Turn confusion into clear systems'&&value.zh==='把混亂轉化為清晰的系統'));
+  assert.ok(heroCopy.some(value=>value.en==='Turn confusion<br>into'&&value.zh==='把混亂<br>轉化為'));
+  assert.match(html, /data-copy-html-key="index\.turn-confusion-br-into-/);
+  assert.match(read("assets/css/tokens.css"), /--hero-title-size-zh-wide:\s*clamp\(8\.75rem,\s*9\.8vw,\s*140pt\)/);
+  assert.match(read("assets/css/tokens.css"), /--hero-title-scale-zh-compact:\s*\.96/);
+  assert.match(read("assets/css/tokens.css"), /--hero-title-measure-zh:\s*3\.2em/);
+  assert.match(hero, /html:lang\(zh\) \.hero__title,\s*html:lang\(zh\) \.hero__outcome\s*\{\s*font-size:var\(--hero-title-size-zh-wide\)/);
+  assert.match(hero, /html:lang\(zh\) \.hero__title\{max-width:var\(--hero-title-measure-zh\)\}/);
+  assert.match(hero, /@media \(max-width: 1100px\)[\s\S]*font-size:calc\(var\(--hero-title-size\) \* var\(--hero-title-scale-zh-compact\)\)/);
+  assert.match(hero, /@media \(max-width: 1100px\)/);
+  assert.match(hero, /@media \(max-width: 760px\)/);
+  assert.match(hero, /translateX\(var\(--hero-transformation-shift-mobile\)\)/);
+  assert.match(hero, /inset-inline-start:\s*var\(--hero-artwork-start-narrow\)/);
+  assert.match(hero, /@media \(max-width: 430px\)/);
+  assert.match(hero, /prefers-reduced-motion: reduce/);
+  assert.match(hero, /@keyframes hero-hand-enter/);
+  assert.match(transformation, /animation-duration:\s*4\.2s/);
+  assert.match(transformation, /animation-delay:\s*\.9s/);
+  assert.match(transformation, /7\.7%[\s\S]*15\.4%/);
+  assert.match(resolvedArtwork, /viewBox="0 0 799 459"/);
+  assert.match(resolvedArtwork, /M521\.997 233\.563/);
+  assert.match(resolvedArtwork, /M585\.139 222\.155/);
+  assert.match(resolvedArtwork, /\.hero-final-flame\{display:none\}/);
+  assert.match(transformation, /\.hero-grip-reveal\s*\{\s*display:\s*none;/);
+  assert.match(transformation, /attributeName="d"[\s\S]*keyTimes="0;0\.333;0\.667;1"/);
+  assert.doesNotMatch(transformation, /hero-flame-frame/);
+  assert.doesNotMatch(base, /(^|[\s>+~,:])\.hero(?=$|[\s>+~.#:[(]|-|__)/m);
+});
+
+test("keeps global search focus on the complete form frame", () => {
+  const chrome = read("assets/css/components/site-chrome.css");
+  assert.match(chrome, /\.global-search-v114__form:focus-within\s*\{[^}]*border-color:\s*var\(--color-focus\);[^}]*box-shadow:\s*var\(--shadow-focus\)/s);
+  assert.match(chrome, /\.global-search-v114__input\s*\{[^}]*border:\s*0;[^}]*box-shadow:\s*none;/s);
+  assert.match(chrome, /\.global-search-v114__input:focus,\s*\.global-search-v114__input:focus-visible\s*\{[^}]*outline:\s*0;[^}]*box-shadow:\s*none;/s);
+  assert.match(read("assets/css/components/foundation.css"), /:not\(\[data-focus-managed\]\):focus-visible/);
+  assert.match(read("assets/js/app.js"), /input\.dataset\.focusManaged='true'/);
+  assert.match(chrome, /@media \(max-width: 600px\)[\s\S]*\.global-search-v114__form\s*\{[^}]*border:\s*var\(--dimension-2px\) solid var\(--color-border-strong\)/s);
+  assert.doesNotMatch(chrome, /@media \(max-width: 600px\)[\s\S]*\.global-search-v114__input\s*\{[^}]*border:\s*var\(--dimension-2px\)/s);
+});
+
+test("keeps homepage evidence readable and singly owned across viewports", () => {
+  const base = read("assets/css/base.css");
+  const evidence = read("assets/css/components/homepage-evidence.css");
+  const registry = JSON.parse(read("docs/design-system/registry.json"));
+  const entry = registry.components.find((component) => component.component === "HomepageEvidence");
+  assert.equal(entry.cssOwner, "assets/css/components/homepage-evidence.css");
+  assert.doesNotMatch(base, /\.(?:experience-(?:proof|metrics|orgs|org-group)|metric-(?:value|number|unit)|principle-(?:cards|card|evidence)|principles-v)/);
+  for (const contract of [
+    ".experience-metrics-v42 {",
+    "grid-template-columns: repeat(4, minmax(0, 1fr))",
+    ".experience-orgs-v44__list {",
+    "flex-wrap: wrap",
+    ".principle-node__trigger:focus-visible",
+    "@media (max-width: 900px)",
+    "@media (max-width: 700px)",
+    "@media (max-width: 380px)",
+    ".principle-constellation { grid-template-columns: 1fr; }",
+    "prefers-reduced-motion: reduce",
+  ]) assert.ok(evidence.includes(contract), contract);
+  assert.doesNotMatch(evidence, /!important|overflow-wrap:anywhere|word-break:break-all|overflow-x:\s*auto/);
+});
+
+test("keeps supporting page openings responsive and singly owned", () => {
+  const base = read("assets/css/base.css");
+  const layout = read("assets/css/components/supporting-page-layout.css");
+  const cards = read("assets/css/components/project-card.css");
+  const registry = JSON.parse(read("docs/design-system/registry.json"));
+  const entry = registry.components.find((component) => component.component === "SupportingPageLayout");
+  assert.equal(entry.cssOwner, "assets/css/components/supporting-page-layout.css");
+  assert.doesNotMatch(base, /(?:^|[\s>+~,.#:])(?:page-hero(?:-|\b))/m);
+  for (const contract of [".page-hero{", ".page-hero-grid{", ".page-hero-grid>p{", "@media(max-width:900px)", "@media(max-width:560px)", "@media(max-width:360px)"]) assert.ok(layout.includes(contract), contract);
+  assert.doesNotMatch(layout, /!important|backdrop-filter|word-break:break-all|overflow-wrap:anywhere/);
+  assert.doesNotMatch(cards, /\.work-card-v32__action[^}]*border-top/);
+});
+
+test("keeps bundled CSS imagery deploy-safe", () => {
+  const css = read("assets/css/components/editorial-section.css");
+  const tokens = read("assets/css/tokens.css");
+  const cloud = read("assets/img/experience-proof-cloud.svg");
+  assert.match(tokens, /--experience-proof-cloud-shape: url\("\/site\/assets\/img\/experience-proof-cloud\.svg"\)/);
+  assert.match(tokens, /--experience-proof-cloud-height: 17\.336vw/);
+  assert.match(tokens, /--portfolio-cloud-surface: #f4efe8/);
+  assert.match(css, /padding-top: calc\(var\(--experience-proof-cloud-height\) \+ var\(--experience-proof-pad-block-start\)\)/);
+  assert.match(css, /background: var\(--experience-proof-surface\)/);
+  assert.match(css, /mask: var\(--experience-proof-cloud-shape\) center top \/ 100% 100% no-repeat/);
+  assert.doesNotMatch(css, /translateY\(calc\(var\(--experience-proof-cloud-height\) \* -1\)\)/);
+  assert.match(css, /inset: 0 0 auto/);
+  assert.match(css, /inset: var\(--experience-proof-cloud-height\) 0 0/);
+  assert.match(cloud, /fill="#F4EFE8"/);
+  assert.doesNotMatch(cloud, /(?:linear|radial)Gradient|url\(#/);
+  assert.equal(fs.existsSync(new URL("assets/img/experience-proof-cloud.svg", site)), true);
+  assert.doesNotMatch(css, /url\(["']?\.\.\//);
+});
+
+test("footer uses a bounded organic edge without clipping its content", () => {
+  const tokens = read("assets/css/tokens.css");
+  const css = read("assets/css/components/site-chrome.css");
+  const edge = read("assets/img/footer-organic-edge.svg");
+  assert.match(tokens, /--footer-organic-edge-shape: url\("\/site\/assets\/img\/footer-organic-edge\.svg"\)/);
+  assert.match(tokens, /--footer-organic-edge-height: clamp\(/);
+  assert.match(css, /\.site-footer::before\s*\{[^}]*height: calc\(var\(--footer-organic-edge-height\) \+ var\(--dimension-1px\)\)[^}]*mask: var\(--footer-organic-edge-shape\)/s);
+  assert.doesNotMatch(css, /\.site-footer[^{]*\{[^}]*clip-path\s*:/s);
+  assert.match(edge, /viewBox="0 0 1440 48"/);
+});
+
+test("does not keep versioned legacy owners beside canonical source", () => {
+  for (const directory of ["assets/css", "assets/js"]) {
+    const legacy = fs.readdirSync(new URL(`${directory}/`, site)).filter((name) => /-(?:v)?\d+\.(?:css|js)$/.test(name));
+    assert.deepEqual(legacy, [], `${directory}: ${legacy.join(", ")}`);
+  }
+});
+
+test("prevents narrow-column recruiter content and forced word breaking", () => {
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const cards = read("assets/css/components/project-card.css");
+  const tokens = read("assets/css/tokens.css");
+  const app = read("assets/js/app.js");
+  assert.match(overview, /\.info-grid-v45\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(overview, /@media\(max-width:600px\)[\s\S]*\.info-grid-v45\{grid-template-columns:1fr\}/);
+  assert.match(overview, /\.modal-head-meta-v60\{[^}]*flex-wrap:nowrap[^}]*overflow-x:auto/);
+  assert.match(overview, /\.modal-head-meta-v60 \.kicker\{display:contents\}/);
+  assert.match(overview, /\.detail-period-v60:empty\{display:none\}/);
+  assert.match(overview, /\.info-grid-v45>div\{[^}]*padding:var\(--space-3\) var\(--info-card-padding\) var\(--space-5\)/);
+  assert.match(overview, /\.info-grid-v45 strong\{[^}]*margin-top:var\(--info-card-label-value-gap\)/);
+  assert.match(overview, /\.project-signals-v45\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(overview, /@media\(max-width:600px\)[\s\S]*\.project-signals-v45\{grid-template-columns:1fr/);
+  assert.match(overview, /\.quick-view-v51--project\{grid-template-columns:1fr;align-items:start\}/);
+  assert.match(overview, /\.quick-view-v51--project>\*\{grid-column:1\}/);
+  assert.match(overview, /\.modal-content-v45\{[^}]*overflow-wrap:normal;word-break:normal/);
+  assert.match(overview, /\.decision-considerations-v46\{[^}]*grid-template-columns:1fr/);
+  assert.match(overview, /\.decision-card-v46\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
+  assert.match(overview, /\.decision-considerations-v46>div\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
+  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*background:var\(--cmp-popup-info-surface\)/);
+  assert.match(overview, /\.decision-evidence-v58\{background:var\(--color-surface-evidence-accent\)\}/);
+  assert.doesNotMatch(overview, /\.decision-(?:result-block-v58|considerations-v46)[^{]*\{[^}]*border-top:/);
+  assert.doesNotMatch(overview, /\.decision-result-block-v58\{[^}]*padding-left:/);
+  assert.match(overview, /\.project-context-v45__hard ul\{[^}]*padding:0[^}]*list-style:none/);
+  assert.match(overview, /\.ownership-section-v45>\.section-heading-v45\{[^}]*margin-bottom:0/);
+  assert.match(overview, /\.ownership-section-v45 \.section-heading-v45\+\*\{margin-top:var\(--cmp-popup-subtitle-content-gap\)/);
+  assert.match(tokens, /--color-surface-evidence-neutral: var\(--paper-50\)/);
+  assert.match(tokens, /--color-surface-evidence-accent: var\(--paper-50\)/);
+  assert.match(overview, /\.impact-grid-v45>article\{background:var\(--color-surface-evidence-neutral\)\}/);
+  assert.match(overview, /\.ownership-section-v45,\.delivery-grid-v45 article\{background:var\(--color-surface-evidence-accent\)\}/);
+  assert.match(tokens, /--color-surface-evidence-item: var\(--paper-0\)/);
+  assert.match(overview, /\.ownership-grid-v45>article\{[^}]*background:var\(--color-surface-evidence-item\)/);
+  assert.match(overview, /\.team-impact-item-v47,\.recruiter-proof-item-v46\{[^}]*background:var\(--color-surface-evidence-item\)/);
+  assert.match(overview, /\.detail-related-v45__head h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
+  assert.match(cards, /\.related-project-card-v45,.detail-related-card-v45\{display:grid;[^}]*grid-template-rows:auto minmax\(0,1fr\) auto/);
+  assert.match(cards, /\.work-card-v32__action,.related-project-card__action,.detail-related-action-v46\{[^}]*margin-top:auto/);
+  assert.match(cards, /\.global-search-v114__projects \.related-project-card__intro-v81\{[^}]*grid-template-rows:var\(--dimension-24px\) auto/);
+  assert.match(cards, /\.global-search-v114__projects \.related-project-card__action\{[^}]*display:inline-flex;[^}]*white-space:nowrap/);
+  assert.match(cards, /\.related-project-card__action-arrow\{[^}]*flex:0 0 auto/);
+  assert.match(cards, /\.work-card-v32--compact \.work-artifact\{[^}]*box-sizing:border-box;[^}]*min-height:0;[^}]*height:var\(--project-card-media-block-mobile\)/);
+  assert.match(cards, /\.work-card-v32--compact \.work-card-v32__content\{border-top:var\(--dimension-1px\) solid var\(--color-border\)\}/);
+  assert.match(cards, /\.work-card-v32__content h2\{[^}]*min-width:0;max-width:min\(100%,var\(--dimension-24ch\)\)[^}]*overflow-wrap:break-word;word-break:normal/);
+  assert.match(cards, /\.related-project-card-v45 :is\(h4,h5\),\.detail-related-card-v45 h4\{[^}]*max-width:min\(100%,var\(--dimension-24ch\)\)[^}]*overflow-wrap:break-word;word-break:normal/);
+  assert.doesNotMatch(cards, /(?:work-card-v32__content h2|related-project-card-v45 :is\(h4,h5\))\{[^}]*word-break:keep-all/);
+  assert.match(overview, /\.detail-dialog-v45 h1,\.detail-dialog-v45 h2,\.detail-dialog-v45 \.detail-title-v45\{[^}]*max-width:100%[^}]*word-break:normal;overflow-wrap:break-word/);
+  assert.ok(
+    cards.indexOf(".work-card-v32--compact .work-artifact{box-sizing:border-box") >
+      cards.indexOf(".work-card-v32 .work-artifact{min-height:var(--project-card-media-block)"),
+    "compact media reset must follow the general Work media rule"
+  );
+  assert.match(app, /related-project-card__action-label/);
+  assert.match(app, /related-project-card__action-arrow/);
+  assert.match(app, /function logicalRailMax\(rail\)/);
+  assert.match(app, /last\.offsetLeft\+last\.offsetWidth\+paddingEnd-rail\.clientWidth/);
+  assert.match(app, /anchors\.find\(anchor=>anchor>current\+2\)/);
+  assert.match(app, /rail\.scrollTo\(\{left:target/);
+  assert.doesNotMatch(app, /const max=Math\.max\(0,rail\.scrollWidth-rail\.clientWidth\)/);
+  const signalItems = app.match(/const signalItems=\[[\s\S]*?\];/)?.[0] ?? "";
+  for (const field of ["p.type", "p.timeline", "p.scope", "audience"]) assert.ok(signalItems.includes(field), field);
+  assert.doesNotMatch(overview, /!important/, "Project detail owner must not depend on specificity overrides");
+  assert.doesNotMatch(read("assets/css/base.css"), /(?:^|[\s>+~,.#:])(?:project-evidence-v45\b|decision-(?:section|list|card|number|body|result|considerations|evidence|field|visual)(?:-|__|\b))/, "Project detail selectors must not return to base.css");
+  for (const file of ["project-card.css", "experiment-card.css", "profile-card.css"]) {
+    const css = read(`assets/css/components/${file}`);
+    assert.doesNotMatch(css, /overflow-wrap:anywhere|word-break:break-all/, file);
+  }
+});
+
+test("provides recruiter anchor navigation and outcome metric hierarchy", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  for (const page of ["index.html", "work.html", "profile.html", "experiments.html"]) {
+    const html = read(page);
+    assert.match(html, /<nav data-aria-key="aria\.project-sections-[^"]+" class="pd-section-nav" hidden id="projectSectionNav">/);
+    assert.doesNotMatch(html, /class="project-section-nav/);
+    assert.doesNotMatch(html, /projectSectionNav[^>]*role="tablist"/);
+  }
+  assert.match(app, /const PROJECT_NAV_ITEMS=/);
+  assert.match(app, /setAttribute\('aria-current','location'\)/);
+  assert.match(app, /appendEvidenceValue\(card,value\)/);
+  assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
+  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch[^}]*border:var\(--dimension-1px\) solid var\(--color-border\)/);
+  assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
+  assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
+  assert.doesNotMatch(overview, /\.project-section-nav/);
+  assert.match(overview, /\.recruiter-proof-item-v46__metric-value\{[^}]*font-size:var\(--cmp-popup-outcome-metric-size\)/);
+  assert.match(app, /function embeddedOutcomeMetric\(text\)/);
+  assert.match(app, /\[~≈\]\?\\s\*\\d\[\\d,.\]\*/);
+  assert.doesNotMatch(app, /\[\\d,.\]\+\\\+\?/);
+  assert.match(app, /零〇一二兩三四五六七八九十百千萬/);
+});
+
+test("keeps recruiter-facing ownership concise and principle examples actionable", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const home = read("assets/js/home.js");
+  assert.doesNotMatch(app, /safeText\(leadershipHeading,detailLabel\('partnerOwned'\)\)/);
+  for (const item of ssot.designPrinciples.items) {
+    assert.ok(ssot.projects[item.expanded.practice.projectId], item.id);
+  }
+  assert.match(home, /principle-node__case-cta/);
+  for (const id of ["voucher", "dbs", "booking", "bandzo"]) {
+    assert.ok(ssot.projects[id].infoGrid.audience.primary.zh);
+    assert.equal(ssot.projects[id].infoGrid.audience.secondary.zh.length, ssot.projects[id].infoGrid.audience.secondary.en.length);
+  }
+});
+
+test("keeps Search and Domain entity relationships resolvable", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const ids = new Set();
+  for (const bucket of ["projects", "experiments", "sideProjects"]) {
+    for (const [key, entity] of Object.entries(ssot[bucket] ?? {})) {
+      const index = entity.searchIndexV2;
+      assert.ok(index, `${bucket}.${key} searchIndexV2`);
+      if (index.canonicalId) assert.equal(index.canonicalId, key);
+      assert.ok(!ids.has(key), `duplicate canonicalId ${key}`);
+      ids.add(key);
+    }
+  }
+  for (const domain of ssot.contentDiscovery.domains) {
+    for (const key of [...(domain.featuredProjectIds ?? []), ...(domain.supportingProjectIds ?? [])]) {
+      assert.ok(ssot.projects[key], `${domain.id} -> ${key}`);
+      assert.ok(app.includes("matchedDomains") && app.includes("domainIds:[...new Set"), `${key} -> ${domain.id} canonical projection`);
+    }
+  }
+  assert.match(app, /const searchEntities=query=>/);
+  assert.match(app, /appendExploration/);
+});
+
+test("keeps interactive prototypes in-site, lazy, and owned only by Voucher Center", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const flow = ssot.interactiveFlowRegistry["voucher-center-discovery-ut-2024"];
+  assert.equal(flow.ownerProjectId, "voucher-center");
+  assert.equal(ssot.projects.voucher.publicContent.journeyChapters[0].interactiveFlowRef, undefined);
+  assert.deepEqual(ssot.projectInteractiveFlowRefs["voucher-center"], [flow.id]);
+  assert.equal(flow.evidenceRefs.length, 2);
+  for (const path of flow.evidenceRefs) {
+    assert.match(path, /^projects\.voucher-center\.publicContent\.whatResearchChanged\.proofStrip\[\d+\]$/);
+  }
+  assert.match(app, /function createInteractiveFlow\(flow,\{compact=false\}=\{\}\)/);
+  assert.match(app, /function prototypeEmbedUrl\(prototypeUrl\)/);
+  assert.match(app, /embed\.loading='lazy'/);
+  assert.match(app, /embed\.setAttribute\('sandbox','allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-presentation'\)/);
+  assert.match(app, /source\.searchParams\.set\('show-proto-sidebar','0'\)/);
+  const labels = Object.values(ssot.localizationRegistry.runtimeUiLabels).map((value) => value.en);
+  assert.ok(labels.includes("FINAL TESTED VERSION"));
+  assert.ok(labels.includes("Loading prototype…"));
+  assert.match(app, /list\(p\.interactive_flows\)\.forEach\(flow=>decisions\.appendChild\(createInteractiveFlow\(flow\)\)\)/);
+  assert.ok(
+    app.indexOf("list(p.interactive_flows).forEach") > app.indexOf("(p.decisions||[]).forEach"),
+    "prototype must render after the complete decision list"
+  );
+  assert.doesNotMatch(app, /Open in Figma|在 Figma 開啟|window\.open\(flow\.prototypeUrl/);
+  assert.match(app, /localize\(optional\.content\|\|\[decision\.tradeoff,decision\.tradeoff_zh\]\)/);
+  assert.match(app, /item\.release2024\?\.status/);
+  assert.match(overview, /\.interactive-flow-v195\{/);
+  assert.match(overview, /\.interactive-flow-v195__actions\{display:flex;justify-content:center\}/);
+  assert.match(overview, /\.interactive-flow-v195__loading\{/);
+  assert.match(overview, /\.programme-stage-case__proof\{grid-column:1\/-1/);
+  assert.doesNotMatch(overview, /\.interactive-flow-v195__external/);
+  assert.doesNotMatch(overview, /!important/);
+});
+
+test("renders complex project sections as recruiter narratives, not flattened SSOT fields", () => {
+  const app = read("assets/js/app.js");
+  for (const section of ["product-evolution", "research-evolution", "future-direction", "visual-system-guardrail", "system-foundation"]) {
+    assert.ok(app.includes(`sectionId==='${section}'`) || app.includes(`'${section}'`), section);
+  }
+  assert.match(app, /function renderNarrativeProjectSection\(sectionId,value\)/);
+  assert.match(app, /project-story-v198__grid/);
+  assert.doesNotMatch(app, /desktopLayoutIntent.*project-story-v198/s);
+});
+
+test("keeps downloads outside the blocking page-navigation loader", () => {
+  const runtime = read("assets/js/runtime.js");
+  const profile = read("profile.html");
+  const tokens = read("assets/css/tokens.css");
+  const chrome = read("assets/css/components/site-chrome.css");
+  assert.match(profile, /download href="\/site\/assets\/docs\/Shulin-Chou-CV\.pdf"/);
+  assert.match(runtime, /link\.hasAttribute\('download'\)\|\|link\.target==='_blank'/);
+  assert.match(runtime, /\\\.\(\?:pdf\|zip\|docx\?\)/);
+  assert.match(runtime, /safetyTimer=window\.setTimeout\(hide,8000\)/);
+  assert.match(runtime, /countSequence=\[1,2,3,4,5,4,3,2\]/);
+  assert.match(runtime, /show\(runtimeCopy\('loading'\)\)/);
+  assert.match(runtime, /doc\.body\.setAttribute\('aria-busy','true'\)/);
+  assert.match(runtime, /doc\.body\.removeAttribute\('aria-busy'\)/);
+  assert.match(chrome, /data-count="5"/);
+  assert.match(chrome, /@media\(forced-colors:active\)\{\.portfolio-loader-v59__palm/);
+  assert.doesNotMatch(tokens, /--loader-(?:cycle|shadow):/);
+});
+
+test("preserves localized arrays and structured values during Chinese copy cleanup", () => {
+  const app = read("assets/js/app.js");
+  assert.match(
+    app,
+    /if\(Array\.isArray\(value\)\)return value\.map\(normalizePublicCopy\)/,
+    "Project problem types must remain arrays for the shared tag renderer"
+  );
+  assert.match(
+    app,
+    /if\(typeof value==='object'\)return value/,
+    "Structured values must not be coerced into [object Object]"
+  );
+  const publicCopyNormalizer = app.match(/const normalizePublicCopy=[\s\S]*?\n  \};/)?.[0] ?? "";
+  assert.match(publicCopyNormalizer, /\.normalize\('NFC'\)/);
+  assert.doesNotMatch(publicCopyNormalizer, /\.normalize\('NFKC'\)/);
+});
+
+
+test("removes obsolete Stage CTA copy from canonical source", () => {
+  const forbidden = /Explore \\d+ initiatives|View stage case|Explore initiatives/;
+  assert.doesNotMatch(read("content/portfolio-content.json"), forbidden);
+  assert.doesNotMatch(read("assets/js/app.js"), forbidden);
+});
+
+
+test("renders governed Stage visual evidence from canonical Voucher journey contracts", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const stages = ssot.projects.voucher.publicContent.journeyChapters;
+  assert.deepEqual(stages.map((stage) => stage.label.en), ["DISCOVER", "QUALIFY", "ACTIVATE", "REDEEM", "REVIEW"]);
+  const allowedRoles = new Set(["decision-proof", "shipped-state", "before-after", "flow", "system-rule"]);
+  const allowedLayouts = new Set(["single-screen", "before-after", "flow-strip", "system-visual"]);
+  assert.equal(stages.length, 5);
+  for (const stage of stages) {
+    const visual = stage.visualEvidence?.primary;
+    assert.ok(visual, stage.id);
+    assert.ok(allowedRoles.has(visual.evidenceRole), stage.id);
+    assert.ok(allowedLayouts.has(visual.layoutVariant), stage.id);
+    if(stage.id==="discover"){
+      assert.ok(visual.copy.en.beforeCaption && visual.copy.zh.shippedCaption);
+      assert.equal(manifest.items[visual.beforeAssetId].implementationStatus, "real-active");
+      assert.equal(manifest.items[visual.shippedAssetId].implementationStatus, "real-active");
+    }else{
+      assert.ok(visual.caption.en && visual.caption.zh, stage.id);
+      assert.ok(visual.alt.en && visual.alt.zh, stage.id);
+      assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+    }
+  }
+  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
+  assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
+  assert.match(app, /localizedField\(stage,'transformation'\)/);
+  assert.match(app, /stage\.visualEvidence\?\.primary/);
+  assert.match(app, /resolveProjectAsset\(visualContract\.assetId\)/);
+  assert.match(app, /programme-stage-visual__caption/);
+  assert.match(app, /before-after-evidence-v147/);
+  assert.match(app, /evidence-lightbox-v147/);
+  assert.match(app, /impact-evidence-v147/);
+  assert.match(css, /\.programme-stage-visual\{/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{/);
+  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.programme-stage-visual--before-after/);
+});
+
+test("locks the existing Voucher Card history and independent-project boundaries", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects.voucher;
+  const card = voucher.systemFoundations.voucherCardComponentSystem2024_2025;
+  assert.match(card.history.en, /original white Voucher Card already existed/);
+  assert.match(card.history.en, /Claim → View/);
+  assert.match(card.history.en, /reusable Tangram component/);
+  assert.doesNotMatch(card.title.en, /one-off Voucher cards/);
+  assert.ok(card.forbiddenClaims.includes("I created the Voucher Card system from scratch."));
+  assert.equal(voucher.publicContent.publicArchitecture.voucherCenterIsIndependentProject, true);
+  assert.equal(voucher.publicContent.continueExploring.independentProjectCards.some((item) => item.projectId === "game-center"), true);
+  assert.deepEqual(voucher.publicContent.selectedInitiatives.order, ["save-everyday-digital-campaign-2023", "brand-challenges"]);
+  assert.equal(voucher.publicContent.voucherWalletEvidence.forbiddenProjection.includes("voucher-center"), true);
+});
