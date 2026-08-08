@@ -258,3 +258,54 @@ for (const match of componentCss.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)) 
 
 // A canonical selector may be responsive inside its own file, but it must never
 // be declared by two component owners. This catches accidental second versions
+// before they can reach production.
+const selectorOwners = new Map();
+for (const file of componentCssSources) {
+  postcss.parse(fs.readFileSync(path.join(root, file), "utf8")).walkRules((rule) => {
+    if (rule.parent?.type === "atrule" && /keyframes$/i.test(rule.parent.name)) return;
+    for (const selector of rule.selectors) {
+      const normalized = selector.replace(/\s+/g, " ").trim();
+      // Component-scoped custom properties intentionally share :root; ownership
+      // conflicts are about rendered selectors, not the token declaration host.
+      if (normalized === ":root") continue;
+      const previous = selectorOwners.get(normalized);
+      if (previous && previous !== file) {
+        throw new Error(`Canonical selector has multiple owners: ${normalized} (${previous}, ${file})`);
+      }
+      selectorOwners.set(normalized, file);
+    }
+  });
+}
+const css = `/* Generated production stylesheet. Edit canonical sources, not this file. */\n${canonicalCss}\n${componentCss}`;
+function createRuntimeContentProjection(source) {
+  const runtimeContent = structuredClone(source);
+  delete runtimeContent.sourceArchives;
+  for (const project of Object.values(runtimeContent.projects || {})) {
+    for (const legacyField of [
+      "transformation", "transformation_zh", "problem_types", "problem_types_zh",
+      "at_glance", "at_glance_zh", "type", "type_zh", "legacyAliasStatus",
+    ]) delete project[legacyField];
+  }
+  return runtimeContent;
+}
+const runtimeContent = createRuntimeContentProjection(content);
+const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(runtimeContent)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};`;
+const js = `${bundle([], "/* Generated production runtime. Edit canonical sources, not this file. */")}\n${contentRuntime}\n${jsSources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
+for (const [key, project] of Object.entries(content.projects || {})) {
+  if (!project.title?.en || !project.title?.zh) throw new Error(`Project ${key} has no bilingual canonical title`);
+  if (!project.problemTypes?.en || !project.problemTypes?.zh) throw new Error(`Project ${key} has no bilingual canonical problemTypes`);
+  if (!project.atAGlance?.en || !project.atAGlance?.zh) throw new Error(`Project ${key} has no bilingual canonical atAGlance`);
+}
+const cssFile = `production.${fingerprint(css)}.css`;
+const jsFile = `production.${fingerprint(js)}.js`;
+fs.writeFileSync(path.join(root, "assets/css", cssFile), css);
+fs.writeFileSync(path.join(root, "assets/js", jsFile), js);
+
+for (const page of pages) {
+  const file = path.join(root, page);
+  fs.writeFileSync(file, replaceProductionAssets(fs.readFileSync(file, "utf8"), cssFile, jsFile));
+}
+
+console.log(`Production assets: ${cssFile}, ${jsFile}`);
+
+await import("./generate-project-pages.mjs");
