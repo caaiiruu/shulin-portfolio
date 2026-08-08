@@ -1319,6 +1319,9 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.doesNotMatch(app, /PROJECT_SECTION_REGISTRY/);
   assert.match(app, /project\.section_order\|\|\[\]/);
   assert.match(app, /Unknown canonical section/);
+  assert.match(app, /mappedCanonicalSectionOrder/);
+  assert.match(app, /dataset\.canonicalSectionId=sectionId/);
+  assert.doesNotMatch(app, /\[problem,complexity,\.\.\.supplemental,decisions,gallery,impact,ownership,delivery\]/);
   assert.match(app, /applyCaseStudySectionSystem\(p\)/);
   for (const variant of ["canvas", "soft", "emphasis"]) {
     assert.match(css, new RegExp(`\\.case-study-section--${variant}\\{`));
@@ -1334,4 +1337,13 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.match(css, /\.gallery-copy-v45\{[^}]*background:transparent/);
   assert.match(css, /\.gallery-thumbs-v45\{[^}]*background:transparent/);
   assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--space-5\);width:100%\}/);
+  for (const forbidden of [
+    /\.project-context-v45--decision-band\{grid-template-columns:1fr;padding:var\(--space-5\)\}/,
+    /\.quick-view-v51\{display:grid;grid-template-columns:1fr;gap:var\(--space-5\);padding:var\(--space-5\)\}/,
+    /\.gallery-copy-v45\{padding:var\(--space-4\)\}/,
+    /\.gallery-thumbs-v45\{padding:0 var\(--space-4\) var\(--space-4\)\}/,
+    /\.voucher-stage-decision-list \.decision-card-v46\{[^}]*background:var\(--color-surface\)/,
+    /\.stage-decision-problem\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-evidence-item\)/,
+    /\.stage-decision-meta>div\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-subtle\)/
+  ]) assert.doesNotMatch(css, forbidden);
 });
