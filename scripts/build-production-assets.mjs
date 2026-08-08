@@ -156,7 +156,7 @@ if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
 if (assetManifest.packageVersion !== "r43" || assetManifest.contentVersion !== "2026-08-08-r147") {
-  throw new Error("The active Asset Manifest must be r43 aligned to Content r146");
+  throw new Error("The active Asset Manifest must be r43 aligned to Content r147");
 }
 const derivedVisualSlots = [];
 function deriveVisualSlots(value, projectId, location = []) {
@@ -164,14 +164,14 @@ function deriveVisualSlots(value, projectId, location = []) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
     const next = [...location, key];
-    if ((key === "assetId" || key === "publicAssetId") && typeof child === "string") {
+    if (["assetId", "publicAssetId", "beforeAssetId", "shippedAssetId"].includes(key) && typeof child === "string") {
       derivedVisualSlots.push({ projectId, slotId: next.join("."), assetId: child });
     } else if (key !== "sourceArchives") deriveVisualSlots(child, projectId, next);
   }
 }
 for (const [projectId, project] of Object.entries(content.projects)) deriveVisualSlots(project, projectId);
-if (derivedVisualSlots.length !== 36 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 31) {
-  throw new Error("Content must derive exactly 36 runtime visual slots and 31 unique asset IDs");
+if (derivedVisualSlots.length !== 37 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 33) {
+  throw new Error("Content must derive exactly 37 runtime visual slots and 33 unique asset IDs");
 }
 for (const slot of derivedVisualSlots) {
   const record = assetManifest.items?.[slot.assetId];
@@ -258,54 +258,3 @@ for (const match of componentCss.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)) 
 
 // A canonical selector may be responsive inside its own file, but it must never
 // be declared by two component owners. This catches accidental second versions
-// before they can reach production.
-const selectorOwners = new Map();
-for (const file of componentCssSources) {
-  postcss.parse(fs.readFileSync(path.join(root, file), "utf8")).walkRules((rule) => {
-    if (rule.parent?.type === "atrule" && /keyframes$/i.test(rule.parent.name)) return;
-    for (const selector of rule.selectors) {
-      const normalized = selector.replace(/\s+/g, " ").trim();
-      // Component-scoped custom properties intentionally share :root; ownership
-      // conflicts are about rendered selectors, not the token declaration host.
-      if (normalized === ":root") continue;
-      const previous = selectorOwners.get(normalized);
-      if (previous && previous !== file) {
-        throw new Error(`Canonical selector has multiple owners: ${normalized} (${previous}, ${file})`);
-      }
-      selectorOwners.set(normalized, file);
-    }
-  });
-}
-const css = `/* Generated production stylesheet. Edit canonical sources, not this file. */\n${canonicalCss}\n${componentCss}`;
-function createRuntimeContentProjection(source) {
-  const runtimeContent = structuredClone(source);
-  delete runtimeContent.sourceArchives;
-  for (const project of Object.values(runtimeContent.projects || {})) {
-    for (const legacyField of [
-      "transformation", "transformation_zh", "problem_types", "problem_types_zh",
-      "at_glance", "at_glance_zh", "type", "type_zh", "legacyAliasStatus",
-    ]) delete project[legacyField];
-  }
-  return runtimeContent;
-}
-const runtimeContent = createRuntimeContentProjection(content);
-const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(runtimeContent)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};`;
-const js = `${bundle([], "/* Generated production runtime. Edit canonical sources, not this file. */")}\n${contentRuntime}\n${jsSources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
-for (const [key, project] of Object.entries(content.projects || {})) {
-  if (!project.title?.en || !project.title?.zh) throw new Error(`Project ${key} has no bilingual canonical title`);
-  if (!project.problemTypes?.en || !project.problemTypes?.zh) throw new Error(`Project ${key} has no bilingual canonical problemTypes`);
-  if (!project.atAGlance?.en || !project.atAGlance?.zh) throw new Error(`Project ${key} has no bilingual canonical atAGlance`);
-}
-const cssFile = `production.${fingerprint(css)}.css`;
-const jsFile = `production.${fingerprint(js)}.js`;
-fs.writeFileSync(path.join(root, "assets/css", cssFile), css);
-fs.writeFileSync(path.join(root, "assets/js", jsFile), js);
-
-for (const page of pages) {
-  const file = path.join(root, page);
-  fs.writeFileSync(file, replaceProductionAssets(fs.readFileSync(file, "utf8"), cssFile, jsFile));
-}
-
-console.log(`Production assets: ${cssFile}, ${jsFile}`);
-
-await import("./generate-project-pages.mjs");
