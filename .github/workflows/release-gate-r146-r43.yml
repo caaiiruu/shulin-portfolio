@@ -290,8 +290,7 @@ jobs:
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
             const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','CUSTOMER BREAKPOINT','DESIGN SHIFT','VISUAL EVIDENCE','View related work'];
             const missing=required.filter(t=>!text.includes(t));
-            const lazyImages=page.locator('img[loading="lazy"]');
-            for(let i=0;i<await lazyImages.count();i++)await lazyImages.nth(i).scrollIntoViewIfNeeded();
+            await page.locator('img[loading="lazy"]').evaluateAll(xs=>xs.filter(x=>x.currentSrc||x.getAttribute('src')).forEach(x=>x.scrollIntoView({block:'center'})));
             await page.waitForTimeout(500);
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
@@ -334,8 +333,7 @@ jobs:
             const voucherCenterRequired=['From fragmented campaign discovery to a persistent Voucher claim product','proposal-era modelled targets—not actual results','Separate participation from application','Preserve the target architecture without blocking launch','Original white Voucher Card','Reusable Tangram component'];
             const voucherCenterMissing=voucherCenterRequired.filter(t=>!voucherCenterText.includes(t));
             const voucherCenterWidth=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const voucherCenterLazyImages=page.locator('img[loading="lazy"]');
-            for(let i=0;i<await voucherCenterLazyImages.count();i++)await voucherCenterLazyImages.nth(i).scrollIntoViewIfNeeded();
+            await page.locator('img[loading="lazy"]').evaluateAll(xs=>xs.filter(x=>x.currentSrc||x.getAttribute('src')).forEach(x=>x.scrollIntoView({block:'center'})));
             await page.waitForTimeout(500);
             const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
