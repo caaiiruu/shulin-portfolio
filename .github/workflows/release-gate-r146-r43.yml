@@ -293,7 +293,7 @@ jobs:
             const lazyImages=page.locator('img[loading="lazy"]');
             for(let i=0;i<await lazyImages.count();i++)await lazyImages.nth(i).scrollIntoViewIfNeeded();
             await page.waitForTimeout(500);
-            const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
+            const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
             const cta=page.getByText('View related work',{exact:false}).first();
             const ctaVisible=await cta.isVisible().catch(()=>false);
@@ -337,7 +337,7 @@ jobs:
             const voucherCenterLazyImages=page.locator('img[loading="lazy"]');
             for(let i=0;i<await voucherCenterLazyImages.count();i++)await voucherCenterLazyImages.nth(i).scrollIntoViewIfNeeded();
             await page.waitForTimeout(500);
-            const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
+            const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
             await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
             const keyProblemsContract=vp.width>768?keyVisible:true;
