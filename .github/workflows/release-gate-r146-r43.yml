@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: 76ce1b0e9e2a6ad68c7eb24e55d239898a999007
+      IMPLEMENTATION_HEAD: fba2cf33bb7fa95283acd46f79aa14c85170b6ed
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -242,9 +242,9 @@ jobs:
           const base=process.env.BASE_URL;
           const out=process.env.EVIDENCE_DIR;
           const viewports=[
-            {name:'desktop-1440',width:1440,height:900},
-            {name:'desktop-1280',width:1280,height:800},
-            {name:'tablet-1024',width:1024,height:768},
+            {name:'desktop-1440',width:1440,height:1000},
+            {name:'desktop-1280',width:1280,height:960},
+            {name:'tablet-1024',width:1024,height:900},
             {name:'tablet-768',width:768,height:1024},
             {name:'mobile-430',width:430,height:932},
             {name:'mobile-390',width:390,height:844},
@@ -374,9 +374,9 @@ jobs:
           if(failures.length) throw new Error(failures.join('\n'));
           NODE
           node /tmp/release-gate.mjs
-          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/desktop-1419/audit.json"
-          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/tablet-871/audit.json"
-          cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/mobile-430/audit.json"
+          for viewport in desktop-1440 desktop-1280 tablet-1024 tablet-768 mobile-430 mobile-390 mobile-375 mobile-320; do
+            cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/$viewport/audit.json"
+          done
 
       - name: Compose release gate report
         if: always()
