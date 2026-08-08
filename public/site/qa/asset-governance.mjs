@@ -20,9 +20,9 @@ const placeholderIds = [
 ];
 
 const contentSha = createHash("sha256").update(contentBytes).digest("hex");
-fail(contentSha === "a2b57fb528343ebc77d60c85df9472e8f2e0f7f771fce5a4b4d00bb73b8232ea", `Content r146 SHA changed: ${contentSha}`);
-fail(content.contentVersion === "2026-08-06-r146" && projectIds.length === 13, "Content r146 roster changed");
-fail(manifest.packageVersion === "r43" && manifest.contentVersion === content.contentVersion, "Manifest must be r43 aligned to r146");
+fail(contentSha === "1eda19c29abfe81fe5185d28ce2656ec75d3627b9edbe5e44a04f6a9f32e92eb", `Content r147 SHA changed: ${contentSha}`);
+fail(content.contentVersion === "2026-08-08-r147" && projectIds.length === 13, "Content r147 roster changed");
+fail(manifest.packageVersion === "r43" && manifest.contentVersion === content.contentVersion, "Manifest must be r43 aligned to r147");
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
 fail(itemEntries.length === new Set(itemEntries.map(([id]) => id)).size, "Duplicate asset IDs");
 const slots = [];
@@ -31,14 +31,14 @@ function deriveSlots(value, projectId, location = []) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
     const next = [...location, key];
-    if ((key === "assetId" || key === "publicAssetId") && typeof child === "string") {
+    if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") {
       slots.push({ projectId, slotId: next.join("."), assetId: child });
     } else if (key !== "sourceArchives") deriveSlots(child, projectId, next);
   }
 }
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
 fail(itemEntries.length === new Set(slots.map((slot) => slot.assetId)).size + placeholderIds.length, "Manifest contains non-runtime records");
-fail(slots.length === 36, "Runtime slot count must be 31");
+fail(slots.length === 37, "Runtime slot count must be 37");
 fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id)), "Every canonical project needs a visual slot");
 
 const slotKeys = new Set();
@@ -50,10 +50,17 @@ for (const slot of slots) {
   const record = items[slot.assetId];
   fail(Boolean(record), `Missing asset record ${slot.assetId}`);
   if (!record) continue;
-  fail(record.publicBuild === true && record.replacementRequired === true, `Runtime record is not publishable/replacement-ready: ${slot.assetId}`);
-  const fallback = items[record.placeholderFallbackAssetId];
-  fail(Boolean(fallback?.publicPath), `Placeholder missing: ${slot.assetId}`);
-  if (fallback?.publicPath) fail(fs.existsSync(path.join(siteRoot, fallback.publicPath.replace(/^\/site\//, ""))), `Placeholder file missing: ${fallback.publicPath}`);
+  const production=record.assetStatus === "production" && record.implementationStatus === "real-active";
+  const placeholder=record.assetStatus === "awaiting-user-asset" && record.implementationStatus === "placeholder-active";
+  fail(record.publicBuild === true && (production || placeholder), `Runtime record is not publishable: ${slot.assetId}`);
+  if(production){
+    fail(record.replacementRequired === false, `Production record must not request replacement: ${slot.assetId}`);
+    fail(Boolean(record.publicPath) && fs.existsSync(path.join(siteRoot, record.publicPath.replace(/^\/site\//, ""))), `Production file missing: ${slot.assetId}`);
+  }else{
+    const fallback = items[record.placeholderFallbackAssetId];
+    fail(Boolean(fallback?.publicPath), `Placeholder missing: ${slot.assetId}`);
+    if (fallback?.publicPath) fail(fs.existsSync(path.join(siteRoot, fallback.publicPath.replace(/^\/site\//, ""))), `Placeholder file missing: ${fallback.publicPath}`);
+  }
 }
 
 for (const [id, record] of itemEntries) {
