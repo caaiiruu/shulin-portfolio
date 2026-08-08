@@ -2044,7 +2044,7 @@
       if(['product-evolution','research-evolution','future-direction','visual-system-guardrail','system-foundation','reusable-system'].includes(sectionId)){
         const narrativeId=sectionId==='reusable-system'?'system-foundation':sectionId;
         const section=renderNarrativeProjectSection(narrativeId,publicSectionValue(project,sectionId));
-        if(section)host.appendChild(section);
+        if(section){section.dataset.projectSection=sectionId;host.appendChild(section)}
         return;
       }
       const source=publicSectionValue(project,sectionId);
