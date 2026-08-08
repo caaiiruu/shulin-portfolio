@@ -2520,21 +2520,14 @@
         .map(stageEvidenceTitle)
         .map(value=>localize(value))
         .find(value=>value&&value.trim().toLocaleLowerCase()!==shippedTitle.trim().toLocaleLowerCase());
-      if(distinctEvidence){
+      const evidenceFact=distinctEvidence||shippedTitle;
+      if(evidenceFact){
         const evidence=element('div','programme-stage-case__fact');
         evidence.append(
           element('small','',ui("stage-evidence-6c01b468")),
-          element('strong','programme-stage-case__capability',distinctEvidence)
+          element('strong','programme-stage-case__capability',evidenceFact)
         );
         proof.append(evidence);
-      }
-      if(shippedTitle){
-        const work=element('div','programme-stage-case__fact');
-        work.append(
-          element('small','',ui("representative-shipped-work-94a1458e")),
-          element('strong','programme-stage-case__capability',shippedTitle)
-        );
-        proof.append(work);
       }
       const evidenceCount=stageEvidenceItems(p,stage.id).length;
       const action=element('div','programme-stage-case__action');
@@ -2660,6 +2653,12 @@
 
     const surface=programmeSurface();clear(surface);
     positionProjectContext(true);
+    const stageNumber=parent.journey_stages?.findIndex(stage=>stage.id===item.parentStageId)+1;
+    const stageEntry=parent.initiative_map?.find(entry=>(entry.primary_stage||entry.range?.[0])===stageNumber&&(!entry.initiative_id||entry.initiative_id===initiativeKey));
+    const stageLabel=localizedField(parentStage,'label');
+    const stageFocus=createProgrammeSection(`${ui("stage-focus-16475437")} · ${stageLabel}`,'','stage-focus-v148');
+    const relationship=localizedField(stageEntry,'capability')||localizedField(parentStage,'direction');
+    stageFocus.append(element('p','stage-focus-v148__statement',lang==='zh'?`此子案透過「${relationship}」推進 ${stageLabel}。`:`This initiative advances ${stageLabel} by ${relationship}.`));
     const gallery=doc.getElementById('sharedGallery');
     gallery?.classList.add('is-initiative-context');
     initiativeGallery=lang==='zh'?[
@@ -2703,7 +2702,7 @@
       'programme-contribution-v103'
     );
     contribution.append(element('p','programme-contribution-v103__statement',localizedField(item,'system_contribution')));
-    surface.append(signals,journey,contribution);
+    surface.append(stageFocus,signals,journey,contribution);
   }
   function renderExperiment(key){
     const e=DATA.experiments[key];
@@ -2835,22 +2834,14 @@
       safeText(dialogTitle,localizedField(stage,'label'));
       renderTags([]);
       const classification=doc.getElementById('detailClassification');if(classification)classification.hidden=true;
-      renderDeliveryStatus(localizedField(item,'status'));
+      renderDeliveryStatus('');
+      const stageLabel=localizedField(stage,'label');
       const section=createProgrammeSection(
-        ui("stage-focus-16475437"),
+        `${ui("stage-focus-16475437")} · ${stageLabel}`,
         ''
       );
-      section.classList.add('voucher-stage-case');
-      const summary=element('div','voucher-stage-summary');
-      [
-        [ui("customer-breakpoint-915aa4a5"),localizedField(item,'problem')],
-        [ui("system-response-e95c1752"),localizedField(item,'capability')]
-      ].forEach(([label,value],index)=>{
-        const block=element('article',index===1?'is-response':'');
-        block.append(element('small','',label),element('p','',value));
-        summary.append(block);
-      });
-      section.append(summary);
+      section.classList.add('voucher-stage-case','stage-focus-v148');
+      section.append(element('p','stage-focus-v148__statement',localizedField(item,'capability')||localizedField(stage,'direction')));
       const evidenceItems=stageEvidenceItems(parent,currentDetail.key);
       if(evidenceItems.length){
         const evidenceHeading=element('div','voucher-subsection-heading');
