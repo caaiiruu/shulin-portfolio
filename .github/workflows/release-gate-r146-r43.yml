@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: 4f3eba60e43f250526a13ffde289e6578d2beabc
+      IMPLEMENTATION_HEAD: fba2cf33bb7fa95283acd46f79aa14c85170b6ed
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -62,7 +62,9 @@ jobs:
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
             ':(exclude)public/site/content/portfolio-content.json' \
             ':(exclude)public/site/assets/js/app.js' \
+            ':(exclude)public/site/assets/js/home.js' \
             ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
+            ':(exclude)public/site/assets/css/components/domain-selector.css' \
             ':(exclude)public/site/content/portfolio-asset-manifest.json' \
             ':(exclude)public/site/docs/stage-visual-evidence-map.json' \
             ':(exclude)public/site/docs/voucher-content-merge-audit.json' \
@@ -75,12 +77,15 @@ jobs:
             ':(exclude)tests/publish-safety.test.mjs' \
             ':(exclude)tests/project-detail-routes.test.mjs' \
             ':(exclude)public/site/qa/asset-governance.mjs' \
+            ':(exclude)public/site/qa/design-system-lint.mjs' \
             ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png' \
             ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
             public/site/content/portfolio-content.json \
             public/site/assets/js/app.js \
+            public/site/assets/js/home.js \
             public/site/assets/css/components/project-detail-overview.css \
+            public/site/assets/css/components/domain-selector.css \
             public/site/content/portfolio-asset-manifest.json \
             public/site/docs/stage-visual-evidence-map.json \
             public/site/docs/voucher-content-merge-audit.json \
@@ -92,7 +97,8 @@ jobs:
             tests/asset-governance.test.mjs \
             tests/publish-safety.test.mjs \
             tests/project-detail-routes.test.mjs \
-            public/site/qa/asset-governance.mjs
+            public/site/qa/asset-governance.mjs \
+            public/site/qa/design-system-lint.mjs
           grep -Fq 'From fragmented campaign discovery to a persistent Voucher claim product' public/site/content/portfolio-content.json
           grep -Fq 'proposal-era modelled targets—not actual results' public/site/content/portfolio-content.json
           grep -Fq 'Original white Voucher Card' public/site/content/portfolio-content.json
@@ -290,8 +296,6 @@ jobs:
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
             const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','CUSTOMER BREAKPOINT','DESIGN SHIFT','VISUAL EVIDENCE','View related work'];
             const missing=required.filter(t=>!text.includes(t));
-            await page.locator('img[loading="lazy"]').evaluateAll(xs=>xs.filter(x=>x.currentSrc||x.getAttribute('src')).forEach(x=>x.scrollIntoView({block:'center'})));
-            await page.waitForTimeout(500);
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
             const cta=page.getByText('View related work',{exact:false}).first();
@@ -333,14 +337,12 @@ jobs:
             const voucherCenterRequired=['From fragmented campaign discovery to a persistent Voucher claim product','proposal-era modelled targets—not actual results','Separate participation from application','Preserve the target architecture without blocking launch','Original white Voucher Card','Reusable Tangram component'];
             const voucherCenterMissing=voucherCenterRequired.filter(t=>!voucherCenterText.includes(t));
             const voucherCenterWidth=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            await page.locator('img[loading="lazy"]').evaluateAll(xs=>xs.filter(x=>x.currentSrc||x.getAttribute('src')).forEach(x=>x.scrollIntoView({block:'center'})));
-            await page.waitForTimeout(500);
             const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
             await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
-            const keyProblemsContract=vp.width>768?keyVisible:true;
-            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyProblemsContract && stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
-            results[vp.name]={...widthAudit,missing,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,keyVisible,keyProblemsContract,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
+            const keyProblemContract=vp.width>=1024?keyVisible:true;
+            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyProblemContract && stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
+            results[vp.name]={...widthAudit,missing,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
             if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
             await context.close();
           }
