@@ -27,6 +27,9 @@
     const title=decisionText(decision,['title','decisionTitle']);
     const result=decisionText(decision,['whatIDecided','whatWeDecided','whatChanged','decision','result','summary']);
     const why=decisionText(decision,['whyThisChoice','why','evidence','rationale']);
+    const problem=decisionText(decision,['problemOrConstraint','problem','constraint','principle']);
+    const effect=decisionText(decision,['effectOrResult','resultingModel','preservedDirection','impactAndOwnership']);
+    const delivery=decisionText(decision,['deliveryBoundary','claimBoundary']);
     const optionalSource=decision.optionalBlock||{};
     const optional=decisionText(decision,['tradeOffAccepted','tradeoff','tradeOff','whatThisRequired','constraintManaged','riskManaged']);
     const optionalType=optionalSource.type||
@@ -39,6 +42,9 @@
       title:title[0],title_zh:title[1],
       result:result[0],result_zh:result[1],
       evidence:why[0],evidence_zh:why[1],
+      problem:problem[0],problem_zh:problem[1],
+      effect:effect[0],effect_zh:effect[1],
+      deliveryBoundary:delivery[0],deliveryBoundary_zh:delivery[1],
       tradeoff:optional[0],tradeoff_zh:optional[1],
       optionalBlock:{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]},
       optional_block_type:optionalType
@@ -146,6 +152,8 @@
       decisions,gallery,status,
       ownership_model:p.ownershipModel||null,
       outcome_evidence_model:p.outcomeEvidenceModel||[],
+      impact_evidence:p.impactEvidence||null,
+      what_this_proves:pair(p.whatThisProves),
       delivery_highlights:p.deliveryHighlights||null,
       hero_visual_brief:p.heroVisualBrief||raw?.heroVisualSystem?.projects?.[id]||null,
       key_intervention_map:p.keyInterventionMap||null,
@@ -638,7 +646,7 @@
           const intro=element('div','related-project-card__intro-v81');
           const top=element('div','related-project-card__top-v45');
           top.append(
-            element('strong','related-project-card__company-v135','NTUC FairPrice'),
+            element('strong','related-project-card__company-v135','FairPrice Group'),
             element('span','related-project-card__context',ui("initiative-2f35f4be"))
           );
           intro.append(top,element('h5','related-project-card__title',lang==='zh'?initiative.title_zh:initiative.title));
@@ -762,6 +770,18 @@
       safeText(title,localize(project.title_pair));
       if(summary)safeText(summary,localize(project.at_a_glance_pair));
       if(context)safeText(context,projectEyebrow(project));
+      let proof=card.querySelector('.what-this-proves-v147');
+      const proofText=localize(project.what_this_proves);
+      if(proofText&&!proof){
+        proof=element('div','what-this-proves-v147');
+        proof.append(
+          element('span','what-this-proves-v147__label',localize(DATA.implementationContracts?.whatThisProvesLabel)),
+          element('p','what-this-proves-v147__body',proofText)
+        );
+        const action=card.querySelector('.evidence-feature__action,.evidence-list__action,.work-card-v32__action');
+        if(action)action.before(proof);else trigger.before(proof);
+      }
+      if(proof)proof.hidden=!proofText;
       trigger.setAttribute('aria-label',`${ui("open-project-9dcdb86a")}: ${localize(project.title_pair)}`);
     });
     doc.querySelectorAll('.experiment-feature-card-v32[data-experiment],.experiment-index-card-v36[data-experiment],.poster[data-experiment]').forEach(card=>{
@@ -1012,6 +1032,62 @@
   const dialogStatus=doc.getElementById('dialogStatus');
   const dialogScrollRoot=dialog?.querySelector('.dialog-scroll');
   const dialogControls=dialog?.querySelector('.dialog-controls-v67');
+  const evidenceLightbox=element('dialog','evidence-lightbox-v147');
+  evidenceLightbox.setAttribute('aria-modal','true');
+  const evidenceLightboxClose=element('button','evidence-lightbox-v147__close','×');
+  evidenceLightboxClose.type='button';
+  evidenceLightboxClose.setAttribute('aria-label',localize(DATA?.implementationContracts?.expandableImageLabels?.close)||'Close');
+  const evidenceLightboxImage=doc.createElement('img');
+  evidenceLightboxImage.className='evidence-lightbox-v147__image';
+  const evidenceLightboxCaption=element('p','evidence-lightbox-v147__caption');
+  evidenceLightbox.append(evidenceLightboxClose,evidenceLightboxImage,evidenceLightboxCaption);
+  body.append(evidenceLightbox);
+  let evidenceLightboxInvoker=null;
+  function closeEvidenceLightbox(){
+    if(!evidenceLightbox.open)return;
+    evidenceLightbox.close();
+    evidenceLightboxInvoker?.focus({preventScroll:true});
+    evidenceLightboxInvoker=null;
+  }
+  function openEvidenceLightbox(invoker,image){
+    if(!image?.src||image.dataset.assetStatus==='placeholder-active')return;
+    evidenceLightboxInvoker=invoker;
+    evidenceLightboxImage.src=image.currentSrc||image.src;
+    evidenceLightboxImage.alt=image.alt||'';
+    const figure=invoker.closest('figure,.before-after-evidence-v147__item,.decision-visual-v58');
+    safeText(evidenceLightboxCaption,figure?.querySelector('figcaption,.before-after-evidence-v147__caption')?.textContent?.trim()||image.alt||'');
+    evidenceLightbox.showModal();
+    evidenceLightboxClose.focus();
+  }
+  function enableExpandableEvidence(rootNode=doc){
+    rootNode.querySelectorAll('.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img').forEach(image=>{
+      if(image.dataset.assetStatus==='placeholder-active')return;
+      const invoker=image.closest('[data-expandable-evidence]')||image;
+      invoker.tabIndex=0;
+      invoker.setAttribute('role','button');
+      invoker.setAttribute('aria-haspopup','dialog');
+      if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
+    });
+  }
+  evidenceLightboxClose.addEventListener('click',closeEvidenceLightbox);
+  evidenceLightbox.addEventListener('click',event=>{if(event.target===evidenceLightbox)closeEvidenceLightbox()});
+  evidenceLightbox.addEventListener('cancel',event=>{event.preventDefault();closeEvidenceLightbox()});
+  doc.addEventListener('click',event=>{
+    const invoker=event.target.closest('[data-expandable-evidence],.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img');
+    if(!invoker)return;
+    const image=invoker.matches('img')?invoker:invoker.querySelector('img');
+    openEvidenceLightbox(invoker,image);
+  });
+  doc.addEventListener('keydown',event=>{
+    if(evidenceLightbox.open&&event.key==='Tab'){
+      event.preventDefault();evidenceLightboxClose.focus();return;
+    }
+    if(event.key!=='Enter'&&event.key!==' ')return;
+    const invoker=event.target.closest('[data-expandable-evidence],.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img');
+    if(!invoker)return;
+    event.preventDefault();
+    openEvidenceLightbox(invoker,invoker.matches('img')?invoker:invoker.querySelector('img'));
+  });
   const projectSectionNav=doc.getElementById('projectSectionNav');
   const projectSectionNavToggle=doc.getElementById('projectSectionNavToggle');
   const projectSectionNavLinks=doc.getElementById('projectSectionNavLinks');
@@ -1699,6 +1775,56 @@
     }
     card.appendChild(element('strong','recruiter-proof-item-v46__statement',text));
   }
+  function renderImpactEvidence(project,node,section,deliverySection){
+    const model=project.impact_evidence;
+    if(!model)return false;
+    const labels=DATA.implementationContracts?.impactEvidenceLabels||{};
+    const shell=element('section',`impact-evidence-v147 impact-evidence-v147--${model.variant||'scale-and-system-change'}`);
+    shell.dataset.impactVariant=model.variant||'';
+    const heading=element('div','impact-evidence-v147__heading');
+    heading.append(
+      element('span','impact-evidence-v147__eyebrow',localize(labels[model.variant])),
+      element('h4','',lang==='zh'?(localize(project.businessImpact)||localize(project.impact_pair)):model.recommendedHeadline)
+    );
+    shell.append(heading);
+    const metrics=element('dl','impact-evidence-v147__metrics');
+    if(lang==='zh'){
+      list(project.outcome_evidence_model).filter(item=>item&&item.publicUse!=='private').slice(0,4).forEach(item=>{
+        const claim=localize(item.claim)||localize(item.publicValue);
+        if(!claim)return;
+        const metric=element('div','impact-evidence-v147__metric');
+        metric.append(element('dt','',localize(item.outcomeType)),element('dd','',claim));
+        metrics.append(metric);
+      });
+    }else{
+      [...list(model.primaryMetrics),...list(model.supportingMetrics)].slice(0,6).forEach(item=>{
+        if(!item?.value||!item?.label)return;
+        const metric=element('div','impact-evidence-v147__metric');
+        metric.append(
+          element('dt','',item.label),
+          element('dd','',item.value),
+          item.detail?element('span','impact-evidence-v147__detail',item.detail):element('span','sr-only','')
+        );
+        metrics.append(metric);
+      });
+    }
+    if(metrics.childElementCount)shell.append(metrics);
+    const interpretation=model.additionalProof||model.shippedProof||list(model.decisionSignals)[0]||list(model.supportingSignals)[0];
+    if(interpretation&&lang!=='zh'){
+      const insight=element('div','impact-evidence-v147__interpretation');
+      insight.append(element('span','',localize(labels.interpretation)),element('p','',interpretation));
+      shell.append(insight);
+    }
+    if(model.boundary&&lang!=='zh'){
+      const boundary=element('p','impact-evidence-v147__boundary');
+      boundary.append(element('span','',localize(labels.boundary)),doc.createTextNode(` — ${model.boundary}`));
+      shell.append(boundary);
+    }
+    node.append(shell);
+    section.hidden=false;
+    if(deliverySection)deliverySection.hidden=false;
+    return true;
+  }
   function renderDeliveryOutcomes(project){
     const node=doc.getElementById('recruiterProof');
     const section=node?.closest('article');
@@ -1706,6 +1832,7 @@
     if(!node||!section)return;
     clear(node);
     section.querySelector('.delivery-measurement-boundary')?.remove();
+    if(renderImpactEvidence(project,node,section,deliverySection))return;
     const highlights=project.delivery_highlights;
     if(highlights&&Array.isArray(highlights.items)){
       highlights.items.forEach(item=>{
@@ -2001,6 +2128,12 @@
     const changed=localize([decision.result||decision.whatIDecided,decision.result_zh]);
     const rationale=localize([decision.evidence||decision.why||decision.whyThisChoice,decision.evidence_zh||decision.why_zh]);
     body.append(element('h4','',title));
+    const problem=localize([decision.problem,decision.problem_zh]);
+    if(problem){
+      const block=element('div','decision-problem-v147');
+      block.append(element('span','decision-field-label-v58',ui("problem-to-solve-969704d5")),element('p','',problem));
+      body.append(block);
+    }
     if(changed){
       const result=element('div','decision-result-block-v58');
       result.append(
@@ -2016,6 +2149,12 @@
         element('p','',rationale)
       );
       body.append(evidence);
+    }
+    const effectText=localize([decision.effect,decision.effect_zh]);
+    if(effectText){
+      const effect=element('div','decision-effect-v147');
+      effect.append(element('span','decision-field-label-v58',localize(DATA.implementationContracts?.designDecisionLabels?.effect)),element('p','',effectText));
+      body.append(effect);
     }
     const considerations=element('dl','decision-considerations-v46');
     const optional=decision.optionalBlock||{};
@@ -2035,6 +2174,12 @@
       considerations.append(tradeoff);
     }
     if(considerations.childElementCount)body.append(considerations);
+    const deliveryBoundary=localize([decision.deliveryBoundary,decision.deliveryBoundary_zh]);
+    if(deliveryBoundary){
+      const boundary=element('div','decision-delivery-boundary-v147');
+      boundary.append(element('span','decision-field-label-v58',ui("delivery-boundary-c71a736f")),element('p','',deliveryBoundary));
+      body.append(boundary);
+    }
     const ownership=localize(decision.ownershipDetail);
     if(ownership){
       const ownershipBlock=element('div','decision-ownership-v83');
@@ -2327,7 +2472,32 @@
       body.append(breakpoint,shift,decision);
       const visualContract=stage.visualEvidence?.primary;
       let visualEvidence=null;
-      if(visualContract?.assetId){
+      if(visualContract?.beforeAssetId&&visualContract?.shippedAssetId){
+        const beforeAsset=resolveProjectAsset(visualContract.beforeAssetId);
+        const shippedAsset=resolveProjectAsset(visualContract.shippedAssetId);
+        const copy=visualContract.copy?.[lang==='zh'?'zh':'en']||{};
+        visualEvidence=element('figure','programme-stage-visual programme-stage-visual--before-after before-after-evidence-v147');
+        visualEvidence.dataset.evidenceRole='before-after';
+        const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
+        const compare=element('div','before-after-evidence-v147__grid');
+        [
+          [beforeAsset,copy.beforeLabel,copy.beforeCaption,'is-before'],
+          [shippedAsset,copy.shippedLabel,copy.shippedCaption,'is-shipped']
+        ].forEach(([asset,stateLabel,caption,state])=>{
+          const item=element('div',`before-after-evidence-v147__item ${state}`);
+          const frame=element('button','before-after-evidence-v147__frame');
+          frame.type='button';
+          frame.dataset.expandableEvidence='true';
+          frame.setAttribute('aria-label',`${stateLabel}: ${caption}`);
+          const image=doc.createElement('img');
+          image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
+          frame.append(image);
+          const figcaption=element('div','before-after-evidence-v147__caption');
+          figcaption.append(element('strong','',stateLabel),element('span','',caption));
+          item.append(frame,figcaption);compare.append(item);
+        });
+        visualEvidence.append(label,compare);
+      }else if(visualContract?.assetId){
         const asset=resolveProjectAsset(visualContract.assetId);
         visualEvidence=element('figure',`programme-stage-visual programme-stage-visual--${visualContract.layoutVariant||'single-screen'}`);
         visualEvidence.dataset.evidenceRole=visualContract.evidenceRole||'decision-proof';
@@ -2365,15 +2535,6 @@
           element('strong','programme-stage-case__capability',shippedTitle)
         );
         proof.append(work);
-      }
-      const deliveryStatus=formatStatus(localizedField(item,'status'));
-      if(deliveryStatus){
-        const delivery=element('div','programme-stage-case__fact');
-        delivery.append(
-          element('small','',ui("delivery-status-0fd5a08d")),
-          element('p','programme-stage-case__problem',deliveryStatus)
-        );
-        proof.append(delivery);
       }
       const evidenceCount=stageEvidenceItems(p,stage.id).length;
       const action=element('div','programme-stage-case__action');
@@ -2478,12 +2639,13 @@
   }
   function renderInitiative(parentKey,initiativeKey){
     const parent=DATA.projects[parentKey];const item=parent?.initiatives?.[initiativeKey];if(!item)return;
-    safeText(doc.getElementById('detailContext'),localizedField(item,'eyebrow'));
+    const parentStage=parent.journey_stages?.find(stage=>stage.id===item.parentStageId);
+    safeText(doc.getElementById('detailContext'),`FairPrice Group · ${localizedField(parentStage,'label')}`);
     // Professional-case metadata belongs to the context grid, never above the title.
     safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localizedField(item,'title'));
     renderTags(lang==='zh'?item.problem_types_zh:item.problem_types);
-    renderDeliveryStatus(localizedField(item,'delivery_status')||(ui("shipped-f5ba3c74")));
+    renderDeliveryStatus('');
     renderProjectValue(localizedField(item,'value_i_bring'));
     safeText(doc.getElementById('projectAtGlance'),localizedField(item,'at_glance'));
     renderInfoGrid('projectSignals',[
@@ -2597,7 +2759,7 @@
   };
   function detailBrand(type,key){
     if(type==='experiment')return ui("experiment-81b73d30");
-    const map={voucher:'Customer incentives','voucher-center':'Voucher Center','game-center':'Game Center',dbs:'DBS',booking:'Booking.com',payment:'NTUC FairPrice',bandzo:'Bandzo'};
+    const map={voucher:'Customer incentives','voucher-center':'Voucher Center','game-center':'Game Center',dbs:'DBS',booking:'Booking.com',payment:'FairPrice Group',bandzo:'Bandzo'};
     return map[key]||'Project';
   }
   function detailVisualLabels(type,key){
@@ -2668,7 +2830,7 @@
     if(isStage){
       const parent=DATA.projects[currentDetail.parentKey];clear(programmeSurface());
       const stageIndex=parent.journey_stages.findIndex(item=>item.id===currentDetail.key);const stage=parent.journey_stages[stageIndex];const item=parent.initiative_map.find(entry=>(entry.primary_stage||entry.range?.[0])===stageIndex+1)||{};
-      safeText(doc.getElementById('detailContext'),'NTUC FairPrice · Voucher / Offer');
+      safeText(doc.getElementById('detailContext'),`FairPrice Group · ${localizedField(stage,'label')}`);
       safeText(doc.getElementById('detailPeriod'),`${ui("stage-f31c1647")} ${String(stageIndex+1).padStart(2,'0')} / ${String(parent.journey_stages.length).padStart(2,'0')}`);
       safeText(dialogTitle,localizedField(stage,'label'));
       renderTags([]);
@@ -2733,6 +2895,7 @@
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
     else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
+    enableExpandableEvidence(projectView);
     renderProjectSectionNav();
     if(currentDetail.type==='experiment')renderGallery();
     renderRelated();
