@@ -71,6 +71,7 @@ jobs:
             ':(exclude)worker/index.ts' \
             ':(exclude)scripts/build-production-assets.mjs' \
             ':(exclude)scripts/generate-project-pages.mjs' \
+            ':(exclude)scripts/case-study-dom-audit.mjs' \
             ':(exclude)vercel.json' \
             ':(exclude)tests/rendered-html.test.mjs' \
             ':(exclude)tests/asset-governance.test.mjs' \
@@ -92,6 +93,7 @@ jobs:
             worker/index.ts \
             scripts/build-production-assets.mjs \
             scripts/generate-project-pages.mjs \
+            scripts/case-study-dom-audit.mjs \
             vercel.json \
             tests/rendered-html.test.mjs \
             tests/asset-governance.test.mjs \
