@@ -384,7 +384,8 @@ test("preserves approved delivery and confidentiality metadata", () => {
   assert.ok(ssot.projects.voucher.publicContent);
   assert.match(JSON.stringify(ssot.projects.payment), /shipped-and-scaled/);
   assert.match(app, /function renderDeliveryStatus\(value\)/);
-  assert.match(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
+  assert.doesNotMatch(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
+  assert.match(app, /if\(isStage\)[\s\S]*?renderDeliveryStatus\(''\)/);
   assert.doesNotMatch(app, /safeText\(detailStatus,isConfidential/);
   assert.match(overview, /\.detail-status\{[^}]*display:grid;[^}]*grid-template-columns:max-content max-content;[^}]*align-items:start/);
   assert.match(overview, /\.detail-status__chip\[data-state="shipped"\]/);
@@ -553,8 +554,8 @@ test("keeps project-detail hierarchy line-free, aligned, and unnumbered", () => 
     assert.doesNotMatch(read(page), /section-index-v45/);
   }
   assert.match(tokens, /--cmp-evidence-section-padding:clamp\(/);
-  assert.match(overview, /\.project-signals-v45>div\{[^}]*background:var\(--color-surface\)/);
-  assert.match(overview, /\.modal-classification-v45\{[^}]*align-items:start;[^}]*border-left:var\(--dimension-3px\) solid var\(--color-text-accent\)/);
+  assert.match(overview, /\.project-signals-v45>div\{[^}]*border-bottom:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
+  assert.match(overview, /\.modal-classification-v45\{[^}]*align-items:start;[^}]*border-left:var\(--dimension-3px\) solid var\(--color-border-strong\)/);
   assert.match(overview, /\.modal-classification-v45__label\{[^}]*padding-block:var\(--dimension-4px\);[^}]*line-height:1.4/);
   assert.match(overview, /\.modal-tags>\*\{[^}]*display:inline-flex;[^}]*align-items:center;[^}]*font-weight:var\(--sys-weight-bold\)/);
   assert.doesNotMatch(overview, /\.modal-tags>\*\{[^}]*(?:border-radius|background):/);
@@ -1038,9 +1039,7 @@ test("prevents narrow-column recruiter content and forced word breaking", () => 
   assert.match(overview, /\.decision-considerations-v46\{[^}]*grid-template-columns:1fr/);
   assert.match(overview, /\.decision-card-v46\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
   assert.match(overview, /\.decision-considerations-v46>div\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
-  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*background:var\(--cmp-popup-info-surface\)/);
-  assert.match(overview, /\.decision-evidence-v58\{background:var\(--color-surface-evidence-accent\)\}/);
-  assert.doesNotMatch(overview, /\.decision-(?:result-block-v58|considerations-v46)[^{]*\{[^}]*border-top:/);
+  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*border-top:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
   assert.doesNotMatch(overview, /\.decision-result-block-v58\{[^}]*padding-left:/);
   assert.match(overview, /\.project-context-v45__hard ul\{[^}]*padding:0[^}]*list-style:none/);
   assert.match(overview, /\.ownership-section-v45>\.section-heading-v45\{[^}]*margin-bottom:0/);
@@ -1100,7 +1099,7 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /appendEvidenceValue\(card,value\)/);
   assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
   assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
-  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch[^}]*border:var\(--dimension-1px\) solid var\(--color-border\)/);
+  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch[^}]*border-block:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
   assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
@@ -1292,4 +1291,23 @@ test("locks the existing Voucher Card history and independent-project boundaries
   assert.equal(voucher.publicContent.continueExploring.independentProjectCards.some((item) => item.projectId === "game-center"), true);
   assert.deepEqual(voucher.publicContent.selectedInitiatives.order, ["save-everyday-digital-campaign-2023", "brand-challenges"]);
   assert.equal(voucher.publicContent.voucherWalletEvidence.forbiddenProjection.includes("voucher-center"), true);
+});
+
+test("closes the final P1 case-study runtime contracts", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const domain = read("assets/css/components/domain-selector.css");
+  const home = read("assets/js/home.js");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.doesNotMatch(app, /representative-shipped-work-94a1458e/);
+  assert.doesNotMatch(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
+  assert.match(overview, /@media\(max-width:600px\)\{#detailClassification,\.modal-classification-v45\{display:none\}\}/);
+  assert.match(overview, /\.decision-number-v48\{[^}]*border:var\(--dimension-1px\) solid var\(--color-text-accent\)[^}]*background:var\(--color-surface-evidence-accent\)/);
+  assert.match(overview, /\.quick-view-v51\{[^}]*padding:0;[^}]*background:transparent/);
+  assert.match(overview, /\.decision-card-v46\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(app, /stage-focus-v148__statement/);
+  assert.match(home, /image\.dataset\.assetStatus=isReal\?'real-active':'placeholder-active'/);
+  assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
+  const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
+  assert.equal(real.filter(item=>item.projectId==='voucher').length,2);
 });
