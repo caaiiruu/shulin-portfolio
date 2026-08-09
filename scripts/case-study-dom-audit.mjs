@@ -134,16 +134,12 @@ for(const width of viewports){
   await context.close();
 }
 for(const [id,url] of projects){
-  const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();
+  const context=await browser.newContext({viewport:{width:390,height:844}});
+  await context.addInitScript(()=>localStorage.setItem('portfolioLang','zh'));
+  const page=await context.newPage();
   await page.goto(base+url,{waitUntil:'networkidle'});
   await page.locator('[data-outcome-exact-projection="true"]:visible').first().waitFor({state:'visible'});
-  const toggle=page.locator('[data-lang-toggle]:visible').first();
-  if(await toggle.count()){
-    const before=await page.locator('[data-outcome-source-path]:visible').first().textContent();
-    await toggle.click();
-    await page.waitForFunction(previous=>window.getPortfolioLanguage?.()==='zh'&&document.querySelector('[data-outcome-source-path]')?.textContent!==previous,before);
-    await page.waitForTimeout(200);
-  }
+  await page.waitForFunction(()=>window.getPortfolioLanguage?.()==='zh');
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-390.png'),fullPage:true});
   const expectedZh=expectedOutcome(ssot.projects[id],'zh');
