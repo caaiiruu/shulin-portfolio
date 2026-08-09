@@ -1740,6 +1740,14 @@
 
     const boundary=localize(value.shipmentBoundary);
     if(boundary)section.appendChild(element('p','structured-evidence-v223__boundary',boundary));
+    if(section.childElementCount===1){
+      const rows=[...new Set(publicSectionRows(value).map(item=>item.trim()).filter(Boolean))].slice(0,8);
+      if(rows.length){
+        const fallback=element('div','structured-evidence-v223__editorial');
+        rows.forEach(row=>fallback.appendChild(element('p','',row)));
+        section.appendChild(fallback);
+      }
+    }
     return section.childElementCount>1?section:null;
   }
   function humaniseDeliveryStatus(value){

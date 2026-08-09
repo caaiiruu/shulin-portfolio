@@ -20149,16 +20149,20 @@
               ],
               "presentationType": "system-model",
               "renderRequired": true
-            },
-            "validated-outcomes": {
-              "sourcePaths": [
-                "publicContent.validatedOutcomes",
-                "outcomes"
-              ],
-              "presentationType": "outcome-evidence",
-              "renderRequired": true
             }
-          }
+          },
+          "supporting": [
+            {
+              "sourcePath": "publicContent.validatedOutcomes",
+              "parentSectionId": "shipped-proof",
+              "presentationType": "outcome-evidence"
+            },
+            {
+              "sourcePath": "outcomes",
+              "parentSectionId": "shipped-proof",
+              "presentationType": "outcome-evidence"
+            }
+          ]
         },
         "booking": {
           "sections": {
@@ -20266,8 +20270,7 @@
             },
             "voucher-and-loyalty-integration": {
               "sourcePaths": [
-                "voucherIntegration",
-                "publicContent.voucherIntegrationRef"
+                "voucherIntegration"
               ],
               "presentationType": "integration-model",
               "renderRequired": true

@@ -370,14 +370,15 @@
       "approvedPublicBlocks": 25,
       "renderRequiredBlocks": [
         "heroMetadata",
-        "outcomes",
         "ownershipModel",
         "publicContent.validatedOutcomes",
         "roleAndOwnership",
         "targetSystemModel",
         "whatThisProves"
       ],
-      "supportingBlocks": [],
+      "supportingBlocks": [
+        "outcomes"
+      ],
       "demotedBlocks": [
         "currentStateEvidence",
         "domainTags",
@@ -403,10 +404,6 @@
         {
           "blockPath": "heroMetadata",
           "sectionId": "hero"
-        },
-        {
-          "blockPath": "outcomes",
-          "sectionId": "validated-outcomes"
         },
         {
           "blockPath": "ownershipModel",
@@ -726,7 +723,6 @@
         "operationalSystemOwnership",
         "ownershipModel",
         "publicContent.recognition",
-        "publicContent.voucherIntegrationRef",
         "recognition",
         "roleAndOwnership",
         "roleAndOwnership.systemOwnership",
@@ -760,6 +756,7 @@
         "publicContent.programmeLeadership",
         "publicContent.recognitionRef",
         "publicContent.sectionOrderRef",
+        "publicContent.voucherIntegrationRef",
         "researchAndValidation",
         "researchAndValidation.fieldResearchProgramme",
         "researchAndValidation.validationCadence",
@@ -793,10 +790,6 @@
         {
           "blockPath": "publicContent.recognition",
           "sectionId": "recognition"
-        },
-        {
-          "blockPath": "publicContent.voucherIntegrationRef",
-          "sectionId": "voucher-and-loyalty-integration"
         },
         {
           "blockPath": "recognition",
