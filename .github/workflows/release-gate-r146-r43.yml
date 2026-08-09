@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 24
+# orchestration revision: 25
 
 on:
   pull_request:
@@ -39,13 +39,15 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: fba2cf33bb7fa95283acd46f79aa14c85170b6ed
+      IMPLEMENTATION_HEAD: de9a697dc4f446512678ab365e6f78a286a19b49
+      EXPECTED_SSOT_SHA256: 9569246344daf1efceef37fe979b03fe9686b3620ad05a6e8e5853fb6b85a2ce
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
       - name: Complete private checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -56,13 +58,25 @@ jobs:
           mkdir -p "$EVIDENCE_DIR"
           {
             echo "repository=$GITHUB_REPOSITORY"
-            echo "ref=$GITHUB_REF"
-            echo "orchestration_head=$(git rev-parse HEAD)"
-            echo "implementation_head=$IMPLEMENTATION_HEAD"
+            echo "source_branch=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+            echo "event_ref=$GITHUB_REF"
+            echo "remote:"
+            git remote -v
+            echo "branch:"
+            git branch --show-current
+            echo "current_qa_head:"
+            git rev-parse HEAD
+            echo "implementation_baseline=$IMPLEMENTATION_HEAD"
             echo "status:"
             git status --short
+            echo "canonical_ssot_sha256:"
+            sha256sum public/site/content/portfolio-content.json
             echo "tracked_file_count=$(git ls-files | wc -l)"
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
+          test "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')" = "$EXPECTED_SSOT_SHA256"
+          grep -Fq '"contentVersion": "2026-08-09-r148"' public/site/content/portfolio-content.json
+          git merge-base --is-ancestor "$IMPLEMENTATION_HEAD" HEAD
+          test "$(git diff --name-only "$IMPLEMENTATION_HEAD"..HEAD | paste -sd ' ' -)" = ".github/workflows/release-gate-r146-r43.yml"
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
             ':(exclude).github/workflows/release-gate-r146-r43.yml' \
             ':(exclude)public/site/content/portfolio-content.json' \
