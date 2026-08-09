@@ -139,7 +139,7 @@ for(const width of viewports){
   const stage=await audit(page);await page.screenshot({path:path.join(dir,'voucher-stage.png'),fullPage:true});
   await page.goto(base+'/site',{waitUntil:'networkidle'});await page.screenshot({path:path.join(dir,'domain.png'),fullPage:true});
   const cover=await page.evaluate(()=>{const frame=document.querySelector('.domain-project-list-v30 .related-project-card__visual-v45'),image=frame?.querySelector('img');if(!frame)return null;const r=frame.getBoundingClientRect(),s=getComputedStyle(frame);return {ratio:Math.round((r.width/r.height)*100)/100,fit:image?getComputedStyle(image).objectFit:null,overflow:s.overflow}});
-  const expectedColumns=width<=700?1:2,expectedCoverRatio=width<=560?1.33:1.6;
+  const expectedColumns=width<=768?1:2,expectedCoverRatio=width<=560?1.33:1.6;
   const framePass=beforeAfter.count===2&&beforeAfter.columns===expectedColumns&&beforeAfter.captions.every(item=>item.leftDelta<=1&&Math.abs(item.gap-8)<=1&&item.fit==='contain')&&cover&&Math.abs(cover.ratio-expectedCoverRatio)<=.03&&cover.fit==='cover'&&cover.overflow==='hidden';
   report.imageFrames[width]={beforeAfter,cover,expectedColumns,expectedCoverRatio,pass:framePass};
   report.viewports[width]={overflow,horizontalLegacyInsets:horizontalInset,stageDecisionSurfaces:stage.decisionStructure.disallowedCardLikeSurfaces,framePass,pass:overflow<=0&&!horizontalInset.length&&!stage.decisionStructure.disallowedCardLikeSurfaces.length&&framePass};
