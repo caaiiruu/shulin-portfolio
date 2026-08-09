@@ -25,7 +25,7 @@ const stageUrl='/site/work/voucher?stage=discover';
 const viewports=[1440,1280,1024,871,768,430,390,375,320];
 const browser=await chromium.launch({headless:true});
 const failures=[];
-const report={projects:{},stageDecision:{},viewports:{},outcomes:{},geometry:{}};
+const report={projects:{},stageDecision:{},viewports:{},outcomes:{},geometry:{},imageFrames:{}};
 const captureOutcome=async(page,outcome,file)=>{
   await page.addStyleTag({content:'.site-header,#detailClose,#detailBack,.dialog-controls-v67,.pd-section-nav,[data-skip-link]{display:none!important}'});
   const height=await outcome.evaluate(node=>Math.ceil(node.getBoundingClientRect().height));
@@ -136,8 +136,13 @@ for(const width of viewports){
   await page.screenshot({path:path.join(dir,'voucher.png'),fullPage:true});
   await page.goto(base+stageUrl,{waitUntil:'networkidle'});await page.waitForTimeout(200);
   const stage=await audit(page);await page.screenshot({path:path.join(dir,'voucher-stage.png'),fullPage:true});
+  const beforeAfter=await page.evaluate(()=>{const grid=document.querySelector('.before-after-evidence-v147__grid');const items=[...document.querySelectorAll('.before-after-evidence-v147__item')];const captions=items.map(item=>{const image=item.querySelector('img'),caption=item.querySelector('.before-after-evidence-v147__caption');if(!image||!caption)return null;const ir=image.getBoundingClientRect(),cr=caption.getBoundingClientRect();return {leftDelta:Math.abs(ir.left-cr.left),gap:Math.round((cr.top-ir.bottom)*10)/10,fit:getComputedStyle(image).objectFit}}).filter(Boolean);return {count:items.length,columns:items.length>1&&Math.abs(items[0].getBoundingClientRect().top-items[1].getBoundingClientRect().top)<2?2:1,captions}});
   await page.goto(base+'/site/work',{waitUntil:'networkidle'});await page.screenshot({path:path.join(dir,'domain.png'),fullPage:true});
-  report.viewports[width]={overflow,horizontalLegacyInsets:horizontalInset,stageDecisionSurfaces:stage.decisionStructure.disallowedCardLikeSurfaces,pass:overflow<=0&&!horizontalInset.length&&!stage.decisionStructure.disallowedCardLikeSurfaces.length};
+  const cover=await page.evaluate(()=>{const frame=document.querySelector('.domain-project-list-v30 .related-project-card__visual-v45'),image=frame?.querySelector('img');if(!frame)return null;const r=frame.getBoundingClientRect(),s=getComputedStyle(frame);return {ratio:Math.round((r.width/r.height)*100)/100,fit:image?getComputedStyle(image).objectFit:null,overflow:s.overflow}});
+  const expectedColumns=width<=700?1:2,expectedCoverRatio=width<=560?1.33:1.6;
+  const framePass=beforeAfter.count===2&&beforeAfter.columns===expectedColumns&&beforeAfter.captions.every(item=>item.leftDelta<=1&&Math.abs(item.gap-8)<=1&&item.fit==='contain')&&cover&&Math.abs(cover.ratio-expectedCoverRatio)<=.03&&cover.fit==='cover'&&cover.overflow==='hidden';
+  report.imageFrames[width]={beforeAfter,cover,expectedColumns,expectedCoverRatio,pass:framePass};
+  report.viewports[width]={overflow,horizontalLegacyInsets:horizontalInset,stageDecisionSurfaces:stage.decisionStructure.disallowedCardLikeSurfaces,framePass,pass:overflow<=0&&!horizontalInset.length&&!stage.decisionStructure.disallowedCardLikeSurfaces.length&&framePass};
   if(!report.viewports[width].pass)failures.push(`viewport ${width}: ${JSON.stringify(report.viewports[width])}`);
   await context.close();
 }

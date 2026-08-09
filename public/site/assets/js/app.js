@@ -1331,7 +1331,7 @@
   dialog?.addEventListener('cancel',event=>{event.preventDefault();closeDialog()});
 
   function renderArtifact(labels,assetId=''){
-    const art=doc.getElementById('galleryArt');clear(art);
+    const art=doc.getElementById('galleryArt');clear(art);art.dataset.frameRole='supporting-evidence';
     const resolved=assetId?resolveProjectAsset(assetId):null;
     if(resolved){
       const image=doc.createElement('img');
@@ -1343,7 +1343,7 @@
     appendArtifactContents(art,labels);
   }
   function renderGalleryMedia(item){
-    const art=doc.getElementById('galleryArt');clear(art);
+    const art=doc.getElementById('galleryArt');clear(art);art.dataset.frameRole='supporting-evidence';
     const resolved=item.assetId?resolveProjectAsset(item.assetId):null;
     if(resolved){
       const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
@@ -2595,6 +2595,7 @@
         const copy=visualContract.copy?.[lang==='zh'?'zh':'en']||{};
         visualEvidence=element('figure','programme-stage-visual programme-stage-visual--before-after before-after-evidence-v147');
         visualEvidence.dataset.evidenceRole='before-after';
+        visualEvidence.dataset.frameRole='primary-evidence';
         const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
         const compare=element('div','before-after-evidence-v147__grid');
         [
@@ -2602,6 +2603,7 @@
           [shippedAsset,copy.shippedLabel,copy.shippedCaption,'is-shipped']
         ].forEach(([asset,stateLabel,caption,state])=>{
           const item=element('div',`before-after-evidence-v147__item ${state}`);
+          item.dataset.frameRole='primary-evidence';
           const frame=element('button','before-after-evidence-v147__frame');
           frame.type='button';
           frame.dataset.expandableEvidence='true';
@@ -2619,9 +2621,12 @@
         visualEvidence=element('figure',`programme-stage-visual programme-stage-visual--${visualContract.layoutVariant||'single-screen'}`);
         visualEvidence.dataset.evidenceRole=visualContract.evidenceRole||'decision-proof';
         visualEvidence.dataset.mobileBehavior=visualContract.mobileBehavior||'single-screen';
+        const frameRole=visualContract.layoutVariant==='system-visual'||visualContract.layoutVariant==='flow-strip'?'system-diagram':visualContract.layoutVariant==='portrait'?'portrait-evidence':visualContract.evidenceRole==='supporting-evidence'?'supporting-evidence':'primary-evidence';
+        visualEvidence.dataset.frameRole=frameRole;
         if(asset?.isPlaceholder)visualEvidence.dataset.placeholder='true';
         const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
         const frame=element('div','programme-stage-visual__frame');
+        frame.dataset.frameRole=frameRole;
         const image=doc.createElement('img');
         image.src=asset.src;
         image.alt=localizedField(visualContract,'alt')||localize(asset.alt);

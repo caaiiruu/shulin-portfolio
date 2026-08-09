@@ -65,6 +65,7 @@ function projectVisualLabels(key){
 }
 function createProjectVisual(key){
  const visual=element('div','related-project-card__visual-v45');
+ visual.dataset.frameRole='project-cover';
  const project=window.adaptPortfolioProject?.(key)||DATA.projects[key];
  const preferredAssetId=key==='voucher'?'voucher-offer-stage-discover-pdp-shipped-01':(project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId);
  const record=ASSETS[preferredAssetId];
@@ -73,7 +74,7 @@ function createProjectVisual(key){
  const src=isReal?(record.productionUrl||record.publicPath):fallback?.publicPath;
  if(src){
   const image=element('img','related-project-card__image-v148');
-  image.src=src;image.loading='lazy';image.decoding='async';
+  image.dataset.frameRole='project-cover';image.src=src;image.loading='lazy';image.decoding='async';
   image.alt=isReal?(lang()==='zh'?(record.alt_zh||record.alt||''):(record.alt||'')):(lang()==='zh'?'專案視覺素材待補。':'Project visual pending.');
   image.dataset.assetStatus=isReal?'real-active':'placeholder-active';
   visual.dataset.assetStatus=image.dataset.assetStatus;

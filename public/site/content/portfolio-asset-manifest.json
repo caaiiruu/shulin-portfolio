@@ -457,5 +457,60 @@
       "alt": "Shipped FairPrice product page showing an eligible Voucher beside the product decision.",
       "alt_zh": "已上線的 FairPrice 商品頁，在商品決策旁呈現適用優惠券。"
     }
+  },
+  "frameSystemContract": {
+    "status": "frozen-after-step-6a",
+    "geometryOwner": "public/site/assets/css/components/project-detail-overview.css#ImageFrameSystem",
+    "canonicalEdges": {
+      "reading": "760px",
+      "evidence": "1120px"
+    },
+    "roles": {
+      "project-cover": {
+        "desktop": "16:10 cover",
+        "tablet": "16:10 cover",
+        "mobile": "4:3 presentation viewport; same source preferred; per-asset object-position"
+      },
+      "primary-evidence": {
+        "width": "100% up to 1120px",
+        "ratio": "intrinsic",
+        "fit": "contain"
+      },
+      "portrait-evidence": {
+        "width": "intrinsic, capped at 420px",
+        "ratio": "intrinsic; placeholder shell 5:7",
+        "fit": "contain"
+      },
+      "supporting-evidence": {
+        "width": "intrinsic, up to 760px by default",
+        "ratio": "intrinsic",
+        "fit": "contain"
+      },
+      "system-diagram": {
+        "width": "100% up to 1120px",
+        "ratio": "intrinsic",
+        "fit": "contain; mobile scroll-safe when required"
+      },
+      "before-after": {
+        "desktop": "40:60 when shipped evidence is primary",
+        "mobile": "stack before then after",
+        "caption": "HTML; 8px semantic gap"
+      }
+    },
+    "mutableAfterFreeze": [
+      "source",
+      "crop",
+      "object-position",
+      "safe-area",
+      "justified mobile-specific source"
+    ],
+    "forbiddenAfterFreeze": [
+      "frame dimensions",
+      "shared page width",
+      "reading width",
+      "evidence width",
+      "gutter",
+      "caption geometry"
+    ]
   }
 }

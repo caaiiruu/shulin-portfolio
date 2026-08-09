@@ -1403,3 +1403,24 @@ test("projects exact canonical Outcome claims through the shared Case Study syst
   assert.doesNotMatch(overview, /\.impact-evidence-v147__heading h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
 });
+
+
+test("Step 6A image frame system keeps canonical roles, intrinsic evidence and placeholder fidelity",()=>{
+  const app=read("assets/js/app.js");
+  const home=read("assets/js/home.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const domain=read("assets/css/components/domain-selector.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.equal(manifest.frameSystemContract.status,"frozen-after-step-6a");
+  assert.match(home,/dataset\.frameRole='project-cover'/);
+  for(const role of ["primary-evidence","portrait-evidence","supporting-evidence","system-diagram"])assert.ok(css.includes(`data-frame-role="${role}"`),role);
+  assert.match(css,/data-frame-role="primary-evidence"[^}]*[\s\S]*aspect-ratio:auto/);
+  assert.match(css,/data-frame-role="portrait-evidence"[^}]*var\(--dimension-420px\)/);
+  assert.match(css,/data-frame-role="system-diagram"[^}]*[\s\S]*overflow-x:auto/);
+  assert.match(css,/\.before-after-evidence-v147__grid\{[^}]*grid-template-columns:minmax\(0,2fr\) minmax\(0,3fr\)[^}]*align-items:start/);
+  assert.match(css,/\.before-after-evidence-v147__item\{[^}]*gap:var\(--case-gap-caption\)/);
+  assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
+  assert.match(domain,/related-project-card__visual-v45\{[^}]*aspect-ratio:16\/10/);
+  assert.match(domain,/@media\(max-width:560px\)\{[\s\S]*related-project-card__visual-v45\{aspect-ratio:4\/3/);
+  assert.match(app,/const frameRole=visualContract\.layoutVariant/);
+});

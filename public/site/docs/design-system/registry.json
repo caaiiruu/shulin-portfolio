@@ -681,6 +681,42 @@
         "Homepage"
       ],
       "exclusiveOwner": true
+    },
+    {
+      "component": "ImageFrameSystem",
+      "status": "Live / Current Production",
+      "renderSource": "assets/js/app.js and assets/js/home.js",
+      "contentOwner": "content/portfolio-asset-manifest.json#frameSystemContract",
+      "cssOwner": "assets/css/components/project-detail-overview.css and assets/css/components/domain-selector.css",
+      "tokenDependencies": [
+        "case-reading-max",
+        "case-evidence-max",
+        "case-gap-caption",
+        "radius-sm"
+      ],
+      "variants": [
+        "Domain / Project Cover",
+        "Primary UI Evidence",
+        "Portrait Evidence",
+        "Supporting Evidence",
+        "System / Journey Diagram",
+        "Before / After Evidence"
+      ],
+      "interactionContract": [
+        "Cover uses 16:10 cover at desktop and tablet, with a 4:3 presentation viewport on mobile and per-asset object-position",
+        "Primary, supporting, portrait and diagram evidence preserve intrinsic ratio with contain; production evidence is never cropped to normalize height",
+        "Portrait evidence is capped at 420px and never expands to the full Evidence edge",
+        "Before / After aligns top edges, uses a 40/60 hierarchy when shipped evidence is primary, and stacks Before then After on compact viewports",
+        "Caption is HTML aligned to the image edge with the canonical 8px caption gap",
+        "Placeholder and production sources use the same frame component and role identity"
+      ],
+      "usageScope": [
+        "Domain project cards",
+        "Project details",
+        "Voucher stage evidence",
+        "Project gallery"
+      ],
+      "exclusiveOwner": true
     }
   ]
 }
