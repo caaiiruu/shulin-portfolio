@@ -36,11 +36,13 @@ const expectedOutcome=(project,locale)=>{
   }).filter(Boolean);
   if(governed.length)return governed;
   const fallback=[];
+  const completion=project.publicContent?.completionEvidence;
+  if(completion?.publicValue&&completion?.label)fallback.push({sourcePath:'publicContent.completionEvidence.publicValue+label',value:`${String(completion.publicValue)} ${localizedValue(completion.label,locale)}`.trim()});
   const walk=(value,path)=>{
     if(!value||fallback.length>=4)return;
     if(value&&typeof value==='object'&&!Array.isArray(value)&&typeof value.en==='string'&&typeof value.zh==='string'){
       const copy=localizedValue(value,locale);
-      if(copy.length>=8)fallback.push({sourcePath:path,value:copy});
+      if(value.en.length>=8&&value.zh.length>=8&&!path.endsWith('.label'))fallback.push({sourcePath:path,value:copy});
       return;
     }
     if(Array.isArray(value))value.forEach((item,index)=>walk(item,`${path}.${index}`));
@@ -134,8 +136,8 @@ for(const width of viewports){
 for(const [id,url] of projects){
   const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();
   await page.goto(base+url,{waitUntil:'networkidle'});await page.waitForTimeout(300);
-  const toggle=page.locator('[data-lang-toggle]').first();
-  if(await toggle.isVisible().catch(()=>false)){await toggle.click();await page.waitForTimeout(400)}
+  const toggle=page.locator('[data-lang-toggle]:visible').first();
+  if(await toggle.count()){await toggle.click();await page.waitForFunction(()=>window.getPortfolioLanguage?.()==='zh');await page.waitForTimeout(300)}
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-390.png'),fullPage:true});
   const expectedZh=expectedOutcome(ssot.projects[id],'zh');

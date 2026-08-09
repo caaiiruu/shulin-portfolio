@@ -1835,11 +1835,19 @@
       .filter(Boolean);
     if(governed.length)return governed;
     const fallback=[];
+    const completion=project.publicContent?.completionEvidence;
+    if(completion?.publicValue&&completion?.label){
+      fallback.push({
+        item:{outcomeType:{en:'Completion evidence',zh:'完成證據'}},
+        value:`${String(completion.publicValue)} ${localize(completion.label)}`.trim(),
+        sourcePath:'publicContent.completionEvidence.publicValue+label'
+      });
+    }
     const walk=(value,path)=>{
       if(!value||fallback.length>=4)return;
       if(value&&typeof value==='object'&&!Array.isArray(value)&&typeof value.en==='string'&&typeof value.zh==='string'){
         const copy=localize(value);
-        if(copy&&copy.length>=8)fallback.push({item:{outcomeType:{en:'Completion evidence',zh:'完成證據'}},value:copy,sourcePath:path});
+        if(copy&&value.en.length>=8&&value.zh.length>=8&&!path.endsWith('.label'))fallback.push({item:{outcomeType:{en:'Completion evidence',zh:'完成證據'}},value:copy,sourcePath:path});
         return;
       }
       if(Array.isArray(value))value.forEach((item,index)=>walk(item,`${path}.${index}`));
