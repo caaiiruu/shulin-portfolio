@@ -145,7 +145,7 @@
       status:stage.status
     }));
     return {
-      ...p,valueIBrought,company,domain,title_pair:title,
+      ...p,project_id:id,valueIBrought,company,domain,title_pair:title,
       problem_type_pairs:problemTypes.map((item,index)=>[pair(item)[0],pair(problemTypesZh[index])[0]]),
       at_a_glance_pair:atGlance,
       type_pair:type,scope_pair:scope,audience_pair:audience,timeline_pair:timeline,why_pair:why,impact_pair:impact,
@@ -1489,8 +1489,8 @@
       .trim();
   }
   const sectionContract=(owner,surface='canvas',required=false)=>({owner,surface,headingLevel:2,required});
-  const CASE_STUDY_SECTION_REGISTRY={hero:sectionContract('hero','canvas',true),'value-i-brought':sectionContract('value','canvas',true),overview:sectionContract('overview','soft',true),'at-a-glance':sectionContract('overview','soft',true),'info-grid':sectionContract('overview','soft',true),'critical-problem':sectionContract('problem','canvas',true),'why-it-mattered':sectionContract('problem'),'what-made-this-hard':sectionContract('complexity'),'key-decisions':sectionContract('decisions','soft'),'key-design-decisions':sectionContract('decisions','soft'),'business-impact':sectionContract('impact','soft'),'team-impact':sectionContract('impact','soft'),'validated-outcomes':sectionContract('impact','soft'),'shipped-outcomes':sectionContract('impact','soft'),'shipped-proof':sectionContract('impact','soft'),'conversion-evidence':sectionContract('impact','soft'),'delivery-proof':sectionContract('impact','soft'),'validation-and-launch':sectionContract('impact','soft'),'recommendation-evidence':sectionContract('impact','soft'),'delivery-and-measurement':sectionContract('delivery'),'confidentiality-note':sectionContract('delivery'),'status-and-disclosure':sectionContract('delivery'),'ownership-and-collaboration':sectionContract('ownership'),'ownership-and-evidence':sectionContract('ownership'),'my-contribution':sectionContract('ownership'),'continue-exploring':sectionContract('related','soft'),prototype:sectionContract('evidence','soft')};
-  ['system-coverage-map','selected-shipped-evidence','future-vision','system-foundation','phased-validation-path','research-changed-the-model','product-scope','reusable-system','task-and-reward-model','shipped-experience','completion-evidence','operating-model','connected-trip-model','learning-and-entitlement-model','research-and-validation','released-product-scope','taishin-research-definition-model','research-and-specification-evidence','consultation-model','transaction-model','voucher-and-loyalty-integration','recognition','multi-route-transaction-model','five-phase-journey-map','initial-strategies','confidence-model','booking-pickup-research-strategy'].forEach((id,index)=>{CASE_STUDY_SECTION_REGISTRY[id]=sectionContract('supplemental',index%2?'canvas':'soft')});Object.assign(CASE_STUDY_SECTION_REGISTRY['system-coverage-map'],{programmeOwner:'journey'});Object.assign(CASE_STUDY_SECTION_REGISTRY['system-foundation'],{programmeOwner:'system'});Object.assign(CASE_STUDY_SECTION_REGISTRY['ownership-and-evidence'],{programmeOwner:'accountability'});
+  const CASE_STUDY_SECTION_REGISTRY={hero:sectionContract('hero','canvas',true),'value-i-brought':sectionContract('value','canvas',true),overview:sectionContract('overview','soft',true),'at-a-glance':sectionContract('overview','soft',true),'info-grid':sectionContract('overview','soft',true),'critical-problem':sectionContract('problem','canvas',true),'why-it-mattered':sectionContract('problem'),'what-made-this-hard':sectionContract('complexity'),'core-system-insight':sectionContract('supplemental','canvas'),'key-decisions':sectionContract('decisions','soft'),'key-design-decisions':sectionContract('decisions','soft'),'business-impact':sectionContract('impact','soft'),'team-impact':sectionContract('impact','soft'),'validated-outcomes':sectionContract('impact','soft'),'shipped-outcomes':sectionContract('impact','soft'),'shipped-proof':sectionContract('impact','soft'),'conversion-evidence':sectionContract('impact','soft'),'delivery-proof':sectionContract('impact','soft'),'validation-and-launch':sectionContract('impact','soft'),'recommendation-evidence':sectionContract('impact','soft'),'delivery-and-measurement':sectionContract('delivery'),'confidentiality-note':sectionContract('delivery'),'status-and-disclosure':sectionContract('delivery'),'ownership-and-collaboration':sectionContract('ownership'),'ownership-and-evidence':sectionContract('ownership'),'my-contribution':sectionContract('ownership'),'continue-exploring':sectionContract('related','soft'),prototype:sectionContract('evidence','soft')};
+  ['system-coverage-map','selected-shipped-evidence','future-vision','system-foundation','phased-validation-path','research-changed-the-model','product-scope','reusable-system','task-and-reward-model','shipped-experience','completion-evidence','operating-model','connected-trip-model','learning-and-entitlement-model','research-and-validation','released-product-scope','taishin-research-definition-model','research-and-specification-evidence','consultation-model','transaction-model','voucher-and-loyalty-integration','recognition','multi-route-transaction-model','five-phase-journey-map','initial-strategies','confidence-model','booking-pickup-research-strategy'].forEach((id,index)=>{CASE_STUDY_SECTION_REGISTRY[id]=sectionContract('supplemental',index%2?'canvas':'soft')});Object.assign(CASE_STUDY_SECTION_REGISTRY['core-system-insight'],{programmeOwner:'insight'});Object.assign(CASE_STUDY_SECTION_REGISTRY['system-coverage-map'],{programmeOwner:'journey'});Object.assign(CASE_STUDY_SECTION_REGISTRY['key-decisions'],{programmeOwner:'decisions'});Object.assign(CASE_STUDY_SECTION_REGISTRY['selected-shipped-evidence'],{programmeOwner:'shipped'});Object.assign(CASE_STUDY_SECTION_REGISTRY['future-vision'],{programmeOwner:'future'});Object.assign(CASE_STUDY_SECTION_REGISTRY['system-foundation'],{programmeOwner:'system'});Object.assign(CASE_STUDY_SECTION_REGISTRY['ownership-and-evidence'],{programmeOwner:'accountability'});
   const SECTION_LABELS={
     'core-system-insight':['Core system insight','核心系統洞察'],
     'evidence-to-strategy':['Evidence to strategy','從證據到策略'],
@@ -1525,7 +1525,19 @@
     'system-architecture':['System architecture','系統架構']
   };
   const toCamel=value=>String(value).replace(/-([a-z])/g,(_,letter)=>letter.toUpperCase());
+  function contentPresentationSection(project,sectionId){
+    return DATA.implementationContracts?.contentPresentationContract?.projects?.[project.project_id]?.sections?.[sectionId]||null;
+  }
+  function contentPresentationSources(project,sectionId){
+    const projectContract=contentPresentationSection(project,sectionId);
+    const shared=DATA.implementationContracts?.contentPresentationContract?.sharedSectionSources?.[sectionId]||[];
+    return [...list(projectContract?.sourcePaths),...list(shared)];
+  }
   function publicSectionValue(project,sectionId){
+    for(const path of contentPresentationSources(project,sectionId)){
+      const contracted=valueAtPath(project,path);
+      if(contracted!=null)return contracted;
+    }
     if(sectionId==='reusable-system')return project.publicContent?.systemFoundation??project.systemFoundation;
     const key=toCamel(sectionId);
     return project.publicContent?.[key]??project[key];
@@ -1565,6 +1577,20 @@
     section.appendChild(grid);
     const boundary=localize(value.claimBoundary);
     if(boundary)section.appendChild(element('p','research-scale-v185__note',boundary));
+    return section;
+  }
+  function renderEditorialStatementSection(sectionId,value){
+    if(!value||typeof value!=='object')return null;
+    const statement=localize(value.title||value.statement);
+    const supporting=localize(value.statement&&value.title?value.statement:value.supporting);
+    if(!statement)return null;
+    const section=element('section','project-section-v81 editorial-statement-v224');
+    section.dataset.projectSection=sectionId;
+    section.append(
+      element('h3','',localize(SECTION_LABELS[sectionId])),
+      element('p','editorial-statement-v224__statement',statement)
+    );
+    if(supporting)section.appendChild(element('p','editorial-statement-v224__supporting',supporting));
     return section;
   }
   function appendTextList(target,items,className='project-story-v198__list'){
@@ -1960,6 +1986,7 @@
     if(!value)return null;
     const section=element('section','project-section-v81 project-story-v198 project-story-v198--product-scope');
     section.dataset.projectSection='product-scope';
+    section.appendChild(element('h3','',lang==='zh'?'已上線／下一步':'Shipped / Next'));
     const grid=element('div','project-story-v198__grid');
     const shipped=storyCard('',localize(SECTION_LABELS['shipped-scope']),'');
     appendTextList(shipped,value.confirmedShipped);
@@ -2002,6 +2029,11 @@
       }
       if(sectionId==='research-scale'){
         const section=renderResearchScaleSection(publicSectionValue(project,sectionId));
+        if(section)host.appendChild(section);
+        return;
+      }
+      if(sectionId==='core-system-insight'){
+        const section=renderEditorialStatementSection(sectionId,publicSectionValue(project,sectionId));
         if(section)host.appendChild(section);
         return;
       }
@@ -2066,7 +2098,7 @@
   }
   function caseStudySection(node,id,surface='canvas'){if(!node)return null;node.classList.remove('case-study-section--canvas','case-study-section--soft','case-study-section--emphasis');node.classList.add('case-study-section',`case-study-section--${surface}`);node.dataset.caseStudySection=id;return node}
   function caseStudyHeader(node,index=''){if(!node)return;const governed=node.matches('.case-study-section__header')?node:node.querySelector(':scope > .case-study-section__header');if(governed){const eyebrow=governed.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);return}const existing=node.matches('.section-heading-v45')?node:node.querySelector(':scope > .section-heading-v45');const header=existing||node.querySelector(':scope > h2, :scope > h3, :scope > h4')||node.querySelector('h2, h3, h4');if(!header)return;if(existing){existing.classList.add('case-study-section__header');const eyebrow=existing.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);else if(index)existing.prepend(element('span','case-study-section__eyebrow',index));const title=existing.querySelector('h3, h4');if(title){const h2=element('h2',title.className,title.textContent);for(const attr of title.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);title.replaceWith(h2)}return}if(header.matches('h3, h4')){const h2=element('h2',header.className,header.textContent);for(const attr of header.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);header.replaceWith(h2)}const title=node.querySelector(':scope > h2')||node.querySelector('h2');if(!title)return;const wrapper=element('div','case-study-section__header');if(index)wrapper.appendChild(element('span','case-study-section__eyebrow',index));node.prepend(wrapper);wrapper.appendChild(title)}
-  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=project.section_order||[];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;ordered.push(node);mapped.push(sectionId);appended.add(node)}ordered.forEach(node=>evidence.appendChild(node));ordered.filter(node=>!node.hidden).forEach((node,index)=>caseStudyHeader(node,String(index+3).padStart(2,'0')));caseStudyHeader(value,'01 · VALUE I BROUGHT');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'02 · OVERVIEW');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ')}
+  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=project.section_order||[];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;node.dataset.contentBlockIds=contentPresentationSources(project,sectionId).join('|');ordered.push(node);mapped.push(sectionId);appended.add(node)}ordered.forEach(node=>evidence.appendChild(node));ordered.filter(node=>!node.hidden).forEach((node,index)=>caseStudyHeader(node,String(index+3).padStart(2,'0')));caseStudyHeader(value,'01 · VALUE I BROUGHT');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'02 · OVERVIEW');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ')}
   function renderKeyInterventionMap(project){
     const section=doc.getElementById('projectKeyIntervention');
     const flow=doc.getElementById('projectKeyInterventionFlow');
@@ -2435,6 +2467,13 @@
   }
   function renderProgrammeParent(key,p){
     const surface=programmeSurface();clear(surface);
+    const programmeContent=p.publicContent||{};
+    const insight=renderEditorialStatementSection('core-system-insight',programmeContent.coreSystemInsight);
+    if(insight){
+      insight.classList.add('case-study-section','case-study-section--canvas');
+      insight.dataset.caseStudySection='core-system-insight';
+      caseStudyHeader(insight);
+    }
     const map=createProgrammeSection(
       ui("one-journey-from-research-signals-to-produ-44a8a3c4"),
       ui("five-journey-stages-connect-customer-break-31ea1061")
@@ -2547,7 +2586,43 @@
       chapter.append(proof);chapters.append(chapter);
     });
     map.append(chapters);
-    const system=createProgrammeSection(ui("one-shared-system-behind-all-five-journey--b10e730d"),ui("switch-between-the-four-foundations-to-see-ac2a3130"));
+    const decisions=createProgrammeSection(ui("key-design-decisions-b07038e4"),'');
+    const decisionListNode=element('div','decision-grid-v46');
+    p.decisions.slice(0,3).forEach((decision,index)=>decisionListNode.appendChild(createDecisionCard(decision,index,{showVisual:true})));
+    decisions.append(decisionListNode);
+    const shipped=createProgrammeSection(localize(SECTION_LABELS['selected-shipped-evidence']),'');
+    const shippedGrid=element('div','programme-shipped-proof-v224');
+    list(programmeContent.selectedShippedProofs).forEach(item=>{
+      const proof=element('article','programme-shipped-proof-v224__item');
+      proof.append(
+        element('h3','',localize(item.title)),
+        element('p','',localize(item.decision)),
+        localize(item.outcome)?element('strong','',localize(item.outcome)):element('span','sr-only','')
+      );
+      shippedGrid.appendChild(proof);
+    });
+    shipped.append(shippedGrid);
+    const future=createProgrammeSection(localize(programmeContent.futureVision?.title)||localize(SECTION_LABELS['future-vision']),localize(programmeContent.futureVision?.summary));
+    future.classList.add('programme-future-v224');
+    const northStar=localize(programmeContent.futureVision?.northStar);
+    if(northStar)future.appendChild(element('p','editorial-statement-v224__statement',northStar));
+    const futureProof=element('div','programme-future-v224__proof');
+    Object.values(programmeContent.futureVision?.platformModel||{}).forEach(item=>futureProof.appendChild(storyCard(localize(item.label),'',localize(item.content))));
+    if(futureProof.childElementCount)future.appendChild(futureProof);
+    const sponsorBoundary=programmeContent.futureVision?.sponsorSelfServiceBoundary;
+    if(sponsorBoundary)future.appendChild(storyCard(localize(sponsorBoundary.label),localize(sponsorBoundary.title),localize(sponsorBoundary.summary)));
+    const systemFoundation=programmeContent.systemFoundations?.voucherCardComponentSystem;
+    const system=createProgrammeSection(localize(systemFoundation?.title)||ui("one-shared-system-behind-all-five-journey--b10e730d"),localize(systemFoundation?.atAGlance)||ui("switch-between-the-four-foundations-to-see-ac2a3130"));
+    if(systemFoundation){
+      const contractProof=element('div','programme-system-contract-v224');
+      const research=element('div','programme-system-contract-v224__column');
+      research.appendChild(element('h3','',lang==='zh'?'研究證據':'Research proof'));
+      appendTextList(research,systemFoundation.researchProof);
+      const deliveryProof=element('div','programme-system-contract-v224__column');
+      deliveryProof.appendChild(element('h3','',lang==='zh'?'系統證據':'System proof'));
+      appendTextList(deliveryProof,systemFoundation.systemProof);
+      contractProof.append(research,deliveryProof);system.appendChild(contractProof);
+    }
     const foundation=element('div','voucher-foundation-gallery');
     const foundationTabs=element('div','voucher-foundation-gallery__tabs');
     foundationTabs.setAttribute('role','tablist');
@@ -2633,7 +2708,7 @@
     const owned=element('article');owned.append(element('span','voucher-accountability__label',ui("i-owned-the-outcome-dfddcd9b")),element('h4','',ui("turn-fragmented-signals-into-one-journey-s-5237a193")),element('p','',ui("research-synthesis-system-framing-end-to-e-8e4f19e4")));
     const shared=element('article');shared.append(element('span','voucher-accountability__label',ui("shared-decisions-ff490c2c")),element('h4','',ui("make-the-strategy-prioritised-buildable-an-badffeab")),element('p','',ui("joint-prioritisation-feasibility-and-measu-0512e522")));
     contributionGrid.append(owned,shared);contribution.append(contributionGrid);
-    const programmeOwners={journey:map,system,accountability:contribution};
+    const programmeOwners={insight,journey:map,decisions,shipped,future,system,accountability:contribution};
     const rendered=new Set(),mapped=[];
     for(const sectionId of p.section_order||[]){
       const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];
@@ -2642,6 +2717,7 @@
       if(!node||rendered.has(node))continue;
       node.hidden=false;
       node.dataset.canonicalSectionId=sectionId;
+      node.dataset.contentBlockIds=contentPresentationSources(p,sectionId).join('|');
       surface.append(node);
       rendered.add(node);
       mapped.push(sectionId);

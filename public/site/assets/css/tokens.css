@@ -686,10 +686,11 @@
   --sys-weight-heavy:860;
   --sys-weight-regular:450;
   /* Semantic typography roles: HTML heading level owns structure; these roles own appearance. */
-  --type-page-title:clamp(var(--dimension-2-2rem),var(--dimension-3vw),var(--dimension-3-2rem));
-  --type-page-title-compact:clamp(var(--dimension-1-8rem),var(--dimension-9vw),var(--dimension-2-75rem));
-  --type-section-title:clamp(var(--dimension-1-65rem),var(--dimension-2-5vw),var(--dimension-2-35rem));
-  --type-subsection-title:clamp(var(--dimension-1-35rem),var(--dimension-1-5vw),var(--dimension-1-75rem));
+  --type-page-title:clamp(3.5rem,5vw,4.25rem);
+  --type-page-title-compact:clamp(2.25rem,9vw,2.625rem);
+  --type-section-title:clamp(2.375rem,3.2vw,2.75rem);
+  --type-subsection-title:clamp(1.5rem,2vw,1.75rem);
+  --type-core-statement:clamp(1.625rem,2.2vw,1.875rem);
   --type-body:var(--text-body);
   --type-meta:var(--text-sm);
   --type-eyebrow:var(--text-xs);
@@ -724,6 +725,7 @@
   --cmp-popup-outcome-metric-size:var(--type-outcome-metric);
   --cmp-popup-value-headline-size:var(--text-lead);
   --cmp-popup-value-supporting-size:var(--cmp-popup-body-size);
+  --cmp-popup-core-statement-size:var(--type-core-statement);
   --cmp-popup-body-size:var(--type-body);
   --cmp-popup-supporting-size:var(--type-meta);
   --cmp-popup-label-size:var(--type-eyebrow);

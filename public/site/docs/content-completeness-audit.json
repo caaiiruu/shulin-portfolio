@@ -1,0 +1,1132 @@
+{
+  "contentVersion": "2026-08-09-r148",
+  "projects": {
+    "voucher": {
+      "approvedPublicBlocks": 99,
+      "renderRequiredBlocks": [
+        "heroMetadata",
+        "ownershipModel",
+        "publicContent.continueExploring",
+        "publicContent.coreSystemInsight",
+        "publicContent.futureVision.sponsorSelfServiceBoundary",
+        "publicContent.journeyChapters",
+        "publicContent.myContribution",
+        "publicContent.publicArchitecture.futureVision",
+        "publicContent.selectedShippedProofs",
+        "publicContent.systemBehindJourney",
+        "publicContent.systemFoundations.voucherCardComponentSystem",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [
+        "journeyStageOptimisations.discoverQualify.pdpVoucher2024.designSolutions",
+        "journeyStageOptimisations.discoverQualify.pdpVoucher2024.ownership",
+        "journeyStageOptimisations.discoverQualify.pdpVoucher2024.shippedScope",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.businessImpact",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.conditionDrivenExperienceSystem",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.ownership",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.performanceEvidence",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.problem",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.release2024",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.release2025",
+        "journeyStageOptimisations.discoverQualify.voucherDetailsShoppableJourney2024_2025.systemDecision",
+        "journeyStageOptimisations.redeem.voucherErrorRecovery2023",
+        "programmeResearch.claimCollectConceptStudy2023",
+        "programmeResearch.saveAllAndSecPerformance2023",
+        "programmeResearch.voucherExperienceSurveyQ42023",
+        "programmeResearch.voucherJourneyDesignSprint",
+        "programmeResearch.voucherWalletFilterStudy2023",
+        "publicContent.evidenceToStrategy",
+        "publicContent.voucherWalletEvidence",
+        "publicContent.workshopEvidence"
+      ],
+      "demotedBlocks": [
+        "domainTags",
+        "futureVision.omniIncentivePlatform2024",
+        "futureVision.omniIncentivePlatform2024.collaborationModel",
+        "futureVision.omniIncentivePlatform2024.deterministicVariableRewardExploration",
+        "futureVision.omniIncentivePlatform2024.experiencePrinciples",
+        "futureVision.omniIncentivePlatform2024.experimentalConceptLibrary",
+        "futureVision.omniIncentivePlatform2024.habitFormationModel",
+        "futureVision.omniIncentivePlatform2024.journeyMeasurementFramework",
+        "futureVision.omniIncentivePlatform2024.mechanismEvaluation",
+        "futureVision.omniIncentivePlatform2024.northStarMechanic",
+        "futureVision.omniIncentivePlatform2024.openQuestions",
+        "futureVision.omniIncentivePlatform2024.opportunityArchitecture",
+        "futureVision.omniIncentivePlatform2024.ownership",
+        "futureVision.omniIncentivePlatform2024.platformOperatingModel",
+        "futureVision.omniIncentivePlatform2024.platformOperatingModel.sponsorSelfServeStatus",
+        "futureVision.omniIncentivePlatform2024.sourcePeriod",
+        "futureVision.omniIncentivePlatform2024.sponsorSelfServiceGap",
+        "futureVision.omniIncentivePlatform2024.strategicProblem",
+        "futureVision.omniIncentivePlatform2024.systemConstraints",
+        "futureVision.omniIncentivePlatform2024.transitionDecision",
+        "futureVision.omniIncentivePlatform2024.transitionRoadmap",
+        "futureVision.omniIncentivePlatform2024.visionStatement",
+        "futureVision.omniIncentivePlatform2024.visionToDeliveryContinuity",
+        "globalContentIntegration.outerProjectCard",
+        "heroVisualBrief",
+        "principalPositioning",
+        "principalPositioning.futureVisionSignal",
+        "principalPositioning.publicEvidenceUpdate",
+        "principalPositioning.voucherCardSystemSignal",
+        "principalPositioning.voucherDetailsEvolutionSignal",
+        "principalReadinessAudit",
+        "programmeInitiatives.saveEverydayDigitalCampaign2023",
+        "programmeInitiatives.saveEverydayDigitalCampaign2023.annualEvolution2024",
+        "programmeInitiatives.saveEverydayDigitalCampaign2023.annualEvolution2024.baselineAndLearning",
+        "programmeInitiatives.saveEverydayDigitalCampaign2023.annualEvolution2024.journeyEvolution",
+        "programmeInitiatives.saveEverydayDigitalCampaign2023.annualEvolution2024.performanceEvidence",
+        "projectModel.hierarchy",
+        "publicContent",
+        "publicContent.contentStatus",
+        "publicContent.featuredInitiatives.saveEverydayDigitalCampaign",
+        "publicContent.featuredInitiatives.saveEverydayDigitalCampaign.metricDisclosureUpdate",
+        "publicContent.hero",
+        "publicContent.journeyUpdates.voucherDetailsShoppableJourney",
+        "publicContent.modelEvolution",
+        "publicContent.primaryNarrative",
+        "publicContent.principalMandate",
+        "publicContent.publicArchitecture",
+        "publicContent.publicArchitecture.voucherCardComponentSystem",
+        "publicContent.publicArchitecture.voucherDetailsShoppableJourney",
+        "publicContent.relatedProjects",
+        "publicContent.sectionOrderRef",
+        "publicContent.selectedInitiatives",
+        "publicTags",
+        "searchIndexV2",
+        "systemFoundations.voucherCardComponentSystem2024_2025",
+        "systemFoundations.voucherCardComponentSystem2024_2025.businessImpact",
+        "systemFoundations.voucherCardComponentSystem2024_2025.componentContract",
+        "systemFoundations.voucherCardComponentSystem2024_2025.deliveryAndOperatingModel",
+        "systemFoundations.voucherCardComponentSystem2024_2025.deliveryAndOperatingModel.codeToOperations",
+        "systemFoundations.voucherCardComponentSystem2024_2025.designDecisions.colourAsSecondaryCue",
+        "systemFoundations.voucherCardComponentSystem2024_2025.designDecisions.densityAndClarity",
+        "systemFoundations.voucherCardComponentSystem2024_2025.designDecisions.fromScreensToProperties",
+        "systemFoundations.voucherCardComponentSystem2024_2025.designDecisions.operationsConfiguredReuse",
+        "systemFoundations.voucherCardComponentSystem2024_2025.ownership",
+        "systemFoundations.voucherCardComponentSystem2024_2025.principalSignal",
+        "systemFoundations.voucherCardComponentSystem2024_2025.problem",
+        "systemFoundations.voucherCardComponentSystem2024_2025.research"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-evidence"
+        },
+        {
+          "blockPath": "publicContent.continueExploring",
+          "sectionId": "continue-exploring"
+        },
+        {
+          "blockPath": "publicContent.coreSystemInsight",
+          "sectionId": "core-system-insight"
+        },
+        {
+          "blockPath": "publicContent.futureVision.sponsorSelfServiceBoundary",
+          "sectionId": "future-vision"
+        },
+        {
+          "blockPath": "publicContent.journeyChapters",
+          "sectionId": "system-coverage-map"
+        },
+        {
+          "blockPath": "publicContent.myContribution",
+          "sectionId": "ownership-and-evidence"
+        },
+        {
+          "blockPath": "publicContent.publicArchitecture.futureVision",
+          "sectionId": "future-vision"
+        },
+        {
+          "blockPath": "publicContent.selectedShippedProofs",
+          "sectionId": "selected-shipped-evidence"
+        },
+        {
+          "blockPath": "publicContent.systemBehindJourney",
+          "sectionId": "system-foundation"
+        },
+        {
+          "blockPath": "publicContent.systemFoundations.voucherCardComponentSystem",
+          "sectionId": "system-foundation"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "voucher-center": {
+      "approvedPublicBlocks": 47,
+      "renderRequiredBlocks": [
+        "decisionNarrative.primaryDecisions.0",
+        "decisionNarrative.primaryDecisions.1",
+        "heroMetadata",
+        "ownershipModel",
+        "publicContent.continueExploring",
+        "publicContent.decisionNarrative.primaryDecisions.0",
+        "publicContent.decisionNarrative.primaryDecisions.1",
+        "publicContent.phasedValidationPath",
+        "publicContent.productScope",
+        "publicContent.researchChangedTheModel",
+        "publicContent.systemFoundation",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [
+        "productEvolution.flashVoucher2024",
+        "productEvolution.flashVoucher2024.businessCase",
+        "productEvolution.flashVoucher2024.deliveryArchitecture",
+        "productEvolution.flashVoucher2024.designDecisionPhasedPOC",
+        "productEvolution.flashVoucher2024.futurePlatformDirection",
+        "productEvolution.flashVoucher2024.segmentedMechanic",
+        "productEvolution.flashVoucher2024.sourceAddendum",
+        "productEvolution.flashVoucher2024.strategicMandate",
+        "publicContent.decisionNarrative.supportingDecisions.0",
+        "research.competitiveVisualAudit2025"
+      ],
+      "demotedBlocks": [
+        "",
+        "contentOwnershipBoundary",
+        "domainTags",
+        "flashVoucherEvidence",
+        "heroVisualBrief",
+        "principalPositioning",
+        "principalReadinessAudit",
+        "productScope",
+        "projectModel",
+        "projectModel.productEvolutionImplementationContract",
+        "publicContent",
+        "publicContent.businessImpactRef",
+        "publicContent.contentPruning",
+        "publicContent.contentStatus",
+        "publicContent.decisionNarrative",
+        "publicContent.deliveryRef",
+        "publicContent.executiveSummary",
+        "publicContent.flashVoucherEvidenceRef",
+        "publicContent.ownershipRef",
+        "publicContent.sectionOrderRef",
+        "publicContent.systemFoundationRef",
+        "searchIndexV2",
+        "strategicValidationPath",
+        "systemFoundation",
+        "valueIBrought"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.0",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.1",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-evidence"
+        },
+        {
+          "blockPath": "publicContent.continueExploring",
+          "sectionId": "continue-exploring"
+        },
+        {
+          "blockPath": "publicContent.decisionNarrative.primaryDecisions.0",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "publicContent.decisionNarrative.primaryDecisions.1",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "publicContent.phasedValidationPath",
+          "sectionId": "phased-validation-path"
+        },
+        {
+          "blockPath": "publicContent.productScope",
+          "sectionId": "product-scope"
+        },
+        {
+          "blockPath": "publicContent.researchChangedTheModel",
+          "sectionId": "research-changed-the-model"
+        },
+        {
+          "blockPath": "publicContent.systemFoundation",
+          "sectionId": "reusable-system"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "game-center": {
+      "approvedPublicBlocks": 28,
+      "renderRequiredBlocks": [
+        "decisionNarrative",
+        "delivery.futurePhases",
+        "delivery.phase1_1",
+        "delivery.phase1_2",
+        "heroMetadata",
+        "ownershipModel",
+        "publicContent.completionEvidence",
+        "publicContent.taskAndRewardModel",
+        "strategy.futureOpportunityFramework",
+        "strategy.measurementModel",
+        "strategy.vision",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "designDecisions.centralHub",
+        "designDecisions.lifecycleStates",
+        "designDecisions.phase12VisibilityFocus",
+        "designDecisions.scopedFirstRelease",
+        "domainTags",
+        "heroVisualBrief",
+        "ownership",
+        "problemEvidence.singleGameConstraint",
+        "publicContent",
+        "publicContent.businessImpactRef",
+        "publicContent.contentStatus",
+        "publicContent.decisionNarrativeRef",
+        "publicContent.hero",
+        "publicContent.sectionOrderRef",
+        "searchIndexV2"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "delivery.futurePhases",
+          "sectionId": "shipped-experience"
+        },
+        {
+          "blockPath": "delivery.phase1_1",
+          "sectionId": "shipped-experience"
+        },
+        {
+          "blockPath": "delivery.phase1_2",
+          "sectionId": "shipped-experience"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "publicContent.completionEvidence",
+          "sectionId": "completion-evidence"
+        },
+        {
+          "blockPath": "publicContent.taskAndRewardModel",
+          "sectionId": "task-and-reward-model"
+        },
+        {
+          "blockPath": "strategy.futureOpportunityFramework",
+          "sectionId": "task-and-reward-model"
+        },
+        {
+          "blockPath": "strategy.measurementModel",
+          "sectionId": "task-and-reward-model"
+        },
+        {
+          "blockPath": "strategy.vision",
+          "sectionId": "task-and-reward-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "dbs": {
+      "approvedPublicBlocks": 25,
+      "renderRequiredBlocks": [
+        "heroMetadata",
+        "outcomes",
+        "ownershipModel",
+        "publicContent.validatedOutcomes",
+        "roleAndOwnership",
+        "targetSystemModel",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "currentStateEvidence",
+        "domainTags",
+        "heroVisualBrief",
+        "marketScope",
+        "principalPositioning",
+        "principalReadinessAudit",
+        "programContext",
+        "programContext.creditLifecycleImage",
+        "publicContent",
+        "publicContent.confidentialityNote",
+        "publicContent.contentStatus",
+        "publicContent.hero",
+        "publicContent.myContribution",
+        "publicContent.researchScale",
+        "publicContent.sectionOrderRef",
+        "researchAndValidation",
+        "searchIndexV2",
+        "systemClassification"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "outcomes",
+          "sectionId": "validated-outcomes"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "publicContent.validatedOutcomes",
+          "sectionId": "validated-outcomes"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "targetSystemModel",
+          "sectionId": "operating-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "booking": {
+      "approvedPublicBlocks": 27,
+      "renderRequiredBlocks": [
+        "heroMetadata",
+        "ownershipModel",
+        "publicContent.outcomes",
+        "publicContent.primaryOutcome",
+        "publicContent.strategyModel",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [
+        "publicContent.continuousEvidenceLoop",
+        "publicContent.interviewDeckEvidence"
+      ],
+      "demotedBlocks": [
+        "archiveIntegration",
+        "archiveIntegration.detailedTaxiCase2021",
+        "domainClassification",
+        "domainTags",
+        "heroVisualBrief",
+        "measurementBoundary",
+        "principalPositioning",
+        "principalReadinessAudit",
+        "publicContent",
+        "publicContent.contentPruning",
+        "publicContent.contentStatus",
+        "publicContent.executiveSummary",
+        "publicContent.hero",
+        "publicContent.primaryDecisions",
+        "publicContent.researchAndExperimentEvidence",
+        "publicContent.sectionOrderRef",
+        "searchIndexV2",
+        "systemImpact",
+        "valueIBrought"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "publicContent.outcomes",
+          "sectionId": "conversion-evidence"
+        },
+        {
+          "blockPath": "publicContent.primaryOutcome",
+          "sectionId": "conversion-evidence"
+        },
+        {
+          "blockPath": "publicContent.strategyModel",
+          "sectionId": "connected-trip-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "bandzo": {
+      "approvedPublicBlocks": 15,
+      "renderRequiredBlocks": [
+        "archiveIntegration",
+        "decisionNarrative.primaryDecisions.1",
+        "decisionNarrative.primaryDecisions.2",
+        "heroMetadata",
+        "ownershipModel",
+        "systemImpact",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "additionalDesignDecisions.0",
+        "additionalDesignDecisions.1",
+        "domainTags",
+        "heroVisualBrief",
+        "publicContent.hero",
+        "publicContent.sectionOrderRef",
+        "searchIndexV2"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "archiveIntegration",
+          "sectionId": "research-and-validation"
+        },
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.1",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.2",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "systemImpact",
+          "sectionId": "learning-and-entitlement-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "taishin-p2p-marketplace-platform": {
+      "approvedPublicBlocks": 19,
+      "renderRequiredBlocks": [
+        "decisionNarrative",
+        "heroMetadata",
+        "ownershipModel",
+        "projectClosure.deliveryAndMeasurement",
+        "projectClosure.ownershipAndCollaboration",
+        "projectClosure.statusAndDisclosure",
+        "projectModel",
+        "publicContent",
+        "publicContent.contentStatus",
+        "publicContent.criticalProblem",
+        "publicContent.primaryDecisionsRef",
+        "publicContent.projectModelRef",
+        "publicContent.sectionOrderRef",
+        "publicContent.whatMadeThisHard",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "domainTags",
+        "searchIndexV2",
+        "valueIBrought"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative",
+          "sectionId": "key-design-decisions"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "projectClosure.deliveryAndMeasurement",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "projectClosure.ownershipAndCollaboration",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "projectClosure.statusAndDisclosure",
+          "sectionId": "status-and-disclosure"
+        },
+        {
+          "blockPath": "projectModel",
+          "sectionId": "taishin-research-definition-model"
+        },
+        {
+          "blockPath": "publicContent",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.contentStatus",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.criticalProblem",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.primaryDecisionsRef",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.projectModelRef",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.sectionOrderRef",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "publicContent.whatMadeThisHard",
+          "sectionId": "research-and-specification-evidence"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "cathay-mortgage-assistant": {
+      "approvedPublicBlocks": 17,
+      "renderRequiredBlocks": [
+        "decisionNarrative.primaryDecisions.0",
+        "decisionNarrative.primaryDecisions.1",
+        "decisionNarrative.primaryDecisions.2",
+        "heroMetadata",
+        "ownershipModel",
+        "roleAndOwnership",
+        "sourceEvidence",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "designDecisions.0",
+        "designDecisions.1",
+        "designDecisions.2",
+        "domainTags",
+        "heroVisualBrief",
+        "publicContent.contentStatus",
+        "publicContent.sectionOrderRef",
+        "searchIndexV2"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.0",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.1",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "decisionNarrative.primaryDecisions.2",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "sourceEvidence",
+          "sectionId": "consultation-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "payment": {
+      "approvedPublicBlocks": 44,
+      "renderRequiredBlocks": [
+        "decisionNarrative",
+        "deliveryAndMeasurement.operationalReadiness",
+        "heroMetadata",
+        "operationalSystemOwnership",
+        "ownershipModel",
+        "publicContent.recognition",
+        "publicContent.voucherIntegrationRef",
+        "recognition",
+        "roleAndOwnership",
+        "roleAndOwnership.systemOwnership",
+        "voucherIntegration",
+        "whatThisProves",
+        "zeroToOneMandate"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "crossFunctionalDelivery",
+        "deliveryBoundary",
+        "domainTags",
+        "heroVisualBrief",
+        "interviewDeckEvidence",
+        "organisationalLeadership",
+        "outcomes",
+        "outcomes.recognition",
+        "principalReadinessAudit",
+        "publicContent",
+        "publicContent.contentStatus",
+        "publicContent.crossFunctionalDeliveryRef",
+        "publicContent.fieldResearch",
+        "publicContent.imageBudget",
+        "publicContent.imagePlan",
+        "publicContent.mediaStrategy",
+        "publicContent.myContribution",
+        "publicContent.operationalReadiness",
+        "publicContent.operationalSystemOwnership",
+        "publicContent.optionalGallery",
+        "publicContent.programmeLeadership",
+        "publicContent.recognitionRef",
+        "publicContent.sectionOrderRef",
+        "researchAndValidation",
+        "researchAndValidation.fieldResearchProgramme",
+        "researchAndValidation.validationCadence",
+        "searchIndexV2",
+        "sourceEvidence",
+        "valueIBrought",
+        "visualEvidenceStatus"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative",
+          "sectionId": "key-decisions"
+        },
+        {
+          "blockPath": "deliveryAndMeasurement.operationalReadiness",
+          "sectionId": "delivery-and-measurement"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "operationalSystemOwnership",
+          "sectionId": "transaction-model"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "publicContent.recognition",
+          "sectionId": "recognition"
+        },
+        {
+          "blockPath": "publicContent.voucherIntegrationRef",
+          "sectionId": "voucher-and-loyalty-integration"
+        },
+        {
+          "blockPath": "recognition",
+          "sectionId": "recognition"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "roleAndOwnership.systemOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "voucherIntegration",
+          "sectionId": "voucher-and-loyalty-integration"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        },
+        {
+          "blockPath": "zeroToOneMandate",
+          "sectionId": "transaction-model"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "cathay-sit-online-account-opening": {
+      "approvedPublicBlocks": 21,
+      "renderRequiredBlocks": [
+        "heroMetadata",
+        "ownershipModel",
+        "publicContent.systemFraming",
+        "roleAndOwnership",
+        "sourceEvidence",
+        "targetSystemModel",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "discoveryEvidence",
+        "domainTags",
+        "heroVisualBrief",
+        "outcomeReporting",
+        "principalReadinessAudit",
+        "publicContent",
+        "publicContent.confidentialityNote",
+        "publicContent.contentStatus",
+        "publicContent.myContribution",
+        "publicContent.sectionOrderRef",
+        "scopeBoundaries",
+        "searchIndexV2",
+        "sourceStatus"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "publicContent.systemFraming",
+          "sectionId": "multi-route-transaction-model"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "sourceEvidence",
+          "sectionId": "delivery-proof"
+        },
+        {
+          "blockPath": "targetSystemModel",
+          "sectionId": "multi-route-transaction-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "cathay-sit-review-remediation-operations": {
+      "approvedPublicBlocks": 23,
+      "renderRequiredBlocks": [
+        "futureDirection",
+        "heroMetadata",
+        "ownershipModel",
+        "priorityModel",
+        "publicContent.researchScale",
+        "roleAndOwnership",
+        "sourceEvidence",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "currentStateEvidence",
+        "domainTags",
+        "heroVisualBrief",
+        "operationalScale",
+        "outcomeReporting",
+        "principalReadinessAudit",
+        "publicContent",
+        "publicContent.confidentialityNote",
+        "publicContent.contentStatus",
+        "publicContent.myContribution",
+        "publicContent.sectionOrderRef",
+        "researchCoverage",
+        "searchIndexV2",
+        "workshopEvidence"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "futureDirection",
+          "sectionId": "initial-strategies"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "priorityModel",
+          "sectionId": "five-phase-journey-map"
+        },
+        {
+          "blockPath": "publicContent.researchScale",
+          "sectionId": "five-phase-journey-map"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "sourceEvidence",
+          "sectionId": "delivery-proof"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "ctbc-mortgage-self-service-app": {
+      "approvedPublicBlocks": 22,
+      "renderRequiredBlocks": [
+        "deliveryAndMeasurement",
+        "deliveryHighlights",
+        "heroMetadata",
+        "ownershipModel",
+        "projectClosure.deliveryAndMeasurement",
+        "roleAndOwnership",
+        "targetSystemModel",
+        "userModel",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "currentStateEvidence",
+        "domainTags",
+        "heroVisualBrief",
+        "outcomeReporting",
+        "principalReadinessAudit",
+        "publicContent",
+        "publicContent.confidentialityNote",
+        "publicContent.contentStatus",
+        "publicContent.myContribution",
+        "publicContent.sectionOrderRef",
+        "searchIndexV2",
+        "sourceEvidence"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "deliveryAndMeasurement",
+          "sectionId": "delivery-and-measurement"
+        },
+        {
+          "blockPath": "deliveryHighlights",
+          "sectionId": "delivery-proof"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "projectClosure.deliveryAndMeasurement",
+          "sectionId": "delivery-proof"
+        },
+        {
+          "blockPath": "roleAndOwnership",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "targetSystemModel",
+          "sectionId": "confidence-model"
+        },
+        {
+          "blockPath": "userModel",
+          "sectionId": "confidence-model"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    },
+    "booking-taxi-pickup-service-strategy": {
+      "approvedPublicBlocks": 18,
+      "renderRequiredBlocks": [
+        "decisionNarrative",
+        "heroMetadata",
+        "ownershipModel",
+        "projectClosure.deliveryAndMeasurement",
+        "projectClosure.ownershipAndCollaboration",
+        "projectClosure.statusAndDisclosure",
+        "projectModel",
+        "publicContent",
+        "publicContent.contentStatus",
+        "publicContent.criticalProblem",
+        "publicContent.primaryDecisionsRef",
+        "publicContent.projectModelRef",
+        "publicContent.sectionOrderRef",
+        "publicContent.whatMadeThisHard",
+        "whatThisProves"
+      ],
+      "supportingBlocks": [],
+      "demotedBlocks": [
+        "",
+        "searchIndexV2",
+        "valueIBrought"
+      ],
+      "privateBlocks": [],
+      "renderedBlocks": [
+        {
+          "blockPath": "decisionNarrative",
+          "sectionId": "key-design-decisions"
+        },
+        {
+          "blockPath": "heroMetadata",
+          "sectionId": "hero"
+        },
+        {
+          "blockPath": "ownershipModel",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "projectClosure.deliveryAndMeasurement",
+          "sectionId": "recommendation-evidence"
+        },
+        {
+          "blockPath": "projectClosure.ownershipAndCollaboration",
+          "sectionId": "ownership-and-collaboration"
+        },
+        {
+          "blockPath": "projectClosure.statusAndDisclosure",
+          "sectionId": "status-and-disclosure"
+        },
+        {
+          "blockPath": "projectModel",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.contentStatus",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.criticalProblem",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.primaryDecisionsRef",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.projectModelRef",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.sectionOrderRef",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "publicContent.whatMadeThisHard",
+          "sectionId": "booking-pickup-research-strategy"
+        },
+        {
+          "blockPath": "whatThisProves",
+          "sectionId": "continue-exploring"
+        }
+      ],
+      "unexpectedMissingBlocks": [],
+      "orphanedBlocks": [],
+      "duplicateBlocks": [],
+      "invalidSupportingBlocks": []
+    }
+  }
+}

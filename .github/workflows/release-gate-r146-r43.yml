@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 23
+# orchestration revision: 24
 
 on:
   pull_request:
@@ -14,6 +14,11 @@ on:
       - public/site/content/portfolio-asset-manifest.json
       - public/site/assets/js/app.js
       - public/site/assets/css/components/project-detail-overview.css
+      - public/site/assets/css/tokens.css
+      - public/site/docs/content-completeness-audit.json
+      - scripts/content-completeness-audit.mjs
+      - scripts/case-study-dom-audit.mjs
+      - package.json
       - public/site/qa/asset-governance.mjs
       - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png
       - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png
@@ -64,14 +69,18 @@ jobs:
             ':(exclude)public/site/assets/js/app.js' \
             ':(exclude)public/site/assets/js/home.js' \
             ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
+            ':(exclude)public/site/assets/css/tokens.css' \
             ':(exclude)public/site/assets/css/components/domain-selector.css' \
             ':(exclude)public/site/content/portfolio-asset-manifest.json' \
             ':(exclude)public/site/docs/stage-visual-evidence-map.json' \
             ':(exclude)public/site/docs/voucher-content-merge-audit.json' \
+            ':(exclude)public/site/docs/content-completeness-audit.json' \
             ':(exclude)worker/index.ts' \
             ':(exclude)scripts/build-production-assets.mjs' \
             ':(exclude)scripts/generate-project-pages.mjs' \
             ':(exclude)scripts/case-study-dom-audit.mjs' \
+            ':(exclude)scripts/content-completeness-audit.mjs' \
+            ':(exclude)package.json' \
             ':(exclude)vercel.json' \
             ':(exclude)tests/rendered-html.test.mjs' \
             ':(exclude)tests/asset-governance.test.mjs' \
@@ -86,14 +95,18 @@ jobs:
             public/site/assets/js/app.js \
             public/site/assets/js/home.js \
             public/site/assets/css/components/project-detail-overview.css \
+            public/site/assets/css/tokens.css \
             public/site/assets/css/components/domain-selector.css \
             public/site/content/portfolio-asset-manifest.json \
             public/site/docs/stage-visual-evidence-map.json \
             public/site/docs/voucher-content-merge-audit.json \
+            public/site/docs/content-completeness-audit.json \
             worker/index.ts \
             scripts/build-production-assets.mjs \
             scripts/generate-project-pages.mjs \
             scripts/case-study-dom-audit.mjs \
+            scripts/content-completeness-audit.mjs \
+            package.json \
             vercel.json \
             tests/rendered-html.test.mjs \
             tests/asset-governance.test.mjs \
@@ -108,6 +121,8 @@ jobs:
           grep -Fq 'generate-project-pages.mjs' scripts/build-production-assets.mjs
           grep -Fq 'Object.entries(content.projects' scripts/generate-project-pages.mjs
           ! test -e public/site/work/voucher-center-only.html
+          grep -Fq 'contentPresentationContract' public/site/content/portfolio-content.json
+          grep -Fq 'unexpectedMissingBlocks' scripts/content-completeness-audit.mjs
           ! grep -E '^\+.*(sr-only|hidden)' <(git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/js/app.js scripts/generate-project-pages.mjs)
           test -z "$(git status --short)"
           echo "PASS: product source matches the approved Voucher content and Stage visual evidence implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
@@ -141,8 +156,8 @@ jobs:
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 63' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 63' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 64' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 64' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
           grep -Fq 'Asset governance passed: 13 projects, 37 derived slots, 37 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"

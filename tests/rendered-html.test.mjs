@@ -330,7 +330,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-08-r147");
+  assert.equal(ssot.contentVersion, "2026-08-09-r148");
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -1349,4 +1349,31 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
     /\.stage-decision-problem\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-evidence-item\)/,
     /\.stage-decision-meta>div\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-subtle\)/
   ]) assert.doesNotMatch(css, forbidden);
+});
+
+test("contracts every approved recruiter block to an explicit public role", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const contract=ssot.implementationContracts.contentPresentationContract;
+  assert.deepEqual(contract.allowedPublicRoles,["RENDER","SUPPORTING","DEMOTED","PRIVATE"]);
+  assert.match(contract.statusResolution,/longest matching sourcePath/i);
+  assert.match(read("../../scripts/content-completeness-audit.mjs"),/unexpectedMissingBlocks/);
+  assert.match(read("../../scripts/content-completeness-audit.mjs"),/orphanedBlocks/);
+  for(const [id,project] of Object.entries(ssot.projects)){
+    const projectContract=contract.projects[id];
+    assert.ok(projectContract,`${id}: missing content presentation contract`);
+    for(const [sectionId,section] of Object.entries(projectContract.sections||{})){
+      if(!section.renderRequired)continue;
+      assert.ok(project.sectionOrder.includes(sectionId),`${id}: ${sectionId} missing from sectionOrder`);
+      assert.ok(section.presentationType,`${id}: ${sectionId} missing presentationType`);
+      assert.ok(section.sourcePaths?.length,`${id}: ${sectionId} missing sourcePaths`);
+    }
+    for(const supporting of projectContract.supporting||[]){
+      assert.ok(project.sectionOrder.includes(supporting.parentSectionId),`${id}: supporting parent ${supporting.parentSectionId} missing`);
+      assert.ok(supporting.presentationType,`${id}: supporting block missing presentationType`);
+    }
+  }
+  assert.ok(ssot.projects.voucher.sectionOrder.includes("core-system-insight"));
+  assert.match(read("assets/js/app.js"),/contentPresentationSources\(project,sectionId\)/);
+  assert.match(read("assets/js/app.js"),/dataset\.contentBlockIds/);
+  assert.match(read("assets/css/components/project-detail-overview.css"),/\.editorial-statement-v224__statement/);
 });
