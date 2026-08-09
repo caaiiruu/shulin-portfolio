@@ -1399,5 +1399,6 @@ test("projects exact canonical Outcome claims through the shared Case Study syst
   for (const token of ["--case-page-max:", "--case-reading-max:", "--case-evidence-max:", "--case-page-gutter:", "--case-gap-chapter:", "--case-gap-section:", "--case-gap-subsection:", "--case-gap-content:", "--case-gap-caption:"]) assert.ok(tokens.includes(token), token);
   assert.match(overview, /\.case-study-section\{[^}]*width:min\(100%,var\(--case-page-max\)\)/);
   assert.match(overview, /\.impact-evidence-v147\{[^}]*var\(--case-evidence-max\)/);
+  assert.match(overview, /\.impact-evidence-v147__heading h4,[^}]*font-size:var\(--text-h3\)/);
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
 });
