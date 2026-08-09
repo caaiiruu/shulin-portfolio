@@ -1040,7 +1040,7 @@ test("prevents narrow-column recruiter content and forced word breaking", () => 
   assert.match(overview, /\.decision-considerations-v46\{[^}]*grid-template-columns:1fr/);
   assert.match(overview, /\.decision-card-v46\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
   assert.match(overview, /\.decision-considerations-v46>div\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
-  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*border-top:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
+  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*border:0;[^}]*background:transparent/);
   assert.doesNotMatch(overview, /\.decision-result-block-v58\{[^}]*padding-left:/);
   assert.match(overview, /\.project-context-v45__hard ul\{[^}]*padding:0[^}]*list-style:none/);
   assert.match(overview, /\.ownership-section-v45>\.section-heading-v45\{[^}]*margin-bottom:0/);
@@ -1099,7 +1099,8 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /appendEvidenceValue\(card,value\)/);
   assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
   assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
-  assert.match(overview, /\.case-study-section\{[^}]*border-top:var\(--dimension-1px\) solid var\(--color-border\)[^}]*border-radius:0/);
+  assert.match(overview, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
+  assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
   assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
   assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
