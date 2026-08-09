@@ -22,10 +22,17 @@ const projects=[
 const ssot=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const presentation=ssot.implementationContracts.contentPresentationContract;
 const stageUrl='/site/work/voucher?stage=discover';
-const viewports=[1440,1280,1024,768,430,390,375,320];
+const viewports=[1440,1280,1024,871,768,430,390,375,320];
 const browser=await chromium.launch({headless:true});
 const failures=[];
-const report={projects:{},stageDecision:{},viewports:{}};
+const report={projects:{},stageDecision:{},viewports:{},outcomes:{},geometry:{}};
+const localizedValue=(value,locale)=>value&&typeof value==='object'&&!Array.isArray(value)?String(value[locale]||''):String(value||'');
+const expectedOutcome=(project,locale)=>(project.outcomeEvidenceModel||[]).map((item,index)=>{
+  if(!item||['private','blocked'].includes(item.publicUse))return null;
+  const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
+  const value=sourceField==='values'?(item.values||[]).map(v=>localizedValue(v,locale)).filter(Boolean).join(' · '):localizedValue(item[sourceField],locale);
+  return sourceField&&value?{sourcePath:`outcomeEvidenceModel.${index}.${sourceField}`,value}:null;
+}).filter(Boolean);
 const audit=async page=>page.evaluate(()=>{
   const visible=el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden'};
   const transparent=color=>color==='rgba(0, 0, 0, 0)'||color==='transparent'||/rgba\([^)]*,\s*0\)$/.test(color);
@@ -75,6 +82,13 @@ for(const [id,url] of projects){
   const result=await audit(page);report.projects[id]=result;check(id,result);
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-1440.png'),fullPage:true});
+  const expectedEn=expectedOutcome(ssot.projects[id],'en');
+  const renderedEn=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden'})));
+  const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
+  if(await outcome.isVisible().catch(()=>false)){await outcome.scrollIntoViewIfNeeded();await outcome.screenshot({path:path.join(dir,'outcome-1440.png')})}
+  const matchEn=JSON.stringify(renderedEn.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedEn);
+  if(!matchEn||renderedEn.some(x=>!x.visible)||!renderedEn.length)failures.push(`${id}: exact EN Outcome projection failed ${JSON.stringify({expectedEn,renderedEn})}`);
+  report.outcomes[id]={expectedEn,renderedEn,matchEn};
   for(const [name,selector] of [['top-two-screens','.project-detail-v45'],['overview-decisions','.detail-overview-v45'],['decision','.decision-section-v45'],['impact','.impact-section-v45'],['ownership','.ownership-section-v45']]){const el=page.locator(selector).first();if(await el.isVisible().catch(()=>false)){await el.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(dir,`${name}-1440.png`),fullPage:false})}}
   await context.close();
 }
@@ -99,6 +113,40 @@ for(const width of viewports){
   await page.goto(base+'/site/work',{waitUntil:'networkidle'});await page.screenshot({path:path.join(dir,'domain.png'),fullPage:true});
   report.viewports[width]={overflow,horizontalLegacyInsets:horizontalInset,stageDecisionSurfaces:stage.decisionStructure.disallowedCardLikeSurfaces,pass:overflow<=0&&!horizontalInset.length&&!stage.decisionStructure.disallowedCardLikeSurfaces.length};
   if(!report.viewports[width].pass)failures.push(`viewport ${width}: ${JSON.stringify(report.viewports[width])}`);
+  await context.close();
+}
+for(const [id,url] of projects){
+  const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();
+  await page.goto(base+'/site',{waitUntil:'networkidle'});
+  const toggle=page.locator('[data-lang-toggle]').first();
+  if(await toggle.isVisible().catch(()=>false))await toggle.click();
+  await page.goto(base+url,{waitUntil:'networkidle'});await page.waitForTimeout(400);
+  const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
+  await page.screenshot({path:path.join(dir,'full-390.png'),fullPage:true});
+  const expectedZh=expectedOutcome(ssot.projects[id],'zh');
+  const renderedZh=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden',fontSize:parseFloat(getComputedStyle(node).fontSize),opacity:parseFloat(getComputedStyle(node).opacity)})));
+  const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
+  if(await outcome.isVisible().catch(()=>false)){await outcome.scrollIntoViewIfNeeded();await outcome.screenshot({path:path.join(dir,'outcome-390.png')})}
+  const matchZh=JSON.stringify(renderedZh.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedZh);
+  const readable=renderedZh.length&&renderedZh.every(x=>x.visible&&x.fontSize>=14&&x.opacity>=.75&&x.value.length>=8);
+  if(!matchZh||!readable)failures.push(`${id}: exact ZH/readable Outcome projection failed ${JSON.stringify({expectedZh,renderedZh})}`);
+  const edge=await page.evaluate(()=>{const nodes=[...document.querySelectorAll('.case-study-section__header,[data-outcome-source-path],.impact-evidence-v147__business-impact')].filter(el=>el.getClientRects().length);const xs=nodes.map(el=>Math.round(el.getBoundingClientRect().left*10)/10);return {xs,deviation:xs.length?Math.max(...xs)-Math.min(...xs):0,gutter:xs[0]||0}});
+  if(edge.deviation>1)failures.push(`${id}: mobile reading-edge deviation ${edge.deviation}px`);
+  report.outcomes[id]={...report.outcomes[id],expectedZh,renderedZh,matchZh,readable};
+  report.geometry[id]={mobile390:edge};
+  await context.close();
+}
+{
+  const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
+  await page.goto(base+'/site/work',{waitUntil:'networkidle'});
+  const domainDir=path.join(out,'domains');fs.mkdirSync(domainDir,{recursive:true});
+  const domainControls=page.locator('[data-domain-id], [data-domain-filter], .domain-selector button');
+  const domainCount=Math.min(6,await domainControls.count());
+  for(let i=0;i<domainCount;i++){const control=domainControls.nth(i);if(await control.isVisible().catch(()=>false)){await control.click();await page.waitForTimeout(150);await page.screenshot({path:path.join(domainDir,`domain-${i+1}.png`),fullPage:true})}}
+  await page.goto(base+'/site',{waitUntil:'networkidle'});
+  const searchDir=path.join(out,'search');fs.mkdirSync(searchDir,{recursive:true});
+  const search=page.locator('input[type="search"], [data-search-input]').first();
+  for(const [i,query] of ['payment','voucher','banking'].entries()){if(await search.isVisible().catch(()=>false)){await search.fill(query);await page.waitForTimeout(300);await page.screenshot({path:path.join(searchDir,`search-${i+1}-${query}.png`),fullPage:true})}}
   await context.close();
 }
 await browser.close();

@@ -1389,3 +1389,15 @@ test("contracts every approved recruiter block to an explicit public role", () =
   assert.match(read("assets/js/app.js"),/dataset\.contentBlockIds/);
   assert.match(read("assets/css/components/project-detail-overview.css"),/\.editorial-statement-v224__statement/);
 });
+
+
+test("projects exact canonical Outcome claims through the shared Case Study system", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const tokens = read("assets/css/tokens.css");
+  for (const contract of ["function publicOutcomeSignals(project)", "dataset.outcomeSourcePath", "dataset.outcomeExactProjection='true'", "Business impact", "商業影響"]) assert.ok(app.includes(contract), contract);
+  for (const token of ["--case-page-max:", "--case-reading-max:", "--case-evidence-max:", "--case-page-gutter:", "--case-gap-chapter:", "--case-gap-section:", "--case-gap-subsection:", "--case-gap-content:", "--case-gap-caption:"]) assert.ok(tokens.includes(token), token);
+  assert.match(overview, /\.case-study-section\{[^}]*width:min\(100%,var\(--case-page-max\)\)/);
+  assert.match(overview, /\.impact-evidence-v147\{[^}]*var\(--case-evidence-max\)/);
+  assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
+});

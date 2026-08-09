@@ -1823,59 +1823,64 @@
     }
     card.appendChild(element('strong','recruiter-proof-item-v46__statement',text));
   }
+  function publicOutcomeSignals(project){
+    return list(project.outcome_evidence_model)
+      .map((item,index)=>{
+        if(!item||['private','blocked'].includes(item.publicUse))return null;
+        const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
+        const value=localize(item.claim)||localize(item.publicValue)||list(item.values).map(localize).filter(Boolean).join(' · ');
+        if(!sourceField||!value)return null;
+        return {item,index,value,sourcePath:`outcomeEvidenceModel.${index}.${sourceField}`};
+      })
+      .filter(Boolean);
+  }
   function renderImpactEvidence(project,node,section,deliverySection){
     const model=project.impact_evidence;
-    if(!model)return false;
+    const signals=publicOutcomeSignals(project);
+    if(!model||!signals.length)return false;
     const labels=DATA.implementationContracts?.impactEvidenceLabels||{};
     const shell=element('div',`impact-evidence-v147 impact-evidence-v147--${model.variant||'scale-and-system-change'}`);
     shell.dataset.impactVariant=model.variant||'';
     shell.dataset.recruiterOutcome='visible';
+    shell.dataset.outcomeExactProjection='true';
+    const primary=signals[0];
     const heading=element('div','impact-evidence-v147__heading');
     heading.append(
-      element('span','impact-evidence-v147__eyebrow',lang==='zh'?'成果證據':'Outcome evidence'),
-      element('h3','',lang==='zh'?(localize(project.businessImpact)||localize(project.impact_pair)):model.recommendedHeadline)
+      element('span','impact-evidence-v147__eyebrow',lang==='zh'?'主要成果':'Primary outcome'),
+      element('h3','impact-evidence-v147__primary',primary.value)
     );
-    const evidenceType=localize(labels[model.variant]);
-    if(evidenceType)heading.appendChild(element('p','impact-evidence-v147__type',evidenceType));
+    heading.querySelector('h3').dataset.outcomeSourcePath=primary.sourcePath;
     shell.append(heading);
     const metrics=element('dl','impact-evidence-v147__metrics');
-    if(lang==='zh'){
-      list(project.outcome_evidence_model).filter(item=>item&&item.publicUse!=='private').slice(0,4).forEach(item=>{
-        const claim=localize(item.claim)||localize(item.publicValue);
-        if(!claim)return;
-        const metric=element('div','impact-evidence-v147__metric');
-        metric.append(element('dt','',localize(item.outcomeType)),element('dd','',claim));
-        metrics.append(metric);
-      });
-    }else{
-      [...list(model.primaryMetrics),...list(model.supportingMetrics)].slice(0,6).forEach(item=>{
-        if(!item?.value||!item?.label)return;
-        const metric=element('div','impact-evidence-v147__metric');
-        metric.append(
-          element('dt','',item.label),
-          element('dd','',item.value),
-          item.detail?element('span','impact-evidence-v147__detail',item.detail):element('span','sr-only','')
-        );
-        metrics.append(metric);
-      });
-    }
+    signals.slice(1,4).forEach(signal=>{
+      const metric=element('div','impact-evidence-v147__metric');
+      metric.dataset.outcomeSourcePath=signal.sourcePath;
+      metric.append(
+        element('dt','',localize(signal.item.outcomeType)||localize(labels[model.variant])||(lang==='zh'?'成果證據':'Outcome evidence')),
+        element('dd','',signal.value)
+      );
+      metrics.append(metric);
+    });
     if(metrics.childElementCount)shell.append(metrics);
-    const interpretation=model.additionalProof||model.shippedProof||list(model.decisionSignals)[0]||list(model.supportingSignals)[0];
-    if(interpretation&&lang!=='zh'){
-      const insight=element('div','impact-evidence-v147__interpretation');
-      insight.append(element('span','',localize(labels.interpretation)),element('p','',interpretation));
-      shell.append(insight);
+    const businessImpact=localize(project.businessImpact)||localize(project.impact_pair);
+    if(businessImpact&&businessImpact!==primary.value){
+      const impact=element('div','impact-evidence-v147__business-impact');
+      impact.append(
+        element('span','impact-evidence-v147__eyebrow',lang==='zh'?'商業影響':'Business impact'),
+        element('p','',businessImpact)
+      );
+      shell.append(impact);
     }
-    if(model.boundary&&lang!=='zh'){
-      const boundary=element('p','impact-evidence-v147__boundary');
-      boundary.append(element('span','',localize(labels.boundary)),doc.createTextNode(` — ${model.boundary}`));
-      shell.append(boundary);
+    const boundary=localize(project.confidentialityNote)||localize(project.confidentiality_note);
+    if(boundary){
+      const note=element('p','impact-evidence-v147__boundary',boundary);
+      shell.append(note);
     }
     node.append(shell);
     section.hidden=false;
     return true;
-
   }
+
   function renderDeliveryOutcomes(project){
     const node=doc.getElementById('recruiterProof');
     const section=node?.closest('article');

@@ -26,6 +26,12 @@ on:
       - public/site/docs/voucher-content-merge-audit.json
       - scripts/build-production-assets.mjs
   workflow_dispatch:
+    inputs:
+      ref:
+        description: Exact QA branch, tag, or commit to validate
+        required: true
+        default: qa/r146-r43-preview-2026-08-06
+        type: string
 
 permissions:
   contents: read
@@ -47,7 +53,7 @@ jobs:
       - name: Complete private checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -66,6 +72,7 @@ jobs:
             git branch --show-current
             echo "current_qa_head:"
             git rev-parse HEAD
+            echo "requested_checkout_ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
             echo "implementation_baseline=$IMPLEMENTATION_HEAD"
             echo "status:"
             git status --short
@@ -73,6 +80,8 @@ jobs:
             sha256sum public/site/content/portfolio-content.json
             echo "tracked_file_count=$(git ls-files | wc -l)"
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
+          expected_checkout_ref="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "$expected_checkout_ref^{commit}")"
           test "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')" = "$EXPECTED_SSOT_SHA256"
           grep -Fq '"contentVersion": "2026-08-09-r148"' public/site/content/portfolio-content.json
           git merge-base --is-ancestor "$IMPLEMENTATION_HEAD" HEAD
@@ -84,6 +93,7 @@ jobs:
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
+          scripts/case-study-dom-audit.mjs
           tests/rendered-html.test.mjs
           FILES
           diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
@@ -430,6 +440,19 @@ jobs:
       - name: Rendered CaseStudySection DOM and screenshot gate
         shell: bash
         run: node scripts/case-study-dom-audit.mjs
+
+      - name: Upload Step 5 screenshot QA package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step-5-semantic-outcome-layout-screenshots
+          path: |
+            /tmp/release-gate-r146-r43/case-study
+            /tmp/release-gate-r146-r43/domains
+            /tmp/release-gate-r146-r43/search
+            /tmp/release-gate-r146-r43/case-study-dom-audit.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Compose release gate report
         if: always()
