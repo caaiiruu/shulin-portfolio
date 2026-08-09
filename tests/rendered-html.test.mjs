@@ -647,7 +647,8 @@ test("preserves search interaction while using r85 as the active inventory", () 
   for (const contract of ["let mode='idle'", "setWorkspace('matched',before)", "setMatcherState('loading',keep)", "pendingResultFocus=true"]) assert.ok(home.includes(contract), contract);
   const labels = Object.values(content.localizationRegistry.runtimeUiLabels).map((value) => value.en);
   for (const label of ["Why it fits", "Evidence"]) assert.ok(labels.includes(label), label);
-  for (const contract of ["p.card_outcome", "localize(v)"]) assert.ok(home.includes(contract), contract);
+  for (const contract of ["window.PORTFOLIO_RUNTIME_DATA", "p.search_evidence_pair", "p.what_this_proves", "localize(v)"]) assert.ok(home.includes(contract), contract);
+  assert.doesNotMatch(home, /p\.card_outcome|p\.domain_proof/);
   for (const contract of ["matcherSuggestions", "match-project-grid"]) assert.ok(html.includes(contract), contract);
   assert.ok(Object.values(content.localizationRegistry.staticPageCopy).some(value=>value.en==='Most relevant projects'));
   assert.equal(Object.keys(content.projects).length, 13);
