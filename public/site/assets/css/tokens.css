@@ -253,6 +253,14 @@
   --popup-control-inset-inline: clamp(var(--dimension-32px), var(--dimension-4vw), var(--dimension-56px));
   --domain-anchor-gap: var(--space-7);
 
+  /* Project detail reading and rhythm tokens */
+  --project-detail-copy-measure: var(--dimension-68ch);
+  --project-detail-section-gap: clamp(var(--space-6), var(--dimension-4vw), var(--space-8));
+  --project-detail-section-pad-block: clamp(var(--space-7), var(--dimension-4vw), var(--space-9));
+  --project-detail-section-pad-inline: clamp(var(--space-5), var(--dimension-3vw), var(--space-8));
+  --project-detail-mobile-section-gap: var(--space-5);
+  --project-detail-mobile-section-pad-block: var(--space-7);
+
   /* SelectedEvidence component tokens */
   --evidence-section-gap: var(--space-8);
   --evidence-content-gap: var(--space-7);
