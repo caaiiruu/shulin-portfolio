@@ -171,10 +171,19 @@ for(const [id,url] of projects){
   const domainCount=Math.min(6,await domainControls.count());
   for(let i=0;i<domainCount;i++){const control=domainControls.nth(i);if(await control.isVisible().catch(()=>false)){await control.click();await page.waitForTimeout(150);await page.screenshot({path:path.join(domainDir,`domain-${i+1}.png`),fullPage:true})}}
   await page.goto(base+'/site',{waitUntil:'networkidle'});
+  await page.screenshot({path:path.join(domainDir,'homepage-1440.png'),fullPage:true});
   const searchDir=path.join(out,'search');fs.mkdirSync(searchDir,{recursive:true});
-  const search=page.locator('input[type="search"], [data-search-input]').first();
-  for(const [i,query] of ['payment','voucher','banking'].entries()){if(await search.isVisible().catch(()=>false)){await search.fill(query);await page.waitForTimeout(300);await page.screenshot({path:path.join(searchDir,`search-${i+1}-${query}.png`),fullPage:true})}}
+  const searchTrigger=page.locator('.header-search-v114').first();
+  if(await searchTrigger.isVisible().catch(()=>false))await searchTrigger.click();
+  const search=page.locator('#globalSearchInput').first();
+  await search.waitFor({state:'visible'});
+  for(const [i,query] of ['payment','voucher','banking'].entries()){await search.fill(query);await page.waitForTimeout(300);await page.screenshot({path:path.join(searchDir,`search-${i+1}-${query}.png`),fullPage:true})}
+  if((fs.readdirSync(searchDir).filter(file=>file.endsWith('.png')).length)!==3)failures.push('search screenshots: expected 3');
   await context.close();
+  const mobileContext=await browser.newContext({viewport:{width:390,height:844}}),mobile=await mobileContext.newPage();
+  await mobile.goto(base+'/site',{waitUntil:'networkidle'});
+  await mobile.screenshot({path:path.join(domainDir,'homepage-390.png'),fullPage:true});
+  await mobileContext.close();
 }
 await browser.close();
 fs.writeFileSync(path.join(out,'case-study-dom-audit.json'),JSON.stringify(report,null,2));
