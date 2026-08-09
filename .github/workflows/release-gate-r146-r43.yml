@@ -80,6 +80,8 @@ jobs:
           cat > /tmp/qa-allowed-files.txt <<'FILES'
           .github/workflows/release-gate-r146-r43.yml
           public/site/assets/css/components/domain-selector.css
+          public/site/assets/css/tokens.css
+          public/site/assets/css/components/project-detail-overview.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
           tests/rendered-html.test.mjs
@@ -290,6 +292,7 @@ jobs:
             {name:'desktop-1440',width:1440,height:1000},
             {name:'desktop-1280',width:1280,height:960},
             {name:'tablet-1024',width:1024,height:900},
+            {name:'tablet-871',width:871,height:1024},
             {name:'tablet-768',width:768,height:1024},
             {name:'mobile-430',width:430,height:932},
             {name:'mobile-390',width:390,height:844},
@@ -420,7 +423,7 @@ jobs:
           if(failures.length) throw new Error(failures.join('\n'));
           NODE
           node /tmp/release-gate.mjs
-          for viewport in desktop-1440 desktop-1280 tablet-1024 tablet-768 mobile-430 mobile-390 mobile-375 mobile-320; do
+          for viewport in desktop-1440 desktop-1280 tablet-1024 tablet-871 tablet-768 mobile-430 mobile-390 mobile-375 mobile-320; do
             cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/$viewport/audit.json"
           done
 
