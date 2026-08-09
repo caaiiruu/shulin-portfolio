@@ -82,6 +82,7 @@ jobs:
           public/site/assets/css/components/domain-selector.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
+          tests/rendered-html.test.mjs
           FILES
           diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
