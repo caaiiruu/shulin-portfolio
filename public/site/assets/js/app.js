@@ -394,7 +394,10 @@
       node.append(en,zh);
       node.setAttribute('aria-label',ui(lang==='en'?'switch-language-current-english':'switch-language-current-chinese'));
     });
-    if(currentDetail)renderDetail();
+    if(currentDetail){
+      renderDetail();
+      if(currentDetail.type==='project')refreshVisibleOutcomeProjection(DATA.projects[currentDetail.key]);
+    }
     decorateDocumentArrows();
     doc.dispatchEvent(new CustomEvent('portfolio:language',{detail:{lang}}));
     requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({left:scrollX,top:scrollY,behavior:'auto'})));
@@ -1903,6 +1906,20 @@
     return true;
   }
 
+  function refreshVisibleOutcomeProjection(project){
+    if(!project)return;
+    [...doc.querySelectorAll('.impact-evidence-v147')].forEach(shell=>{
+      if(!shell.getClientRects().length)return;
+      const section=shell.closest('.case-study-section')||shell.closest('article');
+      const host=element('div','outcome-projection-refresh');
+      if(!renderImpactEvidence(project,host,section,null)||!host.firstElementChild)return;
+      shell.replaceWith(host.firstElementChild);
+      const title=section?.querySelector(':scope > .case-study-section__header h2');
+      if(title)safeText(title,lang==='zh'?'成果':'Outcomes');
+      const impactLabel=section?.querySelector('.case-study-impact-copy__label');
+      if(impactLabel)safeText(impactLabel,lang==='zh'?'商業影響':'Business impact');
+    });
+  }
   function renderDeliveryOutcomes(project){
     const node=doc.getElementById('recruiterProof');
     const section=node?.closest('article');
