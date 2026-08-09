@@ -48,7 +48,7 @@
   text-transform:none;
 }
 .domain-project-list-v30 .related-project-card__visual-v45{display:grid;aspect-ratio:16/10;overflow:hidden;border-radius:var(--radius-md);background:var(--sys-color-surface-soft)}
-.domain-project-list-v30 .related-project-card__image-v148{display:block;width:100%;height:100%;object-fit:contain}
+.domain-project-list-v30 .related-project-card__image-v148{display:block;width:100%;height:100%;object-fit:cover}
 .domain-project-list-v30 .related-project-card-v45{min-height:var(--dimension-420px)}
 .domain-floating-nav-v52{position:fixed;z-index:80;left:50%;bottom:calc(var(--space-3) + env(safe-area-inset-bottom));box-sizing:border-box;width:min(calc(var(--dimension-100vw) - var(--dimension-24px)),var(--dimension-720px));padding:var(--space-1);overflow:hidden;transform:translate(-50%,calc(100% + var(--space-7)));opacity:0;visibility:hidden;pointer-events:none;border:var(--dimension-1px) solid var(--sys-color-border-strong);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--sys-color-surface) 96%,transparent);box-shadow:var(--shadow-raised);backdrop-filter:blur(var(--dimension-16px));transition:transform var(--motion-base) var(--ease-standard),opacity var(--motion-base) var(--ease-standard),visibility var(--dimension-0-01ms) linear var(--motion-base)}
 .domain-floating-nav-v52.is-visible{transform:translate(-50%,0);opacity:1;visibility:visible;pointer-events:auto;transition-delay:var(--dimension-0-01ms)}
