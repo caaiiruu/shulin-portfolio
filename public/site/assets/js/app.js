@@ -1874,7 +1874,7 @@
     node.append(shell);
     section.hidden=false;
     return true;
-  
+
   }
   function renderDeliveryOutcomes(project){
     const node=doc.getElementById('recruiterProof');
@@ -2838,7 +2838,7 @@
     safeText(doc.getElementById('detailPeriod'),localize(e.timeline));
     safeText(dialogTitle,localize(e.title));
     const fullStatus=localize(e.status);const stage=String(fullStatus).split(' · ')[0];
-    
+
     renderTags([]);
     const questionText=localize(e.question);
     const prototypeText=localize(e.prototype);
