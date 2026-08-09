@@ -297,7 +297,12 @@
         "Outcome metric evidence",
         "Structured case evidence",
         "Two-stage product validation path",
-        "Voucher Center r119 popup composition"
+        "Voucher Center r119 popup composition",
+        "Primary UI Evidence",
+        "Portrait Evidence",
+        "Supporting Evidence",
+        "System / Journey Diagram",
+        "Before / After Evidence"
       ],
       "interactionContract": [
         "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
@@ -339,9 +344,19 @@
         "Desktop, tablet and mobile preserve complete stage names, keyboard focus, minimum 48px primary controls and zero page-level horizontal overflow",
         "Stage cards use one shared grid owner across desktop, tablet and mobile; stage number, identity, reasoning, evidence, delivery status and action never rely on positional transforms, absolute calibration or page-level overrides",
         "Stage Evidence renders only when it is semantically distinct from Representative Shipped Work; the evidence strip supports two, three or four populated columns without empty placeholders",
-        "Dark Stage Focus surfaces use the registered on-dark primary, secondary, border and focus semantic tokens and meet WCAG AA contrast"
+        "Dark Stage Focus surfaces use the registered on-dark primary, secondary, border and focus semantic tokens and meet WCAG AA contrast",
+        "Primary, supporting, portrait and diagram evidence preserve intrinsic ratio with contain; production evidence is never cropped to normalize height",
+        "Portrait evidence is capped at 420px and never expands to the full Evidence edge",
+        "Before / After aligns top edges, uses a 40/60 hierarchy when shipped evidence is primary, and stacks Before then After on compact viewports",
+        "Caption is HTML aligned to the image edge with the canonical 8px caption gap",
+        "Placeholder and production sources use the same frame component and role identity"
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": true,
+      "assetFrameContract": {
+        "contentOwner": "content/portfolio-asset-manifest.json#frameSystemContract",
+        "delegatedCoverOwner": "assets/css/components/domain-selector.css#related-project-card__visual-v45",
+        "freeze": "After Step 6A only source, crop, object-position, safe area and justified mobile-specific source may change"
+      }
     },
     {
       "component": "DomainSelector",
@@ -681,45 +696,6 @@
         "Homepage"
       ],
       "exclusiveOwner": true
-    },
-    {
-      "component": "ImageFrameSystem",
-      "status": "Live / Current Production",
-      "renderSource": "assets/js/app.js and assets/js/home.js",
-      "contentOwner": "content/portfolio-asset-manifest.json#frameSystemContract",
-      "cssOwner": "assets/css/components/project-detail-overview.css",
-      "tokenDependencies": [
-        "case-reading-max",
-        "case-evidence-max",
-        "case-gap-caption",
-        "radius-sm"
-      ],
-      "variants": [
-        "Domain / Project Cover",
-        "Primary UI Evidence",
-        "Portrait Evidence",
-        "Supporting Evidence",
-        "System / Journey Diagram",
-        "Before / After Evidence"
-      ],
-      "interactionContract": [
-        "Cover uses 16:10 cover at desktop and tablet, with a 4:3 presentation viewport on mobile and per-asset object-position",
-        "Primary, supporting, portrait and diagram evidence preserve intrinsic ratio with contain; production evidence is never cropped to normalize height",
-        "Portrait evidence is capped at 420px and never expands to the full Evidence edge",
-        "Before / After aligns top edges, uses a 40/60 hierarchy when shipped evidence is primary, and stacks Before then After on compact viewports",
-        "Caption is HTML aligned to the image edge with the canonical 8px caption gap",
-        "Placeholder and production sources use the same frame component and role identity"
-      ],
-      "usageScope": [
-        "Domain project cards",
-        "Project details",
-        "Voucher stage evidence",
-        "Project gallery"
-      ],
-      "exclusiveOwner": true,
-      "delegatedOwners": {
-        "Domain / Project Cover": "assets/css/components/domain-selector.css#related-project-card__visual-v45"
-      }
     }
   ]
 }
