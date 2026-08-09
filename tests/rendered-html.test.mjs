@@ -1277,7 +1277,7 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
   assert.match(app, /impact-evidence-v147/);
   assert.match(css, /\.programme-stage-visual\{/);
   assert.match(css, /\.programme-stage-case__breakpoint\{/);
-  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.programme-stage-visual--before-after/);
+  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
 });
 
 test("locks the existing Voucher Card history and independent-project boundaries", () => {
