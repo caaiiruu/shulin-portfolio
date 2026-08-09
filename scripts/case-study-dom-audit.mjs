@@ -26,6 +26,14 @@ const viewports=[1440,1280,1024,871,768,430,390,375,320];
 const browser=await chromium.launch({headless:true});
 const failures=[];
 const report={projects:{},stageDecision:{},viewports:{},outcomes:{},geometry:{}};
+const captureOutcome=async(page,outcome,file)=>{
+  await page.addStyleTag({content:'.site-header,#detailClose,#detailBack,.dialog-controls-v67,.pd-section-nav,[data-skip-link]{display:none!important}'});
+  const height=await outcome.evaluate(node=>Math.ceil(node.getBoundingClientRect().height));
+  const viewport=page.viewportSize();
+  if(viewport&&height+64>viewport.height)await page.setViewportSize({width:viewport.width,height:height+64});
+  await outcome.scrollIntoViewIfNeeded();
+  await outcome.screenshot({path:file});
+};
 const localizedValue=(value,locale)=>value&&typeof value==='object'&&!Array.isArray(value)?String(value[locale]||''):String(value||'');
 const expectedOutcome=(project,locale)=>{
   const governed=(project.outcomeEvidenceModel||[]).map((item,index)=>{
@@ -103,7 +111,7 @@ for(const [id,url] of projects){
   const expectedEn=expectedOutcome(ssot.projects[id],'en');
   const renderedEn=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden'})));
   const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
-  if(await outcome.isVisible().catch(()=>false)){await outcome.scrollIntoViewIfNeeded();await page.addStyleTag({content:'.site-header,#detailClose,#detailBack,.dialog-controls-v67,.pd-section-nav,[data-skip-link]{display:none!important}'});await outcome.screenshot({path:path.join(dir,'outcome-1440.png')})}
+  if(await outcome.isVisible().catch(()=>false))await captureOutcome(page,outcome,path.join(dir,'outcome-1440.png'))
   const matchEn=JSON.stringify(renderedEn.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedEn);
   if(!matchEn||renderedEn.some(x=>!x.visible)||!renderedEn.length)failures.push(`${id}: exact EN Outcome projection failed ${JSON.stringify({expectedEn,renderedEn})}`);
   report.outcomes[id]={expectedEn,renderedEn,matchEn};
@@ -145,7 +153,7 @@ for(const [id,url] of projects){
   const expectedZh=expectedOutcome(ssot.projects[id],'zh');
   const renderedZh=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden',fontSize:parseFloat(getComputedStyle(node).fontSize),opacity:parseFloat(getComputedStyle(node).opacity)})));
   const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
-  if(await outcome.isVisible().catch(()=>false)){await outcome.scrollIntoViewIfNeeded();await page.addStyleTag({content:'.site-header,#detailClose,#detailBack,.dialog-controls-v67,.pd-section-nav,[data-skip-link]{display:none!important}'});await outcome.screenshot({path:path.join(dir,'outcome-390.png')})}
+  if(await outcome.isVisible().catch(()=>false))await captureOutcome(page,outcome,path.join(dir,'outcome-390.png'))
   const matchZh=JSON.stringify(renderedZh.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedZh);
   const readable=renderedZh.length&&renderedZh.every(x=>x.visible&&x.fontSize>=14&&x.opacity>=.75&&x.value.length>=8);
   if(!matchZh||!readable)failures.push(`${id}: exact ZH/readable Outcome projection failed ${JSON.stringify({expectedZh,renderedZh})}`);
