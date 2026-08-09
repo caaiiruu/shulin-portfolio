@@ -1340,7 +1340,7 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.match(css, /\.ownership-grid-v45>article\{[^}]*border-radius:0;[^}]*background:transparent/);
   assert.match(css, /\.gallery-copy-v45\{[^}]*background:transparent/);
   assert.match(css, /\.gallery-thumbs-v45\{[^}]*background:transparent/);
-  assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--space-5\);width:100%\}/);
+  assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--case-gap-content\);width:min\(100%,var\(--case-evidence-max\)\);max-width:var\(--case-evidence-max\)\}/);
   assert.match(app, /dataset\.recruiterOutcome='visible'/);
   assert.match(app, /impact\.dataset\.recruiterOutcomeSection='visible'/);
   assert.match(app, /impactEvidence&&!appended\.has\(impact\)/);

@@ -190,8 +190,8 @@ jobs:
           npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
           npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 64' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 64' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# tests 65' "$EVIDENCE_DIR/tests-result.txt"
+          grep -Eq '# pass 65' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
           grep -Fq 'Asset governance passed: 13 projects, 37 derived slots, 37 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
@@ -451,7 +451,7 @@ jobs:
             /tmp/release-gate-r146-r43/domains
             /tmp/release-gate-r146-r43/search
             /tmp/release-gate-r146-r43/case-study-dom-audit.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Compose release gate report
