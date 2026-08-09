@@ -1824,7 +1824,7 @@
     card.appendChild(element('strong','recruiter-proof-item-v46__statement',text));
   }
   function publicOutcomeSignals(project){
-    return list(project.outcome_evidence_model)
+    const governed=list(project.outcome_evidence_model)
       .map((item,index)=>{
         if(!item||['private','blocked'].includes(item.publicUse))return null;
         const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
@@ -1833,6 +1833,20 @@
         return {item,index,value,sourcePath:`outcomeEvidenceModel.${index}.${sourceField}`};
       })
       .filter(Boolean);
+    if(governed.length)return governed;
+    const fallback=[];
+    const walk=(value,path)=>{
+      if(!value||fallback.length>=4)return;
+      if(value&&typeof value==='object'&&!Array.isArray(value)&&typeof value.en==='string'&&typeof value.zh==='string'){
+        const copy=localize(value);
+        if(copy&&copy.length>=8)fallback.push({item:{outcomeType:{en:'Completion evidence',zh:'完成證據'}},value:copy,sourcePath:path});
+        return;
+      }
+      if(Array.isArray(value))value.forEach((item,index)=>walk(item,`${path}.${index}`));
+      else if(typeof value==='object')Object.entries(value).forEach(([key,item])=>walk(item,`${path}.${key}`));
+    };
+    walk(project.publicContent?.completionEvidence,'publicContent.completionEvidence');
+    return fallback;
   }
   function renderImpactEvidence(project,node,section,deliverySection){
     const model=project.impact_evidence;

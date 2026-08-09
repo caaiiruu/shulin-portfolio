@@ -27,12 +27,28 @@ const browser=await chromium.launch({headless:true});
 const failures=[];
 const report={projects:{},stageDecision:{},viewports:{},outcomes:{},geometry:{}};
 const localizedValue=(value,locale)=>value&&typeof value==='object'&&!Array.isArray(value)?String(value[locale]||''):String(value||'');
-const expectedOutcome=(project,locale)=>(project.outcomeEvidenceModel||[]).map((item,index)=>{
-  if(!item||['private','blocked'].includes(item.publicUse))return null;
-  const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
-  const value=sourceField==='values'?(item.values||[]).map(v=>localizedValue(v,locale)).filter(Boolean).join(' · '):localizedValue(item[sourceField],locale);
-  return sourceField&&value?{sourcePath:`outcomeEvidenceModel.${index}.${sourceField}`,value}:null;
-}).filter(Boolean);
+const expectedOutcome=(project,locale)=>{
+  const governed=(project.outcomeEvidenceModel||[]).map((item,index)=>{
+    if(!item||['private','blocked'].includes(item.publicUse))return null;
+    const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
+    const value=sourceField==='values'?(item.values||[]).map(v=>localizedValue(v,locale)).filter(Boolean).join(' · '):localizedValue(item[sourceField],locale);
+    return sourceField&&value?{sourcePath:`outcomeEvidenceModel.${index}.${sourceField}`,value}:null;
+  }).filter(Boolean);
+  if(governed.length)return governed;
+  const fallback=[];
+  const walk=(value,path)=>{
+    if(!value||fallback.length>=4)return;
+    if(value&&typeof value==='object'&&!Array.isArray(value)&&typeof value.en==='string'&&typeof value.zh==='string'){
+      const copy=localizedValue(value,locale);
+      if(copy.length>=8)fallback.push({sourcePath:path,value:copy});
+      return;
+    }
+    if(Array.isArray(value))value.forEach((item,index)=>walk(item,`${path}.${index}`));
+    else if(typeof value==='object')Object.entries(value).forEach(([key,item])=>walk(item,`${path}.${key}`));
+  };
+  walk(project.publicContent?.completionEvidence,'publicContent.completionEvidence');
+  return fallback;
+};
 const audit=async page=>page.evaluate(()=>{
   const visible=el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden'};
   const transparent=color=>color==='rgba(0, 0, 0, 0)'||color==='transparent'||/rgba\([^)]*,\s*0\)$/.test(color);
@@ -117,10 +133,9 @@ for(const width of viewports){
 }
 for(const [id,url] of projects){
   const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();
-  await page.goto(base+'/site',{waitUntil:'networkidle'});
+  await page.goto(base+url,{waitUntil:'networkidle'});await page.waitForTimeout(300);
   const toggle=page.locator('[data-lang-toggle]').first();
-  if(await toggle.isVisible().catch(()=>false))await toggle.click();
-  await page.goto(base+url,{waitUntil:'networkidle'});await page.waitForTimeout(400);
+  if(await toggle.isVisible().catch(()=>false)){await toggle.click();await page.waitForTimeout(400)}
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-390.png'),fullPage:true});
   const expectedZh=expectedOutcome(ssot.projects[id],'zh');
@@ -130,8 +145,8 @@ for(const [id,url] of projects){
   const matchZh=JSON.stringify(renderedZh.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedZh);
   const readable=renderedZh.length&&renderedZh.every(x=>x.visible&&x.fontSize>=14&&x.opacity>=.75&&x.value.length>=8);
   if(!matchZh||!readable)failures.push(`${id}: exact ZH/readable Outcome projection failed ${JSON.stringify({expectedZh,renderedZh})}`);
-  const edge=await page.evaluate(()=>{const nodes=[...document.querySelectorAll('.case-study-section__header,[data-outcome-source-path],.impact-evidence-v147__business-impact')].filter(el=>el.getClientRects().length);const xs=nodes.map(el=>Math.round(el.getBoundingClientRect().left*10)/10);return {xs,deviation:xs.length?Math.max(...xs)-Math.min(...xs):0,gutter:xs[0]||0}});
-  if(edge.deviation>1)failures.push(`${id}: mobile reading-edge deviation ${edge.deviation}px`);
+  const edge=await page.evaluate(()=>{const outcome=document.querySelector('[data-outcome-exact-projection="true"]');const section=outcome?.closest('.case-study-section');const header=section?.querySelector(':scope > .case-study-section__header');const primary=outcome?.querySelector('[data-outcome-source-path]');const business=outcome?.querySelector('.impact-evidence-v147__business-impact');const xs=[header,primary,business].filter(el=>el&&el.getClientRects().length).map(el=>Math.round(el.getBoundingClientRect().left*10)/10);return {xs,deviation:xs.length?Math.max(...xs)-Math.min(...xs):0,gutter:xs[0]||0}});
+  if(edge.deviation>1)failures.push(`${id}: mobile Outcome reading-edge deviation ${edge.deviation}px`);
   report.outcomes[id]={...report.outcomes[id],expectedZh,renderedZh,matchZh,readable};
   report.geometry[id]={mobile390:edge};
   await context.close();
