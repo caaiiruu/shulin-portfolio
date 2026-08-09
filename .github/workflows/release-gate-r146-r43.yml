@@ -80,8 +80,8 @@ jobs:
           cat > /tmp/qa-allowed-files.txt <<'FILES'
           .github/workflows/release-gate-r146-r43.yml
           public/site/assets/css/components/domain-selector.css
-          public/site/assets/css/tokens.css
           public/site/assets/css/components/project-detail-overview.css
+          public/site/assets/css/tokens.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
           tests/rendered-html.test.mjs
