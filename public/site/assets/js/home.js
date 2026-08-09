@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-const DATA=window.PORTFOLIO_DATA;
+const DATA=window.PORTFOLIO_RUNTIME_DATA||window.PORTFOLIO_DATA;
 const ASSETS=window.PORTFOLIO_ASSET_MANIFEST?.items||{};
 const lang=()=>window.getPortfolioLanguage?window.getPortfolioLanguage():'en';
 const localize=value=>{
@@ -40,7 +40,7 @@ queryPanel?.addEventListener('focusout',event=>{
 function safeText(node,text){if(node)node.textContent=text??''}
 function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node}
 function projectTitle(project){return localize(project?.cardTitle||project?.title)||''}
-function projectSummary(project){return localize(project?.at_a_glance_pair)||''}
+function projectSummary(project){return localize(project?.at_a_glance_pair||project?.atAGlance)||''}
 function animateShift(before){
  if(!before||!queryPanel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  requestAnimationFrame(()=>{const after=queryPanel.getBoundingClientRect();queryPanel.animate([{transform:`translate(${before.left-after.left}px,${before.top-after.top}px)`},{transform:'translate(0,0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'});result?.animate([{opacity:0,transform:'translateX(22px)'},{opacity:1,transform:'translateX(0)'}],{duration:360,easing:'cubic-bezier(.16,1,.3,1)'})});
@@ -65,7 +65,8 @@ function projectVisualLabels(key){
 }
 function createProjectVisual(key){
  const visual=element('div','related-project-card__visual-v45');
- const preferredAssetId=key==='voucher'?'voucher-offer-stage-discover-pdp-shipped-01':DATA.projects[key]?.heroVisualBrief?.assetId;
+ const project=window.adaptPortfolioProject?.(key)||DATA.projects[key];
+ const preferredAssetId=key==='voucher'?'voucher-offer-stage-discover-pdp-shipped-01':(project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId);
  const record=ASSETS[preferredAssetId];
  const isReal=record?.assetStatus==='production'&&record?.implementationStatus==='real-active';
  const fallback=ASSETS[record?.placeholderFallbackAssetId];
@@ -88,7 +89,7 @@ function createProjectVisual(key){
  visual.append(brand,flow);return visual;
 }
 function createProjectCard(key,variant){
- const p=DATA.projects[key];
+ const p=window.adaptPortfolioProject?.(key)||DATA.projects[key];
  if(!p)throw new Error(`Integration Conflict: unresolved project ID "${key}"`);
  const card=element('button',`related-project-card related-project-card--${variant} related-project-card-v45`);
  card.type='button';card.dataset.project=key;
@@ -102,10 +103,10 @@ function createProjectCard(key,variant){
  const rows=variant==='search'
   ?[
     [ui("why-it-fits-3421d244"),localize(p.search_relevance_pair)||projectSummary(p)],
-    [ui("evidence-1111eae0"),localize([p.card_outcome,p.card_outcome_zh])]
+    [ui("evidence-1111eae0"),localize(p.search_evidence_pair)]
    ]
   :variant==='domain'
-   ?[[ui("what-this-proves-bfb1a5d4"),localize([p.domain_proof,p.domain_proof_zh])||projectSummary(p)]]
+   ?[[ui("what-this-proves-bfb1a5d4"),localize(p.what_this_proves)]]
    :[[ui("direction-b41b4458"),localize(p.search_relevance_pair)||projectSummary(p)]];
  rows.forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
  const action=element('span','related-project-card__action',ui("view-case-ca67a135"));
