@@ -1400,5 +1400,6 @@ test("projects exact canonical Outcome claims through the shared Case Study syst
   assert.match(overview, /\.case-study-section\{[^}]*width:min\(100%,var\(--case-page-max\)\)/);
   assert.match(overview, /\.impact-evidence-v147\{[^}]*var\(--case-evidence-max\)/);
   assert.match(overview, /\.impact-evidence-v147__heading h4,[^}]*font-size:var\(--text-h3\)/);
+  assert.doesNotMatch(overview, /\.impact-evidence-v147__heading h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
 });

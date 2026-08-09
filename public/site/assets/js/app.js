@@ -394,10 +394,10 @@
       node.append(en,zh);
       node.setAttribute('aria-label',ui(lang==='en'?'switch-language-current-english':'switch-language-current-chinese'));
     });
-    if(currentDetail){
-      renderDetail();
-      if(currentDetail.type==='project')refreshVisibleOutcomeProjection(DATA.projects[currentDetail.key]);
-    }
+    if(currentDetail)renderDetail();
+    const routeProjectKey=canonicalProjectId(decodeURIComponent(new URL(window.location.href).pathname.split('/').filter(Boolean).at(-1)||''));
+    const visibleProjectKey=currentDetail?.type==='project'?currentDetail.key:routeProjectKey;
+    if(DATA.projects[visibleProjectKey])requestAnimationFrame(()=>requestAnimationFrame(()=>refreshVisibleOutcomeProjection(DATA.projects[visibleProjectKey])));
     decorateDocumentArrows();
     doc.dispatchEvent(new CustomEvent('portfolio:language',{detail:{lang}}));
     requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({left:scrollX,top:scrollY,behavior:'auto'})));

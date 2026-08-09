@@ -744,7 +744,7 @@
 
 /* Editorial outcome grammar — major chapters use hierarchy and whitespace, not repeated rules. */
 .case-study-impact-copy__label{display:block;margin-bottom:var(--space-3);color:var(--color-text-secondary);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase}
-.impact-evidence-v147__heading h3{max-width:var(--dimension-26ch);margin:0;font-size:var(--cmp-popup-section-title-size);line-height:1.12;text-wrap:balance}
+.impact-evidence-v147__heading h3{max-width:var(--dimension-26ch);margin:0;font-size:var(--text-h3);line-height:1.18;text-wrap:balance}
 .impact-evidence-v147__type{max-width:var(--dimension-54ch);margin:0;color:var(--color-text-secondary);font-size:var(--text-sm);line-height:1.5}
 .case-study-section[data-recruiter-outcome-section="visible"]{background:var(--color-surface-subtle)}
 .case-study-section[data-canonical-section-id^="ownership"],.case-study-section[data-canonical-section-id="continue-exploring"]{border-top:var(--dimension-1px) solid var(--color-border)}
