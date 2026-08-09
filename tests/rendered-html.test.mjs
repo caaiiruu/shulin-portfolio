@@ -1346,6 +1346,7 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   assert.match(app, /impactEvidence&&!appended\.has\(impact\)/);
   assert.match(app, /impact\.dataset\.recruiterSectionId='outcomes'/);
   assert.match(app, /if\(!ordered\.includes\(node\)\)delete node\.dataset\.canonicalSectionId/);
+  assert.match(app, /evidence\.closest\('\[hidden\]'\)&&directSurface/);
   assert.match(app, /lang==='zh'\?'成果':'Outcomes'/);
   assert.match(css, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
   assert.doesNotMatch(css, /\.case-study-section\{[^}]*border-top:/);
