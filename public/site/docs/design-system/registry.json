@@ -687,7 +687,7 @@
       "status": "Live / Current Production",
       "renderSource": "assets/js/app.js and assets/js/home.js",
       "contentOwner": "content/portfolio-asset-manifest.json#frameSystemContract",
-      "cssOwner": "assets/css/components/project-detail-overview.css and assets/css/components/domain-selector.css",
+      "cssOwner": "assets/css/components/project-detail-overview.css",
       "tokenDependencies": [
         "case-reading-max",
         "case-evidence-max",
@@ -716,7 +716,10 @@
         "Voucher stage evidence",
         "Project gallery"
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": true,
+      "delegatedOwners": {
+        "Domain / Project Cover": "assets/css/components/domain-selector.css#related-project-card__visual-v45"
+      }
     }
   ]
 }
