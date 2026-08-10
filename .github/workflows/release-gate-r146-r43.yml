@@ -99,6 +99,7 @@ jobs:
           public/site/qa/asset-governance.mjs
           public/site/qa/design-system-lint.mjs
           scripts/build-production-assets.mjs
+          scripts/case-study-dom-audit.mjs
           tests/rendered-html.test.mjs
           FILES
           diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
