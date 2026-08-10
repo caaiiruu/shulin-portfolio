@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-10-r149",
+  "contentVersion": "2026-08-09-r148",
   "supersedes": "2026-08-06-r146",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -4966,31 +4966,6 @@
               "en": "PDP and contextual offer visibility",
               "zh": "PDP 與情境式優惠顯示"
             },
-            "visualEvidence": {
-              "primary": {
-                "evidenceRole": "before-after",
-                "layoutVariant": "before-after",
-                "beforeAssetId": "voucher-offer-stage-discover-pdp-before-01",
-                "shippedAssetId": "voucher-offer-stage-discover-pdp-shipped-01",
-                "copy": {
-                  "en": {
-                    "beforeLabel": "Before",
-                    "beforeCaption": "No Voucher discovery",
-                    "shippedLabel": "Shipped",
-                    "shippedCaption": "Eligible Voucher discovery"
-                  },
-                  "zh": {
-                    "beforeLabel": "調整前",
-                    "beforeCaption": "PDP 未呈現 Voucher",
-                    "shippedLabel": "已上線",
-                    "shippedCaption": "PDP 呈現適用 Voucher"
-                  }
-                },
-                "mobileBehavior": "stack",
-                "captionsAreHTML": true,
-                "placeholderState": "production"
-              }
-            },
             "decisions": [
               {
                 "title": {
@@ -5077,24 +5052,6 @@
               "en": "Applicability and cart-matching states",
               "zh": "適用性與購物車匹配狀態"
             },
-            "visualEvidence": {
-              "primary": {
-                "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
-                "evidenceRole": "system-rule",
-                "layoutVariant": "system-visual",
-                "aspectRatio": "wide",
-                "caption": {
-                  "en": "Eligibility evidence connects product, channel, threshold and action rules before commitment.",
-                  "zh": "資格判斷證據在顧客投入前，連結商品、通路、門檻與操作規則。"
-                },
-                "alt": {
-                  "en": "Placeholder reserved for a system visual showing Voucher eligibility and applicable-state rules.",
-                  "zh": "預留給呈現優惠券資格與適用狀態規則的系統視覺。"
-                },
-                "mobileBehavior": "single-screen",
-                "placeholderState": "governed-placeholder"
-              }
-            },
             "decisions": []
           },
           {
@@ -5114,24 +5071,6 @@
             "shipped": {
               "en": "Selected campaign and limited-value participation models",
               "zh": "特定活動與限量價值的參與模式"
-            },
-            "visualEvidence": {
-              "primary": {
-                "assetId": "voucher-framework-mechanism-transition-public-v1",
-                "evidenceRole": "flow",
-                "layoutVariant": "flow-strip",
-                "aspectRatio": "wide",
-                "caption": {
-                  "en": "Participation actions changed with the incentive mechanic instead of using one generic collection action.",
-                  "zh": "參與操作依獎勵機制改變，而不是套用單一通用領取行為。"
-                },
-                "alt": {
-                  "en": "Placeholder reserved for a flow showing mechanic-specific Save, Claim, Add item or participation actions.",
-                  "zh": "預留給呈現依機制使用儲存、領取、加入商品或參與操作的流程。"
-                },
-                "mobileBehavior": "horizontal-rail",
-                "placeholderState": "governed-placeholder"
-              }
             },
             "decisions": []
           },
@@ -5153,24 +5092,6 @@
               "en": "Select all, code application and cart matching",
               "zh": "全選、代碼套用與購物車匹配"
             },
-            "visualEvidence": {
-              "primary": {
-                "assetId": "voucher-framework-error-recovery-public-v1",
-                "evidenceRole": "flow",
-                "layoutVariant": "flow-strip",
-                "aspectRatio": "wide",
-                "caption": {
-                  "en": "Explicit application and recovery states reduced trial-and-error during redemption.",
-                  "zh": "明確的套用與復原狀態，降低兌換過程中的反覆試錯。"
-                },
-                "alt": {
-                  "en": "Placeholder reserved for a redemption and recovery flow with explicit application states.",
-                  "zh": "預留給具明確套用狀態的兌換與復原流程。"
-                },
-                "mobileBehavior": "horizontal-rail",
-                "placeholderState": "governed-placeholder"
-              }
-            },
             "decisions": []
           },
           {
@@ -5190,24 +5111,6 @@
             "shipped": {
               "en": "Selected savings and post-transaction communication",
               "zh": "部分節省與交易後溝通"
-            },
-            "visualEvidence": {
-              "primary": {
-                "assetId": "voucher-stage-review-post-use-public-v1",
-                "evidenceRole": "shipped-state",
-                "layoutVariant": "single-screen",
-                "aspectRatio": "wide",
-                "caption": {
-                  "en": "Post-use evidence should confirm savings, usage or returned value without overstating future-state coverage.",
-                  "zh": "使用後證據應確認節省、使用或退回價值，且不誇大尚未全面實現的狀態。"
-                },
-                "alt": {
-                  "en": "Placeholder reserved for a post-use Voucher state confirming savings, usage or returned value.",
-                  "zh": "預留給確認節省、使用或退回價值的使用後優惠券狀態。"
-                },
-                "mobileBehavior": "single-screen",
-                "placeholderState": "governed-placeholder"
-              }
             },
             "decisions": []
           }
