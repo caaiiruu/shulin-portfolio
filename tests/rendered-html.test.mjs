@@ -1311,7 +1311,7 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(home, /image\.dataset\.assetStatus=isReal\?'real-active':'placeholder-active'/);
   assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
-  assert.equal(real.filter(item=>item.projectId==='voucher').length,2);
+  assert.equal(real.filter(item=>item.projectId==='voucher').length,3);
 });
 
 test("converges every project on one SSOT-ordered CaseStudySection system", () => {
