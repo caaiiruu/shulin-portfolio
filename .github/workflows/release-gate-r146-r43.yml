@@ -93,8 +93,8 @@ jobs:
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
-          public/site/content/portfolio-asset-manifest.json
           public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
+          public/site/content/portfolio-asset-manifest.json
           public/site/docs/design-system/registry.json
           scripts/case-study-dom-audit.mjs
           tests/rendered-html.test.mjs
