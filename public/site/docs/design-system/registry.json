@@ -708,7 +708,8 @@
       "component": "RecruiterFirstCaseStudy",
       "status": "Live / Current Production",
       "renderSource": "assets/js/app.js#renderProgrammeParent",
-      "contentOwner": "content/portfolio-content.json#projects.voucher.recruiterFirstPopup",
+      "contentOwner": "content/portfolio-content.json",
+      "contentProjection": "projects.voucher.recruiterFirstPopup",
       "cssOwner": "assets/css/components/project-detail-overview.css",
       "tokenDependencies": [
         "cmp-evidence-section-gap",
@@ -737,7 +738,7 @@
         "Container nesting",
         "Magic spacing values"
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": false
     }
   ]
 }
