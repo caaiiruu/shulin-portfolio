@@ -170,8 +170,8 @@ function deriveVisualSlots(value, projectId, location = []) {
   }
 }
 for (const [projectId, project] of Object.entries(content.projects)) deriveVisualSlots(project, projectId);
-if (derivedVisualSlots.length !== 37 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 33) {
-  throw new Error("Content must derive exactly 37 runtime visual slots and 33 unique asset IDs");
+if (derivedVisualSlots.length !== 38 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 34) {
+  throw new Error("Content must derive exactly 38 runtime visual slots and 34 unique asset IDs");
 }
 for (const slot of derivedVisualSlots) {
   const record = assetManifest.items?.[slot.assetId];

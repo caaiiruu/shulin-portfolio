@@ -38,7 +38,7 @@ function deriveSlots(value, projectId, location = []) {
 }
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
 fail(itemEntries.length === new Set(slots.map((slot) => slot.assetId)).size + placeholderIds.length, "Manifest contains non-runtime records");
-fail(slots.length === 37, "Runtime slot count must be 37");
+fail(slots.length === 38, "Runtime slot count must be 38");
 fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id)), "Every canonical project needs a visual slot");
 
 const slotKeys = new Set();

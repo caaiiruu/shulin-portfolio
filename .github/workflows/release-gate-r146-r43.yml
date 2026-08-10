@@ -98,6 +98,7 @@ jobs:
           public/site/docs/design-system/registry.json
           public/site/qa/asset-governance.mjs
           public/site/qa/design-system-lint.mjs
+          scripts/build-production-assets.mjs
           FILES
           diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
@@ -211,11 +212,11 @@ jobs:
           grep -Eq '# tests 68' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# pass 68' "$EVIDENCE_DIR/tests-result.txt"
           grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Fq 'Asset governance passed: 13 projects, 37 derived slots, 37 public records.' "$EVIDENCE_DIR/validation-result.txt"
+          grep -Fq 'Asset governance passed: 13 projects, 38 derived slots, 38 public records.' "$EVIDENCE_DIR/validation-result.txt"
           grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
           echo 'Asset tests: 8/8 PASS — canonical asset-governance contract' > "$EVIDENCE_DIR/asset-tests-result.txt"
           echo 'Publish-safety: 15/15 PASS — rendered suite plus packaged artifact validation' >> "$EVIDENCE_DIR/publish-safety-result.txt"
-          echo 'Derived-slot: PASS — 13 projects, 37 slots, 37 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
+          echo 'Derived-slot: PASS — 13 projects, 38 slots, 38 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
 
       - name: Deterministic generated-output gate
         shell: bash
