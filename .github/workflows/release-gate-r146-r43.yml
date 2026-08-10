@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: de9a697dc4f446512678ab365e6f78a286a19b49
+      IMPLEMENTATION_HEAD: 9238a599f256088ce9d09680a877968a26f9fc53
       EXPECTED_SSOT_SHA256: b57d8f57271cf69767e74cfe378443b0a3c7c17190be712cb3334e6727601b90
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
@@ -89,22 +89,15 @@ jobs:
           git diff --name-only "$IMPLEMENTATION_HEAD"..HEAD | sort > /tmp/qa-changed-files.txt
           cat > /tmp/qa-allowed-files.txt <<'FILES'
           .github/workflows/release-gate-r146-r43.yml
-          public/site/assets/css/components/domain-selector.css
-          public/site/assets/css/components/project-card.css
           public/site/assets/css/components/project-detail-overview.css
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
-          public/site/assets/js/home.js
           public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/content/portfolio-asset-manifest.json
           public/site/content/portfolio-content.json
           public/site/docs/design-system/registry.json
           public/site/qa/asset-governance.mjs
           public/site/qa/design-system-lint.mjs
-          public/site/work.html
-          scripts/case-study-dom-audit.mjs
-          tests/rendered-html.test.mjs
           FILES
           diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
           git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
