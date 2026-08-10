@@ -46,7 +46,7 @@ jobs:
     timeout-minutes: 45
     env:
       IMPLEMENTATION_HEAD: de9a697dc4f446512678ab365e6f78a286a19b49
-      EXPECTED_SSOT_SHA256: bc40af055af5d9cd6c34898519f8e551a65eefc5e3d68aef301269fbedbd4b51
+      EXPECTED_SSOT_SHA256: 15824b3bd12f35658da2b6a7434bfbdfb5143d5053e86e2847061329a94e45fc
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
