@@ -2784,31 +2784,31 @@
         const evidenceGrid=element('div','voucher-r149-decision-list');
         evidenceItems.forEach((source,index)=>{
           const legacy=projectedDecisions.length?null:stageEvidenceDecision(source);
-          const title=projectedDecisions.length?localize(source.title):stageEvidenceTitle(source);
-          const problem=projectedDecisions.length?localize(source.problem):localize(stageEvidenceProblem(source));
-          const decision=projectedDecisions.length?localize(source.decision):localize(legacy?.whatIDecided);
-          const effect=projectedDecisions.length?localize(source.effect):localize(legacy?.whyThisChoice);
-          const card=element('article','voucher-r149-decision');
-          card.append(element('span','voucher-r149-eyebrow',`${lang==='zh'?'決策':'DECISION'} ${String(index+1).padStart(2,'0')}`),element('h3','',title));
-          const fields=element('div','voucher-r149-decision__fields');
-          [[lang==='zh'?'問題':'PROBLEM',problem],[lang==='zh'?'決策':'DECISION',decision],[lang==='zh'?'效果':'EFFECT',effect]].forEach(([label,value])=>{if(!value)return;const field=element('div');field.append(element('span','decision-field-label-v58',label),element('p','',value));fields.append(field)});
-          card.append(fields);
-          const optional=source.optionalBlock||legacy?.optionalBlock;
-          if(optional?.type&&optional?.content&&/^(TRADE-OFF|WHAT THIS REQUIRED|REQUIREMENT|CONSTRAINT|RISK)/i.test(optional.type)){
-            const extra=element('div','voucher-r149-decision__optional');
-            extra.append(element('span','decision-field-label-v58',optional.type),element('p','',localize(optional.content)));
-            card.append(extra);
-          }
+          const model=projectedDecisions.length?{
+            title:source.title,
+            problem:source.problem,
+            result:source.decision,
+            effect:source.effect,
+            optionalBlock:source.optionalBlock
+          }:{
+            title:stageEvidenceTitle(source),
+            problem:stageEvidenceProblem(source),
+            result:legacy?.whatIDecided,
+            effect:legacy?.whyThisChoice,
+            optionalBlock:legacy?.optionalBlock
+          };
+          const card=createDecisionCard(model,index,{showVisual:false});
+          card.classList.add('voucher-r149-decision');
           if(source.trend?.value){
             const trend=element('div','voucher-r149-decision__trend');
             trend.append(element('strong','',source.trend.value),element('span','',localize(source.trend.label)),element('p','',localize(source.trend.boundary)));
-            card.append(trend);
+            card.querySelector('.decision-body-v46')?.append(trend);
           }
           const ownership=projectedDecisions.length?localize(source.ownership):localize(stageEvidenceOwnership(source));
           if(ownership){
             const owner=element('div','voucher-r149-decision__ownership');
             owner.append(element('span','decision-field-label-v58',lang==='zh'?'責任邊界':'OWNERSHIP BOUNDARY'),element('p','',ownership));
-            card.append(owner);
+            card.querySelector('.decision-body-v46')?.append(owner);
           }
           evidenceGrid.append(card);
         });
