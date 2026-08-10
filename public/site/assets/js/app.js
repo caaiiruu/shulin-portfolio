@@ -247,6 +247,9 @@
       if(!fallback?.publicPath?.startsWith('/site/'))throw new Error(`Asset governance: invalid placeholder fallback for ${assetId}`);
       return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。']};
     }
+    if(record.assetStatus==='placeholder'&&record.publicPath?.startsWith('/site/')){
+      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。']};
+    }
     throw new Error(`Asset governance: public runtime asset has no real file or placeholder: ${assetId}`);
   }
   window.resolveProjectAsset=resolveProjectAsset;
