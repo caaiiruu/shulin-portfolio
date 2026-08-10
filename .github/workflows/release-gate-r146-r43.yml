@@ -366,13 +366,26 @@ jobs:
             const body=page.locator('body');
             const text=await body.innerText();
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','WHAT CHANGED','BEFORE → SHIPPED','View solution details'];
+            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','WHAT CHANGED','View solution details'];
             const missing=required.filter(t=>!text.includes(t));
+            const forbiddenEvidenceLabels=['BEFORE → SHIPPED','PDP and contextual offer visibility','No Voucher discovery','Eligible Voucher discovery'];
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
             const cta=page.getByText('View solution details',{exact:false}).first();
             const ctaVisible=await cta.isVisible().catch(()=>false);
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
+            if(ctaVisible){
+              await cta.click();
+              await page.waitForTimeout(300);
+            }
+            const decisionPageText=await body.innerText();
+            const duplicateEvidenceLabels=forbiddenEvidenceLabels.filter(t=>decisionPageText.includes(t));
+            const discoverDecision=page.locator('.voucher-r149-decision-list .decision-card-v46').first();
+            const discoverDecisionVisible=await discoverDecision.isVisible().catch(()=>false);
+            const sharedDecisionStructure=discoverDecisionVisible && await discoverDecision.locator('.decision-number-v48, .decision-body-v46, .decision-visual-v58.evidence-frame').count()===3;
+            const approvedEvidence=discoverDecision.locator('img[src$="/voucher-offer-stage-discover-pdp-before-shipped-01.jpg"]');
+            const approvedEvidenceVisible=await approvedEvidence.isVisible().catch(()=>false);
+            const approvedEvidenceLoaded=approvedEvidenceVisible && await approvedEvidence.evaluate(image=>image.complete&&image.naturalWidth===2048&&image.naturalHeight===1280).catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
             const stageFocusDom=page.getByText('Stage Focus',{exact:false}).first();
             const stageFocusVisible=await stageFocusDom.isVisible().catch(()=>false) || await page.evaluate(()=>[...document.querySelectorAll('body *')].some(el=>{const r=el.getBoundingClientRect();if(r.width===0||r.height===0)return false;const before=getComputedStyle(el,'::before').content;const after=getComputedStyle(el,'::after').content;return [before,after].some(v=>String(v).toLowerCase().includes('stage focus'));}));
@@ -413,8 +426,8 @@ jobs:
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
             await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
             const keyProblemContract=!keyVisible;
-            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
-            results[vp.name]={...widthAudit,missing,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
+            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !duplicateEvidenceLabels.length && !voucherCenterMissing.length && ctaVisible && stageVisible && discoverDecisionVisible && sharedDecisionStructure && approvedEvidenceLoaded && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
+            results[vp.name]={...widthAudit,missing,duplicateEvidenceLabels,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,discoverDecisionVisible,sharedDecisionStructure,approvedEvidenceLoaded,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
             if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
             await context.close();
           }
