@@ -5337,7 +5337,7 @@
           "foundations": [
             {
               "label": {
-                "en": "SHARED RULES",
+                "en": "Shared rules",
                 "zh": "共享規則"
               },
               "text": {
@@ -5348,7 +5348,7 @@
             },
             {
               "label": {
-                "en": "SHARED STATES",
+                "en": "Shared states",
                 "zh": "共享狀態"
               },
               "text": {
@@ -5359,7 +5359,7 @@
             },
             {
               "label": {
-                "en": "REUSABLE PATTERNS",
+                "en": "Reusable patterns",
                 "zh": "可重用模式"
               },
               "text": {
@@ -5370,7 +5370,7 @@
             },
             {
               "label": {
-                "en": "REUSABLE COMPONENT FOUNDATION",
+                "en": "Reusable component foundation",
                 "zh": "可重用元件基礎"
               },
               "text": {
