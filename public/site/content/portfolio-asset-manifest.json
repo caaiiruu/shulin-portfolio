@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
-  "packageVersion": "r43",
-  "contentVersion": "2026-08-09-r148",
+  "packageVersion": "r44",
+  "contentVersion": "2026-08-10-r149",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -478,6 +478,123 @@
       "height": 1280,
       "alt": "Before and shipped FairPrice product detail screens comparing no Voucher discovery with eligible Voucher discovery.",
       "alt_zh": "FairPrice 商品詳情頁調整前與上線後比較：從沒有優惠券探索到顯示適用優惠券。"
+    },
+    "voucher-offer-stage-discover-voucher-details-before-shipped-01": {
+      "id": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Discover two-panel Voucher Details before and shipped comparison.",
+      "alt_zh": "Discover two-panel Voucher Details before and shipped comparison."
+    },
+    "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01": {
+      "id": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01.jpg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Qualify three-panel Voucher Details eligibility progress comparison.",
+      "alt_zh": "Qualify three-panel Voucher Details eligibility progress comparison."
+    },
+    "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01": {
+      "id": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01.jpg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Save Every Day / SEC campaign entry, saving and Wallet return flow.",
+      "alt_zh": "Save Every Day / SEC campaign entry, saving and Wallet return flow."
+    },
+    "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01": {
+      "id": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01.jpg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Wallet applicability, error recovery and Select all evidence.",
+      "alt_zh": "Wallet applicability, error recovery and Select all evidence."
+    },
+    "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01": {
+      "id": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-review-payment-voucher-selection-review-shipped-01.jpg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Voucher selection and rule integration in payment review.",
+      "alt_zh": "Voucher selection and rule integration in payment review."
+    },
+    "voucher-offer-reusable-system-shared-rules-01": {
+      "id": "voucher-offer-reusable-system-shared-rules-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-reusable-system-shared-rules-01.jpg",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Shared Voucher eligibility, threshold and application rules.",
+      "alt_zh": "Shared Voucher eligibility, threshold and application rules."
+    },
+    "voucher-offer-reusable-system-shared-states-01": {
+      "id": "voucher-offer-reusable-system-shared-states-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-reusable-system-shared-states-01.jpg",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Shared available, applicable, selected, redeemed and error states.",
+      "alt_zh": "Shared available, applicable, selected, redeemed and error states."
+    },
+    "voucher-offer-reusable-system-reusable-patterns-01": {
+      "id": "voucher-offer-reusable-system-reusable-patterns-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-reusable-system-reusable-patterns-01.jpg",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Reusable discovery, selection, application and recovery patterns.",
+      "alt_zh": "Reusable discovery, selection, application and recovery patterns."
+    },
+    "voucher-offer-reusable-system-component-foundation-01": {
+      "id": "voucher-offer-reusable-system-component-foundation-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-reusable-system-component-foundation-01.jpg",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "alt": "Reusable Voucher Card component foundation mapped to Operations configuration.",
+      "alt_zh": "Reusable Voucher Card component foundation mapped to Operations configuration."
     }
   },
   "frameSystemContract": {

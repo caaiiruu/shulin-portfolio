@@ -20,9 +20,9 @@ const placeholderIds = [
 ];
 
 const contentSha = createHash("sha256").update(contentBytes).digest("hex");
-fail(contentSha === "145908a83c1ff217ed637a551268e8466067e88ed246f9a4c2df43277337efd9", `Content r148 SHA changed: ${contentSha}`);
-fail(content.contentVersion === "2026-08-09-r148" && projectIds.length === 13, "Content r148 roster changed");
-fail(manifest.packageVersion === "r43" && manifest.contentVersion === content.contentVersion, "Manifest must be r43 aligned to r148");
+fail(contentSha === "fa3cef60170d8e0a0ad9b27421f6ab8380b1efaee1a72b423ac6426452e948cc", `Content r149 SHA changed: ${contentSha}`);
+fail(content.contentVersion === "2026-08-10-r149" && projectIds.length === 13, "Content r149 roster changed");
+fail(manifest.packageVersion === "r44" && manifest.contentVersion === content.contentVersion, "Manifest must be r44 aligned to r149");
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
 fail(itemEntries.length === new Set(itemEntries.map(([id]) => id)).size, "Duplicate asset IDs");
 const slots = [];
@@ -38,7 +38,7 @@ function deriveSlots(value, projectId, location = []) {
 }
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
 fail(itemEntries.length === new Set(slots.map((slot) => slot.assetId)).size + placeholderIds.length, "Manifest contains non-runtime records");
-fail(slots.length === 38, "Runtime slot count must be 38");
+fail(slots.length === 47, "Runtime slot count must be 47");
 fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id)), "Every canonical project needs a visual slot");
 
 const slotKeys = new Set();

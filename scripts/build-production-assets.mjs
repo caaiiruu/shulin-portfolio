@@ -129,7 +129,7 @@ const expectedProjectIds = [
   "ctbc-mortgage-self-service-app",
   "booking-taxi-pickup-service-strategy",
 ];
-if (content.contentVersion !== "2026-08-09-r148") throw new Error("The active Content SSOT must be r148");
+if (content.contentVersion !== "2026-08-10-r149") throw new Error("The active Content SSOT must be r149");
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
 const projectIds = Object.keys(content.projects || {});
@@ -155,8 +155,8 @@ const publicExplorations = [...Object.values(content.sideProjects || {}), ...Obj
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r43" || assetManifest.contentVersion !== "2026-08-09-r148") {
-  throw new Error("The active Asset Manifest must be r43 aligned to Content r148");
+if (assetManifest.packageVersion !== "r44" || assetManifest.contentVersion !== "2026-08-10-r149") {
+  throw new Error("The active Asset Manifest must be r44 aligned to Content r149");
 }
 const derivedVisualSlots = [];
 function deriveVisualSlots(value, projectId, location = []) {
@@ -170,8 +170,8 @@ function deriveVisualSlots(value, projectId, location = []) {
   }
 }
 for (const [projectId, project] of Object.entries(content.projects)) deriveVisualSlots(project, projectId);
-if (derivedVisualSlots.length !== 38 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 34) {
-  throw new Error("Content must derive exactly 38 runtime visual slots and 34 unique asset IDs");
+if (derivedVisualSlots.length !== 47 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 43) {
+  throw new Error("Content must derive exactly 47 runtime visual slots and 43 unique asset IDs");
 }
 for (const slot of derivedVisualSlots) {
   const record = assetManifest.items?.[slot.assetId];

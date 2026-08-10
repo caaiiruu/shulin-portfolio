@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-09-r148",
-  "supersedes": "2026-08-06-r146",
+  "contentVersion": "2026-08-10-r149",
+  "supersedes": "2026-08-09-r148",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -615,8 +615,8 @@
               "zh": "建立從線下探索、App 內儲存到主要購物通路數位兌換的一體化旅程。"
             },
             "outcome": {
-              "en": "Expanded to 400+ in-app Vouchers; the final three weeks delivered 125.2k digital redemptions and a 30.6% digital redemption share.",
-              "zh": "擴展至 400+ 張 App 內優惠券；最後三週帶來 12.52 萬次數位兌換，數位兌換占比達 30.6%。"
+              "en": "The final three weeks delivered ~125K digital redemptions; 30.6% of all campaign redemptions were digital in that period.",
+              "zh": "最後三週帶來約 12.5 萬次數位兌換；該期間所有活動兌換中有 30.6% 為數位兌換。"
             },
             "status": "shipped-and-recurring",
             "assetStatus": "public-derivative-needed"
@@ -1297,7 +1297,7 @@
             {
               "id": "campaign-evolution",
               "title": "Campaign mechanics became repeatable product behaviour",
-              "proof": "Save Every Day, Flash Voucher and selected Brand Challenge evidence"
+              "proof": "Save Every Day / SEC evidence"
             }
           ],
           "contentPruning": {
@@ -4771,16 +4771,16 @@
             "label": "programme"
           },
           {
-            "value": "400+",
-            "label": "in-app Vouchers in Save Everyday"
-          },
-          {
-            "value": "125.2K",
-            "label": "digital redemptions in final 3 weeks"
+            "value": "~125K",
+            "label": "digital redemptions in final three weeks"
           },
           {
             "value": "30.6%",
-            "label": "digital redemption share"
+            "label": "of all campaign redemptions were digital in final three weeks"
+          },
+          {
+            "value": "2 weeks → 2 days",
+            "label": "recurring cross-team Voucher alignment cycle"
           }
         ],
         "supportingSignals": [
@@ -4789,7 +4789,7 @@
           "2.4% eligible-item-to-cart baseline",
           "1.8% PDP-to-cart baseline"
         ],
-        "recommendedHeadline": "Established a reusable cross-channel incentive model, with shipped programmes reaching 400+ Vouchers and 125.2K digital redemptions.",
+        "recommendedHeadline": "Established a reusable cross-channel incentive model, with ~125K digital redemptions in the final three weeks and a recurring cross-team alignment cycle reduced from 2 weeks to 2 days.",
         "boundary": "Programme baselines are prioritisation evidence, not design uplift.",
         "subProjectOverrides": {
           "voucher-details-2024-2025": {
@@ -4801,10 +4801,8 @@
           "save-everyday-digital-campaign": {
             "variant": "measured-outcome",
             "metrics": [
-              "10 → 400+ app-available Vouchers (40×+ inventory)",
-              "125.2K digital redemptions in final three weeks",
-              "30.6% digital redemption share",
-              "51.1K digital customers across 64.1K transactions in final three weeks"
+              "~125K digital redemptions in final three weeks",
+              "30.6% of all campaign redemptions were digital in final three weeks"
             ]
           }
         }
@@ -5027,9 +5025,43 @@
                     "en": "Accepted one extra disclosure action for full instructions in exchange for moving shoppable products earlier.",
                     "zh": "完整說明增加一次展開，以換取提早呈現可購買商品。"
                   }
+                },
+                "evidence": {
+                  "assetId": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
+                  "role": "primary-evidence",
+                  "panelCount": 2,
+                  "externalCaption": false
+                },
+                "contentBoundary": {
+                  "en": "This decision shows the two-panel Voucher Details evolution only. Qualification progress belongs to the Qualify stage.",
+                  "zh": "此決策僅呈現雙畫面的 Voucher Details 演進；資格進度屬於 Qualify 階段。"
                 }
               }
-            ]
+            ],
+            "overview": {
+              "keyInsight": {
+                "en": "Customers usually began with products or shopping tasks, not the Voucher Wallet.",
+                "zh": "顧客通常從商品或購物任務開始，而不是從優惠券錢包開始。"
+              },
+              "designDirection": {
+                "en": "Surface relevant value within product, search and in-store contexts.",
+                "zh": "在商品、搜尋與店內情境中呈現相關優惠價值。"
+              },
+              "designSolution": {
+                "en": "PDP and contextual offer visibility",
+                "zh": "PDP 與情境式優惠顯示"
+              },
+              "effect": {
+                "en": "PDP and contextual offer visibility",
+                "zh": "PDP 與情境式優惠顯示"
+              }
+            },
+            "presentationLabels": {
+              "keyInsight": "KEY INSIGHT",
+              "designDirection": "DESIGN DIRECTION",
+              "designSolution": "DESIGN SOLUTION",
+              "effect": "EFFECT"
+            }
           },
           {
             "id": "qualify",
@@ -5049,7 +5081,52 @@
               "en": "Applicability and cart-matching states",
               "zh": "適用性與購物車匹配狀態"
             },
-            "decisions": []
+            "decisions": [
+              {
+                "title": {
+                  "en": "Make qualification progress visible before commitment",
+                  "zh": "在投入前讓資格進度清楚可見"
+                },
+                "whatIDecided": {
+                  "en": "Connect eligible items, conditions and remaining qualification progress in one Voucher Details journey.",
+                  "zh": "在同一個 Voucher Details 旅程中連結適用商品、條件與剩餘資格進度。"
+                },
+                "whyThisChoice": {
+                  "en": "Customers had to interpret product, channel and threshold conditions before knowing whether a Voucher was useful.",
+                  "zh": "顧客必須自行解讀商品、通路與門檻條件，才能知道優惠券是否有用。"
+                },
+                "evidence": {
+                  "assetId": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
+                  "role": "primary-evidence",
+                  "panelCount": 3,
+                  "externalCaption": false
+                }
+              }
+            ],
+            "overview": {
+              "keyInsight": {
+                "en": "Customers had to interpret product, channel and threshold conditions before knowing whether a Voucher was useful.",
+                "zh": "顧客必須自行解讀商品、通路與門檻條件，才能知道優惠券是否有用。"
+              },
+              "designDirection": {
+                "en": "Make applicable items, channel, savings and remaining requirements visible before commitment.",
+                "zh": "在顧客投入前，先讓適用商品、通路、節省金額與剩餘條件可見。"
+              },
+              "designSolution": {
+                "en": "Applicability and cart-matching states",
+                "zh": "適用性與購物車匹配狀態"
+              },
+              "effect": {
+                "en": "Applicability and cart-matching states",
+                "zh": "適用性與購物車匹配狀態"
+              }
+            },
+            "presentationLabels": {
+              "keyInsight": "KEY INSIGHT",
+              "designDirection": "DESIGN DIRECTION",
+              "designSolution": "DESIGN SOLUTION",
+              "effect": "EFFECT"
+            }
           },
           {
             "id": "activate",
@@ -5069,7 +5146,55 @@
               "en": "Selected campaign and limited-value participation models",
               "zh": "特定活動與限量價值的參與模式"
             },
-            "decisions": []
+            "decisions": [
+              {
+                "title": {
+                  "en": "Use Save Every Day as the shipped campaign activation proof",
+                  "zh": "以 Save Every Day 作為已上線的活動啟動證據"
+                },
+                "whatIDecided": {
+                  "en": "Connect the SEC campaign entry, Voucher saving and Wallet return flow as one participation journey.",
+                  "zh": "將 SEC 活動入口、Voucher 儲存與返回 Wallet 串成一條參與旅程。"
+                },
+                "whyThisChoice": {
+                  "en": "Collect could mean purchase intent to some customers and a consequence-free game to others.",
+                  "zh": "收集對部分顧客代表購買意圖，對另一些顧客則只是沒有承諾的遊戲行為。"
+                },
+                "evidence": {
+                  "assetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
+                  "role": "primary-evidence",
+                  "externalCaption": false
+                },
+                "contentBoundary": {
+                  "en": "SEC only. Brand Challenge is not part of this stage evidence.",
+                  "zh": "此階段僅使用 SEC，不包含 Brand Challenge。"
+                }
+              }
+            ],
+            "overview": {
+              "keyInsight": {
+                "en": "Collect could mean purchase intent to some customers and a consequence-free game to others.",
+                "zh": "收集對部分顧客代表購買意圖，對另一些顧客則只是沒有承諾的遊戲行為。"
+              },
+              "designDirection": {
+                "en": "Use Save, Claim, Add item or participation actions only when they match the actual incentive mechanic.",
+                "zh": "只有在符合真實獎勵機制時，才使用儲存、領取、加入商品或參與等操作。"
+              },
+              "designSolution": {
+                "en": "Selected campaign and limited-value participation models",
+                "zh": "特定活動與限量價值的參與模式"
+              },
+              "effect": {
+                "en": "Selected campaign and limited-value participation models",
+                "zh": "特定活動與限量價值的參與模式"
+              }
+            },
+            "presentationLabels": {
+              "keyInsight": "KEY INSIGHT",
+              "designDirection": "DESIGN DIRECTION",
+              "designSolution": "DESIGN SOLUTION",
+              "effect": "EFFECT"
+            }
           },
           {
             "id": "redeem",
@@ -5089,7 +5214,51 @@
               "en": "Select all, code application and cart matching",
               "zh": "全選、代碼套用與購物車匹配"
             },
-            "decisions": []
+            "decisions": [
+              {
+                "title": {
+                  "en": "Make applicability, recovery and Select all explicit",
+                  "zh": "明確呈現適用性、復原與全選"
+                },
+                "whatIDecided": {
+                  "en": "Use applicable and not-applicable states, error recovery and Select all to reduce repeated Voucher selection.",
+                  "zh": "以適用／不適用狀態、錯誤復原與全選，降低重複選擇 Voucher 的負擔。"
+                },
+                "whyThisChoice": {
+                  "en": "Customers could miss value because added, selected and applied states were not always distinguishable.",
+                  "zh": "加入、選取與套用狀態不一定清楚可辨，使顧客可能錯過優惠價值。"
+                },
+                "evidence": {
+                  "assetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
+                  "role": "primary-evidence",
+                  "externalCaption": false
+                }
+              }
+            ],
+            "overview": {
+              "keyInsight": {
+                "en": "Customers could miss value because added, selected and applied states were not always distinguishable.",
+                "zh": "加入、選取與套用狀態不一定清楚可辨，使顧客可能錯過優惠價值。"
+              },
+              "designDirection": {
+                "en": "Reduce repeated selection and make eligibility, application and recovery states explicit.",
+                "zh": "降低重複選擇，並明確呈現資格、套用與復原狀態。"
+              },
+              "designSolution": {
+                "en": "Select all, code application and cart matching",
+                "zh": "全選、代碼套用與購物車匹配"
+              },
+              "effect": {
+                "en": "Reduced repeated selection and made eligibility, application and recovery states explicit.",
+                "zh": "降低重複選擇，並明確呈現資格、套用與復原狀態。"
+              }
+            },
+            "presentationLabels": {
+              "keyInsight": "KEY INSIGHT",
+              "designDirection": "DESIGN DIRECTION",
+              "designSolution": "DESIGN SOLUTION",
+              "effect": "EFFECT"
+            }
           },
           {
             "id": "review",
@@ -5109,7 +5278,55 @@
               "en": "Selected savings and post-transaction communication",
               "zh": "部分節省與交易後溝通"
             },
-            "decisions": []
+            "decisions": [
+              {
+                "title": {
+                  "en": "Integrate Voucher selection and rule logic into payment review",
+                  "zh": "將 Voucher 選擇與規則邏輯整合進付款檢視"
+                },
+                "whatIDecided": {
+                  "en": "Owned the Voucher interaction and rule logic, collaborated with the Payment designer, and integrated the experience into the payment flow.",
+                  "zh": "負責 Voucher 互動與規則邏輯，與 Payment designer 協作，並將體驗整合進付款流程。"
+                },
+                "whyThisChoice": {
+                  "en": "Customers could complete payment without a clear understanding of what was saved, used or returned.",
+                  "zh": "顧客可能在完成付款後，仍不清楚節省、使用或退回了哪些價值。"
+                },
+                "evidence": {
+                  "assetId": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
+                  "role": "primary-evidence",
+                  "externalCaption": false
+                },
+                "ownership": {
+                  "en": "Shulin owned Voucher interaction and rule logic; the Payment designer collaborated on payment-flow integration.",
+                  "zh": "Shulin 負責 Voucher 互動與規則邏輯；Payment designer 協作完成付款流程整合。"
+                }
+              }
+            ],
+            "overview": {
+              "keyInsight": {
+                "en": "Customers could complete payment without a clear understanding of what was saved, used or returned.",
+                "zh": "顧客可能在完成付款後，仍不清楚節省、使用或退回了哪些價值。"
+              },
+              "designDirection": {
+                "en": "Preserve transparent savings, usage and post-transaction states.",
+                "zh": "保留透明的節省、使用與交易後狀態。"
+              },
+              "designSolution": {
+                "en": "Selected savings and post-transaction communication",
+                "zh": "部分節省與交易後溝通"
+              },
+              "effect": {
+                "en": "Made Voucher value and use visible across the integrated payment flow.",
+                "zh": "在整合付款流程中清楚呈現 Voucher 價值與使用狀態。"
+              }
+            },
+            "presentationLabels": {
+              "keyInsight": "KEY INSIGHT",
+              "designDirection": "DESIGN DIRECTION",
+              "designSolution": "DESIGN SOLUTION",
+              "effect": "EFFECT"
+            }
           }
         ],
         "reusableSystem": {
@@ -5126,7 +5343,8 @@
               "text": {
                 "en": "Eligibility, thresholds and application logic",
                 "zh": "資格、門檻與套用邏輯"
-              }
+              },
+              "assetId": "voucher-offer-reusable-system-shared-rules-01"
             },
             {
               "label": {
@@ -5136,7 +5354,8 @@
               "text": {
                 "en": "Available, applicable, selected, redeemed and error states",
                 "zh": "可用、適用、已選、已兌換與錯誤狀態"
-              }
+              },
+              "assetId": "voucher-offer-reusable-system-shared-states-01"
             },
             {
               "label": {
@@ -5146,7 +5365,8 @@
               "text": {
                 "en": "Discovery, selection, application and recovery",
                 "zh": "探索、選擇、套用與復原"
-              }
+              },
+              "assetId": "voucher-offer-reusable-system-reusable-patterns-01"
             },
             {
               "label": {
@@ -5156,7 +5376,8 @@
               "text": {
                 "en": "Voucher Card variants mapped to Operations configuration",
                 "zh": "Voucher Card variants 對應營運設定"
-              }
+              },
+              "assetId": "voucher-offer-reusable-system-component-foundation-01"
             }
           ],
           "voucherCard": {
@@ -5185,7 +5406,6 @@
               }
             ],
             "researchExample": {
-              "eyebrow": {"en": "RESEARCH EXAMPLE", "zh": "研究案例"},
               "title": {
                 "en": "One study helped define what the Voucher Card needed to communicate first",
                 "zh": "一項研究協助定義優惠券卡片應優先傳達的資訊"
@@ -5194,7 +5414,10 @@
                 "en": "A 15-participant study was one of several research inputs used to shape the reusable Voucher Card system.",
                 "zh": "一項 15 人研究，是形塑可重用優惠券卡片系統的多項研究輸入之一。"
               },
-              "study": {"en": "Study: 15 participants", "zh": "研究：15 位參與者"},
+              "study": {
+                "en": "Study: 15 participants",
+                "zh": "研究：15 位參與者"
+              },
               "thirdFinding": {
                 "en": "Colour helped differentiate variants, but comprehension showed it could not carry meaning alone.",
                 "zh": "色彩有助於區分版本，但理解結果顯示它不能單獨承載意義。"
@@ -5207,40 +5430,9 @@
             "insight": {
               "en": "Colour differentiated variants, but colour could not carry meaning alone.",
               "zh": "色彩可區分版本，但不能單獨承載意義。"
-            }
+            },
+            "integratedSection": true
           },
-          "delivery": [
-            {
-              "label": {
-                "en": "SHIPPED",
-                "zh": "已上線"
-              },
-              "text": {
-                "en": "Shared terminology, eligibility rules, lifecycle states and reusable patterns.",
-                "zh": "共享用語、資格規則、生命週期狀態與可重用模式。"
-              }
-            },
-            {
-              "label": {
-                "en": "PARTIALLY REALISED",
-                "zh": "部分實現"
-              },
-              "text": {
-                "en": "Contextual discovery, progress communication and recovery.",
-                "zh": "情境式探索、進度溝通與復原。"
-              }
-            },
-            {
-              "label": {
-                "en": "FUTURE",
-                "zh": "未來"
-              },
-              "text": {
-                "en": "Cross-channel orchestration and end-to-end measurement.",
-                "zh": "跨通路協作與端到端衡量。"
-              }
-            }
-          ],
           "future": {
             "headline": {
               "en": "From campaign Vouchers to an intent-led incentive platform",
@@ -5282,10 +5474,12 @@
                 }
               }
             ],
-            "status": {
-              "en": "Future direction — not delivered during my tenure.",
-              "zh": "未來方向・任職期間未交付。"
-            }
+            "integratedIntoNarrative": true
+          },
+          "layout": {
+            "desktop": "2x2",
+            "tablet": "2x2",
+            "mobile": "1-column"
           }
         },
         "outcomes": {
@@ -5295,13 +5489,6 @@
           },
           "metrics": [
             {
-              "value": "400+",
-              "label": {
-                "en": "in-app Vouchers",
-                "zh": "App 內 Vouchers"
-              }
-            },
-            {
               "value": "~125K",
               "label": {
                 "en": "digital redemptions in the final three weeks",
@@ -5309,10 +5496,17 @@
               }
             },
             {
-              "value": "~31%",
+              "value": "30.6%",
               "label": {
-                "en": "digital redemption share",
-                "zh": "數位兌換占比"
+                "en": "of all campaign redemptions were digital in the final three weeks",
+                "zh": "最後三週所有活動兌換中為數位兌換的比例"
+              }
+            },
+            {
+              "value": "2 weeks → 2 days",
+              "label": {
+                "en": "recurring cross-team Voucher alignment cycle",
+                "zh": "跨團隊 Voucher 定期對齊週期"
               }
             }
           ],
@@ -5353,7 +5547,8 @@
               "en": "Joint prioritisation, feasibility, rules and measurement with cross-functional partners.",
               "zh": "與跨職能夥伴共同進行優先排序、可行性、規則與衡量決策。"
             }
-          }
+          },
+          "componentVariant": "shared-accountability"
         }
       }
     },
@@ -18919,7 +19114,7 @@
     }
   },
   "assetRegistry": {
-    "packageVersion": "r142-content-source-registration",
+    "packageVersion": "2026-08-10-r149",
     "sourceAssets": {
       "taishin-p2p-overview-source-v1": {
         "projectId": "taishin-p2p-marketplace-platform",
@@ -19122,7 +19317,63 @@
         "contentStatus": "approved-source-evidence"
       }
     },
-    "note": "This Content SSOT registers source ownership. Production derivatives, paths, crop, caption, alt text and publicBuild remain owned by portfolio-asset-manifest.json."
+    "note": "This Content SSOT registers source ownership. Production derivatives, paths, crop, caption, alt text and publicBuild remain owned by portfolio-asset-manifest.json.",
+    "round3Assets": {
+      "voucher-offer-stage-discover-voucher-details-before-shipped-01": {
+        "projectId": "voucher",
+        "stage": "discover",
+        "filename": "voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01": {
+        "projectId": "voucher",
+        "stage": "qualify",
+        "filename": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01": {
+        "projectId": "voucher",
+        "stage": "activate",
+        "filename": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01": {
+        "projectId": "voucher",
+        "stage": "redeem",
+        "filename": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01": {
+        "projectId": "voucher",
+        "stage": "review",
+        "filename": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-reusable-system-shared-rules-01": {
+        "projectId": "voucher",
+        "stage": "reusable-system",
+        "filename": "voucher-offer-reusable-system-shared-rules-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-reusable-system-shared-states-01": {
+        "projectId": "voucher",
+        "stage": "reusable-system",
+        "filename": "voucher-offer-reusable-system-shared-states-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-reusable-system-reusable-patterns-01": {
+        "projectId": "voucher",
+        "stage": "reusable-system",
+        "filename": "voucher-offer-reusable-system-reusable-patterns-01.jpg",
+        "status": "approved"
+      },
+      "voucher-offer-reusable-system-component-foundation-01": {
+        "projectId": "voucher",
+        "stage": "reusable-system",
+        "filename": "voucher-offer-reusable-system-component-foundation-01.jpg",
+        "status": "approved"
+      }
+    }
   },
   "contentUpdateLog": {
     "r42": {
@@ -19976,6 +20227,12 @@
       "date": "2026-08-08",
       "summary": "Merged approved recruiter proof, FairPrice Group naming, ImpactEvidence contracts, shared case-study hierarchy and PDP before/shipped evidence.",
       "sourcePackage": "PORTFOLIO-CONSOLIDATED-PENDING-APPROVED-2026-08-08"
+    },
+    "voucherOfferRound3_20260810": {
+      "packageId": "VOUCHER-ROUND-3-2026-08-10",
+      "mode": "deterministic-structured-update",
+      "scope": "Voucher / Offer recruiter-first popup, approved Round 3 evidence mappings, outcomes and presentation contracts",
+      "source": "User-approved Consolidated Work Order continuation"
     }
   },
   "implementationContracts": {
@@ -30131,7 +30388,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-08",
+  "lastUpdated": "2026-08-10",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",
