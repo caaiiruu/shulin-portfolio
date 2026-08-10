@@ -36,6 +36,8 @@ const captureOutcome=async(page,outcome,file)=>{
 };
 const localizedValue=(value,locale)=>value&&typeof value==='object'&&!Array.isArray(value)?String(value[locale]||''):String(value||'');
 const expectedOutcome=(project,locale)=>{
+  const recruiterMetrics=project.recruiterFirstPopup?.outcomes?.metrics;
+  if(recruiterMetrics?.length)return recruiterMetrics.map((item,index)=>({sourcePath:`recruiterFirstPopup.outcomes.metrics.${index}.value+label`,value:`${item.value} ${localizedValue(item.label,locale)}`.trim()}));
   const governed=(project.outcomeEvidenceModel||[]).map((item,index)=>{
     if(!item||['private','blocked'].includes(item.publicUse))return null;
     const sourceField=item.claim?'claim':item.publicValue?'publicValue':item.values?'values':'';
@@ -109,7 +111,7 @@ for(const [id,url] of projects){
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-1440.png'),fullPage:true});
   const expectedEn=expectedOutcome(ssot.projects[id],'en');
-  const renderedEn=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden'})));
+  const renderedEn=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?(node.querySelector('dd')?.textContent||node.textContent):node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden'})));
   const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
   if(await outcome.isVisible().catch(()=>false))await captureOutcome(page,outcome,path.join(dir,'outcome-1440.png'))
   const matchEn=JSON.stringify(renderedEn.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedEn);
