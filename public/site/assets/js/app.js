@@ -2583,7 +2583,7 @@
  reusable.dataset.canonicalSectionId='reusable-system';reusable.dataset.contentBlockIds='recruiterFirstPopup.reusableSystem|publicContent.systemFoundations|publicContent.futureVision';
  outcomes.dataset.canonicalSectionId='validated-outcomes';outcomes.dataset.contentBlockIds='recruiterFirstPopup.outcomes|impactEvidence';
  const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro)),ag=element('div','voucher-r149-accountability');[c.accountability?.owned,c.accountability?.shared].forEach(x=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('h3','',t(x.title)),element('p','',t(x.text)));ag.append(a)});account.append(ag);account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
- [hard,contribution,insight,journey,reusable,outcomes,account].forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
+ const related=doc.getElementById('detailRelated');if(related){related.hidden=false;related.dataset.canonicalSectionId='continue-exploring';related.dataset.contentBlockIds='relatedProjects'}[hard,contribution,insight,journey,reusable,outcomes,account,related].filter(Boolean).forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence','continue-exploring'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
 }
   function renderInitiative(parentKey,initiativeKey){
     const parent=DATA.projects[parentKey];const item=parent?.initiatives?.[initiativeKey];if(!item)return;
@@ -2756,7 +2756,7 @@
   function renderRelated(){
     if(!currentDetail)return;const type=currentDetail.type;const nested=type==='initiative'||type==='stage';const relatedType=nested?'project':type;const relatedKey=nested?currentDetail.parentKey:currentDetail.key;const keys=(relatedType==='project'?RELATED_PROJECTS[relatedKey]:RELATED_EXPERIMENTS[relatedKey])||[];
     const rail=doc.getElementById('detailRelatedRail');clear(rail);keys.forEach(key=>rail.appendChild(relatedCard(relatedType,key)));enhanceCompanyNames(rail);
-    safeText(doc.getElementById('detailRelatedTitle'),ui("related-work-9e3ba8e3"));
+    safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'&&relatedKey==='voucher'?(lang==='zh'?'探索其他專案':'Explore other projects'):ui("related-work-9e3ba8e3"));
     safeText(doc.getElementById('detailRelatedCopy'),'');
     window.refreshHorizontalRails?.();
   }
