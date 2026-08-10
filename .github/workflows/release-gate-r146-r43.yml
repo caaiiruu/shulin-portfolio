@@ -99,6 +99,7 @@ jobs:
           public/site/content/portfolio-content.json
           public/site/docs/design-system/registry.json
           public/site/qa/asset-governance.mjs
+          public/site/qa/design-system-lint.mjs
           public/site/work.html
           scripts/case-study-dom-audit.mjs
           tests/rendered-html.test.mjs
