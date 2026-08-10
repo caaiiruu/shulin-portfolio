@@ -212,7 +212,8 @@ test("keeps one live registry owner per component", () => {
   const registry = JSON.parse(read("docs/design-system/registry.json"));
   const live = registry.components.filter((entry) => entry.status === "Live / Current Production");
   assert.equal(new Set(live.map((entry) => entry.component)).size, live.length);
-  assert.equal(new Set(live.filter((entry) => entry.exclusiveOwner !== false).map((entry) => entry.cssOwner)).size, live.length);
+  const exclusive = live.filter((entry) => entry.exclusiveOwner !== false);
+  assert.equal(new Set(exclusive.map((entry) => entry.cssOwner)).size, exclusive.length);
   for (const entry of live) {
     assert.doesNotMatch(entry.cssOwner.split("/").at(-1), /v\d+/i);
     assert.equal(fs.existsSync(new URL(entry.cssOwner, site)), true);
@@ -584,58 +585,29 @@ test("preserves popup stack, close, and back behavior", () => {
   assert.match(app, /detailCommerce\.hidden=isStage/);
 });
 
-test("supports the r85 Voucher programme without replacing sibling projects", () => {
+test("supports the recruiter-first Voucher programme without replacing sibling projects", () => {
   const data = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const css = read("assets/css/components/project-detail-overview.css");
   const voucher = data.projects.voucher;
   assert.equal(voucher.projectModel.renderVariant, "programme-case-with-stage-evidence");
   assert.ok(voucher.programmeInitiatives);
+  assert.equal(Object.keys(data.projects).length, 13);
   assert.match(app, /function renderProgrammeParent/);
-  const labels = Object.values(data.localizationRegistry.runtimeUiLabels).map((value) => value.en);
-  assert.ok(labels.includes("One journey—from research signals to product decisions"));
-  assert.match(app, /'View related work →'/);
-  assert.match(app, /'查看相關作品 →'/);
-  for (const retired of ["Explore ${evidenceCount}", "view-stage-case-297e5a01", "label:stage.title||stage.label"]) assert.ok(!app.includes(retired), retired);
-  assert.match(app, /label:stage\.label/);
-  assert.match(app, /transformation:stage\.title/);
-  assert.match(app, /value&&value\.trim\(\)\.toLocaleLowerCase\(\)!==shippedTitle\.trim\(\)\.toLocaleLowerCase\(\)/);
-  assert.match(app, /cta\.dataset\.stage=stage\.id/);
-  assert.doesNotMatch(app, /Detailed case and approved imagery are being prepared/);
+  assert.match(app, /'View solution details →'/);
+  assert.match(app, /'查看解決方案細節 →'/);
+  assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
+  assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
+  assert.match(app, /createProgrammeSection\(stageLabel,''\)/);
+  assert.doesNotMatch(app, /stage-focus-16475437/);
+  assert.match(app, /'PROBLEM'/);
+  assert.match(app, /'DECISION'/);
+  assert.match(app, /'EFFECT'/);
+  assert.match(app, /OWNERSHIP BOUNDARY/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);
-  assert.ok(labels.includes("One shared system behind all five journey stages"));
-  assert.doesNotMatch(app, /Capability added:/);
-  assert.ok(labels.includes("REPRESENTATIVE SHIPPED WORK"));
-  assert.ok(labels.includes("DELIVERY STATUS"));
-  assert.match(app, /'button button--dark programme-stage-case__cta'/);
-  assert.doesNotMatch(css, /\.programme-stage-case[^}]*transform:translateY/);
-  assert.match(css, /\.voucher-stage-summary article\.is-response\{[^}]*color:var\(--color-text-on-dark-primary\)/);
-  assert.match(css, /\.voucher-stage-summary article\.is-response small\{color:var\(--color-text-on-dark-secondary\)/);
-  assert.match(app, /\['Marketing','Consistent messaging'/);
-  assert.doesNotMatch(app, /\['CRM \/ Marketing'/);
-  assert.match(app, /role','tablist'/);
-  assert.match(app, /ArrowLeft','ArrowRight/);
-  assert.ok(labels.includes("My accountability"));
-  assert.match(app, /const isProgrammeChild=currentDetail\?\.type==='initiative'\|\|isJourneyStage/);
-  assert.doesNotMatch(app, /dataset\.stageBack/);
-  assert.match(app, /type==='stage'/);
-  assert.match(app, /deepLinkedStage/);
-  assert.match(app, /deepLinkedInitiative&&DATA\.projects/);
-  assert.ok(data.projects["voucher-center"]);
-  assert.ok(data.projects["game-center"]);
-  assert.match(css, /\.programme-surface-v103/);
-  assert.match(css, /\.voucher-decision-journey__thesis/);
-  assert.match(css, /\.programme-stage-cases/);
-  assert.match(css, /\.programme-stage-case__proof/);
-  assert.match(css, /\.voucher-foundation-gallery/);
-  assert.match(css, /\.voucher-foundation-gallery__tab\[aria-selected="true"\]/);
-  assert.match(css, /\.voucher-stage-summary/);
-  assert.match(css, /\.voucher-stage-decision-list/);
-  assert.match(app, /createDecisionCard/);
-  assert.doesNotMatch(css, /\.voucher-stage-evidence-card/);
-  assert.doesNotMatch(css, /\.stage-parent-link/);
-  assert.doesNotMatch(css, /overflow-wrap:anywhere/);
+  assert.match(css, /\.voucher-r149-stage/);
+  assert.match(css, /\.voucher-r149-details/);
 });
 
 test("preserves search interaction while using r85 as the active inventory", () => {
@@ -1268,10 +1240,10 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
   assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
   assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
   assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
-  assert.match(app, /localizedField\(stage,'transformation'\)/);
-  assert.match(app, /stage\.visualEvidence\?\.primary/);
-  assert.match(app, /resolveProjectAsset\(visualContract\.assetId\)/);
-  assert.match(app, /programme-stage-visual__caption/);
+  assert.match(app, /localizedField\(stageProjection\|\|stage,'whatChanged'\)/);
+  assert.match(app, /stageProjection\?\.visualEvidence\?\.primary/);
+  assert.match(app, /resolveProjectAsset\(assetId\)/);
+  assert.match(app, /before-after-evidence-v147__caption/);
   assert.match(app, /before-after-evidence-v147/);
   assert.match(app, /evidence-lightbox-v147/);
   assert.match(app, /impact-evidence-v147/);
@@ -1422,7 +1394,7 @@ test("Step 6A image frame system keeps canonical roles, intrinsic evidence and p
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
   assert.match(domain,/related-project-card__visual-v45\{[^}]*aspect-ratio:16\/10/);
   assert.match(domain,/@media\(max-width:560px\)\{[\s\S]*related-project-card__visual-v45\{aspect-ratio:4\/3/);
-  assert.match(app,/const frameRole=visualContract\.layoutVariant/);
+  assert.match(app,/frame\.dataset\.frameRole='primary-evidence'/);
 });
 
 

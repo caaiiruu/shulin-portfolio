@@ -2773,51 +2773,58 @@
       const classification=doc.getElementById('detailClassification');if(classification)classification.hidden=true;
       renderDeliveryStatus('');
       const stageLabel=localizedField(stage,'label');
-      const section=createProgrammeSection(
-        `${ui("stage-focus-16475437")} · ${stageLabel}`,
-        ''
-      );
-      section.classList.add('voucher-stage-case','voucher-r149-solution');
-      section.append(element('p','stage-focus-v148__statement',localizedField(item,'capability')||localizedField(stage,'direction')));
-      const evidenceItems=stageEvidenceItems(parent,currentDetail.key);
+      const stageProjection=parent.recruiterFirstPopup?.stages?.find(entry=>entry.id===currentDetail.key);
+      const section=createProgrammeSection(stageLabel,'');
+      section.classList.add('voucher-stage-case','voucher-r149-solution','voucher-r149-details');
+      const stageSummary=localizedField(stageProjection||stage,'whatChanged')||localizedField(item,'capability')||localizedField(stage,'direction');
+      if(stageSummary)section.append(element('p','voucher-r149-intro',stageSummary));
+      const projectedDecisions=list(stageProjection?.decisions);
+      const evidenceItems=projectedDecisions.length?projectedDecisions:stageEvidenceItems(parent,currentDetail.key);
       if(evidenceItems.length){
-        const evidenceHeading=element('div','voucher-subsection-heading');
-        evidenceHeading.append(
-          element('span','programme-card-meta-v103',lang==='zh'?'設計決策':'DESIGN DECISIONS'),
-          element('h4','',ui("product-decisions-made-at-this-stage-439156a8"))
-        );
-        const evidenceGrid=element('div','voucher-stage-decision-list');
-        evidenceItems.forEach((evidenceItem,index)=>{
-          const decision=stageEvidenceDecision(evidenceItem);
-          const card=createDecisionCard({
-            title:stageEvidenceTitle(evidenceItem),
-            result:decision.whatIDecided,
-            evidence:decision.whyThisChoice,
-            optionalBlock:decision.optionalBlock
-          },index,{showVisual:false});
-          const problem=localize(stageEvidenceProblem(evidenceItem));
-          if(problem){
-            const problemBlock=element('div','stage-decision-problem');
-            problemBlock.append(element('span','decision-field-label-v58',lang==='zh'?'問題':'PROBLEM'),element('p','',problem));
-            card.querySelector('.decision-body-v46')?.insertBefore(problemBlock,card.querySelector('.decision-result-block-v58'));
+        const evidenceGrid=element('div','voucher-r149-decision-list');
+        evidenceItems.forEach((source,index)=>{
+          const legacy=projectedDecisions.length?null:stageEvidenceDecision(source);
+          const title=projectedDecisions.length?localize(source.title):stageEvidenceTitle(source);
+          const problem=projectedDecisions.length?localize(source.problem):localize(stageEvidenceProblem(source));
+          const decision=projectedDecisions.length?localize(source.decision):localize(legacy?.whatIDecided);
+          const effect=projectedDecisions.length?localize(source.effect):localize(legacy?.whyThisChoice);
+          const card=element('article','voucher-r149-decision');
+          card.append(element('span','voucher-r149-eyebrow',`${lang==='zh'?'決策':'DECISION'} ${String(index+1).padStart(2,'0')}`),element('h3','',title));
+          const fields=element('div','voucher-r149-decision__fields');
+          [[lang==='zh'?'問題':'PROBLEM',problem],[lang==='zh'?'決策':'DECISION',decision],[lang==='zh'?'效果':'EFFECT',effect]].forEach(([label,value])=>{if(!value)return;const field=element('div');field.append(element('span','decision-field-label-v58',label),element('p','',value));fields.append(field)});
+          card.append(fields);
+          const optional=source.optionalBlock||legacy?.optionalBlock;
+          if(optional?.type&&optional?.content&&/^(TRADE-OFF|WHAT THIS REQUIRED|REQUIREMENT|CONSTRAINT|RISK)/i.test(optional.type)){
+            const extra=element('div','voucher-r149-decision__optional');
+            extra.append(element('span','decision-field-label-v58',optional.type),element('p','',localize(optional.content)));
+            card.append(extra);
           }
-          const meta=element('div','stage-decision-meta');
-          const ownership=localize(stageEvidenceOwnership(evidenceItem));
-          const status=stageEvidenceStatus(evidenceItem);
+          if(source.trend?.value){
+            const trend=element('div','voucher-r149-decision__trend');
+            trend.append(element('strong','',source.trend.value),element('span','',localize(source.trend.label)),element('p','',localize(source.trend.boundary)));
+            card.append(trend);
+          }
+          const ownership=projectedDecisions.length?localize(source.ownership):localize(stageEvidenceOwnership(source));
           if(ownership){
-            const block=element('div');
-            block.append(element('small','',ui("my-ownership-9a18ac5d")),element('p','',ownership));
-            meta.append(block);
+            const owner=element('div','voucher-r149-decision__ownership');
+            owner.append(element('span','decision-field-label-v58',lang==='zh'?'責任邊界':'OWNERSHIP BOUNDARY'),element('p','',ownership));
+            card.append(owner);
           }
-          if(status){
-            const block=element('div');
-            block.append(element('small','',ui("delivery-boundary-c71a736f")),element('strong','',formatStatus(status)));
-            meta.append(block);
-          }
-          if(meta.childElementCount)card.querySelector('.decision-body-v46')?.append(meta);
           evidenceGrid.append(card);
         });
-        section.append(evidenceHeading,evidenceGrid);
+        section.append(evidenceGrid);
+      }
+      const visual=stageProjection?.visualEvidence?.primary||parent.publicContent?.journeyChapters?.find(entry=>entry.id===currentDetail.key)?.visualEvidence?.primary;
+      if(visual?.beforeAssetId&&visual?.shippedAssetId){
+        const figure=element('figure','voucher-r149-evidence'),grid=element('div','before-after-evidence-v147__grid'),copy=visual.copy?.[lang==='zh'?'zh':'en']||{};
+        [[visual.beforeAssetId,copy.beforeLabel,copy.beforeCaption,'is-before'],[visual.shippedAssetId,copy.shippedLabel,copy.shippedCaption,'is-shipped']].forEach(([assetId,label,caption,state])=>{
+          const asset=resolveProjectAsset(assetId),part=element('div',`before-after-evidence-v147__item ${state}`),frame=element('button','before-after-evidence-v147__frame');
+          frame.type='button';frame.dataset.expandableEvidence='true';frame.dataset.frameRole='primary-evidence';
+          const image=doc.createElement('img');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';
+          const htmlCaption=element('figcaption','before-after-evidence-v147__caption');htmlCaption.append(element('strong','',label),element('span','',caption));
+          frame.append(image);part.append(frame,htmlCaption);grid.append(part);
+        });
+        figure.append(grid);section.append(figure);
       }
       programmeSurface().append(section);
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
