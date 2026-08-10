@@ -2778,7 +2778,10 @@
       doc.getElementById('galleryPrev').hidden=false;
       doc.getElementById('galleryNext').hidden=false;
     }
-    programmeSurface().hidden=!(isProgramme||isInitiative||isStage);
+    const sharedProgrammeSurface=programmeSurface();
+    const sharedRelated=doc.getElementById('detailRelated');
+    if(sharedRelated&&sharedProgrammeSurface.contains(sharedRelated))projectView.append(sharedRelated);
+    sharedProgrammeSurface.hidden=!(isProgramme||isInitiative||isStage);
     dialog?.classList.toggle('is-experiment',!isProject);dialog?.classList.toggle('is-project',isProject);dialog?.classList.toggle('is-programme',isProgramme);dialog?.classList.toggle('is-initiative',isInitiative);dialog?.classList.toggle('is-stage',isStage);
     if(!isInitiative)positionProjectContext(false);
     if(isStage){
@@ -2849,6 +2852,10 @@
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
     else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
+    if((isStage||isInitiative)&&sharedRelated){
+      sharedRelated.hidden=false;
+      sharedProgrammeSurface.append(sharedRelated);
+    }
     enableExpandableEvidence(projectView);
     renderProjectSectionNav();
     if(currentDetail.type==='experiment')renderGallery();
