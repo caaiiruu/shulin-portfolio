@@ -67,8 +67,8 @@
     "voucher": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented incentive work into a reusable system that made rewards more visible, easier to act on and capable of driving repeated engagement across five shopping stages.",
-          "zh": "我將分散的獎勵工作整合為可重用系統，讓獎勵更容易被看見與採取行動，並能橫跨五個購物階段支持重複參與。"
+          "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+          "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
         },
         "supportingStatement": {
           "en": "Led research synthesis, system framing, end-to-end journey strategy, interaction architecture and recurring validation.",
@@ -4810,7 +4810,7 @@
         }
       },
       "recruiterFirstPopup": {
-        "version": "2026-08-10-r150",
+        "version": "2026-08-10-r149",
         "hero": {
           "showKeyProblems": false
         },
@@ -4826,8 +4826,8 @@
         },
         "contribution": {
           "title": {
-            "en": "I turned fragmented incentive work into a reusable system that made rewards more visible, easier to act on and capable of driving repeated engagement across five shopping stages.",
-            "zh": "我將分散的獎勵工作整合為可重用系統，讓獎勵更容易被看見與採取行動，並能橫跨五個購物階段支持重複參與。"
+            "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+            "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
           },
           "transformation": [
             {
@@ -4836,8 +4836,8 @@
                 "zh": "調整前"
               },
               "text": {
-                "en": "Fragmented incentives were easy to miss, inconsistent across journeys and repeatedly redefined by teams.",
-                "zh": "分散的獎勵容易被錯過，在不同旅程中不一致，也需要團隊反覆重新定義。"
+                "en": "Campaign-specific rules and disconnected Voucher journeys",
+                "zh": "各活動獨立規則與斷裂旅程"
               }
             },
             {
@@ -4846,8 +4846,8 @@
                 "zh": "我的介入"
               },
               "text": {
-                "en": "Connected discovery, reward visibility, progress and redemption into a behaviour-led incentive journey, while standardising the shared rules, states and reusable product foundations behind it.",
-                "zh": "將探索、獎勵可見性、進度與兌換串成行為導向的獎勵旅程，同時標準化背後的共享規則、狀態與可重用產品基礎。"
+                "en": "Shared rules, states, patterns and decision logic",
+                "zh": "共享規則、狀態、模式與決策邏輯"
               }
             },
             {
@@ -4856,8 +4856,8 @@
                 "zh": "調整後"
               },
               "text": {
-                "en": "A more compelling incentive experience designed to support repeated engagement, backed by a reusable system across five shopping stages.",
-                "zh": "以橫跨五個購物階段的可重用系統為基礎，形成更具吸引力並支持重複參與的獎勵體驗。"
+                "en": "A reusable incentive foundation across five stages",
+                "zh": "橫跨五階段的可重用獎勵基礎"
               }
             }
           ],
@@ -4963,8 +4963,8 @@
               "zh": "在商品、搜尋與店內情境中呈現相關優惠價值。"
             },
             "shipped": {
-              "en": "Contextual Voucher discovery at the product decision point",
-              "zh": "在商品決策點提供情境式優惠券探索"
+              "en": "PDP and contextual offer visibility",
+              "zh": "PDP 與情境式優惠顯示"
             },
             "decisions": [
               {
@@ -4973,32 +4973,27 @@
                   "zh": "直接在商品頁呈現適用 Voucher 價值"
                 },
                 "problem": {
-                  "en": "Customers usually started from products and shopping tasks rather than the Voucher Wallet.",
-                  "zh": "顧客通常從商品與購物任務開始，而不是從優惠券錢包開始。"
+                  "en": "Customers often missed applicable Vouchers while browsing products and could not compare Voucher and promotional value in one scan.",
+                  "zh": "顧客瀏覽商品時常錯過適用 Voucher，也無法一次比較 Voucher 與促銷價值。"
                 },
                 "decision": {
-                  "en": "Group product-related Voucher value near product information and surface the most important eligibility rules earlier in the shopping journey.",
-                  "zh": "將商品相關優惠券價值放在商品資訊附近，並在購物旅程中更早呈現最重要的資格規則。"
+                  "en": "Group product-related Voucher value near product information and expose the most important eligibility rules earlier.",
+                  "zh": "將商品相關 Voucher 價值放在商品資訊附近，並提早呈現重要資格規則。"
                 },
                 "effect": {
-                  "en": "Customers usually started from products and shopping tasks rather than the Voucher Wallet. Research showed that relevant value needed to appear where the purchase decision was already happening.",
-                  "zh": "顧客通常從商品與購物任務開始，而不是從優惠券錢包開始。研究顯示，相關價值必須出現在購買決策已經發生的位置。"
+                  "en": "Shipped an Eligible Voucher swimlane at a high-intent product touchpoint.",
+                  "zh": "在高意圖商品接觸點上線 Eligible Voucher 橫向區塊。"
                 },
                 "optionalBlock": {
                   "type": "WHAT THIS REQUIRED",
                   "content": {
-                    "en": "Align Voucher, offer and product data so eligibility and visibility states could remain consistent into cart and checkout.",
-                    "zh": "對齊優惠券、優惠與商品資料，使資格與可見性狀態能一致延續至購物車與結帳。"
+                    "en": "Align Voucher, offer and product data so visibility and eligibility states could remain consistent into cart and checkout.",
+                    "zh": "對齊 Voucher、優惠與商品資料，使狀態延續至購物車與結帳。"
                   }
                 },
                 "ownership": {
                   "en": "Shulin led research, problem framing, direction and validation / review; final detailed swimlane UI was completed with the product design team.",
                   "zh": "Shulin 主導研究、問題定義、方向與驗證／檢視；最終細部 UI 由產品設計團隊共同完成。"
-                },
-                "evidenceAssetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
-                "evidenceAlt": {
-                  "en": "Before and shipped FairPrice product detail screens comparing no Voucher discovery with eligible Voucher discovery.",
-                  "zh": "FairPrice 商品詳情頁調整前與上線後比較：從沒有優惠券探索到顯示適用優惠券。"
                 }
               },
               {
@@ -5011,12 +5006,12 @@
                   "zh": "顧客能理解規則，卻難以行動；適用商品被埋在說明之後。"
                 },
                 "decision": {
-                  "en": "Enable customers to act on eligible items directly from Voucher Details, then move shoppable content ahead of lengthy instructions so value became actionable earlier.",
-                  "zh": "讓顧客可直接從優惠券詳情頁對適用商品採取行動，再將可購物內容移到冗長說明之前，使優惠價值更早可被使用。"
+                  "en": "Add eligible products directly from Voucher Details and move them before lengthy instructions.",
+                  "zh": "從 Voucher Details 直接加入適用商品，並將商品移到冗長說明之前。"
                 },
                 "effect": {
-                  "en": "Customers could understand Voucher rules but still had to leave the page or scroll past instructions before taking the next shopping action.",
-                  "zh": "顧客雖能理解優惠券規則，仍必須離開頁面或捲過說明後才能進行下一個購物動作。"
+                  "en": "Two shipped releases turned Voucher Details into a commerce touchpoint.",
+                  "zh": "兩次上線演進將 Voucher Details 轉化為商務接觸點。"
                 },
                 "trend": {
                   "value": "~1.5% → ~4%",
@@ -5035,25 +5030,9 @@
                     "en": "Accepted one extra disclosure action for full instructions in exchange for moving shoppable products earlier.",
                     "zh": "完整說明增加一次展開，以換取提早呈現可購買商品。"
                   }
-                },
-                "evidenceAssetId": "voucher-framework-voucher-details-evolution-public-v1",
-                "evidenceAlt": {
-                  "en": "Voucher Details evolution showing eligible products made actionable earlier in the journey.",
-                  "zh": "優惠券詳情頁演進，讓適用商品更早可被採取行動。"
                 }
               }
-            ],
-            "visualEvidence": {
-              "primary": {
-                "assetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
-                "evidenceRole": "before-after",
-                "layoutVariant": "single-screen",
-                "alt": {
-                  "en": "Before and shipped FairPrice product detail screens comparing no Voucher discovery with eligible Voucher discovery.",
-                  "zh": "FairPrice 商品詳情頁調整前與上線後比較：從沒有優惠券探索到顯示適用優惠券。"
-                }
-              }
-            }
+            ]
           },
           {
             "id": "qualify",
@@ -5185,24 +5164,22 @@
           ],
           "voucherCard": {
             "headline": {
-              "en": "One study helped define what the Voucher Card needed to communicate first",
-              "zh": "一項研究協助定義 Voucher Card 應優先傳達的資訊"
+              "en": "Research informed the component; Operations configuration made it reusable.",
+              "zh": "研究形塑元件；營運設定讓它可重用。"
             },
             "history": {
               "en": "Existing white Voucher Card → colour evolution → reusable Tangram component abstraction → Operations mapping.",
               "zh": "既有白色 Voucher Card → 色彩演進 → Tangram 元件抽象化 → 營運對應。"
             },
-            "study": {
-              "en": "15 participants",
-              "zh": "15 位參與者"
-            },
-            "supporting": {
-              "en": "A 15-participant study was one of several research inputs used to shape the reusable Voucher Card system.",
-              "zh": "一項 15 人研究是形塑可重用 Voucher Card 系統的多項研究輸入之一。"
-            },
             "metrics": [
               {
-                "number": "01",
+                "value": "15",
+                "label": {
+                  "en": "participants",
+                  "zh": "位參與者"
+                }
+              },
+              {
                 "value": "14/15",
                 "label": {
                   "en": "prioritised discount value",
@@ -5210,25 +5187,16 @@
                 }
               },
               {
-                "number": "02",
                 "value": "13/15",
                 "label": {
                   "en": "prioritised usage channel",
                   "zh": "優先關注使用通路"
                 }
-              },
-              {
-                "number": "03",
-                "value": "",
-                "label": {
-                  "en": "Colour helped differentiate variants, but comprehension showed it could not carry meaning alone.",
-                  "zh": "色彩有助區分不同版本，但理解結果顯示它不能單獨承載意義。"
-                }
               }
             ],
             "insight": {
-              "en": "This is one example from a broader body of research and evidence used across the programme.",
-              "zh": "這是整項計畫更廣泛研究與證據中的一個例子。"
+              "en": "Colour differentiated variants, but colour could not carry meaning alone.",
+              "zh": "色彩可區分版本，但不能單獨承載意義。"
             }
           },
           "delivery": [
