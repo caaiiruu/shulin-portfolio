@@ -129,7 +129,7 @@ const expectedProjectIds = [
   "ctbc-mortgage-self-service-app",
   "booking-taxi-pickup-service-strategy",
 ];
-if (content.contentVersion !== "2026-08-10-r149") throw new Error("The active Content SSOT must be r149");
+if (content.contentVersion !== "2026-08-11-r150") throw new Error("The active Content SSOT must be r150");
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
 const projectIds = Object.keys(content.projects || {});
@@ -155,8 +155,8 @@ const publicExplorations = [...Object.values(content.sideProjects || {}), ...Obj
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r44" || assetManifest.contentVersion !== "2026-08-10-r149") {
-  throw new Error("The active Asset Manifest must be r44 aligned to Content r149");
+if (assetManifest.packageVersion !== "r44" || assetManifest.contentVersion !== "2026-08-11-r150") {
+  throw new Error("The active Asset Manifest must be r44 aligned to Content r150");
 }
 const derivedVisualSlots = [];
 function deriveVisualSlots(value, projectId, location = []) {
