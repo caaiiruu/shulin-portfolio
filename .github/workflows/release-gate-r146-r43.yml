@@ -380,7 +380,8 @@ jobs:
           for(const vp of viewports){
             const dir=path.join(out,vp.name);
             fs.mkdirSync(dir,{recursive:true});
-            const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},deviceScaleFactor:1});
+            const isTouchViewport=vp.name==='mobile-430';
+            const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},deviceScaleFactor:1,hasTouch:isTouchViewport,isMobile:isTouchViewport});
             const page=await context.newPage();
             page.on('console',m=>{if(m.type()==='error')consoleErrors.push(`${vp.name}: ${m.text()}`)});
             page.on('requestfailed',r=>{
@@ -391,6 +392,29 @@ jobs:
             });
             await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
             await page.waitForTimeout(1000);
+            if(['desktop-1440','tablet-871','mobile-430'].includes(vp.name)){
+              for(const stageId of ['discover','qualify','activate','redeem','review']){
+                await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+                const stageCta=page.locator('a.programme-stage-case__cta[data-stage="'+stageId+'"]');
+                if(isTouchViewport) await stageCta.tap();
+                else await stageCta.click();
+                await page.waitForTimeout(120);
+                const stageOpen=await page.locator('dialog[open]').isVisible().catch(()=>false);
+                const stageTitle=(await page.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase();
+                const stageUrl=new URL(page.url()).searchParams.get('stage');
+                if(!stageOpen||stageTitle!==stageId||stageUrl!==stageId) failures.push(vp.name+': stage interaction failed '+stageId);
+              }
+              if(vp.name==='desktop-1440'){
+                for(const [stageId,key] of [['discover','Enter'],['qualify',' ']]){
+                  await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+                  await page.locator('a.programme-stage-case__cta[data-stage="'+stageId+'"]').press(key);
+                  await page.waitForTimeout(120);
+                  if(!await page.locator('dialog[open]').isVisible().catch(()=>false)) failures.push(vp.name+': keyboard stage interaction failed '+stageId+' '+key);
+                }
+              }
+              await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+              await page.waitForTimeout(200);
+            }
             const body=page.locator('body');
             const text=await body.innerText();
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
