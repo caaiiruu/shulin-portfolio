@@ -157,15 +157,25 @@ jobs:
             public/site/qa/asset-governance.mjs \
             public/site/qa/design-system-lint.mjs
           grep -Fq 'From fragmented campaign discovery to a persistent Voucher claim product' public/site/content/portfolio-content.json
+          echo 'PASS: Voucher transformation copy'
           grep -Fq 'proposal-era modelled targets—not actual results' public/site/content/portfolio-content.json
+          echo 'PASS: proposal metric boundary'
           grep -Fq 'Original white Voucher Card' public/site/content/portfolio-content.json
+          echo 'PASS: original card module'
           grep -Fq 'Reusable Tangram component' public/site/content/portfolio-content.json
+          echo 'PASS: Tangram module'
           grep -Fq 'generate-project-pages.mjs' scripts/build-production-assets.mjs
+          echo 'PASS: page generator build hook'
           grep -Fq 'Object.entries(content.projects' scripts/generate-project-pages.mjs
+          echo 'PASS: canonical project iteration'
           ! test -e public/site/work/voucher-center-only.html
+          echo 'PASS: no duplicate Voucher route'
           grep -Fq 'contentPresentationContract' public/site/content/portfolio-content.json
+          echo 'PASS: presentation contract'
           grep -Fq 'unexpectedMissingBlocks' scripts/content-completeness-audit.mjs
+          echo 'PASS: completeness audit contract'
           ! grep -E '^\+.*(sr-only|hidden)' <(git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/js/app.js scripts/generate-project-pages.mjs)
+          echo 'PASS: no hidden patching'
           test -z "$(git status --short)"
           echo "PASS: product source matches the approved Voucher content and Stage visual evidence implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
 
