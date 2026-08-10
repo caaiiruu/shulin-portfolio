@@ -411,7 +411,7 @@
     {
       "component": "WorkLibrary",
       "status": "Live / Current Production",
-      "renderSource": "work.html and assets/js/work.js",
+      "renderSource": "work.html and assets/js/app.js",
       "contentOwner": "content/portfolio-content.json",
       "cssOwner": "assets/css/components/work-library.css",
       "tokenDependencies": [
@@ -453,7 +453,8 @@
         "Work featured card",
         "Work compact card",
         "Related card",
-        "Global search result"
+        "Global search result",
+        "Canonical project-cover image"
       ],
       "layoutContract": [
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
@@ -470,9 +471,15 @@
         "compact Work and Related variants omit redundant Domain metadata; the featured Work and Search variants retain context when it improves relevance",
         "search-result titles remain scan-friendly while preserving SSOT copy",
         "search-result CTA label and directional arrow are separate inline elements and remain on one line",
-        "shared Work hover contract across routes"
+        "shared Work hover contract across routes",
+        "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop."
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": true,
+      "assetFrameContract": {
+        "contentOwner": "content/portfolio-asset-manifest.json",
+        "runtimeOwner": "assets/js/app.js#resolveProjectAsset",
+        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225"
+      }
     },
     {
       "component": "ArtifactVisual",

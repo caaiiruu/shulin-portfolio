@@ -93,6 +93,7 @@ jobs:
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
+          public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/content/portfolio-asset-manifest.json
           public/site/docs/design-system/registry.json
           scripts/case-study-dom-audit.mjs
@@ -107,6 +108,7 @@ jobs:
             ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
             ':(exclude)public/site/assets/css/tokens.css' \
             ':(exclude)public/site/assets/css/components/domain-selector.css' \
+            ':(exclude)public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg' \
             ':(exclude)public/site/content/portfolio-asset-manifest.json' \
             ':(exclude)public/site/docs/design-system/registry.json' \
             ':(exclude)public/site/docs/stage-visual-evidence-map.json' \

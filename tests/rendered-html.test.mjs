@@ -1311,7 +1311,7 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(home, /image\.dataset\.assetStatus=isReal\?'real-active':'placeholder-active'/);
   assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
-  assert.equal(real.filter(item=>item.projectId==='voucher').length,2);
+  assert.equal(real.filter(item=>item.projectId==='voucher').length,3);
 });
 
 test("converges every project on one SSOT-ordered CaseStudySection system", () => {
@@ -1423,4 +1423,20 @@ test("Step 6A image frame system keeps canonical roles, intrinsic evidence and p
   assert.match(domain,/related-project-card__visual-v45\{[^}]*aspect-ratio:16\/10/);
   assert.match(domain,/@media\(max-width:560px\)\{[\s\S]*related-project-card__visual-v45\{aspect-ratio:4\/3/);
   assert.match(app,/const frameRole=visualContract\.layoutVariant/);
+});
+
+
+test("Work Voucher card uses the canonical project-cover image owner", () => {
+  const app=read("assets/js/app.js");
+  const work=read("work.html");
+  const css=read("assets/css/components/project-card.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const asset=manifest.items["voucher-hero-incentive-journey-public-v1"];
+  assert.equal(asset.sha256,"ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409");
+  assert.equal(asset.implementationStatus,"real-active");
+  assert.doesNotMatch(work,/work-artifact--voucher/);
+  assert.match(work,/data-frame-role="project-cover"/);
+  assert.match(app,/resolveProjectAsset\(coverAssetId\)/);
+  assert.match(app,/image\.dataset\.assetId=coverAsset\.assetId/);
+  assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });

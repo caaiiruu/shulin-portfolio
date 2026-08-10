@@ -919,9 +919,21 @@
     card.dataset.workCategories=workFilterIdsForProject(id).join(' ');
     const button=element('button','work-card-v32__button');
     button.type='button';button.dataset.project=id;button.dataset.pressable='';
-    const visual=element('div',`work-artifact work-artifact--${id}`);
-    visual.setAttribute('aria-hidden','true');
-    appendArtifactContents(visual,projectArtifactLabels(id));
+    const coverAssetId=id==='voucher'?'voucher-hero-incentive-journey-public-v1':(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId);
+    const coverAsset=coverAssetId?resolveProjectAsset(coverAssetId):null;
+    const visual=element('div',coverAsset?'work-artifact work-card-v32__visual-v225':`work-artifact work-artifact--${id}`);
+    visual.dataset.frameRole='project-cover';
+    if(coverAsset){
+      const image=element('img','work-card-v32__image-v225');
+      image.src=coverAsset.src;image.loading=index===0?'eager':'lazy';image.decoding='async';
+      image.alt=localize(coverAsset.alt);image.dataset.assetId=coverAsset.assetId;
+      image.dataset.assetStatus=coverAsset.isPlaceholder?'placeholder-active':'real-active';
+      visual.dataset.assetStatus=image.dataset.assetStatus;
+      visual.append(image);
+    }else{
+      visual.setAttribute('aria-hidden','true');
+      appendArtifactContents(visual,projectArtifactLabels(id));
+    }
     const content=element('div','work-card-v32__content');
     const top=element('div','work-card-v32__top related-project-card__top-v45');
     top.append(element('strong','related-project-card__company-v135',localize(project.company)));
