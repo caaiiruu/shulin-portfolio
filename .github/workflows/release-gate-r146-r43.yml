@@ -46,7 +46,7 @@ jobs:
     timeout-minutes: 45
     env:
       IMPLEMENTATION_HEAD: de9a697dc4f446512678ab365e6f78a286a19b49
-      EXPECTED_SSOT_SHA256: 9569246344daf1efceef37fe979b03fe9686b3620ad05a6e8e5853fb6b85a2ce
+      EXPECTED_SSOT_SHA256: 91c68e56cb49eda460b6f46882288c3db1722373e83867a09f5a1827b9feb97e
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -82,7 +82,7 @@ jobs:
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
           expected_checkout_ref="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
           test "$(git rev-parse HEAD)" = "$(git rev-parse "$expected_checkout_ref^{commit}")"
-          test -n "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')"
+          test "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')" = "$EXPECTED_SSOT_SHA256"
           grep -Fq '"contentVersion": "2026-08-10-r149"' public/site/content/portfolio-content.json
           git merge-base --is-ancestor "$IMPLEMENTATION_HEAD" HEAD
           git diff --name-only "$IMPLEMENTATION_HEAD"..HEAD | sort > /tmp/qa-changed-files.txt
@@ -96,6 +96,7 @@ jobs:
           public/site/assets/js/home.js
           public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/content/portfolio-asset-manifest.json
+          public/site/content/portfolio-content.json
           public/site/docs/design-system/registry.json
           public/site/work.html
           scripts/case-study-dom-audit.mjs
