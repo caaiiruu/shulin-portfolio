@@ -602,7 +602,7 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.doesNotMatch(app, /stage-focus-16475437/);
   assert.match(app, /'PROBLEM'/);
   assert.match(app, /'DECISION'/);
-  assert.match(app, /'EFFECT'/);
+  assert.match(app, /effect:source\.effect/);
   assert.match(app, /OWNERSHIP BOUNDARY/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);
