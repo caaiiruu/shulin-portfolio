@@ -703,6 +703,41 @@
         "Homepage"
       ],
       "exclusiveOwner": true
+    },
+    {
+      "component": "RecruiterFirstCaseStudy",
+      "status": "Live / Current Production",
+      "renderSource": "assets/js/app.js#renderProgrammeParent",
+      "contentOwner": "content/portfolio-content.json#projects.voucher.recruiterFirstPopup",
+      "cssOwner": "assets/css/components/project-detail-overview.css",
+      "tokenDependencies": [
+        "cmp-evidence-section-gap",
+        "cmp-evidence-section-padding",
+        "cmp-popup-section-title-size",
+        "cmp-popup-metric-size"
+      ],
+      "usageScope": [
+        "Voucher parent case",
+        "Voucher stage solution details"
+      ],
+      "variants": [
+        "SystemInsight",
+        "TransformationFlow",
+        "StageOverview",
+        "EvidenceFrame",
+        "DecisionBlock",
+        "MetricStrip",
+        "Accountability"
+      ],
+      "allowedModifications": [
+        "Shared variant extension"
+      ],
+      "forbiddenModifications": [
+        "Voucher-specific global override",
+        "Container nesting",
+        "Magic spacing values"
+      ],
+      "exclusiveOwner": true
     }
   ]
 }

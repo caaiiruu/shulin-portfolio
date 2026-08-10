@@ -1440,3 +1440,5 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(app,/image\.dataset\.assetId=coverAsset\.assetId/);
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
+
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-10-r149");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/minmax\(0,5fr\) minmax\(0,7fr\)/);assert.match(css,/@media\(max-width:871px\)/)});

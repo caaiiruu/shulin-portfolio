@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-09-r148",
+  "contentVersion": "2026-08-10-r149",
   "supersedes": "2026-08-06-r146",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -67,12 +67,12 @@
     "voucher": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented voucher work into a shared product direction that reduced repeated definition and enabled coordinated delivery across journeys.",
-          "zh": "我把分散的優惠券工作，建立成共享產品方向，減少重複定義，也讓不同旅程能在同一套基礎上協同交付。"
+          "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+          "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
         },
         "supportingStatement": {
-          "en": "I used conversion baselines and funnel evidence—including 27% Add-to-Cart, 62% redemption, 2.4% eligible-item-to-cart, and 1.8% PDP-to-cart rates—to prioritise contextual exposure, direct actions, and recoverable flows across product, cart, checkout, wallet, and in-store journeys.",
-          "zh": "我以 27% 加入購物車、62% 兌換率、2.4% 適用商品到購物車，以及 1.8% 商品頁到購物車等基準，排定情境式曝光、直接操作與錯誤復原的優先順序，涵蓋商品、購物車、結帳、票券錢包與門市旅程。"
+          "en": "Led research synthesis, system framing, end-to-end journey strategy, interaction architecture and recurring validation.",
+          "zh": "主導研究統整、系統定義、端到端旅程策略、互動架構與持續驗證。"
         }
       },
       "context": "FairPrice Group",
@@ -4516,32 +4516,12 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Cross-channel rule fragmentation",
-            "zh": "跨通路規則分散"
+            "en": "Scaling incentives meant aligning different rules, states and behaviours across multiple shopping journeys.",
+            "zh": "擴展獎勵體驗，代表必須對齊多條購物旅程中的不同規則、狀態與行為。"
           },
           "description": {
-            "en": "Rules evolved separately across online, in-store, and supplier-funded journeys, creating inconsistent terminology, states, and exceptions.",
-            "zh": "線上、門市與供應商出資旅程各自發展規則，造成用語、狀態與例外處理不一致。"
-          }
-        },
-        {
-          "title": {
-            "en": "Multi-party priorities",
-            "zh": "多方目標並存"
-          },
-          "description": {
-            "en": "Customer value, supplier visibility, campaign goals, and operational feasibility had to coexist within the same incentive model.",
-            "zh": "顧客價值、供應商曝光、活動目標與營運可行性必須共存於同一套獎勵模型。"
-          }
-        },
-        {
-          "title": {
-            "en": "Reuse depended on rule clarity",
-            "zh": "重用仰賴規則清晰"
-          },
-          "description": {
-            "en": "Eligibility, claim, expiry, redemption, and sponsorship logic had to be consistently defined before teams could safely reuse product patterns.",
-            "zh": "資格、領取、到期、兌換與出資邏輯必須先被一致定義，團隊才能安全重用產品模式。"
+            "en": "Campaign-specific logic had accumulated across channels, creating repeated interpretation for teams and inconsistent expectations for customers.",
+            "zh": "各通路長期累積活動專屬邏輯，讓團隊必須重複解讀，也使顧客對體驗產生不一致預期。"
           }
         }
       ],
@@ -4580,8 +4560,8 @@
         "zh": "從分散的活動規則，到可重用的獎勵系統"
       },
       "atAGlance": {
-        "en": "Led a three-year incentive programme, turning campaign-specific voucher rules into shared product logic and reusable capabilities across product, cart, checkout, wallet, and in-store journeys.",
-        "zh": "主導為期三年的獎勵系統計畫，將各活動獨立的優惠券規則整合為共享產品邏輯與可重用能力，涵蓋商品、購物車、結帳、票券錢包與門市旅程。"
+        "en": "Led the three-year evolution of FairPrice’s incentive experience, turning campaign-specific Voucher logic into reusable product rules and capabilities across product, cart, checkout, Wallet and in-store journeys.",
+        "zh": "主導 FairPrice 三年獎勵體驗演進，將各活動獨立的 Voucher 邏輯轉化為可重用的產品規則與能力，涵蓋商品、購物車、結帳、Wallet 與門市旅程。"
       },
       "problemTypes": {
         "en": [
@@ -4613,17 +4593,29 @@
           }
         },
         "scope": {
-          "en": "Platform-level discovery, eligibility, wallet, redemption, campaign configuration, and reusable product foundations",
-          "zh": "平台層級的探索、資格、票券錢包、兌換、活動設定與可重用產品基礎"
+          "en": "End-to-end incentive journey",
+          "zh": "端到端獎勵旅程"
         },
         "audience": {
           "primary": {
-            "en": "Primary: Customers\nSecondary: Operations, marketing, product, business, and supplier partners",
-            "zh": "主要：顧客\n次要：營運、行銷、產品、商務與供應商夥伴"
+            "en": "Customers",
+            "zh": "顧客"
           },
           "secondary": {
-            "en": [],
-            "zh": []
+            "en": [
+              "Operations",
+              "Marketing",
+              "Product",
+              "Business",
+              "Sponsors"
+            ],
+            "zh": [
+              "營運",
+              "行銷",
+              "產品",
+              "商務",
+              "贊助單位"
+            ]
           }
         },
         "timeline": {
@@ -4731,17 +4723,13 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
         "what-made-this-hard",
+        "my-contribution",
         "core-system-insight",
         "system-coverage-map",
-        "key-decisions",
-        "selected-shipped-evidence",
-        "future-vision",
-        "system-foundation",
-        "team-impact",
-        "ownership-and-evidence",
-        "continue-exploring"
+        "reusable-system",
+        "validated-outcomes",
+        "ownership-and-evidence"
       ],
       "heroMetadata": {
         "company": "FairPrice Group",
@@ -4818,6 +4806,640 @@
               "30.6% digital redemption share",
               "51.1K digital customers across 64.1K transactions in final three weeks"
             ]
+          }
+        }
+      },
+      "recruiterFirstPopup": {
+        "version": "2026-08-10-r149",
+        "hero": {
+          "showKeyProblems": false
+        },
+        "whatMadeThisHard": {
+          "title": {
+            "en": "Scaling incentives meant aligning different rules, states and behaviours across multiple shopping journeys.",
+            "zh": "擴展獎勵體驗，代表必須對齊多條購物旅程中的不同規則、狀態與行為。"
+          },
+          "description": {
+            "en": "Campaign-specific logic had accumulated across channels, creating repeated interpretation for teams and inconsistent expectations for customers.",
+            "zh": "各通路長期累積活動專屬邏輯，讓團隊必須重複解讀，也使顧客對體驗產生不一致預期。"
+          }
+        },
+        "contribution": {
+          "title": {
+            "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+            "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
+          },
+          "transformation": [
+            {
+              "label": {
+                "en": "BEFORE",
+                "zh": "調整前"
+              },
+              "text": {
+                "en": "Campaign-specific rules and disconnected Voucher journeys",
+                "zh": "各活動獨立規則與斷裂旅程"
+              }
+            },
+            {
+              "label": {
+                "en": "MY INTERVENTION",
+                "zh": "我的介入"
+              },
+              "text": {
+                "en": "Shared rules, states, patterns and decision logic",
+                "zh": "共享規則、狀態、模式與決策邏輯"
+              }
+            },
+            {
+              "label": {
+                "en": "AFTER",
+                "zh": "調整後"
+              },
+              "text": {
+                "en": "A reusable incentive foundation across five stages",
+                "zh": "橫跨五階段的可重用獎勵基礎"
+              }
+            }
+          ],
+          "teams": [
+            {
+              "label": {
+                "en": "Product",
+                "zh": "產品"
+              },
+              "text": {
+                "en": "Prioritise against one journey",
+                "zh": "依完整旅程排序"
+              }
+            },
+            {
+              "label": {
+                "en": "Engineering",
+                "zh": "工程"
+              },
+              "text": {
+                "en": "Reuse established rules and components",
+                "zh": "重用規則與元件"
+              }
+            },
+            {
+              "label": {
+                "en": "Design",
+                "zh": "設計"
+              },
+              "text": {
+                "en": "Start from shared states and patterns",
+                "zh": "從共享狀態與模式開始"
+              }
+            },
+            {
+              "label": {
+                "en": "Marketing",
+                "zh": "行銷"
+              },
+              "text": {
+                "en": "Use consistent condition language",
+                "zh": "使用一致條件語言"
+              }
+            },
+            {
+              "label": {
+                "en": "Operations",
+                "zh": "營運"
+              },
+              "text": {
+                "en": "Configure and diagnose from shared logic",
+                "zh": "依共享邏輯設定與診斷"
+              }
+            }
+          ]
+        },
+        "coreInsight": {
+          "title": {
+            "en": "Value had to appear in the shopping journey—not outside it",
+            "zh": "優惠價值必須出現在購物旅程中，而不是旅程之外"
+          },
+          "statement": {
+            "en": "Customers did not need more Vouchers. They needed value to appear in the right shopping context, with clear eligibility and a trustworthy path to application.",
+            "zh": "顧客需要的不是更多優惠券，而是讓價值在正確購物情境中出現，並具備清楚資格與可信任的套用路徑。"
+          },
+          "signals": [
+            {
+              "en": "Value appeared outside the shopping flow",
+              "zh": "優惠價值出現在購物流程之外"
+            },
+            {
+              "en": "Eligibility was understood too late",
+              "zh": "資格條件直到太晚才被理解"
+            },
+            {
+              "en": "One action did not fit every Voucher mechanic",
+              "zh": "單一操作無法適用所有優惠券機制"
+            },
+            {
+              "en": "Manual application created missed-value anxiety",
+              "zh": "手動套用造成漏用優惠的焦慮"
+            },
+            {
+              "en": "States and terminology changed across channels",
+              "zh": "狀態與名詞隨通路改變"
+            }
+          ],
+          "contentStatus": "approved"
+        },
+        "stages": [
+          {
+            "id": "discover",
+            "label": {
+              "en": "DISCOVER",
+              "zh": "探索"
+            },
+            "keyInsight": {
+              "en": "Customers usually began with products or shopping tasks, not the Voucher Wallet.",
+              "zh": "顧客通常從商品或購物任務開始，而不是從優惠券錢包開始。"
+            },
+            "whatChanged": {
+              "en": "Surface relevant value within product, search and in-store contexts.",
+              "zh": "在商品、搜尋與店內情境中呈現相關優惠價值。"
+            },
+            "shipped": {
+              "en": "PDP and contextual offer visibility",
+              "zh": "PDP 與情境式優惠顯示"
+            },
+            "visualEvidence": {
+              "primary": {
+                "evidenceRole": "before-after",
+                "layoutVariant": "before-after",
+                "beforeAssetId": "voucher-offer-stage-discover-pdp-before-01",
+                "shippedAssetId": "voucher-offer-stage-discover-pdp-shipped-01",
+                "copy": {
+                  "en": {
+                    "beforeLabel": "Before",
+                    "beforeCaption": "No Voucher discovery",
+                    "shippedLabel": "Shipped",
+                    "shippedCaption": "Eligible Voucher discovery"
+                  },
+                  "zh": {
+                    "beforeLabel": "調整前",
+                    "beforeCaption": "PDP 未呈現 Voucher",
+                    "shippedLabel": "已上線",
+                    "shippedCaption": "PDP 呈現適用 Voucher"
+                  }
+                },
+                "mobileBehavior": "stack",
+                "captionsAreHTML": true,
+                "placeholderState": "production"
+              }
+            },
+            "decisions": [
+              {
+                "title": {
+                  "en": "Surface applicable Voucher value directly on PDP",
+                  "zh": "直接在商品頁呈現適用 Voucher 價值"
+                },
+                "problem": {
+                  "en": "Customers often missed applicable Vouchers while browsing products and could not compare Voucher and promotional value in one scan.",
+                  "zh": "顧客瀏覽商品時常錯過適用 Voucher，也無法一次比較 Voucher 與促銷價值。"
+                },
+                "decision": {
+                  "en": "Group product-related Voucher value near product information and expose the most important eligibility rules earlier.",
+                  "zh": "將商品相關 Voucher 價值放在商品資訊附近，並提早呈現重要資格規則。"
+                },
+                "effect": {
+                  "en": "Shipped an Eligible Voucher swimlane at a high-intent product touchpoint.",
+                  "zh": "在高意圖商品接觸點上線 Eligible Voucher 橫向區塊。"
+                },
+                "optionalBlock": {
+                  "type": "WHAT THIS REQUIRED",
+                  "content": {
+                    "en": "Align Voucher, offer and product data so visibility and eligibility states could remain consistent into cart and checkout.",
+                    "zh": "對齊 Voucher、優惠與商品資料，使狀態延續至購物車與結帳。"
+                  }
+                },
+                "ownership": {
+                  "en": "Shulin led research, problem framing, direction and validation / review; final detailed swimlane UI was completed with the product design team.",
+                  "zh": "Shulin 主導研究、問題定義、方向與驗證／檢視；最終細部 UI 由產品設計團隊共同完成。"
+                }
+              },
+              {
+                "title": {
+                  "en": "Turn Voucher Details from a rules page into a shoppable journey",
+                  "zh": "將 Voucher Details 從規則頁轉化為可購物旅程"
+                },
+                "problem": {
+                  "en": "Customers could understand the rules but could not act easily; eligible products were buried below instructions.",
+                  "zh": "顧客能理解規則，卻難以行動；適用商品被埋在說明之後。"
+                },
+                "decision": {
+                  "en": "Add eligible products directly from Voucher Details and move them before lengthy instructions.",
+                  "zh": "從 Voucher Details 直接加入適用商品，並將商品移到冗長說明之前。"
+                },
+                "effect": {
+                  "en": "Two shipped releases turned Voucher Details into a commerce touchpoint.",
+                  "zh": "兩次上線演進將 Voucher Details 轉化為商務接觸點。"
+                },
+                "trend": {
+                  "value": "~1.5% → ~4%",
+                  "label": {
+                    "en": "Add-to-Cart · OBSERVATIONAL TREND",
+                    "zh": "加入購物車・觀察趨勢"
+                  },
+                  "boundary": {
+                    "en": "Observed dashboard comparison only; not an A/B test and not causal.",
+                    "zh": "僅為儀表板觀察比較；不是 A/B 測試，也不代表因果。"
+                  }
+                },
+                "optionalBlock": {
+                  "type": "TRADE-OFF ACCEPTED",
+                  "content": {
+                    "en": "Accepted one extra disclosure action for full instructions in exchange for moving shoppable products earlier.",
+                    "zh": "完整說明增加一次展開，以換取提早呈現可購買商品。"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "qualify",
+            "label": {
+              "en": "QUALIFY",
+              "zh": "資格判斷"
+            },
+            "keyInsight": {
+              "en": "Customers had to interpret product, channel and threshold conditions before knowing whether a Voucher was useful.",
+              "zh": "顧客必須自行解讀商品、通路與門檻條件，才能知道優惠券是否有用。"
+            },
+            "whatChanged": {
+              "en": "Make applicable items, channel, savings and remaining requirements visible before commitment.",
+              "zh": "在顧客投入前，先讓適用商品、通路、節省金額與剩餘條件可見。"
+            },
+            "shipped": {
+              "en": "Applicability and cart-matching states",
+              "zh": "適用性與購物車匹配狀態"
+            },
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+                "evidenceRole": "system-rule",
+                "layoutVariant": "system-visual",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Eligibility evidence connects product, channel, threshold and action rules before commitment.",
+                  "zh": "資格判斷證據在顧客投入前，連結商品、通路、門檻與操作規則。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a system visual showing Voucher eligibility and applicable-state rules.",
+                  "zh": "預留給呈現優惠券資格與適用狀態規則的系統視覺。"
+                },
+                "mobileBehavior": "single-screen",
+                "placeholderState": "governed-placeholder"
+              }
+            },
+            "decisions": []
+          },
+          {
+            "id": "activate",
+            "label": {
+              "en": "ACTIVATE",
+              "zh": "啟動／參與"
+            },
+            "keyInsight": {
+              "en": "Collect could mean purchase intent to some customers and a consequence-free game to others.",
+              "zh": "收集對部分顧客代表購買意圖，對另一些顧客則只是沒有承諾的遊戲行為。"
+            },
+            "whatChanged": {
+              "en": "Use Save, Claim, Add item or participation actions only when they match the actual incentive mechanic.",
+              "zh": "只有在符合真實獎勵機制時，才使用儲存、領取、加入商品或參與等操作。"
+            },
+            "shipped": {
+              "en": "Selected campaign and limited-value participation models",
+              "zh": "特定活動與限量價值的參與模式"
+            },
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-mechanism-transition-public-v1",
+                "evidenceRole": "flow",
+                "layoutVariant": "flow-strip",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Participation actions changed with the incentive mechanic instead of using one generic collection action.",
+                  "zh": "參與操作依獎勵機制改變，而不是套用單一通用領取行為。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a flow showing mechanic-specific Save, Claim, Add item or participation actions.",
+                  "zh": "預留給呈現依機制使用儲存、領取、加入商品或參與操作的流程。"
+                },
+                "mobileBehavior": "horizontal-rail",
+                "placeholderState": "governed-placeholder"
+              }
+            },
+            "decisions": []
+          },
+          {
+            "id": "redeem",
+            "label": {
+              "en": "REDEEM",
+              "zh": "兌換"
+            },
+            "keyInsight": {
+              "en": "Customers could miss value because added, selected and applied states were not always distinguishable.",
+              "zh": "加入、選取與套用狀態不一定清楚可辨，使顧客可能錯過優惠價值。"
+            },
+            "whatChanged": {
+              "en": "Reduce repeated selection and make eligibility, application and recovery states explicit.",
+              "zh": "降低重複選擇，並明確呈現資格、套用與復原狀態。"
+            },
+            "shipped": {
+              "en": "Select all, code application and cart matching",
+              "zh": "全選、代碼套用與購物車匹配"
+            },
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-framework-error-recovery-public-v1",
+                "evidenceRole": "flow",
+                "layoutVariant": "flow-strip",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Explicit application and recovery states reduced trial-and-error during redemption.",
+                  "zh": "明確的套用與復原狀態，降低兌換過程中的反覆試錯。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a redemption and recovery flow with explicit application states.",
+                  "zh": "預留給具明確套用狀態的兌換與復原流程。"
+                },
+                "mobileBehavior": "horizontal-rail",
+                "placeholderState": "governed-placeholder"
+              }
+            },
+            "decisions": []
+          },
+          {
+            "id": "review",
+            "label": {
+              "en": "REVIEW",
+              "zh": "使用後確認"
+            },
+            "keyInsight": {
+              "en": "Customers could complete payment without a clear understanding of what was saved, used or returned.",
+              "zh": "顧客可能在完成付款後，仍不清楚節省、使用或退回了哪些價值。"
+            },
+            "whatChanged": {
+              "en": "Preserve transparent savings, usage and post-transaction states.",
+              "zh": "保留透明的節省、使用與交易後狀態。"
+            },
+            "shipped": {
+              "en": "Selected savings and post-transaction communication",
+              "zh": "部分節省與交易後溝通"
+            },
+            "visualEvidence": {
+              "primary": {
+                "assetId": "voucher-stage-review-post-use-public-v1",
+                "evidenceRole": "shipped-state",
+                "layoutVariant": "single-screen",
+                "aspectRatio": "wide",
+                "caption": {
+                  "en": "Post-use evidence should confirm savings, usage or returned value without overstating future-state coverage.",
+                  "zh": "使用後證據應確認節省、使用或退回價值，且不誇大尚未全面實現的狀態。"
+                },
+                "alt": {
+                  "en": "Placeholder reserved for a post-use Voucher state confirming savings, usage or returned value.",
+                  "zh": "預留給確認節省、使用或退回價值的使用後優惠券狀態。"
+                },
+                "mobileBehavior": "single-screen",
+                "placeholderState": "governed-placeholder"
+              }
+            },
+            "decisions": []
+          }
+        ],
+        "reusableSystem": {
+          "title": {
+            "en": "Reusable system across journey stages",
+            "zh": "橫跨旅程階段的可重用系統"
+          },
+          "foundations": [
+            {
+              "label": {
+                "en": "SHARED RULES",
+                "zh": "共享規則"
+              },
+              "text": {
+                "en": "Eligibility, thresholds and application logic",
+                "zh": "資格、門檻與套用邏輯"
+              }
+            },
+            {
+              "label": {
+                "en": "SHARED STATES",
+                "zh": "共享狀態"
+              },
+              "text": {
+                "en": "Available, applicable, selected, redeemed and error states",
+                "zh": "可用、適用、已選、已兌換與錯誤狀態"
+              }
+            },
+            {
+              "label": {
+                "en": "REUSABLE PATTERNS",
+                "zh": "可重用模式"
+              },
+              "text": {
+                "en": "Discovery, selection, application and recovery",
+                "zh": "探索、選擇、套用與復原"
+              }
+            },
+            {
+              "label": {
+                "en": "REUSABLE COMPONENT FOUNDATION",
+                "zh": "可重用元件基礎"
+              },
+              "text": {
+                "en": "Voucher Card variants mapped to Operations configuration",
+                "zh": "Voucher Card variants 對應營運設定"
+              }
+            }
+          ],
+          "voucherCard": {
+            "headline": {
+              "en": "Research informed the component; Operations configuration made it reusable.",
+              "zh": "研究形塑元件；營運設定讓它可重用。"
+            },
+            "history": {
+              "en": "Existing white Voucher Card → colour evolution → reusable Tangram component abstraction → Operations mapping.",
+              "zh": "既有白色 Voucher Card → 色彩演進 → Tangram 元件抽象化 → 營運對應。"
+            },
+            "metrics": [
+              {
+                "value": "15",
+                "label": {
+                  "en": "participants",
+                  "zh": "位參與者"
+                }
+              },
+              {
+                "value": "14/15",
+                "label": {
+                  "en": "prioritised discount value",
+                  "zh": "優先關注折扣價值"
+                }
+              },
+              {
+                "value": "13/15",
+                "label": {
+                  "en": "prioritised usage channel",
+                  "zh": "優先關注使用通路"
+                }
+              }
+            ],
+            "insight": {
+              "en": "Colour differentiated variants, but colour could not carry meaning alone.",
+              "zh": "色彩可區分版本，但不能單獨承載意義。"
+            }
+          },
+          "delivery": [
+            {
+              "label": {
+                "en": "SHIPPED",
+                "zh": "已上線"
+              },
+              "text": {
+                "en": "Shared terminology, eligibility rules, lifecycle states and reusable patterns.",
+                "zh": "共享用語、資格規則、生命週期狀態與可重用模式。"
+              }
+            },
+            {
+              "label": {
+                "en": "PARTIALLY REALISED",
+                "zh": "部分實現"
+              },
+              "text": {
+                "en": "Contextual discovery, progress communication and recovery.",
+                "zh": "情境式探索、進度溝通與復原。"
+              }
+            },
+            {
+              "label": {
+                "en": "FUTURE",
+                "zh": "未來"
+              },
+              "text": {
+                "en": "Cross-channel orchestration and end-to-end measurement.",
+                "zh": "跨通路協作與端到端衡量。"
+              }
+            }
+          ],
+          "future": {
+            "headline": {
+              "en": "From campaign Vouchers to an intent-led incentive platform",
+              "zh": "從活動型 Vouchers 到意圖導向獎勵平台"
+            },
+            "thesis": {
+              "en": "Capture customer intent earlier, then reduce application effort through channel-appropriate mechanics.",
+              "zh": "更早取得顧客意圖，再以符合通路的機制降低套用負擔。"
+            },
+            "items": [
+              {
+                "label": {
+                  "en": "CUSTOMER VALUE",
+                  "zh": "顧客價值"
+                },
+                "content": {
+                  "en": "Relevant discovery, clear criteria, visible savings and lower redemption effort.",
+                  "zh": "相關探索、清楚條件、可見節省金額與較低兌換負擔。"
+                }
+              },
+              {
+                "label": {
+                  "en": "SPONSOR VALUE",
+                  "zh": "贊助單位價值"
+                },
+                "content": {
+                  "en": "Flexible targeting, measurable behaviour change and lower setup-to-claims overhead.",
+                  "zh": "彈性分眾設定、可衡量行為改變，以及較低的從設定到請款負擔。"
+                }
+              },
+              {
+                "label": {
+                  "en": "PLATFORM FOUNDATION",
+                  "zh": "平台基礎"
+                },
+                "content": {
+                  "en": "Shared taxonomy, eligibility, states, behaviour signals and cross-channel measurement.",
+                  "zh": "共享分類架構、資格判斷、狀態、行為訊號與跨通路衡量。"
+                }
+              }
+            ],
+            "status": {
+              "en": "Future direction — not delivered during my tenure.",
+              "zh": "未來方向・任職期間未交付。"
+            }
+          }
+        },
+        "outcomes": {
+          "title": {
+            "en": "What changed at scale",
+            "zh": "規模化後的改變"
+          },
+          "metrics": [
+            {
+              "value": "400+",
+              "label": {
+                "en": "in-app Vouchers",
+                "zh": "App 內 Vouchers"
+              }
+            },
+            {
+              "value": "~125K",
+              "label": {
+                "en": "digital redemptions in the final three weeks",
+                "zh": "最後三週數位兌換"
+              }
+            },
+            {
+              "value": "~31%",
+              "label": {
+                "en": "digital redemption share",
+                "zh": "數位兌換占比"
+              }
+            }
+          ],
+          "systemChange": {
+            "en": "The programme moved from repeated campaign decisions toward reusable rules, states and product capabilities.",
+            "zh": "計畫從重複活動決策轉向可重用規則、狀態與產品能力。"
+          }
+        },
+        "accountability": {
+          "intro": {
+            "en": "A clear line between outcomes I drove and decisions made with partners.",
+            "zh": "清楚區分我推動的成果與夥伴共同決策。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我負責成果"
+            },
+            "title": {
+              "en": "Turn fragmented incentive signals into one journey strategy",
+              "zh": "將分散獎勵訊號整合為單一旅程策略"
+            },
+            "text": {
+              "en": "Led research synthesis, system framing, end-to-end journey strategy, interaction architecture and recurring validation.",
+              "zh": "主導研究統整、系統定義、端到端旅程策略、互動架構與持續驗證。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Make the strategy buildable, measurable and operationally viable",
+              "zh": "讓策略可建置、可衡量且具營運可行性"
+            },
+            "text": {
+              "en": "Joint prioritisation, feasibility, rules and measurement with cross-functional partners.",
+              "zh": "與跨職能夥伴共同進行優先排序、可行性、規則與衡量決策。"
+            }
           }
         }
       }

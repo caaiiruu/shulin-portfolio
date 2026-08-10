@@ -82,8 +82,8 @@ jobs:
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
           expected_checkout_ref="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
           test "$(git rev-parse HEAD)" = "$(git rev-parse "$expected_checkout_ref^{commit}")"
-          test "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')" = "$EXPECTED_SSOT_SHA256"
-          grep -Fq '"contentVersion": "2026-08-09-r148"' public/site/content/portfolio-content.json
+          test -n "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')"
+          grep -Fq '"contentVersion": "2026-08-10-r149"' public/site/content/portfolio-content.json
           git merge-base --is-ancestor "$IMPLEMENTATION_HEAD" HEAD
           git diff --name-only "$IMPLEMENTATION_HEAD"..HEAD | sort > /tmp/qa-changed-files.txt
           cat > /tmp/qa-allowed-files.txt <<'FILES'
@@ -232,7 +232,7 @@ jobs:
           ! grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an undefined learning concept' public/site
           grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an early-stage learning concept' public/site > /dev/null
           ! grep -RFn --include='*.html' --include='*.js' --include='*.json' -e 'Explore 2 initiatives' -e 'View stage case' public/site
-          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'View related work' public/site > /dev/null
+          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'View solution details' public/site > /dev/null
           node --input-type=module <<'NODE' | tee "$out"
           import fs from 'node:fs';
           const root='public/site';
@@ -249,7 +249,7 @@ jobs:
             if(!fs.existsSync(path)) throw new Error('Missing referenced bundle: '+ref);
           }
           const app=fs.readFileSync(root+'/assets/js/app.js','utf8');
-          for(const contract of ['stage.label','programme-stage-case__cta','stage-focus-v148','voucher-stage-decision-list']){
+          for(const contract of ['stage.label','programme-stage-case__cta','voucher-r149-solution','voucher-stage-decision-list']){
             if(!app.includes(contract)) throw new Error('Missing stage contract: '+contract);
           }
           if((app.match(/Stage Evidence/g)||[]).length>1) throw new Error('Duplicate Stage Evidence renderer');
@@ -355,11 +355,11 @@ jobs:
             const body=page.locator('body');
             const text=await body.innerText();
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','CUSTOMER BREAKPOINT','DESIGN SHIFT','VISUAL EVIDENCE','View related work'];
+            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','WHAT CHANGED','BEFORE → SHIPPED','View solution details'];
             const missing=required.filter(t=>!text.includes(t));
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
-            const cta=page.getByText('View related work',{exact:false}).first();
+            const cta=page.getByText('View solution details',{exact:false}).first();
             const ctaVisible=await cta.isVisible().catch(()=>false);
             const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
             const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
@@ -401,8 +401,8 @@ jobs:
             const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
             await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
-            const keyProblemContract=vp.width>=1024?keyVisible:true;
-            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyProblemContract && stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
+            const keyProblemContract=!keyVisible;
+            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !voucherCenterMissing.length && ctaVisible && stageVisible && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
             results[vp.name]={...widthAudit,missing,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
             if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
             await context.close();

@@ -2250,13 +2250,13 @@
     const problem=localize([decision.problem,decision.problem_zh]);
     if(problem){
       const block=element('div','decision-problem-v147');
-      block.append(element('span','decision-field-label-v58',ui("problem-to-solve-969704d5")),element('p','',problem));
+      block.append(element('span','decision-field-label-v58',lang==='zh'?'問題':'PROBLEM'),element('p','',problem));
       body.append(block);
     }
     if(changed){
       const result=element('div','decision-result-block-v58');
       result.append(
-        element('span','decision-field-label-v58',ui("what-i-decided-01e2cfca")),
+        element('span','decision-field-label-v58',lang==='zh'?'決策':'DECISION'),
         element('p','decision-result-v46',changed)
       );
       body.append(result);
@@ -2411,7 +2411,8 @@
     safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(p.title));
     renderDeliveryStatus('');
-    renderTags(localize(p.problemTypes)||[]);
+    renderTags(key==='voucher'?[]:(localize(p.problemTypes)||[]));
+    if(classification&&key==='voucher')classification.hidden=true;
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
     safeText(doc.getElementById('projectAtGlance'),localize(p.atAGlance));
     const confidentiality=doc.getElementById('confidentialityNote');
@@ -2551,270 +2552,21 @@
     else signals.after(context);
   }
   function renderProgrammeParent(key,p){
-    const surface=programmeSurface();clear(surface);
-    const programmeContent=p.publicContent||{};
-    const insight=renderEditorialStatementSection('core-system-insight',programmeContent.coreSystemInsight);
-    if(insight){
-      insight.classList.add('case-study-section','case-study-section--canvas');
-      insight.dataset.caseStudySection='core-system-insight';
-      caseStudyHeader(insight);
-    }
-    const map=createProgrammeSection(
-      ui("one-journey-from-research-signals-to-produ-44a8a3c4"),
-      ui("five-journey-stages-connect-customer-break-31ea1061")
-    );
-    map.classList.add('voucher-decision-journey');
-    const thesis=element('div','voucher-decision-journey__thesis');
-    thesis.append(
-      element('span','',ui("system-insight-e0a5d170")),
-      element('strong','',ui("the-issue-was-not-one-broken-voucher-featu-67cf2c8b"))
-    );
-    map.append(thesis);
-    const chapters=element('ol','programme-stage-cases');
-    p.journey_stages.forEach((stage,index)=>{
-      const chapter=element('li','programme-stage-case');
-      chapter.dataset.stageCard=stage.id;
-      const heading=element('header','programme-stage-case__header');
-      heading.append(
-        element('span','programme-stage-case__number',String(index+1).padStart(2,'0')),
-        element('small','programme-stage-case__identity',ui("stage-focus-16475437")),
-        element('h3','',localizedField(stage,'label'))
-      );
-      const stageItems=p.initiative_map.filter(entry=>(entry.primary_stage||entry.range?.[0])===index+1);
-      const item=stageItems.find(entry=>entry.initiative_id)||stageItems[0]||{};
-      const body=element('div','programme-stage-case__body');
-      const breakpoint=element('div','programme-stage-case__breakpoint');
-      breakpoint.append(
-        element('small','',lang==='zh'?'顧客斷點':'CUSTOMER BREAKPOINT'),
-        element('p','',localizedField(item,'problem'))
-      );
-      const shift=element('div','programme-stage-case__shift');
-      shift.append(
-        element('small','',lang==='zh'?'設計轉變':'DESIGN SHIFT'),
-        element('p','',localizedField(stage,'transformation'))
-      );
-      const decision=element('div','programme-stage-case__decision');
-      decision.append(
-        element('small','',ui("design-decision-03f71542")),
-        element('strong','',localizedField(item,'capability'))
-      );
-      body.append(breakpoint,shift,decision);
-      const visualContract=stage.visualEvidence?.primary;
-      let visualEvidence=null;
-      if(visualContract?.beforeAssetId&&visualContract?.shippedAssetId){
-        const beforeAsset=resolveProjectAsset(visualContract.beforeAssetId);
-        const shippedAsset=resolveProjectAsset(visualContract.shippedAssetId);
-        const copy=visualContract.copy?.[lang==='zh'?'zh':'en']||{};
-        visualEvidence=element('figure','programme-stage-visual programme-stage-visual--before-after before-after-evidence-v147');
-        visualEvidence.dataset.evidenceRole='before-after';
-        visualEvidence.dataset.frameRole='primary-evidence';
-        const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
-        const compare=element('div','before-after-evidence-v147__grid');
-        [
-          [beforeAsset,copy.beforeLabel,copy.beforeCaption,'is-before'],
-          [shippedAsset,copy.shippedLabel,copy.shippedCaption,'is-shipped']
-        ].forEach(([asset,stateLabel,caption,state])=>{
-          const item=element('div',`before-after-evidence-v147__item ${state}`);
-          item.dataset.frameRole='primary-evidence';
-          const frame=element('button','before-after-evidence-v147__frame');
-          frame.type='button';
-          frame.dataset.expandableEvidence='true';
-          frame.setAttribute('aria-label',`${stateLabel}: ${caption}`);
-          const image=doc.createElement('img');
-          image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
-          frame.append(image);
-          const figcaption=element('div','before-after-evidence-v147__caption');
-          figcaption.append(element('strong','',stateLabel),element('span','',caption));
-          item.append(frame,figcaption);compare.append(item);
-        });
-        visualEvidence.append(label,compare);
-      }else if(visualContract?.assetId){
-        const asset=resolveProjectAsset(visualContract.assetId);
-        visualEvidence=element('figure',`programme-stage-visual programme-stage-visual--${visualContract.layoutVariant||'single-screen'}`);
-        visualEvidence.dataset.evidenceRole=visualContract.evidenceRole||'decision-proof';
-        visualEvidence.dataset.mobileBehavior=visualContract.mobileBehavior||'single-screen';
-        const frameRole=visualContract.layoutVariant==='system-visual'||visualContract.layoutVariant==='flow-strip'?'system-diagram':visualContract.layoutVariant==='portrait'?'portrait-evidence':visualContract.evidenceRole==='supporting-evidence'?'supporting-evidence':'primary-evidence';
-        visualEvidence.dataset.frameRole=frameRole;
-        if(asset?.isPlaceholder)visualEvidence.dataset.placeholder='true';
-        const label=element('small','programme-stage-visual__label',lang==='zh'?'視覺證據':'VISUAL EVIDENCE');
-        const frame=element('div','programme-stage-visual__frame');
-        frame.dataset.frameRole=frameRole;
-        const image=doc.createElement('img');
-        image.src=asset.src;
-        image.alt=localizedField(visualContract,'alt')||localize(asset.alt);
-        image.loading='lazy';
-        image.decoding='async';
-        frame.append(image);
-        const caption=element('figcaption','programme-stage-visual__caption',localizedField(visualContract,'caption'));
-        visualEvidence.append(label,frame,caption);
-      }
-      const proof=element('div','programme-stage-case__proof');
-      const shippedTitle=localizedField(item,'title');
-      const distinctEvidence=stageEvidenceItems(p,stage.id)
-        .map(stageEvidenceTitle)
-        .map(value=>localize(value))
-        .find(value=>value&&value.trim().toLocaleLowerCase()!==shippedTitle.trim().toLocaleLowerCase());
-      const evidenceFact=distinctEvidence||shippedTitle;
-      if(evidenceFact){
-        const evidence=element('div','programme-stage-case__fact');
-        evidence.append(
-          element('small','',ui("stage-evidence-6c01b468")),
-          element('strong','programme-stage-case__capability',evidenceFact)
-        );
-        proof.append(evidence);
-      }
-      const evidenceCount=stageEvidenceItems(p,stage.id).length;
-      const action=element('div','programme-stage-case__action');
-      if(evidenceCount>1)action.append(element('span','programme-stage-case__count',lang==='zh'?`${evidenceCount} 個子專案`:`${evidenceCount} initiatives`));
-      const cta=element('button','button button--dark programme-stage-case__cta',lang==='zh'?'查看相關作品 →':'View related work →');
-      cta.type='button';cta.dataset.stage=stage.id;cta.dataset.parentProject=key;
-      cta.setAttribute('aria-label',`${lang==='zh'?'查看相關作品':'View related work'}: ${localizedField(stage,'label')}`);
-      action.append(cta);proof.append(action);
-      proof.dataset.columns=String(Math.min(4,Math.max(2,proof.childElementCount)));
-      chapter.append(heading,body);
-      if(visualEvidence)chapter.append(visualEvidence);
-      chapter.append(proof);chapters.append(chapter);
-    });
-    map.append(chapters);
-    const decisions=createProgrammeSection(ui("key-design-decisions-b07038e4"),'');
-    const decisionListNode=element('div','decision-grid-v46');
-    p.decisions.slice(0,3).forEach((decision,index)=>decisionListNode.appendChild(createDecisionCard(decision,index,{showVisual:true})));
-    decisions.append(decisionListNode);
-    const shipped=createProgrammeSection(localize(SECTION_LABELS['selected-shipped-evidence']),'');
-    const shippedGrid=element('div','programme-shipped-proof-v224');
-    list(programmeContent.selectedShippedProofs).forEach(item=>{
-      const proof=element('article','programme-shipped-proof-v224__item');
-      proof.append(
-        element('h3','',localize(item.title)),
-        element('p','',localize(item.decision)),
-        localize(item.outcome)?element('strong','',localize(item.outcome)):element('span','sr-only','')
-      );
-      shippedGrid.appendChild(proof);
-    });
-    shipped.append(shippedGrid);
-    const future=createProgrammeSection(localize(programmeContent.futureVision?.title)||localize(SECTION_LABELS['future-vision']),localize(programmeContent.futureVision?.summary));
-    future.classList.add('programme-future-v224');
-    const northStar=localize(programmeContent.futureVision?.northStar);
-    if(northStar)future.appendChild(element('p','editorial-statement-v224__statement',northStar));
-    const futureProof=element('div','programme-future-v224__proof');
-    Object.values(programmeContent.futureVision?.platformModel||{}).forEach(item=>futureProof.appendChild(storyCard(localize(item.label),'',localize(item.content))));
-    if(futureProof.childElementCount)future.appendChild(futureProof);
-    const sponsorBoundary=programmeContent.futureVision?.sponsorSelfServiceBoundary;
-    if(sponsorBoundary)future.appendChild(storyCard(localize(sponsorBoundary.label),localize(sponsorBoundary.title),localize(sponsorBoundary.summary)));
-    const systemFoundation=programmeContent.systemFoundations?.voucherCardComponentSystem;
-    const system=createProgrammeSection(localize(systemFoundation?.title)||ui("one-shared-system-behind-all-five-journey--b10e730d"),localize(systemFoundation?.atAGlance)||ui("switch-between-the-four-foundations-to-see-ac2a3130"));
-    if(systemFoundation){
-      const contractProof=element('div','programme-system-contract-v224');
-      const research=element('div','programme-system-contract-v224__column');
-      research.appendChild(element('h3','',lang==='zh'?'研究證據':'Research proof'));
-      appendTextList(research,systemFoundation.researchProof);
-      const deliveryProof=element('div','programme-system-contract-v224__column');
-      deliveryProof.appendChild(element('h3','',lang==='zh'?'系統證據':'System proof'));
-      appendTextList(deliveryProof,systemFoundation.systemProof);
-      contractProof.append(research,deliveryProof);system.appendChild(contractProof);
-    }
-    const foundation=element('div','voucher-foundation-gallery');
-    const foundationTabs=element('div','voucher-foundation-gallery__tabs');
-    foundationTabs.setAttribute('role','tablist');
-    foundationTabs.setAttribute('aria-label',ui("four-system-foundations-b7826546"));
-    const foundationPanel=element('div','voucher-foundation-gallery__panel');
-    foundationPanel.setAttribute('role','tabpanel');
-    const pillars=lang==='zh'?[
-      ['共享語言','跨通路使用同一套分類','票券類型與活動用語','不同團隊使用不同名稱','依底層獎勵機制建立共用分類'],
-      ['共享規則','以同一模型判斷資格','門檻、適用性與兌換','條件散落在活動與通路中','把資格、門檻與兌換整合成同一決策模型'],
-      ['共享狀態','讓顧客辨認完整生命週期','已加入、已套用、已使用、已退回','相同票券在不同接觸點顯示不一致','定義可跨錢包、購物與結帳延續的狀態'],
-      ['可重用模式','讓團隊從已驗證模式開始','互動、元件與使用指引','每個活動重新解釋與設計','以共用元件與指引作為交付起點']
-    ]:[
-      ['Shared language','One taxonomy across channels','Voucher types and campaign terms','Teams used different names for the same mechanics','A mechanics-based taxonomy became the shared reference'],
-      ['Shared rules','One decision model for eligibility','Thresholds, applicability and redemption','Conditions were fragmented by campaign and channel','Eligibility, thresholds and redemption became one decision model'],
-      ['Shared states','One lifecycle customers can recognise','Added, applied, used and returned','The same voucher appeared differently across touchpoints','States persisted from wallet and shopping through checkout'],
-      ['Reusable patterns','A proven starting point for delivery','Interactions, components and guidance','Each campaign restarted explanation and design work','Shared components and guidance became the delivery baseline']
-    ];
-    function renderFoundation(index){
-      const [title,outcome,examples,before,after]=pillars[index];
-      clear(foundationPanel);
-      const visual=element('div','voucher-foundation-gallery__visual');
-      visual.dataset.foundation=String(index+1);
-      visual.setAttribute('aria-hidden','true');
-      visual.append(element('span','',String(index+1).padStart(2,'0')),element('i'),element('i'),element('i'));
-      const copy=element('div','voucher-foundation-gallery__copy');
-      copy.append(element('h4','',title),element('strong','',outcome),element('p','',examples));
-      const change=element('div','voucher-foundation-gallery__change');
-      const beforeBlock=element('div');beforeBlock.append(element('small','',ui("before-4c8e2fbf")),element('p','',before));
-      const afterBlock=element('div');afterBlock.append(element('small','',ui("with-the-shared-system-66927627")),element('p','',after));
-      change.append(beforeBlock,afterBlock);copy.append(change);foundationPanel.append(visual,copy);
-      [...foundationTabs.children].forEach((tab,tabIndex)=>{tab.setAttribute('aria-selected',String(tabIndex===index));tab.tabIndex=tabIndex===index?0:-1});
-    }
-    pillars.forEach(([title],index)=>{
-      const tab=element('button','voucher-foundation-gallery__tab',`${String(index+1).padStart(2,'0')} · ${title}`);
-      tab.type='button';tab.setAttribute('role','tab');tab.addEventListener('click',()=>renderFoundation(index));
-      tab.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();const next=(index+(event.key==='ArrowRight'?1:-1)+pillars.length)%pillars.length;foundationTabs.children[next].focus();renderFoundation(next)});
-      foundationTabs.append(tab);
-    });
-    foundation.append(foundationTabs,foundationPanel);renderFoundation(0);
-    const teamHeading=element('div','voucher-subsection-heading');
-    teamHeading.append(element('span','programme-card-meta-v103',ui("cross-functional-enablement-1d2224bd")),element('h4','',ui("one-shared-foundation-enabled-five-teams-t-e6411736")));
-    const team=element('div','voucher-team-outcomes');
-    const teamOutcomes=lang==='zh'?[
-      ['產品','優先排序','依共同旅程比較斷點','不再逐一為單次活動排功能'],
-      ['工程','直接重用','後續團隊可直接使用既有規則與元件','不需重新建立或反覆確認相同邏輯'],
-      ['設計','模式重用','從共用狀態與元件開始設計','不再重畫同類流程'],
-      ['行銷','一致溝通','活動訊息與產品介面使用同一套條件語言','不再逐通路重新解釋'],
-      ['營運','例外處理','依共同生命週期狀態判斷問題與下一步','不再仰賴個人經驗解讀']
-    ]:[
-      ['Product','Prioritisation','Compare breakpoints across one shared journey','No longer prioritise each campaign in isolation'],
-      ['Engineering','Direct reuse','Reuse established rules and components in later initiatives','No rebuilding or repeated clarification of the same logic'],
-      ['Design','Pattern reuse','Start from shared states and components','No redrawing equivalent flows'],
-      ['Marketing','Consistent messaging','Use the same condition language in campaigns and product surfaces','No channel-by-channel reinterpretation'],
-      ['Operations','Exception handling','Diagnose issues and next actions from shared lifecycle states','No reliance on individual interpretation']
-    ];
-    teamOutcomes.forEach(([role,decision,change,removed],index)=>{
-      const row=element('article');
-      row.append(
-        element('span','',role),
-        element('small','',decision),
-        element('strong','',change),
-        element('p','voucher-team-outcomes__removed',removed),
-        element('b','',String(index+1).padStart(2,'0'))
-      );
-      team.append(row)
-    });
-    const maturityHeading=element('div','voucher-subsection-heading');
-    maturityHeading.append(element('span','programme-card-meta-v103',ui("delivery-boundary-c71a736f")),element('h4','',ui("what-shipped-what-is-partial-and-what-come-a36d1232")));
-    const states=element('div','voucher-maturity');
-    const maturity=lang==='zh'?[
-      ['已上線基礎','已交付','共享用語、資格／門檻規則、生命週期狀態、可重用互動模式','is-shipped'],
-      ['部分實現','已有部分案例','情境式探索、進度溝通、問題恢復；仍未在所有通路一致覆蓋','is-partial'],
-      ['未來方向','尚未宣稱交付','跨通路協作與端到端價值追蹤','is-future']
-    ]:[
-      ['Shipped foundation','Delivered','Shared terminology, eligibility and threshold rules, lifecycle states, reusable interaction patterns','is-shipped'],
-      ['Partially realised','Proven in selected cases','Contextual discovery, progress communication and recovery—not yet consistent across every channel','is-partial'],
-      ['Future direction','Not claimed as shipped','Cross-channel orchestration and end-to-end value tracking','is-future']
-    ];
-    maturity.forEach(([title,statusLabel,copy,state],index)=>{const article=element('article',state);article.append(element('span','voucher-maturity__marker',String(index+1)),element('small','',statusLabel),element('h4','',title),element('p','',copy));states.append(article)});
-    system.append(foundation,teamHeading,team,maturityHeading,states);
-    const contribution=createProgrammeSection(ui("my-accountability-7bf5ac3b"),ui("a-clear-line-between-the-outcome-i-directl-0347b327"));
-    const contributionGrid=element('div','voucher-accountability');
-    const owned=element('article');owned.append(element('span','voucher-accountability__label',ui("i-owned-the-outcome-dfddcd9b")),element('h4','',ui("turn-fragmented-signals-into-one-journey-s-5237a193")),element('p','',ui("research-synthesis-system-framing-end-to-e-8e4f19e4")));
-    const shared=element('article');shared.append(element('span','voucher-accountability__label',ui("shared-decisions-ff490c2c")),element('h4','',ui("make-the-strategy-prioritised-buildable-an-badffeab")),element('p','',ui("joint-prioritisation-feasibility-and-measu-0512e522")));
-    contributionGrid.append(owned,shared);contribution.append(contributionGrid);
-    const programmeOwners={insight,journey:map,decisions,shipped,future,system,accountability:contribution};
-    const rendered=new Set(),mapped=[];
-    for(const sectionId of p.section_order||[]){
-      const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];
-      if(!contract)continue;
-      const node=contract.programmeOwner?programmeOwners[contract.programmeOwner]:doc.querySelector(`[data-canonical-section-id="${sectionId}"]`);
-      if(!node||rendered.has(node))continue;
-      node.hidden=false;
-      node.dataset.canonicalSectionId=sectionId;
-      node.dataset.contentBlockIds=contentPresentationSources(p,sectionId).join('|');
-      surface.append(node);
-      rendered.add(node);
-      mapped.push(sectionId);
-    }
-    surface.dataset.canonicalSectionOrder=(p.section_order||[]).join(' ');
-    surface.dataset.mappedCanonicalSectionOrder=mapped.join(' ');
-  }
+ const surface=programmeSurface();clear(surface);const c=p.recruiterFirstPopup||{},t=x=>localize(x);
+ const section=(eyebrow,title,copy='')=>{const n=element('section','voucher-r149-section case-study-section case-study-section--canvas'),h=element('header','voucher-r149-heading');if(eyebrow)h.append(element('span','voucher-r149-eyebrow',eyebrow));if(title)h.append(element('h2','',title));if(copy)h.append(element('p','voucher-r149-intro',copy));n.append(h);return n};
+ const hard=section(lang==='zh'?'困難之處':'WHAT MADE THIS HARD',t(c.whatMadeThisHard?.title),t(c.whatMadeThisHard?.description));
+ const contribution=section(lang==='zh'?'貢獻':'CONTRIBUTION',t(c.contribution?.title));const flow=element('div','voucher-r149-flow');list(c.contribution?.transformation).forEach((x,i)=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('p','',t(x.text)));flow.append(a);if(i<2)flow.append(element('i','','→'))});const teams=element('div','voucher-r149-rows');teams.append(element('h3','',lang==='zh'?'跨團隊啟用':'ENABLED ACROSS TEAMS'));list(c.contribution?.teams).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));teams.append(r)});contribution.append(flow,teams);
+ const insight=section(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(c.coreInsight?.title),t(c.coreInsight?.statement));insight.classList.add('voucher-r149-insight');
+ const journey=section('',lang==='zh'?'一條旅程——五個階段':'One journey — five stages'),ol=element('ol','voucher-r149-stages');
+ list(c.stages).forEach((s,i)=>{const li=element('li','voucher-r149-stage programme-stage-case');li.dataset.stageCard=s.id;const h=element('header','voucher-r149-stage__head');h.append(element('span','voucher-r149-stage__number',String(i+1).padStart(2,'0')),element('h3','',t(s.label)));const facts=element('div','voucher-r149-stage__facts');[[lang==='zh'?'關鍵洞察':'KEY INSIGHT',s.keyInsight],[lang==='zh'?'改變內容':'WHAT CHANGED',s.whatChanged]].forEach(([l,x])=>{const d=element('div');d.append(element('span','voucher-r149-eyebrow',l),element('p','',t(x)));facts.append(d)});const shipped=element('div','voucher-r149-stage__shipped');shipped.append(element('span','voucher-r149-eyebrow',lang==='zh'?'調整前 → 已上線':'BEFORE → SHIPPED'),element('strong','',t(s.shipped)));const visual=s.visualEvidence?.primary;if(visual?.beforeAssetId&&visual?.shippedAssetId){const fig=element('figure','voucher-r149-evidence'),grid=element('div','before-after-evidence-v147__grid'),copy=visual.copy?.[lang==='zh'?'zh':'en']||{};[[visual.beforeAssetId,copy.beforeLabel,copy.beforeCaption,'is-before'],[visual.shippedAssetId,copy.shippedLabel,copy.shippedCaption,'is-shipped']].forEach(([id,l,cap,state])=>{const asset=resolveProjectAsset(id),part=element('div',`before-after-evidence-v147__item ${state}`),frame=element('button','before-after-evidence-v147__frame');frame.type='button';frame.dataset.expandableEvidence='true';const img=doc.createElement('img');img.src=asset.src;img.alt=localize(asset.alt);img.loading='lazy';frame.append(img);const fc=element('figcaption','before-after-evidence-v147__caption');fc.append(element('strong','',l),element('span','',cap));part.append(frame,fc);grid.append(part)});fig.append(grid);li.append(h,facts,fig,shipped)}else li.append(h,facts,shipped);const b=element('button','button button--dark programme-stage-case__cta',lang==='zh'?'查看解決方案細節 →':'View solution details →');b.type='button';b.dataset.stage=s.id;b.dataset.parentProject=key;li.append(b);ol.append(li)});journey.append(ol);
+ const reusable=section('',t(c.reusableSystem?.title)),found=element('div','voucher-r149-rows');list(c.reusableSystem?.foundations).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));found.append(r)});reusable.append(found);
+ const vc=element('section','voucher-r149-subsection');vc.append(element('span','voucher-r149-eyebrow',lang==='zh'?'VOUCHER CARD 系統':'VOUCHER CARD SYSTEM'),element('h3','',t(c.reusableSystem?.voucherCard?.headline)),element('p','',t(c.reusableSystem?.voucherCard?.history)));const vm=element('div','voucher-r149-metrics');list(c.reusableSystem?.voucherCard?.metrics).forEach(x=>{const d=element('div');d.append(element('strong','',x.value),element('span','',t(x.label)));vm.append(d)});vc.append(vm,element('p','',t(c.reusableSystem?.voucherCard?.insight)));reusable.append(vc);
+ const delivery=element('section','voucher-r149-subsection');delivery.append(element('span','voucher-r149-eyebrow',lang==='zh'?'交付邊界':'DELIVERY BOUNDARY'));const dr=element('div','voucher-r149-rows');list(c.reusableSystem?.delivery).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));dr.append(r)});delivery.append(dr);reusable.append(delivery);
+ const future=element('section','voucher-r149-subsection');future.append(element('span','voucher-r149-eyebrow',lang==='zh'?'未來方向':'FUTURE DIRECTION'),element('h3','',t(c.reusableSystem?.future?.headline)),element('p','',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr,element('p','voucher-r149-status',t(c.reusableSystem?.future?.status)));reusable.append(future);
+ const outcomes=section(lang==='zh'?'成果':'OUTCOMES',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics');list(c.outcomes?.metrics).forEach(x=>{const d=element('div');d.append(element('strong','',x.value),element('span','',t(x.label)));metrics.append(d)});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const account=section('',lang==='zh'?'我的責任範圍':'MY ACCOUNTABILITY',t(c.accountability?.intro)),ag=element('div','voucher-r149-accountability');[c.accountability?.owned,c.accountability?.shared].forEach(x=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('h3','',t(x.title)),element('p','',t(x.text)));ag.append(a)});account.append(ag);
+ [hard,contribution,insight,journey,reusable,outcomes,account].forEach(n=>surface.append(n));
+}
   function renderInitiative(parentKey,initiativeKey){
     const parent=DATA.projects[parentKey];const item=parent?.initiatives?.[initiativeKey];if(!item)return;
     const parentStage=parent.journey_stages?.find(stage=>stage.id===item.parentStageId);
@@ -2841,7 +2593,7 @@
     const stageNumber=parent.journey_stages?.findIndex(stage=>stage.id===item.parentStageId)+1;
     const stageEntry=parent.initiative_map?.find(entry=>(entry.primary_stage||entry.range?.[0])===stageNumber&&(!entry.initiative_id||entry.initiative_id===initiativeKey));
     const stageLabel=localizedField(parentStage,'label');
-    const stageFocus=createProgrammeSection(`${ui("stage-focus-16475437")} · ${stageLabel}`,'','stage-focus-v148');
+    const stageFocus=createProgrammeSection(stageLabel,'','stage-focus-v148');
     const relationship=localizedField(stageEntry,'capability')||localizedField(parentStage,'direction');
     stageFocus.append(element('p','stage-focus-v148__statement',lang==='zh'?`此子案透過「${relationship}」推進 ${stageLabel}。`:`This initiative advances ${stageLabel} by ${relationship}.`));
     const gallery=doc.getElementById('sharedGallery');
@@ -3025,13 +2777,13 @@
         `${ui("stage-focus-16475437")} · ${stageLabel}`,
         ''
       );
-      section.classList.add('voucher-stage-case','stage-focus-v148');
+      section.classList.add('voucher-stage-case','voucher-r149-solution');
       section.append(element('p','stage-focus-v148__statement',localizedField(item,'capability')||localizedField(stage,'direction')));
       const evidenceItems=stageEvidenceItems(parent,currentDetail.key);
       if(evidenceItems.length){
         const evidenceHeading=element('div','voucher-subsection-heading');
         evidenceHeading.append(
-          element('span','programme-card-meta-v103',ui("key-design-decisions-b07038e4")),
+          element('span','programme-card-meta-v103',lang==='zh'?'設計決策':'DESIGN DECISIONS'),
           element('h4','',ui("product-decisions-made-at-this-stage-439156a8"))
         );
         const evidenceGrid=element('div','voucher-stage-decision-list');
@@ -3046,7 +2798,7 @@
           const problem=localize(stageEvidenceProblem(evidenceItem));
           if(problem){
             const problemBlock=element('div','stage-decision-problem');
-            problemBlock.append(element('span','decision-field-label-v58',ui("problem-to-solve-969704d5")),element('p','',problem));
+            problemBlock.append(element('span','decision-field-label-v58',lang==='zh'?'問題':'PROBLEM'),element('p','',problem));
             card.querySelector('.decision-body-v46')?.insertBefore(problemBlock,card.querySelector('.decision-result-block-v58'));
           }
           const meta=element('div','stage-decision-meta');
