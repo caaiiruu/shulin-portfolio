@@ -598,10 +598,10 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.match(app, /'查看解決方案細節 →'/);
   assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
   assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
-  assert.match(app, /createProgrammeSection\(stageLabel,''\)/);
+  assert.match(app, /voucher-stage-case/);
   assert.doesNotMatch(app, /stage-focus-16475437/);
   assert.match(app, /'PROBLEM'/);
-  assert.match(app, /'DECISION'/);
+  assert.match(app, /'WHAT I DECIDED'/);
   assert.match(app, /effect:source\.effect/);
   assert.match(app, /OWNERSHIP BOUNDARY/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
@@ -1241,10 +1241,9 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
   assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
   assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
   assert.match(app, /localizedField\(stageProjection\|\|stage,'whatChanged'\)/);
-  assert.match(app, /stageProjection\?\.visualEvidence\?\.primary/);
-  assert.match(app, /resolveProjectAsset\(assetId\)/);
-  assert.match(app, /before-after-evidence-v147__caption/);
-  assert.match(app, /before-after-evidence-v147/);
+  assert.match(app, /source\.evidence\?\.assetId/);
+  assert.match(app, /createDecisionCard\(model,index/);
+  assert.match(app, /decision-visual-v58/);
   assert.match(app, /evidence-lightbox-v147/);
   assert.match(app, /impact-evidence-v147/);
   assert.match(css, /\.programme-stage-visual\{/);
@@ -1283,7 +1282,7 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(home, /image\.dataset\.assetStatus=isReal\?'real-active':'placeholder-active'/);
   assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
-  assert.equal(real.filter(item=>item.projectId==='voucher').length,3);
+  assert.equal(real.filter(item=>item.projectId==='voucher').length,4);
 });
 
 test("converges every project on one SSOT-ordered CaseStudySection system", () => {
@@ -1413,4 +1412,4 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-09-r148");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/minmax\(0,5fr\) minmax\(0,7fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-09-r148");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*repeat\(3,minmax\(0,1fr\)\)/);assert.match(css,/@media\(max-width:871px\)/)});
