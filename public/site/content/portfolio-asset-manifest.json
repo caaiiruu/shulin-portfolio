@@ -456,6 +456,22 @@
       "publicBuild": true,
       "alt": "Shipped FairPrice product page showing an eligible Voucher beside the product decision.",
       "alt_zh": "已上線的 FairPrice 商品頁，在商品決策旁呈現適用優惠券。"
+    },
+    "voucher-offer-work-card-primary-01": {
+      "id": "voucher-offer-work-card-primary-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409",
+      "width": 1536,
+      "height": 691,
+      "alt": "Voucher and Offer Vision shown across three complete mobile product screens.",
+      "alt_zh": "Voucher 與 Offer Vision 在三支完整手機產品畫面中的呈現。"
     }
   },
   "frameSystemContract": {

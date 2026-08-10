@@ -67,7 +67,7 @@ function createProjectVisual(key){
  const visual=element('div','related-project-card__visual-v45');
  visual.dataset.frameRole='project-cover';
  const project=window.adaptPortfolioProject?.(key)||DATA.projects[key];
- const preferredAssetId=key==='voucher'?'voucher-offer-stage-discover-pdp-shipped-01':(project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId);
+ const preferredAssetId=key==='voucher'?'voucher-offer-work-card-primary-01':(project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId);
  const record=ASSETS[preferredAssetId];
  const isReal=record?.assetStatus==='production'&&record?.implementationStatus==='real-active';
  const fallback=ASSETS[record?.placeholderFallbackAssetId];
