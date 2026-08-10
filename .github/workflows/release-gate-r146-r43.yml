@@ -394,7 +394,7 @@ jobs:
             const body=page.locator('body');
             const text=await body.innerText();
             const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','WHAT CHANGED','View solution details'];
+            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','DESIGN DIRECTION','DESIGN SOLUTION','EFFECT','View solution details'];
             const missing=required.filter(t=>!text.includes(t));
             const forbiddenEvidenceLabels=['BEFORE → SHIPPED','PDP and contextual offer visibility','No Voucher discovery','Eligible Voucher discovery'];
             const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
