@@ -2554,7 +2554,7 @@
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);const c=p.recruiterFirstPopup||{},t=x=>localize(x);
  const section=(eyebrow,title,copy='')=>{const n=element('section','voucher-r149-section case-study-section case-study-section--canvas'),h=element('header','voucher-r149-heading case-study-section__header');if(eyebrow)h.append(element('span','voucher-r149-eyebrow',eyebrow));if(title)h.append(element('h2','',title));if(copy)h.append(element('p','voucher-r149-intro',copy));n.append(h);return n};
- const hard=section(lang==='zh'?'困難之處':'WHAT MADE THIS HARD',t(c.whatMadeThisHard?.title),t(c.whatMadeThisHard?.description));
+ const hard=section(lang==='zh'?'困難之處':'WHAT MADE THIS HARD',t(c.whatMadeThisHard?.title),t(c.whatMadeThisHard?.description));hard.dataset.canonicalSectionId='what-made-this-hard';
  const contribution=section(lang==='zh'?'貢獻':'CONTRIBUTION',t(c.contribution?.title));const flow=element('div','voucher-r149-flow');list(c.contribution?.transformation).forEach((x,i)=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('p','',t(x.text)));flow.append(a);if(i<2)flow.append(element('i','','→'))});const teams=element('div','voucher-r149-rows');teams.append(element('h3','',lang==='zh'?'跨團隊啟用':'ENABLED ACROSS TEAMS'));list(c.contribution?.teams).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));teams.append(r)});contribution.append(flow,teams);
  const insight=section(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(c.coreInsight?.title),t(c.coreInsight?.statement));insight.classList.add('voucher-r149-insight');
  const journey=section('',lang==='zh'?'一條旅程——五個階段':'One journey — five stages'),ol=element('ol','voucher-r149-stages');
@@ -2570,7 +2570,7 @@
  reusable.dataset.canonicalSectionId='reusable-system';reusable.dataset.contentBlockIds='recruiterFirstPopup.reusableSystem|publicContent.systemFoundations|publicContent.futureVision';
  outcomes.dataset.canonicalSectionId='validated-outcomes';outcomes.dataset.contentBlockIds='recruiterFirstPopup.outcomes|impactEvidence';
  const account=section('',lang==='zh'?'我的責任範圍':'MY ACCOUNTABILITY',t(c.accountability?.intro)),ag=element('div','voucher-r149-accountability');[c.accountability?.owned,c.accountability?.shared].forEach(x=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('h3','',t(x.title)),element('p','',t(x.text)));ag.append(a)});account.append(ag);account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
- [hard,contribution,insight,journey,reusable,outcomes,account].forEach(n=>surface.append(n));
+ [hard,contribution,insight,journey,reusable,outcomes,account].forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
 }
   function renderInitiative(parentKey,initiativeKey){
     const parent=DATA.projects[parentKey];const item=parent?.initiatives?.[initiativeKey];if(!item)return;

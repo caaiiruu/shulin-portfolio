@@ -158,7 +158,7 @@ for(const [id,url] of projects){
   const dir=path.join(out,'case-study',id);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'full-390.png'),fullPage:true});
   const expectedZh=expectedOutcome(ssot.projects[id],'zh');
-  const renderedZh=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden',fontSize:parseFloat(getComputedStyle(node).fontSize),opacity:parseFloat(getComputedStyle(node).opacity)})).filter(item=>item.visible));
+  const renderedZh=await page.locator('[data-outcome-source-path]').evaluateAll(nodes=>nodes.map(node=>({sourcePath:node.dataset.outcomeSourcePath,value:(node.matches('.voucher-r149-metrics>div')?[...node.children].map(child=>child.textContent?.trim()).filter(Boolean).join(' '):node.matches('div')?node.querySelector('dd')?.textContent:node.textContent)?.trim()||'',visible:Boolean(node.getClientRects().length)&&getComputedStyle(node).visibility!=='hidden',fontSize:parseFloat(getComputedStyle(node).fontSize),opacity:parseFloat(getComputedStyle(node).opacity)})).filter(item=>item.visible));
   const outcome=page.locator('[data-outcome-exact-projection="true"]').first();
   if(await outcome.isVisible().catch(()=>false))await captureOutcome(page,outcome,path.join(dir,'outcome-390.png'))
   const matchZh=JSON.stringify(renderedZh.map(x=>({sourcePath:x.sourcePath,value:x.value})))===JSON.stringify(expectedZh);
