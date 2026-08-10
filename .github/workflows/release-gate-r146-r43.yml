@@ -95,8 +95,8 @@ jobs:
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
           public/site/assets/js/home.js
-          public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
+          public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/content/portfolio-asset-manifest.json
           public/site/content/portfolio-content.json
           public/site/docs/design-system/registry.json
