@@ -21,7 +21,14 @@ const projects=[
 ];
 const ssot=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const presentation=ssot.implementationContracts.contentPresentationContract;
-const stageUrl='/site/work/voucher?stage=discover';
+const stageUrl='/site/work/voucher';
+const openDiscoverSolution=async page=>{
+  await page.goto(base+stageUrl,{waitUntil:'networkidle'});
+  const cta=page.getByText('View solution details',{exact:false}).first();
+  await cta.waitFor({state:'visible'});
+  await cta.click();
+  await page.locator('.voucher-r149-decision-list .decision-card-v46').first().waitFor({state:'visible'});
+};
 const viewports=[1440,1280,1024,871,768,430,390,375,320];
 const browser=await chromium.launch({headless:true});
 const failures=[];
@@ -122,7 +129,7 @@ for(const [id,url] of projects){
 }
 {
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
-  await page.goto(base+stageUrl,{waitUntil:'networkidle'});await page.waitForTimeout(500);
+  await openDiscoverSolution(page);await page.waitForTimeout(500);
   report.stageDecision=await audit(page);check('voucher-stage',report.stageDecision);if(!report.stageDecision.decisionStructure.count)failures.push('voucher-stage: no rendered shared Decision found');
   const dir=path.join(out,'case-study','voucher-stage');fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'decision-1440.png'),fullPage:true});
@@ -133,17 +140,18 @@ for(const width of viewports){
   await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});await page.waitForTimeout(300);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   const structure=await audit(page);
-  const beforeAfter=await page.evaluate(()=>{const grid=document.querySelector('.before-after-evidence-v147__grid');const items=[...document.querySelectorAll('.before-after-evidence-v147__item')];const captions=items.map(item=>{const image=item.querySelector('img'),caption=item.querySelector('.before-after-evidence-v147__caption');if(!image||!caption)return null;const ir=image.getBoundingClientRect(),cr=caption.getBoundingClientRect();return {leftDelta:Math.abs(ir.left-cr.left),gap:Math.round((cr.top-ir.bottom)*10)/10,fit:getComputedStyle(image).objectFit}}).filter(Boolean);return {count:items.length,columns:items.length>1&&Math.abs(items[0].getBoundingClientRect().top-items[1].getBoundingClientRect().top)<2?2:1,captions}});
+  await openDiscoverSolution(page);await page.waitForTimeout(200);
+  const combinedEvidence=await page.evaluate(()=>{const decision=document.querySelector('.voucher-r149-decision-list .decision-card-v46');const image=decision?.querySelector('img[src$="/voucher-offer-stage-discover-pdp-before-shipped-01.jpg"]');const forbidden=['BEFORE → SHIPPED','PDP and contextual offer visibility','No Voucher discovery','Eligible Voucher discovery'];const bodyText=document.body.innerText;return {count:image?1:0,loaded:Boolean(image?.complete&&image.naturalWidth===2048&&image.naturalHeight===1280),fit:image?getComputedStyle(image).objectFit:null,duplicateLabels:forbidden.filter(label=>bodyText.includes(label)),sharedStructure:Boolean(decision&&decision.querySelector('.decision-number-v48')&&decision.querySelector('.decision-body-v46')&&decision.querySelector('.decision-visual-v58.evidence-frame'))}});
   const horizontalInset=structure.mobileInsetOwners.filter(item=>parseFloat(item.padding[1])>0||parseFloat(item.padding[3])>0);
   const dir=path.join(out,'case-study',`viewport-${width}`);fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'voucher.png'),fullPage:true});
-  await page.goto(base+stageUrl,{waitUntil:'networkidle'});await page.waitForTimeout(200);
+  await openDiscoverSolution(page);await page.waitForTimeout(200);
   const stage=await audit(page);await page.screenshot({path:path.join(dir,'voucher-stage.png'),fullPage:true});
   await page.goto(base+'/site',{waitUntil:'networkidle'});await page.screenshot({path:path.join(dir,'domain.png'),fullPage:true});
   const cover=await page.evaluate(()=>{const frame=document.querySelector('.domain-project-list-v30 .related-project-card__visual-v45'),image=frame?.querySelector('img');if(!frame)return null;const r=frame.getBoundingClientRect(),s=getComputedStyle(frame);return {ratio:Math.round((r.width/r.height)*100)/100,fit:image?getComputedStyle(image).objectFit:null,overflow:s.overflow}});
-  const expectedColumns=width<=768?1:2,expectedCoverRatio=width<=560?1.33:1.6;
-  const framePass=beforeAfter.count===2&&beforeAfter.columns===expectedColumns&&beforeAfter.captions.every(item=>item.leftDelta<=1&&Math.abs(item.gap-8)<=1&&item.fit==='contain')&&cover&&Math.abs(cover.ratio-expectedCoverRatio)<=.03&&cover.fit==='cover'&&cover.overflow==='hidden';
-  report.imageFrames[width]={beforeAfter,cover,expectedColumns,expectedCoverRatio,pass:framePass};
+  const expectedCoverRatio=width<=560?1.33:1.6;
+  const framePass=combinedEvidence.count===1&&combinedEvidence.loaded&&combinedEvidence.fit==='contain'&&!combinedEvidence.duplicateLabels.length&&combinedEvidence.sharedStructure&&cover&&Math.abs(cover.ratio-expectedCoverRatio)<=.03&&cover.fit==='cover'&&cover.overflow==='hidden';
+  report.imageFrames[width]={combinedEvidence,cover,expectedCoverRatio,pass:framePass};
   report.viewports[width]={overflow,horizontalLegacyInsets:horizontalInset,stageDecisionSurfaces:stage.decisionStructure.disallowedCardLikeSurfaces,framePass,pass:overflow<=0&&!horizontalInset.length&&!stage.decisionStructure.disallowedCardLikeSurfaces.length&&framePass};
   if(!report.viewports[width].pass)failures.push(`viewport ${width}: ${JSON.stringify(report.viewports[width])}`);
   await context.close();
