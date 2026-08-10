@@ -20495,6 +20495,13 @@
       "projects": {
         "voucher": {
           "sections": {
+            "my-contribution": {
+              "sourcePaths": [
+                "recruiterFirstPopup.contribution"
+              ],
+              "presentationType": "transformation-and-team-enablement",
+              "renderRequired": true
+            },
             "core-system-insight": {
               "sourcePaths": [
                 "publicContent.coreSystemInsight"
@@ -20509,42 +20516,29 @@
               "presentationType": "journey-with-five-stages",
               "renderRequired": true
             },
-            "key-decisions": {
+            "reusable-system": {
               "sourcePaths": [
-                "publicContent.primaryNarrative.primaryDecisions"
-              ],
-              "presentationType": "decision-sequence",
-              "renderRequired": true
-            },
-            "selected-shipped-evidence": {
-              "sourcePaths": [
-                "publicContent.selectedShippedProofs"
-              ],
-              "presentationType": "shipped-proof-strip",
-              "renderRequired": true
-            },
-            "system-foundation": {
-              "sourcePaths": [
+                "recruiterFirstPopup.reusableSystem",
                 "publicContent.systemFoundations",
-                "publicContent.systemBehindJourney"
+                "publicContent.futureVision"
               ],
-              "presentationType": "system-foundation",
+              "presentationType": "reusable-system",
               "renderRequired": true
             },
-            "future-vision": {
+            "validated-outcomes": {
               "sourcePaths": [
-                "publicContent.futureVision",
-                "publicContent.publicArchitecture.futureVision"
+                "recruiterFirstPopup.outcomes",
+                "impactEvidence"
               ],
-              "presentationType": "future-direction",
+              "presentationType": "metric-strip",
               "renderRequired": true
             },
             "ownership-and-evidence": {
               "sourcePaths": [
-                "publicContent.myContribution",
+                "recruiterFirstPopup.accountability",
                 "ownershipModel"
               ],
-              "presentationType": "ownership",
+              "presentationType": "accountability",
               "renderRequired": true
             }
           },
@@ -20561,7 +20555,7 @@
             },
             {
               "sourcePath": "publicContent.voucherWalletEvidence",
-              "parentSectionId": "key-decisions",
+              "parentSectionId": "reusable-system",
               "presentationType": "decision-evidence"
             },
             {
