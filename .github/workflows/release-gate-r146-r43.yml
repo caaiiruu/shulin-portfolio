@@ -22,6 +22,7 @@ on:
       - public/site/qa/asset-governance.mjs
       - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png
       - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png
+      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
       - public/site/docs/stage-visual-evidence-map.json
       - public/site/docs/voucher-content-merge-audit.json
       - scripts/build-production-assets.mjs
@@ -46,7 +47,7 @@ jobs:
     timeout-minutes: 45
     env:
       IMPLEMENTATION_HEAD: de9a697dc4f446512678ab365e6f78a286a19b49
-      EXPECTED_SSOT_SHA256: 15824b3bd12f35658da2b6a7434bfbdfb5143d5053e86e2847061329a94e45fc
+      EXPECTED_SSOT_SHA256: b57d8f57271cf69767e74cfe378443b0a3c7c17190be712cb3334e6727601b90
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
@@ -95,6 +96,7 @@ jobs:
           public/site/assets/js/app.js
           public/site/assets/js/home.js
           public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
+          public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
           public/site/content/portfolio-asset-manifest.json
           public/site/content/portfolio-content.json
           public/site/docs/design-system/registry.json
@@ -135,7 +137,8 @@ jobs:
             ':(exclude)public/site/qa/asset-governance.mjs' \
             ':(exclude)public/site/qa/design-system-lint.mjs' \
             ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png'
+            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png' \
+            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg'
           git diff --check "$IMPLEMENTATION_HEAD" -- \
             public/site/content/portfolio-content.json \
             public/site/assets/js/app.js \
