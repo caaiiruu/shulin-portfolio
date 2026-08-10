@@ -716,6 +716,8 @@
         "cmp-evidence-section-padding",
         "cmp-popup-section-title-size",
         "cmp-popup-metric-size"
+        ,"case-study-emphasis-surface"
+        ,"experience-proof-cloud-shape"
       ],
       "usageScope": [
         "Voucher parent case",
@@ -729,6 +731,14 @@
         "DecisionBlock",
         "MetricStrip",
         "Accountability"
+      ],
+      "interactionContract": [
+        "At a glance remains the first recruiter summary and Contribution renders once after What made this hard",
+        "Major headings use sentence case; uppercase is reserved for semantic eyebrows and compact labels",
+        "SystemInsight reuses the homepage cloud asset and the shared emphasis-surface token",
+        "Stage surfaces are static; only their explicit View solution details action is interactive",
+        "Every approved decision image renders through EvidenceFrame without destructive crop or duplicate visible captions",
+        "Navigator Overview, Complexity and Impact resolve actual runtime targets and support pointer, keyboard and touch activation"
       ],
       "allowedModifications": [
         "Shared variant extension"

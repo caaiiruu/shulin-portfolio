@@ -30,7 +30,7 @@
   --portfolio-coral-500: #f28b82;
   --portfolio-coral-600: #f94f59;
   --portfolio-cyan-500: #4fa3b8;
-  --portfolio-cloud-surface: #f4efe8;
+  --portfolio-cloud-surface: #f4f1ea;
 
   /* Semantic layer */
   --color-text-primary: var(--ink-950);
@@ -51,6 +51,7 @@
   --color-surface-evidence-neutral: var(--paper-50);
   --color-surface-evidence-accent: var(--paper-50);
   --color-surface-evidence-item: var(--paper-0);
+  --case-study-emphasis-surface: var(--portfolio-cloud-surface);
   --color-border: var(--line-200);
   --color-border-strong: var(--line-300);
   --color-focus: var(--brand-700);
