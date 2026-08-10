@@ -89,6 +89,7 @@ jobs:
           cat > /tmp/qa-allowed-files.txt <<'FILES'
           .github/workflows/release-gate-r146-r43.yml
           public/site/assets/css/components/domain-selector.css
+          public/site/assets/css/components/project-card.css
           public/site/assets/css/components/project-detail-overview.css
           public/site/assets/css/tokens.css
           public/site/assets/js/app.js
@@ -96,6 +97,7 @@ jobs:
           public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg
           public/site/content/portfolio-asset-manifest.json
           public/site/docs/design-system/registry.json
+          public/site/work.html
           scripts/case-study-dom-audit.mjs
           tests/rendered-html.test.mjs
           FILES
