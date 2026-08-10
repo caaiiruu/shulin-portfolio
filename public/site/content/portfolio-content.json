@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-10-r149",
-  "supersedes": "2026-08-09-r148",
+  "contentVersion": "2026-08-11-r150",
+  "supersedes": "2026-08-10-r149",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -5382,8 +5382,8 @@
           ],
           "voucherCard": {
             "headline": {
-              "en": "Research informed the component; Operations configuration made it reusable.",
-              "zh": "研究形塑元件；營運設定讓它可重用。"
+              "en": "How research shaped the system",
+              "zh": "研究如何形塑系統"
             },
             "history": {
               "en": "Existing white Voucher Card → colour evolution → reusable Tangram component abstraction → Operations mapping.",
@@ -5407,16 +5407,12 @@
             ],
             "researchExample": {
               "title": {
-                "en": "One study helped define what the Voucher Card needed to communicate first",
-                "zh": "一項研究協助定義優惠券卡片應優先傳達的資訊"
+                "en": "How research shaped the system",
+                "zh": "研究如何形塑系統"
               },
               "supporting": {
                 "en": "A 15-participant study was one of several research inputs used to shape the reusable Voucher Card system.",
                 "zh": "一項 15 人研究，是形塑可重用優惠券卡片系統的多項研究輸入之一。"
-              },
-              "study": {
-                "en": "Study: 15 participants",
-                "zh": "研究：15 位參與者"
               },
               "thirdFinding": {
                 "en": "Colour helped differentiate variants, but comprehension showed it could not carry meaning alone.",
@@ -5431,16 +5427,20 @@
               "en": "Colour differentiated variants, but colour could not carry meaning alone.",
               "zh": "色彩可區分版本，但不能單獨承載意義。"
             },
-            "integratedSection": true
+            "integratedSection": true,
+            "bridge": {
+              "en": "These findings informed information hierarchy and variant differentiation before the evolved Voucher Card was abstracted into a reusable Tangram component and mapped to Operations configuration.",
+              "zh": "這些發現先形塑資訊層級與版本區分，之後演進後的 Voucher Card 才被抽象為可重用的 Tangram 元件，並對應至營運設定。"
+            }
           },
           "future": {
             "headline": {
-              "en": "From campaign Vouchers to an intent-led incentive platform",
-              "zh": "從活動型 Vouchers 到意圖導向獎勵平台"
+              "en": "What this foundation enabled",
+              "zh": "這套基礎帶來的可能性"
             },
             "thesis": {
-              "en": "Capture customer intent earlier, then reduce application effort through channel-appropriate mechanics.",
-              "zh": "更早取得顧客意圖，再以符合通路的機制降低套用負擔。"
+              "en": "The shared taxonomy, eligibility rules, states and behavioural signals created a foundation for a more intent-led incentive platform—one that could capture intent earlier, reduce application effort and support stronger cross-channel measurement.",
+              "zh": "共享分類架構、資格規則、狀態與行為訊號，為更意圖導向的獎勵平台建立基礎，使系統能更早捕捉意圖、降低套用負擔，並支援更完整的跨通路衡量。"
             },
             "items": [
               {
