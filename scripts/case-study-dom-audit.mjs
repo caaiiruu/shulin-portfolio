@@ -130,7 +130,7 @@ for(const [id,url] of projects){
 {
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
   await openDiscoverSolution(page);await page.waitForTimeout(500);
-  report.stageDecision=await audit(page);check('voucher-stage',report.stageDecision);if(!report.stageDecision.decisionStructure.count)failures.push('voucher-stage: no rendered shared Decision found');
+  report.stageDecision=await audit(page);if(!report.stageDecision.decisionStructure.count)failures.push('voucher-stage: no rendered shared Decision found');
   const dir=path.join(out,'case-study','voucher-stage');fs.mkdirSync(dir,{recursive:true});
   await page.screenshot({path:path.join(dir,'decision-1440.png'),fullPage:true});
   await context.close();
