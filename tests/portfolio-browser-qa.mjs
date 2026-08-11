@@ -109,7 +109,7 @@ for (const viewport of viewports) {
   if (viewport.name === "desktop-1419" || viewport.name === "mobile-430") {
     for (const stage of ["discover", "qualify", "activate", "redeem", "review"]) {
       await page.goto(`${baseUrl}/site/work/voucher?case=voucher&stage=${stage}`, { waitUntil: "networkidle" });
-      await capture(`child-${stage}-overview`, ".stage-focus-v148, .voucher-stage-overview, .programme-stage-case");
+      await capture(`child-${stage}-overview`, "#projectOverviewSection");
       if (stage === "discover") {
         const decisions = page.locator(".voucher-r149-decision, .decision-card-v46");
         if (await decisions.count() >= 2) {
