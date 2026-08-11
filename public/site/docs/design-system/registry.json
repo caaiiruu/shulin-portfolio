@@ -715,9 +715,9 @@
         "cmp-evidence-section-gap",
         "cmp-evidence-section-padding",
         "cmp-popup-section-title-size",
-        "cmp-popup-metric-size"
-        ,"case-study-emphasis-surface"
-        ,"experience-proof-cloud-shape"
+        "cmp-popup-metric-size",
+        "case-study-emphasis-surface",
+        "experience-proof-cloud-shape"
       ],
       "usageScope": [
         "Voucher parent case",

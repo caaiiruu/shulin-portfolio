@@ -10,7 +10,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/voucher"];
+const routes = ["/site/", "/site/work", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });

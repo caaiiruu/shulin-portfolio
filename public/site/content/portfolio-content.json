@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r152",
-  "supersedes": "2026-08-11-r151",
+  "contentVersion": "2026-08-11-r153",
+  "supersedes": "2026-08-11-r152",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -1272,7 +1272,7 @@
                 "zh": "贊助單位價值"
               },
               "content": {
-                "en": "Flexible targeting, measurable behaviour change and lower setup-to-claims overhead.",
+                "en": "Flexible targeting, measurable behaviour change and lower campaign setup and redemption overhead.",
                 "zh": "彈性分眾設定、可衡量行為改變，以及較低的從設定到請款負擔。"
               }
             },
@@ -4988,7 +4988,7 @@
         }
       },
       "recruiterFirstPopup": {
-        "version": "2026-08-10-r149",
+        "version": "2026-08-11-r153",
         "hero": {
           "showKeyProblems": false
         },
@@ -5190,13 +5190,20 @@
                   "zh": "連結 Voucher 條件與商品資格，使 Voucher Details 能呈現相關商品，而不必建立另一套探索模型。"
                 },
                 "outcome": {
-                  "en": "Customers could move directly from understanding a Voucher to exploring products they could use it on, reducing the gap between offer discovery and shopping action.",
-                  "zh": "顧客可從理解 Voucher 直接前往探索可使用的商品，縮短優惠探索與購物行動之間的落差。"
+                  "en": "In the Voucher Details flow, observed add-to-cart rate trended from ~1.5% to ~4% after eligible products were surfaced in context.",
+                  "zh": "在 Voucher Details 流程中，情境式呈現適用商品後，觀察到的加入購物車率由約 1.5% 上升至約 4%。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
                   "role": "primary-evidence",
                   "externalCaption": false
+                },
+                "outcomeMetric": {
+                  "value": "~1.5% → ~4%",
+                  "evidenceNote": {
+                    "en": "Observational product trend; not a controlled causal experiment.",
+                    "zh": "產品趨勢觀察；非受控因果實驗。"
+                  }
                 }
               }
             ],
@@ -5746,7 +5753,7 @@
                   "zh": "贊助單位價值"
                 },
                 "content": {
-                  "en": "Flexible targeting, measurable behaviour change and lower setup-to-claims overhead.",
+                  "en": "Flexible targeting, measurable behaviour change and lower campaign setup and redemption overhead.",
                   "zh": "彈性分眾設定、可衡量行為改變，以及較低的從設定到請款負擔。"
                 }
               },
@@ -5771,36 +5778,68 @@
         },
         "outcomes": {
           "title": {
-            "en": "What changed at scale",
-            "zh": "規模化後的改變"
+            "en": "The programme improved discovery, action and repeatable delivery.",
+            "zh": "計畫改善探索、行動與可重複交付。"
           },
           "metrics": [
             {
-              "value": "~125K",
+              "value": "+90.9%",
               "label": {
-                "en": "digital redemptions in the final three weeks",
-                "zh": "最後三週的數位兌換次數"
+                "en": "relative growth in PDP-linked Voucher add-to-cart rate",
+                "zh": "PDP 連結 Voucher 的加入購物車率相對成長"
+              },
+              "primaryCopy": {
+                "en": "Observed PDP-linked Voucher add-to-cart rate increased from 1.1% to 2.1%.",
+                "zh": "PDP 連結 Voucher 的加入購物車率由 1.1% 增至 2.1%。"
+              },
+              "evidenceNote": {
+                "en": "Relative growth calculated from the observed 1.1% to 2.1% change; observational product trend, not a controlled causal experiment.",
+                "zh": "相對成長依觀察到的 1.1% 至 2.1% 變化計算；屬產品趨勢觀察，非受控因果實驗。"
               }
             },
             {
-              "value": "30.6%",
+              "value": "~1.5% → ~4%",
               "label": {
-                "en": "of all campaign redemptions in the final three weeks came from digital channels",
-                "zh": "最後三週所有活動兌換中，來自數位通路的比例"
+                "en": "observed add-to-cart rate in the Voucher Details flow",
+                "zh": "Voucher Details 流程中觀察到的加入購物車率"
+              },
+              "primaryCopy": {
+                "en": "In the Voucher Details flow, observed add-to-cart rate trended from ~1.5% to ~4% after eligible products were surfaced in context.",
+                "zh": "在 Voucher Details 流程中，情境式呈現適用商品後，觀察到的加入購物車率由約 1.5% 上升至約 4%。"
+              },
+              "evidenceNote": {
+                "en": "Observational product trend; not a controlled causal experiment.",
+                "zh": "產品趨勢觀察；非受控因果實驗。"
+              }
+            },
+            {
+              "value": "~125K",
+              "label": {
+                "en": "digital redemptions during Save Every Day",
+                "zh": "Save Every Day 數位兌換次數"
+              },
+              "evidenceNote": {
+                "en": "Campaign-scale operational result.",
+                "zh": "活動規模營運成果。"
               }
             },
             {
               "value": "2 weeks → 2 days",
               "label": {
-                "en": "recurring cross-team Voucher alignment cycle",
-                "zh": "跨團隊 Voucher 定期對齊週期"
+                "en": "campaign setup alignment cycle",
+                "zh": "活動設定對齊週期"
+              },
+              "evidenceNote": {
+                "en": "Observed after shared rules and reusable patterns were established.",
+                "zh": "建立共享規則與可重用模式後的觀察結果。"
               }
             }
           ],
           "systemChange": {
-            "en": "The programme moved from repeated campaign decisions toward reusable rules, states and product capabilities.",
-            "zh": "計畫從重複活動決策轉向可重用規則、狀態與產品能力。"
-          }
+            "en": "Shared rules, states and reusable patterns reduced repeated campaign interpretation across teams.",
+            "zh": "共享規則、狀態與可重用模式降低跨團隊重複解讀。"
+          },
+          "contentStatus": "approved"
         },
         "accountability": {
           "intro": {
@@ -5836,6 +5875,67 @@
             }
           },
           "componentVariant": "shared-accountability"
+        },
+        "programmeResearch": {
+          "title": {
+            "en": "Programme-wide research and validation",
+            "zh": "全計畫研究與驗證"
+          },
+          "summary": {
+            "en": "Evidence combined broad survey signals with recurring Wallet, Checkout and Voucher Details validation; percentages include participant denominators.",
+            "zh": "證據結合大規模問卷，以及 Wallet、Checkout 與 Voucher Details 的持續驗證；百分比均附參與者分母。"
+          },
+          "metrics": [
+            {
+              "value": "2,857",
+              "label": {
+                "en": "survey respondents",
+                "zh": "問卷受訪者"
+              }
+            },
+            {
+              "value": "18",
+              "label": {
+                "en": "participant sessions",
+                "zh": "參與者場次"
+              },
+              "note": {
+                "en": "9 Wallet + 9 Checkout sessions",
+                "zh": "9 場 Wallet＋9 場 Checkout"
+              }
+            },
+            {
+              "value": "15",
+              "label": {
+                "en": "Voucher Details participants",
+                "zh": "Voucher Details 參與者"
+              }
+            },
+            {
+              "value": "93%",
+              "label": {
+                "en": "understood which products qualified",
+                "zh": "理解哪些商品符合資格"
+              },
+              "note": {
+                "en": "14 of 15 participants",
+                "zh": "15 位中有 14 位"
+              }
+            },
+            {
+              "value": "87%",
+              "label": {
+                "en": "understood the remaining qualification requirement",
+                "zh": "理解仍需完成的資格條件"
+              },
+              "note": {
+                "en": "13 of 15 participants",
+                "zh": "15 位中有 13 位"
+              }
+            }
+          ],
+          "aggregateParticipantCount": null,
+          "contentStatus": "approved"
         }
       }
     },
@@ -15640,7 +15740,22 @@
         },
         "confidentialityNote": "*Metrics are rounded or abstracted for confidentiality.*",
         "contentStatus": "approved",
-        "sectionOrderRef": "projects.cathay-sit-online-account-opening.sectionOrder"
+        "sectionOrderRef": "projects.cathay-sit-online-account-opening.sectionOrder",
+        "coreSystemInsight": {
+          "eyebrow": {
+            "en": "CORE SYSTEM INSIGHT",
+            "zh": "核心系統洞察"
+          },
+          "title": {
+            "en": "Self-service account opening only worked when eligibility, path and recovery became explicit early in the journey.",
+            "zh": "只有在資格、路徑與中斷後恢復方式能夠提早被說清楚時，自助開戶才真正成立。"
+          },
+          "statement": {
+            "en": "Customers needed to understand their route before investing effort. Upfront qualification, clearer path routing, resumable progress and explicit recovery states helped turn late-stage surprises into guided decisions the journey could support earlier.",
+            "zh": "使用者需要在投入大量填寫前，就知道自己該走哪條開戶路徑。透過前置資格判斷、清楚的路徑導引、可續填進度與明確的恢復狀態，產品才能把原本後段才出現的限制，轉化為流程前段即可被引導處理的決策。"
+          },
+          "contentStatus": "approved"
+        }
       },
       "imagePlan": {
         "hero": {
@@ -16996,7 +17111,22 @@
           },
           "contentStatus": "approved"
         },
-        "sectionOrderRef": "projects.cathay-sit-review-remediation-operations.sectionOrder"
+        "sectionOrderRef": "projects.cathay-sit-review-remediation-operations.sectionOrder",
+        "coreSystemInsight": {
+          "eyebrow": {
+            "en": "CORE SYSTEM INSIGHT",
+            "zh": "核心系統洞察"
+          },
+          "title": {
+            "en": "Review remediation needed a shared internal operating model before it needed more screens.",
+            "zh": "審件補件改善，首先需要的是共享的內部營運模型，而不是更多畫面。"
+          },
+          "statement": {
+            "en": "The core workflow was primarily internal: review, request for additional documents, customer resubmission and re-review. Making this end-to-end operating model visible helped fragmented review knowledge become prioritised, traceable remediation decisions, while customer upload served as only one handoff point in a broader internal process.",
+            "zh": "這個流程的核心主要落在銀行內部：審件、要求補件、客戶回補、再審核。當這條端到端營運流程被看見後，原本分散的作業知識才能轉化為可排序、可追蹤、可驗證的改善決策；而客戶補件只是整體內部流程中的其中一個交接節點。"
+          },
+          "contentStatus": "approved"
+        }
       },
       "imagePlan": {
         "hero": {
@@ -19321,7 +19451,68 @@
         "projectModelRef": "projects.booking-taxi-pickup-service-strategy.projectModel",
         "primaryDecisionsRef": "projects.booking-taxi-pickup-service-strategy.decisionNarrative.primaryDecisions",
         "contentStatus": "approved-recovery-candidate",
-        "sectionOrderRef": "projects.booking-taxi-pickup-service-strategy.sectionOrder"
+        "sectionOrderRef": "projects.booking-taxi-pickup-service-strategy.sectionOrder",
+        "coreSystemInsight": {
+          "eyebrow": {
+            "en": "CORE SYSTEM INSIGHT",
+            "zh": "核心系統洞察"
+          },
+          "title": {
+            "en": "The airport transfer journey became easier to trust when itinerary context and airport-native language worked together.",
+            "zh": "當行程脈絡與機場熟悉語言一起被帶入流程時，機場接送服務才更值得信任。"
+          },
+          "statement": {
+            "en": "Customers should not have to rebuild information the platform already knows. Reusing trip details and expressing options in familiar airport language—such as carry-on and checked baggage—helped reduce ambiguity, improved confidence in vehicle selection and made the service easier to act on from comparison through pickup.",
+            "zh": "使用者不該重新輸入平台已知的行程資訊。當產品能重用旅程脈絡，並以旅客熟悉的機場語言表達選項——例如隨身行李與托運行李——就能減少理解落差，提升對車型與服務選擇的信心，讓使用者更容易從比較、預訂一路走到接送。"
+          },
+          "contentStatus": "approved"
+        },
+        "futureServiceOpportunities": {
+          "title": {
+            "en": "Future service opportunities",
+            "zh": "未來服務機會"
+          },
+          "status": "concept-not-shipped",
+          "items": [
+            {
+              "title": {
+                "en": "Preferred driver continuity",
+                "zh": "延續偏好司機"
+              },
+              "concept": {
+                "en": "Allow customers to save a preferred driver and prioritise that driver when booking another airport transfer from the same airport.",
+                "zh": "讓使用者儲存偏好司機，並在再次預訂同一機場的接送服務時優先媒合該司機。"
+              },
+              "whyItMatters": {
+                "en": "Preserving a trusted driver preference could reduce perceived service risk and strengthen repeat-use confidence.",
+                "zh": "保留可信任的司機偏好，可降低感知服務風險並強化再次使用的信心。"
+              },
+              "systemRequirement": {
+                "en": "Driver availability, airport/service-area matching and fallback logic must prevent false availability promises.",
+                "zh": "需要司機可用性、機場／服務區域媒合與備援邏輯，避免錯誤的可用性承諾。"
+              }
+            },
+            {
+              "title": {
+                "en": "Contextual route-risk disclosure",
+                "zh": "情境式路線風險揭露"
+              },
+              "concept": {
+                "en": "Use the transfer date, airport and destination to surface time-sensitive route risks before booking.",
+                "zh": "依接送日期、機場與目的地，在預訂前呈現具時效性的路線風險。"
+              },
+              "whyItMatters": {
+                "en": "Known disruption visibility could clarify when journey duration may be longer than expected.",
+                "zh": "呈現已知中斷可協助理解何時車程可能超出預期。"
+              },
+              "systemRequirement": {
+                "en": "Location-aware disruption data, time-window relevance and clear confidence states are required.",
+                "zh": "需要具地點感知的中斷資料、時間關聯性與清楚的可信度狀態。"
+              }
+            }
+          ],
+          "contentStatus": "approved"
+        }
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
