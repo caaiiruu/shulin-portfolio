@@ -286,6 +286,10 @@
   let galleryIndex=0;
   let initiativeGallery=[];
   const detailStack=[];
+  const parentContextStorageKey='portfolio:voucher-parent-context';
+  const readParentContext=()=>{try{return JSON.parse(sessionStorage.getItem(parentContextStorageKey)||'null')}catch{return null}};
+  const writeParentContext=value=>{try{sessionStorage.setItem(parentContextStorageKey,JSON.stringify(value))}catch{}};
+  const clearParentContext=()=>{try{sessionStorage.removeItem(parentContextStorageKey)}catch{}};
   const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const precisePointer=window.matchMedia('(pointer: fine)');
   const arrowDirections={
@@ -1291,15 +1295,18 @@
     const parentKey=currentDetail?.parentKey;
     if(!parentKey||!DATA.projects[parentKey])return false;
     const parentSnapshot=[...detailStack].reverse().find(entry=>entry.detail?.type==='project'&&entry.detail.key===parentKey);
+    const persistedContext=readParentContext();
+    const restoredContext=persistedContext?.parentKey===parentKey?persistedContext:null;
     detailStack.length=0;
     currentDetail={type:'project',key:parentKey};
     currentInvoker=parentSnapshot?.invoker||doc.querySelector(`[data-project="${parentKey}"]`);
     galleryIndex=parentSnapshot?.galleryIndex||0;
     renderDetail();
     if(dialogScrollRoot){
-      const restoreTop=parentSnapshot?.scrollTop||0;
+      const restoreTop=parentSnapshot?.scrollTop??restoredContext?.scrollTop??0;
       requestAnimationFrame(()=>requestAnimationFrame(()=>{
         dialogScrollRoot.scrollTo({top:restoreTop,left:0,behavior:'auto'});
+        clearParentContext();
       }));
     }
     updateCloseControl();
@@ -2944,6 +2951,8 @@
     if(stage&&event.key===' '){event.preventDefault();stage.click()}
   });
   doc.addEventListener('click',event=>{
+    const stageLink=event.target.closest('a[data-stage]');
+    if(stageLink&&currentDetail?.type==='project')writeParentContext({parentKey:currentDetail.key,anchorStage:stageLink.dataset.stage||'',scrollTop:dialogScrollRoot?.scrollTop||0});
     const stageBack=event.target.closest('[data-stage-back]');
     if(stageBack){event.preventDefault();returnToParentProject();return}
     // Stage links keep their native canonical href. Deep-link rendering enhances

@@ -126,17 +126,45 @@ for (const viewport of viewports) {
   }
   r156.initialFocus = initialFocus;
   r156.tooltipState = tooltipState;
+  const r158 = { contribution: null, research: null, cloud: null, tooltips: [], anchors: {} };
+  r158.contribution = await page.locator(".voucher-r149-flow").evaluate(flow => {
+    const cards=[...flow.querySelectorAll(":scope>article")].map(node=>{const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,background:getComputedStyle(node).backgroundColor,color:getComputedStyle(node).color}});
+    return {cards,oneRow:new Set(cards.map(card=>Math.round(card.y))).size===1,equalWidth:Math.max(...cards.map(x=>x.width))-Math.min(...cards.map(x=>x.width))<1,equalHeight:Math.max(...cards.map(x=>x.height))-Math.min(...cards.map(x=>x.height))<1};
+  });
+  r158.research = await page.locator(".research-evidence-metrics").evaluate(grid => {
+    const values=[...grid.querySelectorAll(".research-evidence-metric>strong")].map(node=>{const r=node.getBoundingClientRect();return {text:node.textContent.trim(),y:r.y,color:getComputedStyle(node).color}});
+    const labels=[...grid.querySelectorAll(".research-evidence-metric__label")].map(node=>node.getBoundingClientRect().y);
+    return {values,labels,valueAligned:Math.max(...values.map(x=>x.y))-Math.min(...values.map(x=>x.y))<1,labelAligned:Math.max(...labels)-Math.min(...labels)<1};
+  });
+  r158.cloud = await page.locator(".core-system-insight-section.case-study-cloud-emphasis").first().evaluate(node=>{const r=node.getBoundingClientRect(),root=node.closest(".dialog-scroll").getBoundingClientRect();return {left:r.left,right:r.right,rootLeft:root.left,rootRight:root.right,leftDelta:Math.abs(r.left-root.left),rightDelta:Math.abs(r.right-root.right)}});
+  const tooltipTriggers=page.locator(".info-tooltip__trigger");
+  const tooltipIndexes=[0,Math.floor((await tooltipTriggers.count())/2),(await tooltipTriggers.count())-1];
+  for(const [label,index] of [["left",tooltipIndexes[0]],["centre",tooltipIndexes[1]],["right",tooltipIndexes[2]]]){
+    const trigger=tooltipTriggers.nth(index);await trigger.scrollIntoViewIfNeeded();const closed=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);await trigger.click();await page.waitForTimeout(40);
+    const panel=page.locator(".info-tooltip__panel:not([hidden])").first();const measurement=await panel.evaluate((node)=>{const r=node.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight,contained:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,whiteSpace:getComputedStyle(node).whiteSpace}},null);const openHeight=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);measurement.lineBoxDelta=Math.abs(openHeight-closed);measurement.label=label;r158.tooltips.push(measurement);await page.screenshot({path:path.join(targetedDirectory,`tooltip-${label}.png`)});await trigger.press("Escape");
+  }
+  for(const stage of ["discover","qualify","activate","redeem","review"]){
+    await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
+    const parentScroll=page.locator(".dialog-scroll").first(),link=page.locator(`a[data-stage="${stage}"]`).first();
+    await link.scrollIntoViewIfNeeded();await parentScroll.evaluate((root,stageId)=>{const card=root.querySelector(`[data-stage-card="${stageId}"]`);root.scrollTop=Math.max(0,card.offsetTop-120)},stage);
+    const before=await parentScroll.evaluate(root=>root.scrollTop);await link.click();await page.waitForLoadState("networkidle");const back=page.locator("[data-stage-back]").first();await back.click();await page.waitForTimeout(80);const after=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);r158.anchors[stage]={before,after,delta:Math.abs(after-before)};
+  }
+  r156.r158=r158;
+  await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
 
   if (viewport.name === "desktop-1419" || viewport.name === "mobile-430") {
     for (const stage of ["discover", "qualify", "activate", "redeem", "review"]) {
       await page.goto(`${baseUrl}/site/work/voucher?case=voucher&stage=${stage}`, { waitUntil: "networkidle" });
       await capture(`child-${stage}-overview`, ".voucher-stage-hero");
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
+      await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
         const decisions = page.locator(".voucher-r149-decision, .decision-card-v46");
         if (await decisions.count() >= 2) {
           await decisions.nth(0).scrollIntoViewIfNeeded();
+          const evidenceImage=decisions.nth(0).locator('img').first();if(await evidenceImage.count())await evidenceImage.evaluate(image=>image.complete&&image.naturalWidth?true:new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})}));
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
+          await capture("discover-pdp-evidence", ".voucher-r149-decision .evidence-frame");
           await decisions.nth(1).scrollIntoViewIfNeeded();
           await decisions.nth(1).screenshot({ path: path.join(targetedDirectory, "discover-decision-02.png") });
         } else failures.push(`${viewport.name} Discover decision captures missing`);
