@@ -604,7 +604,7 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);
   assert.match(css, /\.voucher-r149-stage/);
-  assert.match(css, /\.voucher-stage-decision-surface/);
+  assert.match(css, /\.voucher-stage-surface/);
 });
 
 test("preserves search interaction while using r85 as the active inventory", () => {
