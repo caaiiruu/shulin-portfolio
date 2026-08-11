@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-11-r155",
+  "contentVersion": "2026-08-11-r156",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -473,7 +473,7 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "b6309fe91976447451b17487156cc6318d9cde9038e2cd6f6ac67dc217c4dc00",
+      "sha256": "b89ac3c9d648a19fe4a2ccf287bd4df87b39d83ce7e5e37151ccca8934f1308c",
       "width": 2048,
       "height": 1280,
       "alt": "Before and shipped FairPrice product detail screens comparing no Voucher discovery with eligible Voucher discovery.",
@@ -623,6 +623,23 @@
       "height": 1152,
       "replacedAt": "2026-08-11",
       "semanticSlotStable": true
+    },
+    "voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01": {
+      "id": "voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01",
+      "projectId": "voucher",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01.jpg",
+      "aspectRatio": "16:10",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "59bdf1cb1a6dee4aa1704289584a6e5c6865bee0334f90142440cf4485df0aa6",
+      "width": 2048,
+      "height": 1280,
+      "alt": "Voucher Details concept showing eligible products and an eligibility tracker in one shoppable journey.",
+      "alt_zh": "Voucher Details 概念圖，在同一購物旅程中呈現適用商品與資格進度。"
     }
   },
   "frameSystemContract": {

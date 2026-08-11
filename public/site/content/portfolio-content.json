@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r155",
-  "supersedes": "2026-08-11-r154",
+  "contentVersion": "2026-08-11-r156",
+  "supersedes": "2026-08-11-r155",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -4988,7 +4988,7 @@
         }
       },
       "recruiterFirstPopup": {
-        "version": "2026-08-11-r153",
+        "version": "2026-08-11-r156",
         "hero": {
           "showKeyProblems": false
         },
@@ -5024,7 +5024,7 @@
                 "zh": "我的介入"
               },
               "text": {
-                "en": "Connected discovery, reward visibility, progress and redemption into a behaviour-led incentive journey, while standardising the shared rules, states and reusable product foundations behind it.",
+                "en": "Connected discovery, reward visibility, progress and redemption into one incentive journey, while standardising the shared rules, states and reusable product foundations behind it.",
                 "zh": "將探索、獎勵可見度、進度與兌換串成行為導向的獎勵旅程，同時標準化背後的共享規則、狀態與可重用產品基礎。"
               }
             },
@@ -5194,15 +5194,15 @@
                   "zh": "在 Voucher Details 流程中，情境式呈現適用商品後，觀察到的加入購物車率由約 1.5% 上升至約 4%。"
                 },
                 "evidence": {
-                  "assetId": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
+                  "assetId": "voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01",
                   "role": "primary-evidence",
                   "externalCaption": false
                 },
                 "outcomeMetric": {
-                  "value": "~1.5% → ~4%",
+                  "value": "~167%",
                   "evidenceNote": {
-                    "en": "Observational product trend; not a controlled causal experiment.",
-                    "zh": "產品趨勢觀察；非受控因果實驗。"
+                    "en": "Observed add-to-cart rate increased from ~1.5% to ~4%. Observational trend, not a controlled causal experiment.",
+                    "zh": "觀察到的加入購物車率由約 1.5% 上升至約 4%。屬觀察趨勢，非受控因果實驗。"
                   }
                 }
               }
@@ -5637,10 +5637,6 @@
             }
           ],
           "voucherCard": {
-            "headline": {
-              "en": "How research shaped the system",
-              "zh": "研究如何形塑系統"
-            },
             "history": {
               "en": "Existing white Voucher Card → colour evolution → reusable Tangram component abstraction → Operations mapping.",
               "zh": "既有白色 Voucher Card → 色彩演進 → Tangram 元件抽象化 → 營運對應。"
@@ -5661,70 +5657,14 @@
                 }
               }
             ],
-            "researchExample": {
-              "title": {
-                "en": "How research shaped the system",
-                "zh": "研究如何形塑系統"
-              },
-              "supporting": {
-                "en": "Research and validation across the programme informed how Voucher information, eligibility, states and interaction patterns were structured.",
-                "zh": "整個計畫中的研究與驗證，形塑了 Voucher 資訊、資格、狀態與互動模式的架構。"
-              },
-              "credibility": {
-                "en": "This is one example from a broader body of research and evidence used across the programme.",
-                "zh": "這是整個計畫更廣泛研究與證據中的一個案例。"
-              }
-            },
             "insight": {
               "en": "Colour differentiated variants, but colour could not carry meaning alone.",
               "zh": "色彩可區分版本，但不能單獨承載意義。"
             },
             "integratedSection": true,
             "bridge": {
-              "en": "These findings informed information hierarchy and variant differentiation before the evolved Voucher Card was abstracted into a reusable Tangram component and mapped to Operations configuration.",
-              "zh": "這些發現先形塑資訊層級與 variant 區分，之後演進後的 Voucher Card 才被抽象化為可重用 Tangram 元件，並對應至營運配置。"
-            },
-            "evidence": [
-              {
-                "value": "18 participant sessions",
-                "label": {
-                  "en": "Unmoderated usability testing across Voucher Wallet and Checkout",
-                  "zh": "橫跨 Voucher Wallet 與 Checkout 的非主持式可用性測試"
-                },
-                "detail": {
-                  "en": "9 Wallet + 9 Checkout",
-                  "zh": "9 位 Wallet + 9 位 Checkout"
-                }
-              },
-              {
-                "value": "15 participants",
-                "label": {
-                  "en": "Voucher Card information-priority study",
-                  "zh": "Voucher Card 資訊優先順序研究"
-                }
-              },
-              {
-                "value": "14 / 15",
-                "label": {
-                  "en": "Prioritised discount value",
-                  "zh": "優先關注折扣價值"
-                }
-              },
-              {
-                "value": "13 / 15",
-                "label": {
-                  "en": "Prioritised usage channel",
-                  "zh": "優先關注使用通路"
-                }
-              }
-            ],
-            "supportingEvidence": {
-              "en": "Additional research and validation covered campaign mechanics, Voucher Details, PDP discovery and redemption error recovery across the programme.",
-              "zh": "其他研究與驗證涵蓋活動機制、Voucher Details、PDP 探索及整個計畫中的兌換錯誤復原。"
-            },
-            "credibilityNote": {
-              "en": "This is one example from a broader body of research and evidence used across the programme.",
-              "zh": "這是整個計畫更廣泛研究與證據中的一個案例。"
+              "en": "Findings informed information hierarchy and variant differentiation before the evolved Voucher Card became a reusable Tangram component mapped to Operations configuration.",
+              "zh": "研究發現先形塑資訊層級與 variant 區分，之後演進後的 Voucher Card 成為可重用 Tangram 元件，並對應至營運配置。"
             }
           },
           "future": {
@@ -5798,18 +5738,18 @@
               }
             },
             {
-              "value": "~1.5% → ~4%",
+              "value": "~167%",
               "label": {
-                "en": "observed add-to-cart rate in the Voucher Details flow",
-                "zh": "Voucher Details 流程中觀察到的加入購物車率"
+                "en": "observed add-to-cart rate growth in the Voucher Details flow",
+                "zh": "Voucher Details 流程中觀察到的加入購物車率成長"
               },
               "primaryCopy": {
-                "en": "In the Voucher Details flow, observed add-to-cart rate trended from ~1.5% to ~4% after eligible products were surfaced in context.",
-                "zh": "在 Voucher Details 流程中，情境式呈現適用商品後，觀察到的加入購物車率由約 1.5% 上升至約 4%。"
+                "en": "observed add-to-cart rate growth in the Voucher Details flow after eligible products were surfaced in context",
+                "zh": "在情境中呈現適用商品後，Voucher Details 流程觀察到的加入購物車率成長"
               },
               "evidenceNote": {
-                "en": "Observational product trend; not a controlled causal experiment.",
-                "zh": "產品趨勢觀察；非受控因果實驗。"
+                "en": "Observed add-to-cart rate increased from ~1.5% to ~4%. Observational trend, not a controlled causal experiment.",
+                "zh": "觀察到的加入購物車率由約 1.5% 上升至約 4%。屬觀察趨勢，非受控因果實驗。"
               }
             },
             {
@@ -5882,8 +5822,8 @@
             "zh": "全計畫研究與驗證"
           },
           "summary": {
-            "en": "Evidence combined broad survey signals with recurring Wallet, Checkout and Voucher Details validation; percentages include participant denominators.",
-            "zh": "證據結合大規模問卷，以及 Wallet、Checkout 與 Voucher Details 的持續驗證；百分比均附參與者分母。"
+            "en": "Research across Voucher discovery, qualification and redemption shaped the system.",
+            "zh": "橫跨 Voucher 探索、資格判定與兌換的研究形塑了這套系統。"
           },
           "metrics": [
             {
@@ -5900,15 +5840,19 @@
                 "zh": "參與者場次"
               },
               "note": {
-                "en": "9 Wallet + 9 Checkout sessions",
-                "zh": "9 場 Wallet＋9 場 Checkout"
+                "en": "9 Wallet + 9 Checkout",
+                "zh": "9 Wallet＋9 Checkout"
               }
             },
             {
               "value": "15",
               "label": {
-                "en": "Voucher Details participants",
-                "zh": "Voucher Details 參與者"
+                "en": "participants",
+                "zh": "參與者"
+              },
+              "note": {
+                "en": "Voucher Card information-priority study",
+                "zh": "Voucher Card 資訊優先順序研究"
               }
             },
             {
@@ -5918,8 +5862,8 @@
                 "zh": "優先關注折扣價值"
               },
               "note": {
-                "en": "14 of 15 participants in the Voucher Card information-priority study",
-                "zh": "Voucher Card 資訊優先順序研究中，15 位參與者有 14 位"
+                "en": "14 of 15 participants",
+                "zh": "15 位參與者中有 14 位"
               }
             },
             {
@@ -5929,8 +5873,8 @@
                 "zh": "優先關注使用通路"
               },
               "note": {
-                "en": "13 of 15 participants in the Voucher Card information-priority study",
-                "zh": "Voucher Card 資訊優先順序研究中，15 位參與者有 13 位"
+                "en": "13 of 15 participants",
+                "zh": "15 位參與者中有 13 位"
               }
             }
           ],
