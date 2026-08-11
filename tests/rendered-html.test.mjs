@@ -759,6 +759,12 @@ test("keeps popup navigation and related work in their canonical owners", () => 
     "dialogTitle.focus({preventScroll:true})",
   ]) assert.ok(app.includes(contract), contract);
   assert.doesNotMatch(shell, /!important|overflow-wrap:anywhere|word-break:break-all/);
+  assert.match(overview, /\.voucher-r149-insight\{[^}]*overflow:hidden[^}]*background:#F4F1EA/);
+  assert.doesNotMatch(overview.match(/\.voucher-r149-insight\{[^}]*\}/)?.[0] ?? "", /box-shadow|clip-path|dimension-100vw/);
+  assert.match(overview, /\.detail-related-v45\{[^}]*gap:var\(--project-detail-section-gap\)/);
+  assert.match(app, /querySelector\('#detailRelated \.kicker'\)\?\.remove\(\)/);
+  assert.match(app, /controlsHead\.hidden=!scrollable/);
+  assert.doesNotMatch(app, /scheduleProjectSectionFrame\(transaction,animate\)/);
 });
 
 test("keeps the Work library filters readable and singly owned", () => {

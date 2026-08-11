@@ -871,6 +871,8 @@
     const atEnd=rail.scrollLeft>=max-2;
     const scrollable=max>2;
     rail.dataset.railScrollable=String(scrollable);
+    const controlsHead=rail.closest('.detail-related-v45')?.querySelector(':scope > .detail-related-v45__head');
+    if(controlsHead)controlsHead.hidden=!scrollable;
     if(prev){prev.hidden=!scrollable;prev.disabled=atStart;prev.setAttribute('aria-disabled',String(atStart))}
     if(next){next.hidden=!scrollable;next.disabled=atEnd;next.setAttribute('aria-disabled',String(atEnd))}
   }
@@ -1182,41 +1184,29 @@
     const transaction={id:++projectSectionNavigationId,targetId:target.id,frames:new Set(),timers:new Set()};
     projectSectionNavigation=transaction;
     setActiveProjectSection(target.id);
-    scheduleProjectSectionFrame(transaction,()=>scheduleProjectSectionFrame(transaction,()=>{
-      const rootTop=dialogScrollRoot.getBoundingClientRect().top;
-      const targetTop=target.getBoundingClientRect().top;
-      const startTop=dialogScrollRoot.scrollTop;
-      const initialTop=Math.max(0,startTop+targetTop-rootTop-projectSectionInset());
-      const duration=prefersReduced.matches?0:420;
-      let startedAt=null;
-      const finish=()=>{
-        if(projectSectionNavigation!==transaction)return;
-        alignProjectSectionTarget(target);
-        target.focus?.({preventScroll:true});
-        visibleProjectSectionId=target.id;
-        setActiveProjectSection(target.id);
-        projectSectionNavigation=null;
-        updateProjectSectionLocation();
-      };
-      if(!duration){
-        dialogScrollRoot.scrollTo({left:0,top:initialTop,behavior:'auto'});
-        finish();
-        return;
-      }
-      const animate=time=>{
-        if(startedAt===null)startedAt=time;
-        const progress=Math.min(1,(time-startedAt)/duration);
-        const eased=1-Math.pow(1-progress,3);
-        const currentRootTop=dialogScrollRoot.getBoundingClientRect().top;
-        const currentTargetTop=target.getBoundingClientRect().top;
-        const desiredTop=Math.max(0,dialogScrollRoot.scrollTop+currentTargetTop-currentRootTop-projectSectionInset());
-        const endTop=progress<1?initialTop+(desiredTop-initialTop)*progress:desiredTop;
-        dialogScrollRoot.scrollTop=startTop+(endTop-startTop)*eased;
-        if(progress<1)scheduleProjectSectionFrame(transaction,animate);
-        else finish();
-      };
-      scheduleProjectSectionFrame(transaction,animate);
-    }));
+    const rootTop=dialogScrollRoot.getBoundingClientRect().top;
+    const targetTop=target.getBoundingClientRect().top;
+    const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
+    const finish=()=>{
+      if(projectSectionNavigation!==transaction)return;
+      alignProjectSectionTarget(target);
+      target.focus?.({preventScroll:true});
+      visibleProjectSectionId=target.id;
+      setActiveProjectSection(target.id);
+      projectSectionNavigation=null;
+      updateProjectSectionLocation();
+    };
+    if(prefersReduced.matches){
+      dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
+      finish();
+      return;
+    }
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'smooth'});
+    const timer=window.setTimeout(()=>{
+      transaction.timers.delete(timer);
+      finish();
+    },480);
+    transaction.timers.add(timer);
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
@@ -2756,6 +2746,7 @@
   function renderRelated(){
     if(!currentDetail)return;const type=currentDetail.type;const nested=type==='initiative'||type==='stage';const relatedType=nested?'project':type;const relatedKey=nested?currentDetail.parentKey:currentDetail.key;const keys=(relatedType==='project'?RELATED_PROJECTS[relatedKey]:RELATED_EXPERIMENTS[relatedKey])||[];
     const rail=doc.getElementById('detailRelatedRail');clear(rail);keys.forEach(key=>rail.appendChild(relatedCard(relatedType,key)));enhanceCompanyNames(rail);
+    doc.querySelector('#detailRelated .kicker')?.remove();
     safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'&&relatedKey==='voucher'?(lang==='zh'?'探索其他專案':'Explore other projects'):ui("related-work-9e3ba8e3"));
     safeText(doc.getElementById('detailRelatedCopy'),'');
     window.refreshHorizontalRails?.();
