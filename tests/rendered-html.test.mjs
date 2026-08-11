@@ -598,16 +598,13 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.match(app, /'查看解決方案細節 →'/);
   assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
   assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
-  assert.match(app, /voucher-stage-case/);
-  assert.doesNotMatch(app, /stage-focus-16475437/);
-  assert.match(app, /'PROBLEM'/);
+  assert.match(app, /voucher-r149-decision-list voucher-stage-decision-list/);
+  assert.match(app, /createDecisionCard\(model,index,\{projectKey:currentDetail\.parentKey,showVisual:Boolean\(model\.evidenceAssetId\)\}\)/);
   assert.match(app, /'WHAT I DECIDED'/);
-  assert.match(app, /evidence:source\.whyThisChoice/);
-  assert.match(app, /OWNERSHIP BOUNDARY/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);
   assert.match(css, /\.voucher-r149-stage/);
-  assert.match(css, /\.voucher-r149-details/);
+  assert.match(css, /\.voucher-stage-decision-surface/);
 });
 
 test("preserves search interaction while using r85 as the active inventory", () => {
@@ -1434,7 +1431,7 @@ test("Step 6A image frame system keeps canonical roles, intrinsic evidence and p
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
   assert.match(domain,/related-project-card__visual-v45\{[^}]*aspect-ratio:16\/10/);
   assert.match(domain,/@media\(max-width:560px\)\{[\s\S]*related-project-card__visual-v45\{aspect-ratio:4\/3/);
-  assert.match(app,/frame\.dataset\.frameRole='primary-evidence'/);
+  assert.match(app,/media\.dataset\.frameRole='primary-evidence'/);
 });
 
 
@@ -1453,4 +1450,4 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-11-r151");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*repeat\(3,minmax\(0,1fr\)\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-11-r152");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*repeat\(3,minmax\(0,1fr\)\)/);assert.match(css,/@media\(max-width:871px\)/)});
