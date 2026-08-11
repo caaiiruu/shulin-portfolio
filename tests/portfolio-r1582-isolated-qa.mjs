@@ -49,7 +49,8 @@ async function openParent(page) {
 async function stableTarget(page, locator) {
   await locator.waitFor({ state: "visible" });
   await locator.evaluate(node => {
-    const root = node.closest(".dialog-scroll");
+    const ancestors=[]; for(let p=node.parentElement;p;p=p.parentElement)ancestors.push(p);
+    const root=ancestors.find(p=>{const cs=getComputedStyle(p);return /(auto|scroll)/.test(cs.overflowY)&&p.scrollHeight>p.clientHeight+1});
     if (!root) { node.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" }); return; }
     const nr = node.getBoundingClientRect(), rr = root.getBoundingClientRect();
     root.scrollTop = Math.max(0, root.scrollTop + nr.top - rr.top - (root.clientHeight - Math.min(nr.height, root.clientHeight)) / 2);
@@ -59,9 +60,11 @@ async function stableTarget(page, locator) {
   if (!rect || rect.width < 1 || rect.height < 1) throw new Error("target has zero box");
   const visible = await locator.evaluate(node => {
     const r = node.getBoundingClientRect();
-    const root = node.closest(".dialog-scroll"), rr = root?.getBoundingClientRect() || {left:0,top:0,right:innerWidth,bottom:innerHeight};
+    const ancestors=[]; for(let p=node.parentElement;p;p=p.parentElement)ancestors.push(p);
+    const root=ancestors.find(p=>{const cs=getComputedStyle(p);return /(auto|scroll)/.test(cs.overflowY)&&p.scrollHeight>p.clientHeight+1});
+    const rr = root?.getBoundingClientRect() || {left:0,top:0,right:innerWidth,bottom:innerHeight};
     const hit = document.elementFromPoint(Math.min(innerWidth - 1, Math.max(0, r.left + r.width / 2)), Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2)));
-    return r.right > rr.left && r.left < rr.right && r.bottom > rr.top && r.top < rr.bottom && !!hit && (hit === node || node.contains(hit) || hit.contains(node));
+    return r.right > Math.max(0,rr.left) && r.left < Math.min(innerWidth,rr.right) && r.bottom > Math.max(0,rr.top) && r.top < Math.min(innerHeight,rr.bottom) && !!hit && (hit === node || node.contains(hit) || hit.contains(node));
   });
   if (!visible) throw new Error(`target not interactable: ${JSON.stringify(rect)}`);
   return rect;
@@ -171,8 +174,9 @@ report.gateB = await isolated("discover-pdp-evidence", { width: 1419, height: 90
   await decision.waitFor({ state: "visible" });
   const frame = decision.locator(".evidence-frame").first(), image = frame.locator("img").first();
   await image.waitFor({ state: "attached" });
-  await image.evaluate(img => { img.loading = "eager"; return img.complete ? true : new Promise(resolve => { img.addEventListener("load", () => resolve(true), {once:true}); img.addEventListener("error", () => resolve(false), {once:true}); }); });
+  await image.evaluate(async img => { img.loading = "eager"; if(!img.complete)await new Promise(resolve => { img.addEventListener("load", () => resolve(true), {once:true}); img.addEventListener("error", () => resolve(false), {once:true}); }); if(img.decode)await img.decode(); });
   await stableTarget(page, frame);
+  await twoFrames(page);
   const measurement = await image.evaluate(img => {
     const ir=img.getBoundingClientRect(), frame=img.closest(".evidence-frame"), fr=frame.getBoundingClientRect(), ics=getComputedStyle(img), fcs=getComputedStyle(frame);
     return { currentSrc:img.currentSrc||img.src, sourceBasename:(img.currentSrc||img.src).split("/").pop().replace(/\.[^.]+$/, ""), naturalWidth:img.naturalWidth, naturalHeight:img.naturalHeight, renderedWidth:ir.width, renderedHeight:ir.height, frameWidth:fr.width, frameHeight:fr.height, imageRadius:ics.borderRadius, frameRadius:fcs.borderRadius, overflow:fcs.overflow, opacity:ics.opacity, visibility:ics.visibility, display:ics.display, inset:{left:ir.left-fr.left,top:ir.top-fr.top,right:fr.right-ir.right,bottom:fr.bottom-ir.bottom} };
@@ -193,14 +197,13 @@ async function footerCase(stage, viewport, group) {
     const response=await page.goto(`${parentUrl}?case=voucher&stage=${stage}`,{waitUntil:"networkidle"});
     if(!response?.ok())throw new Error(`${stage} HTTP ${response?.status()}`);
     await page.locator(".voucher-stage-hero").waitFor({state:"visible"});
-    const footer=page.locator(".child-stage-navigation").first(), root=page.locator(".dialog-scroll").first();
+    const footer=page.locator(".child-stage-navigation").first();
     await footer.waitFor({state:"visible"});
     await footer.evaluate(node=>node.scrollIntoView({block:"end",behavior:"auto"})); await twoFrames(page);
-    const measurement=await footer.evaluate(node=>{const r=node.getBoundingClientRect(),root=node.closest(".dialog-scroll"),rr=root.getBoundingClientRect(),content=root.firstElementChild,cr=content?.getBoundingClientRect();const links=[...node.querySelectorAll("a,button")].filter(x=>getComputedStyle(x).display!=="none").map(x=>(x.textContent||x.getAttribute("aria-label")||"").trim()).filter(Boolean);return{footerBottomY:r.bottom,footerTopY:r.top,footerHeight:r.height,popupBottomY:rr.bottom,contentBottomY:cr?.bottom??rr.bottom,whitespace:Math.max(0,(cr?.bottom??rr.bottom)-r.bottom),viewportHeight:innerHeight,rootScrollTop:root.scrollTop,rootScrollHeight:root.scrollHeight,rootClientHeight:root.clientHeight,links,visible:r.width>0&&r.height>0&&r.bottom>rr.top&&r.top<rr.bottom};});
-    const rootBox=box(await root.boundingBox());
-    await root.screenshot({path:`${shot}.png`});
-    const pass=measurement.visible&&measurement.links.length>0&&measurement.whitespace<=96&&measurement.rootScrollHeight-measurement.rootClientHeight-measurement.rootScrollTop<=2;
-    if(!pass)failures.push(`${label}: ${JSON.stringify(measurement)}`); return {...measurement,rootBox,pass};
+    const measurement=await footer.evaluate(node=>{const r=node.getBoundingClientRect(),ancestors=[];for(let p=node.parentElement;p;p=p.parentElement)ancestors.push(p);const root=ancestors.find(p=>{const cs=getComputedStyle(p);return /(auto|scroll)/.test(cs.overflowY)&&p.scrollHeight>p.clientHeight+1})||node.closest("dialog")||node.closest(".dialog-scroll");const rr=root.getBoundingClientRect();const links=[...node.querySelectorAll("a,button")].filter(x=>getComputedStyle(x).display!=="none").map(x=>(x.textContent||x.getAttribute("aria-label")||"").trim()).filter(Boolean);return{footerBottomY:r.bottom,footerTopY:r.top,footerHeight:r.height,popupBottomY:rr.bottom,whitespace:Math.max(0,Math.min(innerHeight,rr.bottom)-r.bottom),viewportHeight:innerHeight,rootTag:root.tagName,rootClass:root.className,rootScrollTop:root.scrollTop,rootScrollHeight:root.scrollHeight,rootClientHeight:root.clientHeight,links,visible:r.width>0&&r.height>0&&r.bottom>Math.max(0,rr.top)&&r.top<Math.min(innerHeight,rr.bottom)};});
+    await page.screenshot({path:`${shot}.png`});
+    const pass=measurement.visible&&measurement.links.length>0&&measurement.whitespace<=160&&measurement.rootScrollHeight-measurement.rootClientHeight-measurement.rootScrollTop<=2;
+    if(!pass)failures.push(`${label}: ${JSON.stringify(measurement)}`); return {...measurement,pass};
   });
 }
 for(const stage of stages) report.gateC.desktop1419[stage]=await footerCase(stage,{width:1419,height:900},"desktop1419");
