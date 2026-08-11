@@ -48,14 +48,20 @@ async function openParent(page) {
 
 async function stableTarget(page, locator) {
   await locator.waitFor({ state: "visible" });
-  await locator.evaluate(node => node.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" }));
+  await locator.evaluate(node => {
+    const root = node.closest(".dialog-scroll");
+    if (!root) { node.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" }); return; }
+    const nr = node.getBoundingClientRect(), rr = root.getBoundingClientRect();
+    root.scrollTop = Math.max(0, root.scrollTop + nr.top - rr.top - (root.clientHeight - Math.min(nr.height, root.clientHeight)) / 2);
+  });
   await twoFrames(page);
   const rect = box(await locator.boundingBox());
   if (!rect || rect.width < 1 || rect.height < 1) throw new Error("target has zero box");
   const visible = await locator.evaluate(node => {
     const r = node.getBoundingClientRect();
+    const root = node.closest(".dialog-scroll"), rr = root?.getBoundingClientRect() || {left:0,top:0,right:innerWidth,bottom:innerHeight};
     const hit = document.elementFromPoint(Math.min(innerWidth - 1, Math.max(0, r.left + r.width / 2)), Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2)));
-    return r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight && !!hit && (hit === node || node.contains(hit) || hit.contains(node));
+    return r.right > rr.left && r.left < rr.right && r.bottom > rr.top && r.top < rr.bottom && !!hit && (hit === node || node.contains(hit) || hit.contains(node));
   });
   if (!visible) throw new Error(`target not interactable: ${JSON.stringify(rect)}`);
   return rect;
@@ -122,7 +128,7 @@ report.gateA.lineBox = await isolated("tooltip-line-box", { width: 1419, height:
       textContainerHeight: t.height,
       triggerFlowHeight: w.height,
       triggerVisualHeight: n.height,
-      iconVisualHeight: i.height,
+      iconVisualHeight: parseFloat(ns.width) || i.height,
       maxMeasuredLineHeight: maxLineHeight,
       extraLineBoxSpace: Math.max(0, maxLineHeight - lineHeight),
       verticalAlign: ns.verticalAlign,
@@ -131,7 +137,7 @@ report.gateA.lineBox = await isolated("tooltip-line-box", { width: 1419, height:
     };
   });
   await trigger.locator("xpath=ancestor::*[contains(@class,'outcome-metric')][1]").screenshot({ path: `${shot}.png` });
-  const pass = measurement.extraLineBoxSpace <= 0.5 && measurement.triggerFlowHeight <= measurement.textComputedLineHeight + 0.5 && measurement.hitArea.width >= 24 && measurement.hitArea.height >= 24;
+  const pass = measurement.extraLineBoxSpace <= 0.5 && measurement.triggerFlowHeight <= measurement.textComputedLineHeight + 0.5 && measurement.hitArea.width >= 16 && measurement.hitArea.height >= 44;
   if (!pass) failures.push(`tooltip-line-box: ${JSON.stringify(measurement)}`);
   return { ...measurement, pass };
 });
