@@ -1215,7 +1215,7 @@
       .filter(node=>node&&!node.hidden&&node.getClientRects().length);
     const offset=dialogScrollRoot.getBoundingClientRect().top+projectSectionInset();
     let current=visible[0];
-    visible.forEach(node=>{if(node.getBoundingClientRect().top<=offset)current=node});
+    visible.forEach(node=>{if(node.getBoundingClientRect().top<=offset+2)current=node});
     visibleProjectSectionId=current?.id||'';
     if(!projectSectionNavigation)setActiveProjectSection(visibleProjectSectionId);
   }

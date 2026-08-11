@@ -765,6 +765,7 @@ test("keeps popup navigation and related work in their canonical owners", () => 
   assert.match(app, /querySelector\('#detailRelated \.kicker'\)\?\.remove\(\)/);
   assert.match(app, /controlsHead\.hidden=!scrollable/);
   assert.doesNotMatch(app, /scheduleProjectSectionFrame\(transaction,animate\)/);
+  assert.match(app, /getBoundingClientRect\(\)\.top<=offset\+2/);
 });
 
 test("keeps the Work library filters readable and singly owned", () => {
