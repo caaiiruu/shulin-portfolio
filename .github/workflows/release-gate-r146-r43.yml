@@ -522,6 +522,94 @@ jobs:
             cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/$viewport/audit.json"
           done
 
+      - name: Voucher deterministic routing and mobile Outcomes matrix
+        shell: bash
+        run: |
+          cat > /tmp/voucher-routing-matrix.mjs <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          const { chromium }=await import(pathToFileURL(path.resolve('node_modules/playwright/index.mjs')).href);
+          const base=process.env.BASE_URL;
+          const out=process.env.EVIDENCE_DIR;
+          const stages=['discover','qualify','activate','redeem','review'];
+          const failures=[];
+          const matrix={};
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({viewport:{width:1440,height:1000}});
+          const page=await context.newPage();
+          const parent=()=>page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+          const reached=async(stage)=>{
+            await page.waitForTimeout(180);
+            return {
+              identifier:new URL(page.url()).searchParams.get('stage'),
+              title:(await page.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase(),
+              parentFallback:new URL(page.url()).searchParams.get('stage')===null
+            };
+          };
+          const activate=async(stage,mode='click')=>{
+            const cta=page.locator('a.programme-stage-case__cta[data-stage="'+stage+'"]');
+            if(mode==='tap') await cta.tap();
+            else if(mode==='enter') await cta.press('Enter');
+            else if(mode==='space') await cta.press(' ');
+            else await cta.click();
+            return reached(stage);
+          };
+          for(const stage of stages){
+            matrix[stage]={};
+            await parent();
+            matrix[stage].firstClick=await activate(stage);
+            await page.locator('#detailBack').click();
+            matrix[stage].secondClick=await activate(stage);
+            await page.locator('#detailClose').click();
+            await parent();
+            matrix[stage].closeReclick=await activate(stage);
+            await page.goBack({waitUntil:'networkidle'});
+            matrix[stage].browserBackReclick=await activate(stage);
+            await parent();
+            matrix[stage].keyboardEnter=await activate(stage,'enter');
+            await parent();
+            matrix[stage].keyboardSpace=await activate(stage,'space');
+            for(const [scenario,result] of Object.entries(matrix[stage])){
+              if(result.identifier!==stage||result.title!==stage||result.parentFallback) failures.push(stage+' '+scenario+' '+JSON.stringify(result));
+            }
+          }
+          const nextStage={};
+          for(const [from,to] of [['discover','qualify'],['qualify','activate'],['activate','redeem'],['redeem','review']]){
+            await parent();
+            await activate(from);
+            await page.locator('a.voucher-stage-next__link[data-stage="'+to+'"]').click();
+            nextStage[from]=await reached(to);
+            if(nextStage[from].identifier!==to||nextStage[from].title!==to||nextStage[from].parentFallback) failures.push('next '+from+' '+JSON.stringify(nextStage[from]));
+          }
+          await context.close();
+          const mobileContext=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,isMobile:true});
+          const mobile=await mobileContext.newPage();
+          for(const stage of stages){
+            await mobile.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+            await mobile.locator('a.programme-stage-case__cta[data-stage="'+stage+'"]').tap();
+            const result=await (async()=>{await mobile.waitForTimeout(180);return {identifier:new URL(mobile.url()).searchParams.get('stage'),title:(await mobile.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase(),parentFallback:new URL(mobile.url()).searchParams.get('stage')===null}})();
+            matrix[stage].mobileTap=result;
+            if(result.identifier!==stage||result.title!==stage||result.parentFallback) failures.push(stage+' mobileTap '+JSON.stringify(result));
+          }
+          await mobile.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
+          const metrics=mobile.locator('.voucher-r149-metrics').first();
+          const outcomes=await metrics.evaluate(el=>{
+            const items=[...el.children].filter(x=>x.getBoundingClientRect().width>0);
+            const box=el.getBoundingClientRect();
+            const style=getComputedStyle(el);
+            return {gridTemplateColumns:style.gridTemplateColumns,rowCount:new Set(items.map(x=>Math.round(x.getBoundingClientRect().top))).size,containerWidth:box.width,itemWidths:items.map(x=>x.getBoundingClientRect().width),horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth};
+          });
+          if(outcomes.gridTemplateColumns.split(' ').length!==1||outcomes.rowCount!==3||outcomes.itemWidths.some(w=>Math.abs(w-outcomes.containerWidth)>1)||outcomes.horizontalOverflow) failures.push('mobile outcomes '+JSON.stringify(outcomes));
+          await mobileContext.close();
+          await browser.close();
+          const parentFallbackCount=Object.values(matrix).flatMap(x=>Object.values(x)).filter(x=>x.parentFallback).length;
+          fs.writeFileSync(path.join(out,'voucher-routing-matrix.json'),JSON.stringify({matrix,parentFallbackCount,nextStage,mobileOutcomes430:outcomes},null,2));
+          if(parentFallbackCount) failures.push('parent fallback count='+parentFallbackCount);
+          if(failures.length) throw new Error(failures.join('\n'));
+          NODE
+          node /tmp/voucher-routing-matrix.mjs
+
       - name: Rendered CaseStudySection DOM and screenshot gate
         shell: bash
         run: node scripts/case-study-dom-audit.mjs
