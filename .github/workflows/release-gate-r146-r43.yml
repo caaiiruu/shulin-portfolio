@@ -87,7 +87,7 @@ jobs:
         run: |
           set -o pipefail
           npm install --no-save --package-lock=false playwright@1.55.0 2>&1 | tee "$EVIDENCE_DIR/playwright-install-result.txt"
-          npx playwright install --with-deps chromium 2>&1 | tee "$EVIDENCE_DIR/chromium-install-result.txt"
+          npx playwright install chromium 2>&1 | tee "$EVIDENCE_DIR/chromium-install-result.txt"
 
       - name: Start production-like static server
         shell: bash
