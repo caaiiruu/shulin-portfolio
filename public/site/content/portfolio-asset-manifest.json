@@ -479,19 +479,6 @@
       "alt": "Before and shipped FairPrice product detail screens comparing no Voucher discovery with eligible Voucher discovery.",
       "alt_zh": "FairPrice 商品詳情頁調整前與上線後比較：從沒有優惠券探索到顯示適用優惠券。"
     },
-    "voucher-offer-stage-discover-voucher-details-before-shipped-01": {
-      "id": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
-      "projectId": "voucher",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "replacementRequired": false,
-      "publicBuild": true,
-      "alt": "Discover two-panel Voucher Details before and shipped comparison.",
-      "alt_zh": "Discover two-panel Voucher Details before and shipped comparison."
-    },
     "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01": {
       "id": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
       "projectId": "voucher",

@@ -20,9 +20,9 @@ const placeholderIds = [
 ];
 
 const contentSha = createHash("sha256").update(contentBytes).digest("hex");
-fail(contentSha === "010caca797b92b7c9fe8cd075401b38f455777d0a15dc2fb6fd77de53a527c5c", `Content r155 SHA changed: ${contentSha}`);
-fail(content.contentVersion === "2026-08-11-r155" && projectIds.length === 13, "Content r155 roster changed");
-fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r155");
+fail(contentSha === "cc7efc0a185c1cace47a3ce9135437140c7fdf829fde0325d3bc33b0fcac6835", `Content r156 SHA changed: ${contentSha}`);
+fail(content.contentVersion === "2026-08-11-r156" && projectIds.length === 13, "Content r156 roster changed");
+fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r156");
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
 fail(itemEntries.length === new Set(itemEntries.map(([id]) => id)).size, "Duplicate asset IDs");
 const slots = [];
