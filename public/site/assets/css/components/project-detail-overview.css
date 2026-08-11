@@ -823,7 +823,7 @@
 .research-evidence-metric>strong,.outcome-metric__value{color:var(--color-text-primary);font-weight:var(--sys-weight-heavy);line-height:1}
 .research-evidence-metric__label,.outcome-metric__primary,.outcome-metric__label{color:var(--color-text-secondary);font-size:var(--text-sm);line-height:var(--leading-body)}
 .voucher-r149-research__bridge,.voucher-r149-research__supporting,.voucher-r149-system-change{line-height:var(--leading-body)}
-.info-tooltip{display:inline-flex;align-items:center;height:1em;min-height:0;line-height:1;vertical-align:-.125em}
+.info-tooltip{display:inline-flex;align-items:center;height:var(--dimension-16px);min-height:0;line-height:1;vertical-align:-.125em}
 .info-tooltip__trigger,.info-tooltip__trigger:hover,.info-tooltip__trigger:focus,.info-tooltip__trigger:focus-visible{background:transparent}
 .info-tooltip__trigger:hover,.info-tooltip__trigger:focus-visible{color:var(--color-text-primary)}
 .info-tooltip__trigger:hover svg,.info-tooltip__trigger:focus-visible svg{fill:currentColor}
