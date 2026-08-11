@@ -331,7 +331,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-11-r151");
+  assert.equal(ssot.contentVersion, "2026-08-11-r152");
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -729,6 +729,40 @@ test("uses one canonical SVG arrow system and consistent supplemental headings",
   assert.match(selected, /\.evidence-list__item:hover\{[^}]*border-radius:var\(--work-card-hover-radius\)[^}]*box-shadow:var\(--work-card-hover-shadow\)[^}]*transform:var\(--work-card-hover-transform\)/);
 });
 
+test("keeps Voucher child stages canonical, deterministic, and shared", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const stages = ssot.projects.voucher.recruiterFirstPopup.stages;
+  assert.deepEqual(Object.fromEntries(stages.map((stage) => [stage.id, stage.decisions.length])), {
+    discover: 2, qualify: 1, activate: 1, redeem: 1, review: 1,
+  });
+  const evidence = stages.flatMap((stage) => stage.decisions.map((decision) => decision.evidence.assetId));
+  assert.deepEqual(evidence, [
+    "voucher-offer-stage-discover-pdp-before-shipped-01",
+    "voucher-offer-stage-discover-voucher-details-before-shipped-01",
+    "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
+    "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
+    "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
+    "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
+  ]);
+  for (const stage of stages) for (const decision of stage.decisions) {
+    for (const field of ["whatIDecided", "whyThisChoice", "whatThisRequired", "outcome"]) {
+      assert.ok(decision[field].en && decision[field].zh, `${stage.id}: ${field}`);
+    }
+    assert.doesNotMatch(JSON.stringify(decision), /To be added|EFFECT/);
+  }
+  assert.match(app, /Stage links keep their native canonical href/);
+  assert.doesNotMatch(app, /const stage=event\.target\.closest\('\[data-stage\]'\)/);
+  assert.match(app, /nextUrl\.searchParams\.set\('stage',nextStage\.id\)/);
+  assert.match(app, /voucher-stage-decision__grid/);
+  assert.match(css, /\.voucher-stage-decision__grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css, /@media\(max-width:600px\)\{\.voucher-stage-decision__grid\{grid-template-columns:1fr\}/);
+  assert.match(css, /\.voucher-r149-metrics,\.impact-evidence-v147__metrics\{grid-template-columns:1fr\}/);
+  assert.match(css, /M553\.077 103\.851/);
+  assert.match(css, /M1727\.15 0C1714\.02/);
+});
+
 test("keeps popup navigation and related work in their canonical owners", () => {
   const base = read("assets/css/base.css");
   const shell = read("assets/css/components/popup-shell.css");
@@ -759,7 +793,7 @@ test("keeps popup navigation and related work in their canonical owners", () => 
     "dialogTitle.focus({preventScroll:true})",
   ]) assert.ok(app.includes(contract), contract);
   assert.doesNotMatch(shell, /!important|overflow-wrap:anywhere|word-break:break-all/);
-  assert.match(overview, /\.voucher-r149-insight\{[^}]*overflow:hidden[^}]*background:#F4F1EA/);
+  assert.match(overview, /\.voucher-r149-insight\{[^}]*overflow:hidden[^}]*background:linear-gradient\([^}]*#F4F1EA/);
   assert.doesNotMatch(overview.match(/\.voucher-r149-insight\{[^}]*\}/)?.[0] ?? "", /box-shadow|clip-path|dimension-100vw/);
   assert.match(overview, /\.detail-related-v45\{[^}]*gap:var\(--section-heading-content-gap\)/);
   assert.match(app, /querySelector\('#detailRelated \.kicker'\)\?\.remove\(\)/);

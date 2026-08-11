@@ -2777,69 +2777,75 @@
     if(!isInitiative)positionProjectContext(false);
     if(isStage){
       const parent=DATA.projects[currentDetail.parentKey];clear(programmeSurface());
-      const stageIndex=parent.journey_stages.findIndex(item=>item.id===currentDetail.key);const stage=parent.journey_stages[stageIndex];const item=parent.initiative_map.find(entry=>(entry.primary_stage||entry.range?.[0])===stageIndex+1)||{};
-      safeText(doc.getElementById('detailContext'),'FairPrice Group · Voucher / Offer Vision');
+      const stageIndex=parent.journey_stages.findIndex(item=>item.id===currentDetail.key);
+      const stage=parent.journey_stages[stageIndex];
+      const stageProjection=parent.recruiterFirstPopup?.stages?.find(entry=>entry.id===currentDetail.key);
+      const stageNumber=String(stageIndex+1).padStart(2,'0');
+      safeText(doc.getElementById('detailContext'),lang==='zh'?`Voucher / offer 階段 ${stageNumber}`:`Voucher / offer stage ${stageNumber}`);
       safeText(doc.getElementById('detailPeriod'),'');
       safeText(dialogTitle,localizedField(stage,'label'));
       renderTags([]);
       const classification=doc.getElementById('detailClassification');if(classification)classification.hidden=true;
       renderDeliveryStatus('');
-      const stageLabel=localizedField(stage,'label');
-      const stageProjection=parent.recruiterFirstPopup?.stages?.find(entry=>entry.id===currentDetail.key);
-      const section=element('section','case-study-section case-study-section--canvas');
-      section.classList.add('voucher-stage-case','voucher-r149-solution','voucher-r149-details');
-      const stageSummary=localizedField(stageProjection?.overview||stageProjection||stage,'designDirection')||localizedField(stageProjection||stage,'whatChanged')||localizedField(item,'capability')||localizedField(stage,'direction');
-      section.append(element('h2','voucher-r149-solution__title',lang==='zh'?'主要設計方向':'Main design direction'));
-      if(stageSummary)section.append(element('p','voucher-r149-intro',stageSummary));
-      const projectedDecisions=list(stageProjection?.decisions);
-      const evidenceItems=projectedDecisions.length?projectedDecisions:stageEvidenceItems(parent,currentDetail.key);
-      if(evidenceItems.length){
-        const evidenceGrid=element('div','voucher-r149-decision-list');
-        evidenceItems.forEach((source,index)=>{
-          const legacy=projectedDecisions.length?null:stageEvidenceDecision(source);
-          const model=projectedDecisions.length?{
-            title:source.title,
-            result:source.whatIDecided,
-            evidence:source.whyThisChoice,
-            optionalBlock:source.optionalBlock,
-            evidenceAssetId:source.evidence?.assetId
-          }:{
-            title:stageEvidenceTitle(source),
-            problem:stageEvidenceProblem(source),
-            result:legacy?.whatIDecided,
-            effect:legacy?.whyThisChoice,
-            optionalBlock:legacy?.optionalBlock
-          };
-          const card=createDecisionCard(model,index,{projectKey:currentDetail.parentKey,showVisual:Boolean(model.evidenceAssetId)});
-          card.classList.add('voucher-r149-decision');
-          if(source.trend?.value){
-            const trend=element('div','voucher-r149-decision__trend');
-            trend.append(element('strong','',source.trend.value),element('span','',localize(source.trend.label)),element('p','',localize(source.trend.boundary)));
-            card.querySelector('.decision-body-v46')?.append(trend);
-          }
-          const ownership=projectedDecisions.length?localize(source.ownership):localize(stageEvidenceOwnership(source));
-          if(ownership){
-            const owner=element('div','voucher-r149-decision__ownership');
-            owner.append(element('span','decision-field-label-v58',lang==='zh'?'責任邊界':'OWNERSHIP BOUNDARY'),element('p','',ownership));
-            card.querySelector('.decision-body-v46')?.append(owner);
-          }
-          evidenceGrid.append(card);
+      const hero=element('section','voucher-stage-hero');
+      hero.append(
+        element('span','voucher-stage-hero__label',lang==='zh'?'主要設計方向':'Main design direction'),
+        element('p','voucher-stage-hero__statement',localizedField(stageProjection?.overview||stageProjection||stage,'designDirection')||localizedField(stageProjection||stage,'whatChanged'))
+      );
+      const surface=element('section','voucher-stage-surface');
+      const decisionList=element('div','voucher-stage-decision-list');
+      list(stageProjection?.decisions).forEach((decision,index)=>{
+        const article=element('article','voucher-stage-decision');
+        article.dataset.decisionIndex=String(index+1);
+        const heading=element('header','voucher-stage-decision__heading');
+        heading.append(
+          element('span','decision-number-v48',`${lang==='zh'?'設計決策':'Decision'} ${String(index+1).padStart(2,'0')}`),
+          element('h2','',localize(decision.title))
+        );
+        const grid=element('div','voucher-stage-decision__grid');
+        [
+          [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
+          [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
+          [lang==='zh'?'系統要求':'WHAT THIS REQUIRED',decision.whatThisRequired],
+          [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
+        ].forEach(([label,value])=>{
+          const field=element('section','voucher-stage-decision__field');
+          field.append(element('span','decision-field-label-v58',label),element('p','',localize(value)));
+          grid.append(field);
         });
-        section.append(evidenceGrid);
+        const evidence=element('figure','voucher-stage-evidence evidence-frame');
+        const resolved=resolveProjectAsset(decision.evidence?.assetId);
+        const media=element('button','voucher-stage-evidence__media evidence-frame__media');
+        media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
+        if(resolved){
+          const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
+          if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
+          media.append(image);
+        }
+        evidence.append(media);
+        article.append(heading,grid,evidence);
+        if(index<stageProjection.decisions.length-1)article.append(element('hr','voucher-stage-decision__divider'));
+        decisionList.append(article);
+      });
+      surface.append(decisionList);
+      const nextStage=parent.journey_stages[stageIndex+1];
+      const navigation=element('nav','voucher-stage-next');
+      if(nextStage){
+        const nextUrl=new URL(window.location.href);
+        nextUrl.searchParams.set('case',currentDetail.parentKey);
+        nextUrl.searchParams.set('stage',nextStage.id);
+        nextUrl.searchParams.delete('initiative');
+        const link=element('a','button button--dark voucher-stage-next__link',`${lang==='zh'?'下一階段':'Next stage'}: ${localizedField(nextStage,'label')}`);
+        link.href=nextUrl.pathname+nextUrl.search+nextUrl.hash;
+        link.dataset.stage=nextStage.id;link.dataset.parentProject=currentDetail.parentKey;
+        navigation.append(link);
+      }else{
+        const parentUrl=canonicalProjectUrl(currentDetail.parentKey);
+        const link=element('a','button button--dark voucher-stage-next__link',lang==='zh'?'返回 Voucher / Offer Vision':'Return to Voucher / Offer Vision');
+        link.href=parentUrl.pathname+parentUrl.search+parentUrl.hash;link.dataset.stageBack='true';
+        navigation.append(link);
       }
-      const visual=null;
-      if(visual?.beforeAssetId&&visual?.shippedAssetId){
-        const figure=element('figure','voucher-r149-evidence'),grid=element('div','before-after-evidence-v147__grid'),copy=visual.copy?.[lang==='zh'?'zh':'en']||{};
-        [[visual.beforeAssetId,copy.beforeLabel,copy.beforeCaption,'is-before'],[visual.shippedAssetId,copy.shippedLabel,copy.shippedCaption,'is-shipped']].forEach(([assetId,label,caption,state])=>{
-          const asset=resolveProjectAsset(assetId),part=element('div',`before-after-evidence-v147__item ${state}`),frame=element('button','before-after-evidence-v147__frame');
-          frame.type='button';frame.dataset.expandableEvidence='true';frame.dataset.frameRole='primary-evidence';
-          const image=doc.createElement('img');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';
-          const htmlCaption=element('figcaption','before-after-evidence-v147__caption');htmlCaption.append(element('strong','',label),element('span','',caption));
-          frame.append(image);part.append(frame,htmlCaption);grid.append(part);
-        });
-        figure.append(grid);section.append(figure);
-      }
-      programmeSurface().append(section);
+      programmeSurface().append(hero,surface,navigation);
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
     else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
@@ -2895,18 +2901,8 @@
   doc.addEventListener('click',event=>{
     const stageBack=event.target.closest('[data-stage-back]');
     if(stageBack){event.preventDefault();returnToParentProject();return}
-    const stage=event.target.closest('[data-stage]');
-    if(stage){
-      event.preventDefault();
-      const parentKey=stage.dataset.parentProject||'voucher';
-      openDetail('stage',stage.dataset.stage,stage,parentKey);
-      const url=new URL(window.location.href);
-      url.searchParams.set('case',parentKey);
-      url.searchParams.set('stage',stage.dataset.stage);
-      url.searchParams.delete('initiative');
-      history.pushState({detail:{type:'stage',key:stage.dataset.stage,parentKey}},'',url);
-      return;
-    }
+    // Stage links keep their native canonical href. Deep-link rendering enhances
+    // the destination after navigation; it never replaces deterministic routing.
     const initiative=event.target.closest('[data-initiative]');
     if(initiative){event.preventDefault();openInitiative(initiative.dataset.parentProject||'voucher',initiative.dataset.initiative,initiative);return}
     const project=event.target.closest('[data-project]');

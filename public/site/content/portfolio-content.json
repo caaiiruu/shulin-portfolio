@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r151",
-  "supersedes": "2026-08-11-r150",
+  "contentVersion": "2026-08-11-r152",
+  "supersedes": "2026-08-11-r151",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -5151,70 +5151,52 @@
                   "zh": "直接在商品頁呈現適用 Voucher 價值"
                 },
                 "whatIDecided": {
-                  "en": "Group product-related Voucher value near product information and surface the most important eligibility rules earlier in the shopping journey.",
-                  "zh": "將商品相關優惠券價值放在商品資訊附近，並在購物旅程更早呈現最重要的資格規則。"
+                  "en": "Added contextual eligible Voucher visibility to PDP so customers could see relevant value while evaluating a product.",
+                  "zh": "在 PDP 加入情境式適用 Voucher 曝光，讓顧客在評估商品時看見相關價值。"
                 },
                 "whyThisChoice": {
-                  "en": "Customers usually started from products and shopping tasks rather than the Voucher Wallet. Research showed that relevant value needed to appear where the purchase decision was already happening.",
-                  "zh": "顧客通常從商品與購物任務開始，而不是從優惠券錢包開始。研究顯示，相關價值必須出現在購買決策已經發生的位置。"
+                  "en": "Voucher discovery previously sat outside the product decision. Bringing eligibility into PDP reduced the need to leave the shopping journey to search for relevant value.",
+                  "zh": "Voucher 探索原先位於商品決策之外。將資格資訊帶入 PDP，減少顧客離開購物旅程另行搜尋相關價值的需要。"
                 },
-                "optionalBlock": {
-                  "type": "WHAT THIS REQUIRED",
-                  "content": {
-                    "en": "Align Voucher, offer and product data so eligibility and visibility states could remain consistent into cart and checkout.",
-                    "zh": "對齊優惠券、優惠與商品資料，使資格與可見狀態能一致延續至購物車與結帳。"
-                  }
+                "whatThisRequired": {
+                  "en": "Aligned Voucher, offer and product data so eligibility and visibility states could remain consistent from product evaluation through cart and checkout.",
+                  "zh": "對齊 Voucher、offer 與商品資料，使資格與可見狀態能從商品評估一致延續至購物車與結帳。"
+                },
+                "outcome": {
+                  "en": "Relevant Voucher value became visible closer to purchase intent, reducing the effort required to discover applicable savings before adding a product to cart.",
+                  "zh": "相關 Voucher 價值更接近購買意圖出現，降低顧客在加入商品前探索適用優惠所需的操作與理解成本。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
                   "role": "primary-evidence",
                   "externalCaption": false
-                },
-                "ownership": {
-                  "en": "Shulin led research, problem framing, direction and validation / review; final detailed swimlane UI was completed with the product design team.",
-                  "zh": "Shulin 主導研究、問題定義、方向與驗證／檢視；最終細部 UI 由產品設計團隊共同完成。"
                 }
               },
               {
                 "title": {
-                  "en": "Turn Voucher Details from a rules page into a shoppable journey",
-                  "zh": "將 Voucher Details 從規則頁轉化為可購物旅程"
+                  "en": "Connect Voucher Details to eligible products",
+                  "zh": "將 Voucher Details 連結至適用商品"
                 },
                 "whatIDecided": {
-                  "en": "Enable customers to act on eligible items directly from Voucher Details, then move shoppable content ahead of lengthy instructions so value became actionable earlier.",
-                  "zh": "讓顧客能直接從優惠券詳情對適用商品採取行動，再將可購物內容移到冗長說明之前，讓價值更早可採取行動。"
+                  "en": "Reframed Voucher Details from static redemption instructions into an actionable shopping surface showing eligible products.",
+                  "zh": "將 Voucher Details 從靜態兌換說明重構為呈現適用商品、可直接採取購物行動的介面。"
                 },
                 "whyThisChoice": {
-                  "en": "Customers could understand Voucher rules but still had to leave the page or scroll past instructions before taking the next shopping action.",
-                  "zh": "顧客能理解優惠券規則，但在採取下一個購物行動前，仍必須離開頁面或滑過說明。"
+                  "en": "Customers previously had to interpret Voucher conditions and then search separately for qualifying products. Bringing eligible products into the same context made the next action clearer.",
+                  "zh": "顧客原先必須先解讀 Voucher 條件，再另行搜尋符合資格的商品。將適用商品帶入同一情境，讓下一步更明確。"
                 },
-                "trend": {
-                  "value": "~1.5% → ~4%",
-                  "label": {
-                    "en": "Add-to-Cart · OBSERVATIONAL TREND",
-                    "zh": "加入購物車・觀察趨勢"
-                  },
-                  "boundary": {
-                    "en": "Observed dashboard comparison only; not an A/B test and not causal.",
-                    "zh": "僅為儀表板觀察比較；不是 A/B 測試，也不代表因果。"
-                  }
+                "whatThisRequired": {
+                  "en": "Connected Voucher conditions with product eligibility so Voucher Details could surface relevant products without introducing a separate discovery model.",
+                  "zh": "連結 Voucher 條件與商品資格，使 Voucher Details 能呈現相關商品，而不必建立另一套探索模型。"
                 },
-                "optionalBlock": {
-                  "type": "TRADE-OFF ACCEPTED",
-                  "content": {
-                    "en": "Accepted one extra disclosure action for full instructions in exchange for moving shoppable products earlier.",
-                    "zh": "完整說明增加一次展開，以換取提早呈現可購買商品。"
-                  }
+                "outcome": {
+                  "en": "Customers could move directly from understanding a Voucher to exploring products they could use it on, reducing the gap between offer discovery and shopping action.",
+                  "zh": "顧客可從理解 Voucher 直接前往探索可使用的商品，縮短優惠探索與購物行動之間的落差。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-discover-voucher-details-before-shipped-01",
                   "role": "primary-evidence",
-                  "panelCount": 2,
                   "externalCaption": false
-                },
-                "contentBoundary": {
-                  "en": "This decision shows the two-panel Voucher Details evolution only. Qualification progress belongs to the Qualify stage.",
-                  "zh": "此決策僅呈現雙畫面的 Voucher Details 演進；資格進度屬於 Qualify 階段。"
                 }
               }
             ],
@@ -5267,7 +5249,7 @@
             },
             "whatChanged": {
               "en": "Make eligibility understandable before commitment.",
-              "zh": "在顧客投入前讓資格判定容易理解。"
+              "zh": "在投入前讓資格判定清楚易懂。"
             },
             "shipped": {
               "en": "Linked Voucher conditions to eligible items, channel requirements, savings and remaining thresholds.",
@@ -5276,21 +5258,28 @@
             "decisions": [
               {
                 "title": {
-                  "en": "Make qualification progress visible before commitment",
-                  "zh": "在投入前讓資格進度清楚可見"
+                  "en": "Turn Voucher conditions into visible qualification guidance",
+                  "zh": "將 Voucher 條件轉化為可見的資格引導"
                 },
                 "whatIDecided": {
-                  "en": "Connect eligible items, conditions and remaining qualification progress in one Voucher Details journey.",
-                  "zh": "在同一個 Voucher Details 旅程中連結適用商品、條件與剩餘資格進度。"
+                  "en": "Translated Voucher conditions into contextual qualification guidance by connecting eligible products with visible savings, channel requirements and remaining thresholds.",
+                  "zh": "連結適用商品、可節省金額、通路要求與剩餘門檻，將 Voucher 條件轉化為情境式資格引導。"
                 },
                 "whyThisChoice": {
-                  "en": "Customers had to interpret product, channel and threshold conditions before knowing whether a Voucher was useful.",
-                  "zh": "顧客必須自行解讀商品、通路與門檻條件，才能知道優惠券是否有用。"
+                  "en": "Customers previously had to interpret Voucher rules and then work out for themselves which products qualified and what conditions remained. Eligibility needed to become part of the shopping decision rather than a separate rule-reading task.",
+                  "zh": "顧客原先必須解讀 Voucher 規則，再自行判斷哪些商品符合資格及仍缺少哪些條件。資格判斷需要成為購物決策的一部分，而非獨立的規則閱讀工作。"
+                },
+                "whatThisRequired": {
+                  "en": "Connected product eligibility, channel requirements and threshold states into a shared qualification model that could distinguish what qualified, what remained and when a Voucher became usable.",
+                  "zh": "將商品資格、通路要求與門檻狀態連結成共享的資格模型，區分已符合、仍缺少與 Voucher 可使用的狀態。"
+                },
+                "outcome": {
+                  "en": "Customers could understand both which products qualified and what remained before commitment, reducing interpretation effort and making Voucher eligibility more predictable before checkout.",
+                  "zh": "顧客能在投入前同時理解哪些商品符合資格及仍需完成的條件，降低解讀成本，並讓結帳前的 Voucher 資格更可預期。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
                   "role": "primary-evidence",
-                  "panelCount": 3,
                   "externalCaption": false
                 }
               }
@@ -5302,7 +5291,7 @@
               },
               "designDirection": {
                 "en": "Make eligibility understandable before commitment.",
-                "zh": "在顧客投入前讓資格判定容易理解。"
+                "zh": "在投入前讓資格判定清楚易懂。"
               },
               "designSolution": {
                 "en": "Linked Voucher conditions to eligible items, channel requirements, savings and remaining thresholds.",
@@ -5325,7 +5314,7 @@
             },
             "direction": {
               "en": "Make eligibility understandable before commitment.",
-              "zh": "在顧客投入前讓資格判定容易理解。"
+              "zh": "在投入前讓資格判定清楚易懂。"
             },
             "representativeShippedSignal": {
               "en": "Linked Voucher conditions to eligible items, channel requirements, savings and remaining thresholds.",
@@ -5343,8 +5332,8 @@
               "zh": "高流量活動的參與仰賴入口、瀏覽與返回存取之間的連續性，而非單一活動接觸點。"
             },
             "whatChanged": {
-              "en": "Create a continuous activation journey from campaign entry to repeat Voucher access.",
-              "zh": "建立從活動入口到重複存取 Voucher 的連續啟動旅程。"
+              "en": "Create a continuous path from campaign entry to repeat Voucher access.",
+              "zh": "建立從活動入口到重複存取 Voucher 的連續路徑。"
             },
             "shipped": {
               "en": "Connected campaign entry points, the dedicated Save Every Day Voucher experience and Wallet access into one repeatable participation path.",
@@ -5353,25 +5342,29 @@
             "decisions": [
               {
                 "title": {
-                  "en": "Use Save Every Day as the shipped campaign activation proof",
-                  "zh": "以 Save Every Day 作為已上線的活動啟動證據"
+                  "en": "Connect campaign entry, browsing and return access into one participation journey",
+                  "zh": "將活動入口、瀏覽與返回存取串成單一參與旅程"
                 },
                 "whatIDecided": {
-                  "en": "Connect the SEC campaign entry, Voucher saving and Wallet return flow as one participation journey.",
-                  "zh": "將 SEC 活動入口、Voucher 儲存與返回 Wallet 串成一條參與旅程。"
+                  "en": "Connected campaign entry points, the dedicated Save Every Day Voucher experience and Wallet access into one continuous participation path.",
+                  "zh": "將活動入口、專屬 Save Every Day Voucher 體驗與 Wallet 存取串成一條連續的參與路徑。"
                 },
                 "whyThisChoice": {
-                  "en": "Collect could mean purchase intent to some customers and a consequence-free game to others.",
-                  "zh": "收集對部分顧客代表購買意圖，對另一些顧客則只是沒有承諾的遊戲行為。"
+                  "en": "A high-volume Voucher campaign could not depend on a single exposure. Customers needed a clear way to enter the campaign, understand what was available and return to distributed Vouchers later without rediscovering the campaign from scratch.",
+                  "zh": "高流量 Voucher 活動不能依賴單次曝光。顧客需要清楚進入活動、理解可用內容，並能在之後返回已發放的 Voucher，而不必重新探索活動。"
+                },
+                "whatThisRequired": {
+                  "en": "Aligned campaign entry, Voucher availability and Wallet states so the same campaign value remained coherent across initial discovery, browsing and later return access.",
+                  "zh": "對齊活動入口、Voucher 可用性與 Wallet 狀態，使相同活動價值能在首次探索、瀏覽與後續返回時保持一致。"
+                },
+                "outcome": {
+                  "en": "Campaign Vouchers remained easier to discover and return to across the campaign lifecycle, reducing re-entry friction after first exposure.",
+                  "zh": "活動 Voucher 在整個活動生命週期中更容易被發現與再次存取，降低首次曝光後重新進入的阻力。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
                   "role": "primary-evidence",
                   "externalCaption": false
-                },
-                "contentBoundary": {
-                  "en": "SEC only. Brand Challenge is not part of this stage evidence.",
-                  "zh": "此階段僅使用 SEC，不包含 Brand Challenge。"
                 }
               }
             ],
@@ -5381,8 +5374,8 @@
                 "zh": "高流量活動的參與仰賴入口、瀏覽與返回存取之間的連續性，而非單一活動接觸點。"
               },
               "designDirection": {
-                "en": "Create a continuous activation journey from campaign entry to repeat Voucher access.",
-                "zh": "建立從活動入口到重複存取 Voucher 的連續啟動旅程。"
+                "en": "Create a continuous path from campaign entry to repeat Voucher access.",
+                "zh": "建立從活動入口到重複存取 Voucher 的連續路徑。"
               },
               "designSolution": {
                 "en": "Connected campaign entry points, the dedicated Save Every Day Voucher experience and Wallet access into one repeatable participation path.",
@@ -5404,8 +5397,8 @@
               "zh": "高流量活動的參與仰賴入口、瀏覽與返回存取之間的連續性，而非單一活動接觸點。"
             },
             "direction": {
-              "en": "Create a continuous activation journey from campaign entry to repeat Voucher access.",
-              "zh": "建立從活動入口到重複存取 Voucher 的連續啟動旅程。"
+              "en": "Create a continuous path from campaign entry to repeat Voucher access.",
+              "zh": "建立從活動入口到重複存取 Voucher 的連續路徑。"
             },
             "representativeShippedSignal": {
               "en": "Connected campaign entry points, the dedicated Save Every Day Voucher experience and Wallet access into one repeatable participation path.",
@@ -5433,16 +5426,24 @@
             "decisions": [
               {
                 "title": {
-                  "en": "Make applicability, recovery and Select all explicit",
-                  "zh": "明確呈現適用性、復原與全選"
+                  "en": "Make Voucher selection system-guided from applicability through conflict recovery",
+                  "zh": "從適用性到衝突復原，讓 Voucher 選擇由系統引導"
                 },
                 "whatIDecided": {
-                  "en": "Use applicable and not-applicable states, error recovery and Select all to reduce repeated Voucher selection.",
-                  "zh": "以適用／不適用狀態、錯誤復原與全選，降低重複選擇 Voucher 的負擔。"
+                  "en": "Reframed Voucher selection around system-known applicability by separating usable and unavailable Vouchers, supporting bulk selection with Select all, and surfacing non-stackable conflicts before checkout.",
+                  "zh": "以系統已知的適用性重構 Voucher 選擇：分開可用與不可用 Voucher、提供 Select all 批次選取，並在結帳前呈現不可疊加衝突。"
                 },
                 "whyThisChoice": {
-                  "en": "Customers could miss value because added, selected and applied states were not always distinguishable.",
-                  "zh": "加入、選取與套用狀態不一定清楚可辨，使顧客可能錯過優惠價值。"
+                  "en": "Customers were being asked to interpret rules the system already knew. As Voucher volume increased, manually checking applicability, selecting Vouchers one by one and discovering conflicts late created unnecessary decision and recovery effort.",
+                  "zh": "顧客被要求自行解讀系統已知的規則。當 Voucher 數量增加，手動檢查適用性、逐一選取及延後發現衝突，造成不必要的決策與復原成本。"
+                },
+                "whatThisRequired": {
+                  "en": "Standardised applicability, selection and stacking states across Voucher types so bulk actions and conflict handling could follow the same underlying redemption logic.",
+                  "zh": "統一不同 Voucher 類型的適用、選取與疊加狀態，使批次操作與衝突處理遵循同一套兌換邏輯。"
+                },
+                "outcome": {
+                  "en": "Redemption became more predictable and less manually intensive: customers could identify usable Vouchers faster, apply valid combinations more efficiently and resolve conflicts before progressing into checkout.",
+                  "zh": "兌換變得更可預期且減少手動操作：顧客可更快辨識可用 Voucher、更有效率地套用有效組合，並在進入結帳前解決衝突。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
@@ -5509,16 +5510,24 @@
             "decisions": [
               {
                 "title": {
-                  "en": "Integrate Voucher selection and rule logic into payment review",
-                  "zh": "將 Voucher 選擇與規則邏輯整合進付款檢視"
+                  "en": "Make Voucher application status verifiable before payment",
+                  "zh": "讓付款前的 Voucher 套用狀態可被確認"
                 },
                 "whatIDecided": {
-                  "en": "Owned the Voucher interaction and rule logic, collaborated with the Payment designer, and integrated the experience into the payment flow.",
-                  "zh": "負責 Voucher 互動與規則邏輯，與 Payment designer 協作，並將體驗整合進付款流程。"
+                  "en": "Defined the Voucher interaction and review logic so customers could see which Vouchers had been applied and which remained unapplied before continuing with payment.",
+                  "zh": "定義 Voucher 互動與檢視邏輯，使顧客在繼續付款前看見哪些 Voucher 已套用、哪些仍未套用。"
                 },
                 "whyThisChoice": {
-                  "en": "Customers could complete payment without a clear understanding of what was saved, used or returned.",
-                  "zh": "顧客可能在完成付款後，仍不清楚節省、使用或退回了哪些價值。"
+                  "en": "With many Vouchers available, customers needed confirmation of the system’s selection rather than relying on memory or inferring savings from the final payable amount.",
+                  "zh": "當可用 Voucher 很多時，顧客需要確認系統的選擇，而不是依賴記憶或從最終應付金額推測節省內容。"
+                },
+                "whatThisRequired": {
+                  "en": "Defined Voucher selection and review states, then partnered with the Payment designer to integrate those states into the existing payment journey.",
+                  "zh": "定義 Voucher 選取與檢視狀態，並與 Payment designer 協作，將這些狀態整合進既有付款旅程。"
+                },
+                "outcome": {
+                  "en": "Customers could verify Voucher application before payment, increasing transparency and reducing uncertainty around which savings had been applied.",
+                  "zh": "顧客可在付款前確認 Voucher 套用狀態，提高透明度，並降低對哪些優惠已套用的不確定性。"
                 },
                 "evidence": {
                   "assetId": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
@@ -5526,8 +5535,8 @@
                   "externalCaption": false
                 },
                 "ownership": {
-                  "en": "Shulin owned Voucher interaction and rule logic; the Payment designer collaborated on payment-flow integration.",
-                  "zh": "Shulin 負責 Voucher 互動與規則邏輯；Payment designer 協作完成付款流程整合。"
+                  "en": "Shulin owned Voucher interaction and rule logic; the Payment designer owned the payment flow; integration was collaborative.",
+                  "zh": "Shulin 負責 Voucher 互動與規則邏輯；Payment designer 負責付款流程；整合由雙方協作完成。"
                 }
               }
             ],
