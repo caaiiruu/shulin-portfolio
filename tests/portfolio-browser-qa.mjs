@@ -137,7 +137,7 @@ for (const viewport of viewports) {
     return {values,labels,valueAligned:Math.max(...values.map(x=>x.y))-Math.min(...values.map(x=>x.y))<1,labelAligned:Math.max(...labels)-Math.min(...labels)<1};
   });
   r158.cloud = await page.locator(".core-system-insight-section.case-study-cloud-emphasis").first().evaluate(node=>{const r=node.getBoundingClientRect(),root=node.closest(".dialog-scroll").getBoundingClientRect();return {left:r.left,right:r.right,rootLeft:root.left,rootRight:root.right,leftDelta:Math.abs(r.left-root.left),rightDelta:Math.abs(r.right-root.right)}});
-  const tooltipTriggers=page.locator(".info-tooltip__trigger:visible");
+  const tooltipTriggers=page.locator(".outcome-metric .info-tooltip__trigger");
   const tooltipIndexes=[0,Math.floor((await tooltipTriggers.count())/2),(await tooltipTriggers.count())-1];
   for(const [label,index] of [["left",tooltipIndexes[0]],["centre",tooltipIndexes[1]],["right",tooltipIndexes[2]]]){
     const trigger=tooltipTriggers.nth(index);await trigger.scrollIntoViewIfNeeded();const closed=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);await trigger.click();await page.waitForTimeout(40);
