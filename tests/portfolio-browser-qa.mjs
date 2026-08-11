@@ -60,6 +60,14 @@ for (const viewport of viewports) {
   if (!r156.tooltips) failures.push(`${viewport.name} shared info tooltips missing`);
   if (r156.desktopEvidenceButtons) failures.push(`${viewport.name} desktop evidence lightbox affordance remains`);
 
+  const initialFocus = await page.evaluate(() => ({
+    tag: document.activeElement?.tagName || "",
+    id: document.activeElement?.id || "",
+    titleFocused: document.activeElement?.id === "detailTitle",
+    scrollTop: document.querySelector(".dialog-scroll")?.scrollTop || 0,
+  }));
+  if (initialFocus.titleFocused) failures.push(`${viewport.name} popup title received initial focus`);
+
   const targetedDirectory = path.join(directory, "targeted");
   fs.mkdirSync(targetedDirectory, { recursive: true });
   const capture = async (name, selector) => {
@@ -84,14 +92,6 @@ for (const viewport of viewports) {
     ["stage-redeem", "[data-stage-card='redeem']"],
     ["stage-review", "[data-stage-card='review']"],
   ]) await capture(name, selector);
-
-  const initialFocus = await page.evaluate(() => ({
-    tag: document.activeElement?.tagName || "",
-    id: document.activeElement?.id || "",
-    titleFocused: document.activeElement?.id === "detailTitle",
-    scrollTop: document.querySelector(".dialog-scroll")?.scrollTop || 0,
-  }));
-  if (initialFocus.titleFocused) failures.push(`${viewport.name} popup title received initial focus`);
 
   const firstTooltip = page.locator(".outcome-metric .info-tooltip__trigger").first();
   const tooltipState = { count: await page.locator(".info-tooltip__trigger").count() };
