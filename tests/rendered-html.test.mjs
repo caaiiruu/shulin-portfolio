@@ -761,7 +761,7 @@ test("keeps popup navigation and related work in their canonical owners", () => 
   assert.doesNotMatch(shell, /!important|overflow-wrap:anywhere|word-break:break-all/);
   assert.match(overview, /\.voucher-r149-insight\{[^}]*overflow:hidden[^}]*background:#F4F1EA/);
   assert.doesNotMatch(overview.match(/\.voucher-r149-insight\{[^}]*\}/)?.[0] ?? "", /box-shadow|clip-path|dimension-100vw/);
-  assert.match(overview, /\.detail-related-v45\{[^}]*gap:var\(--project-detail-section-gap\)/);
+  assert.match(overview, /\.detail-related-v45\{[^}]*gap:var\(--section-heading-content-gap\)/);
   assert.match(app, /querySelector\('#detailRelated \.kicker'\)\?\.remove\(\)/);
   assert.match(app, /controlsHead\.hidden=!scrollable/);
   assert.doesNotMatch(app, /scheduleProjectSectionFrame\(transaction,animate\)/);
