@@ -24,6 +24,7 @@ async function run(name,viewport,stage,audit=false){
   const response=await page.goto(baseUrl+"/site/work/voucher?case=voucher&stage="+stage,{waitUntil:"networkidle"});
   if(!response?.ok())throw new Error(stage+" HTTP "+response?.status());
   const footer=page.locator(".child-stage-navigation").first(); await footer.waitFor({state:"visible"});
+  await page.locator("img").evaluateAll(async images=>{await Promise.all(images.map(async img=>{img.loading="eager";if(!img.complete)await new Promise(resolve=>{img.addEventListener("load",resolve,{once:true});img.addEventListener("error",resolve,{once:true})});if(img.decode)try{await img.decode()}catch{}}))}); await twoFrames(page);
   const before=await footer.evaluate((node,{audit,props})=>{
    const ancestors=[];for(let p=node.parentElement;p;p=p.parentElement)ancestors.push(p);
    const dialog=node.closest("dialog"),surface=node.closest(".dialog-scroll"),content=node.closest(".modal-content-v45");
@@ -33,7 +34,7 @@ async function run(name,viewport,stage,audit=false){
   },{audit,props});
   const ownerSelector=before.owner?.className?"."+String(before.owner.className).trim().split(/\s+/).join("."):before.owner?.tag?.toLowerCase();
   const owner=before.owner?footer.locator("xpath=ancestor::*[contains(concat(' ',normalize-space(@class),' '),' "+String(before.owner.className).trim().split(/\s+/)[0]+" ')][1]"):page.locator("dialog").first();
-  await owner.evaluate(node=>{node.scrollTop=node.scrollHeight-node.clientHeight}); await twoFrames(page);
+  let previous=""; for(let attempt=0;attempt<8;attempt++){const state=await owner.evaluate(node=>{const max=node.scrollHeight-node.clientHeight;node.scrollTop=max;return max+":"+node.scrollTop+":"+node.scrollHeight});await twoFrames(page);const next=await owner.evaluate(node=>(node.scrollHeight-node.clientHeight)+":"+node.scrollTop+":"+node.scrollHeight);if(next===state&&next===previous)break;previous=next;}
   const final=await footer.evaluate((node,props)=>{
    const ancestors=[];for(let p=node.parentElement;p;p=p.parentElement)ancestors.push(p);
    const owner=ancestors.find(p=>/(auto|scroll)/.test(getComputedStyle(p).overflowY)&&p.scrollHeight>p.clientHeight+1)||node.closest("dialog");
