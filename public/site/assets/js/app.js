@@ -2598,8 +2598,8 @@
     trigger.type='button';trigger.setAttribute('aria-label',label);trigger.setAttribute('aria-controls',id);trigger.setAttribute('aria-expanded','false');
     const panel=element('span','info-tooltip__panel',text);panel.id=id;panel.setAttribute('role','tooltip');panel.hidden=true;
     const position=()=>{if(panel.hidden)return;const r=trigger.getBoundingClientRect(),gap=8,gutter=Math.max(16,parseFloat(getComputedStyle(doc.documentElement).getPropertyValue('--page-gutter'))||16),width=panel.offsetWidth,height=panel.offsetHeight;let left=Math.min(Math.max(r.left+r.width/2-width/2,gutter),window.innerWidth-gutter-width);let top=r.top-gap-height;if(top<gutter)top=Math.min(window.innerHeight-gutter-height,r.bottom+gap);panel.style.left=`${Math.round(left)}px`;panel.style.top=`${Math.round(Math.max(gutter,top))}px`};
-    const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false')};
-    const open=()=>{panel.hidden=false;trigger.setAttribute('aria-expanded','true');requestAnimationFrame(position)};
+    const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false');if(panel.parentElement!==root)root.append(panel)};
+    const open=()=>{const host=root.closest('dialog')||doc.body;if(panel.parentElement!==host)host.append(panel);panel.hidden=false;trigger.setAttribute('aria-expanded','true');requestAnimationFrame(position)};
     trigger.addEventListener('click',event=>{event.stopPropagation();open()});
     root.addEventListener('mouseenter',open);root.addEventListener('mouseleave',close);
     trigger.addEventListener('focus',open);trigger.addEventListener('blur',()=>setTimeout(()=>{if(!root.contains(doc.activeElement))close()},0));
