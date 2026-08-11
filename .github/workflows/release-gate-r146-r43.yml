@@ -435,6 +435,7 @@ jobs:
             }
             const decisionPageText=await body.innerText();
             const duplicateEvidenceLabels=forbiddenEvidenceLabels.filter(t=>decisionPageText.includes(t));
+            const childPlaceholder=/Content to be added|To be added/.test(decisionPageText);
             const discoverDecision=page.locator('.voucher-r149-decision-list .decision-card-v46').first();
             const discoverDecisionVisible=await discoverDecision.isVisible().catch(()=>false);
             const sharedDecisionStructure=discoverDecisionVisible && await discoverDecision.locator('.decision-number-v48, .decision-body-v46, .decision-visual-v58.evidence-frame').count()===3;
@@ -478,8 +479,8 @@ jobs:
             brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
             await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
             const keyProblemContract=!keyVisible;
-            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !duplicateEvidenceLabels.length && !voucherCenterMissing.length && ctaVisible && stageVisible && discoverDecisionVisible && sharedDecisionStructure && approvedEvidenceLoaded && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
-            results[vp.name]={...widthAudit,missing,duplicateEvidenceLabels,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,discoverDecisionVisible,sharedDecisionStructure,approvedEvidenceLoaded,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
+            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !duplicateEvidenceLabels.length && !childPlaceholder && !voucherCenterMissing.length && ctaVisible && stageVisible && discoverDecisionVisible && sharedDecisionStructure && approvedEvidenceLoaded && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
+            results[vp.name]={...widthAudit,missing,duplicateEvidenceLabels,childPlaceholder,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,discoverDecisionVisible,sharedDecisionStructure,approvedEvidenceLoaded,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
             if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
             await context.close();
           }
