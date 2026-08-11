@@ -103,11 +103,11 @@ jobs:
           cat "$EVIDENCE_DIR/server.log"
           exit 1
 
-      - name: Run reusable browser engineering QA
+      - name: Run focused R158.3 footer geometry certification
         shell: bash
         run: |
           set -o pipefail
-          node tests/portfolio-r1582-isolated-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r1582-isolated-qa-result.txt"
+          node tests/portfolio-r1583-footer-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r1583-footer-qa-result.txt"
 
       - name: Compose engineering QA report
         if: always()
