@@ -1,5 +1,5 @@
 name: Release Gate r146-r43
-# orchestration revision: 27
+# orchestration revision: 28
 
 on:
   pull_request:
@@ -56,7 +56,7 @@ jobs:
     timeout-minutes: 45
     env:
       IMPLEMENTATION_HEAD: 9238a599f256088ce9d09680a877968a26f9fc53
-      EXPECTED_SSOT_SHA256: 8ed122a910193de086c1a4b99e57b1b4eed3825ca3af5949b20db09d7f66c9c8
+      EXPECTED_SSOT_SHA256: 58598b7f22e494c61402f550df2fbc32ef2d0670bc766df6003bd7c8e66277ac
       EVIDENCE_DIR: /tmp/release-gate-r146-r43
       BASE_URL: http://127.0.0.1:3000
     steps:
