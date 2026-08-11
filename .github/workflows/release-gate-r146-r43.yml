@@ -288,7 +288,7 @@ jobs:
             if(!fs.existsSync(path)) throw new Error('Missing referenced bundle: '+ref);
           }
           const app=fs.readFileSync(root+'/assets/js/app.js','utf8');
-          for(const contract of ['stage.label','programme-stage-case__cta','voucher-r149-solution','voucher-r149-decision-list']){
+          for(const contract of ['stage.label','programme-stage-case__cta','voucher-stage-surface','voucher-r149-decision-list']){
             if(!app.includes(contract)) throw new Error('Missing stage contract: '+contract);
           }
           if((app.match(/Stage Evidence/g)||[]).length>1) throw new Error('Duplicate Stage Evidence renderer');
