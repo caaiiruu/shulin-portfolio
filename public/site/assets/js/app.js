@@ -2244,6 +2244,34 @@
     const changed=localize([decision.result||decision.whatIDecided,decision.result_zh]);
     const rationale=localize([decision.evidence||decision.why||decision.whyThisChoice,decision.evidence_zh||decision.why_zh]);
     body.append(element('h4','',title));
+    if(decision.fixedStageFields){
+      const grid=element('div','voucher-stage-decision__grid');
+      [
+        [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
+        [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
+        [lang==='zh'?'系統要求':'WHAT THIS REQUIRED',decision.whatThisRequired],
+        [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
+      ].forEach(([label,value])=>{
+        const field=element('section','voucher-stage-decision__field');
+        field.append(element('span','decision-field-label-v58',label),element('p','',localize(value)));
+        grid.append(field);
+      });
+      body.append(grid);
+      card.append(number,body);
+      if(showVisual&&projectKey){
+        const visual=element('figure','decision-visual-v58 evidence-frame voucher-stage-evidence');
+        const media=element('button','decision-visual-v67__crop evidence-frame__media voucher-stage-evidence__media');
+        media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
+        const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
+        if(resolved){
+          const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
+          if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
+          media.append(image);
+        }
+        visual.append(media);card.append(visual);
+      }
+      return card;
+    }
     const problem=localize([decision.problem,decision.problem_zh]);
     if(problem){
       const block=element('div','decision-problem-v147');
@@ -2794,38 +2822,20 @@
       );
       const surface=element('section','voucher-stage-surface');
       const decisionList=element('div','voucher-stage-decision-list');
-      list(stageProjection?.decisions).forEach((decision,index)=>{
-        const article=element('article','voucher-stage-decision');
-        article.dataset.decisionIndex=String(index+1);
-        const heading=element('header','voucher-stage-decision__heading');
-        heading.append(
-          element('span','decision-number-v48',`${lang==='zh'?'設計決策':'Decision'} ${String(index+1).padStart(2,'0')}`),
-          element('h2','',localize(decision.title))
-        );
-        const grid=element('div','voucher-stage-decision__grid');
-        [
-          [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
-          [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
-          [lang==='zh'?'系統要求':'WHAT THIS REQUIRED',decision.whatThisRequired],
-          [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
-        ].forEach(([label,value])=>{
-          const field=element('section','voucher-stage-decision__field');
-          field.append(element('span','decision-field-label-v58',label),element('p','',localize(value)));
-          grid.append(field);
-        });
-        const evidence=element('figure','voucher-stage-evidence evidence-frame');
-        const resolved=resolveProjectAsset(decision.evidence?.assetId);
-        const media=element('button','voucher-stage-evidence__media evidence-frame__media');
-        media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
-        if(resolved){
-          const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
-          if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-          media.append(image);
-        }
-        evidence.append(media);
-        article.append(heading,grid,evidence);
-        if(index<stageProjection.decisions.length-1)article.append(element('hr','voucher-stage-decision__divider'));
-        decisionList.append(article);
+      list(stageProjection?.decisions).forEach((source,index)=>{
+        const model={
+          fixedStageFields:true,
+          title:source.title?.en,title_zh:source.title?.zh,
+          whatIDecided:source.whatIDecided,
+          whyThisChoice:source.whyThisChoice,
+          whatThisRequired:source.whatThisRequired,
+          outcome:source.outcome,
+          evidenceAssetId:source.evidence?.assetId
+        };
+        const card=createDecisionCard(model,index,{projectKey:currentDetail.parentKey,showVisual:Boolean(model.evidenceAssetId)});
+        card.classList.add('voucher-r149-decision');
+        if(index<stageProjection.decisions.length-1)card.append(element('hr','voucher-stage-decision__divider'));
+        decisionList.append(card);
       });
       surface.append(decisionList);
       const nextStage=parent.journey_stages[stageIndex+1];
