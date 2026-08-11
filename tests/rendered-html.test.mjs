@@ -331,7 +331,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-11-r156");
+  assert.equal(ssot.contentVersion, "2026-08-11-r157");
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
