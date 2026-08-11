@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
-  "packageVersion": "r44",
-  "contentVersion": "2026-08-11-r150",
+  "packageVersion": "r45",
+  "contentVersion": "2026-08-11-r151",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -555,7 +555,14 @@
       "replacementRequired": false,
       "publicBuild": true,
       "alt": "Shared Voucher eligibility, threshold and application rules.",
-      "alt_zh": "Shared Voucher eligibility, threshold and application rules."
+      "alt_zh": "Shared Voucher eligibility, threshold and application rules.",
+      "sha256": "7c6727db399ecfe3a1e002855641013f4643176a966d5de216ad76ef7a4178bf",
+      "byteSize": 133960,
+      "blobSha": "bc51eda9d1ecdca2e6375894772fc8958f8c76b2",
+      "width": 2048,
+      "height": 1152,
+      "replacedAt": "2026-08-11",
+      "semanticSlotStable": true
     },
     "voucher-offer-reusable-system-shared-states-01": {
       "id": "voucher-offer-reusable-system-shared-states-01",
@@ -568,7 +575,14 @@
       "replacementRequired": false,
       "publicBuild": true,
       "alt": "Shared available, applicable, selected, redeemed and error states.",
-      "alt_zh": "Shared available, applicable, selected, redeemed and error states."
+      "alt_zh": "Shared available, applicable, selected, redeemed and error states.",
+      "sha256": "9decc2c91ce54f96bb1d034133c52e073bb6157d1ed3a48fabe5734ca66d9728",
+      "byteSize": 96240,
+      "blobSha": "c2ed33222498d65a99732095ec3b33433e2709f2",
+      "width": 2048,
+      "height": 1152,
+      "replacedAt": "2026-08-11",
+      "semanticSlotStable": true
     },
     "voucher-offer-reusable-system-reusable-patterns-01": {
       "id": "voucher-offer-reusable-system-reusable-patterns-01",
@@ -581,7 +595,14 @@
       "replacementRequired": false,
       "publicBuild": true,
       "alt": "Reusable discovery, selection, application and recovery patterns.",
-      "alt_zh": "Reusable discovery, selection, application and recovery patterns."
+      "alt_zh": "Reusable discovery, selection, application and recovery patterns.",
+      "sha256": "adba53915b5d046de7cb62100d23a35458e70cb23fd6c4db915659ac40d0a76c",
+      "byteSize": 92919,
+      "blobSha": "531f62df78a66bc37f2ca1007af8ae6d7ee14a6a",
+      "width": 2048,
+      "height": 1152,
+      "replacedAt": "2026-08-11",
+      "semanticSlotStable": true
     },
     "voucher-offer-reusable-system-component-foundation-01": {
       "id": "voucher-offer-reusable-system-component-foundation-01",
@@ -594,7 +615,14 @@
       "replacementRequired": false,
       "publicBuild": true,
       "alt": "Reusable Voucher Card component foundation mapped to Operations configuration.",
-      "alt_zh": "Reusable Voucher Card component foundation mapped to Operations configuration."
+      "alt_zh": "Reusable Voucher Card component foundation mapped to Operations configuration.",
+      "sha256": "065b092190099aae3a57ccc98452297d19a9ada9bc3a70ccb4585eee8f6089d5",
+      "byteSize": 178392,
+      "blobSha": "1cf53c35f836620e25b1cfffe9877ba235c4cf24",
+      "width": 2048,
+      "height": 1152,
+      "replacedAt": "2026-08-11",
+      "semanticSlotStable": true
     }
   },
   "frameSystemContract": {
