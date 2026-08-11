@@ -2860,7 +2860,7 @@
         element('span','voucher-stage-hero__label',lang==='zh'?'主要設計方向':'Main design direction'),
         element('p','voucher-stage-hero__statement',localizedField(stageProjection?.overview||stageProjection||stage,'designDirection')||localizedField(stageProjection||stage,'whatChanged'))
       );
-      const surface=element('section','voucher-stage-surface core-system-insight-section');surface.dataset.componentOwner='CoreSystemInsightSection';
+      const surface=element('section','voucher-stage-surface case-study-cloud-emphasis core-system-insight-section');surface.dataset.componentOwner='CoreSystemInsightSection';
       const decisionList=element('div','voucher-r149-decision-list voucher-stage-decision-list');
       list(stageProjection?.decisions).forEach((source,index)=>{
         const model={
