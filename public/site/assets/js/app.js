@@ -2821,7 +2821,7 @@
         element('p','voucher-stage-hero__statement',localizedField(stageProjection?.overview||stageProjection||stage,'designDirection')||localizedField(stageProjection||stage,'whatChanged'))
       );
       const surface=element('section','voucher-stage-surface');
-      const decisionList=element('div','voucher-stage-decision-list');
+      const decisionList=element('div','voucher-r149-decision-list voucher-stage-decision-list');
       list(stageProjection?.decisions).forEach((source,index)=>{
         const model={
           fixedStageFields:true,
