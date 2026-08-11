@@ -147,7 +147,27 @@ for (const viewport of viewports) {
     await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
     const parentScroll=page.locator(".dialog-scroll").first(),link=page.locator(`a[data-stage="${stage}"]`).first();
     await link.evaluate(node=>node.scrollIntoView({block:'center',behavior:'auto'}));await parentScroll.evaluate((root,stageId)=>{const card=root.querySelector(`[data-stage-card="${stageId}"]`);root.scrollTop=Math.max(0,card.offsetTop-120)},stage);
-    const before=await parentScroll.evaluate(root=>root.scrollTop);await link.evaluate(node=>node.click());await page.waitForLoadState("networkidle");const back=page.locator("[data-stage-back]").first();await back.evaluate(node=>node.click());await page.waitForTimeout(80);const after=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);r158.anchors[stage]={before,after,delta:Math.abs(after-before)};
+    const before=await parentScroll.evaluate(root=>root.scrollTop);
+    await Promise.all([
+      page.waitForURL(url=>url.searchParams.get("stage")===stage),
+      link.evaluate(node=>node.click())
+    ]);
+    await page.waitForLoadState("networkidle");
+    await page.locator(".voucher-stage-hero").waitFor({state:"visible"});
+    const back=page.locator("#detailBack").first();
+    await back.waitFor({state:"visible"});
+    const backLabel=await back.getAttribute("aria-label");
+    if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
+    await back.click();
+    await page.waitForURL(url=>!url.searchParams.has("stage"));
+    await page.locator(`[data-stage-card="${stage}"]`).waitFor({state:"visible"});
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const restoredScroll=page.locator(".dialog-scroll").first();
+    const after=await restoredScroll.evaluate(root=>root.scrollTop);
+    const restoredAnchor=await page.locator(`[data-stage-card="${stage}"]`).evaluate((node)=>{const root=node.closest(".dialog-scroll"),nodeRect=node.getBoundingClientRect(),rootRect=root.getBoundingClientRect();return {stage:node.dataset.stageCard,offsetFromRoot:nodeRect.top-rootRect.top,visible:nodeRect.bottom>rootRect.top&&nodeRect.top<rootRect.bottom}});
+    const delta=Math.abs(after-before);
+    r158.anchors[stage]={before,after,delta,backSelector:"#detailBack",backLabel,restoredAnchor,pass:delta<=2&&restoredAnchor.visible};
+    if(delta>2||!restoredAnchor.visible)failures.push(`${viewport.name} ${stage} parent anchor restoration delta ${delta}`);
   }
   r156.r158=r158;
   await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
