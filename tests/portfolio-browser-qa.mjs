@@ -129,7 +129,7 @@ for (const viewport of viewports) {
     await captureCloudEdges("parent-core-system-insight-cloud", ".core-system-insight-section.case-study-cloud-emphasis");
   }
 
-  const firstTooltip = page.locator(".outcome-metric .info-tooltip__trigger").first();
+  const firstTooltip = page.locator(".outcome-metric:visible .info-tooltip__trigger").first();
   const tooltipState = { count: await page.locator(".info-tooltip__trigger").count() };
   if (await firstTooltip.count()) {
     await firstTooltip.click();
@@ -152,7 +152,7 @@ for (const viewport of viewports) {
     return {values,labels,valueAligned:Math.max(...values.map(x=>x.y))-Math.min(...values.map(x=>x.y))<1,labelAligned:Math.max(...labels)-Math.min(...labels)<1};
   });
   r158.cloud = await page.locator(".core-system-insight-section.case-study-cloud-emphasis").first().evaluate(node=>{const r=node.getBoundingClientRect(),root=node.closest(".dialog-scroll").getBoundingClientRect();return {left:r.left,right:r.right,rootLeft:root.left,rootRight:root.right,leftDelta:Math.abs(r.left-root.left),rightDelta:Math.abs(r.right-root.right)}});
-  const tooltipTriggers=page.locator(".outcome-metric .info-tooltip__trigger");
+  const tooltipTriggers=page.locator(".outcome-metric:visible .info-tooltip__trigger");
   const tooltipIndexes=[0,Math.floor((await tooltipTriggers.count())/2),(await tooltipTriggers.count())-1];
   for(const [label,index] of [["left",tooltipIndexes[0]],["centre",tooltipIndexes[1]],["right",tooltipIndexes[2]]]){
     const trigger=tooltipTriggers.nth(index);await scrollDialogTarget(trigger);const closed=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);await trigger.click();const panel=page.locator(".info-tooltip__panel:not([hidden]):visible").first();await panel.waitFor({state:"visible"});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
