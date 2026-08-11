@@ -756,8 +756,9 @@ test("keeps Voucher child stages canonical, deterministic, and shared", () => {
   assert.match(css, /\.voucher-stage-decision__grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(css, /@media\(max-width:600px\)\{\.voucher-stage-decision__grid\{grid-template-columns:1fr\}/);
   assert.match(css, /\.voucher-r149-metrics,\.impact-evidence-v147__metrics\{grid-template-columns:1fr\}/);
-  assert.match(css, /M553\.077 103\.851/);
-  assert.match(css, /M1727\.15 0C1714\.02/);
+  assert.match(app, /voucher-stage-surface case-study-cloud-emphasis core-system-insight-section/);
+  assert.match(css, /\.case-study-cloud-emphasis::before,\.case-study-cloud-emphasis::after/);
+  assert.doesNotMatch(css, /M553\.077 103\.851|M1727\.15 0C1714\.02/);
 });
 
 test("keeps popup navigation and related work in their canonical owners", () => {
