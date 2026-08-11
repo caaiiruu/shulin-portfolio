@@ -155,8 +155,8 @@ const publicExplorations = [...Object.values(content.sideProjects || {}), ...Obj
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r45" || assetManifest.contentVersion !== "2026-08-11-r156") {
-  throw new Error("The active Asset Manifest must be r45 aligned to Content r151");
+if (assetManifest.packageVersion !== "r45" || assetManifest.contentVersion !== "2026-08-11-r157") {
+  throw new Error("The active Asset Manifest must be r45 aligned to Content r157");
 }
 const derivedVisualSlots = [];
 function deriveVisualSlots(value, projectId, location = []) {
