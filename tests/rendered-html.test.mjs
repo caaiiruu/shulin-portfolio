@@ -1114,7 +1114,7 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
   assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
-  assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
+  assert.match(overview, /@media\\(max-width:700px\\)[\\s\\S]*\\.pd-section-nav__toggle\\{display:flex[^}]*\\}/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
   assert.match(overview, /\.recruiter-proof-item-v46__metric-value\{[^}]*font-size:var\(--cmp-popup-outcome-metric-size\)/);
   assert.match(app, /function embeddedOutcomeMetric\(text\)/);
