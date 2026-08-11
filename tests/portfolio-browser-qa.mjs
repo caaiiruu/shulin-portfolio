@@ -70,13 +70,28 @@ for (const viewport of viewports) {
 
   const targetedDirectory = path.join(directory, "targeted");
   fs.mkdirSync(targetedDirectory, { recursive: true });
+  const scrollDialogTarget = async target => {
+    await target.evaluate(element => {
+      const root=element.closest(".dialog-scroll");
+      if(!root){element.scrollIntoView({block:"center",behavior:"auto"});return}
+      const elementRect=element.getBoundingClientRect(),rootRect=root.getBoundingClientRect();
+      const centredOffset=Math.max(0,(root.clientHeight-Math.min(elementRect.height,root.clientHeight))/2);
+      root.scrollTop=Math.max(0,root.scrollTop+elementRect.top-rootRect.top-centredOffset);
+    });
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  };
   const capture = async (name, selector) => {
     const target = page.locator(selector).first();
     if (!(await target.count()) || !(await target.isVisible())) {
       failures.push(`${viewport.name} targeted capture missing: ${name}`);
       return;
     }
-    await target.scrollIntoViewIfNeeded();
+    await scrollDialogTarget(target);
+    const box=await target.boundingBox();
+    if(!box||box.width<1||box.height<1){
+      failures.push(`${viewport.name} targeted capture empty: ${name}`);
+      return;
+    }
     await target.screenshot({ path: path.join(targetedDirectory, `${name}.png`) });
   };
   const captureCloudEdges = async (name, selector) => {
@@ -140,8 +155,8 @@ for (const viewport of viewports) {
   const tooltipTriggers=page.locator(".outcome-metric .info-tooltip__trigger");
   const tooltipIndexes=[0,Math.floor((await tooltipTriggers.count())/2),(await tooltipTriggers.count())-1];
   for(const [label,index] of [["left",tooltipIndexes[0]],["centre",tooltipIndexes[1]],["right",tooltipIndexes[2]]]){
-    const trigger=tooltipTriggers.nth(index);await trigger.evaluate(node=>node.scrollIntoView({block:'center',behavior:'auto'}));const closed=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);await trigger.evaluate(node=>node.click());await page.waitForTimeout(40);
-    const panel=page.locator(".info-tooltip__panel:not([hidden])").first();const measurement=await panel.evaluate((node)=>{const r=node.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight,contained:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,whiteSpace:getComputedStyle(node).whiteSpace}},null);const openHeight=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);measurement.lineBoxDelta=Math.abs(openHeight-closed);measurement.label=label;r158.tooltips.push(measurement);await page.screenshot({path:path.join(targetedDirectory,`tooltip-${label}.png`)});await trigger.evaluate(node=>node.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true})));
+    const trigger=tooltipTriggers.nth(index);await scrollDialogTarget(trigger);const closed=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);await trigger.click();const panel=page.locator(".info-tooltip__panel:not([hidden]):visible").first();await panel.waitFor({state:"visible"});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+    const measurement=await panel.evaluate((node)=>{const r=node.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight,contained:r.width>0&&r.height>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,whiteSpace:getComputedStyle(node).whiteSpace}},null);const openHeight=await trigger.evaluate(node=>node.closest(".inline-tooltip-tail")?.getBoundingClientRect().height||node.parentElement.getBoundingClientRect().height);measurement.lineBoxDelta=Math.abs(openHeight-closed);measurement.label=label;r158.tooltips.push(measurement);if(!measurement.contained)failures.push(`${viewport.name} tooltip ${label} not viewport-contained`);if(measurement.lineBoxDelta>0.5)failures.push(`${viewport.name} tooltip ${label} line-box delta ${measurement.lineBoxDelta}`);await page.screenshot({path:path.join(targetedDirectory,`tooltip-${label}.png`)});await page.keyboard.press("Escape");await panel.waitFor({state:"hidden"});
   }
   for(const stage of ["discover","qualify","activate","redeem","review"]){
     await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
@@ -181,11 +196,16 @@ for (const viewport of viewports) {
       if (stage === "discover") {
         const decisions = page.locator(".voucher-r149-decision, .decision-card-v46");
         if (await decisions.count() >= 2) {
-          await decisions.nth(0).scrollIntoViewIfNeeded();
-          const evidenceImage=decisions.nth(0).locator('img').first();if(await evidenceImage.count())await evidenceImage.evaluate(image=>image.complete&&image.naturalWidth?true:new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})}));
+          await scrollDialogTarget(decisions.nth(0));
+          const evidenceImage=decisions.nth(0).locator('img').first();
+          if(await evidenceImage.count()){
+            await evidenceImage.evaluate(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})})});
+            const imageState=await evidenceImage.evaluate(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src}));
+            if(!imageState.complete||!imageState.naturalWidth)failures.push(`${viewport.name} Discover PDP evidence failed to load: ${JSON.stringify(imageState)}`);
+          }else failures.push(`${viewport.name} Discover PDP evidence image missing`);
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
           await capture("discover-pdp-evidence", ".voucher-r149-decision .evidence-frame");
-          await decisions.nth(1).scrollIntoViewIfNeeded();
+          await scrollDialogTarget(decisions.nth(1));
           await decisions.nth(1).screenshot({ path: path.join(targetedDirectory, "discover-decision-02.png") });
         } else failures.push(`${viewport.name} Discover decision captures missing`);
       }
