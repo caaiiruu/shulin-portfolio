@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r154",
-  "supersedes": "2026-08-11-r153",
+  "contentVersion": "2026-08-11-r155",
+  "supersedes": "2026-08-11-r154",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -5785,16 +5785,16 @@
             {
               "value": "+90.9%",
               "label": {
-                "en": "relative growth in PDP-linked Voucher add-to-cart rate",
-                "zh": "PDP 連結 Voucher 的加入購物車率相對成長"
+                "en": "relative growth in digital redemption share",
+                "zh": "數位兌換占比相對成長"
               },
               "primaryCopy": {
-                "en": "Observed PDP-linked Voucher add-to-cart rate increased from 1.1% to 2.1%.",
-                "zh": "PDP 連結 Voucher 的加入購物車率由 1.1% 增至 2.1%。"
+                "en": "digital redemption share growth after PDP enhancements surfaced eligible Vouchers in context",
+                "zh": "PDP 優化在情境中呈現適用 Voucher 後，數位兌換占比成長"
               },
               "evidenceNote": {
-                "en": "Relative growth calculated from the observed 1.1% to 2.1% change; observational product trend, not a controlled causal experiment.",
-                "zh": "相對成長依觀察到的 1.1% 至 2.1% 變化計算；屬產品趨勢觀察，非受控因果實驗。"
+                "en": "from 43.9% in the previous SEC campaign to 83.8% during CNY; internal campaign reporting linked the improvement to eligible Voucher swimlanes and Voucher badges on product imagery.",
+                "zh": "由前一次 SEC 活動的 43.9% 提升至 CNY 期間的 83.8%；內部活動報告將此改善連結至適用 Voucher swimlane 與商品圖片上的 Voucher badge。"
               }
             },
             {
