@@ -79,6 +79,24 @@ for (const viewport of viewports) {
     await target.scrollIntoViewIfNeeded();
     await target.screenshot({ path: path.join(targetedDirectory, `${name}.png`) });
   };
+  const captureCloudEdges = async (name, selector) => {
+    const target = page.locator(selector).first();
+    const scrollRoot = page.locator(".dialog-scroll").first();
+    if (!(await target.count()) || !(await target.isVisible()) || !(await scrollRoot.count())) {
+      failures.push(`${viewport.name} cloud capture missing: ${name}`);
+      return;
+    }
+    await target.evaluate(element => {
+      const root = element.closest(".dialog-scroll");
+      if (root) root.scrollTop = Math.max(0, element.offsetTop - 220);
+    });
+    await scrollRoot.screenshot({ path: path.join(targetedDirectory, `${name}-top.png`) });
+    await target.evaluate(element => {
+      const root = element.closest(".dialog-scroll");
+      if (root) root.scrollTop = Math.max(0, element.offsetTop + element.offsetHeight - root.clientHeight + 220);
+    });
+    await scrollRoot.screenshot({ path: path.join(targetedDirectory, `${name}-bottom.png`) });
+  };
   for (const [name, selector] of [
     ["parent-contribution", ".contribution-block"],
     ["parent-core-system-insight", ".core-system-insight-section"],
@@ -92,6 +110,9 @@ for (const viewport of viewports) {
     ["stage-redeem", "[data-stage-card='redeem']"],
     ["stage-review", "[data-stage-card='review']"],
   ]) await capture(name, selector);
+  if (["desktop-1419", "tablet-871", "mobile-430"].includes(viewport.name)) {
+    await captureCloudEdges("parent-core-system-insight-cloud", ".core-system-insight-section.case-study-cloud-emphasis");
+  }
 
   const firstTooltip = page.locator(".outcome-metric .info-tooltip__trigger").first();
   const tooltipState = { count: await page.locator(".info-tooltip__trigger").count() };
@@ -110,6 +131,7 @@ for (const viewport of viewports) {
     for (const stage of ["discover", "qualify", "activate", "redeem", "review"]) {
       await page.goto(`${baseUrl}/site/work/voucher?case=voucher&stage=${stage}`, { waitUntil: "networkidle" });
       await capture(`child-${stage}-overview`, ".voucher-stage-hero");
+      await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
       if (stage === "discover") {
         const decisions = page.locator(".voucher-r149-decision, .decision-card-v46");
         if (await decisions.count() >= 2) {
