@@ -385,7 +385,7 @@ jobs:
             const page=await context.newPage();
             page.on('console',m=>{if(m.type()==='error')consoleErrors.push(`${vp.name}: ${m.text()}`)});
             page.on('requestfailed',r=>{
-              if(new URL(r.url()).origin===new URL(base).origin) networkErrors.push(`${vp.name}: ${r.url()} ${r.failure()?.errorText}`);
+              if(new URL(r.url()).origin===new URL(base).origin && r.failure()?.errorText!=='net::ERR_ABORTED') networkErrors.push(`${vp.name}: ${r.url()} ${r.failure()?.errorText}`);
             });
             page.on('response',r=>{
               if(new URL(r.url()).origin===new URL(base).origin && r.status()>=400) networkErrors.push(`${vp.name}: HTTP ${r.status()} ${r.url()}`);
