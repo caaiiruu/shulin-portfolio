@@ -103,11 +103,11 @@ jobs:
           cat "$EVIDENCE_DIR/server.log"
           exit 1
 
-      - name: Run focused R158.4 human visual delta certification
+      - name: Run focused R158.5 native interaction certification
         shell: bash
         run: |
           set -o pipefail
-          node tests/portfolio-r1584-focused-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r1584-focused-qa-result.txt"
+          node tests/portfolio-r1585-focused-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r1585-focused-qa-result.txt"
 
       - name: Compose engineering QA report
         if: always()

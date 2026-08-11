@@ -2590,8 +2590,9 @@
     else signals.after(context);
   }
   function createInfoTooltip(content,label='Evidence details'){
-    const text=String(content||'').trim();
-    if(!text)return null;
+    const sourceText=String(content||'').trim();
+    if(!sourceText)return null;
+    const text=sourceText.replace(/[A-Za-z]/,character=>character.toUpperCase());
     const root=element('span','info-tooltip');
     const id=`info-tooltip-${Math.random().toString(36).slice(2)}`;
     const trigger=element('button','info-tooltip__trigger','ⓘ');

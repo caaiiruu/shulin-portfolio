@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-11-r156",
+  "contentVersion": "2026-08-11-r157",
   "supersedes": "2026-08-11-r155",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -4959,8 +4959,8 @@
             "label": "of all campaign redemptions were digital in final three weeks"
           },
           {
-            "value": "2 weeks → 2 days",
-            "label": "recurring cross-team Voucher alignment cycle"
+            "value": "7× faster",
+            "label": "campaign setup alignment cycle"
           }
         ],
         "supportingSignals": [
@@ -4988,7 +4988,7 @@
         }
       },
       "recruiterFirstPopup": {
-        "version": "2026-08-11-r156",
+        "version": "2026-08-11-r157",
         "hero": {
           "showKeyProblems": false
         },
@@ -5764,14 +5764,14 @@
               }
             },
             {
-              "value": "2 weeks → 2 days",
+              "value": "7× faster",
               "label": {
                 "en": "campaign setup alignment cycle",
                 "zh": "活動設定對齊週期"
               },
               "evidenceNote": {
-                "en": "Observed after shared rules and reusable patterns were established.",
-                "zh": "建立共享規則與可重用模式後的觀察結果。"
+                "en": "Reduced from 2 weeks to 2 days.",
+                "zh": "由 2 週縮短至 2 天。"
               }
             }
           ],
@@ -31073,4 +31073,4 @@
     "projectCountChanged": false,
     "projectNarrativeRewritten": false
   }
-}
+}\n
