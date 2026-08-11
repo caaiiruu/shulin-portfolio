@@ -812,4 +812,4 @@
 @media(max-width:600px){.voucher-r149-stage__facts{grid-template-columns:1fr;grid-template-rows:auto;row-gap:var(--space-5)}.voucher-r149-stage__facts>div:nth-child(n){grid-column:1;grid-row:auto}.voucher-r149-stage{row-gap:var(--space-7)}}
 @media(min-width:601px){[data-expandable-evidence],.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img{cursor:default}}
 
-.detail-dialog-v45:has(.child-stage-navigation){height:auto}.detail-dialog-v45:has(.child-stage-navigation) .dialog-scroll{height:auto;padding-bottom:calc(var(--space-7) + env(safe-area-inset-bottom))}
+.detail-dialog-v45:has(.child-stage-navigation){height:auto;overflow-y:auto}.detail-dialog-v45:has(.child-stage-navigation) .dialog-scroll{height:auto;padding-bottom:calc(var(--space-7) + env(safe-area-inset-bottom))}
