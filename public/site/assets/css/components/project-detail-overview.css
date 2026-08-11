@@ -816,11 +816,11 @@
 
 
 /* R158.4 human visual delta — shared case-study owners only */
-.project-context-v45--overview .project-summary-v45 p{margin-top:var(--section-heading-content-gap)}
+#projectOverviewSection .project-summary-v45>p{margin-top:var(--dimension-28px)}
 .contribution-block{width:min(100%,var(--case-page-max));max-width:var(--case-page-max);margin-inline:auto}
 .contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{width:min(100%,var(--case-reading-max));max-width:var(--case-reading-max);margin-inline:0}
 .research-evidence-metric,.outcome-metric{row-gap:var(--space-3)}
-.research-evidence-metric>strong,.outcome-metric__value{color:var(--color-text-primary);font-weight:var(--sys-weight-heavy);line-height:1}
+.research-evidence-metric>strong,.outcome-metric-grid .outcome-metric>.outcome-metric__value{color:var(--color-text-primary);font-weight:var(--sys-weight-heavy);line-height:1}
 .research-evidence-metric__label,.outcome-metric__primary,.outcome-metric__label{color:var(--color-text-secondary);font-size:var(--text-sm);line-height:var(--leading-body)}
 .voucher-r149-research__bridge,.voucher-r149-research__supporting,.voucher-r149-system-change{line-height:var(--leading-body)}
 .info-tooltip{display:inline-flex;align-items:center;height:var(--dimension-16px);min-height:0;line-height:1;vertical-align:middle}
