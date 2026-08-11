@@ -282,7 +282,7 @@ test("keeps global typography readable and singly owned by Foundation", () => {
   assert.doesNotMatch(foundation.match(/html\{[\s\S]*?h1\+p,h2\+p,h3\+p,h4\+p[^}]*\}/)?.[0] ?? "", /!important/);
 });
 
-test("keeps the project navigator outside the animated dialog scroll container", () => {
+test("keeps desktop navigator outside the scroll container and permits the approved mobile floating state", () => {
   const projectDetail = read("assets/css/components/project-detail-overview.css");
   const tokens = read("assets/css/tokens.css");
   assert.match(projectDetail, /\.pd-section-nav\{position:absolute/);
