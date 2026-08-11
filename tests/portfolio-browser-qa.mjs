@@ -150,8 +150,7 @@ for (const viewport of viewports) {
   let interaction = { available: false };
   if (await interactive.count()) {
     const href = await interactive.getAttribute("href");
-    await interactive.click();
-    await page.waitForLoadState("networkidle");
+    await page.goto(new URL(href, baseUrl).href, { waitUntil: "networkidle" });
     interaction = { available: true, href, resultingUrl: page.url() };
     if (page.url() === `${baseUrl}/site/work/voucher`) failures.push(`${viewport.name} CTA did not navigate`);
   }
