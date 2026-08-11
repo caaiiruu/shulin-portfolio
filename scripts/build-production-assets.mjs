@@ -129,7 +129,7 @@ const expectedProjectIds = [
   "ctbc-mortgage-self-service-app",
   "booking-taxi-pickup-service-strategy",
 ];
-if (content.contentVersion !== "2026-08-11-r156") throw new Error("The active Content SSOT must be r156");
+if (content.contentVersion !== "2026-08-11-r157") throw new Error("The active Content SSOT must be r157");
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
 const projectIds = Object.keys(content.projects || {});
