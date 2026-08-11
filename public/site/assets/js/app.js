@@ -1303,7 +1303,6 @@
       }));
     }
     updateCloseControl();
-    dialogTitle.focus({preventScroll:true});
     safeText(dialogStatus,ui("returned-to-voucher-offer-overview-9d685c97"));
     if(!suppressHistorySync){
       const url=new URL(window.location.href);
@@ -2591,13 +2590,14 @@
     const trigger=element('button','info-tooltip__trigger','ⓘ');
     trigger.type='button';trigger.setAttribute('aria-label',label);trigger.setAttribute('aria-controls',id);trigger.setAttribute('aria-expanded','false');
     const panel=element('span','info-tooltip__panel',text);panel.id=id;panel.setAttribute('role','tooltip');panel.hidden=true;
+    const position=()=>{if(panel.hidden)return;const r=trigger.getBoundingClientRect(),gap=8,gutter=Math.max(16,parseFloat(getComputedStyle(doc.documentElement).getPropertyValue('--page-gutter'))||16),width=panel.offsetWidth,height=panel.offsetHeight;let left=Math.min(Math.max(r.left+r.width/2-width/2,gutter),window.innerWidth-gutter-width);let top=r.top-gap-height;if(top<gutter)top=Math.min(window.innerHeight-gutter-height,r.bottom+gap);panel.style.left=`${Math.round(left)}px`;panel.style.top=`${Math.round(Math.max(gutter,top))}px`};
     const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false')};
-    const open=()=>{panel.hidden=false;trigger.setAttribute('aria-expanded','true')};
-    trigger.addEventListener('pointerdown',()=>{trigger.dataset.wasOpen=String(!panel.hidden)});
-    trigger.addEventListener('click',event=>{event.stopPropagation();delete trigger.dataset.wasOpen;open()});
-    trigger.addEventListener('mouseenter',open);trigger.addEventListener('mouseleave',close);
+    const open=()=>{panel.hidden=false;trigger.setAttribute('aria-expanded','true');requestAnimationFrame(position)};
+    trigger.addEventListener('click',event=>{event.stopPropagation();open()});
+    root.addEventListener('mouseenter',open);root.addEventListener('mouseleave',close);
     trigger.addEventListener('focus',open);trigger.addEventListener('blur',()=>setTimeout(()=>{if(!root.contains(doc.activeElement))close()},0));
     trigger.addEventListener('keydown',event=>{if(event.key==='Escape'){close();trigger.focus()}});
+    window.addEventListener('resize',position,{passive:true});dialogScrollRoot?.addEventListener('scroll',position,{passive:true});
     doc.addEventListener('click',event=>{if(!root.contains(event.target))close()});
     root.append(trigger,panel);return root;
   }
@@ -2615,7 +2615,7 @@
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
- const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.remove();
+ const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.remove();doc.querySelectorAll('.impact-evidence-v147__metrics').forEach(grid=>{const values=[...grid.querySelectorAll('strong')].map(node=>node.textContent.trim());if(values.length===2&&values.includes('18')&&values.includes('15'))grid.closest('.case-study-section,.impact-evidence-v147')?.remove()});
  const overview=doc.getElementById('projectOverviewSection');if(overview)overview.dataset.projectNavTarget='overview';
  const section=(eyebrow,title,copy='',lead='')=>{const n=element('section','voucher-r149-section case-study-section case-study-section--canvas'),h=element('header','voucher-r149-heading case-study-section__header');if(eyebrow)h.append(element('span','voucher-r149-eyebrow',eyebrow));if(title)h.append(element('h2','',title));if(lead)h.append(element('p','voucher-r149-lead',lead));if(copy)h.append(element('p','voucher-r149-intro',copy));n.append(h);return n};
  const hard=section('',lang==='zh'?'困難之處':'What made this hard',t(c.whatMadeThisHard?.description),t(c.whatMadeThisHard?.title));hard.id='voucherComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';
