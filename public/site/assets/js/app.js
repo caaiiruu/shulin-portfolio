@@ -2593,7 +2593,8 @@
     const panel=element('span','info-tooltip__panel',text);panel.id=id;panel.setAttribute('role','tooltip');panel.hidden=true;
     const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false')};
     const open=()=>{panel.hidden=false;trigger.setAttribute('aria-expanded','true')};
-    trigger.addEventListener('click',event=>{event.stopPropagation();panel.hidden?open():close()});
+    trigger.addEventListener('pointerdown',()=>{trigger.dataset.wasOpen=String(!panel.hidden)});
+    trigger.addEventListener('click',event=>{event.stopPropagation();const wasOpen=trigger.dataset.wasOpen==='true';delete trigger.dataset.wasOpen;wasOpen?close():open()});
     trigger.addEventListener('mouseenter',open);trigger.addEventListener('mouseleave',close);
     trigger.addEventListener('focus',open);trigger.addEventListener('blur',()=>setTimeout(()=>{if(!root.contains(doc.activeElement))close()},0));
     trigger.addEventListener('keydown',event=>{if(event.key==='Escape'){close();trigger.focus()}});
