@@ -107,7 +107,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node tests/portfolio-browser-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/browser-qa-result.txt"
+          node tests/portfolio-r1582-isolated-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r1582-isolated-qa-result.txt"
 
       - name: Compose engineering QA report
         if: always()
