@@ -50,6 +50,16 @@ for (const viewport of viewports) {
   }
 
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
+  const r156 = await page.evaluate(() => ({
+    permanentOutcomeNotes: document.querySelectorAll('.outcome-metric > small').length,
+    permanentResearchNotes: document.querySelectorAll('.research-evidence-metric > small').length,
+    tooltips: document.querySelectorAll('.info-tooltip__trigger').length,
+    desktopEvidenceButtons: matchMedia('(min-width: 601px)').matches ? document.querySelectorAll('.decision-visual-v58 img[role="button"],[data-expandable-evidence][role="button"]').length : 0
+  }));
+  if (r156.permanentOutcomeNotes || r156.permanentResearchNotes) failures.push(`${viewport.name} permanent metric notes remain`);
+  if (!r156.tooltips) failures.push(`${viewport.name} shared info tooltips missing`);
+  if (r156.desktopEvidenceButtons) failures.push(`${viewport.name} desktop evidence lightbox affordance remains`);
+
   const links = page.locator("a[href]");
   const linkCount = await links.count();
   const destinations = [];
