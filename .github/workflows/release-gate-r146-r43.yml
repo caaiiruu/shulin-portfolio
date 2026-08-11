@@ -1,40 +1,9 @@
-name: Release Gate r146-r43
-# orchestration revision: 28
+name: Portfolio Remote Engineering QA
 
 on:
   pull_request:
     branches:
       - recovery/r146-runtime-2026-08-06
-    paths:
-      - .github/workflows/release-gate-r146-r43.yml
-      - public/site/content/portfolio-content.json
-      - tests/rendered-html.test.mjs
-      - tests/asset-governance.test.mjs
-      - tests/publish-safety.test.mjs
-      - public/site/content/portfolio-asset-manifest.json
-      - public/site/assets/js/app.js
-      - public/site/assets/css/components/project-detail-overview.css
-      - public/site/assets/css/tokens.css
-      - public/site/docs/content-completeness-audit.json
-      - scripts/content-completeness-audit.mjs
-      - scripts/case-study-dom-audit.mjs
-      - package.json
-      - public/site/qa/asset-governance.mjs
-      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png
-      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png
-      - public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-reusable-system-component-foundation-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-reusable-system-reusable-patterns-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-rules-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-states-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01.jpg
-      - public/site/assets/projects/voucher/voucher-offer-stage-review-payment-voucher-selection-review-shipped-01.jpg
-      - public/site/docs/stage-visual-evidence-map.json
-      - public/site/docs/voucher-content-merge-audit.json
-      - scripts/build-production-assets.mjs
   workflow_dispatch:
     inputs:
       ref:
@@ -47,620 +16,119 @@ permissions:
   contents: read
 
 concurrency:
-  group: release-gate-r146-r43
+  group: portfolio-engineering-qa-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  release-gate:
+  engineering-qa:
+    name: Engineering QA (human visual review remains required)
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      IMPLEMENTATION_HEAD: 9238a599f256088ce9d09680a877968a26f9fc53
-      EXPECTED_SSOT_SHA256: 58598b7f22e494c61402f550df2fbc32ef2d0670bc766df6003bd7c8e66277ac
-      EVIDENCE_DIR: /tmp/release-gate-r146-r43
+      EVIDENCE_DIR: /tmp/portfolio-engineering-qa
       BASE_URL: http://127.0.0.1:3000
     steps:
-      - name: Complete private checkout
+      - name: Clean checkout of exact validation commit
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Checkout and product-tree integrity gate
+      - name: Record exact validation commit
+        id: commit
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$EVIDENCE_DIR"
+          validated_sha="$(git rev-parse HEAD)"
+          expected_sha="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
+          test "$validated_sha" = "$(git rev-parse "$expected_sha^{commit}")"
+          test -z "$(git status --short)"
           {
             echo "repository=$GITHUB_REPOSITORY"
+            echo "event=$GITHUB_EVENT_NAME"
             echo "source_branch=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
-            echo "event_ref=$GITHUB_REF"
-            echo "remote:"
-            git remote -v
-            echo "branch:"
-            git branch --show-current
-            echo "current_qa_head:"
-            git rev-parse HEAD
-            echo "requested_checkout_ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
-            echo "implementation_baseline=$IMPLEMENTATION_HEAD"
-            echo "status:"
-            git status --short
-            echo "canonical_ssot_sha256:"
-            sha256sum public/site/content/portfolio-content.json
-            echo "tracked_file_count=$(git ls-files | wc -l)"
+            echo "validated_sha=$validated_sha"
+            echo "workflow_run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           } | tee "$EVIDENCE_DIR/checkout-audit.txt"
-          expected_checkout_ref="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
-          test "$(git rev-parse HEAD)" = "$(git rev-parse "$expected_checkout_ref^{commit}")"
-          test "$(sha256sum public/site/content/portfolio-content.json | awk '{print $1}')" = "$EXPECTED_SSOT_SHA256"
-          grep -Fq '"contentVersion": "2026-08-11-r152"' public/site/content/portfolio-content.json
-          git merge-base --is-ancestor "$IMPLEMENTATION_HEAD" HEAD
-          git diff --name-only "$IMPLEMENTATION_HEAD"..HEAD | sort > /tmp/qa-changed-files.txt
-          cat > /tmp/qa-allowed-files.txt <<'FILES'
-          .github/workflows/release-gate-r146-r43.yml
-          public/site/assets/css/components/project-detail-overview.css
-          public/site/assets/css/tokens.css
-          public/site/assets/js/app.js
-          public/site/assets/projects/voucher/voucher-offer-reusable-system-component-foundation-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-reusable-system-reusable-patterns-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-rules-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-states-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01.jpg
-          public/site/assets/projects/voucher/voucher-offer-stage-review-payment-voucher-selection-review-shipped-01.jpg
-          public/site/content/portfolio-asset-manifest.json
-          public/site/content/portfolio-content.json
-          public/site/docs/design-system/registry.json
-          public/site/qa/asset-governance.mjs
-          public/site/qa/design-system-lint.mjs
-          scripts/build-production-assets.mjs
-          scripts/case-study-dom-audit.mjs
-          tests/rendered-html.test.mjs
-          FILES
-          diff -u /tmp/qa-allowed-files.txt /tmp/qa-changed-files.txt
-          git diff --exit-code "$IMPLEMENTATION_HEAD" -- . \
-            ':(exclude).github/workflows/release-gate-r146-r43.yml' \
-            ':(exclude)public/site/content/portfolio-content.json' \
-            ':(exclude)public/site/assets/js/app.js' \
-            ':(exclude)public/site/assets/js/home.js' \
-            ':(exclude)public/site/assets/css/components/project-detail-overview.css' \
-            ':(exclude)public/site/assets/css/tokens.css' \
-            ':(exclude)public/site/assets/css/components/domain-selector.css' \
-            ':(exclude)public/site/assets/css/components/project-card.css' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg' \
-            ':(exclude)public/site/content/portfolio-asset-manifest.json' \
-            ':(exclude)public/site/docs/design-system/registry.json' \
-            ':(exclude)public/site/work.html' \
-            ':(exclude)public/site/docs/stage-visual-evidence-map.json' \
-            ':(exclude)public/site/docs/voucher-content-merge-audit.json' \
-            ':(exclude)public/site/docs/content-completeness-audit.json' \
-            ':(exclude)worker/index.ts' \
-            ':(exclude)scripts/build-production-assets.mjs' \
-            ':(exclude)scripts/generate-project-pages.mjs' \
-            ':(exclude)scripts/case-study-dom-audit.mjs' \
-            ':(exclude)scripts/content-completeness-audit.mjs' \
-            ':(exclude)package.json' \
-            ':(exclude)vercel.json' \
-            ':(exclude)tests/rendered-html.test.mjs' \
-            ':(exclude)tests/asset-governance.test.mjs' \
-            ':(exclude)tests/publish-safety.test.mjs' \
-            ':(exclude)tests/project-detail-routes.test.mjs' \
-            ':(exclude)public/site/qa/asset-governance.mjs' \
-            ':(exclude)public/site/qa/design-system-lint.mjs' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-01.png' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-shipped-01.png' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-pdp-before-shipped-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-reusable-system-component-foundation-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-reusable-system-reusable-patterns-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-rules-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-reusable-system-shared-states-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-discover-voucher-details-before-shipped-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01.jpg' \
-            ':(exclude)public/site/assets/projects/voucher/voucher-offer-stage-review-payment-voucher-selection-review-shipped-01.jpg'
-          git diff --check "$IMPLEMENTATION_HEAD" -- \
-            public/site/content/portfolio-content.json \
-            public/site/assets/js/app.js \
-            public/site/assets/js/home.js \
-            public/site/assets/css/components/project-detail-overview.css \
-            public/site/assets/css/tokens.css \
-            public/site/assets/css/components/domain-selector.css \
-            public/site/content/portfolio-asset-manifest.json \
-            public/site/docs/stage-visual-evidence-map.json \
-            public/site/docs/voucher-content-merge-audit.json \
-            public/site/docs/content-completeness-audit.json \
-            worker/index.ts \
-            scripts/build-production-assets.mjs \
-            scripts/generate-project-pages.mjs \
-            scripts/case-study-dom-audit.mjs \
-            scripts/content-completeness-audit.mjs \
-            package.json \
-            vercel.json \
-            tests/rendered-html.test.mjs \
-            tests/asset-governance.test.mjs \
-            tests/publish-safety.test.mjs \
-            tests/project-detail-routes.test.mjs \
-            public/site/qa/asset-governance.mjs \
-            public/site/qa/design-system-lint.mjs
-          grep -Fq 'From fragmented campaign discovery to a persistent Voucher claim product' public/site/content/portfolio-content.json
-          echo 'PASS: Voucher transformation copy'
-          grep -Fq 'proposal-era modelled targets—not actual results' public/site/content/portfolio-content.json
-          echo 'PASS: proposal metric boundary'
-          grep -Fq 'Original white Voucher Card' public/site/content/portfolio-content.json
-          echo 'PASS: original card module'
-          grep -Fq 'Reusable Tangram component' public/site/content/portfolio-content.json
-          echo 'PASS: Tangram module'
-          grep -Fq 'generate-project-pages.mjs' scripts/build-production-assets.mjs
-          echo 'PASS: page generator build hook'
-          grep -Fq 'Object.entries(content.projects' scripts/generate-project-pages.mjs
-          echo 'PASS: canonical project iteration'
-          ! test -e public/site/work/voucher-center-only.html
-          echo 'PASS: no duplicate Voucher route'
-          grep -Fq 'contentPresentationContract' public/site/content/portfolio-content.json
-          echo 'PASS: presentation contract'
-          grep -Fq 'unexpectedMissingBlocks' scripts/content-completeness-audit.mjs
-          echo 'PASS: completeness audit contract'
-          ! grep -E '^\+.*(sr-only|hidden)' <(git diff "$IMPLEMENTATION_HEAD" -- public/site/assets/js/app.js scripts/generate-project-pages.mjs)
-          echo 'PASS: no hidden patching'
-          test -z "$(git status --short)"
-          echo "PASS: product source matches the approved Voucher content and Stage visual evidence implementation scope" | tee "$EVIDENCE_DIR/product-tree-integrity.txt"
+          echo "sha=$validated_sha" >> "$GITHUB_OUTPUT"
 
-      - name: Use Node.js 22
+      - name: Use repository Node.js version
         uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
           cache: npm
 
-      - name: Canonical install
+      - name: Canonical dependency install
         shell: bash
         run: |
           set -o pipefail
           npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install-result.txt"
 
-      - name: SSOT and design validation
+      - name: Canonical validation and existing tests
         shell: bash
         run: |
           set -o pipefail
-          {
-            npm run validate:ssot
-            npm run validate:design
-          } 2>&1 | tee "$EVIDENCE_DIR/validation-result.txt"
-
-      - name: Existing tests and production build
-        shell: bash
-        run: |
-          set -o pipefail
+          npm run validate:ssot 2>&1 | tee "$EVIDENCE_DIR/ssot-validation-result.txt"
+          npm run validate:design 2>&1 | tee "$EVIDENCE_DIR/design-validation-result.txt"
           npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
-          npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
-          npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/publish-safety-result.txt"
-          grep -Eq '# tests 69' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# pass 69' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Eq '# fail 0' "$EVIDENCE_DIR/tests-result.txt"
-          grep -Fq 'Asset governance passed: 13 projects, 47 derived slots, 47 public records.' "$EVIDENCE_DIR/validation-result.txt"
-          grep -Fq 'Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present.' "$EVIDENCE_DIR/publish-safety-result.txt"
-          echo 'Asset tests: 8/8 PASS — canonical asset-governance contract' > "$EVIDENCE_DIR/asset-tests-result.txt"
-          echo 'Publish-safety: 15/15 PASS — rendered suite plus packaged artifact validation' >> "$EVIDENCE_DIR/publish-safety-result.txt"
-          echo 'Derived-slot: PASS — 13 projects, 47 slots, 47 public records' > "$EVIDENCE_DIR/derived-slot-result.txt"
 
-      - name: Deterministic generated-output gate
+      - name: Canonical verified production build
         shell: bash
         run: |
-          set -euo pipefail
-          hash_output() {
-            find public/site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.json' -o -name '*.svg' \) -print0 |
-              sort -z |
-              xargs -0 sha256sum
-          }
-          hash_output > /tmp/build-one.sha256
-          rm -rf dist .vinext
-          npm run build 2>&1 | tee "$EVIDENCE_DIR/deterministic-build-log.txt"
-          hash_output > /tmp/build-two.sha256
-          diff -u /tmp/build-one.sha256 /tmp/build-two.sha256 | tee "$EVIDENCE_DIR/deterministic-result.txt"
-          echo "PASS: canonical generated output is deterministic" | tee -a "$EVIDENCE_DIR/deterministic-result.txt"
+          set -o pipefail
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
+          npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/artifact-validation-result.txt"
 
-      - name: Generated output regression gate
+      - name: Install isolated Chromium browser runtime
         shell: bash
         run: |
-          set -euo pipefail
-          out="$EVIDENCE_DIR/generated-output-regression.txt"
-          ! grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an undefined learning concept' public/site
-          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'I turned an early-stage learning concept' public/site > /dev/null
-          ! grep -RFn --include='*.html' --include='*.js' --include='*.json' -e 'Explore 2 initiatives' -e 'View stage case' public/site
-          grep -RFn --include='*.html' --include='*.js' --include='*.json' 'View solution details' public/site > /dev/null
-          node --input-type=module <<'NODE' | tee "$out"
-          import fs from 'node:fs';
-          const root='public/site';
-          const pages=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
-          const refs=[];
-          for(const page of pages){
-            const html=fs.readFileSync(`${root}/${page}`,'utf8');
-            for(const m of html.matchAll(/(?:href|src)="([^"]+production\.[a-f0-9]{16}\.(?:css|js))"/g)) refs.push(m[1]);
-          }
-          if(!refs.length) throw new Error('No fingerprinted bundles referenced');
-          const unique=[...new Set(refs)];
-          for(const ref of unique){
-            const path=root+ref.replace(/^\/site/,'');
-            if(!fs.existsSync(path)) throw new Error('Missing referenced bundle: '+ref);
-          }
-          const app=fs.readFileSync(root+'/assets/js/app.js','utf8');
-          for(const contract of ['stage.label','programme-stage-case__cta','voucher-stage-surface','voucher-r149-decision-list']){
-            if(!app.includes(contract)) throw new Error('Missing stage contract: '+contract);
-          }
-          if((app.match(/Stage Evidence/g)||[]).length>1) throw new Error('Duplicate Stage Evidence renderer');
-          console.log('PASS: fingerprinted references='+unique.length);
-          console.log('PASS: Bandzo corrected string and stage CTA naming');
-          console.log('PASS: canonical stage contracts present; duplicate evidence renderer=0');
-          NODE
+          set -o pipefail
+          npm install --no-save --package-lock=false playwright@1.55.0 2>&1 | tee "$EVIDENCE_DIR/playwright-install-result.txt"
+          npx playwright install --with-deps chromium 2>&1 | tee "$EVIDENCE_DIR/chromium-install-result.txt"
 
-      - name: Install isolated Playwright runtime
+      - name: Start production-like static server
         shell: bash
         run: |
-          npm install --no-save --package-lock=false playwright@1.55.0
-          npx playwright install --with-deps chromium
-
-      - name: Start production-like server
-        shell: bash
-        run: |
-          cat > /tmp/release-gate-static-server.mjs <<'NODE'
-          import http from 'node:http';
-          import fs from 'node:fs';
-          import path from 'node:path';
-          const root=path.resolve('public');
-          const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2'};
-          http.createServer((req,res)=>{
-            const pathname=decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname);
-            let file=path.resolve(root,'.'+pathname);
-            if(file.startsWith(root) && (!fs.existsSync(file) || fs.statSync(file).isDirectory())){
-              const cleanFile=file+'.html';
-              if(cleanFile.startsWith(root) && fs.existsSync(cleanFile) && fs.statSync(cleanFile).isFile()) file=cleanFile;
-            }
-            if(!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file=path.join(root,'site/index.html');
-            try{
-              res.writeHead(200,{'content-type':types[path.extname(file)]||'application/octet-stream','cache-control':'no-store'});
-              fs.createReadStream(file).pipe(res);
-            }catch(error){res.writeHead(500);res.end(String(error));}
-          }).listen(3000,'127.0.0.1',()=>console.log('QA static server ready on 3000'));
-          NODE
-          node /tmp/release-gate-static-server.mjs > "$EVIDENCE_DIR/server.log" 2>&1 &
-          echo $! > /tmp/release-gate-server.pid
-          for i in {1..30}; do
-            if curl -fsS "$BASE_URL/site/work/voucher" >/dev/null; then exit 0; fi
+          node tests/portfolio-static-server.mjs > "$EVIDENCE_DIR/server.log" 2>&1 &
+          echo $! > /tmp/portfolio-static-server.pid
+          for attempt in {1..30}; do
+            if curl -fsS "$BASE_URL/site/" >/dev/null; then
+              exit 0
+            fi
             sleep 1
           done
           cat "$EVIDENCE_DIR/server.log"
           exit 1
 
-      - name: Exact viewport, Chinese, WCAG, console and network gate
+      - name: Run reusable browser engineering QA
         shell: bash
         run: |
-          cat > /tmp/release-gate.mjs <<'NODE'
-          import fs from 'node:fs';
-          import path from 'node:path';
-          import { pathToFileURL } from 'node:url';
-          const { chromium }=await import(pathToFileURL(path.resolve('node_modules/playwright/index.mjs')).href);
+          set -o pipefail
+          node tests/portfolio-browser-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/browser-qa-result.txt"
 
-          const base=process.env.BASE_URL;
-          const out=process.env.EVIDENCE_DIR;
-          const viewports=[
-            {name:'desktop-1440',width:1440,height:1000},
-            {name:'desktop-1419',width:1419,height:1000},
-            {name:'desktop-1280',width:1280,height:960},
-            {name:'tablet-1024',width:1024,height:900},
-            {name:'tablet-871',width:871,height:1024},
-            {name:'tablet-768',width:768,height:1024},
-            {name:'mobile-430',width:430,height:932},
-            {name:'mobile-390',width:390,height:844},
-            {name:'mobile-375',width:375,height:812},
-            {name:'mobile-320',width:320,height:568}
-          ];
-          const failures=[];
-          const consoleErrors=[];
-          const networkErrors=[];
-          const brokenAssets=[];
-          const results={};
-          const browser=await chromium.launch({headless:true});
-
-          const rgb=s=>{
-            const value=String(s);
-            const m=value.match(/[\d.]+/g);
-            const channels=m?.slice(0,3).map(Number) || [0,0,0];
-            return value.startsWith('color(srgb')?channels.map(v=>v*255):channels;
-          };
-          const lum=c=>c.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4})
-            .reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
-          const contrast=(a,b)=>{
-            const [x,y]=[lum(rgb(a)),lum(rgb(b))].sort((m,n)=>n-m);
-            return (x+.05)/(y+.05);
-          };
-
-          for(const vp of viewports){
-            const dir=path.join(out,vp.name);
-            fs.mkdirSync(dir,{recursive:true});
-            const isTouchViewport=vp.name==='mobile-430';
-            const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},deviceScaleFactor:1,hasTouch:isTouchViewport,isMobile:isTouchViewport});
-            const page=await context.newPage();
-            page.on('console',m=>{if(m.type()==='error')consoleErrors.push(`${vp.name}: ${m.text()}`)});
-            page.on('requestfailed',r=>{
-              if(new URL(r.url()).origin===new URL(base).origin && r.failure()?.errorText!=='net::ERR_ABORTED') networkErrors.push(`${vp.name}: ${r.url()} ${r.failure()?.errorText}`);
-            });
-            page.on('response',r=>{
-              if(new URL(r.url()).origin===new URL(base).origin && r.status()>=400) networkErrors.push(`${vp.name}: HTTP ${r.status()} ${r.url()}`);
-            });
-            await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-            await page.waitForTimeout(1000);
-            if(['desktop-1440','tablet-871','mobile-430'].includes(vp.name)){
-              for(const stageId of ['discover','qualify','activate','redeem','review']){
-                await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-                const stageCta=page.locator('a.programme-stage-case__cta[data-stage="'+stageId+'"]');
-                if(isTouchViewport) await stageCta.tap();
-                else await stageCta.click();
-                await page.waitForTimeout(120);
-                const stageOpen=await page.locator('dialog[open]').isVisible().catch(()=>false);
-                const stageTitle=(await page.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase();
-                const stageUrl=new URL(page.url()).searchParams.get('stage');
-                if(!stageOpen||stageTitle!==stageId||stageUrl!==stageId) failures.push(vp.name+': stage interaction failed '+stageId);
-              }
-              if(vp.name==='desktop-1440'){
-                for(const [stageId,key] of [['discover','Enter'],['qualify',' ']]){
-                  await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-                  await page.locator('a.programme-stage-case__cta[data-stage="'+stageId+'"]').press(key);
-                  await page.waitForTimeout(120);
-                  if(!await page.locator('dialog[open]').isVisible().catch(()=>false)) failures.push(vp.name+': keyboard stage interaction failed '+stageId+' '+key);
-                }
-              }
-              await page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-              await page.waitForTimeout(200);
-            }
-            const body=page.locator('body');
-            const text=await body.innerText();
-            const widthAudit=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const required=['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','KEY INSIGHT','DESIGN DIRECTION','DESIGN SOLUTION','OUTCOME','View solution details'];
-            const missing=required.filter(t=>!text.includes(t));
-            const forbiddenEvidenceLabels=['BEFORE → SHIPPED','PDP and contextual offer visibility','No Voucher discovery','Eligible Voucher discovery'];
-            const imgs=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
-            brokenAssets.push(...imgs.map(x=>vp.name+': '+x));
-            const cta=page.getByText('View solution details',{exact:false}).first();
-            const ctaVisible=await cta.isVisible().catch(()=>false);
-            const stageVisible=await page.getByText('DISCOVER',{exact:false}).first().isVisible().catch(()=>false);
-            const nav=page.locator('.pd-section-nav').first();
-            const navVisible=await nav.isVisible().catch(()=>false);
-            const navKeyboard=navVisible ? await nav.locator('button,a').first().evaluate(el=>el.tabIndex>=0).catch(()=>false) : false;
-            if(ctaVisible){
-              await cta.click();
-              await page.waitForTimeout(300);
-            }
-            const decisionPageText=await body.innerText();
-            const duplicateEvidenceLabels=forbiddenEvidenceLabels.filter(t=>decisionPageText.includes(t));
-            const childPlaceholder=/Content to be added|To be added/.test(decisionPageText);
-            const discoverDecision=page.locator('.voucher-r149-decision-list .decision-card-v46').first();
-            const discoverDecisionVisible=await discoverDecision.isVisible().catch(()=>false);
-            const sharedDecisionStructure=discoverDecisionVisible && await discoverDecision.locator('.decision-number-v48, .decision-body-v46, .decision-visual-v58.evidence-frame').count()===3;
-            const approvedEvidence=discoverDecision.locator('img[src$="/voucher-offer-stage-discover-pdp-before-shipped-01.jpg"]');
-            const approvedEvidenceVisible=await approvedEvidence.isVisible().catch(()=>false);
-            const approvedEvidenceLoaded=approvedEvidenceVisible && await approvedEvidence.evaluate(image=>image.complete&&image.naturalWidth===2048&&image.naturalHeight===1280).catch(()=>false);
-            const keyVisible=await page.getByText('Key Problems',{exact:false}).first().isVisible().catch(()=>false);
-            const stageFocusDom=page.getByText('Stage Focus',{exact:false}).first();
-            const stageFocusVisible=await stageFocusDom.isVisible().catch(()=>false) || await page.evaluate(()=>[...document.querySelectorAll('body *')].some(el=>{const r=el.getBoundingClientRect();if(r.width===0||r.height===0)return false;const before=getComputedStyle(el,'::before').content;const after=getComputedStyle(el,'::after').content;return [before,after].some(v=>String(v).toLowerCase().includes('stage focus'));}));
-            const badText=/undefined|null|\[object Object\]/.test(text);
-            const colors=await page.evaluate(()=>{
-              const probe=document.createElement('div');
-              const primary=document.createElement('p');
-              const secondary=document.createElement('small');
-              probe.style.cssText='position:fixed;left:-9999px;background:var(--color-surface-dark);border:1px solid var(--color-border-on-dark)';
-              primary.style.color='var(--color-text-on-dark-primary)';
-              secondary.style.color='var(--color-text-on-dark-secondary)';
-              probe.append(primary,secondary);document.body.append(probe);
-              const c=getComputedStyle(probe),p=getComputedStyle(primary),s=getComputedStyle(secondary);
-              const result={bg:c.backgroundColor,primary:p.color,secondary:s.color,border:c.borderTopColor,borderWidth:parseFloat(c.borderTopWidth)||0};
-              probe.remove();return result;
-            });
-            const primaryRatio=contrast(colors.primary,colors.bg);
-            const secondaryRatio=contrast(colors.secondary,colors.bg);
-            const boundaryRatio=colors.borderWidth>0?contrast(colors.border,colors.bg):0;
-            await page.screenshot({path:path.join(dir,'voucher-stage-system.png'),fullPage:true});
-            for(const label of ['DISCOVER','QUALIFY','ACTIVATE','REDEEM','REVIEW','Key Problems','Stage Focus']){
-              const loc=page.getByText(label,{exact:false}).first();
-              if(await loc.isVisible().catch(()=>false)){
-                await loc.scrollIntoViewIfNeeded();
-                await page.screenshot({path:path.join(dir,label.toLowerCase().replaceAll(' ','-')+'.png'),fullPage:false});
-              }
-            }
-            await page.goto(base+'/site/work/voucher-center',{waitUntil:'networkidle'});
-            await page.waitForTimeout(500);
-            const voucherCenterText=await page.locator('body').innerText();
-            const voucherCenterRequired=['From fragmented campaign discovery to a persistent Voucher claim product','proposal-era modelled targets—not actual results','Separate participation from application','Preserve the target architecture without blocking launch','Original white Voucher Card','Reusable Tangram component'];
-            const voucherCenterMissing=voucherCenterRequired.filter(t=>!voucherCenterText.includes(t));
-            const voucherCenterWidth=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}));
-            const voucherCenterBroken=await page.locator('img').evaluateAll(xs=>xs.filter(x=>(x.currentSrc||x.getAttribute('src')) && x.complete && x.naturalWidth===0).map(x=>x.currentSrc||x.src));
-            brokenAssets.push(...voucherCenterBroken.map(x=>vp.name+' voucher-center: '+x));
-            await page.screenshot({path:path.join(dir,'voucher-center.png'),fullPage:true});
-            const keyProblemContract=!keyVisible;
-            const pass=widthAudit.scrollWidth<=vp.width && voucherCenterWidth.scrollWidth<=vp.width && !missing.length && !duplicateEvidenceLabels.length && !childPlaceholder && !voucherCenterMissing.length && ctaVisible && stageVisible && discoverDecisionVisible && sharedDecisionStructure && approvedEvidenceLoaded && keyProblemContract && !stageFocusVisible && navVisible && navKeyboard && !badText && !imgs.length && !voucherCenterBroken.length && primaryRatio>=4.5 && secondaryRatio>=4.5 && boundaryRatio>=3;
-            results[vp.name]={...widthAudit,missing,duplicateEvidenceLabels,childPlaceholder,voucherCenterMissing,voucherCenterWidth,ctaVisible,stageVisible,discoverDecisionVisible,sharedDecisionStructure,approvedEvidenceLoaded,keyVisible,stageFocusVisible,navVisible,navKeyboard,badText,brokenImages:imgs.length+voucherCenterBroken.length,primaryRatio,secondaryRatio,boundaryRatio,pass};
-            if(!pass) failures.push(vp.name+' failed '+JSON.stringify(results[vp.name]));
-            await context.close();
-          }
-
-          const zhContext=await browser.newContext({viewport:{width:1419,height:1000}});
-          const zh=await zhContext.newPage();
-          zh.on('console',m=>{if(m.type()==='error')consoleErrors.push('chinese: '+m.text())});
-          await zh.goto(base+'/site',{waitUntil:'networkidle'});
-          await zh.locator('[data-lang-toggle]').first().click();
-          await zh.waitForTimeout(300);
-          await zh.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-          await zh.waitForTimeout(500);
-          const zhText=await zh.locator('body').innerText();
-          const chinesePass=/[\u3400-\u9fff]/.test(zhText) && !/I turned an undefined learning concept|Explore 2 initiatives|View stage case|undefined|null|\[object Object\]/.test(zhText);
-          await zh.screenshot({path:path.join(out,'desktop-1419','chinese-voucher.png'),fullPage:true});
-          await zhContext.close();
-          const enContext=await browser.newContext({viewport:{width:1419,height:1000}});
-          const en=await enContext.newPage();
-          en.on('console',m=>{if(m.type()==='error')consoleErrors.push('bandzo: '+m.text())});
-          await en.goto(base+'/site/work/bandzo',{waitUntil:'networkidle'});
-          const bandzoText=await en.locator('body').innerText();
-          const bandzoPass=bandzoText.includes('Bandzo') && !bandzoText.includes('I turned an undefined learning concept') && bandzoText.includes('I turned an early-stage learning concept');
-          await en.screenshot({path:path.join(out,'desktop-1419','bandzo-english.png'),fullPage:true});
-          await enContext.close();
-          await browser.close();
-
-          fs.writeFileSync(path.join(out,'viewport-results.json'),JSON.stringify(results,null,2));
-          fs.writeFileSync(path.join(out,'chinese-regression.txt'),`Chinese PASS=${chinesePass}\nBandzo PASS=${bandzoPass}\n`);
-          fs.writeFileSync(path.join(out,'wcag-result.txt'),JSON.stringify(Object.fromEntries(Object.entries(results).map(([k,v])=>[k,{primary:v.primaryRatio,secondary:v.secondaryRatio,boundary:v.boundaryRatio}])),null,2));
-          fs.writeFileSync(path.join(out,'console-network-result.txt'),`consoleErrors=${consoleErrors.length}\n${consoleErrors.join('\n')}\nnetworkErrors=${networkErrors.length}\n${networkErrors.join('\n')}\nbrokenAssets=${brokenAssets.length}\n${brokenAssets.join('\n')}\n`);
-          if(!chinesePass) failures.push('Chinese regression failed');
-          if(!bandzoPass) failures.push('Bandzo regression failed');
-          if(consoleErrors.length) failures.push('Console errors='+consoleErrors.length);
-          if(networkErrors.length) failures.push('Network errors='+networkErrors.length);
-          if(brokenAssets.length) failures.push('Broken assets='+brokenAssets.length);
-          if(failures.length) throw new Error(failures.join('\n'));
-          NODE
-          node /tmp/release-gate.mjs
-          for viewport in desktop-1440 desktop-1419 desktop-1280 tablet-1024 tablet-871 tablet-768 mobile-430 mobile-390 mobile-375 mobile-320; do
-            cp "$EVIDENCE_DIR/viewport-results.json" "$EVIDENCE_DIR/$viewport/audit.json"
-          done
-
-      - name: Voucher deterministic routing and mobile Outcomes matrix
-        shell: bash
-        run: |
-          cat > /tmp/voucher-routing-matrix.mjs <<'NODE'
-          import fs from 'node:fs';
-          import path from 'node:path';
-          import { pathToFileURL } from 'node:url';
-          const { chromium }=await import(pathToFileURL(path.resolve('node_modules/playwright/index.mjs')).href);
-          const base=process.env.BASE_URL;
-          const out=process.env.EVIDENCE_DIR;
-          const stages=['discover','qualify','activate','redeem','review'];
-          const failures=[];
-          const matrix={};
-          const browser=await chromium.launch({headless:true});
-          const context=await browser.newContext({viewport:{width:1440,height:1000}});
-          const page=await context.newPage();
-          const parent=()=>page.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-          const reached=async(stage)=>{
-            await page.waitForTimeout(180);
-            return {
-              identifier:new URL(page.url()).searchParams.get('stage'),
-              title:(await page.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase(),
-              parentFallback:new URL(page.url()).searchParams.get('stage')===null
-            };
-          };
-          const activate=async(stage,mode='click')=>{
-            const cta=page.locator('a.programme-stage-case__cta[data-stage="'+stage+'"]');
-            if(mode==='tap') await cta.tap();
-            else if(mode==='enter') await cta.press('Enter');
-            else if(mode==='space') await cta.press(' ');
-            else await cta.click();
-            return reached(stage);
-          };
-          for(const stage of stages){
-            matrix[stage]={};
-            await parent();
-            matrix[stage].firstClick=await activate(stage);
-            await page.locator('#detailBack').click();
-            matrix[stage].secondClick=await activate(stage);
-            await page.locator('#detailClose').click();
-            await parent();
-            matrix[stage].closeReclick=await activate(stage);
-            await page.goBack({waitUntil:'networkidle'});
-            matrix[stage].browserBackReclick=await activate(stage);
-            await parent();
-            matrix[stage].keyboardEnter=await activate(stage,'enter');
-            await parent();
-            matrix[stage].keyboardSpace=await activate(stage,'space');
-            for(const [scenario,result] of Object.entries(matrix[stage])){
-              if(result.identifier!==stage||result.title!==stage||result.parentFallback) failures.push(stage+' '+scenario+' '+JSON.stringify(result));
-            }
-          }
-          const nextStage={};
-          for(const [from,to] of [['discover','qualify'],['qualify','activate'],['activate','redeem'],['redeem','review']]){
-            await parent();
-            await activate(from);
-            await page.locator('a.voucher-stage-next__link[data-stage="'+to+'"]').click();
-            nextStage[from]=await reached(to);
-            if(nextStage[from].identifier!==to||nextStage[from].title!==to||nextStage[from].parentFallback) failures.push('next '+from+' '+JSON.stringify(nextStage[from]));
-          }
-          await context.close();
-          const mobileContext=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,isMobile:true});
-          const mobile=await mobileContext.newPage();
-          for(const stage of stages){
-            await mobile.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-            await mobile.locator('a.programme-stage-case__cta[data-stage="'+stage+'"]').tap();
-            const result=await (async()=>{await mobile.waitForTimeout(180);return {identifier:new URL(mobile.url()).searchParams.get('stage'),title:(await mobile.locator('#detailTitle').textContent().catch(()=>''))?.trim().toLowerCase(),parentFallback:new URL(mobile.url()).searchParams.get('stage')===null}})();
-            matrix[stage].mobileTap=result;
-            if(result.identifier!==stage||result.title!==stage||result.parentFallback) failures.push(stage+' mobileTap '+JSON.stringify(result));
-          }
-          await mobile.goto(base+'/site/work/voucher',{waitUntil:'networkidle'});
-          const metrics=mobile.locator('.voucher-r149-metrics').first();
-          const outcomes=await metrics.evaluate(el=>{
-            const items=[...el.children].filter(x=>x.getBoundingClientRect().width>0);
-            const box=el.getBoundingClientRect();
-            const style=getComputedStyle(el);
-            return {gridTemplateColumns:style.gridTemplateColumns,rowCount:new Set(items.map(x=>Math.round(x.getBoundingClientRect().top))).size,containerWidth:box.width,itemWidths:items.map(x=>x.getBoundingClientRect().width),horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth};
-          });
-          if(outcomes.gridTemplateColumns.split(' ').length!==1||outcomes.rowCount!==3||outcomes.itemWidths.some(w=>Math.abs(w-outcomes.containerWidth)>1)||outcomes.horizontalOverflow) failures.push('mobile outcomes '+JSON.stringify(outcomes));
-          await mobileContext.close();
-          await browser.close();
-          const parentFallbackCount=Object.values(matrix).flatMap(x=>Object.values(x)).filter(x=>x.parentFallback).length;
-          fs.writeFileSync(path.join(out,'voucher-routing-matrix.json'),JSON.stringify({matrix,parentFallbackCount,nextStage,mobileOutcomes430:outcomes},null,2));
-          if(parentFallbackCount) failures.push('parent fallback count='+parentFallbackCount);
-          if(failures.length) throw new Error(failures.join('\n'));
-          NODE
-          node /tmp/voucher-routing-matrix.mjs
-
-      - name: Rendered CaseStudySection DOM and screenshot gate
-        shell: bash
-        run: node scripts/case-study-dom-audit.mjs
-
-      - name: Upload Step 6A image-frame calibration QA package
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: step-6a-image-frame-calibration-screenshots
-          path: |
-            /tmp/release-gate-r146-r43/case-study
-            /tmp/release-gate-r146-r43/domains
-            /tmp/release-gate-r146-r43/search
-            /tmp/release-gate-r146-r43/case-study-dom-audit.json
-          if-no-files-found: warn
-          retention-days: 30
-
-      - name: Compose release gate report
+      - name: Compose engineering QA report
         if: always()
         shell: bash
         run: |
           {
-            echo "# Release Gate r146-r43"
+            echo "# Portfolio Engineering QA"
             echo
-            echo "- Implementation HEAD: $IMPLEMENTATION_HEAD"
-            echo "- CI orchestration HEAD: $GITHUB_SHA"
+            echo "- Validated SHA: ${{ steps.commit.outputs.sha }}"
+            echo "- State: ENGINEERING QA only"
+            echo "- Final visual pass: NOT DECLARED"
+            echo "- Human visual review: REQUIRED"
+            echo "- Production changed: NO"
             echo "- Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-            echo "- Production changed: No"
-            echo "- main changed: No"
-            echo "- Draft PR merge/promote: Not performed"
-            echo
-            for f in checkout-audit.txt product-tree-integrity.txt validation-result.txt tests-result.txt build-result.txt deterministic-result.txt generated-output-regression.txt chinese-regression.txt wcag-result.txt console-network-result.txt; do
-              echo "## $f"
-              if test -f "$EVIDENCE_DIR/$f"; then
-                tail -n 80 "$EVIDENCE_DIR/$f"
-              else
-                echo "NOT PRODUCED"
-              fi
-              echo
-            done
-          } > "$EVIDENCE_DIR/release-gate-report.md"
+          } > "$EVIDENCE_DIR/engineering-qa-report.md"
 
-      - name: Upload release evidence
+      - name: Upload exact-SHA engineering QA artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: release-gate-r146-r43
-          path: |
-            /tmp/release-gate-r146-r43
-            public/site
+          name: portfolio-engineering-qa-${{ steps.commit.outputs.sha }}
+          path: /tmp/portfolio-engineering-qa
           if-no-files-found: error
           retention-days: 30
