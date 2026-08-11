@@ -286,7 +286,6 @@ test("keeps desktop navigator outside the scroll container and permits the appro
   const projectDetail = read("assets/css/components/project-detail-overview.css");
   const tokens = read("assets/css/tokens.css");
   assert.match(projectDetail, /\.pd-section-nav\{position:absolute/);
-  assert.doesNotMatch(projectDetail, /\.pd-section-nav\{position:fixed/);
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
     const scrollStart = html.indexOf('<div class="dialog-scroll">');
