@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r153",
-  "supersedes": "2026-08-11-r152",
+  "contentVersion": "2026-08-11-r154",
+  "supersedes": "2026-08-11-r153",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -5914,23 +5914,23 @@
             {
               "value": "93%",
               "label": {
-                "en": "understood which products qualified",
-                "zh": "理解哪些商品符合資格"
+                "en": "prioritised discount value",
+                "zh": "優先關注折扣價值"
               },
               "note": {
-                "en": "14 of 15 participants",
-                "zh": "15 位中有 14 位"
+                "en": "14 of 15 participants in the Voucher Card information-priority study",
+                "zh": "Voucher Card 資訊優先順序研究中，15 位參與者有 14 位"
               }
             },
             {
               "value": "87%",
               "label": {
-                "en": "understood the remaining qualification requirement",
-                "zh": "理解仍需完成的資格條件"
+                "en": "prioritised usage channel",
+                "zh": "優先關注使用通路"
               },
               "note": {
-                "en": "13 of 15 participants",
-                "zh": "15 位中有 13 位"
+                "en": "13 of 15 participants in the Voucher Card information-priority study",
+                "zh": "Voucher Card 資訊優先順序研究中，15 位參與者有 13 位"
               }
             }
           ],
@@ -5942,7 +5942,7 @@
     "voucher-center": {
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
-      "home_title": "Persistent Voucher discovery and claiming",
+      "home_title": "Persistent Voucher discovery and access",
       "home_title_zh": "常設優惠券探索與領取",
       "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
       "transformation_zh": "從分散的活動型探索，到常設優惠券領取產品",
@@ -5965,7 +5965,7 @@
       "at_glance": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
       "at_glance_zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。",
       "type": "Incentive System",
-      "scope": "Persistent Voucher discovery and claiming, from homepage entry to category access and explicit Claim → View states.",
+      "scope": "Persistent Voucher discovery and access, from homepage entry to category access and explicit Claim → View states.",
       "scope_zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。",
       "audience": "Primary: Customers discovering and claiming Vouchers\nSecondary: Campaign / Voucher Operations, Business / Sponsor stakeholders",
       "audience_zh": "主要：探索並領取優惠券的顧客\n次要：活動／優惠券營運、商務／贊助利害關係人",
@@ -6345,7 +6345,7 @@
       },
       "searchIndex": {
         "title": {
-          "en": "Persistent Voucher discovery and claiming",
+          "en": "Persistent Voucher discovery and access",
           "zh": "常設優惠券探索與領取"
         },
         "keywords": [
@@ -6976,7 +6976,7 @@
         }
       },
       "cardTitle": {
-        "en": "Persistent Voucher discovery and claiming",
+        "en": "Persistent Voucher discovery and access",
         "zh": "常設優惠券探索與領取"
       },
       "cardTitleProtectedPhrases_zh": [
@@ -7020,7 +7020,7 @@
           }
         },
         "scope": {
-          "en": "Persistent Voucher discovery and claiming, from homepage entry to category access and explicit Claim → View states.",
+          "en": "Persistent Voucher discovery and access, from homepage entry to category access and explicit Claim → View states.",
           "zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。"
         },
         "audience": {
