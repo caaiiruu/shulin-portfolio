@@ -769,7 +769,7 @@
     if(!node||node.querySelector('.company-name-v132'))return;
     const parts=node.textContent.trim().split(/\s+·\s+/);
     if(parts.length<2)return;
-    node.replaceChildren(element('strong','company-name-v132',parts.shift()),element('span','company-context-v132',parts.join(' · ')));
+    node.replaceChildren(element('strong','company-name-v132',parts.shift()),element('span','company-separator-v159','·'),element('span','company-context-v132',parts.join(' · ')));
   }
   function projectEyebrow(project){
     if(!project)return '';
