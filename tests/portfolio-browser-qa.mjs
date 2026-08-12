@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const baseUrl = process.env.BASE_URL || "http://127.0.0.1:3000";
+// R159.3 acceptance is based on rendered geometry, computed style, interaction visibility, and fresh screenshots.\nconst baseUrl = process.env.BASE_URL || "http://127.0.0.1:3000";
 const outputRoot = process.env.EVIDENCE_DIR || "/tmp/portfolio-engineering-qa";
 const viewports = [
   { name: "desktop-1440", width: 1440, height: 900 },
