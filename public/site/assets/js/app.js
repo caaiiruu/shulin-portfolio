@@ -803,7 +803,7 @@
       const context=card.querySelector('.project-context,.evidence-list__context');
       safeText(title,localize(project.title_pair));
       if(summary)safeText(summary,localize(project.at_a_glance_pair));
-      if(context)safeText(context,projectEyebrow(project));
+      if(context){safeText(context,projectEyebrow(project));emphasiseCompanyName(context)}
       let proof=card.querySelector('.what-this-proves-v147');
       const proofText=localize(project.what_this_proves);
       if(proofText&&!proof){
