@@ -2467,8 +2467,9 @@
     safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(p.title));
     renderDeliveryStatus('');
-    renderTags(key==='voucher'?[]:(localize(p.problemTypes)||[]));
-    if(classification&&key==='voucher')classification.hidden=true;
+    const showProblemTypes=p.presentation?.visibility?.problemTypes ?? !p.recruiterFirstPopup;
+    renderTags(showProblemTypes?(localize(p.problemTypes)||[]):[]);
+    if(classification)classification.hidden=!showProblemTypes;
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
     safeText(doc.getElementById('projectAtGlance'),localize(p.atAGlance));
     const confidentiality=doc.getElementById('confidentialityNote');

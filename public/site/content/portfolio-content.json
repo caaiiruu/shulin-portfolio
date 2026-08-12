@@ -8499,6 +8499,11 @@
         "zh": "為六個受監管市場建立共享且可追溯的例外審查、決策紀錄與監控模式。"
       },
       "publicStatus": "principal-flagship-ready-shipped-enterprise-internal-system",
+      "presentation": {
+        "visibility": {
+          "problemTypes": false
+        }
+      },
       "principalReadinessAudit": {
         "score": 96,
         "status": "principal-flagship-ready-multi-market-operating-system",
