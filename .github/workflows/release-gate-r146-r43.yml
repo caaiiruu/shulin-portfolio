@@ -34,7 +34,7 @@ jobs:
       - name: Clean checkout of exact validation commit
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -45,7 +45,7 @@ jobs:
           set -euo pipefail
           mkdir -p "$EVIDENCE_DIR"
           validated_sha="$(git rev-parse HEAD)"
-          expected_sha="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.ref }}"
+          expected_sha="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}"
           test "$validated_sha" = "$(git rev-parse "$expected_sha^{commit}")"
           test -z "$(git status --short)"
           {
