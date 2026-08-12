@@ -278,7 +278,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     const backLabel=await back.getAttribute("aria-label");
     const backIcon=back.locator('.icon-arrow').first();
     const backDirection=await backIcon.evaluate(node=>({canonical:node.classList.contains('icon-arrow--left'),rotation:getComputedStyle(node).getPropertyValue('--arrow-rotation').trim(),transform:getComputedStyle(node).transform}));
-    if(!backDirection.canonical||backDirection.transform==='none'||!(()=>{const m=new DOMMatrix(backDirection.transform);return m.c<-.9&&Math.abs(m.d)<.1})())failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
+    if(!backDirection.canonical||backDirection.transform==='none'||!(()=>{const m=backDirection.transform.match(/matrix\\(([^)]+)\\)/)?.[1].split(',').map(Number);return m&&m[2]<-.9&&Math.abs(m[3])<.1})())failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
     if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
     await back.click();
     await page.waitForURL(url=>!url.searchParams.has("stage"));
