@@ -8501,18 +8501,19 @@
       "publicStatus": "principal-flagship-ready-shipped-enterprise-internal-system",
       "presentation": {
         "visibility": {
-          "problemTypes": false
+          "problemTypes": false,
+          "coreSystemInsight": false,
+          "evidence": false
         },
         "composition": "recruiter-first-system-case",
         "contentRefs": {
           "whatMadeThisHard": "whatMadeThisHard",
           "contribution": "valueIBrought",
-          "coreSystemInsight": "principalPositioning.principalThesis",
-          "systemModel": "keyInterventionMap",
           "researchScale": "publicContent.researchScale",
           "decisions": "decisionNarrative.primaryDecisions",
           "validated": "publicContent.validatedOutcomes",
-          "accountability": "ownershipModel"
+          "accountability": "ownershipModel",
+          "contributionIntervention": "keyInterventionMap"
         },
         "navigation": [
           {
@@ -8547,6 +8548,20 @@
               "zh": "影響與成果"
             }
           }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "what-made-this-hard",
+          "contribution",
+          "research-scale",
+          "design-decisions",
+          "validated-and-shipped",
+          "my-accountability"
         ]
       },
       "principalReadinessAudit": {
@@ -8844,16 +8859,6 @@
             "zh": "六市場探索與驗證計畫"
           },
           "proof": [
-            {
-              "value": {
-                "en": "6 markets",
-                "zh": "六個市場"
-              },
-              "label": {
-                "en": "Launched operating scope",
-                "zh": "正式上線範圍"
-              }
-            },
             {
               "value": "50+",
               "label": {
