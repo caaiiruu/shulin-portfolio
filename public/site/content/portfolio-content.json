@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-11-r157",
-  "supersedes": "2026-08-11-r155",
+  "contentVersion": "2026-08-12-r158",
+  "supersedes": "2026-08-11-r157",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -5738,18 +5738,18 @@
               }
             },
             {
-              "value": "~167%",
+              "value": "+~167%",
               "label": {
-                "en": "observed add-to-cart rate growth in the Voucher Details flow",
-                "zh": "Voucher Details 流程中觀察到的加入購物車率成長"
+                "en": "approximate increase in observed add-to-cart rate in the Voucher Details flow",
+                "zh": "Voucher Details 流程中觀察到的加入購物車率約略增幅"
               },
               "primaryCopy": {
-                "en": "observed add-to-cart rate growth in the Voucher Details flow after eligible products were surfaced in context",
-                "zh": "在情境中呈現適用商品後，Voucher Details 流程觀察到的加入購物車率成長"
+                "en": "approximate increase in observed add-to-cart rate after eligible products were surfaced in the Voucher Details flow",
+                "zh": "在 Voucher Details 流程呈現適用商品後，觀察到的加入購物車率約略增幅"
               },
               "evidenceNote": {
-                "en": "Observed add-to-cart rate increased from ~1.5% to ~4%. Observational trend, not a controlled causal experiment.",
-                "zh": "觀察到的加入購物車率由約 1.5% 上升至約 4%。屬觀察趨勢，非受控因果實驗。"
+                "en": "Observed add-to-cart rate increased approximately from ~1.5% to ~4%. Observational trend, not a controlled causal experiment.",
+                "zh": "觀察到的加入購物車率約由 1.5% 上升至 4%。屬約略增幅與觀察趨勢，非受控因果實驗。"
               }
             },
             {
