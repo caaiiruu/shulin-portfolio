@@ -480,7 +480,10 @@
         "contentOwner": "content/portfolio-asset-manifest.json",
         "runtimeOwner": "assets/js/app.js#resolveProjectAsset",
         "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225"
-      }
+      },
+      "interactionContract": [
+        "Company and context metadata use neutral tokens, a layout-owned separator gap, and one canonical company-to-title rhythm"
+      ]
     },
     {
       "component": "ArtifactVisual",
@@ -739,7 +742,10 @@
         "SystemInsight reuses the homepage cloud asset and the shared emphasis-surface token",
         "Stage surfaces are static; only their explicit View solution details action is interactive",
         "Every approved decision image renders through EvidenceFrame without destructive crop or duplicate visible captions",
-        "Navigator Overview, Complexity and Impact resolve actual runtime targets and support pointer, keyboard and touch activation"
+        "Navigator Overview, Complexity and Impact resolve actual runtime targets and support pointer, keyboard and touch activation",
+        "Voucher Research renders exactly 2,857, 93%, and 87% as three visible metrics while provenance remains in canonical SSOT",
+        "Decision text uses the shared reading edge; child evidence uses the shared evidence edge",
+        "Same-hierarchy section transitions use the shared case-section-divider reading-edge owner"
       ],
       "allowedModifications": [
         "Shared variant extension"
@@ -752,10 +758,8 @@
       "exclusiveOwner": false
     },
     {
-      "name": "FloatingNavigator",
       "status": "Live / Current Production",
-      "source": "public/site/assets/js/app.js",
-      "cssOwner": "public/site/assets/css/components/domain-selector.css",
+      "cssOwner": "assets/css/components/domain-selector.css",
       "tokenDependencies": [
         "space-3",
         "radius-pill",
@@ -777,16 +781,9 @@
         "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
         "Project semantic pd-section-nav hooks do not own mobile shell, rail, or item presentation"
       ],
-      "allowedModifications": [
-        "Shared primitive extension",
-        "Consumer data and state extension"
-      ],
-      "forbiddenModifications": [
-        "Parallel project floating shell",
-        "Project-specific mobile rail or chip styling",
-        "Jump to section dropdown on mobile"
-      ],
-      "exclusiveOwner": true
+      "exclusiveOwner": true,
+      "component": "FloatingNavigator",
+      "renderSource": "public/site/assets/js/app.js"
     }
   ]
 }
