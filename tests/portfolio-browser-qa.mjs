@@ -197,7 +197,6 @@ for (const viewport of viewports) {
     const box = node => { const r=node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
     const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(visible);
     const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(visible);
-    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state,.key-intervention-map__node.is-before,.key-intervention-map__node.is-after')].filter(visible);
     const research = [...document.querySelectorAll('.research-evidence-metric')].filter(visible);
     const outcomesNode=document.querySelector('#voucherImpactSection');
     const accountabilityNode=document.querySelector('[data-canonical-section-id="ownership-and-evidence"]');
@@ -209,8 +208,7 @@ for (const viewport of viewports) {
     const metricTypography=research.map(node=>{const value=node.querySelector(':scope>strong'),label=node.querySelector('.research-evidence-metric__label'),vs=getComputedStyle(value),ls=getComputedStyle(label);return {value:value?.textContent.trim(),valueStyle:[vs.fontFamily,vs.fontSize,vs.lineHeight,vs.fontWeight,vs.letterSpacing],labelStyle:[ls.fontFamily,ls.fontSize,ls.lineHeight,ls.fontWeight,ls.letterSpacing],box:box(node)}});
     return {
       overviewGap: overviewTitle && overviewBody ? overviewBody.getBoundingClientRect().top - overviewTitle.getBoundingClientRect().bottom : null,
-      beforeSurfaces: beforeItems.map(node => {const s=getComputedStyle(node);return {background:s.backgroundColor,radius:s.borderRadius,paddingInline:s.paddingInline,paddingBlock:s.paddingBlock,border:s.borderWidth,box:box(node)}}),
-      researchValues: metricTypography.map(item=>item.value),
+researchValues: metricTypography.map(item=>item.value),
       metricTypography,
       accountabilityEdges: outcomesNode&&accountabilityNode ? {left:Math.abs(box(outcomesNode).left-box(accountabilityNode).left),right:Math.abs(box(outcomesNode).right-box(accountabilityNode).right),outcomes:box(outcomesNode),accountability:box(accountabilityNode)} : null,
       foundationBoxes: foundations.map(box),
@@ -222,13 +220,19 @@ for (const viewport of viewports) {
   });
   const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
   if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
-  if(r1592.beforeSurfaces.length!==2||!uniform(r1592.beforeSurfaces.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.paddingInline==='0px'||item.paddingBlock==='0px'))failures.push(`${viewport.name} Before/After rendered surfaces mismatch: ${JSON.stringify(r1592.beforeSurfaces)}`);
-  if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
+if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
   if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
   if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
   if(r1592.accountabilityEdges&&(r1592.accountabilityEdges.left>2||r1592.accountabilityEdges.right>2))failures.push(`${viewport.name} accountability/outcomes visible edges differ: ${JSON.stringify(r1592.accountabilityEdges)}`);
   if(!r1592.navShared||!r1592.navVisual||r1592.navVisual.radius==='0px'||r1592.navVisual.background==='rgba(0, 0, 0, 0)'||r1592.navVisual.textDecoration!=='none')failures.push(`${viewport.name} project navigator rendered active state mismatch: ${JSON.stringify(r1592.navVisual)}`);
   if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.3 horizontal overflow`);
+  await page.goto(`${baseUrl}/site/work/dbs`,{waitUntil:"networkidle"});
+  const beforeAfter=await page.locator(".key-intervention-map__node.is-before:visible,.key-intervention-map__node.is-after:visible").evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {label:node.textContent.trim(),background:s.backgroundColor,radius:s.borderRadius,paddingInline:s.paddingInline,paddingBlock:s.paddingBlock,border:s.borderWidth,box:{left:r.left,right:r.right,top:r.top,bottom:r.bottom}}}));
+  if(beforeAfter.length!==2||!uniform(beforeAfter.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||beforeAfter.some(x=>x.background==='rgba(0, 0, 0, 0)'||x.background==='transparent'||x.radius==='0px'||x.paddingInline==='0px'||x.paddingBlock==='0px'))failures.push(`${viewport.name} Before/After rendered surfaces mismatch: ${JSON.stringify(beforeAfter)}`);
+  if(beforeAfter.length===2)await page.locator(".key-intervention-map__flow").screenshot({path:path.join(targetedDirectory,"r1593-before-after-light-surfaces.png")});
+  r1592.beforeSurfaces=beforeAfter;
+  await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
+
   tooltipState.exclusive=false;
   if(outcomeTooltipIndexes.length>1){
     const first=allTooltipTriggers.nth(outcomeTooltipIndexes[0]),second=allTooltipTriggers.nth(outcomeTooltipIndexes[1]);
@@ -237,6 +241,7 @@ for (const viewport of viewports) {
     const secondPanel=page.locator(`#${await second.getAttribute('aria-controls')}`);
     tooltipState.exclusive=(await first.getAttribute('aria-expanded'))==='false'&&(await second.getAttribute('aria-expanded'))==='true'&&await firstPanel.isHidden()&&await secondPanel.isVisible();
     if(!tooltipState.exclusive)failures.push(`${viewport.name} Tooltip exclusive-open state failed`);
+    await page.screenshot({path:path.join(targetedDirectory,'tooltip-exclusive-b-open-a-closed.png')});
     await second.press('Escape');
   }
   r156.r1592 = r1592;
@@ -269,10 +274,11 @@ for (const viewport of viewports) {
     await page.locator(".voucher-stage-hero").waitFor({state:"visible"});
     const back=page.locator("#detailBack").first();
     await back.waitFor({state:"visible"});
+    if(viewport.name==="desktop-1419"||viewport.name==="mobile-430")await back.screenshot({path:path.join(targetedDirectory,`child-${stage}-back-left.png`)});
     const backLabel=await back.getAttribute("aria-label");
     const backIcon=back.locator('.icon-arrow').first();
     const backDirection=await backIcon.evaluate(node=>({canonical:node.classList.contains('icon-arrow--left'),rotation:getComputedStyle(node).getPropertyValue('--arrow-rotation').trim(),transform:getComputedStyle(node).transform}));
-    if(!backDirection.canonical||!backDirection.rotation.includes('90deg')||backDirection.transform==='none')failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
+    if(!backDirection.canonical||backDirection.transform==='none'||!(()=>{const m=new DOMMatrix(backDirection.transform);return m.c<-.9&&Math.abs(m.d)<.1})())failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
     if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
     await back.click();
     await page.waitForURL(url=>!url.searchParams.has("stage"));
@@ -302,7 +308,7 @@ for (const viewport of viewports) {
           const evidenceImage=decisionGroups.nth(0).locator(":scope > .evidence-frame img").first();
           if(await evidenceImage.count()){
             await evidenceImage.evaluate(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})})});
-            const imageState=await evidenceImage.evaluate(image=>{const ir=image.getBoundingClientRect(),evidence=image.closest('.evidence-frame').getBoundingClientRect(),content=image.closest('.voucher-stage-decision-list').getBoundingClientRect(),media=image.closest('.evidence-frame__media'),ms=getComputedStyle(media),ratio=ir.width/ir.height,intrinsic=image.naturalWidth/image.naturalHeight;return {complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight),edges:{left:Math.abs(content.left-evidence.left),right:Math.abs(content.right-evidence.right)},ratioDelta:Math.abs(ratio-intrinsic),image:{width:ir.width,height:ir.height},evidence:{width:evidence.width,height:evidence.height},mediaBackground:ms.backgroundColor,mediaPadding:ms.padding}});
+            const imageState=await evidenceImage.evaluate(image=>{const ir=image.getBoundingClientRect(),evidence=image.closest('.evidence-frame').getBoundingClientRect(),content=image.closest('.voucher-stage-decision-group').getBoundingClientRect(),media=image.closest('.evidence-frame__media'),ms=getComputedStyle(media),ratio=ir.width/ir.height,intrinsic=image.naturalWidth/image.naturalHeight;return {complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight),edges:{left:Math.abs(content.left-evidence.left),right:Math.abs(content.right-evidence.right)},ratioDelta:Math.abs(ratio-intrinsic),image:{width:ir.width,height:ir.height},evidence:{width:evidence.width,height:evidence.height},mediaBackground:ms.backgroundColor,mediaPadding:ms.padding}});
             if(!imageState.complete||!imageState.naturalWidth||!imageState.visible||imageState.edges.left>2||imageState.edges.right>2||imageState.ratioDelta>.01||imageState.mediaPadding!=='0px')failures.push(`${viewport.name} Discover PDP rendered evidence geometry failed: ${JSON.stringify(imageState)}`);
           }else failures.push(`${viewport.name} Discover PDP evidence image missing`);
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
