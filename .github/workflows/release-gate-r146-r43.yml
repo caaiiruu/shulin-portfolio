@@ -74,8 +74,8 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-result.txt"
-          tar -czf "$EVIDENCE_DIR/generated-runtime.tgz" public/site/*.html public/site/assets/css/production.*.css public/site/assets/js/production.*.js
-          git status --short -- public/site | tee "$EVIDENCE_DIR/generated-runtime-files.txt"
+          git diff --exit-code -- public/site
+          test -z "$(git status --porcelain --untracked-files=all -- public/site)"
 
       - name: Canonical validation and existing tests
         shell: bash
