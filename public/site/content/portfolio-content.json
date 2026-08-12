@@ -8464,8 +8464,8 @@
         },
         "audience": {
           "primary": {
-            "en": "CCU, RM and CRM",
-            "zh": "CCU、RM 與 CRM"
+            "en": "CCU, RM, CRM",
+            "zh": "CCU、RM、CRM"
           },
           "secondary": {
             "en": [
@@ -8482,7 +8482,7 @@
             "zh": "6 個月"
           },
           "dateRange": {
-            "en": "Jan-Jun 2022",
+            "en": "Jan–Jun 2022",
             "zh": "2022 年 1 月至 6 月"
           },
           "status": "user-confirmed",
@@ -8951,12 +8951,12 @@
               "zh": "端到端例外分流、案件審查、決策脈絡、責任、核准與下一步行動"
             },
             "audience": {
-              "en": "Primary: Risk and case-decision teams\nSecondary: Relationship managers and operations teams",
-              "zh": "主要：風險與案件決策團隊\n次要：客戶關係經理與營運團隊"
+              "en": "Primary: CCU, RM, CRM\nSecondary: Operations",
+              "zh": "主要：CCU、RM、CRM\n次要：營運團隊"
             },
             "timeline": {
-              "en": "1 year",
-              "zh": "1 年"
+              "en": "6 months",
+              "zh": "6 個月"
             }
           },
           "whyItMattered": {
@@ -9314,10 +9314,11 @@
       "type": "Internal System",
       "scope": "End-to-end exception triage, case review, decision context, ownership, approvals, and next actions",
       "scope_zh": "端到端例外分流、案件審查、決策脈絡、責任、核准與下一步行動",
-      "audience": "Primary: Risk and case-decision teams\nSecondary: Relationship managers and operations teams",
-      "audience_zh": "主要：風險與案件決策團隊\n次要：客戶關係經理與營運團隊",
-      "timeline": "1 year",
-      "timeline_zh": "1 年",
+      "audience": "Primary: CCU, RM, CRM\nSecondary: Operations",
+      "audience_zh": "主要：CCU、RM、CRM\n次要：營運團隊",
+      "timeline": "6 months",
+      "timeline_zh": "6 個月",
+      "period": "Jan–Jun 2022",
       "why": "Daily credit exceptions depended on incomplete reports, email histories, manual authority checks, and local workarounds, making decisions slow, inconsistent, and difficult to trace.",
       "why_zh": "每日授信例外案件依賴不完整報表、電子郵件紀錄、人工權限查核與各市場自行補救，使決策緩慢、不一致且難以追溯。",
       "impact": "Established a shared, traceable operating model for exception review, decision history, and monitoring across six regulated markets.",
