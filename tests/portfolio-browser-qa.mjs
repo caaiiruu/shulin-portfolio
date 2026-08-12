@@ -197,7 +197,7 @@ for (const viewport of viewports) {
     const box = node => { const r=node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
     const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(visible);
     const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(visible);
-    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state')].filter(visible);
+    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state,.key-intervention-map__node.is-before,.key-intervention-map__node.is-after')].filter(visible);
     const research = [...document.querySelectorAll('.research-evidence-metric')].filter(visible);
     const outcomesNode=document.querySelector('#voucherImpactSection');
     const accountabilityNode=document.querySelector('[data-canonical-section-id="ownership-and-evidence"]');
@@ -222,7 +222,7 @@ for (const viewport of viewports) {
   });
   const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
   if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
-  if(r1592.beforeSurfaces.length&&(!uniform(r1592.beforeSurfaces.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.paddingInline==='0px'||item.paddingBlock==='0px')))failures.push(`${viewport.name} Before/After rendered surfaces mismatch`);
+  if(r1592.beforeSurfaces.length!==2||!uniform(r1592.beforeSurfaces.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.paddingInline==='0px'||item.paddingBlock==='0px'))failures.push(`${viewport.name} Before/After rendered surfaces mismatch: ${JSON.stringify(r1592.beforeSurfaces)}`);
   if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
   if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
   if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
@@ -271,7 +271,8 @@ for (const viewport of viewports) {
     await back.waitFor({state:"visible"});
     const backLabel=await back.getAttribute("aria-label");
     const backIcon=back.locator('.icon-arrow').first();
-    if(!(await backIcon.count())||!(await backIcon.evaluate(node=>node.classList.contains('icon-arrow--left'))))failures.push(`${viewport.name} ${stage} child Back is not canonical left ArrowIcon`);
+    const backDirection=await backIcon.evaluate(node=>({canonical:node.classList.contains('icon-arrow--left'),rotation:getComputedStyle(node).getPropertyValue('--arrow-rotation').trim(),transform:getComputedStyle(node).transform}));
+    if(!backDirection.canonical||!backDirection.rotation.includes('90deg')||backDirection.transform==='none')failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
     if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
     await back.click();
     await page.waitForURL(url=>!url.searchParams.has("stage"));
@@ -301,8 +302,8 @@ for (const viewport of viewports) {
           const evidenceImage=decisionGroups.nth(0).locator(":scope > .evidence-frame img").first();
           if(await evidenceImage.count()){
             await evidenceImage.evaluate(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})})});
-            const imageState=await evidenceImage.evaluate(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight)}));
-            if(!imageState.complete||!imageState.naturalWidth||!imageState.visible)failures.push(`${viewport.name} Discover PDP evidence failed to load: ${JSON.stringify(imageState)}`);
+            const imageState=await evidenceImage.evaluate(image=>{const ir=image.getBoundingClientRect(),evidence=image.closest('.evidence-frame').getBoundingClientRect(),content=image.closest('.voucher-stage-decision-list').getBoundingClientRect(),media=image.closest('.evidence-frame__media'),ms=getComputedStyle(media),ratio=ir.width/ir.height,intrinsic=image.naturalWidth/image.naturalHeight;return {complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight),edges:{left:Math.abs(content.left-evidence.left),right:Math.abs(content.right-evidence.right)},ratioDelta:Math.abs(ratio-intrinsic),image:{width:ir.width,height:ir.height},evidence:{width:evidence.width,height:evidence.height},mediaBackground:ms.backgroundColor,mediaPadding:ms.padding}});
+            if(!imageState.complete||!imageState.naturalWidth||!imageState.visible||imageState.edges.left>2||imageState.edges.right>2||imageState.ratioDelta>.01||imageState.mediaPadding!=='0px')failures.push(`${viewport.name} Discover PDP rendered evidence geometry failed: ${JSON.stringify(imageState)}`);
           }else failures.push(`${viewport.name} Discover PDP evidence image missing`);
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
           await capture("discover-pdp-evidence", ".voucher-stage-decision-list > .voucher-stage-decision-group:first-child > .evidence-frame");
@@ -329,6 +330,15 @@ for (const viewport of viewports) {
     }
     await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
   }
+
+  await page.goto(`${baseUrl}/site/work`,{waitUntil:"networkidle"});
+  const projectCardVisual=await page.locator(".work-card-v32__content").evaluateAll(nodes=>nodes.slice(0,5).map(root=>{const company=root.querySelector(".company-name-v132"),title=root.querySelector("h2"),context=root.querySelector(".company-context-v132"),cs=getComputedStyle(company),tr=title?.getBoundingClientRect(),cr=company?.getBoundingClientRect();return {company:company?.textContent.trim(),color:cs.color,neutral:getComputedStyle(document.documentElement).getPropertyValue("--color-text-secondary").trim(),titleGap:tr&&cr?tr.top-cr.bottom:null,separator:context?getComputedStyle(context,"::before").marginInline:null}}));
+  if(projectCardVisual.length<3||projectCardVisual.some(x=>x.color!==x.neutral||x.titleGap===null||x.titleGap>12))failures.push(`${viewport.name} ProjectCard rendered company hierarchy failed: ${JSON.stringify(projectCardVisual)}`);
+  await page.screenshot({path:path.join(targetedDirectory,"r1593-project-cards.png"),fullPage:false});
+  await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
+  const headerMetadata=await page.locator(".modal-head-meta-v60").evaluate(node=>{const company=node.querySelector(".company-name-v132"),context=node.querySelector(".company-context-v132"),pseudo=context?getComputedStyle(context,"::before"):null;return {company:company?.textContent.trim(),context:context?.textContent.trim(),separatorMargin:pseudo?.marginInline}});
+  if(headerMetadata.context&&headerMetadata.separatorMargin!=="4px")failures.push(`${viewport.name} inline company separator gap ${JSON.stringify(headerMetadata)}`);
+  await page.screenshot({path:path.join(targetedDirectory,"r1593-company-metadata.png"),fullPage:false});
 
   const links = page.locator("a[href]");
   const linkCount = await links.count();
