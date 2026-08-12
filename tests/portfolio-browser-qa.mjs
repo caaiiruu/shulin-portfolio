@@ -171,7 +171,7 @@ for (const viewport of viewports) {
 
   const allTooltipTriggers=page.locator(".info-tooltip__trigger");
   const outcomeTooltipIndexes=await allTooltipTriggers.evaluateAll(nodes=>nodes.map((node,index)=>({node,index})).filter(({node})=>node.closest('[data-component-owner="OutcomeMetric"]')&&node.offsetWidth>0&&node.offsetHeight>0&&getComputedStyle(node).visibility!=="hidden").map(({index})=>index));
-  const activateTooltip=async trigger=>{await trigger.evaluate(node=>node.scrollIntoView({block:"center",inline:"nearest",behavior:"auto"}));await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));const box=await trigger.boundingBox();if(!box)throw new Error(`${viewport.name} live tooltip has no pointer box`);if(viewport.width<=430)await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);else await page.mouse.click(box.x+box.width/2,box.y+box.height/2)};
+  const activateTooltip=async trigger=>{await trigger.evaluate(node=>node.scrollIntoView({block:"center",inline:"nearest",behavior:"auto"}));await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await trigger.dispatchEvent("pointerdown",{pointerType:viewport.width<=430?"touch":"mouse",isPrimary:true});await trigger.dispatchEvent("click",{detail:1})};
   const firstTooltip=allTooltipTriggers.nth(outcomeTooltipIndexes[0]);
   const tooltipState={count:await allTooltipTriggers.count(),liveOutcomeCount:outcomeTooltipIndexes.length};
   if(outcomeTooltipIndexes.length!==4)failures.push(`${viewport.name} live Outcome tooltip count ${outcomeTooltipIndexes.length}`);
