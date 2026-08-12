@@ -750,6 +750,43 @@
         "Magic spacing values"
       ],
       "exclusiveOwner": false
+    },
+    {
+      "name": "FloatingNavigator",
+      "status": "Live / Current Production",
+      "source": "public/site/assets/js/app.js",
+      "cssOwner": "public/site/assets/css/components/domain-selector.css",
+      "tokenDependencies": [
+        "space-3",
+        "radius-pill",
+        "shadow-raised",
+        "color-surface",
+        "color-border-strong",
+        "motion-base"
+      ],
+      "usageScope": [
+        "Homepage Domain navigation",
+        "Project detail mobile section navigation"
+      ],
+      "variants": [
+        "Domain",
+        "Project sections"
+      ],
+      "interactionContract": [
+        "One Shell, Rail, and Item primitive owns fixed positioning, safe-area offset, surface, radius, elevation, motion, horizontal overflow, focus-visible, reduced motion, and forced colors",
+        "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
+        "Project semantic pd-section-nav hooks do not own mobile shell, rail, or item presentation"
+      ],
+      "allowedModifications": [
+        "Shared primitive extension",
+        "Consumer data and state extension"
+      ],
+      "forbiddenModifications": [
+        "Parallel project floating shell",
+        "Project-specific mobile rail or chip styling",
+        "Jump to section dropdown on mobile"
+      ],
+      "exclusiveOwner": true
     }
   ]
 }
