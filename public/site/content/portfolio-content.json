@@ -8404,11 +8404,11 @@
     "dbs": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented exception handling into a shared decision system across six markets and four roles.",
+          "en": "I turned fragmented exception handling into a shared decision system across four operational roles and six markets.",
           "zh": "我把分散的例外處理，建立成橫跨六個市場、四種角色的共享決策系統。"
         },
         "supportingStatement": {
-          "en": "By clarifying case context, ownership, handoffs, and decision rights, I replaced incomplete reports and manual coordination with a more traceable operating model.",
+          "en": "I defined how case context, ownership, handoffs and decision rights should work together, then translated that model into role-based queues, workbenches and one traceable cross-role workflow.",
           "zh": "我釐清案件脈絡、責任、交接與決策權，將不完整報表與人工協調，轉成更可追蹤的營運模式。"
         }
       },
@@ -8430,7 +8430,7 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "From fragmented exception handling to a shared six-market decision system",
+        "en": "From fragmented credit-exception handling to a shared six-market decision system",
         "zh": "從分散的例外處理，到六個市場共用的授信決策系統"
       },
       "problemTypes": {
@@ -8446,7 +8446,7 @@
         ]
       },
       "atAGlance": {
-        "en": "Led problem framing and end-to-end design of a credit-exception management system, replacing incomplete reports and manual coordination with decision-ready cases and clear ownership across four roles and six markets.",
+        "en": "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.",
         "zh": "主導授信例外案件管理系統的問題定義與端到端設計，將不完整報表與人工協調轉化為可直接決策的案件，並為六個市場、四種角色建立明確權責。"
       },
       "infoGrid": {
@@ -8459,7 +8459,7 @@
           }
         },
         "scope": {
-          "en": "Platform-level coverage from end-of-day and real-time triggers through review, approval, release or abort, history and operational monitoring",
+          "en": "End-to-end exception handling across monitoring, review, delegated approval and case closure",
           "zh": "從日終與即時觸發，到審查、核准、放行或中止、歷史紀錄與營運監控的平台層級範圍"
         },
         "audience": {
@@ -8502,7 +8502,7 @@
       "presentation": {
         "visibility": {
           "problemTypes": false,
-          "coreSystemInsight": false,
+          "coreSystemInsight": true,
           "evidence": false
         },
         "composition": "recruiter-first-system-case",
@@ -8513,7 +8513,8 @@
           "decisions": "decisionNarrative.primaryDecisions",
           "validated": "publicContent.validatedOutcomes",
           "accountability": "ownershipModel",
-          "contributionIntervention": "keyInterventionMap"
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight"
         },
         "navigation": [
           {
@@ -8556,12 +8557,22 @@
         "sectionOrder": [
           "hero",
           "at-a-glance",
+          "info-grid",
           "what-made-this-hard",
           "contribution",
-          "research-scale",
+          "core-system-insight",
           "design-decisions",
-          "validated-and-shipped",
-          "my-accountability"
+          "evidence",
+          "research-scale",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain",
+          "roleAndOwnership.projectRole",
+          "period"
         ]
       },
       "principalReadinessAudit": {
@@ -8965,7 +8976,18 @@
             "zh": "基於保密原因，未公開精確數據。"
           }
         },
-        "sectionOrderRef": "projects.dbs.sectionOrder"
+        "sectionOrderRef": "projects.dbs.sectionOrder",
+        "coreSystemInsight": {
+          "headline": {
+            "en": "Scaling the workflow required shared decision logic—not simply digitising existing reports.",
+            "zh": ""
+          },
+          "supportingCopy": {
+            "en": "RM, CRM, CCU and Operations needed the same case context, explicit handoffs and visible decision rights so exception handling could remain traceable across roles and markets.",
+            "zh": ""
+          },
+          "contentStatus": "user-approved-public-copy"
+        }
       },
       "imagePlan": {
         "hero": {
@@ -9302,10 +9324,10 @@
         "決策責任不清",
         "跨市場處理不一致"
       ],
-      "at_glance": "Led problem framing and end-to-end design of a credit-exception management system, replacing incomplete reports and manual coordination with decision-ready cases and clear ownership across four roles and six markets.",
+      "at_glance": "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.",
       "at_glance_zh": "主導授信例外案件管理系統的問題定義與端到端設計，將不完整報表與人工協調轉化為可直接決策的案件，並為六個市場、四種角色建立明確權責。",
       "type": "Internal System",
-      "scope": "End-to-end exception triage, case review, decision context, ownership, approvals, and next actions",
+      "scope": "End-to-end exception handling across monitoring, review, delegated approval and case closure",
       "scope_zh": "端到端例外分流、案件審查、決策脈絡、責任、核准與下一步行動",
       "audience": "Primary: CCU, RM, CRM\nSecondary: Operations",
       "audience_zh": "主要：CCU、RM、CRM\n次要：營運團隊",
@@ -9319,31 +9341,31 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Cross-market variation",
+            "en": "Fragmented operational context",
             "zh": "跨市場差異"
           },
           "description": {
-            "en": "Six markets used different operating practices while still needing one shared model for exception review and decisions.",
+            "en": "Exception handling relied on offline reports, manual filtering and incomplete approval history, forcing teams to reconstruct case context before acting.",
             "zh": "六個市場具有不同營運方式，仍需要共用同一套例外審查與決策模型。"
           }
         },
         {
           "title": {
-            "en": "Conflicting role needs",
+            "en": "Two fundamentally different operating modes",
             "zh": "角色需求衝突"
           },
           "description": {
-            "en": "CCU, RM, CRM, and Operations required different context, ownership, approvals, and next actions within one workflow.",
+            "en": "End-of-day monitoring and real-time exceptions had different triggers, urgency, evidence needs and response expectations, so they could not be treated as one workflow.",
             "zh": "CCU、RM、CRM 與營運團隊在同一流程中需要不同脈絡、責任、核准與下一步。"
           }
         },
         {
           "title": {
-            "en": "Traceability without delay",
+            "en": "Decisions crossed roles, authority levels and markets",
             "zh": "可追溯但不能拖慢"
           },
           "description": {
-            "en": "Decisions had to remain auditable without adding friction to routine case handling across regulated internal operations.",
+            "en": "RM, CRM, CCU and Operations each owned different parts of the case, while decisions still needed clear authority routing, traceability and consistency across six regulated markets.",
             "zh": "受監管的內部營運必須保留決策稽核性，同時不能增加日常案件處理阻力。"
           }
         }
@@ -9359,15 +9381,15 @@
           "zh": "線下報表與分散追蹤"
         },
         "intervention": {
-          "en": "Role-based case queues and decision ownership",
+          "en": "Role-based case queues and explicit decision ownership",
           "zh": "依角色分流案件並明確決策責任"
         },
         "after": {
-          "en": "A shared workflow across six markets",
+          "en": "A shared cross-role workflow adopted across six markets",
           "zh": "六個市場使用共同案件管理流程"
         },
         "supportingCopy": {
-          "en": "I clarified how four roles received, reviewed, decided, and tracked exception cases, creating a workflow that could be adopted across six regulated markets.",
+          "en": "I defined how case context, ownership, handoffs and decision rights should work together, then translated that model into role-based queues, workbenches and one traceable cross-role workflow.",
           "zh": "我釐清四種角色如何接收、審查、決策與追蹤例外案件，建立可供六個受監管市場共同採用的流程。"
         }
       },
@@ -9500,7 +9522,7 @@
       "heroMetadata": {
         "company": "DBS",
         "domain": {
-          "en": "Risk operations",
+          "en": "Enterprise credit operations",
           "zh": "風險營運"
         },
         "renderOrder": [

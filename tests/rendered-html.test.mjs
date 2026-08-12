@@ -1529,3 +1529,22 @@ test("uses frozen recruiter-first research, validation and accountability primit
   assert.match(app, /createInfoTooltip\(t\(item\.note\)/);
   assert.match(app, /data\.componentOwner='SharedAccountability'|dataset\.componentOwner='SharedAccountability'/);
 });
+
+
+test("projects the R160.4 approved DBS orientation and complexity copy", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.title.en, "From fragmented credit-exception handling to a shared six-market decision system");
+  assert.equal(dbs.atAGlance.en, "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.");
+  assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
+    "Fragmented operational context",
+    "Two fundamentally different operating modes",
+    "Decisions crossed roles, authority levels and markets"
+  ]);
+  assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
+  assert.equal(dbs.presentation.contentRefs.coreSystemInsight, "publicContent.coreSystemInsight");
+  assert.match(app, /project\.presentation\?\.heroMetadata/);
+  assert.match(app, /'MY INTERVENTION'/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});

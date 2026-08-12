@@ -775,7 +775,9 @@
   }
   function projectEyebrow(project){
     if(!project)return '';
-    return [localize(project.company),localize(project.domain)].map(value=>String(value||'').trim()).filter(Boolean).join(' · ');
+    const configured=list(project.presentation?.heroMetadata).map(path=>valueAtPath(project,path));
+    const values=configured.length?configured:[project.company,project.domain];
+    return values.map(value=>localize(value)).map(value=>String(value||'').trim()).filter(Boolean).join(' · ');
   }
   function enhanceCompanyNames(root=doc){
     root.querySelectorAll('.project-context').forEach(node=>{
@@ -2710,7 +2712,7 @@
     if(interventionSource){
       appendContributionFlow(contribution,[
         {label:lang==='zh'?'之前':'BEFORE',text:interventionSource.before},
-        {label:lang==='zh'?'關鍵介入':'KEY INTERVENTION',text:interventionSource.intervention},
+        {label:lang==='zh'?'我的介入':'MY INTERVENTION',text:interventionSource.intervention},
         {label:lang==='zh'?'之後':'AFTER',text:interventionSource.after}
       ]);
       contribution.append(element('p','voucher-r149-intro case-reading-wrapper',t(interventionSource.supportingCopy)));
@@ -2720,7 +2722,7 @@
 
     const insightSource=projectContentRef(p,refs.coreSystemInsight);
     const insight=visibility.coreSystemInsight!==false&&insightSource
-      ?createRecruiterSection('',lang==='zh'?'核心系統洞察':'Core system insight',t(insightSource)):null;
+      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightSource.headline),t(insightSource.supportingCopy)):null;
     if(insight){insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight'}
 
     const evidenceSource=projectContentRef(p,refs.evidence);
