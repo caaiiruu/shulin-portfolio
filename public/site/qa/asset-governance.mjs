@@ -20,9 +20,9 @@ const placeholderIds = [
 ];
 
 const contentSha = createHash("sha256").update(contentBytes).digest("hex");
-fail(contentSha === "c2de88c33b98d42c739a527772af8725aedccc4dcd074419d643f8dc8016c8e7", `Content r157 SHA changed: ${contentSha}`);
-fail(content.contentVersion === "2026-08-11-r157" && projectIds.length === 13, "Content r157 roster changed");
-fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r157");
+fail(contentSha === "169430bb168b3e5d9f9a16334bbfebdea8de7b9305228de207c5c958568189e6", `Content r158 SHA changed: ${contentSha}`);
+fail(content.contentVersion === "2026-08-12-r158" && projectIds.length === 13, "Content r158 roster changed");
+fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r158");
 const lockedReusableImages = {
   "voucher-offer-reusable-system-shared-rules-01.jpg": "ea25dc84274b4b9575911e273ef8ed7f0a80e0223dcd2001b5dbd3ef6db0b333",
   "voucher-offer-reusable-system-shared-states-01.jpg": "d694f400aad6539c5eec44863f3dfc27510b66efacd6bbe8cd9f2bb6d9c9ef8f",
