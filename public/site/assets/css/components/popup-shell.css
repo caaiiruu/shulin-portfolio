@@ -32,7 +32,7 @@
   background: var(--color-surface);
 }
 .detail-dialog-v45 .dialog-scroll{padding-bottom:calc(var(--control-height) + var(--space-8) + env(safe-area-inset-bottom))}
-.detail-dialog-v45:has(.pd-section-nav:not([hidden])) .dialog-scroll{padding-bottom:calc(50dvh + var(--control-height) + env(safe-area-inset-bottom))}
+.detail-dialog-v45:has(.pd-section-nav:not([hidden])) .modal-content-v45::after{display:block;height:50dvh;content:"";pointer-events:none}
 .dialog-controls-v67 {
   position: sticky;
   inset: 0 0 auto;
