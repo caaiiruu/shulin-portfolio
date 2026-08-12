@@ -285,7 +285,7 @@ test("keeps global typography readable and singly owned by Foundation", () => {
 test("keeps desktop navigator outside the scroll container and permits the approved mobile floating state", () => {
   const projectDetail = read("assets/css/components/project-detail-overview.css");
   const tokens = read("assets/css/tokens.css");
-  assert.match(projectDetail, /\.pd-section-nav\{position:absolute/);
+  assert.match(projectDetail, /\.pd-section-nav:not\(\.floating-navigator\)\{position:absolute/);
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
     const scrollStart = html.indexOf('<div class="dialog-scroll">');
@@ -692,7 +692,7 @@ test("keeps horizontal rails operable, visible, and singly owned", () => {
     /\.domain-project-list-v30\{grid-auto-columns:100%\}/
   ]) assert.match(rail.replace(/\s+/g," "), contract);
   assert.doesNotMatch(rail, /width:calc\(100% \+|margin-inline:calc\([^)]*\* -1\)/);
-  for (const scroller of [".domain-floating-nav-v52__rail", ".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
+  for (const scroller of [".floating-navigator__rail", ".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
   assert.match(rail, /unobscured content edge/);
   assert.match(rail, /padding-block:var\(--experiment-card-state-safe-block\) var\(--space-8\)/);
   assert.match(rail, /\.domain-project-list-v30\)\{display:grid;grid-auto-flow:column;grid-auto-columns:/);
