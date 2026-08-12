@@ -76,7 +76,8 @@
   place-items: center;
   font-size: var(--dimension-18px);
   line-height: 1;
-  transform: translateY(var(--dimension-neg-1px));
+  position: relative;
+  top: var(--dimension-neg-1px);
 }
 .modal-back-v66[hidden] { display: none; }
 .modal-close { width: var(--control-height); padding: 0; margin-left: auto; font-size: 0; }
