@@ -150,7 +150,7 @@ for (const phrase of ["renderSuggestions();", "if(!results.hidden&&input.value.t
 }
 if (!projectDetail.includes(".modal-classification-v45{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start")) errors.push("ProjectDetailOverview: classification must preserve its label-to-chip alignment grid");
 if (!projectDetail.includes(".detail-status{display:grid;grid-template-columns:max-content max-content;align-items:start")) errors.push("ProjectDetailOverview: delivery status must remain a compact semantic label, not a full-width field");
-if (!projectDetail.includes(".pd-section-nav{position:absolute") || !projectDetail.includes("safe-area-inset-bottom")) errors.push("ProjectDetailOverview: recruiter navigator must remain dialog-floating and safe-area aware");
+if (!projectDetail.includes(".pd-section-nav:not(.floating-navigator){position:absolute") || !projectDetail.includes("safe-area-inset-bottom")) errors.push("ProjectDetailOverview: recruiter navigator must remain dialog-floating and safe-area aware");
 if (projectDetail.includes(".project-section-nav")) errors.push("ProjectDetailOverview: retired navigator namespace must not coexist with .pd-section-nav");
 if (!app.includes("function scrollToProjectSection(target)") || !app.includes("function projectSectionInset()")) errors.push("ProjectDetailOverview: navigator must use the canonical scroll-root and sticky-control offset owner");
 if (!app.includes("function cancelProjectSectionNavigation") || !app.includes("projectSectionNavigation===transaction") || !app.includes("if(!projectSectionNavigation)setActiveProjectSection(visibleProjectSectionId)")) errors.push("ProjectDetailOverview: navigator must keep one cancellable last-click-wins transaction separate from scroll-spy");
