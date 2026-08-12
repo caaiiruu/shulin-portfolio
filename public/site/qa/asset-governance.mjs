@@ -23,6 +23,17 @@ const contentSha = createHash("sha256").update(contentBytes).digest("hex");
 fail(contentSha === "c2de88c33b98d42c739a527772af8725aedccc4dcd074419d643f8dc8016c8e7", `Content r157 SHA changed: ${contentSha}`);
 fail(content.contentVersion === "2026-08-11-r157" && projectIds.length === 13, "Content r157 roster changed");
 fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r157");
+const lockedReusableImages = {
+  "voucher-offer-reusable-system-shared-rules-01.jpg": "ea25dc84274b4b9575911e273ef8ed7f0a80e0223dcd2001b5dbd3ef6db0b333",
+  "voucher-offer-reusable-system-shared-states-01.jpg": "d694f400aad6539c5eec44863f3dfc27510b66efacd6bbe8cd9f2bb6d9c9ef8f",
+  "voucher-offer-reusable-system-reusable-patterns-01.jpg": "1e8d55df890a00bacf24d5a199fb52f7835ebd8bd63eebbf3be10fafc3abccf2",
+  "voucher-offer-reusable-system-component-foundation-01.jpg": "ca695ea9d4562b126c7478180f049036c5fce228298bac378010e03e6497deef",
+};
+for (const [filename, expected] of Object.entries(lockedReusableImages)) {
+  const canonical = path.join(siteRoot, "assets/projects/voucher", filename);
+  fail(fs.existsSync(canonical), `Locked reusable-system image missing: ${filename}`);
+  if (fs.existsSync(canonical)) fail(createHash("sha256").update(fs.readFileSync(canonical)).digest("hex") === expected, `Locked reusable-system image hash changed: ${filename}`);
+}
 fail(!forbidden.test(JSON.stringify(manifest)), "Public Manifest contains historical or local-only metadata");
 fail(itemEntries.length === new Set(itemEntries.map(([id]) => id)).size, "Duplicate asset IDs");
 const slots = [];
