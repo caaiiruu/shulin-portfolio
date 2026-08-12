@@ -1191,6 +1191,7 @@
     if(transaction){
       transaction.frames.forEach(frame=>window.cancelAnimationFrame(frame));
       transaction.timers.forEach(timer=>window.clearTimeout(timer));
+      transaction.cleanup?.();
       projectSectionNavigation=null;
     }
     if(restoreScrollSpy)updateProjectSectionLocation();
@@ -1226,11 +1227,20 @@
       finish();
       return;
     }
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'smooth'});
-    const timer=window.setTimeout(()=>{
-      transaction.timers.delete(timer);
+    let settled=false;
+    let timer=0;
+    const settle=()=>{
+      if(settled||projectSectionNavigation!==transaction)return;
+      settled=true;
+      dialogScrollRoot.removeEventListener('scrollend',settle);
+      transaction.cleanup=null;
+      if(timer){window.clearTimeout(timer);transaction.timers.delete(timer)}
       finish();
-    },480);
+    };
+    transaction.cleanup=()=>dialogScrollRoot.removeEventListener('scrollend',settle);
+    dialogScrollRoot.addEventListener('scrollend',settle,{once:true});
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'smooth'});
+    timer=window.setTimeout(settle,900);
     transaction.timers.add(timer);
   }
   function updateProjectSectionLocation(){
