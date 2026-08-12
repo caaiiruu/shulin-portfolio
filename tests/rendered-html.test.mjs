@@ -515,9 +515,11 @@ test("keeps project metadata on one line and global search in the active languag
   const overview = read("assets/css/components/project-detail-overview.css");
   const app = read("assets/js/app.js");
   assert.doesNotMatch(foundation, /#detailContext:has\(\.company-name-v132\)\{display:grid/);
-  assert.match(foundation, /\.company-context-v132::before\{content:"·"/);
+  assert.match(foundation, /\.company-separator-v159\{[^}]*margin:0;[^}]*padding:0/);
+  assert.doesNotMatch(foundation, /\.company-context-v132::before\{content:"·"/);
+  assert.match(app, /element\('span','company-separator-v159','·'\)/);
   assert.match(overview, /\.modal-head-meta-v60\{[^}]*align-items:baseline;[^}]*flex-wrap:nowrap/);
-  assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
+  assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-separator-v159,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
   for (const contract of [
     "safeText(title,ui(",
     "input.placeholder=ui(",
