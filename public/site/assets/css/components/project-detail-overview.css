@@ -488,7 +488,7 @@
 .detail-dialog.is-experiment .detail-related-rail-v45{grid-auto-columns:var(--rail-card-experiment)}
 @media(max-width:900px){.project-context-v45,.impact-grid-v45,.ownership-grid-v45,.delivery-grid-v45{grid-template-columns:1fr}.detail-related-v45{grid-template-columns:1fr}.detail-related-v45__head{flex-direction:row;justify-content:space-between;align-items:end}}
 @media(max-width:600px){#crossImpact,.recruiter-proof{grid-template-columns:1fr}.detail-related-v45__head{align-items:flex-start;flex-direction:column}.project-context-v45__hard ul{grid-template-columns:1fr}.project-context-v45__hard .complexity-item-v86+ .complexity-item-v86{border-top:var(--dimension-1px) solid var(--color-border);border-left:0}}
-@media(max-width:700px){.pd-section-nav{position:fixed;z-index:80;left:50%;bottom:calc(var(--space-3) + env(safe-area-inset-bottom));width:max-content;max-width:calc(var(--dimension-100vw) - var(--dimension-24px));padding:var(--space-1);transform:translateX(-50%);overflow:hidden;border:var(--dimension-1px) solid var(--sys-color-border-strong);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--sys-color-surface) 96%,transparent);box-shadow:var(--shadow-raised);backdrop-filter:blur(var(--dimension-16px))}.pd-section-nav.is-open{width:min(calc(var(--dimension-100vw) - var(--dimension-24px)),var(--dimension-720px));border-radius:var(--radius-md)}.pd-section-nav__toggle{display:flex;width:auto;min-width:var(--dimension-180px)}.pd-section-nav.is-open .pd-section-nav__toggle{width:100%}.pd-section-nav__links{display:none;align-items:stretch;padding:var(--space-2) 0 0}.pd-section-nav.is-open .pd-section-nav__links{display:grid;grid-template-columns:1fr}.pd-section-nav__link{place-items:center start;text-align:left;white-space:normal}.recruiter-proof-item-v46__metrics{grid-template-columns:1fr}}
+@media(max-width:700px){.pd-section-nav.domain-floating-nav-v52{display:block}.pd-section-nav.domain-floating-nav-v52 .pd-section-nav__toggle{display:none}.pd-section-nav.domain-floating-nav-v52 .pd-section-nav__links{display:flex;align-items:center;padding:var(--dimension-2px) var(--space-2)}.pd-section-nav.domain-floating-nav-v52 .pd-section-nav__link{place-items:center;text-align:center;white-space:nowrap}.recruiter-proof-item-v46__metrics{grid-template-columns:1fr}}
 .portfolio-media {
   display: block;
   width: 100%;
@@ -800,7 +800,7 @@
 .outcome-metric__primary,.research-evidence-metric__label{display:inline;min-width:0;line-height:1.5}.outcome-metric__label{display:inline}
 .inline-tooltip-tail{white-space:nowrap}.outcome-metric__primary .info-tooltip,.research-evidence-metric__label .info-tooltip{margin-inline-start:var(--space-1)}
 .outcome-metric>small,.research-evidence-metric>small{display:none}.outcome-metric__value,.research-evidence-metric>strong{color:var(--color-text-primary)}
-.contribution-block{border:0;border-radius:0;padding-inline:0}.contribution-block__intervention{background:var(--color-surface-dark);color:var(--color-text-on-dark-primary)}.contribution-block__intervention .voucher-r149-eyebrow,.contribution-block__intervention p{color:inherit}.contribution-block__intervention .voucher-r149-eyebrow{color:var(--color-text-on-dark-secondary)}
+.contribution-block{border:0;border-radius:0}.contribution-block__intervention{background:var(--color-surface-dark);color:var(--color-text-on-dark-primary)}.contribution-block__intervention .voucher-r149-eyebrow,.contribution-block__intervention p{color:inherit}.contribution-block__intervention .voucher-r149-eyebrow{color:var(--color-text-on-dark-secondary)}
 .voucher-r149-stage__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto;column-gap:var(--space-7);row-gap:var(--space-7);align-items:start}
 .voucher-r149-stage__facts>div{display:grid;grid-template-rows:auto 1fr;gap:var(--space-2);align-self:stretch;margin:0}
 .voucher-r149-stage__facts>div:nth-child(1){grid-column:1;grid-row:1}.voucher-r149-stage__facts>div:nth-child(2){grid-column:1;grid-row:2}.voucher-r149-stage__facts>div:nth-child(3){grid-column:2;grid-row:1}.voucher-r149-stage__facts>div:nth-child(4){grid-column:2;grid-row:2}
@@ -818,7 +818,7 @@
 /* R158.4 human visual delta — shared case-study owners only */
 #projectOverviewSection .project-summary-v45>p{margin-top:var(--dimension-28px)}
 .contribution-block{width:min(100%,var(--case-page-max));max-width:var(--case-page-max);margin-inline:auto}
-.voucher-r149-section[data-canonical-section-id="what-made-this-hard"]>.voucher-r149-heading,.contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{width:min(100%,var(--case-reading-max));max-width:var(--case-reading-max);margin-inline:auto}
+.case-reading-wrapper,.voucher-r149-section[data-canonical-section-id="what-made-this-hard"]>.voucher-r149-heading,.contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{box-sizing:border-box;width:min(100%,var(--case-reading-max));max-width:var(--case-reading-max);margin-inline:auto}
 .research-evidence-metric,.outcome-metric{row-gap:var(--space-3)}
 .research-evidence-metric>strong,.outcome-metric-grid .outcome-metric>.outcome-metric__value{color:var(--color-text-primary);font-weight:var(--sys-weight-heavy);line-height:1}
 .research-evidence-metric__label,.outcome-metric__primary,.outcome-metric__label{color:var(--color-text-secondary);font-size:var(--text-sm);line-height:var(--leading-body)}
@@ -832,7 +832,7 @@
 @media(max-width:600px){
   .voucher-r149-flow{grid-template-columns:1fr;gap:var(--space-4)}
   .contribution-block .voucher-r149-flow__arrow{--arrow-rotation:var(--arrow-rotate-down);transform:rotate(var(--arrow-rotate-down))}
-  .contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{width:100%;max-width:100%}
+  .case-reading-wrapper,.contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{width:100%;max-width:100%}
   .voucher-r149-flow article{min-width:0;width:100%}
   .outcome-metric-grid{grid-template-columns:1fr}
   .outcome-metric{width:100%}
