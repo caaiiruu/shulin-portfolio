@@ -278,7 +278,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     const backLabel=await back.getAttribute("aria-label");
     const backIcon=back.locator('.icon-arrow').first();
     const backDirection=await backIcon.evaluate(node=>({canonical:node.classList.contains('icon-arrow--left'),rotation:getComputedStyle(node).getPropertyValue('--arrow-rotation').trim(),transform:getComputedStyle(node).transform}));
-    if(!backDirection.canonical||backDirection.transform==='none'||!(()=>{const m=backDirection.transform.match(/matrix\\(([^)]+)\\)/)?.[1].split(',').map(Number);return m&&m[2]<-.9&&Math.abs(m[3])<.1})())failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
+    if(!backDirection.canonical||backDirection.transform==='none'||!(()=>{const m=backDirection.transform.match(/matrix\(([^)]+)\)/)?.[1].split(',').map(Number);return m&&m[2]<-.9&&Math.abs(m[3])<.1})())failures.push(`${viewport.name} ${stage} child Back is not rendered LEFT: ${JSON.stringify(backDirection)}`);
     if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
     await back.click();
     await page.waitForURL(url=>!url.searchParams.has("stage"));
@@ -338,7 +338,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   }
 
   await page.goto(`${baseUrl}/site/work`,{waitUntil:"networkidle"});
-  const projectCardVisual=await page.locator(".work-card-v32").evaluateAll(nodes=>nodes.slice(0,5).map(root=>{const company=root.querySelector(".company-name-v132"),title=root.querySelector("h2"),context=root.querySelector(".company-context-v132"),cs=company?getComputedStyle(company):null,tr=title?.getBoundingClientRect(),cr=company?.getBoundingClientRect();return {company:company?.textContent.trim(),color:cs?.color||null,neutral:getComputedStyle(document.documentElement).getPropertyValue("--color-text-secondary").trim(),titleGap:tr&&cr?tr.top-cr.bottom:null,separator:context?getComputedStyle(context,"::before").marginInline:null}}));
+  const projectCardVisual=await page.locator(".work-card-v32").evaluateAll(nodes=>nodes.slice(0,5).map(root=>{const metadata=root.querySelector(".company-name-v132")||root.querySelector(".project-context"),title=root.querySelector("h2"),context=root.querySelector(".company-context-v132"),cs=metadata?getComputedStyle(metadata):null,tr=title?.getBoundingClientRect(),cr=metadata?.getBoundingClientRect();return {company:metadata?.textContent.trim(),color:cs?.color||null,neutral:getComputedStyle(document.documentElement).getPropertyValue("--color-text-secondary").trim(),titleGap:tr&&cr?tr.top-cr.bottom:null,separator:context?getComputedStyle(context,"::before").marginInline:null}}));
   if(projectCardVisual.length<3||projectCardVisual.some(x=>x.color!==x.neutral||x.titleGap===null||x.titleGap>12))failures.push(`${viewport.name} ProjectCard rendered company hierarchy failed: ${JSON.stringify(projectCardVisual)}`);
   await page.screenshot({path:path.join(targetedDirectory,"r1593-project-cards.png"),fullPage:false});
   await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
