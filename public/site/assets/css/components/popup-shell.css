@@ -79,6 +79,7 @@
   position: relative;
   top: var(--dimension-neg-1px);
 }
+.modal-back-v66 > .icon-arrow--left { --arrow-rotation: var(--arrow-rotate-left); }
 .modal-back-v66[hidden] { display: none; }
 .modal-close { width: var(--control-height); padding: 0; margin-left: auto; font-size: 0; }
 .global-search-v114__close.modal-close {

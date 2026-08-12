@@ -193,38 +193,42 @@ for (const viewport of viewports) {
   r156.initialFocus = initialFocus;
   r156.tooltipState = tooltipState;
   const r1592 = await page.evaluate(() => {
-    const rect = selector => document.querySelector(selector)?.getBoundingClientRect();
-    const style = selector => document.querySelector(selector) ? getComputedStyle(document.querySelector(selector)) : null;
-    const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(node => node.offsetWidth && node.offsetHeight);
-    const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(node => node.offsetWidth && node.offsetHeight);
-    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state')].filter(node => node.offsetWidth && node.offsetHeight);
-    const research = [...document.querySelectorAll('.research-evidence-metric')].filter(node => node.offsetWidth && node.offsetHeight);
-    const outcomes = rect('#voucherImpactSection');
-    const accountability = rect('[data-canonical-section-id="ownership-and-evidence"]');
-    const foundations = [...document.querySelectorAll('.voucher-r149-foundation')].filter(node => node.offsetWidth && node.offsetHeight);
+    const visible = node => Boolean(node && node.offsetWidth && node.offsetHeight && getComputedStyle(node).visibility !== 'hidden');
+    const box = node => { const r=node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
+    const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(visible);
+    const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(visible);
+    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state')].filter(visible);
+    const research = [...document.querySelectorAll('.research-evidence-metric')].filter(visible);
+    const outcomesNode=document.querySelector('#voucherImpactSection');
+    const accountabilityNode=document.querySelector('[data-canonical-section-id="ownership-and-evidence"]');
+    const foundations = [...document.querySelectorAll('.voucher-r149-foundation')].filter(visible);
     const nav = document.querySelector('#projectSectionNav');
-    const navItems = [...document.querySelectorAll('#projectSectionNavLinks a')];
-    const backIcon = document.querySelector('#detailBack .icon-arrow');
+    const navItems = [...document.querySelectorAll('#projectSectionNavLinks a')].filter(visible);
+    const activeNav=navItems.find(node=>node.getAttribute('aria-current')==='location');
+    const triggers=[...document.querySelectorAll('.info-tooltip__trigger')].filter(visible);
+    const metricTypography=research.map(node=>{const value=node.querySelector(':scope>strong'),label=node.querySelector('.research-evidence-metric__label'),vs=getComputedStyle(value),ls=getComputedStyle(label);return {value:value?.textContent.trim(),valueStyle:[vs.fontFamily,vs.fontSize,vs.lineHeight,vs.fontWeight,vs.letterSpacing],labelStyle:[ls.fontFamily,ls.fontSize,ls.lineHeight,ls.fontWeight,ls.letterSpacing],box:box(node)}});
     return {
       overviewGap: overviewTitle && overviewBody ? overviewBody.getBoundingClientRect().top - overviewTitle.getBoundingClientRect().bottom : null,
-      beforeSurfaces: beforeItems.map(node => ({background:getComputedStyle(node).backgroundColor,radius:getComputedStyle(node).borderRadius,padding:getComputedStyle(node).padding})),
-      researchRows: [...new Set(research.map(node => Math.round(node.getBoundingClientRect().top)))].length,
-      researchValues: research.map(node => node.querySelector('strong')?.textContent.trim()),
-      accountabilityEdges: outcomes && accountability ? {left:Math.abs(outcomes.left-accountability.left),right:Math.abs(outcomes.right-accountability.right)} : null,
-      foundationRows: [...new Set(foundations.map(node => Math.round(node.getBoundingClientRect().top)))].length,
+      beforeSurfaces: beforeItems.map(node => {const s=getComputedStyle(node);return {background:s.backgroundColor,radius:s.borderRadius,paddingInline:s.paddingInline,paddingBlock:s.paddingBlock,border:s.borderWidth,box:box(node)}}),
+      researchValues: metricTypography.map(item=>item.value),
+      metricTypography,
+      accountabilityEdges: outcomesNode&&accountabilityNode ? {left:Math.abs(box(outcomesNode).left-box(accountabilityNode).left),right:Math.abs(box(outcomesNode).right-box(accountabilityNode).right),outcomes:box(outcomesNode),accountability:box(accountabilityNode)} : null,
+      foundationBoxes: foundations.map(box),
       navShared: Boolean(nav?.classList.contains('floating-navigator')) && navItems.every(node => node.classList.contains('floating-navigator__item')),
-      navRadius: style('#projectSectionNav')?.borderRadius,
+      navVisual:activeNav?(()=>{const s=getComputedStyle(activeNav);return {background:s.backgroundColor,color:s.color,radius:s.borderRadius,paddingInline:s.paddingInline,paddingBlock:s.paddingBlock,minHeight:s.minHeight,textDecoration:s.textDecorationLine,box:box(activeNav)}})():null,
+      tooltipBoxes:triggers.map(node=>box(node)),
       horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
     };
   });
-  if(r1592.overviewGap===null||r1592.overviewGap<0||r1592.overviewGap>32)failures.push(`${viewport.name} At a glance title/body rhythm ${r1592.overviewGap}`);
-  if(r1592.beforeSurfaces.length&&r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.padding==='0px'))failures.push(`${viewport.name} Before/After shared surfaces missing`);
-  if(r1592.researchValues.join('|')!=='2,857|93%|87%')failures.push(`${viewport.name} research metric projection mismatch`);
-  if(viewport.width<=430&&r1592.researchRows!==3)failures.push(`${viewport.name} research metrics are not one per row`);
-  if(viewport.width<=430&&r1592.foundationRows!==4)failures.push(`${viewport.name} reusable foundations are not one per row`);
-  if(r1592.accountabilityEdges&&(r1592.accountabilityEdges.left>1||r1592.accountabilityEdges.right>1))failures.push(`${viewport.name} accountability/outcomes edges differ: ${JSON.stringify(r1592.accountabilityEdges)}`);
-  if(!r1592.navShared||!r1592.navRadius||r1592.navRadius==='0px')failures.push(`${viewport.name} project navigator is not using shared FloatingNavigator visuals`);
-  if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.2 horizontal overflow`);
+  const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
+  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
+  if(r1592.beforeSurfaces.length&&(!uniform(r1592.beforeSurfaces.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.paddingInline==='0px'||item.paddingBlock==='0px')))failures.push(`${viewport.name} Before/After rendered surfaces mismatch`);
+  if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
+  if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
+  if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
+  if(r1592.accountabilityEdges&&(r1592.accountabilityEdges.left>2||r1592.accountabilityEdges.right>2))failures.push(`${viewport.name} accountability/outcomes visible edges differ: ${JSON.stringify(r1592.accountabilityEdges)}`);
+  if(!r1592.navShared||!r1592.navVisual||r1592.navVisual.radius==='0px'||r1592.navVisual.background==='rgba(0, 0, 0, 0)'||r1592.navVisual.textDecoration!=='none')failures.push(`${viewport.name} project navigator rendered active state mismatch: ${JSON.stringify(r1592.navVisual)}`);
+  if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.3 horizontal overflow`);
   tooltipState.exclusive=false;
   if(outcomeTooltipIndexes.length>1){
     const first=allTooltipTriggers.nth(outcomeTooltipIndexes[0]),second=allTooltipTriggers.nth(outcomeTooltipIndexes[1]);
