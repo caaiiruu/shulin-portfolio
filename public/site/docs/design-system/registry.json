@@ -311,7 +311,7 @@
         "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
         "Until both public derivatives exist, the validation-path media slots use clearly labelled non-evidentiary placeholders and never expose private source boards, fabricated product proof or conversion metrics",
         "Professional cases with at least two available chapters expose one compact, content-width, bottom-floating four-destination anchor navigator as a direct dialog child outside the transformed scroll container; it remains stationary throughout the popup and never uses tab semantics or hides content panels",
-        "Mobile replaces the horizontal navigator with one Jump to section disclosure and a vertical link list",
+        "Mobile project navigation reuses the canonical Domain floating chip rail shell; ProjectDetailOverview owns only section labels, active state and anchor navigation",
         "Every navigator destination is calculated from the dialog scroll root after the mobile disclosure closes, with the sticky control inset applied exactly once",
         "Navigator active state, keyboard focus and visible section are separate runtime states: the latest cancellable click transaction owns active state until its target is aligned and focused, while manual scrolling cancels the transaction and restores scroll-spy",
         "Outcome cards promote verified leading values through the shared popup metric token while preserving evidence tier, attribution and measurement boundaries",
@@ -376,7 +376,8 @@
         "Domain experience is the first recruiter decision surface after experience proof",
         "The Hero CTA aligns the Domain content viewport below the measured sticky Header with a responsive reading gap at desktop and compact widths",
         "Each domain explains recurring problems and transferable design responses before exposing supporting project evidence",
-        "Domain content follows a direct summary-to-problem-to-response-to-evidence sequence without an intermediate cross-project model"
+        "Domain content follows a direct summary-to-problem-to-response-to-evidence sequence without an intermediate cross-project model",
+        "The Domain floating navigation classes are the canonical shared mobile floating chip-rail primitive; project detail navigation reuses this shell without duplicating surface, safe-area, elevation, motion or horizontal-scroll ownership"
       ],
       "exclusiveOwner": true
     },
