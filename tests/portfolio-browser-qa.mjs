@@ -240,17 +240,18 @@ for (const viewport of viewports) {
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
       await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
-        const decisions = page.locator(".voucher-stage-decision-list .voucher-stage-decision-group > .voucher-r149-decision:visible");
+        const decisionGroups = page.locator(".voucher-stage-decision-list > .voucher-stage-decision-group:visible");
+        const decisions = decisionGroups.locator(":scope > .voucher-r149-decision");
         if (await decisions.count() >= 2) {
           await scrollDialogTarget(decisions.nth(0));
-          const evidenceImage=decisions.nth(0).locator('img').first();
+          const evidenceImage=decisionGroups.nth(0).locator(":scope > .evidence-frame img").first();
           if(await evidenceImage.count()){
             await evidenceImage.evaluate(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})})});
             const imageState=await evidenceImage.evaluate(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight)}));
             if(!imageState.complete||!imageState.naturalWidth||!imageState.visible)failures.push(`${viewport.name} Discover PDP evidence failed to load: ${JSON.stringify(imageState)}`);
           }else failures.push(`${viewport.name} Discover PDP evidence image missing`);
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
-          await capture("discover-pdp-evidence", ".voucher-r149-decision .evidence-frame");
+          await capture("discover-pdp-evidence", ".voucher-stage-decision-list > .voucher-stage-decision-group:first-child > .evidence-frame");
           await scrollDialogTarget(decisions.nth(1));
           await decisions.nth(1).screenshot({ path: path.join(targetedDirectory, "discover-decision-02.png") });
         } else failures.push(`${viewport.name} Discover decision captures missing`);
