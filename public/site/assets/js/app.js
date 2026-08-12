@@ -2688,6 +2688,21 @@
     section.append(flow);
     return flow;
   }
+  function appendOutcomeCards(grid,items,{metric=false,translate=localize}={}){
+    list(items).forEach(item=>{
+      const card=element('article',metric?'outcome-metric':'outcome-metric outcome-metric--qualitative');
+      if(metric){
+        const primary=element('div','outcome-metric__primary');
+        const copy=translate(item.primaryCopy)||translate(item.label);
+        const label=element('span','outcome-metric__label');
+        const tip=createInfoTooltip(translate(item.evidenceNote)||translate(item.label),lang==='zh'?'查看成果證據':'View outcome evidence');
+        appendInlineEndTooltip(label,copy,tip);primary.append(label);
+        card.append(directionalValue(item.value,'outcome-metric__value'),primary);
+      }else card.append(element('h3','outcome-metric__heading',translate(item.heading)),element('p','outcome-metric__copy',translate(item.copy)));
+      grid.append(card);
+    });
+    return grid;
+  }
   function renderSystemCaseParent(p){
     const surface=programmeSurface();clear(surface);surface.classList.add('recruiter-system-case');
     const refs=p.presentation?.contentRefs||{};
@@ -2729,7 +2744,7 @@
     const evidence=visibility.evidence!==false&&evidenceSource
       ?createRecruiterSection('',t(evidenceSource.title)):null;
     if(evidence){
-      evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
+      evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
       const evidenceRows=element('div','voucher-r149-rows');
       list(evidenceSource.items).forEach(item=>{
         const article=element('article');article.append(element('h3','',t(item.title)),element('p','',t(item.copy)));evidenceRows.append(article);
@@ -2739,7 +2754,7 @@
 
     const researchSource=projectContentRef(p,refs.researchScale);
     const research=createRecruiterSection('',t(researchSource?.title));
-    research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='ResearchEvidenceMetric';
+    research.id='systemCaseResearchSection';research.dataset.projectNavTarget='research';research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='ResearchEvidenceMetric';
     const metrics=element('div','research-evidence-metrics recruiter-system-case__metrics');
     list(researchSource?.proof).forEach(item=>{
       const metric=element('article','research-evidence-metric');
@@ -2756,12 +2771,11 @@
     decisions.id='systemCaseDecisionsSection';decisions.dataset.projectNavTarget='decisions';decisions.dataset.canonicalSectionId='key-design-decisions';
     const decisionListNode=doc.getElementById('projectDecisions');if(decisionListNode)decisions.append(decisionListNode);
 
-    const validatedSource=projectContentRef(p,refs.validated);
-    const validated=createRecruiterSection('',lang==='zh'?'驗證與上線':'Validated and shipped');
-    validated.id='systemCaseImpactSection';validated.dataset.projectNavTarget='impact';validated.dataset.canonicalSectionId='validated-outcomes';
-    const validatedRows=element('div','voucher-r149-rows');
-    list(validatedSource?.evidence).forEach(item=>{const article=element('article');article.append(element('span','voucher-r149-eyebrow',String(item.type||'').toUpperCase()),element('p','',t(item.content)));validatedRows.append(article)});
-    validated.append(validatedRows);
+    const outcomesSource=projectContentRef(p,refs.outcomes);
+    const outcomes=createRecruiterSection('',t(outcomesSource?.title));
+    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
+    const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
+    appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});outcomes.append(outcomeGrid);
 
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(ownershipSource?.publicSummary));
@@ -2774,7 +2788,7 @@
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
-    [hard,contribution,insight,decisions,evidence,research,validated,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
+    [hard,contribution,insight,decisions,evidence,research,outcomes,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
@@ -2797,7 +2811,7 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');const found=element('div','voucher-r149-foundations');list(c.reusableSystem?.foundations).forEach(x=>{const r=element('article','voucher-r149-foundation'),media=element('div','voucher-r149-foundation__media'),caption=element('div','voucher-r149-foundation__caption');const asset=resolveProjectAsset(x.assetId||'project-visual-placeholder-square-v1'),img=doc.createElement('img');img.src=asset.src;img.alt=localize(asset.alt);img.loading='lazy';media.append(img);caption.append(element('h3','',t(x.label)),element('p','',t(x.text)));r.append(media,caption);found.append(r)});reusable.append(found);
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';list(c.outcomes?.metrics).forEach(x=>{const m=element('article','outcome-metric'),primary=element('div','outcome-metric__primary'),copy=t(x.primaryCopy)||t(x.label),label=element('span','outcome-metric__label'),tip=createInfoTooltip(t(x.evidenceNote)||t(x.label),lang==='zh'?'查看成果證據':'View outcome evidence');appendInlineEndTooltip(label,copy,tip);primary.append(label);m.append(directionalValue(x.value,'outcome-metric__value'),primary);metrics.append(m)});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';

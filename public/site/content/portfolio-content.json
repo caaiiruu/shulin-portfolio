@@ -8511,11 +8511,11 @@
           "contribution": "valueIBrought",
           "researchScale": "publicContent.researchScale",
           "decisions": "decisionNarrative.primaryDecisions",
-          "validated": "publicContent.validatedOutcomes",
           "accountability": "ownershipModel",
           "contributionIntervention": "keyInterventionMap",
           "coreSystemInsight": "publicContent.coreSystemInsight",
-          "evidence": "publicContent.decisionEvidence"
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes"
         },
         "navigation": [
           {
@@ -8543,11 +8543,27 @@
             }
           },
           {
-            "key": "impact",
-            "target": "systemCaseImpactSection",
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
             "label": {
-              "en": "Impact",
-              "zh": "影響與成果"
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "research",
+            "target": "systemCaseResearchSection",
+            "label": {
+              "en": "Research",
+              "zh": "研究"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
             }
           }
         ],
@@ -8897,46 +8913,6 @@
         },
         "confidentialityNote": "*For confidentiality reasons, exact internal metrics and system details are not disclosed.*",
         "contentStatus": "approved",
-        "validatedOutcomes": {
-          "label": {
-            "en": "VALIDATED AND SHIPPED OUTCOMES",
-            "zh": "驗證與上線成果"
-          },
-          "publicSummary": {
-            "en": "Cross-market information-hierarchy studies and recurring prototype tests refined the role-based queues, case structure and action model before the resulting CRM and CCU workbenches launched across all 6 markets.",
-            "zh": "透過跨市場資訊層級研究與多輪原型測試，在上線前持續修正依角色佇列、案件結構與操作模型；最終 CRM／CCU 工作台於六個市場上線。"
-          },
-          "evidence": [
-            {
-              "type": "validation",
-              "content": {
-                "en": "CCU and CRM information-hierarchy studies were run across all six markets.",
-                "zh": "在六個市場完成 CCU 與 CRM 資訊層級研究。"
-              }
-            },
-            {
-              "type": "validation",
-              "content": {
-                "en": "Concept and design-validation sessions were followed by recurring prototype testing.",
-                "zh": "概念與設計驗證後，持續進行多輪原型測試。"
-              }
-            },
-            {
-              "type": "delivery",
-              "content": {
-                "en": "The resulting CRM and CCU workbench capabilities launched across all six markets.",
-                "zh": "最終 CRM 與 CCU 工作台能力於六個市場正式上線。"
-              }
-            }
-          ],
-          "notClaimed": [
-            "Turnaround-time reduction",
-            "Manual-effort reduction",
-            "Error-rate reduction",
-            "Adoption or productivity uplift"
-          ],
-          "contentStatus": "approved"
-        },
         "hero": {
           "title": {
             "en": "From fragmented exception handling to a shared six-market decision system",
@@ -9028,6 +9004,48 @@
           ],
           "assetStatus": "approved-asset-required",
           "contentStatus": "user-approved-public-copy"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": ""
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "Shared operating model launched across six markets",
+                "zh": ""
+              },
+              "copy": {
+                "en": "The programme moved from fragmented local handling toward a common operating structure for case review, decision ownership and escalation.",
+                "zh": ""
+              }
+            },
+            {
+              "heading": {
+                "en": "Exception handling moved into role-based workbenches",
+                "zh": ""
+              },
+              "copy": {
+                "en": "CRM and CCU workflows brought case context, supporting evidence, actions, notifications and decision history into the work itself.",
+                "zh": ""
+              }
+            },
+            {
+              "heading": {
+                "en": "One traceable architecture connected cross-role decisions",
+                "zh": ""
+              },
+              "copy": {
+                "en": "The operating architecture created a common reference for ownership, approval paths and implementation across Product, Engineering and operational teams.",
+                "zh": ""
+              }
+            }
+          ],
+          "claimBoundary": [
+            "No efficiency, turnaround, error-reduction, ROI, adoption or time-saving KPI is claimed."
+          ],
+          "contentStatus": "user-approved-public-copy"
         }
       },
       "imagePlan": {
@@ -9051,37 +9069,6 @@
           "recommendedContent": "Three shipped views: pending cases, borrower/case detail, and actions or monitoring.",
           "statusLabel": "SHIPPED"
         }
-      },
-      "outcomes": {
-        "label": {
-          "en": "VALIDATED AND SHIPPED OUTCOMES",
-          "zh": "驗證與上線成果"
-        },
-        "publicSummary": {
-          "en": "Cross-market information-hierarchy studies and recurring prototype tests refined the role-based queues, case structure and action model before the resulting CRM and CCU workbenches launched across all 6 markets.",
-          "zh": "透過跨市場資訊層級研究與多輪原型測試，在上線前持續修正依角色佇列、案件結構與操作模型；最終 CRM／CCU 工作台於六個市場上線。"
-        },
-        "evidence": [
-          {
-            "type": "validation",
-            "content": "CCU and CRM information-hierarchy studies were run across all six markets."
-          },
-          {
-            "type": "validation",
-            "content": "Concept and design-validation sessions were followed by recurring prototype testing."
-          },
-          {
-            "type": "delivery",
-            "content": "The resulting CRM and CCU workbench capabilities launched across all six markets."
-          }
-        ],
-        "notClaimed": [
-          "Turnaround-time reduction",
-          "Manual-effort reduction",
-          "Error-rate reduction",
-          "Adoption or productivity uplift"
-        ],
-        "contentStatus": "approved"
       },
       "systemClassification": {
         "publicLabel": {

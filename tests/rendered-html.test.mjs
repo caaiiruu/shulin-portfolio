@@ -1562,3 +1562,19 @@ test("orders approved DBS decisions before evidence and renders exactly four res
   assert.match(app, /dataset\.componentOwner='StructuredEvidence'/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+
+test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric owner", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.publicContent.outcomes.cards.length, 3);
+  assert.equal("validatedOutcomes" in dbs.publicContent, false);
+  assert.equal(dbs.presentation.contentRefs.outcomes, "publicContent.outcomes");
+  assert.deepEqual(dbs.presentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Research", "Outcomes"]);
+  assert.match(app, /function appendOutcomeCards\(grid,items/);
+  assert.match(app, /appendOutcomeCards\(metrics,c\.outcomes\?\.metrics,\{metric:true,translate:t\}\)/);
+  assert.match(css, /\.outcome-metric--qualitative\{/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
