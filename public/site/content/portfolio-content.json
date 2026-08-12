@@ -8769,68 +8769,6 @@
         },
         "contentStatus": "approved"
       },
-      "designDecisions": [
-        {
-          "id": "dbs-excess-decision-01",
-          "title": {
-            "en": "From one exception concept to distinct end-of-day and real-time operating models",
-            "zh": "從單一例外概念，拆分為日終監控與即時處理兩套營運模型"
-          },
-          "whatIDecided": {
-            "en": "Separated end-of-day monitoring and real-time exception handling into two operating models, each with its own triggers, urgency, actors and evidence needs.",
-            "zh": "將日終監控與即時例外處理拆成兩套營運模型，分別定義觸發條件、急迫性、參與角色與判斷依據。"
-          },
-          "whyThisChoice": {
-            "en": "End-of-day work centred on report quality, filtering and follow-up, while real-time work required immediate trigger interpretation, authority routing and customer-response decisions.",
-            "zh": "日終工作集中於報表品質、篩選與後續追蹤；即時則需要即時觸發條件判讀、權限路由與顧客-回應決策。"
-          },
-          "status": "shipped-foundation",
-          "evidence": {
-            "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
-            "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
-          }
-        },
-        {
-          "id": "dbs-excess-decision-02",
-          "title": {
-            "en": "From report-centric work to role-based exception workbenches",
-            "zh": "從以報表為中心的工作方式，到依角色分流的例外案件工作台"
-          },
-          "whatIDecided": {
-            "en": "Structured CRM and CCU workbenches around pending cases, borrower context, attachments, decision history, actions, notifications and monitoring views.",
-            "zh": "依待處理案件、借款人脈絡、附件、決策歷史、操作、通知與監控視圖，建立 CRM 與 CCU 的角色工作台。"
-          },
-          "whyThisChoice": {
-            "en": "The highest-ranked problems came from manual filtering, missing case metadata, fragmented approval history and limited visibility across reports.",
-            "zh": "最高排名的問題來自人工篩選、缺少案件中繼資料、分散的核准歷史紀錄與跨報表可視性不足。"
-          },
-          "status": "shipped",
-          "evidence": {
-            "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
-            "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
-          }
-        },
-        {
-          "id": "dbs-excess-decision-03",
-          "title": {
-            "en": "From partial departmental views to one shared decision architecture",
-            "zh": "從各部門的片段視角，到一套共享的決策架構"
-          },
-          "whatIDecided": {
-            "en": "Created system-level and detailed cross-role flow models linking triggers, RM, CRM, CCU and Operations actions through release or abort outcomes.",
-            "zh": "建立系統層級與跨角色詳細流程模型，串接觸發條件、RM、CRM、CCU 與營運操作，涵蓋核准上線或中止等結果。"
-          },
-          "whyThisChoice": {
-            "en": "Each function understood only part of the workflow, while Product and delivery teams needed a shared reference for scope, role boundaries and implementation decisions.",
-            "zh": "各職能只理解部分流程；產品團隊與交付團隊需要共同參考，對齊範圍、角色界線與實作決策。"
-          },
-          "status": "delivered-and-used-for-alignment",
-          "evidence": {
-            "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
-            "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
-          }
-        }
-      ],
       "deliveryBoundary": {
         "confirmed": [
           "Lead Product Designer with full design ownership",
@@ -9468,11 +9406,7 @@
               "zh": "日終工作集中於報表品質、篩選與後續追蹤；即時則需要即時觸發條件判讀、權限路由與顧客-回應決策。"
             },
             "status": "shipped-foundation",
-            "evidence": {
-              "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
-              "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
-            },
-            "effectOrResult": {
+            "outcome": {
               "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
               "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
             }
@@ -9492,11 +9426,7 @@
               "zh": "最高排名的問題來自人工篩選、缺少案件中繼資料、分散的核准歷史紀錄與跨報表可視性不足。"
             },
             "status": "shipped",
-            "evidence": {
-              "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
-              "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
-            },
-            "effectOrResult": {
+            "outcome": {
               "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
               "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
             }
@@ -9516,11 +9446,7 @@
               "zh": "各職能只理解部分流程；產品團隊與交付團隊需要共同參考，對齊範圍、角色界線與實作決策。"
             },
             "status": "delivered-and-used-for-alignment",
-            "evidence": {
-              "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
-              "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
-            },
-            "effectOrResult": {
+            "outcome": {
               "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
               "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
             }

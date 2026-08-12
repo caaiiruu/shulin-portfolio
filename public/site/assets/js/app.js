@@ -29,6 +29,7 @@
     const why=decisionText(decision,['whyThisChoice','why','evidence','rationale']);
     const problem=decisionText(decision,['problemOrConstraint','problem','constraint','principle']);
     const effect=decisionText(decision,['effectOrResult','resultingModel','preservedDirection','impactAndOwnership']);
+    const outcome=decisionText(decision,['outcome']);
     const delivery=decisionText(decision,['deliveryBoundary','claimBoundary']);
     const optionalSource=decision.optionalBlock||{};
     const optional=decisionText(decision,['tradeOffAccepted','tradeoff','tradeOff','whatThisRequired','constraintManaged','riskManaged']);
@@ -44,6 +45,7 @@
       evidence:why[0],evidence_zh:why[1],
       problem:problem[0],problem_zh:problem[1],
       effect:effect[0],effect_zh:effect[1],
+      outcome:outcome[0],outcome_zh:outcome[1],
       deliveryBoundary:delivery[0],deliveryBoundary_zh:delivery[1],
       tradeoff:optional[0],tradeoff_zh:optional[1],
       optionalBlock:{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]},
@@ -2357,6 +2359,12 @@
       considerations.append(tradeoff);
     }
     if(considerations.childElementCount)body.append(considerations);
+    const outcomeText=localize([decision.outcome,decision.outcome_zh]);
+    if(outcomeText){
+      const outcome=element('div','decision-effect-v147');
+      outcome.append(element('span','decision-field-label-v58',lang==='zh'?'成果':'OUTCOME'),element('p','',outcomeText));
+      body.append(outcome);
+    }
     const deliveryBoundary=localize([decision.deliveryBoundary,decision.deliveryBoundary_zh]);
     if(deliveryBoundary){
       const boundary=element('div','decision-delivery-boundary-v147');

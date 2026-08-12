@@ -1497,3 +1497,22 @@ test("consolidates verified DBS intervention into shared ContributionBlock", () 
   assert.doesNotMatch(app, /Evidence to strategy and system model/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+
+test("renders DBS decisions through the shared Decision card with canonical OUTCOME", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal("designDecisions" in dbs, false);
+  assert.equal(dbs.decisionNarrative.primaryDecisions.length, 3);
+  dbs.decisionNarrative.primaryDecisions.forEach(decision => {
+    assert.ok(decision.whatIDecided);
+    assert.ok(decision.whyThisChoice);
+    assert.ok(decision.outcome);
+    assert.equal("effectOrResult" in decision, false);
+    assert.equal("evidence" in decision, false);
+  });
+  assert.match(app, /lang==='zh'\?'成果':'OUTCOME'/);
+  assert.match(app, /showDecisionVisuals=p\.presentation\?\.decisionOptions\?\.showVisuals \?\? true/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
