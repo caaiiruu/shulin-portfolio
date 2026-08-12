@@ -158,7 +158,6 @@ for (const viewport of viewports) {
     ["parent-outcomes", "#voucherImpactSection"],
     ["parent-research", "[data-component-owner='ResearchEvidenceMetric']"],
     ["parent-at-a-glance", "#projectOverviewSection"],
-    ["r1592-before-after", ".before-after-evidence-v147__grid"],
     ["r1592-research-metrics", ".research-evidence-metrics"],
     ["r1592-accountability", "[data-canonical-section-id='ownership-and-evidence']"],
     ["r1592-project-navigator", "#projectSectionNav"],
@@ -195,8 +194,8 @@ for (const viewport of viewports) {
   const r1592 = await page.evaluate(() => {
     const rect = selector => document.querySelector(selector)?.getBoundingClientRect();
     const style = selector => document.querySelector(selector) ? getComputedStyle(document.querySelector(selector)) : null;
-    const overviewTitle = document.querySelector('.project-summary-v45 h3');
-    const overviewBody = document.querySelector('.project-summary-v45 p');
+    const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(node => node.offsetWidth && node.offsetHeight);
+    const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(node => node.offsetWidth && node.offsetHeight);
     const beforeItems = [...document.querySelectorAll('.before-after-evidence-v147__item')];
     const research = [...document.querySelectorAll('.research-evidence-metric')].filter(node => node.offsetWidth && node.offsetHeight);
     const outcomes = rect('#voucherImpactSection');
@@ -214,7 +213,6 @@ for (const viewport of viewports) {
       foundationRows: [...new Set(foundations.map(node => Math.round(node.getBoundingClientRect().top)))].length,
       navShared: Boolean(nav?.classList.contains('floating-navigator')) && navItems.every(node => node.classList.contains('floating-navigator__item')),
       navRadius: style('#projectSectionNav')?.borderRadius,
-      backLeft: Boolean(backIcon?.classList.contains('icon-arrow--left')),
       horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
     };
   });
@@ -225,7 +223,6 @@ for (const viewport of viewports) {
   if(viewport.width<=430&&r1592.foundationRows!==4)failures.push(`${viewport.name} reusable foundations are not one per row`);
   if(r1592.accountabilityEdges&&(r1592.accountabilityEdges.left>1||r1592.accountabilityEdges.right>1))failures.push(`${viewport.name} accountability/outcomes edges differ: ${JSON.stringify(r1592.accountabilityEdges)}`);
   if(!r1592.navShared||!r1592.navRadius||r1592.navRadius==='0px')failures.push(`${viewport.name} project navigator is not using shared FloatingNavigator visuals`);
-  if(!r1592.backLeft)failures.push(`${viewport.name} child Back is not canonical left ArrowIcon`);
   if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.2 horizontal overflow`);
   tooltipState.exclusive=false;
   if(outcomeTooltipIndexes.length>1){
@@ -268,6 +265,8 @@ for (const viewport of viewports) {
     const back=page.locator("#detailBack").first();
     await back.waitFor({state:"visible"});
     const backLabel=await back.getAttribute("aria-label");
+    const backIcon=back.locator('.icon-arrow').first();
+    if(!(await backIcon.count())||!(await backIcon.evaluate(node=>node.classList.contains('icon-arrow--left'))))failures.push(`${viewport.name} ${stage} child Back is not canonical left ArrowIcon`);
     if(!/voucher.*offer.*overview/i.test(backLabel||""))failures.push(`${viewport.name} ${stage} overview control label mismatch`);
     await back.click();
     await page.waitForURL(url=>!url.searchParams.has("stage"));
@@ -290,6 +289,7 @@ for (const viewport of viewports) {
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
       await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
+        await capture("r1592-before-after", ".before-after-evidence-v147__grid");
         const decisionGroups = page.locator(".voucher-stage-decision-list > .voucher-stage-decision-group:visible");
         const decisions = decisionGroups.locator(":scope > .voucher-r149-decision");
         if (await decisions.count() >= 2) {
