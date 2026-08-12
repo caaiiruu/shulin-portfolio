@@ -2209,7 +2209,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
 .modal-head-meta-v60 .company-name-v132,.modal-head-meta-v60 .company-context-v132{display:inline;color:inherit;font-size:inherit;line-height:inherit;letter-spacing:inherit;text-transform:none}
 .modal-head-meta-v60 .company-name-v132{color:var(--color-text-primary);font-weight:var(--sys-weight-heavy)}
 .modal-head-meta-v60 .company-context-v132{color:var(--color-text-secondary);font-weight:var(--sys-weight-bold)}
-.modal-head-meta-v60 .company-context-v132::before{margin-inline:var(--space-2)}
+.modal-head-meta-v60 .company-context-v132::before{margin-inline:var(--space-1)}
 .modal-head-v45 h2{max-width:var(--dimension-24ch);margin:0;font-size:var(--cmp-popup-page-title-size);font-weight:var(--cmp-popup-title-weight);line-height:1.03;letter-spacing:var(--dimension-neg--05em);text-wrap:balance}
 #projectOverviewSection,#projectKeyIntervention,#projectComplexitySection,#projectDecisionsSection,#projectImpactSection{scroll-margin-top:calc(var(--control-height) + var(--space-7))}
 .case-study-section{display:grid;gap:var(--project-detail-section-gap);width:min(100%,var(--case-page-max));min-width:0;margin-inline:auto;padding:var(--project-detail-section-pad-block) var(--project-detail-section-pad-inline);border:0;border-radius:0;box-shadow:none}.case-study-section--canvas{background:transparent}.case-study-section--soft{background:var(--color-surface-subtle)}.case-study-section--emphasis{background:var(--color-surface-evidence-accent)}
