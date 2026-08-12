@@ -1516,3 +1516,16 @@ test("renders DBS decisions through the shared Decision card with canonical OUTC
   assert.match(app, /showDecisionVisuals=p\.presentation\?\.decisionOptions\?\.showVisuals \?\? true/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+
+test("uses frozen recruiter-first research, validation and accountability primitives for DBS", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const research = ssot.projects.dbs.publicContent.researchScale;
+  assert.deepEqual(research.proof.map(item => typeof item.value === "object" ? item.value.en : String(item.value)), ["50+", "4", "2", "3"]);
+  assert.ok(research.proof.find(item => String(item.value) === "3").note);
+  assert.equal("claimBoundary" in research, false);
+  assert.match(app, /research-evidence-metrics recruiter-system-case__metrics/);
+  assert.match(app, /createInfoTooltip\(t\(item\.note\)/);
+  assert.match(app, /data\.componentOwner='SharedAccountability'|dataset\.componentOwner='SharedAccountability'/);
+});

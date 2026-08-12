@@ -2729,10 +2729,18 @@
     if(evidence){evidence.dataset.canonicalSectionId='evidence-to-strategy';evidence.dataset.componentOwner='EvidenceFrame'}
 
     const researchSource=projectContentRef(p,refs.researchScale);
-    const research=createRecruiterSection('',t(researchSource?.title),t(researchSource?.claimBoundary));
-    research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='MetricStrip';
-    const metrics=element('dl','structured-evidence-v223__metrics recruiter-system-case__metrics');
-    list(researchSource?.proof).forEach(item=>{const metric=element('div','structured-evidence-v223__metric');metric.append(element('dt','',t(item.label)),element('dd','',t(item.value)||String(item.value||'')));metrics.append(metric)});
+    const research=createRecruiterSection('',t(researchSource?.title));
+    research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='ResearchEvidenceMetric';
+    const metrics=element('div','research-evidence-metrics recruiter-system-case__metrics');
+    list(researchSource?.proof).forEach(item=>{
+      const metric=element('article','research-evidence-metric');
+      const label=element('span','research-evidence-metric__label');
+      if(item.note){
+        const tip=createInfoTooltip(t(item.note),lang==='zh'?'查看研究證據':'View research evidence');
+        appendInlineEndTooltip(label,t(item.label),tip);
+      }else safeText(label,t(item.label));
+      metric.append(element('strong','',t(item.value)||String(item.value||'')),label);metrics.append(metric);
+    });
     research.append(metrics);
 
     const decisions=createRecruiterSection('',lang==='zh'?'設計決策':'Design decisions');
@@ -2740,7 +2748,7 @@
     const decisionListNode=doc.getElementById('projectDecisions');if(decisionListNode)decisions.append(decisionListNode);
 
     const validatedSource=projectContentRef(p,refs.validated);
-    const validated=createRecruiterSection('',lang==='zh'?'驗證與上線':'Validated and shipped',t(validatedSource?.publicSummary));
+    const validated=createRecruiterSection('',lang==='zh'?'驗證與上線':'Validated and shipped');
     validated.id='systemCaseImpactSection';validated.dataset.projectNavTarget='impact';validated.dataset.canonicalSectionId='validated-outcomes';
     const validatedRows=element('div','voucher-r149-rows');
     list(validatedSource?.evidence).forEach(item=>{const article=element('article');article.append(element('span','voucher-r149-eyebrow',String(item.type||'').toUpperCase()),element('p','',t(item.content)));validatedRows.append(article)});

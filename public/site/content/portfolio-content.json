@@ -8823,13 +8823,13 @@
               "label": {
                 "en": "Co-creation workshops, plus follow-up validation",
                 "zh": "共創工作坊，另含後續驗證"
+              },
+              "note": {
+                "en": "The three-workshop figure refers specifically to co-creation workshops, not every discovery or validation session.",
+                "zh": "三場僅指共創工作坊，不代表所有探索與驗證活動的總數。"
               }
             }
-          ],
-          "claimBoundary": {
-            "en": "The three-workshop figure refers specifically to co-creation workshops, not every discovery or validation session.",
-            "zh": "三場僅指共創工作坊，不代表所有探索與驗證活動的總數。"
-          }
+          ]
         },
         "myContribution": {
           "title": {
