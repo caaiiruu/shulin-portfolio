@@ -1142,8 +1142,8 @@
   const projectNavMobileMedia=window.matchMedia('(max-width: 700px)');
   function syncProjectFloatingPrimitive(){
     const mobile=projectNavMobileMedia.matches;
-    projectSectionNav?.classList.toggle('domain-floating-nav-v52',mobile);
-    projectSectionNavLinks?.classList.toggle('domain-floating-nav-v52__rail',mobile);
+    projectSectionNav?.classList.toggle('floating-navigator',mobile);
+    projectSectionNavLinks?.classList.toggle('floating-navigator__rail',mobile);
     if(projectSectionNavToggle)projectSectionNavToggle.hidden=mobile;
   }
   syncProjectFloatingPrimitive();
@@ -1271,7 +1271,7 @@
     if(projectSectionNav.hidden)return;
     items.forEach(([key,id,en,zh])=>{
       const target=projectNavTarget(key,id);
-      const link=element('a',`pd-section-nav__link${projectNavMobileMedia.matches?' domain-floating-chip-v52':''}`,lang==='zh'?zh:en);
+      const link=element('a',`pd-section-nav__link${projectNavMobileMedia.matches?' floating-navigator__item':''}`,lang==='zh'?zh:en);
       link.href=`#${target.id||id}`;
       link.addEventListener('click',event=>{
         event.preventDefault();
