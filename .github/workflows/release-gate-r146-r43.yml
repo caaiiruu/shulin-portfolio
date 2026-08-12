@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-result.txt"
-          git diff --name-only -z -- public/site | tar --null -T - -czf "$EVIDENCE_DIR/generated-runtime.tgz"
+          git diff --diff-filter=ACMRT --name-only -z -- public/site | tar --null -T - -czf "$EVIDENCE_DIR/generated-runtime.tgz"
           git diff --name-status -- public/site | tee "$EVIDENCE_DIR/generated-runtime-files.txt"
 
       - name: Canonical validation and existing tests
