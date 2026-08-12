@@ -1483,3 +1483,17 @@ test("projects DBS through the shared recruiter-first system-case composition", 
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
   assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
 });
+
+
+test("consolidates verified DBS intervention into shared ContributionBlock", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.contentRefs.contributionIntervention, "keyInterventionMap");
+  assert.equal(dbs.presentation.visibility.coreSystemInsight, false);
+  assert.equal(dbs.presentation.visibility.evidence, false);
+  assert.match(app, /function appendContributionFlow\(section,transformation\)/);
+  assert.match(app, /appendContributionFlow\(contribution,/);
+  assert.doesNotMatch(app, /Evidence to strategy and system model/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
