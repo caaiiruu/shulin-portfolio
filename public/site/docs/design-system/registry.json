@@ -781,7 +781,7 @@
         "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
         "Project semantic pd-section-nav hooks do not own mobile shell, rail, or item presentation"
       ],
-      "exclusiveOwner": true,
+      "exclusiveOwner": false,
       "component": "FloatingNavigator",
       "renderSource": "public/site/assets/js/app.js"
     }
