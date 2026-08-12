@@ -168,6 +168,7 @@ for (const viewport of viewports) {
     ["stage-redeem", "[data-stage-card='redeem']"],
     ["stage-review", "[data-stage-card='review']"],
   ]) await capture(name, selector);
+  if (await page.locator(".project-system-change-v214__row:visible").count()) await capture("r1592-before-after", ".project-system-change-v214__row:visible");
   if (["desktop-1419", "tablet-871", "mobile-430"].includes(viewport.name)) {
     await captureCloudEdges("parent-core-system-insight-cloud", ".core-system-insight-section.case-study-cloud-emphasis");
   }
@@ -196,7 +197,7 @@ for (const viewport of viewports) {
     const style = selector => document.querySelector(selector) ? getComputedStyle(document.querySelector(selector)) : null;
     const overviewTitle = [...document.querySelectorAll('#projectOverviewSection h2,#projectOverviewSection h3')].find(node => node.offsetWidth && node.offsetHeight);
     const overviewBody = [...document.querySelectorAll('#projectOverviewSection p')].find(node => node.offsetWidth && node.offsetHeight);
-    const beforeItems = [...document.querySelectorAll('.before-after-evidence-v147__item')];
+    const beforeItems = [...document.querySelectorAll('.project-system-change-v214__state')].filter(node => node.offsetWidth && node.offsetHeight);
     const research = [...document.querySelectorAll('.research-evidence-metric')].filter(node => node.offsetWidth && node.offsetHeight);
     const outcomes = rect('#voucherImpactSection');
     const accountability = rect('[data-canonical-section-id="ownership-and-evidence"]');
@@ -289,7 +290,6 @@ for (const viewport of viewports) {
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
       await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
-        await capture("r1592-before-after", ".before-after-evidence-v147__grid");
         const decisionGroups = page.locator(".voucher-stage-decision-list > .voucher-stage-decision-group:visible");
         const decisions = decisionGroups.locator(":scope > .voucher-r149-decision");
         if (await decisions.count() >= 2) {

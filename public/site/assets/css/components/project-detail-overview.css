@@ -678,9 +678,6 @@
 .project-system-change-v214__row{display:grid;grid-template-columns:minmax(var(--dimension-18ch),.65fr) minmax(0,1fr) auto minmax(0,1fr);gap:var(--space-4);align-items:center;padding:var(--space-5) 0;border-bottom:var(--dimension-1px) solid var(--color-border)}
 .project-system-change-v214__row h4{font-size:var(--text-sm);font-weight:var(--sys-weight-bold);letter-spacing:var(--dimension-0-08em);text-transform:uppercase}
 .project-system-change-v214__state{display:grid;gap:var(--space-2);min-width:0;padding:var(--space-4);border-radius:var(--radius-md);background:var(--color-surface)}
-.project-system-change-v214__state.is-after{background:var(--color-text-primary);color:var(--color-text-inverse)}
-.project-system-change-v214__state.is-after span{color:var(--color-text-inverse-secondary)}
-.project-system-change-v214__state.is-after p{color:var(--color-text-inverse)}
 .project-system-change-v214__state p{line-height:1.45;text-wrap:pretty}
 .project-system-change-v214__arrow{color:var(--color-text-accent);font-weight:var(--sys-weight-bold)}
 @media(max-width:760px){.project-system-change-v214__row{grid-template-columns:1fr}.project-system-change-v214__arrow{justify-self:center;transform:rotate(var(--dimension-90deg))}}
