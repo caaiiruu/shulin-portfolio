@@ -8503,7 +8503,7 @@
         "visibility": {
           "problemTypes": false,
           "coreSystemInsight": true,
-          "evidence": false
+          "evidence": true
         },
         "composition": "recruiter-first-system-case",
         "contentRefs": {
@@ -8514,7 +8514,8 @@
           "validated": "publicContent.validatedOutcomes",
           "accountability": "ownershipModel",
           "contributionIntervention": "keyInterventionMap",
-          "coreSystemInsight": "publicContent.coreSystemInsight"
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "evidence": "publicContent.decisionEvidence"
         },
         "navigation": [
           {
@@ -8804,40 +8805,40 @@
       "publicContent": {
         "researchScale": {
           "title": {
-            "en": "A six-market discovery and validation programme",
+            "en": "Research scale",
             "zh": "六市場探索與驗證計畫"
           },
           "proof": [
             {
               "value": "50+",
               "label": {
-                "en": "Participants documented in the research synthesis",
-                "zh": "研究整合紀錄中的參與者"
+                "en": "Participants documented in research synthesis",
+                "zh": ""
               }
             },
             {
               "value": "4",
               "label": {
                 "en": "Operational personas",
-                "zh": "營運角色模型"
+                "zh": ""
               }
             },
             {
               "value": "2",
               "label": {
-                "en": "End-of-day and real-time journeys",
-                "zh": "日終與即時作業旅程"
+                "en": "End-of-day and real-time operating journeys",
+                "zh": ""
               }
             },
             {
               "value": "3",
               "label": {
-                "en": "Co-creation workshops, plus follow-up validation",
-                "zh": "共創工作坊，另含後續驗證"
+                "en": "Co-creation workshops, followed by further validation",
+                "zh": ""
               },
               "note": {
-                "en": "The three-workshop figure refers specifically to co-creation workshops, not every discovery or validation session.",
-                "zh": "三場僅指共創工作坊，不代表所有探索與驗證活動的總數。"
+                "en": "The figure refers specifically to co-creation workshops, followed by additional validation.",
+                "zh": ""
               }
             }
           ]
@@ -8986,6 +8987,46 @@
             "en": "RM, CRM, CCU and Operations needed the same case context, explicit handoffs and visible decision rights so exception handling could remain traceable across roles and markets.",
             "zh": ""
           },
+          "contentStatus": "user-approved-public-copy"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": ""
+          },
+          "items": [
+            {
+              "title": {
+                "en": "Separate the operating contexts",
+                "zh": ""
+              },
+              "copy": {
+                "en": "Research showed that end-of-day monitoring and real-time exception handling required fundamentally different decision paths.",
+                "zh": ""
+              }
+            },
+            {
+              "title": {
+                "en": "Model ownership across roles",
+                "zh": ""
+              },
+              "copy": {
+                "en": "Four operational personas and cross-role journey mapping exposed where context, responsibility and decisions changed hands.",
+                "zh": ""
+              }
+            },
+            {
+              "title": {
+                "en": "Validate before standardising",
+                "zh": ""
+              },
+              "copy": {
+                "en": "Three co-creation workshops and repeated prototype validation refined the operating model before broader implementation.",
+                "zh": ""
+              }
+            }
+          ],
+          "assetStatus": "approved-asset-required",
           "contentStatus": "user-approved-public-copy"
         }
       },
@@ -9417,61 +9458,61 @@
             "id": "dbs-excess-decision-01",
             "title": {
               "en": "From one exception concept to distinct end-of-day and real-time operating models",
-              "zh": "從單一例外概念，拆分為日終監控與即時處理兩套營運模型"
+              "zh": ""
             },
             "whatIDecided": {
               "en": "Separated end-of-day monitoring and real-time exception handling into two operating models, each with its own triggers, urgency, actors and evidence needs.",
-              "zh": "將日終監控與即時例外處理拆成兩套營運模型，分別定義觸發條件、急迫性、參與角色與判斷依據。"
+              "zh": ""
             },
             "whyThisChoice": {
-              "en": "End-of-day work centred on report quality, filtering and follow-up, while real-time work required immediate trigger interpretation, authority routing and customer-response decisions.",
-              "zh": "日終工作集中於報表品質、篩選與後續追蹤；即時則需要即時觸發條件判讀、權限路由與顧客-回應決策。"
+              "en": "End-of-day work centred on report quality, filtering and follow-up. Real-time work required immediate trigger interpretation, authority routing and customer-response decisions.",
+              "zh": ""
             },
-            "status": "shipped-foundation",
             "outcome": {
-              "en": "Separate cross-market journeys and ranked pain points were produced and validated for both modes.",
-              "zh": "兩種模式均建立並驗證獨立的跨市場旅程與痛點排序。"
-            }
+              "en": "Two cross-market journeys established the operating logic and priority pain points for each mode.",
+              "zh": ""
+            },
+            "status": "user-approved-public-copy"
           },
           {
             "id": "dbs-excess-decision-02",
             "title": {
-              "en": "From report-centric work to role-based exception workbenches",
-              "zh": "從以報表為中心的工作方式，到依角色分流的例外案件工作台"
+              "en": "From report-centric work to role-based exception queues",
+              "zh": ""
             },
             "whatIDecided": {
-              "en": "Structured CRM and CCU workbenches around pending cases, borrower context, attachments, decision history, actions, notifications and monitoring views.",
-              "zh": "依待處理案件、借款人脈絡、附件、決策歷史、操作、通知與監控視圖，建立 CRM 與 CCU 的角色工作台。"
+              "en": "Structured CRM and CCU workbenches around prioritised case queues, borrower and facility context, supporting documents, delegated authority, actions and decision history.",
+              "zh": ""
             },
             "whyThisChoice": {
-              "en": "The highest-ranked problems came from manual filtering, missing case metadata, fragmented approval history and limited visibility across reports.",
-              "zh": "最高排名的問題來自人工篩選、缺少案件中繼資料、分散的核准歷史紀錄與跨報表可視性不足。"
+              "en": "Manual filtering and fragmented case information forced each role to reconstruct the situation before making or escalating a decision.",
+              "zh": ""
             },
-            "status": "shipped",
             "outcome": {
-              "en": "The role-based dashboards, case views, actions, notifications and monitoring capabilities were launched.",
-              "zh": "依角色設計的儀表板、案件視圖、操作、通知與監控能力均已上線。"
-            }
+              "en": "Role-based workbenches gave teams a consistent way to review, act on and track exception cases across the operating flow.",
+              "zh": ""
+            },
+            "status": "user-approved-public-copy"
           },
           {
             "id": "dbs-excess-decision-03",
             "title": {
-              "en": "From partial departmental views to one shared decision architecture",
-              "zh": "從各部門的片段視角，到一套共享的決策架構"
+              "en": "From departmental handoffs to one traceable decision architecture",
+              "zh": ""
             },
             "whatIDecided": {
-              "en": "Created system-level and detailed cross-role flow models linking triggers, RM, CRM, CCU and Operations actions through release or abort outcomes.",
-              "zh": "建立系統層級與跨角色詳細流程模型，串接觸發條件、RM、CRM、CCU 與營運操作，涵蓋核准上線或中止等結果。"
+              "en": "Mapped one cross-role workflow connecting exception triggers, RM, CRM, CCU and Operations through review, delegated approval, refer-back, rejection and closure.",
+              "zh": ""
             },
             "whyThisChoice": {
-              "en": "Each function understood only part of the workflow, while Product and delivery teams needed a shared reference for scope, role boundaries and implementation decisions.",
-              "zh": "各職能只理解部分流程；產品團隊與交付團隊需要共同參考，對齊範圍、角色界線與實作決策。"
+              "en": "Each function saw only part of the case. Delivery teams needed one shared model for ownership, decision rights, evidence requirements and next actions.",
+              "zh": ""
             },
-            "status": "delivered-and-used-for-alignment",
             "outcome": {
-              "en": "The earlier architecture and detailed new flow were created specifically for internal Product and cross-department communication.",
-              "zh": "早期系統架構與後續詳細流程，皆用於內部產品團隊與跨部門溝通。"
-            }
+              "en": "The cross-role architecture became the shared implementation reference connecting product behaviour with operational decision ownership.",
+              "zh": ""
+            },
+            "status": "user-approved-public-copy"
           }
         ],
         "sourcePaths": [

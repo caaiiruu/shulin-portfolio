@@ -1548,3 +1548,17 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   assert.match(app, /'MY INTERVENTION'/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+
+test("orders approved DBS decisions before evidence and renders exactly four research metrics", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.decisionNarrative.primaryDecisions.length, 3);
+  assert.equal(dbs.publicContent.decisionEvidence.items.length, 3);
+  assert.deepEqual(dbs.publicContent.researchScale.proof.map(item => String(item.value)), ["50+", "4", "2", "3"]);
+  assert.equal(dbs.publicContent.researchScale.proof.some(item => String(item.value).includes("6 market")), false);
+  assert.match(app, /\[hard,contribution,insight,decisions,evidence,research,validated,accountability,related\]/);
+  assert.match(app, /dataset\.componentOwner='StructuredEvidence'/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});

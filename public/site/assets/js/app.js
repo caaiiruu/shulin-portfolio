@@ -2727,8 +2727,15 @@
 
     const evidenceSource=projectContentRef(p,refs.evidence);
     const evidence=visibility.evidence!==false&&evidenceSource
-      ?createRecruiterSection('',lang==='zh'?'策略證據':'Evidence and strategy'):null;
-    if(evidence){evidence.dataset.canonicalSectionId='evidence-to-strategy';evidence.dataset.componentOwner='EvidenceFrame'}
+      ?createRecruiterSection('',t(evidenceSource.title)):null;
+    if(evidence){
+      evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
+      const evidenceRows=element('div','voucher-r149-rows');
+      list(evidenceSource.items).forEach(item=>{
+        const article=element('article');article.append(element('h3','',t(item.title)),element('p','',t(item.copy)));evidenceRows.append(article);
+      });
+      evidence.append(evidenceRows);
+    }
 
     const researchSource=projectContentRef(p,refs.researchScale);
     const research=createRecruiterSection('',t(researchSource?.title));
@@ -2767,7 +2774,7 @@
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
-    [hard,contribution,insight,evidence,research,decisions,validated,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
+    [hard,contribution,insight,decisions,evidence,research,validated,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
