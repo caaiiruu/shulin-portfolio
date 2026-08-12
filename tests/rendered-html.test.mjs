@@ -593,8 +593,9 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.ok(voucher.programmeInitiatives);
   assert.equal(Object.keys(data.projects).length, 13);
   assert.match(app, /function renderProgrammeParent/);
-  assert.match(app, /'View solution details →'/);
-  assert.match(app, /'查看解決方案細節 →'/);
+  assert.match(app, /'View solution details'/);
+  assert.match(app, /'查看解決方案細節'/);
+  assert.match(app, /programme-stage-case__cta[^\n]*icon-arrow--right/);
   assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
   assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
   assert.match(app, /voucher-r149-decision-list voucher-stage-decision-list/);
@@ -692,7 +693,7 @@ test("keeps horizontal rails operable, visible, and singly owned", () => {
     /\.domain-project-list-v30\{grid-auto-columns:100%\}/
   ]) assert.match(rail.replace(/\s+/g," "), contract);
   assert.doesNotMatch(rail, /width:calc\(100% \+|margin-inline:calc\([^)]*\* -1\)/);
-  for (const scroller of [".floating-navigator__rail", ".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
+  for (const scroller of [".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
   assert.match(rail, /unobscured content edge/);
   assert.match(rail, /padding-block:var\(--experiment-card-state-safe-block\) var\(--space-8\)/);
   assert.match(rail, /\.domain-project-list-v30\)\{display:grid;grid-auto-flow:column;grid-auto-columns:/);
@@ -1107,16 +1108,16 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /const PROJECT_NAV_ITEMS=/);
   assert.match(app, /setAttribute\('aria-current','location'\)/);
   assert.match(app, /appendEvidenceValue\(card,value\)/);
-  assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
-  assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
+  assert.match(overview, /\.pd-section-nav:not\(\.floating-navigator\)\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(overview, /\.pd-section-nav:not\(\.floating-navigator\)\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
   assert.match(overview, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
   assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
-  assert.match(app, /classList\.toggle\('domain-floating-nav-v52',mobile\)/);
-  assert.match(app, /classList\.toggle\('domain-floating-nav-v52__rail',mobile\)/);
-  assert.match(app, /domain-floating-chip-v52/);
-  assert.match(overview, /@media\(max-width:700px\)\{\.pd-section-nav\.domain-floating-nav-v52[^}]*\}/);
+  assert.match(app, /classList\.toggle\('floating-navigator',mobile\)/);
+  assert.match(app, /classList\.toggle\('floating-navigator__rail',mobile\)/);
+  assert.match(app, /floating-navigator__item/);
+  assert.match(overview, /@media\(max-width:700px\)\{\.pd-section-nav\.floating-navigator[^}]*\}/);
   assert.doesNotMatch(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex[^}]*\}/);
   for (const page of ["index.html", "work.html", "profile.html", "experiments.html"]) assert.doesNotMatch(read(page), /[←→⌄]/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
