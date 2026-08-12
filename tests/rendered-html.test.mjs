@@ -1468,3 +1468,18 @@ test("uses generic presentation visibility for public Problem Types without proj
   assert.match(app, /p\.presentation\?\.visibility\?\.problemTypes \?\? !p\.recruiterFirstPopup/);
   assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
 });
+
+
+test("projects DBS through the shared recruiter-first system-case composition", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.composition, "recruiter-first-system-case");
+  assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "impact"]);
+  assert.match(app, /function renderSystemCaseParent\(p\)/);
+  assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
+  assert.match(app, /const configured=list\(project\?\.presentation\?\.navigation\)/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+  assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
+});

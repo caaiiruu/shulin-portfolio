@@ -1257,7 +1257,12 @@
     activeProjectSectionId='';
     visibleProjectSectionId='';
     clear(projectSectionNavLinks);
-    const items=PROJECT_NAV_ITEMS.filter(([key,id])=>{
+    const project=currentDetail?.type==='project'?DATA.projects[currentDetail.key]:null;
+    const configured=list(project?.presentation?.navigation).map(item=>{
+      const labels=pair(item.label);
+      return [item.key,item.target,labels[0],labels[1]];
+    });
+    const items=(configured.length?configured:PROJECT_NAV_ITEMS).filter(([key,id])=>{
       const target=projectNavTarget(key,id);
       return target&&!target.hidden;
     });
@@ -2639,11 +2644,94 @@
     const evidence=doc.getElementById('projectEvidence');
     return evidence&&!evidence.hidden?evidence:programmeSurface();
   }
+  function createRecruiterSection(eyebrow,title,copy='',lead=''){
+    const node=element('section','voucher-r149-section case-study-section case-study-section--canvas');
+    const heading=element('header','voucher-r149-heading case-study-section__header');
+    if(eyebrow)heading.append(element('span','voucher-r149-eyebrow',eyebrow));
+    if(title)heading.append(element('h2','',title));
+    if(lead)heading.append(element('p','voucher-r149-lead',lead));
+    if(copy)heading.append(element('p','voucher-r149-intro',copy));
+    node.append(heading);
+    return node;
+  }
+  function projectContentRef(project,path){
+    return String(path||'').split('.').filter(Boolean).reduce((value,key)=>value?.[key],project);
+  }
+  function appendAccountabilityList(article,label,items){
+    article.append(element('span','voucher-r149-eyebrow',label));
+    const listNode=element('ul','project-story-v198__list');
+    list(items).forEach(item=>listNode.append(element('li','',localize(item))));
+    article.append(listNode);
+  }
+  function renderSystemCaseParent(p){
+    const surface=programmeSurface();clear(surface);surface.classList.add('recruiter-system-case');
+    const refs=p.presentation?.contentRefs||{};
+    const t=value=>localize(value);
+    doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+    const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.hidden=true;
+    const overviewContext=doc.querySelector('.project-context-v45--overview');if(overviewContext)overviewContext.hidden=true;
+    const legacyOwnership=doc.querySelector('.ownership-section-v45');if(legacyOwnership)legacyOwnership.hidden=true;
+
+    const hardSource=projectContentRef(p,refs.whatMadeThisHard)||p.hard;
+    const hard=createRecruiterSection('',lang==='zh'?'困難之處':'What made this hard',t(p.why_pair));
+    hard.id='systemCaseComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';
+    const hardRows=element('div','voucher-r149-rows');
+    list(hardSource).forEach(item=>{const article=element('article');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
+    hard.append(hardRows);
+
+    const contributionSource=projectContentRef(p,refs.contribution)||p.valueIBrought;
+    const contribution=createRecruiterSection('',lang==='zh'?'貢獻':'Contribution','',t(contributionSource?.headline));
+    contribution.classList.add('contribution-block');contribution.dataset.componentOwner='ContributionBlock';contribution.dataset.canonicalSectionId='my-contribution';
+    const contributionBody=element('div','voucher-r149-rows case-reading-wrapper');
+    const contributionArticle=element('article','contribution-block__intervention');
+    contributionArticle.append(element('p','',t(contributionSource?.supportingStatement)));
+    contributionBody.append(contributionArticle);contribution.append(contributionBody);
+
+    const insightSource=projectContentRef(p,refs.coreSystemInsight);
+    const insight=createRecruiterSection('',lang==='zh'?'核心系統洞察':'Core system insight',t(insightSource));
+    insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';
+
+    const systemModel=createRecruiterSection('',lang==='zh'?'證據到策略與系統模型':'Evidence to strategy and system model');
+    systemModel.dataset.canonicalSectionId='evidence-to-strategy';systemModel.dataset.componentOwner='StructuredEvidence';
+    const intervention=doc.getElementById('projectKeyIntervention');
+    if(intervention){intervention.hidden=false;intervention.removeAttribute('aria-hidden');systemModel.append(intervention)}
+
+    const researchSource=projectContentRef(p,refs.researchScale);
+    const research=createRecruiterSection('',t(researchSource?.title),t(researchSource?.claimBoundary));
+    research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='MetricStrip';
+    const metrics=element('dl','structured-evidence-v223__metrics recruiter-system-case__metrics');
+    list(researchSource?.proof).forEach(item=>{const metric=element('div','structured-evidence-v223__metric');metric.append(element('dt','',t(item.label)),element('dd','',t(item.value)||String(item.value||'')));metrics.append(metric)});
+    research.append(metrics);
+
+    const decisions=createRecruiterSection('',lang==='zh'?'設計決策':'Design decisions');
+    decisions.id='systemCaseDecisionsSection';decisions.dataset.projectNavTarget='decisions';decisions.dataset.canonicalSectionId='key-design-decisions';
+    const decisionListNode=doc.getElementById('projectDecisions');if(decisionListNode)decisions.append(decisionListNode);
+
+    const validatedSource=projectContentRef(p,refs.validated);
+    const validated=createRecruiterSection('',lang==='zh'?'驗證與上線':'Validated and shipped',t(validatedSource?.publicSummary));
+    validated.id='systemCaseImpactSection';validated.dataset.projectNavTarget='impact';validated.dataset.canonicalSectionId='validated-outcomes';
+    const validatedRows=element('div','voucher-r149-rows');
+    list(validatedSource?.evidence).forEach(item=>{const article=element('article');article.append(element('span','voucher-r149-eyebrow',String(item.type||'').toUpperCase()),element('p','',t(item.content)));validatedRows.append(article)});
+    validated.append(validatedRows);
+
+    const ownershipSource=projectContentRef(p,refs.accountability);
+    const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(ownershipSource?.publicSummary));
+    accountability.dataset.canonicalSectionId='ownership-and-evidence';accountability.dataset.componentOwner='SharedAccountability';
+    const accountabilityGrid=element('div','voucher-r149-accountability');
+    const owned=element('article'),shared=element('article');
+    appendAccountabilityList(owned,lang==='zh'?'我主導':'I OWNED',ownershipSource?.ledByMe);
+    appendAccountabilityList(shared,lang==='zh'?'共同決策':'SHARED DECISIONS',ownershipSource?.coDecided);
+    accountabilityGrid.append(owned,shared);accountability.append(accountabilityGrid);
+
+    const related=doc.getElementById('detailRelated');
+    if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
+    [hard,contribution,insight,systemModel,research,decisions,validated,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
+  }
   function renderProgrammeParent(key,p){
- const surface=programmeSurface();clear(surface);const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+ const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
  const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.remove();doc.querySelectorAll('.impact-evidence-v147__metrics').forEach(grid=>{const values=[...grid.querySelectorAll('strong')].map(node=>node.textContent.trim());if(values.length===2&&values.includes('18')&&values.includes('15'))grid.closest('.case-study-section,.impact-evidence-v147')?.remove()});
  const overview=doc.getElementById('projectOverviewSection');if(overview)overview.dataset.projectNavTarget='overview';
- const section=(eyebrow,title,copy='',lead='')=>{const n=element('section','voucher-r149-section case-study-section case-study-section--canvas'),h=element('header','voucher-r149-heading case-study-section__header');if(eyebrow)h.append(element('span','voucher-r149-eyebrow',eyebrow));if(title)h.append(element('h2','',title));if(lead)h.append(element('p','voucher-r149-lead',lead));if(copy)h.append(element('p','voucher-r149-intro',copy));n.append(h);return n};
+ const section=createRecruiterSection;
  const hard=section('',lang==='zh'?'困難之處':'What made this hard',t(c.whatMadeThisHard?.description),t(c.whatMadeThisHard?.title));hard.id='voucherComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';hard.querySelector('.voucher-r149-heading')?.classList.add('case-reading-wrapper');
  const contribution=section('',lang==='zh'?'貢獻':'Contribution','',t(c.contribution?.title));contribution.querySelector('.voucher-r149-heading')?.classList.add('case-reading-wrapper');contribution.classList.add('contribution-block');contribution.dataset.componentOwner='ContributionBlock';const flow=element('div','voucher-r149-flow case-reading-wrapper');list(c.contribution?.transformation).forEach((x,i)=>{const a=element('article',i===1?'contribution-block__intervention':'');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('p','',t(x.text)));flow.append(a);if(i<2){const arrow=element('span','voucher-r149-flow__arrow icon-arrow icon-arrow--right');arrow.setAttribute('aria-hidden','true');flow.append(arrow)}});const teams=element('div','voucher-r149-rows voucher-r149-rows--teams');teams.append(element('h3','',lang==='zh'?'跨團隊啟用':'Enabled across teams'));list(c.contribution?.teams).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));teams.append(r)});contribution.append(flow,teams);
  const insight=section(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(c.coreInsight?.title),t(c.coreInsight?.statement));insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';
@@ -2852,7 +2940,8 @@
     if(overviewContext)overviewContext.hidden=!isProject;
     if(currentDetail.type!=='project')doc.getElementById('projectKeyIntervention').hidden=true;
     const isProgramme=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
-    doc.getElementById('projectEvidence').hidden=!isProject||isInitiative||isStage||isProgramme;
+    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.presentation?.composition==='recruiter-first-system-case';
+    doc.getElementById('projectEvidence').hidden=!isProject||isInitiative||isStage||isProgramme||isRecruiterSystemCase;
     doc.getElementById('experimentEvidence').hidden=isProject;
     // Professional cases use contextual evidence beside the claim it proves.
     // The detached gallery remains only for experiments and initiative demos.
@@ -2866,8 +2955,8 @@
     const sharedProgrammeSurface=programmeSurface();
     const sharedRelated=doc.getElementById('detailRelated');
     if(sharedRelated&&sharedProgrammeSurface.contains(sharedRelated))projectView.append(sharedRelated);
-    sharedProgrammeSurface.hidden=!(isProgramme||isInitiative||isStage);
-    dialog?.classList.toggle('is-experiment',!isProject);dialog?.classList.toggle('is-project',isProject);dialog?.classList.toggle('is-programme',isProgramme);dialog?.classList.toggle('is-initiative',isInitiative);dialog?.classList.toggle('is-stage',isStage);
+    sharedProgrammeSurface.hidden=!(isProgramme||isRecruiterSystemCase||isInitiative||isStage);
+    dialog?.classList.toggle('is-experiment',!isProject);dialog?.classList.toggle('is-project',isProject);dialog?.classList.toggle('is-programme',isProgramme||isRecruiterSystemCase);dialog?.classList.toggle('is-initiative',isInitiative);dialog?.classList.toggle('is-stage',isStage);
     if(!isInitiative)positionProjectContext(false);
     if(isStage){
       const parent=DATA.projects[currentDetail.parentKey];clear(programmeSurface());
@@ -2926,7 +3015,7 @@
       }
       programmeSurface().append(hero,surface,navigation);
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
-    else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key])}
+    else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key]);else if(isRecruiterSystemCase)renderSystemCaseParent(DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
     if(isStage&&sharedRelated)sharedRelated.hidden=true;else if(isInitiative&&sharedRelated){sharedRelated.hidden=false;sharedProgrammeSurface.append(sharedRelated)}
     enableExpandableEvidence(projectView);

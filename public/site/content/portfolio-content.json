@@ -8502,7 +8502,52 @@
       "presentation": {
         "visibility": {
           "problemTypes": false
-        }
+        },
+        "composition": "recruiter-first-system-case",
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "coreSystemInsight": "principalPositioning.principalThesis",
+          "systemModel": "keyInterventionMap",
+          "researchScale": "publicContent.researchScale",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "validated": "publicContent.validatedOutcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "impact",
+            "target": "systemCaseImpactSection",
+            "label": {
+              "en": "Impact",
+              "zh": "影響與成果"
+            }
+          }
+        ]
       },
       "principalReadinessAudit": {
         "score": 96,
