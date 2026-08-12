@@ -74,8 +74,6 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-result.txt"
-          git status --short --untracked-files=all -- public/site | tee "$EVIDENCE_DIR/generated-runtime-files.txt"
-          tar -czf "$EVIDENCE_DIR/generated-project-pages.tgz" public/site/work/*.html
           git diff --exit-code -- public/site
           test -z "$(git status --porcelain --untracked-files=all -- public/site)"
 
