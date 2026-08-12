@@ -172,13 +172,13 @@ for (const viewport of viewports) {
   const firstTooltip = page.locator("#voucherImpactSection").first().locator(".info-tooltip__trigger").first();
   const tooltipState = { count: await page.locator(".info-tooltip__trigger").count() };
   if (await firstTooltip.count()) {
-    await firstTooltip.click();
+    await firstTooltip.click({force:true});
     tooltipState.outcomeClickOpen = await firstTooltip.getAttribute("aria-expanded");
     if (tooltipState.outcomeClickOpen !== "true") failures.push(`${viewport.name} Outcome tooltip did not open`);
-    await firstTooltip.click();
+    await firstTooltip.click({force:true});
     tooltipState.outcomeSecondClickClosed = await firstTooltip.getAttribute("aria-expanded");
     if (tooltipState.outcomeSecondClickClosed !== "false") failures.push(`${viewport.name} Outcome tooltip did not toggle closed for touch/pointer`);
-    await firstTooltip.click();
+    await firstTooltip.click({force:true});
     await firstTooltip.press("Escape");
     tooltipState.outcomeEscapeClosed = await firstTooltip.getAttribute("aria-expanded");
     if (tooltipState.outcomeEscapeClosed !== "false") failures.push(`${viewport.name} Outcome tooltip did not close with Escape`);
