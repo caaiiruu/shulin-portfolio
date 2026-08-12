@@ -240,14 +240,14 @@ for (const viewport of viewports) {
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
       await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
-        const decisions = page.locator(".voucher-r149-decision, .decision-card-v46");
+        const decisions = page.locator(".voucher-stage-decision-list .voucher-stage-decision-group > .voucher-r149-decision:visible");
         if (await decisions.count() >= 2) {
           await scrollDialogTarget(decisions.nth(0));
           const evidenceImage=decisions.nth(0).locator('img').first();
           if(await evidenceImage.count()){
             await evidenceImage.evaluate(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener('load',()=>resolve(true),{once:true});image.addEventListener('error',()=>resolve(false),{once:true})})});
-            const imageState=await evidenceImage.evaluate(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src}));
-            if(!imageState.complete||!imageState.naturalWidth)failures.push(`${viewport.name} Discover PDP evidence failed to load: ${JSON.stringify(imageState)}`);
+            const imageState=await evidenceImage.evaluate(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,src:image.currentSrc||image.src,visible:Boolean(image.offsetWidth&&image.offsetHeight)}));
+            if(!imageState.complete||!imageState.naturalWidth||!imageState.visible)failures.push(`${viewport.name} Discover PDP evidence failed to load: ${JSON.stringify(imageState)}`);
           }else failures.push(`${viewport.name} Discover PDP evidence image missing`);
           await decisions.nth(0).screenshot({ path: path.join(targetedDirectory, "discover-decision-01.png") });
           await capture("discover-pdp-evidence", ".voucher-r149-decision .evidence-frame");
