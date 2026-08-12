@@ -2780,11 +2780,13 @@
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(ownershipSource?.publicSummary));
     accountability.dataset.canonicalSectionId='ownership-and-evidence';accountability.dataset.componentOwner='SharedAccountability';
-    const accountabilityGrid=element('div','voucher-r149-accountability');
-    const owned=element('article'),shared=element('article');
-    appendAccountabilityList(owned,lang==='zh'?'我主導':'I OWNED',ownershipSource?.ledByMe);
-    appendAccountabilityList(shared,lang==='zh'?'共同決策':'SHARED DECISIONS',ownershipSource?.coDecided);
-    accountabilityGrid.append(owned,shared);accountability.append(accountabilityGrid);
+    if(p.presentation?.accountabilityMode!=='summary'){
+      const accountabilityGrid=element('div','voucher-r149-accountability');
+      const owned=element('article'),shared=element('article');
+      appendAccountabilityList(owned,lang==='zh'?'我主導':'I OWNED',ownershipSource?.ledByMe);
+      appendAccountabilityList(shared,lang==='zh'?'共同決策':'SHARED DECISIONS',ownershipSource?.coDecided);
+      accountabilityGrid.append(owned,shared);accountability.append(accountabilityGrid);
+    }
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}

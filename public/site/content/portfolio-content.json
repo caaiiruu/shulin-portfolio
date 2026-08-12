@@ -8590,7 +8590,8 @@
           "heroMetadata.domain",
           "roleAndOwnership.projectRole",
           "period"
-        ]
+        ],
+        "accountabilityMode": "summary"
       },
       "principalReadinessAudit": {
         "score": 96,
@@ -9246,7 +9247,7 @@
       },
       "ownershipModel": {
         "publicSummary": {
-          "en": "Held delegated end-to-end design ownership for the six-market operating system; workflow rules, risk decisions and implementation priorities were aligned with product, engineering and market stakeholders.",
+          "en": "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.",
           "zh": "獲授權端到端負責六市場營運系統設計；流程規則、風險決策與實作優先順序則與產品、工程及各市場利害關係人共同對齊。"
         },
         "ledByMe": [

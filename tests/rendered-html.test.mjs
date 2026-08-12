@@ -1578,3 +1578,14 @@ test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric
   assert.match(css, /\.outcome-metric--qualitative\{/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+
+test("uses the approved summary-only SharedAccountability projection for DBS", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.accountabilityMode, "summary");
+  assert.equal(dbs.ownershipModel.publicSummary.en, "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.");
+  assert.match(app, /p\.presentation\?\.accountabilityMode!=='summary'/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
