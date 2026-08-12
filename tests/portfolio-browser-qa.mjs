@@ -158,6 +158,10 @@ for (const viewport of viewports) {
     ["parent-outcomes", "#voucherImpactSection"],
     ["parent-research", "[data-component-owner='ResearchEvidenceMetric']"],
     ["parent-at-a-glance", "#projectOverviewSection"],
+    ["r1592-before-after", ".before-after-evidence-v147__grid"],
+    ["r1592-research-metrics", ".research-evidence-metrics"],
+    ["r1592-accountability", "[data-canonical-section-id='ownership-and-evidence']"],
+    ["r1592-project-navigator", "#projectSectionNav"],
     ["parent-reusable-system", "[data-canonical-section-id='reusable-system']"],
     ["stage-discover", "[data-stage-card='discover']"],
     ["stage-qualify", "[data-stage-card='qualify']"],
@@ -188,6 +192,52 @@ for (const viewport of viewports) {
   }
   r156.initialFocus = initialFocus;
   r156.tooltipState = tooltipState;
+  const r1592 = await page.evaluate(() => {
+    const rect = selector => document.querySelector(selector)?.getBoundingClientRect();
+    const style = selector => document.querySelector(selector) ? getComputedStyle(document.querySelector(selector)) : null;
+    const overviewTitle = document.querySelector('.project-summary-v45 h3');
+    const overviewBody = document.querySelector('.project-summary-v45 p');
+    const beforeItems = [...document.querySelectorAll('.before-after-evidence-v147__item')];
+    const research = [...document.querySelectorAll('.research-evidence-metric')].filter(node => node.offsetWidth && node.offsetHeight);
+    const outcomes = rect('#voucherImpactSection');
+    const accountability = rect('[data-canonical-section-id="ownership-and-evidence"]');
+    const foundations = [...document.querySelectorAll('.voucher-r149-foundation')].filter(node => node.offsetWidth && node.offsetHeight);
+    const nav = document.querySelector('#projectSectionNav');
+    const navItems = [...document.querySelectorAll('#projectSectionNavLinks a')];
+    const backIcon = document.querySelector('#detailBack .icon-arrow');
+    return {
+      overviewGap: overviewTitle && overviewBody ? overviewBody.getBoundingClientRect().top - overviewTitle.getBoundingClientRect().bottom : null,
+      beforeSurfaces: beforeItems.map(node => ({background:getComputedStyle(node).backgroundColor,radius:getComputedStyle(node).borderRadius,padding:getComputedStyle(node).padding})),
+      researchRows: [...new Set(research.map(node => Math.round(node.getBoundingClientRect().top)))].length,
+      researchValues: research.map(node => node.querySelector('strong')?.textContent.trim()),
+      accountabilityEdges: outcomes && accountability ? {left:Math.abs(outcomes.left-accountability.left),right:Math.abs(outcomes.right-accountability.right)} : null,
+      foundationRows: [...new Set(foundations.map(node => Math.round(node.getBoundingClientRect().top)))].length,
+      navShared: Boolean(nav?.classList.contains('floating-navigator')) && navItems.every(node => node.classList.contains('floating-navigator__item')),
+      navRadius: style('#projectSectionNav')?.borderRadius,
+      backLeft: Boolean(backIcon?.classList.contains('icon-arrow--left')),
+      horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
+    };
+  });
+  if(r1592.overviewGap===null||r1592.overviewGap<0||r1592.overviewGap>32)failures.push(`${viewport.name} At a glance title/body rhythm ${r1592.overviewGap}`);
+  if(r1592.beforeSurfaces.length&&r1592.beforeSurfaces.some(item=>item.background==='rgba(0, 0, 0, 0)'||item.background==='transparent'||item.radius==='0px'||item.padding==='0px'))failures.push(`${viewport.name} Before/After shared surfaces missing`);
+  if(r1592.researchValues.join('|')!=='2,857|93%|87%')failures.push(`${viewport.name} research metric projection mismatch`);
+  if(viewport.width<=430&&r1592.researchRows!==3)failures.push(`${viewport.name} research metrics are not one per row`);
+  if(viewport.width<=430&&r1592.foundationRows!==4)failures.push(`${viewport.name} reusable foundations are not one per row`);
+  if(r1592.accountabilityEdges&&(r1592.accountabilityEdges.left>1||r1592.accountabilityEdges.right>1))failures.push(`${viewport.name} accountability/outcomes edges differ: ${JSON.stringify(r1592.accountabilityEdges)}`);
+  if(!r1592.navShared||!r1592.navRadius||r1592.navRadius==='0px')failures.push(`${viewport.name} project navigator is not using shared FloatingNavigator visuals`);
+  if(!r1592.backLeft)failures.push(`${viewport.name} child Back is not canonical left ArrowIcon`);
+  if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.2 horizontal overflow`);
+  tooltipState.exclusive=false;
+  if(outcomeTooltipIndexes.length>1){
+    const first=allTooltipTriggers.nth(outcomeTooltipIndexes[0]),second=allTooltipTriggers.nth(outcomeTooltipIndexes[1]);
+    await activateTooltip(first);await activateTooltip(second);
+    const firstPanel=page.locator(`#${await first.getAttribute('aria-controls')}`);
+    const secondPanel=page.locator(`#${await second.getAttribute('aria-controls')}`);
+    tooltipState.exclusive=(await first.getAttribute('aria-expanded'))==='false'&&(await second.getAttribute('aria-expanded'))==='true'&&await firstPanel.isHidden()&&await secondPanel.isVisible();
+    if(!tooltipState.exclusive)failures.push(`${viewport.name} Tooltip exclusive-open state failed`);
+    await second.press('Escape');
+  }
+  r156.r1592 = r1592;
   const r158 = { contribution: null, research: null, cloud: null, tooltips: [], anchors: {} };
   r158.contribution = await page.locator(".voucher-r149-flow").evaluate(flow => {
     const cards=[...flow.querySelectorAll(":scope>article")].map(node=>{const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,background:getComputedStyle(node).backgroundColor,color:getComputedStyle(node).color}});
