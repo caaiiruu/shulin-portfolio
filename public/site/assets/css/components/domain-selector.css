@@ -72,7 +72,7 @@
   .domain-content-v41{grid-template-columns:1fr;gap:var(--space-6)}
   .domain-panel-v30--projects{grid-column:auto}
 }
-@media(min-width:901px){.floating-navigator{display:none}}
+@media(min-width:901px){#domainFloatingNav{display:none}}
 @media(max-width:560px){
   .domain-project-list-v30 .related-project-card__visual-v45{aspect-ratio:4/3}
   .domain-statement{font-size:clamp(var(--dimension-2-5rem),var(--dimension-11vw),var(--dimension-3-5rem))}

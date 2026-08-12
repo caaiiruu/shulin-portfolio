@@ -68,6 +68,46 @@ for (const viewport of viewports) {
   }));
   if (initialFocus.titleFocused) failures.push(`${viewport.name} popup title received initial focus`);
 
+  const navigator=page.locator("#projectSectionNav");
+  await navigator.waitFor({state:"visible"});
+  const navigatorContract=await navigator.evaluate(node=>({
+    floating:node.classList.contains("floating-navigator"),
+    toggleVisible:node.querySelector("#projectSectionNavToggle") ? !node.querySelector("#projectSectionNavToggle").hidden : false,
+    labels:[...node.querySelectorAll("a")].map(link=>link.textContent.trim()),
+  }));
+  if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
+  if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
+  if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Impact"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
+  const navigatorInteractions={clicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
+  for(const label of ["Overview","Complexity","Decisions","Impact"]){
+    const link=navigator.getByRole("link",{name:label,exact:true});
+    await link.click();
+    await page.waitForTimeout(950);
+    const current=await link.getAttribute("aria-current");
+    navigatorInteractions.clicks.push({label,current});
+    if(current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
+  }
+  const impactLink=navigator.getByRole("link",{name:"Impact",exact:true});
+  await impactLink.click();await impactLink.click();await page.waitForTimeout(950);
+  navigatorInteractions.repeated=(await impactLink.getAttribute("aria-current"))==="location";
+  if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
+  const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
+  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(950);
+  navigatorInteractions.keyboard=(await overviewLink.getAttribute("aria-current"))==="location" && !(await page.locator("#projectOverviewSection").evaluate(node=>node===document.activeElement));
+  if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
+  const scrollRootForNav=page.locator(".dialog-scroll").first();
+  await scrollRootForNav.hover();
+  await page.mouse.wheel(0,700);
+  await page.waitForTimeout(150);
+  navigatorInteractions.manualScroll=await navigator.locator('a[aria-current="location"]').count()===1;
+  if(!navigatorInteractions.manualScroll)failures.push(`${viewport.name} manual wheel did not restore one scroll-spy owner`);
+  if(viewport.width<=430){
+    const decisionsLink=navigator.getByRole("link",{name:"Decisions",exact:true});
+    const box=await decisionsLink.boundingBox();
+    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(950);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
+    if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
+  }
+
   const targetedDirectory = path.join(directory, "targeted");
   fs.mkdirSync(targetedDirectory, { recursive: true });
   const scrollDialogTarget = async target => {
@@ -135,6 +175,10 @@ for (const viewport of viewports) {
     await firstTooltip.click();
     tooltipState.outcomeClickOpen = await firstTooltip.getAttribute("aria-expanded");
     if (tooltipState.outcomeClickOpen !== "true") failures.push(`${viewport.name} Outcome tooltip did not open`);
+    await firstTooltip.click();
+    tooltipState.outcomeSecondClickClosed = await firstTooltip.getAttribute("aria-expanded");
+    if (tooltipState.outcomeSecondClickClosed !== "false") failures.push(`${viewport.name} Outcome tooltip did not toggle closed for touch/pointer`);
+    await firstTooltip.click();
     await firstTooltip.press("Escape");
     tooltipState.outcomeEscapeClosed = await firstTooltip.getAttribute("aria-expanded");
     if (tooltipState.outcomeEscapeClosed !== "false") failures.push(`${viewport.name} Outcome tooltip did not close with Escape`);
@@ -255,6 +299,7 @@ for (const viewport of viewports) {
     discoveredDestinations: destinations,
     interaction,
     r157Targeted: r156,
+    r159Navigator: { contract: navigatorContract, interactions: navigatorInteractions },
   };
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);

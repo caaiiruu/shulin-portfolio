@@ -16,7 +16,7 @@ Variants:
 
 Usage scope:
 - Homepage Domain navigation
-- Project detail mobile section navigation
+- Project detail section navigation at desktop, tablet, and mobile
 
 Shared ownership:
 - Shell owns fixed bottom positioning, safe-area inset, surface, border, radius, elevation, backdrop, visibility motion, reduced motion, and forced-colors behavior.
@@ -29,5 +29,5 @@ Consumer ownership:
 
 Forbidden:
 - A Project-only floating shell.
-- Mobile pd-section-nav shell, rail, or chip visual ownership.
-- A Jump to section dropdown or accordion on mobile.
+- Any pd-section-nav shell, rail, chip, disclosure, or breakpoint visual ownership.
+- A Jump to section dropdown or accordion at any viewport.

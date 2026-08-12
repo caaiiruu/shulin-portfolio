@@ -282,10 +282,10 @@ test("keeps global typography readable and singly owned by Foundation", () => {
   assert.doesNotMatch(foundation.match(/html\{[\s\S]*?h1\+p,h2\+p,h3\+p,h4\+p[^}]*\}/)?.[0] ?? "", /!important/);
 });
 
-test("keeps desktop navigator outside the scroll container and permits the approved mobile floating state", () => {
+test("keeps one shared FloatingNavigator outside the scroll container at every viewport", () => {
   const projectDetail = read("assets/css/components/project-detail-overview.css");
   const tokens = read("assets/css/tokens.css");
-  assert.match(projectDetail, /\.pd-section-nav:not\(\.floating-navigator\)\{position:absolute/);
+  assert.doesNotMatch(projectDetail, /\.pd-section-nav:not\(\.floating-navigator\)/);
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
     const scrollStart = html.indexOf('<div class="dialog-scroll">');
@@ -1108,17 +1108,15 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /const PROJECT_NAV_ITEMS=/);
   assert.match(app, /setAttribute\('aria-current','location'\)/);
   assert.match(app, /appendEvidenceValue\(card,value\)/);
-  assert.match(overview, /\.pd-section-nav:not\(\.floating-navigator\)\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
-  assert.match(overview, /\.pd-section-nav:not\(\.floating-navigator\)\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
+  assert.doesNotMatch(overview, /\.pd-section-nav:not\(\.floating-navigator\)/);
   assert.match(overview, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
   assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
   assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
-  assert.match(app, /classList\.toggle\('floating-navigator',mobile\)/);
-  assert.match(app, /classList\.toggle\('floating-navigator__rail',mobile\)/);
+  assert.match(app, /classList\.add\('floating-navigator'\)/);
+  assert.match(app, /classList\.add\('floating-navigator__rail'\)/);
   assert.match(app, /floating-navigator__item/);
-  assert.match(overview, /@media\(max-width:700px\)\{\.pd-section-nav\.floating-navigator[^}]*\}/);
-  assert.doesNotMatch(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex[^}]*\}/);
+  assert.doesNotMatch(overview, /\.pd-section-nav__toggle\{display:flex/);
   for (const page of ["index.html", "work.html", "profile.html", "experiments.html"]) assert.doesNotMatch(read(page), /[←→⌄]/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
   assert.match(overview, /\.recruiter-proof-item-v46__metric-value\{[^}]*font-size:var\(--cmp-popup-outcome-metric-size\)/);

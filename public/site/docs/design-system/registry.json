@@ -311,9 +311,9 @@
         "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
         "Until both public derivatives exist, the validation-path media slots use clearly labelled non-evidentiary placeholders and never expose private source boards, fabricated product proof or conversion metrics",
         "Professional cases with at least two available chapters expose one compact, content-width, bottom-floating four-destination anchor navigator as a direct dialog child outside the transformed scroll container; it remains stationary throughout the popup and never uses tab semantics or hides content panels",
-        "Mobile project navigation reuses the canonical Domain floating chip rail shell; ProjectDetailOverview owns only section labels, active state and anchor navigation",
-        "Every navigator destination is calculated from the dialog scroll root after the mobile disclosure closes, with the sticky control inset applied exactly once",
-        "Navigator active state, keyboard focus and visible section are separate runtime states: the latest cancellable click transaction owns active state until its target is aligned and focused, while manual scrolling cancels the transaction and restores scroll-spy",
+        "Project navigation at desktop, tablet, and mobile reuses the canonical Domain FloatingNavigator shell; ProjectDetailOverview owns only section labels, active state, and anchor navigation.",
+        "Every navigator destination is calculated from the dialog scroll root with the sticky control inset applied exactly once.",
+        "Navigator active state and visible section share one runtime owner: the latest cancellable click transaction owns active state until alignment, manual scrolling restores scroll-spy, and section headings never receive programmatic visible focus.",
         "Outcome cards promote verified leading values through the shared popup metric token while preserving evidence tier, attribution and measurement boundaries",
         "Structured case evidence uses one claim-led intro, semantic metric pairs, capability-group cards and a subtle public boundary; internal completeness notes, authoring reasons and publication instructions never enter the rendered page",
         "Verified projects pair At a glance and one Key Intervention Map inside the same governed overview container, with matched card treatment and balanced height; Before, Key intervention and After stay in DOM order without a heading above the visual, while the semantic section heading sits directly above the supporting copy below",
@@ -770,7 +770,7 @@
       ],
       "usageScope": [
         "Homepage Domain navigation",
-        "Project detail mobile section navigation"
+        "Project detail section navigation at desktop, tablet, and mobile"
       ],
       "variants": [
         "Domain",
@@ -779,7 +779,7 @@
       "interactionContract": [
         "One Shell, Rail, and Item primitive owns fixed positioning, safe-area offset, surface, radius, elevation, motion, horizontal overflow, focus-visible, reduced motion, and forced colors",
         "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
-        "Project semantic pd-section-nav hooks do not own mobile shell, rail, or item presentation"
+        "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior"
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",

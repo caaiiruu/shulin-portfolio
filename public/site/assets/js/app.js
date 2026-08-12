@@ -87,7 +87,7 @@
     const timeline=infoPair(info.timeline);
     const why=pair(p.whyItMattered);
     const impact=pair(p.businessImpact);
-    const company=typeof p.company==='string'?[p.company,p.company]:pair(p.company);
+    const company=(typeof p.company==='string'?[p.company,p.company]:pair(p.company)).map(value=>String(value||'').trim());
     const domain=pair(p.domain);
     const problemTypes=p.problemTypes?.en||[];const problemTypesZh=p.problemTypes?.zh||[];
     const decisions=decisionList(p.decisionNarrative?.primaryDecisions).map(item=>{
@@ -773,7 +773,7 @@
   }
   function projectEyebrow(project){
     if(!project)return '';
-    return [localize(project.company),localize(project.domain)].filter(Boolean).join(' · ');
+    return [localize(project.company),localize(project.domain)].map(value=>String(value||'').trim()).filter(Boolean).join(' · ');
   }
   function enhanceCompanyNames(root=doc){
     root.querySelectorAll('.project-context').forEach(node=>{
@@ -1139,15 +1139,12 @@
   const projectSectionNav=doc.getElementById('projectSectionNav');
   const projectSectionNavToggle=doc.getElementById('projectSectionNavToggle');
   const projectSectionNavLinks=doc.getElementById('projectSectionNavLinks');
-  const projectNavMobileMedia=window.matchMedia('(max-width: 700px)');
   function syncProjectFloatingPrimitive(){
-    const mobile=projectNavMobileMedia.matches;
-    projectSectionNav?.classList.toggle('floating-navigator',mobile);
-    projectSectionNavLinks?.classList.toggle('floating-navigator__rail',mobile);
-    if(projectSectionNavToggle)projectSectionNavToggle.hidden=mobile;
+    projectSectionNav?.classList.add('floating-navigator');
+    projectSectionNavLinks?.classList.add('floating-navigator__rail');
+    if(projectSectionNavToggle)projectSectionNavToggle.hidden=true;
   }
   syncProjectFloatingPrimitive();
-  projectNavMobileMedia.addEventListener?.('change',syncProjectFloatingPrimitive);
   let suppressHistorySync=false;
   let projectSectionNavigation=null;
   let projectSectionNavigationId=0;
@@ -1216,7 +1213,6 @@
     const finish=()=>{
       if(projectSectionNavigation!==transaction)return;
       alignProjectSectionTarget(target);
-      target.focus?.({preventScroll:true});
       visibleProjectSectionId=target.id;
       setActiveProjectSection(target.id);
       projectSectionNavigation=null;
@@ -1267,11 +1263,11 @@
     projectSectionNav.hidden=currentDetail?.type!=='project'||items.length<2;
     closeProjectSectionMenu();
     syncProjectFloatingPrimitive();
-    projectSectionNav.classList.toggle('is-visible',!projectSectionNav.hidden&&projectNavMobileMedia.matches);
+    projectSectionNav.classList.toggle('is-visible',!projectSectionNav.hidden);
     if(projectSectionNav.hidden)return;
     items.forEach(([key,id,en,zh])=>{
       const target=projectNavTarget(key,id);
-      const link=element('a',`pd-section-nav__link${projectNavMobileMedia.matches?' floating-navigator__item':''}`,lang==='zh'?zh:en);
+      const link=element('a','pd-section-nav__link floating-navigator__item',lang==='zh'?zh:en);
       link.href=`#${target.id||id}`;
       link.addEventListener('click',event=>{
         event.preventDefault();
@@ -1354,7 +1350,6 @@
       renderDetail();
       if(dialogScrollRoot)dialogScrollRoot.scrollTo({top:0,left:0,behavior:'auto'});
       updateCloseControl();
-      dialogTitle.focus({preventScroll:true});
       safeText(dialogStatus,ui("returned-to-previous-details-1df10e00"));
       const url=new URL(window.location.href);
       if(!suppressHistorySync&&currentDetail.type==='project'){
@@ -1797,8 +1792,7 @@
     if(groups.length){
       const grid=element('div','structured-evidence-v223__groups');
       groups.forEach(group=>{
-        const card=element('article','structured-evidence-v223__group');
-        card.appendChild(element('h4','',localize(group.label)));
+        const card=element('article','structured-evidence-v223__group');        card.appendChild(element('h4','',localize(group.label)));
         appendTextList(card,group.coverage,'structured-evidence-v223__list');
         grid.appendChild(card);
       });
@@ -2618,13 +2612,13 @@
     const text=sourceText.replace(/[A-Za-z]/,character=>character.toUpperCase());
     const root=element('span','info-tooltip');
     const id=`info-tooltip-${Math.random().toString(36).slice(2)}`;
-    const trigger=element('button','info-tooltip__trigger','ⓘ');
+    const trigger=element('button','info-tooltip__trigger','i');
     trigger.type='button';trigger.setAttribute('aria-label',label);trigger.setAttribute('aria-controls',id);trigger.setAttribute('aria-expanded','false');
     const panel=element('span','info-tooltip__panel',text);panel.id=id;panel.setAttribute('role','tooltip');panel.hidden=true;
     const position=()=>{if(panel.hidden)return;const r=trigger.getBoundingClientRect(),gap=8,gutter=Math.max(16,parseFloat(getComputedStyle(doc.documentElement).getPropertyValue('--page-gutter'))||16),width=panel.offsetWidth,height=panel.offsetHeight;let left=Math.min(Math.max(r.left+r.width/2-width/2,gutter),window.innerWidth-gutter-width);let top=r.top-gap-height;if(top<gutter)top=Math.min(window.innerHeight-gutter-height,r.bottom+gap);panel.style.left=`${Math.round(left)}px`;panel.style.top=`${Math.round(Math.max(gutter,top))}px`};
     const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false');if(panel.parentElement!==root)root.append(panel)};
     const open=()=>{const host=root.closest('dialog')||doc.body;if(panel.parentElement!==host)host.append(panel);panel.hidden=false;trigger.setAttribute('aria-expanded','true');requestAnimationFrame(position)};
-    trigger.addEventListener('click',event=>{event.stopPropagation();open()});
+    trigger.addEventListener('click',event=>{event.stopPropagation();if(panel.hidden)open();else close()});
     if(window.matchMedia('(hover:hover)').matches){root.addEventListener('mouseenter',open);root.addEventListener('mouseleave',close)}
     trigger.addEventListener('focus',open);trigger.addEventListener('blur',()=>setTimeout(()=>{if(!root.contains(doc.activeElement))close()},0));
     trigger.addEventListener('keydown',event=>{if(event.key==='Escape'){close();trigger.focus()}});
@@ -2671,7 +2665,7 @@
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';
  reusable.dataset.canonicalSectionId='reusable-system';reusable.dataset.contentBlockIds='recruiterFirstPopup.reusableSystem|publicContent.systemFoundations|publicContent.futureVision';
  outcomes.dataset.canonicalSectionId='validated-outcomes';outcomes.dataset.contentBlockIds='recruiterFirstPopup.outcomes|impactEvidence';
- const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro)),ag=element('div','voucher-r149-accountability');account.classList.add('case-reading-wrapper');account.prepend(element('hr','case-section-divider'));[c.accountability?.owned,c.accountability?.shared].forEach(x=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('h3','',t(x.title)),element('p','',t(x.text)));ag.append(a)});account.append(ag);account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
+ const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro)),ag=element('div','voucher-r149-accountability');account.classList.add('case-reading-wrapper');[c.accountability?.owned,c.accountability?.shared].forEach(x=>{const a=element('article');a.append(element('span','voucher-r149-eyebrow',t(x.label)),element('h3','',t(x.title)),element('p','',t(x.text)));ag.append(a)});account.append(ag);account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
  const related=doc.getElementById('detailRelated');if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring';related.dataset.contentBlockIds='relatedProjects'}[hard,contribution,insight,journey,programmeResearchSection,reusable,outcomes,account,related].filter(Boolean).forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence','continue-exploring'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
 }
   function renderInitiative(parentKey,initiativeKey){
