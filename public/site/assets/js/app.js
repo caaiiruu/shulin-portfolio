@@ -2619,9 +2619,7 @@
     const close=()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false');if(panel.parentElement!==root)root.append(panel)};
     const open=()=>{const host=root.closest('dialog')||doc.body;if(panel.parentElement!==host)host.append(panel);panel.hidden=false;trigger.setAttribute('aria-expanded','true');requestAnimationFrame(position)};
     trigger.addEventListener('click',event=>{event.stopPropagation();if(panel.hidden)open();else close()});
-    if(window.matchMedia('(hover:hover)').matches){root.addEventListener('mouseenter',open);root.addEventListener('mouseleave',close)}
-    trigger.addEventListener('focus',open);trigger.addEventListener('blur',()=>setTimeout(()=>{if(!root.contains(doc.activeElement))close()},0));
-    trigger.addEventListener('keydown',event=>{if(event.key==='Escape'){close();trigger.focus()}});
+    trigger.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close();trigger.focus()}});
     window.addEventListener('resize',position,{passive:true});dialogScrollRoot?.addEventListener('scroll',position,{passive:true});
     doc.addEventListener('click',event=>{if(!root.contains(event.target))close()});
     root.append(trigger,panel);return root;
