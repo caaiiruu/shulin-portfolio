@@ -118,6 +118,8 @@ for (const viewport of viewports) {
     if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
   }
 
+  await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
+
   const targetedDirectory = path.join(directory, "targeted");
   fs.mkdirSync(targetedDirectory, { recursive: true });
   const scrollDialogTarget = async target => {
