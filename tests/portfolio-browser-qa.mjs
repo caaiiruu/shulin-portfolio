@@ -69,6 +69,15 @@ for (const viewport of viewports) {
   }));
   if (initialFocus.titleFocused) failures.push(`${viewport.name} popup title received initial focus`);
 
+  await page.goto(`${baseUrl}/site/work/dbs`, { waitUntil: "networkidle" });
+  const firstOpenDecisionCount=await page.locator("#projectDecisions .decision-card-v46:visible").count();
+  if(firstOpenDecisionCount!==3)failures.push(`${viewport.name} DBS first-open decisions missing: ${firstOpenDecisionCount}`);
+  await page.locator("#detailClose").click();
+  await page.waitForFunction(()=>!document.querySelector("#detailDialog")?.open);
+  await page.goto(`${baseUrl}/site/work/dbs`, { waitUntil: "networkidle" });
+  const secondOpenDecisionCount=await page.locator("#projectDecisions .decision-card-v46:visible").count();
+  if(secondOpenDecisionCount!==3)failures.push(`${viewport.name} DBS second-open decisions missing: ${secondOpenDecisionCount}`);
+
   const navigator=page.locator("#projectSectionNav");
   await navigator.waitFor({state:"visible"});
   const navigatorContract=await navigator.evaluate(node=>({
@@ -78,9 +87,9 @@ for (const viewport of viewports) {
   }));
   if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
-  if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Impact"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
+  if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
   const navigatorInteractions={clicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
-  for(const label of ["Overview","Complexity","Decisions","Impact"]){
+  for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"]){
     const link=navigator.getByRole("link",{name:label,exact:true});
     await link.click();
     await page.waitForTimeout(950);
@@ -88,9 +97,9 @@ for (const viewport of viewports) {
     navigatorInteractions.clicks.push({label,current});
     if(current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
   }
-  const impactLink=navigator.getByRole("link",{name:"Impact",exact:true});
-  await impactLink.click();await impactLink.click();await page.waitForTimeout(950);
-  navigatorInteractions.repeated=(await impactLink.getAttribute("aria-current"))==="location";
+  const outcomesLink=navigator.getByRole("link",{name:"Outcomes",exact:true});
+  await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(950);
+  navigatorInteractions.repeated=(await outcomesLink.getAttribute("aria-current"))==="location";
   if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
   const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
   await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(950);
