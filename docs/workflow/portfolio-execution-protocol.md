@@ -23,6 +23,15 @@ This protocol is mandatory for all future portfolio Work Orders.
    - P0 = 0
    - P1 = 0
 
+## Generated runtime ownership
+
+- Git owns canonical content, asset mappings, source CSS, source JS, generation scripts, and the four HTML templates in `site-source/templates/`.
+- The build owns `public/site/index.html`, `work.html`, `experiments.html`, `profile.html`, `public/site/work/*.html`, and fingerprinted `production.*.css` / `production.*.js` bundles.
+- Vercel consumes those generated files only after `scripts/build-production-assets.mjs` has produced them from canonical source.
+- Generated runtime files are deployment output, never a second content or component source of truth.
+- Future Work migrations edit and commit canonical source only. Generated bundles must never be downloaded, manually edited, or transferred through Chat/GitHub connector blobs.
+- A valid build must preserve SSOT, source CSS/JS, registry, mappings, and templates; generate the same path, byte-size, hash, and HTML-reference manifest twice from identical source; and resolve every referenced runtime asset.
+
 Required state progression:
 
 `IMPLEMENTED → ENGINEERING QA PASS → READY FOR HUMAN VISUAL REVIEW → HUMAN VISUAL QA PASS / FREEZE`

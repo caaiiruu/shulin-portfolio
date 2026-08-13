@@ -5,6 +5,7 @@ import postcss from "postcss";
 import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "./visual-asset-governance.mjs";
 
 const root = path.resolve("public/site");
+const templateRoot = path.resolve("site-source/templates");
 const pages = ["index.html", "work.html", "experiments.html", "profile.html"];
 const cssSources = [
   "assets/css/tokens.css",
@@ -179,6 +180,12 @@ function replaceProductionAssets(html, cssFile, jsFile) {
     .replace('<h2 class="heading-2" data-en="What are you trying to solve?"', '<h2 data-en="What are you trying to solve?"')
     .replace("</head>", `<link rel="stylesheet" href="/site/assets/css/${cssFile}"></head>`)
     .replace("</body>", `<script defer src="/site/assets/js/${jsFile}"></script></body>`);
+}
+
+for (const page of pages) {
+  const template = path.join(templateRoot, page);
+  if (!fs.existsSync(template)) throw new Error(`Canonical HTML template is missing: ${template}`);
+  fs.copyFileSync(template, path.join(root, page));
 }
 
 for (const directory of ["assets/css", "assets/js"]) {

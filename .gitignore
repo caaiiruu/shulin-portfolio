@@ -43,3 +43,13 @@ next-env.d.ts
 /public/site/qa/node_modules/
 /public/site/qa/report/
 /public/site/qa/test-results/
+
+# Deterministic deployment runtime. Canonical HTML templates live in
+# /site-source/templates; source CSS/JS/content remain tracked under public/site.
+/public/site/index.html
+/public/site/work.html
+/public/site/experiments.html
+/public/site/profile.html
+/public/site/work/*.html
+/public/site/assets/css/production.*.css
+/public/site/assets/js/production.*.js
