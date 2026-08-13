@@ -1163,8 +1163,10 @@
   ];
   function projectNavTarget(key,fallbackId){
     const configuredTarget=fallbackId?doc.getElementById(fallbackId):null;
-    if(configuredTarget)return configuredTarget;
-    return doc.querySelector(`[data-project-nav-target="${key}"]`);
+    const semanticTargets=[...doc.querySelectorAll(`[data-project-nav-target="${key}"]`)];
+    const isRendered=node=>Boolean(node&&!node.hidden&&node.getClientRects().length);
+    if(isRendered(configuredTarget))return configuredTarget;
+    return semanticTargets.find(isRendered)||configuredTarget||semanticTargets[0]||null;
   }
   function closeProjectSectionMenu(){
     projectSectionNav?.classList.remove('is-open');
