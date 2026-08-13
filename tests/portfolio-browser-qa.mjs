@@ -65,9 +65,11 @@ for (const viewport of viewports) {
   assert(anchor.hash==="#domains"&&anchor.selected.length===1,"Supported Domain anchor must select exactly one Domain");
 
   await page.goto(`${baseUrl}/site/work.html`,{waitUntil:"networkidle"});
-  const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),rect=frame?.getBoundingClientRect();return{projectId,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
+  const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),rect=frame?.getBoundingClientRect();return{projectId,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,mediaAspect:frame?.dataset.mediaAspect,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
   const dbs=projectCardGeometry.find(x=>x.projectId==="dbs");assert(Math.abs(dbs.frameRatio-20/9)<.02,"DBS ProjectCard must use 2400x1080 ratio");
-  projectCardGeometry.filter(x=>x.naturalRatio).forEach(x=>{assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`);assert(x.objectFit==="contain"&&x.overflow==="hidden",`${x.projectId} crop/overflow contract failed`)});
+  projectCardGeometry.filter(x=>x.projectId!=="payment"&&x.naturalRatio).forEach(x=>assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`));
+  const payment=projectCardGeometry.find(x=>x.projectId==="payment");assert(Math.abs(payment.frameRatio-16/10)<.02&&payment.mediaAspect==="16 / 10","Placeholder ProjectCard must retain semantic wide ratio");
+  projectCardGeometry.forEach(x=>assert(x.objectFit==="contain"&&x.overflow==="hidden",`${x.projectId} crop/overflow contract failed`));
   await page.locator('[data-project="dbs"]').first().screenshot({path:path.join(directory,"project-card-dbs-ratio.png")});
   report.homepageEntry={fresh,refresh,internal,back,anchor};report.projectCardGeometry=projectCardGeometry;
 
