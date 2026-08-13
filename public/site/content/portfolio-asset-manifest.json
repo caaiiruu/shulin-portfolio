@@ -26,7 +26,8 @@
       "width": 1536,
       "height": 691,
       "alt": "Voucher and Offer Vision shown across three complete mobile product screens.",
-      "alt_zh": "Voucher 與 Offer Vision 在三支完整手機產品畫面中的呈現。"
+      "alt_zh": "Voucher 與 Offer Vision 在三支完整手機產品畫面中的呈現。",
+      "projectCardFocalPosition": "center center"
     },
     "voucher-proof-sec-transformation-public-v1": {
       "id": "voucher-proof-sec-transformation-public-v1",
@@ -199,7 +200,8 @@
       "width": 2400,
       "height": 1080,
       "alt": "Two DBS enterprise credit operations workbench views.",
-      "alt_zh": "兩個 DBS 企業信用營運工作台畫面。"
+      "alt_zh": "兩個 DBS 企業信用營運工作台畫面。",
+      "projectCardFocalPosition": "center center"
     },
     "booking-hero-connected-booking-public-v1": {
       "id": "booking-hero-connected-booking-public-v1",

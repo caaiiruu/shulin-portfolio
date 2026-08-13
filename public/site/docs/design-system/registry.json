@@ -454,7 +454,10 @@
         "work-card-hover-shadow",
         "work-card-hover-transform",
         "project-card-company-title-gap",
-        "project-card-media-ratio"
+        "project-card-media-ratio",
+        "project-card-mobile-panoramic-media-ratio",
+        "project-card-media-focal-position",
+        "project-card-company-color"
       ],
       "variants": [
         "Work featured card",
@@ -482,13 +485,16 @@
         "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop.",
         "Compact company metadata and title use the shared project-card-company-title-gap token.",
         "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
-        "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain."
+        "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain.",
+        "Assets with a numeric source ratio of 2:1 or wider are classified generically as panoramic: desktop/tablet preserve the canonical source ratio; compact viewports use the shared 5:3 readability frame with cover and manifest-owned focal position.",
+        "Company metadata uses the neutral project-card-company-color token and the company-to-title relationship is owned once by project-card-company-title-gap = space-5 (24px)."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
         "contentOwner": "content/portfolio-asset-manifest.json",
         "runtimeOwner": "assets/js/app.js#resolveProjectAsset + projectAssetRatio",
-        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card__visual-v45"
+        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card__visual-v45",
+        "focalPositionOwner": "content/portfolio-asset-manifest.json#projectCardFocalPosition"
       },
       "interactionContract": [
         "Company and context metadata use neutral tokens and one canonical company-to-title rhythm.",

@@ -244,15 +244,15 @@
       if(!publicPath||!publicPath.startsWith('/site/'))throw new Error(`Asset governance: invalid public production path for ${assetId}`);
       const version=String(record.sha256||record.blobSha||'').slice(0,16);
       const src=version?`${publicPath}?v=${version}`:publicPath;
-      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null};
+      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
     }
     if(record.assetStatus==='awaiting-user-asset'&&record.placeholderFallbackAssetId){
       const fallback=ASSET_MANIFEST[record.placeholderFallbackAssetId];
       if(!fallback?.publicPath?.startsWith('/site/'))throw new Error(`Asset governance: invalid placeholder fallback for ${assetId}`);
-      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。'],width:Number(fallback.width)||null,height:Number(fallback.height)||null,aspectRatio:fallback.aspectRatio||null};
+      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。'],width:Number(fallback.width)||null,height:Number(fallback.height)||null,aspectRatio:fallback.aspectRatio||null,projectCardFocalPosition:fallback.projectCardFocalPosition||null};
     }
     if(record.assetStatus==='placeholder'&&record.publicPath?.startsWith('/site/')){
-      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。'],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null};
+      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。'],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
     }
     throw new Error(`Asset governance: public runtime asset has no real file or placeholder: ${assetId}`);
   }
@@ -264,6 +264,13 @@
     return {wide:'16 / 10',portrait:'3 / 4',square:'1 / 1'}[asset?.aspectRatio]||null;
   }
   window.projectAssetRatio=projectAssetRatio;
+  function projectAssetPresentation(asset){
+    const width=Number(asset?.width)||0;
+    const height=Number(asset?.height)||0;
+    const ratio=width>0&&height>0?width/height:({wide:1.6,portrait:.75,square:1}[asset?.aspectRatio]||0);
+    return {format:ratio>=2?'panoramic':'standard',focalPosition:asset?.projectCardFocalPosition||'center center'};
+  }
+  window.projectAssetPresentation=projectAssetPresentation;
   function canonicalProjectId(projectId){
     const alias=DATA.projectAliasRegistry?.[projectId];
     return alias?.routePolicy==='permanent-redirect'&&DATA.projects[alias.canonicalProjectId]
@@ -963,6 +970,9 @@
       if(coverAsset.width&&coverAsset.height){image.width=coverAsset.width;image.height=coverAsset.height}
       const mediaRatio=projectAssetRatio(coverAsset);
       if(mediaRatio){visual.style.setProperty('--project-card-media-ratio',mediaRatio);visual.dataset.mediaAspect=mediaRatio}
+      const mediaPresentation=projectAssetPresentation(coverAsset);
+      visual.dataset.mediaFormat=mediaPresentation.format;
+      visual.style.setProperty('--project-card-media-focal-position',mediaPresentation.focalPosition);
       visual.dataset.assetStatus=image.dataset.assetStatus;
       visual.append(image);
     }else{

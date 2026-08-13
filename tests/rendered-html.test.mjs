@@ -1596,3 +1596,19 @@ test("uses the approved structured SharedAccountability projection for DBS", () 
   assert.match(app, /if\(accountabilityPresentation\)appendSharedAccountability\(accountability,accountabilityPresentation,\{translate:t\}\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
+
+test("R161.1 owns panoramic mobile readability and metadata hierarchy in shared ProjectCard",()=>{
+  const app=read("assets/js/app.js");
+  const home=read("assets/js/home.js");
+  const css=read("assets/css/components/project-card.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.match(app,/ratio>=2\?'panoramic':'standard'/);
+  assert.match(app,/projectCardFocalPosition/);
+  assert.match(home,/window\.projectAssetPresentation\?\.\(asset\)/);
+  assert.match(css,/--project-card-mobile-panoramic-media-ratio:5\/3/);
+  assert.match(css,/--project-card-company-color:var\(--color-text-secondary\)/);
+  assert.match(css,/--project-card-company-title-gap:var\(--space-5\)/);
+  assert.match(css,/@media\(max-width:560px\)[\s\S]*data-media-format="panoramic"[^}]*var\(--project-card-mobile-panoramic-media-ratio\)/);
+  assert.doesNotMatch(css,/dbs|voucher/i);
+  assert.equal(manifest.items["dbs-project-card-primary-01"].projectCardFocalPosition,"center center");
+});

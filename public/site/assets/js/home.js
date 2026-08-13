@@ -74,6 +74,8 @@ function createProjectVisual(key){
   if(asset.width&&asset.height){image.width=asset.width;image.height=asset.height}
   const ratio=window.projectAssetRatio?.(asset);
   if(ratio){visual.style.setProperty('--project-card-media-ratio',ratio);visual.dataset.mediaAspect=ratio}
+  const presentation=window.projectAssetPresentation?.(asset);
+  if(presentation){visual.dataset.mediaFormat=presentation.format;visual.style.setProperty('--project-card-media-focal-position',presentation.focalPosition)}
   visual.dataset.assetStatus=image.dataset.assetStatus;visual.append(image);return visual;
  }
  visual.setAttribute('aria-hidden','true');

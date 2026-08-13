@@ -68,11 +68,15 @@ for (const viewport of viewports) {
   assert(anchor.hash==="#domains"&&anchor.selected.length===1,"Supported Domain anchor must select exactly one Domain");
 
   await page.goto(`${baseUrl}/site/work.html`,{waitUntil:"networkidle"});
-  const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),rect=frame?.getBoundingClientRect();return{projectId,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,mediaAspect:frame?.dataset.mediaAspect,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
-  const dbs=projectCardGeometry.find(x=>x.projectId==="dbs");assert(Math.abs(dbs.frameRatio-20/9)<.02,"DBS ProjectCard must use 2400x1080 ratio");
-  projectCardGeometry.filter(x=>x.projectId!=="payment"&&x.naturalRatio).forEach(x=>assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`));
-  const payment=projectCardGeometry.find(x=>x.projectId==="payment");assert(Math.abs(payment.frameRatio-16/10)<.02&&payment.mediaAspect==="16 / 10","Placeholder ProjectCard must retain semantic wide ratio");
-  projectCardGeometry.forEach(x=>assert(x.objectFit==="contain"&&x.overflow==="hidden",`${x.projectId} crop/overflow contract failed`));
+  const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),title=card?.querySelector("h2"),company=card?.querySelector(".related-project-card__company-v135"),summary=card?.querySelector(".work-card-v32__content>p"),rect=frame?.getBoundingClientRect();return{projectId,frameWidth:rect?.width,frameHeight:rect?.height,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,mediaAspect:frame?.dataset.mediaAspect,mediaFormat:frame?.dataset.mediaFormat,objectPosition:image?getComputedStyle(image).objectPosition:null,companyColor:company?getComputedStyle(company).color:null,neutralReference:summary?getComputedStyle(summary).color:null,companyTitleGap:title?parseFloat(getComputedStyle(title).marginTop):null,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
+  const dbs=projectCardGeometry.find(x=>x.projectId==="dbs"),voucherCard=projectCardGeometry.find(x=>x.projectId==="voucher");
+  const compactPanoramic=viewport.width<=560;
+  assert(Math.abs(dbs.frameRatio-(compactPanoramic?5/3:20/9))<.02,"DBS ProjectCard responsive ratio failed");
+  for(const x of [dbs,voucherCard]){assert(x.mediaFormat==="panoramic",`${x.projectId} panoramic classification failed`);assert(x.objectFit===(compactPanoramic?"cover":"contain"),`${x.projectId} responsive fit failed`)}
+  if(!compactPanoramic)projectCardGeometry.filter(x=>x.projectId!=="payment"&&x.naturalRatio).forEach(x=>assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`));
+  const payment=projectCardGeometry.find(x=>x.projectId==="payment");assert(Math.abs(payment.frameRatio-16/10)<.02&&payment.mediaAspect==="16 / 10"&&payment.mediaFormat==="standard"&&payment.objectFit==="contain","Placeholder ProjectCard semantic ratio failed");
+  projectCardGeometry.forEach(x=>{assert(x.overflow==="hidden",`${x.projectId} overflow contract failed`);assert(x.companyColor===x.neutralReference,`${x.projectId} company metadata must be neutral`);assert(x.companyTitleGap===24,`${x.projectId} company/title gap must resolve to 24px`)});
+  if(viewport.width===430)console.log(`R161.1 430 geometry ${JSON.stringify(projectCardGeometry)}`);
   await page.locator('[data-project="dbs"]').first().screenshot({path:path.join(directory,"project-card-dbs-ratio.png")});
   report.homepageEntry={fresh,refresh,internal,back,anchor};report.projectCardGeometry=projectCardGeometry;
 
