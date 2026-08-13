@@ -826,7 +826,7 @@
         "Third custom width",
         "Forced equal-height cards"
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": false
     }
   ]
 }
