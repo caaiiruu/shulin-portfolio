@@ -720,7 +720,7 @@
     {
       "component": "RecruiterFirstCaseStudy",
       "status": "Live / Current Production",
-      "renderSource": "assets/js/app.js#renderProgrammeParent",
+      "renderSource": "assets/js/app.js#createFeaturedDecisionGroup → createDecisionCard → EvidenceFrame; composed by renderProgrammeParent and renderSystemCaseParent",
       "contentOwner": "content/portfolio-content.json",
       "contentProjection": "projects.voucher.recruiterFirstPopup",
       "cssOwner": "assets/css/components/project-detail-overview.css",
@@ -758,7 +758,8 @@
         "Decision text uses the shared reading edge; child evidence uses the shared evidence edge",
         "Same-hierarchy section transitions use the shared case-section-divider reading-edge owner",
         "FeaturedDecision is one shared composition for Voucher child stages and DBS: Decision badge, readable title, four-field 2×2 grid, reading-edge text, and an optional EvidenceFrame below without empty placeholders.",
-        "SharedAccountability owns the section intro and the two-column owned/shared decision grammar for recruiter-first cases."
+        "SharedAccountability owns the section intro and the two-column owned/shared decision grammar for recruiter-first cases.",
+        "Voucher child stages and DBS recruiter-first decisions both adapt canonical SSOT data through createFeaturedDecisionGroup, which delegates decision grammar to createDecisionCard and evidence media, captions, accessibility and responsive ownership to EvidenceFrame."
       ],
       "allowedModifications": [
         "Shared variant extension"

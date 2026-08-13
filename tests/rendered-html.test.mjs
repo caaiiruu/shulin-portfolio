@@ -601,7 +601,10 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
   assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
   assert.match(app, /voucher-r149-decision-list voucher-stage-decision-list/);
-  assert.match(app, /createDecisionCard\(model,index,\{projectKey:currentDetail\.parentKey,showVisual:Boolean\(model\.evidenceAssetId\)\}\)/);
+  assert.match(app, /function createFeaturedDecisionGroup\(/);
+  assert.match(app, /createDecisionCard\(model,index,\{projectKey,showVisual:showVisual&&Boolean\(model\.evidenceAssetId\)\}\)/);
+  assert.match(app, /card\.querySelector\('\.decision-visual-v58\.evidence-frame'\)/);
+  assert.match(app, /createFeaturedDecisionGroup\(decision,index,\{projectKey:key,showVisual:showDecisionVisuals/);
   assert.match(app, /'WHAT I DECIDED'/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);

@@ -124,7 +124,20 @@ if (!app.includes("'button button--dark programme-stage-case__cta'")) errors.pus
 if (/\.programme-stage-case__cta:(?:hover|active)\{/.test(canonicalCss)) errors.push("ProjectDetailOverview: stage-case CTA must not maintain a parallel hover or active contract");
 const recruiterStageSource = app.slice(app.indexOf("if(isStage){"), app.indexOf("}else if(isInitiative)", app.indexOf("if(isStage){")));
 if (recruiterStageSource.includes("stage-focus-v148__statement") || recruiterStageSource.includes("createProgrammeSection(stageLabel,'')") || !recruiterStageSource.includes("const stageProjection=parent.recruiterFirstPopup")) errors.push("ProjectDetailOverview: recruiter-first stage details must use the primary dialog stage title and must not render a duplicate Stage Focus or stage heading wrapper");
-if (!app.includes("createDecisionCard(model,index,{projectKey:currentDetail.parentKey,showVisual:Boolean(model.evidenceAssetId)})") || !app.includes("voucher-r149-decision-list")) errors.push("ProjectDetailOverview: recruiter-first stage details must reuse the canonical Design Decision and EvidenceFrame renderer");
+const featuredDecisionSource = app.slice(app.indexOf("function createFeaturedDecisionGroup("), app.indexOf("function interactiveFlowById(", app.indexOf("function createFeaturedDecisionGroup(")));
+const canonicalDecisionEvidenceChain = [
+  "const card=createDecisionCard(model,index,{projectKey,showVisual:showVisual&&Boolean(model.evidenceAssetId)})",
+  "card.querySelector('.decision-visual-v58.evidence-frame')",
+  "evidence.classList.add('case-evidence-wrapper')",
+  "group.dataset.componentOwner='FeaturedDecision'"
+];
+const recruiterDecisionProjection = app.includes("p.presentation?.decisionOptions?.variant==='featured'") &&
+  app.includes("createFeaturedDecisionGroup(decision,index,{projectKey:key,showVisual:showDecisionVisuals");
+if (!canonicalDecisionEvidenceChain.every((contract) => featuredDecisionSource.includes(contract)) ||
+    !recruiterDecisionProjection ||
+    !app.includes("voucher-r149-decision-list")) {
+  errors.push("ProjectDetailOverview: recruiter-first stage details must reuse the canonical Design Decision and EvidenceFrame renderer");
+}
 if (/\.home-page\s+:is\([^)]*\.principles/.test(editorial)) errors.push("HomepageEvidence: EditorialSection must not override the dark Principles surface");
 if (!homeRuntime.includes("localize(project?.company)") || !homeRuntime.includes("localize(project?.domain_label)")) errors.push("ProjectCard: related cards must render company first and domain second from SSOT");
 if (homeRuntime.includes("localize([p.context,p.context_zh])")) errors.push("ProjectCard: related-card metadata must not repeat the company through legacy context copy");
