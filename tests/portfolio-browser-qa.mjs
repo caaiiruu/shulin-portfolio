@@ -54,7 +54,7 @@ for (const viewport of viewports) {
   const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
   await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});const fresh=await homepageState();
   assert(fresh.scrollY===0&&fresh.hero&&fresh.selected.length===0,"Fresh Homepage must open at Hero with neutral Domain state");
-  await page.screenshot({path:join(screenshotDir,"homepage-fresh-entry.png"),fullPage:false});
+  await page.screenshot({path:path.join(directory,"homepage-fresh-entry.png"),fullPage:false});
   await page.reload({waitUntil:"networkidle"});const refresh=await homepageState();
   assert(refresh.scrollY===0&&refresh.selected.length===0,"Homepage refresh must stay neutral at Hero");
   await page.goto(`${baseUrl}/site/work.html`,{waitUntil:"networkidle"});await page.click(".brand");await page.waitForLoadState("networkidle");const internal=await homepageState();
@@ -68,7 +68,7 @@ for (const viewport of viewports) {
   const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),rect=frame?.getBoundingClientRect();return{projectId,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
   const dbs=projectCardGeometry.find(x=>x.projectId==="dbs");assert(Math.abs(dbs.frameRatio-20/9)<.02,"DBS ProjectCard must use 2400x1080 ratio");
   projectCardGeometry.filter(x=>x.naturalRatio).forEach(x=>{assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`);assert(x.objectFit==="contain"&&x.overflow==="hidden",`${x.projectId} crop/overflow contract failed`)});
-  await page.locator('[data-project="dbs"]').first().screenshot({path:join(screenshotDir,"project-card-dbs-ratio.png")});
+  await page.locator('[data-project="dbs"]').first().screenshot({path:path.join(directory,"project-card-dbs-ratio.png")});
   report.homepageEntry={fresh,refresh,internal,back,anchor};report.projectCardGeometry=projectCardGeometry;
 
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
