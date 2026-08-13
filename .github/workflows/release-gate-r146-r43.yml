@@ -73,7 +73,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-result.txt"
+          runtime_manifest() {
+            {
+              printf '%s\0' public/site/index.html public/site/work.html public/site/experiments.html public/site/profile.html
+              find public/site/work -maxdepth 1 -type f -name '*.html' -print0
+              find public/site/assets/css -maxdepth 1 -type f -name 'production.*.css' -print0
+              find public/site/assets/js -maxdepth 1 -type f -name 'production.*.js' -print0
+            } | sort -z | xargs -0 sha256sum
+          }
+          node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-pass-a.txt"
+          runtime_manifest > /tmp/generated-runtime-a.txt
+          node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-pass-b.txt"
+          runtime_manifest > /tmp/generated-runtime-b.txt
+          diff -u /tmp/generated-runtime-a.txt /tmp/generated-runtime-b.txt | tee "$EVIDENCE_DIR/generated-runtime-determinism.txt"
+          test "$(wc -l < /tmp/generated-runtime-b.txt)" -eq 19
           git diff --exit-code -- public/site
           test -z "$(git status --porcelain --untracked-files=all -- public/site)"
 
