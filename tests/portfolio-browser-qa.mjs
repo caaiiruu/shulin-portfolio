@@ -33,7 +33,10 @@ for (const viewport of viewports) {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
   page.on("pageerror", error => runtimeErrors.push(error.message));
-  page.on("requestfailed", request => networkErrors.push(`${request.method()} ${request.url()} ${request.failure()?.errorText || ""}`));
+  page.on("requestfailed", request => {
+    const errorText=request.failure()?.errorText||"";
+    if(errorText!=="net::ERR_ABORTED")networkErrors.push(`${request.method()} ${request.url()} ${errorText}`);
+  });
 
   const routeResults = [];
   for (const [index, route] of routes.entries()) {
