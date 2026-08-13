@@ -451,14 +451,17 @@
         "work-card-hover-border",
         "work-card-hover-radius",
         "work-card-hover-shadow",
-        "work-card-hover-transform"
+        "work-card-hover-transform",
+        "project-card-panoramic-media-ratio",
+        "project-card-company-title-gap"
       ],
       "variants": [
         "Work featured card",
         "Work compact card",
         "Related card",
         "Global search result",
-        "Canonical project-cover image"
+        "Canonical project-cover image",
+        "Panoramic compact project-cover image"
       ],
       "layoutContract": [
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
@@ -476,7 +479,9 @@
         "search-result titles remain scan-friendly while preserving SSOT copy",
         "search-result CTA label and directional arrow are separate inline elements and remain on one line",
         "shared Work hover contract across routes",
-        "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop."
+        "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop.",
+        "Compact panoramic covers derive their intrinsic dimensions from the Asset Manifest and use the approved 20:9 composition without crop or distortion.",
+        "Compact company metadata and title use the shared project-card-company-title-gap token."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
@@ -797,7 +802,7 @@
       "renderSource": "public/site/assets/js/app.js#renderSystemCaseParent",
       "cssOwner": "assets/css/components/project-detail-overview.css",
       "tokenDependencies": [
-        "case-evidence-max",
+        "case-reading-max",
         "space-5",
         "radius-md",
         "color-border",
@@ -805,16 +810,16 @@
         "cmp-popup-card-title-size"
       ],
       "variants": [
-        "Bordered evidence-edge cards"
+        "Bordered reading-edge cards"
       ],
       "usageScope": [
         "DBS recruiter-first system case",
         "Future recruiter-first system cases with equivalent complexity semantics"
       ],
       "interactionContract": [
-        "Heading follows the shared recruiter section alignment while the card grid uses only the canonical evidence edge.",
+        "Heading follows the shared recruiter section alignment while the card grid uses the same canonical reading edge.",
         "Desktop uses three contained columns; shared responsive rules switch to one readable column at 871px and below.",
-        "Cards use natural height and never exceed the section content boundary."
+        "Cards use natural height, share the heading's left and right reading boundaries, and never exceed the section content boundary."
       ],
       "allowedModifications": [
         "Generic variant extension",

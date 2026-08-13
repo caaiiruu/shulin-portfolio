@@ -244,7 +244,7 @@
       if(!publicPath||!publicPath.startsWith('/site/'))throw new Error(`Asset governance: invalid public production path for ${assetId}`);
       const version=String(record.sha256||record.blobSha||'').slice(0,16);
       const src=version?`${publicPath}?v=${version}`:publicPath;
-      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||'']};
+      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null};
     }
     if(record.assetStatus==='awaiting-user-asset'&&record.placeholderFallbackAssetId){
       const fallback=ASSET_MANIFEST[record.placeholderFallbackAssetId];
@@ -953,6 +953,13 @@
       image.src=coverAsset.src;image.loading=index===0?'eager':'lazy';image.decoding='async';
       image.alt=localize(coverAsset.alt);image.dataset.assetId=coverAsset.assetId;
       image.dataset.assetStatus=coverAsset.isPlaceholder?'placeholder-active':'real-active';
+      if(coverAsset.width&&coverAsset.height){
+        image.width=coverAsset.width;image.height=coverAsset.height;
+        if(coverAsset.width/coverAsset.height>=2){
+          card.classList.add('work-card-v32--panoramic-media');
+          visual.dataset.mediaAspect='panoramic';
+        }
+      }
       visual.dataset.assetStatus=image.dataset.assetStatus;
       visual.append(image);
     }else{
