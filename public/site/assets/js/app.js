@@ -1248,8 +1248,8 @@
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
-    const visible=PROJECT_NAV_ITEMS
-      .map(([key,id])=>projectNavTarget(key,id))
+    const visible=[...projectSectionNavLinks.querySelectorAll('a')]
+      .map(link=>doc.querySelector(link.getAttribute('href')))
       .filter(node=>node&&!node.hidden&&node.getClientRects().length);
     const offset=dialogScrollRoot.getBoundingClientRect().top+projectSectionInset();
     let current=visible[0];
