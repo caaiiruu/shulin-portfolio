@@ -8509,7 +8509,6 @@
         "contentRefs": {
           "whatMadeThisHard": "whatMadeThisHard",
           "contribution": "valueIBrought",
-          "researchScale": "publicContent.researchScale",
           "decisions": "decisionNarrative.primaryDecisions",
           "accountability": "ownershipModel",
           "contributionIntervention": "keyInterventionMap",
@@ -8551,14 +8550,6 @@
             }
           },
           {
-            "key": "research",
-            "target": "systemCaseResearchSection",
-            "label": {
-              "en": "Research",
-              "zh": "研究"
-            }
-          },
-          {
             "key": "outcomes",
             "target": "systemCaseOutcomesSection",
             "label": {
@@ -8581,7 +8572,6 @@
           "core-system-insight",
           "design-decisions",
           "evidence",
-          "research-scale",
           "outcomes",
           "my-accountability",
           "related-work"
@@ -8819,46 +8809,6 @@
         ]
       },
       "publicContent": {
-        "researchScale": {
-          "title": {
-            "en": "Research scale",
-            "zh": "六市場探索與驗證計畫"
-          },
-          "proof": [
-            {
-              "value": "50+",
-              "label": {
-                "en": "Participants documented in research synthesis",
-                "zh": ""
-              }
-            },
-            {
-              "value": "4",
-              "label": {
-                "en": "Operational personas",
-                "zh": ""
-              }
-            },
-            {
-              "value": "2",
-              "label": {
-                "en": "End-of-day and real-time operating journeys",
-                "zh": ""
-              }
-            },
-            {
-              "value": "3",
-              "label": {
-                "en": "Co-creation workshops, followed by further validation",
-                "zh": ""
-              },
-              "note": {
-                "en": "The figure refers specifically to co-creation workshops, followed by additional validation.",
-                "zh": ""
-              }
-            }
-          ]
-        },
         "myContribution": {
           "title": {
             "en": "My contribution",
@@ -9003,7 +8953,41 @@
             }
           ],
           "assetStatus": "approved-asset-required",
-          "contentStatus": "user-approved-public-copy"
+          "contentStatus": "user-approved-public-copy",
+          "metrics": [
+            {
+              "value": "50+",
+              "label": {
+                "en": "Participants documented in research synthesis",
+                "zh": ""
+              }
+            },
+            {
+              "value": "4",
+              "label": {
+                "en": "Operational personas",
+                "zh": ""
+              }
+            },
+            {
+              "value": "2",
+              "label": {
+                "en": "End-of-day and real-time operating journeys",
+                "zh": ""
+              }
+            },
+            {
+              "value": "3",
+              "label": {
+                "en": "Co-creation workshops, followed by further validation",
+                "zh": ""
+              },
+              "note": {
+                "en": "The figure refers specifically to co-creation workshops, followed by additional validation.",
+                "zh": ""
+              }
+            }
+          ]
         },
         "outcomes": {
           "title": {

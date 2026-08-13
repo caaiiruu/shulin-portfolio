@@ -2752,22 +2752,18 @@
         const article=element('article');article.append(element('h3','',t(item.title)),element('p','',t(item.copy)));evidenceRows.append(article);
       });
       evidence.append(evidenceRows);
+      const metrics=element('div','research-evidence-metrics recruiter-system-case__metrics');
+      list(evidenceSource.metrics).forEach(item=>{
+        const metric=element('article','research-evidence-metric');
+        const label=element('span','research-evidence-metric__label');
+        if(item.note){
+          const tip=createInfoTooltip(t(item.note),lang==='zh'?'查看研究證據':'View research evidence');
+          appendInlineEndTooltip(label,t(item.label),tip);
+        }else safeText(label,t(item.label));
+        metric.append(element('strong','',t(item.value)||String(item.value||'')),label);metrics.append(metric);
+      });
+      evidence.append(metrics);
     }
-
-    const researchSource=projectContentRef(p,refs.researchScale);
-    const research=createRecruiterSection('',t(researchSource?.title));
-    research.id='systemCaseResearchSection';research.dataset.projectNavTarget='research';research.dataset.canonicalSectionId='research-scale';research.dataset.componentOwner='ResearchEvidenceMetric';
-    const metrics=element('div','research-evidence-metrics recruiter-system-case__metrics');
-    list(researchSource?.proof).forEach(item=>{
-      const metric=element('article','research-evidence-metric');
-      const label=element('span','research-evidence-metric__label');
-      if(item.note){
-        const tip=createInfoTooltip(t(item.note),lang==='zh'?'查看研究證據':'View research evidence');
-        appendInlineEndTooltip(label,t(item.label),tip);
-      }else safeText(label,t(item.label));
-      metric.append(element('strong','',t(item.value)||String(item.value||'')),label);metrics.append(metric);
-    });
-    research.append(metrics);
 
     const decisions=createRecruiterSection('',lang==='zh'?'設計決策':'Design decisions');
     decisions.id='systemCaseDecisionsSection';decisions.dataset.projectNavTarget='decisions';decisions.dataset.canonicalSectionId='key-design-decisions';
@@ -2792,7 +2788,7 @@
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
-    [hard,contribution,insight,decisions,evidence,research,outcomes,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
+    [hard,contribution,insight,decisions,evidence,outcomes,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
