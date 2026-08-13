@@ -790,6 +790,43 @@
       "exclusiveOwner": false,
       "component": "FloatingNavigator",
       "renderSource": "public/site/assets/js/app.js"
+    },
+    {
+      "component": "WhatMadeThisHard",
+      "status": "Live / Current Production",
+      "renderSource": "public/site/assets/js/app.js#renderSystemCaseParent",
+      "cssOwner": "public/site/assets/css/components/project-detail-overview.css",
+      "tokenDependencies": [
+        "case-evidence-max",
+        "space-5",
+        "radius-md",
+        "color-border",
+        "color-surface-evidence-item",
+        "cmp-popup-card-title-size"
+      ],
+      "variants": [
+        "Bordered evidence-edge cards"
+      ],
+      "usageScope": [
+        "DBS recruiter-first system case",
+        "Future recruiter-first system cases with equivalent complexity semantics"
+      ],
+      "interactionContract": [
+        "Heading follows the shared recruiter section alignment while the card grid uses only the canonical evidence edge.",
+        "Desktop uses three contained columns; shared responsive rules switch to one readable column at 871px and below.",
+        "Cards use natural height and never exceed the section content boundary."
+      ],
+      "allowedModifications": [
+        "Generic variant extension",
+        "Shared token substitution"
+      ],
+      "forbiddenModifications": [
+        "DBS-specific selector",
+        "Viewport-width calculation",
+        "Third custom width",
+        "Forced equal-height cards"
+      ],
+      "exclusiveOwner": true
     }
   ]
 }

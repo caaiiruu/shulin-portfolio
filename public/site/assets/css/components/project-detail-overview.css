@@ -787,7 +787,7 @@
 .contribution-block__intervention p{color:inherit}
 .case-reading-wrapper,.voucher-r149-section[data-canonical-section-id="what-made-this-hard"]>.voucher-r149-heading,.contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-flow,.contribution-block>.voucher-r149-rows{box-sizing:border-box;width:min(100%,var(--case-reading-max));max-width:var(--case-reading-max);margin-inline:auto}
 
-.recruiter-complexity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);width:100%;align-items:stretch}
+.recruiter-complexity-grid{box-sizing:border-box;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);width:min(100%,var(--case-evidence-max));max-width:var(--case-evidence-max);margin-inline:auto;align-items:start}
 .recruiter-complexity-card{display:grid;align-content:start;gap:var(--space-3);min-width:0;padding:var(--space-5);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-evidence-item)}
 .recruiter-complexity-card h3{font-size:var(--cmp-popup-card-title-size);font-weight:var(--cmp-popup-title-weight);line-height:1.2}
 .recruiter-complexity-card p{margin:0;color:var(--color-text-secondary);line-height:1.6}
