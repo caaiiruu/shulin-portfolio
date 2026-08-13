@@ -51,7 +51,7 @@ for (const viewport of viewports) {
     routeResults.push({ route, status: response?.status(), metrics });
   }
 
-  const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero-v31")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
+  const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
   await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});const fresh=await homepageState();
   assert(fresh.scrollY===0&&fresh.hero&&fresh.selected.length===0,"Fresh Homepage must open at Hero with neutral Domain state");
   await page.screenshot({path:join(screenshotDir,"homepage-fresh-entry.png"),fullPage:false});
