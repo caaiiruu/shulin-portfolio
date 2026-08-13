@@ -8927,19 +8927,21 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Research revealed that end-of-day monitoring and real-time exceptions followed different decision paths, requiring distinct operating models rather than one shared flow.",
+                "en": "Research showed that end-of-day monitoring and real-time exceptions required different decision paths, so they could not be treated as one shared workflow.",
                 "zh": ""
-              }
+              },
+              "publicAssetId": "dbs-evidence-research-synthesis-01"
             },
             {
               "title": {
-                "en": "Model ownership across roles",
+                "en": "Prioritise the highest-risk friction",
                 "zh": ""
               },
               "copy": {
-                "en": "Cross-role mapping exposed where context, responsibility and decision ownership changed hands across the workflow.",
+                "en": "Workshop synthesis ranked recurring real-time pain points, helping distinguish which problems required system-level intervention.",
                 "zh": ""
-              }
+              },
+              "publicAssetId": "dbs-evidence-realtime-painpoint-ranking-01"
             },
             {
               "title": {
@@ -8947,12 +8949,13 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Repeated validation exposed gaps in the operating model before it was standardised for broader implementation.",
+                "en": "Early concepts were tested through prioritisation, field grouping, feature-importance feedback and recurring prototype validation before the operating model was standardised.",
                 "zh": ""
-              }
+              },
+              "publicAssetId": "dbs-evidence-concept-validation-01"
             }
           ],
-          "assetStatus": "approved-asset-required",
+          "assetStatus": "public-safe-production",
           "contentStatus": "user-approved-public-copy",
           "metrics": [
             {
