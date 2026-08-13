@@ -1479,7 +1479,7 @@ test("projects DBS through the shared recruiter-first system-case composition", 
   const overview = read("assets/css/components/project-detail-overview.css");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.composition, "recruiter-first-system-case");
-  assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "impact"]);
+  assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes"]);
   assert.match(app, /function renderSystemCaseParent\(p\)/);
   assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
   assert.match(app, /const configured=list\(project\?\.presentation\?\.navigation\)/);
@@ -1493,8 +1493,8 @@ test("consolidates verified DBS intervention into shared ContributionBlock", () 
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.contentRefs.contributionIntervention, "keyInterventionMap");
-  assert.equal(dbs.presentation.visibility.coreSystemInsight, false);
-  assert.equal(dbs.presentation.visibility.evidence, false);
+  assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
+  assert.equal(dbs.presentation.visibility.evidence, true);
   assert.match(app, /function appendContributionFlow\(section,transformation\)/);
   assert.match(app, /appendContributionFlow\(contribution,/);
   assert.doesNotMatch(app, /Evidence to strategy and system model/);
@@ -1524,9 +1524,9 @@ test("renders DBS decisions through the shared Decision card with canonical OUTC
 test("uses frozen recruiter-first research, validation and accountability primitives for DBS", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
-  const research = ssot.projects.dbs.publicContent.researchScale;
-  assert.deepEqual(research.proof.map(item => typeof item.value === "object" ? item.value.en : String(item.value)), ["50+", "4", "2", "3"]);
-  assert.ok(research.proof.find(item => String(item.value) === "3").note);
+  const research = ssot.projects.dbs.publicContent.decisionEvidence;
+  assert.deepEqual(research.metrics.map(item => typeof item.value === "object" ? item.value.en : String(item.value)), ["50+", "4", "2", "3"]);
+  assert.ok(research.metrics.find(item => String(item.value) === "3").note);
   assert.equal("claimBoundary" in research, false);
   assert.match(app, /research-evidence-metrics recruiter-system-case__metrics/);
   assert.match(app, /createInfoTooltip\(t\(item\.note\)/);
@@ -1538,7 +1538,7 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
-  assert.equal(dbs.title.en, "From fragmented credit-exception handling to a shared six-market decision system");
+  assert.equal(dbs.title.en, "Turning fragmented credit-exception handling into a shared six-market decision system");
   assert.equal(dbs.atAGlance.en, "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.");
   assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
     "Fragmented operational context",
@@ -1559,9 +1559,9 @@ test("orders approved DBS decisions before evidence and renders exactly four res
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.decisionNarrative.primaryDecisions.length, 3);
   assert.equal(dbs.publicContent.decisionEvidence.items.length, 3);
-  assert.deepEqual(dbs.publicContent.researchScale.proof.map(item => String(item.value)), ["50+", "4", "2", "3"]);
-  assert.equal(dbs.publicContent.researchScale.proof.some(item => String(item.value).includes("6 market")), false);
-  assert.match(app, /\[hard,contribution,insight,decisions,evidence,research,validated,accountability,related\]/);
+  assert.deepEqual(dbs.publicContent.decisionEvidence.metrics.map(item => String(item.value)), ["50+", "4", "2", "3"]);
+  assert.equal(dbs.publicContent.decisionEvidence.metrics.some(item => String(item.value).includes("6 market")), false);
+  assert.match(app, /\[hard,contribution,insight,decisions,evidence,outcomes,accountability,related\]/);
   assert.match(app, /dataset\.componentOwner='StructuredEvidence'/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
@@ -1575,7 +1575,7 @@ test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric
   assert.equal(dbs.publicContent.outcomes.cards.length, 3);
   assert.equal("validatedOutcomes" in dbs.publicContent, false);
   assert.equal(dbs.presentation.contentRefs.outcomes, "publicContent.outcomes");
-  assert.deepEqual(dbs.presentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Research", "Outcomes"]);
+  assert.deepEqual(dbs.presentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Outcomes"]);
   assert.match(app, /function appendOutcomeCards\(grid,items/);
   assert.match(app, /appendOutcomeCards\(metrics,c\.outcomes\?\.metrics,\{metric:true,translate:t\}\)/);
   assert.match(css, /\.outcome-metric--qualitative\{/);
@@ -1587,7 +1587,7 @@ test("uses the approved summary-only SharedAccountability projection for DBS", (
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
-  assert.equal(dbs.presentation.accountabilityMode, "summary");
+  assert.equal(dbs.presentation.accountabilityMode, "structured");
   assert.equal(dbs.ownershipModel.publicSummary.en, "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.");
   assert.match(app, /p\.presentation\?\.accountabilityMode!=='summary'/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
