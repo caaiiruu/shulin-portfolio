@@ -95,7 +95,7 @@
     const decisions=decisionList(p.decisionNarrative?.primaryDecisions).map(item=>{
       const decision=adaptDecision(item);
       const evidence=p.decisionEvidenceMap?.[decision.id];
-      return {...decision,evidenceAssetId:evidence?.publicAssetId||null};
+      return {...decision,evidenceAssetId:evidence?.publicAssetId||null,evidenceCaption:evidence?.caption||null};
     });
     const gallery=id==='payment'?[
       {assetId:'payment-evidence-sco-entry-public-v2',title:['Self-checkout entry','自助結帳入口'],text:['Responsive evidence with a reserved aspect ratio and deferred loading.','保留固定比例並延後載入的 Responsive evidence。'],src:'/site/assets/validation/payment/validation-payment-sco-entry-final-r77.jpg',alt:['The self-checkout loyalty and discount screen with a FairPrice app payment entry.','Self-checkout 會員與折扣畫面中的 FairPrice App 支付入口。']},
@@ -2314,7 +2314,10 @@
           media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
           const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
           if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-          media.append(image);visual.append(media);card.append(visual);
+          media.append(image);visual.append(media);
+          const caption=localize(decision.evidenceCaption||decision.evidence?.caption);
+          if(caption)visual.append(element('figcaption','evidence-frame__caption',caption));
+          card.append(visual);
         }
       }
       return card;
@@ -2415,7 +2418,8 @@
       whyThisChoice:source.whyThisChoice,
       whatThisRequired:source.whatThisRequired,
       outcome:source.outcome,
-      evidenceAssetId:source.evidenceAssetId||source.evidence?.assetId||null
+      evidenceAssetId:source.evidenceAssetId||source.evidence?.assetId||null,
+      evidenceCaption:source.evidenceCaption||source.evidence?.caption||null
     };
     const card=createDecisionCard(model,index,{projectKey,showVisual:showVisual&&Boolean(model.evidenceAssetId)});
     card.classList.add('voucher-r149-decision','decision-module','case-reading-wrapper');

@@ -9595,6 +9595,29 @@
         ],
         "recommendedHeadline": "Standardised one excess-management operating model across 6 markets, aligning shared decision states, ownership and escalation.",
         "boundary": "Do not invent efficiency or turnaround uplift."
+      },
+      "decisionEvidenceMap": {
+        "dbs-excess-decision-01": {
+          "publicAssetId": "dbs-decision-01-eod-operating-model-01",
+          "caption": {
+            "en": "End-of-day operating journey mapped across report generation, monitoring, approvals and follow-up, with cross-market pain points layered onto each stage.",
+            "zh": ""
+          }
+        },
+        "dbs-excess-decision-02": {
+          "publicAssetId": "dbs-decision-02-report-to-workbench-01",
+          "caption": {
+            "en": "The reporting experience moved from manually monitored spreadsheets to a centralised exception workspace that surfaced case status, trends and decision context in one place.",
+            "zh": ""
+          }
+        },
+        "dbs-excess-decision-03": {
+          "publicAssetId": "dbs-decision-03-cross-role-architecture-01",
+          "caption": {
+            "en": "The proposed operating architecture connected data triggers, CCU, RM, CRM and Operations through one shared approval and follow-up model.",
+            "zh": ""
+          }
+        }
       }
     },
     "booking": {
