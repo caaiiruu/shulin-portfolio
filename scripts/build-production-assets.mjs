@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import postcss from "postcss";
+import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "./visual-asset-governance.mjs";
 
 const root = path.resolve("public/site");
 const pages = ["index.html", "work.html", "experiments.html", "profile.html"];
@@ -158,28 +159,14 @@ if (publicExplorations.length !== 6) {
 if (assetManifest.packageVersion !== "r45" || assetManifest.contentVersion !== "2026-08-12-r158") {
   throw new Error("The active Asset Manifest must be r45 aligned to Content r158");
 }
-const derivedVisualSlots = [];
-function deriveVisualSlots(value, projectId, location = []) {
-  if (Array.isArray(value)) return value.forEach((entry, index) => deriveVisualSlots(entry, projectId, [...location, index]));
-  if (!value || typeof value !== "object") return;
-  for (const [key, child] of Object.entries(value)) {
-    const next = [...location, key];
-    if (["assetId", "publicAssetId", "beforeAssetId", "shippedAssetId"].includes(key) && typeof child === "string") {
-      derivedVisualSlots.push({ projectId, slotId: next.join("."), assetId: child });
-    } else if (key !== "sourceArchives") deriveVisualSlots(child, projectId, next);
-  }
-}
-for (const [projectId, project] of Object.entries(content.projects)) deriveVisualSlots(project, projectId);
-if (derivedVisualSlots.length !== 47 || new Set(derivedVisualSlots.map((slot) => slot.assetId)).size !== 43) {
-  throw new Error("Content must derive exactly 47 runtime visual slots and 43 unique asset IDs");
-}
-for (const slot of derivedVisualSlots) {
-  const record = assetManifest.items?.[slot.assetId];
-  const fallback = assetManifest.items?.[record?.placeholderFallbackAssetId];
-  if (!record || (record.assetStatus !== "production" && !fallback?.publicPath?.startsWith("/site/"))) {
-    throw new Error(`Derived visual slot cannot resolve safely: ${slot.projectId}/${slot.slotId}`);
-  }
-}
+const derivedVisualSlots = deriveRuntimeVisualSlots(content);
+validateRuntimeVisualAssets({
+  slots: derivedVisualSlots,
+  assetManifest,
+  publicAssetExists(publicPath) {
+    return fs.existsSync(path.join(root, publicPath.slice("/site/".length)));
+  },
+});
 
 function fingerprint(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 16);

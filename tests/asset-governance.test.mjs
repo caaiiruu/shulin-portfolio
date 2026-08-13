@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "../scripts/visual-asset-governance.mjs";
 
 const manifest = JSON.parse(fs.readFileSync("public/site/content/portfolio-asset-manifest.json", "utf8"));
 const content = JSON.parse(fs.readFileSync("public/site/content/portfolio-content.json", "utf8"));
@@ -57,11 +58,100 @@ test("legacy auction runtime ownership uses canonical Taishin identity", () => {
 
 test("all 13 projects own unique visual slots with no broken src assignment", () => {
   assert.equal(Object.keys(content.projects).length, 13);
-  assert.equal(slots.length, 37);
+  assert.ok(slots.length > 0);
   assert.equal(new Set(slots.map((slot) => `${slot.projectId}/${slot.slotId}`)).size, slots.length);
   assert.doesNotMatch(app, /\.src\s*=\s*(?:''|null|undefined)/);
 });
 
 test("Chinese placeholder label has no English fallback", () => {
   assert.match(app, /專案視覺素材待補/);
+});
+
+test("structural governance accepts legitimate canonical inventory growth", () => {
+  const derived = deriveRuntimeVisualSlots(content);
+  const result = validateRuntimeVisualAssets({
+    slots: derived,
+    assetManifest: manifest,
+    publicAssetExists: () => true,
+  });
+  assert.equal(result.slotCount, derived.length);
+  assert.equal(result.uniqueAssetCount, new Set(derived.map((slot) => slot.assetId)).size);
+});
+
+test("structural governance rejects unknown and malformed runtime references", () => {
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [{ projectId: "dbs", slotId: "decisionEvidenceMap.0", assetId: "missing-asset" }],
+      assetManifest: manifest,
+    }),
+    /unknown asset/
+  );
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [{ projectId: "dbs", slotId: "", assetId: "dbs-decision-01-eod-operating-model-01" }],
+      assetManifest: manifest,
+    }),
+    /projectId, slotId and assetId/
+  );
+});
+
+test("structural governance rejects unsafe fallbacks and public paths", () => {
+  const unsafeFallbackManifest = {
+    items: {
+      pending: { id: "pending", assetStatus: "awaiting-user-asset", publicBuild: true, placeholderFallbackAssetId: null },
+    },
+  };
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "pending" }],
+      assetManifest: unsafeFallbackManifest,
+    }),
+    /no approved fallback/
+  );
+
+  const outsidePathManifest = {
+    items: {
+      unsafe: { id: "unsafe", assetStatus: "production", publicBuild: true, publicPath: "https://private.example/asset.jpg" },
+    },
+  };
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "unsafe" }],
+      assetManifest: outsidePathManifest,
+    }),
+    /allowed \/site\/ public path/
+  );
+});
+
+test("structural governance rejects dangling files and duplicate active mappings", () => {
+  const dangling = {
+    items: {
+      asset: { id: "asset", assetStatus: "production", publicBuild: true, publicPath: "/site/missing.jpg" },
+    },
+  };
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "asset" }],
+      assetManifest: dangling,
+      publicAssetExists: () => false,
+    }),
+    /file is missing/
+  );
+
+  const duplicated = {
+    items: {
+      first: { id: "first", assetStatus: "production", publicBuild: true, publicPath: "/site/shared.jpg" },
+      second: { id: "second", assetStatus: "production", publicBuild: true, publicPath: "/site/shared.jpg" },
+    },
+  };
+  assert.throws(
+    () => validateRuntimeVisualAssets({
+      slots: [
+        { projectId: "dbs", slotId: "evidence.0", assetId: "first" },
+        { projectId: "dbs", slotId: "evidence.1", assetId: "second" },
+      ],
+      assetManifest: duplicated,
+    }),
+    /Duplicate active semantic asset path/
+  );
 });
