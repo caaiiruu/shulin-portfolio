@@ -1326,8 +1326,10 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(overview, /\.quick-view-v51\{[^}]*padding:0;[^}]*background:transparent/);
   assert.match(overview, /\.decision-card-v46\{[^}]*border-radius:0;[^}]*background:transparent/);
   assert.match(app, /stage-focus-v148__statement/);
-  assert.match(home, /image\.dataset\.assetStatus=isReal\?'real-active':'placeholder-active'/);
-  assert.match(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{display:grid/);
+  assert.match(home, /image\.dataset\.assetStatus=asset\.isPlaceholder\?'placeholder-active':'real-active'/);
+  assert.match(home, /window\.resolveProjectAsset\?\.\(assetId\)/);
+  assert.match(home, /window\.projectAssetRatio\?\.\(asset\)/);
+  assert.doesNotMatch(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
   assert.equal(real.filter(item=>item.projectId==='voucher').length,13);
 });
@@ -1438,8 +1440,10 @@ test("Step 6A image frame system keeps canonical roles, intrinsic evidence and p
   assert.match(css,/\.before-after-evidence-v147__grid\{[^}]*grid-template-columns:minmax\(0,2fr\) minmax\(0,3fr\)[^}]*align-items:start/);
   assert.match(css,/\.before-after-evidence-v147__item\{[^}]*gap:var\(--case-gap-caption\)/);
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
-  assert.match(domain,/related-project-card__visual-v45\{[^}]*aspect-ratio:16\/10/);
-  assert.match(domain,/@media\(max-width:560px\)\{[\s\S]*related-project-card__visual-v45\{aspect-ratio:4\/3/);
+  const projectCard=read("assets/css/components/project-card.css");
+  assert.match(projectCard,/related-project-card__visual-v45\{[^}]*aspect-ratio:var\(--project-card-media-ratio,16\/10\)/);
+  assert.match(projectCard,/related-project-card__image-v148\{[^}]*object-fit:contain/);
+  assert.doesNotMatch(domain,/related-project-card__visual-v45\{/);
   assert.match(app,/media\.dataset\.frameRole='primary-evidence'/);
 });
 
