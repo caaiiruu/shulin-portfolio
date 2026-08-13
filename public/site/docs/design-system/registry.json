@@ -490,7 +490,8 @@
         "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225"
       },
       "interactionContract": [
-        "Company and context metadata use neutral tokens, a layout-owned separator gap, and one canonical company-to-title rhythm"
+        "Company and context metadata use neutral tokens and one canonical company-to-title rhythm.",
+        "All outer Project Cards use the shared project-card-company-title-gap token; no project-specific spacing owner is permitted."
       ]
     },
     {
@@ -756,7 +757,8 @@
         "Voucher Research renders exactly 2,857, 93%, and 87% as three visible metrics while provenance remains in canonical SSOT",
         "Decision text uses the shared reading edge; child evidence uses the shared evidence edge",
         "Same-hierarchy section transitions use the shared case-section-divider reading-edge owner",
-        "FeaturedDecision is one shared composition for Voucher child stages and DBS: Decision badge, readable title, four-field 2×2 grid, reading-edge text, and an optional EvidenceFrame below without empty placeholders."
+        "FeaturedDecision is one shared composition for Voucher child stages and DBS: Decision badge, readable title, four-field 2×2 grid, reading-edge text, and an optional EvidenceFrame below without empty placeholders.",
+        "SharedAccountability owns the section intro and the two-column owned/shared decision grammar for recruiter-first cases."
       ],
       "allowedModifications": [
         "Shared variant extension"
@@ -810,16 +812,18 @@
         "cmp-popup-card-title-size"
       ],
       "variants": [
-        "Bordered reading-edge cards"
+        "Bordered reading-edge cards",
+        "Featured-first 1 + 2 composition"
       ],
       "usageScope": [
         "DBS recruiter-first system case",
         "Future recruiter-first system cases with equivalent complexity semantics"
       ],
       "interactionContract": [
-        "Heading follows the shared recruiter section alignment while the card grid uses the same canonical reading edge.",
-        "Desktop uses three contained columns; shared responsive rules switch to one readable column at 871px and below.",
-        "Cards use natural height, share the heading's left and right reading boundaries, and never exceed the section content boundary."
+        "Heading and card grid share the canonical reading edge.",
+        "Featured-first composition uses one full-width priority card followed by two equal supporting cards.",
+        "The supporting row remains two columns while readable and becomes one ordered column at 600px and below.",
+        "Cards use natural height and never exceed the section content boundary."
       ],
       "allowedModifications": [
         "Generic variant extension",

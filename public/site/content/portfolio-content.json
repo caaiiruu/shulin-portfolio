@@ -8580,7 +8580,8 @@
           "company",
           "heroMetadata.domain"
         ],
-        "accountabilityMode": "summary"
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       },
       "principalReadinessAudit": {
         "score": 96,
@@ -9286,7 +9287,42 @@
             "zh": "各市場營運政策"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "A clear line between the operating model I defined and the decisions delivered with cross-functional partners.",
+            "zh": ""
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": ""
+            },
+            "title": {
+              "en": "Turn fragmented exception handling into one cross-market operating model",
+              "zh": ""
+            },
+            "text": {
+              "en": "Led problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation.",
+              "zh": ""
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": ""
+            },
+            "title": {
+              "en": "Make the workflow workable across roles, controls and market constraints",
+              "zh": ""
+            },
+            "text": {
+              "en": "Joint prioritisation, feasibility, governance rules and implementation planning with Product, Engineering and operational stakeholders.",
+              "zh": ""
+            }
+          },
+          "contentStatus": "user-approved-public-copy"
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -9356,22 +9392,22 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Fragmented operational context",
-            "zh": "跨市場差異"
-          },
-          "description": {
-            "en": "Exception handling relied on offline reports, manual filtering and incomplete approval history, forcing teams to reconstruct case context before acting.",
-            "zh": "六個市場具有不同營運方式，仍需要共用同一套例外審查與決策模型。"
-          }
-        },
-        {
-          "title": {
             "en": "Two fundamentally different operating modes",
             "zh": "角色需求衝突"
           },
           "description": {
             "en": "End-of-day monitoring and real-time exceptions had different triggers, urgency, evidence needs and response expectations, so they could not be treated as one workflow.",
             "zh": "CCU、RM、CRM 與營運團隊在同一流程中需要不同脈絡、責任、核准與下一步。"
+          }
+        },
+        {
+          "title": {
+            "en": "Fragmented operational context",
+            "zh": "跨市場差異"
+          },
+          "description": {
+            "en": "Exception handling relied on offline reports, manual filtering and incomplete approval history, forcing teams to reconstruct case context before acting.",
+            "zh": "六個市場具有不同營運方式，仍需要共用同一套例外審查與決策模型。"
           }
         },
         {
