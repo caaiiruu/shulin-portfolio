@@ -380,7 +380,8 @@
         "The Hero CTA aligns the Domain content viewport below the measured sticky Header with a responsive reading gap at desktop and compact widths",
         "Each domain explains recurring problems and transferable design responses before exposing supporting project evidence",
         "Domain content follows a direct summary-to-problem-to-response-to-evidence sequence without an intermediate cross-project model",
-        "The Domain floating navigation classes are the canonical shared mobile floating chip-rail primitive; project detail navigation reuses this shell without duplicating surface, safe-area, elevation, motion or horizontal-scroll ownership"
+        "The Domain floating navigation classes are the canonical shared mobile floating chip-rail primitive; project detail navigation reuses this shell without duplicating surface, safe-area, elevation, motion or horizontal-scroll ownership",
+        "Fresh Homepage entry is neutral: no Domain is selected or auto-anchored until explicit #domains navigation, user selection, or legitimate viewport entry."
       ],
       "exclusiveOwner": true
     },
@@ -452,7 +453,6 @@
         "work-card-hover-radius",
         "work-card-hover-shadow",
         "work-card-hover-transform",
-        "project-card-panoramic-media-ratio",
         "project-card-company-title-gap"
       ],
       "variants": [
@@ -460,8 +460,7 @@
         "Work compact card",
         "Related card",
         "Global search result",
-        "Canonical project-cover image",
-        "Panoramic compact project-cover image"
+        "Canonical project-cover image"
       ],
       "layoutContract": [
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
@@ -480,14 +479,15 @@
         "search-result CTA label and directional arrow are separate inline elements and remain on one line",
         "shared Work hover contract across routes",
         "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop.",
-        "Compact panoramic covers derive their intrinsic dimensions from the Asset Manifest and use the approved 20:9 composition without crop or distortion.",
-        "Compact company metadata and title use the shared project-card-company-title-gap token."
+        "Compact company metadata and title use the shared project-card-company-title-gap token.",
+        "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
+        "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
         "contentOwner": "content/portfolio-asset-manifest.json",
-        "runtimeOwner": "assets/js/app.js#resolveProjectAsset",
-        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225"
+        "runtimeOwner": "assets/js/app.js#resolveProjectAsset + projectAssetRatio",
+        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card__visual-v45"
       },
       "interactionContract": [
         "Company and context metadata use neutral tokens and one canonical company-to-title rhythm.",

@@ -249,14 +249,21 @@
     if(record.assetStatus==='awaiting-user-asset'&&record.placeholderFallbackAssetId){
       const fallback=ASSET_MANIFEST[record.placeholderFallbackAssetId];
       if(!fallback?.publicPath?.startsWith('/site/'))throw new Error(`Asset governance: invalid placeholder fallback for ${assetId}`);
-      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。']};
+      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。'],width:Number(fallback.width)||null,height:Number(fallback.height)||null,aspectRatio:fallback.aspectRatio||null};
     }
     if(record.assetStatus==='placeholder'&&record.publicPath?.startsWith('/site/')){
-      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。']};
+      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。'],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null};
     }
     throw new Error(`Asset governance: public runtime asset has no real file or placeholder: ${assetId}`);
   }
   window.resolveProjectAsset=resolveProjectAsset;
+  function projectAssetRatio(asset){
+    const width=Number(asset?.width)||0;
+    const height=Number(asset?.height)||0;
+    if(width>0&&height>0)return `${width} / ${height}`;
+    return {wide:'16 / 10',portrait:'3 / 4',square:'1 / 1'}[asset?.aspectRatio]||null;
+  }
+  window.projectAssetRatio=projectAssetRatio;
   function canonicalProjectId(projectId){
     const alias=DATA.projectAliasRegistry?.[projectId];
     return alias?.routePolicy==='permanent-redirect'&&DATA.projects[alias.canonicalProjectId]
@@ -953,13 +960,9 @@
       image.src=coverAsset.src;image.loading=index===0?'eager':'lazy';image.decoding='async';
       image.alt=localize(coverAsset.alt);image.dataset.assetId=coverAsset.assetId;
       image.dataset.assetStatus=coverAsset.isPlaceholder?'placeholder-active':'real-active';
-      if(coverAsset.width&&coverAsset.height){
-        image.width=coverAsset.width;image.height=coverAsset.height;
-        if(coverAsset.width/coverAsset.height>=2){
-          card.classList.add('work-card-v32--panoramic-media');
-          visual.dataset.mediaAspect='panoramic';
-        }
-      }
+      if(coverAsset.width&&coverAsset.height){image.width=coverAsset.width;image.height=coverAsset.height}
+      const mediaRatio=projectAssetRatio(coverAsset);
+      if(mediaRatio){visual.style.setProperty('--project-card-media-ratio',mediaRatio);visual.dataset.mediaAspect=mediaRatio}
       visual.dataset.assetStatus=image.dataset.assetStatus;
       visual.append(image);
     }else{
