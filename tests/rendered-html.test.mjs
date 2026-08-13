@@ -1541,8 +1541,8 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   assert.equal(dbs.title.en, "Turning fragmented credit-exception handling into a shared six-market decision system");
   assert.equal(dbs.atAGlance.en, "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.");
   assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
-    "Fragmented operational context",
     "Two fundamentally different operating modes",
+    "Fragmented operational context",
     "Decisions crossed roles, authority levels and markets"
   ]);
   assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
@@ -1583,12 +1583,12 @@ test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric
 });
 
 
-test("uses the approved summary-only SharedAccountability projection for DBS", () => {
+test("uses the approved structured SharedAccountability projection for DBS", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.accountabilityMode, "structured");
   assert.equal(dbs.ownershipModel.publicSummary.en, "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.");
-  assert.match(app, /p\.presentation\?\.accountabilityMode!=='summary'/);
+  assert.match(app, /if\(accountabilityPresentation\)appendSharedAccountability\(accountability,accountabilityPresentation,\{translate:t\}\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
