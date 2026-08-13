@@ -8430,7 +8430,7 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "From fragmented credit-exception handling to a shared six-market decision system",
+        "en": "Turning fragmented credit-exception handling into a shared six-market decision system",
         "zh": "從分散的例外處理，到六個市場共用的授信決策系統"
       },
       "problemTypes": {
@@ -8587,9 +8587,7 @@
         ],
         "heroMetadata": [
           "company",
-          "heroMetadata.domain",
-          "roleAndOwnership.projectRole",
-          "period"
+          "heroMetadata.domain"
         ],
         "accountabilityMode": "summary"
       },
@@ -8916,7 +8914,7 @@
         "contentStatus": "approved",
         "hero": {
           "title": {
-            "en": "From fragmented exception handling to a shared six-market decision system",
+            "en": "Turning fragmented credit-exception handling into a shared six-market decision system",
             "zh": "從分散的例外處理，到六個市場共用的授信決策系統"
           },
           "atAGlance": {
