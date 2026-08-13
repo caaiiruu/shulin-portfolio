@@ -2404,6 +2404,30 @@
     }
     return card;
   }
+  function createFeaturedDecisionGroup(source,index,{projectKey='',showVisual=true,includeDivider=false}={}){
+    const sourceTitle=source.title&&typeof source.title==='object'?source.title:null;
+    const model={
+      ...source,
+      fixedStageFields:true,
+      title:sourceTitle?.en??source.title,
+      title_zh:sourceTitle?.zh??source.title_zh,
+      whatIDecided:source.whatIDecided,
+      whyThisChoice:source.whyThisChoice,
+      whatThisRequired:source.whatThisRequired,
+      outcome:source.outcome,
+      evidenceAssetId:source.evidenceAssetId||source.evidence?.assetId||null
+    };
+    const card=createDecisionCard(model,index,{projectKey,showVisual:showVisual&&Boolean(model.evidenceAssetId)});
+    card.classList.add('voucher-r149-decision','decision-module','case-reading-wrapper');
+    card.dataset.componentOwner='FeaturedDecision';
+    const evidence=card.querySelector('.decision-visual-v58.evidence-frame');
+    const group=element('section','voucher-stage-decision-group');
+    group.dataset.componentOwner='FeaturedDecision';
+    group.append(card);
+    if(evidence){evidence.remove();evidence.classList.add('case-evidence-wrapper');group.append(evidence)}
+    if(includeDivider)group.append(element('hr','case-section-divider'));
+    return group;
+  }
   function interactiveFlowById(flowId){
     if(!flowId)return null;
     for(const project of Object.values(DATA.projects)){
@@ -2526,9 +2550,12 @@
     const decisions=doc.getElementById('projectDecisions');clear(decisions);
     const showDecisionVisuals=p.presentation?.decisionOptions?.showVisuals ?? true;
     const featuredDecisionFields=p.presentation?.decisionOptions?.variant==='featured';
+    decisions.classList.toggle('voucher-stage-decision-list',featuredDecisionFields);
     (p.decisions||[]).forEach((decision,index)=>{
-      const model=featuredDecisionFields?{...decision,fixedStageFields:true}:decision;
-      decisions.appendChild(createDecisionCard(model,index,{projectKey:key,showVisual:showDecisionVisuals}));
+      const node=featuredDecisionFields
+        ?createFeaturedDecisionGroup(decision,index,{projectKey:key,showVisual:showDecisionVisuals,includeDivider:index<p.decisions.length-1})
+        :createDecisionCard(decision,index,{projectKey:key,showVisual:showDecisionVisuals});
+      decisions.appendChild(node);
     });
     list(p.interactive_flows).forEach(flow=>decisions.appendChild(createInteractiveFlow(flow)));
     const decisionSection=decisions?.closest('.decision-section-v45');
@@ -3045,23 +3072,11 @@
       const surface=element('section','voucher-stage-surface case-study-cloud-emphasis core-system-insight-section');surface.dataset.componentOwner='CoreSystemInsightSection';
       const decisionList=element('div','voucher-r149-decision-list voucher-stage-decision-list case-evidence-wrapper');
       list(stageProjection?.decisions).forEach((source,index)=>{
-        const model={
-          fixedStageFields:true,
-          title:source.title?.en,title_zh:source.title?.zh,
-          whatIDecided:source.whatIDecided,
-          whyThisChoice:source.whyThisChoice,
-          whatThisRequired:source.whatThisRequired,
-          outcome:source.outcome,
-          evidenceAssetId:source.evidence?.assetId
-        };
-        const card=createDecisionCard(model,index,{projectKey:currentDetail.parentKey,showVisual:Boolean(model.evidenceAssetId)});
-        card.classList.add('voucher-r149-decision','decision-module','case-reading-wrapper');card.dataset.componentOwner='DecisionModule';
-        const evidence=card.querySelector('.decision-visual-v58.evidence-frame');
-        const group=element('section','voucher-stage-decision-group');
-        group.append(card);
-        if(evidence){evidence.remove();evidence.classList.add('case-evidence-wrapper');group.append(evidence)}
-        if(index<stageProjection.decisions.length-1)group.append(element('hr','case-section-divider'));
-        decisionList.append(group);
+        decisionList.append(createFeaturedDecisionGroup(source,index,{
+          projectKey:currentDetail.parentKey,
+          showVisual:true,
+          includeDivider:index<stageProjection.decisions.length-1
+        }));
       });
       surface.append(decisionList);
       const previousStage=parent.journey_stages[stageIndex-1],nextStage=parent.journey_stages[stageIndex+1];const navigation=element('nav','voucher-stage-next child-stage-navigation');navigation.dataset.componentOwner='ChildStageNavigation';if(previousStage){const u=new URL(location.href),a=element('a','button button--dark voucher-stage-next__link',`${lang==='zh'?'上一階段':'Previous stage'}: ${localizedField(previousStage,'label')}`);u.searchParams.set('stage',previousStage.id);a.href=u.pathname+u.search;a.dataset.stage=previousStage.id;navigation.append(a)}

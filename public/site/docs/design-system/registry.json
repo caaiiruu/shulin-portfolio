@@ -324,7 +324,9 @@
         "Executive-summary data never repeats the opening decision filter; system-evidence items retain labelled Before and After relationships",
         "The intervention node carries an explicit label, stronger border and higher-contrast surface so meaning never depends on colour alone",
         "Connectors are decorative and hidden from assistive technology",
-        "Public presentation visibility is project-agnostic and opt-in through projects.{projectId}.presentation.visibility; canonical content may remain required by governance while a shared semantic area is omitted from public rendering, and recruiter-first compositions preserve their established default","Recruiter-first system cases use one SSOT-driven presentation composition: complexity precedes ContributionBlock and Core System Insight, decisions precede structured evidence and research, qualitative system outcomes use the OutcomeMetric owner, and SharedAccountability may opt into a summary-only mode without project-identity conditionals.","Every complete professional parent case opens with one shared decision filter: transformation title, up to three problem types, The value I brought, At a glance, Why it mattered, Business impact, context grid, and an evidence-bound confidentiality note",
+        "Public presentation visibility is project-agnostic and opt-in through projects.{projectId}.presentation.visibility; canonical content may remain required by governance while a shared semantic area is omitted from public rendering, and recruiter-first compositions preserve their established default",
+        "Recruiter-first system cases use one SSOT-driven presentation composition: complexity precedes ContributionBlock and Core System Insight, decisions precede structured evidence and research, qualitative system outcomes use the OutcomeMetric owner, and SharedAccountability may opt into a summary-only mode without project-identity conditionals.",
+        "Every complete professional parent case opens with one shared decision filter: transformation title, up to three problem types, The value I brought, At a glance, Why it mattered, Business impact, context grid, and an evidence-bound confidentiality note",
         "The value I brought renders only its approved headline and supporting statement; internal company value, team value, evidence and review status never render publicly",
         "Every parent project overview renders Type, Scope, Audience, and Timeline only in the context grid; title metadata never duplicates them",
         "Voucher / Offer Customer Journey, Voucher Center, and Game Center are independent parent projects; Voucher Center names only the internal operations system",
@@ -726,7 +728,8 @@
       ],
       "usageScope": [
         "Voucher parent case",
-        "Voucher stage solution details"
+        "Voucher stage solution details",
+        "DBS recruiter-first system case"
       ],
       "variants": [
         "SystemInsight",
@@ -735,7 +738,8 @@
         "EvidenceFrame",
         "DecisionBlock",
         "MetricStrip",
-        "Accountability"
+        "Accountability",
+        "FeaturedDecision"
       ],
       "interactionContract": [
         "At a glance remains the first recruiter summary and Contribution renders once after What made this hard",
@@ -746,7 +750,8 @@
         "Navigator Overview, Complexity and Impact resolve actual runtime targets and support pointer, keyboard and touch activation",
         "Voucher Research renders exactly 2,857, 93%, and 87% as three visible metrics while provenance remains in canonical SSOT",
         "Decision text uses the shared reading edge; child evidence uses the shared evidence edge",
-        "Same-hierarchy section transitions use the shared case-section-divider reading-edge owner"
+        "Same-hierarchy section transitions use the shared case-section-divider reading-edge owner",
+        "FeaturedDecision is one shared composition for Voucher child stages and DBS: Decision badge, readable title, four-field 2×2 grid, reading-edge text, and an optional EvidenceFrame below without empty placeholders."
       ],
       "allowedModifications": [
         "Shared variant extension"
