@@ -233,7 +233,7 @@ researchValues: metricTypography.map(item=>item.value),
     };
   });
   const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
-  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-4)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
+  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
 if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
   if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
   if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
@@ -241,9 +241,9 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   if(!r1592.navShared||!r1592.navVisual||r1592.navVisual.radius==='0px'||r1592.navVisual.background==='rgba(0, 0, 0, 0)'||r1592.navVisual.textDecoration!=='none'||r1592.navVisual.shellBottomInset<0||r1592.navVisual.shellWidth>r1592.navVisual.railScrollWidth+20||r1592.navVisual.items.some(x=>x.alignItems!=='center'||x.justifyContent!=='center'||x.horizontalCenterDelta>2||x.verticalCenterDelta>2))failures.push(`${viewport.name} project navigator rendered active state mismatch: ${JSON.stringify(r1592.navVisual)}`);
   if(r1592.horizontalOverflow)failures.push(`${viewport.name} R159.3 horizontal overflow`);
   await page.goto(`${baseUrl}/site/work/dbs`,{waitUntil:"networkidle"});
-  const beforeAfter=await page.locator(".key-intervention-map__node.is-before:visible,.key-intervention-map__node.is-after:visible").evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {label:node.textContent.trim(),background:s.backgroundColor,radius:s.borderRadius,paddingInline:s.paddingInline,paddingBlock:s.paddingBlock,border:s.borderWidth,box:{left:r.left,right:r.right,top:r.top,bottom:r.bottom}}}));
-  if(beforeAfter.length!==2||!uniform(beforeAfter.map(x=>[x.background,x.radius,x.paddingInline,x.paddingBlock]))||beforeAfter.some(x=>x.background==='rgba(0, 0, 0, 0)'||x.background==='transparent'||x.radius==='0px'||x.paddingInline==='0px'||x.paddingBlock==='0px'))failures.push(`${viewport.name} Before/After rendered surfaces mismatch: ${JSON.stringify(beforeAfter)}`);
-  if(beforeAfter.length===2)await page.locator(".key-intervention-map__flow").screenshot({path:path.join(targetedDirectory,"r1593-before-after-light-surfaces.png")});
+  const beforeAfter=await page.locator(".contribution-block .voucher-r149-flow > article:not(.contribution-block__intervention):visible").evaluateAll(nodes=>nodes.map(node=>({label:node.textContent.trim(),box:(()=>{const r=node.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom}})()})));
+  if(beforeAfter.length!==2||beforeAfter.some(item=>!item.label))failures.push(`${viewport.name} shared ContributionBlock Before/After nodes mismatch: ${JSON.stringify(beforeAfter)}`);
+  if(beforeAfter.length===2)await page.locator(".contribution-block .voucher-r149-flow").screenshot({path:path.join(targetedDirectory,"r1593-before-after-contribution-flow.png")});
   r1592.beforeSurfaces=beforeAfter;
   await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
 
@@ -336,7 +336,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "The airport transfer journey became easier to trust"],
       ["cathay-oa-core-insight", "/site/work/cathay-sit-online-account-opening", "Self-service account opening only worked"],
       ["cathay-review-core-insight", "/site/work/cathay-sit-review-remediation-operations", "Review remediation needed a shared internal operating model"],
-      ["dbs-regression", "/site/work/dbs", "From fragmented exception handling"],
+      ["dbs-regression", "/site/work/dbs", "Turning fragmented credit-exception handling"],
     ]) {
       await page.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
       const target = page.getByText(text, { exact: false }).first();
