@@ -795,7 +795,7 @@
       "component": "WhatMadeThisHard",
       "status": "Live / Current Production",
       "renderSource": "public/site/assets/js/app.js#renderSystemCaseParent",
-      "cssOwner": "public/site/assets/css/components/project-detail-overview.css",
+      "cssOwner": "assets/css/components/project-detail-overview.css",
       "tokenDependencies": [
         "case-evidence-max",
         "space-5",
