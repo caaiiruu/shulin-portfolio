@@ -8927,7 +8927,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Research showed that end-of-day monitoring and real-time exception handling required fundamentally different decision paths.",
+                "en": "Research revealed that end-of-day monitoring and real-time exceptions followed different decision paths, requiring distinct operating models rather than one shared flow.",
                 "zh": ""
               }
             },
@@ -8937,7 +8937,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Four operational personas and cross-role journey mapping exposed where context, responsibility and decisions changed hands.",
+                "en": "Cross-role mapping exposed where context, responsibility and decision ownership changed hands across the workflow.",
                 "zh": ""
               }
             },
@@ -8947,7 +8947,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Three co-creation workshops and repeated prototype validation refined the operating model before broader implementation.",
+                "en": "Repeated validation exposed gaps in the operating model before it was standardised for broader implementation.",
                 "zh": ""
               }
             }
