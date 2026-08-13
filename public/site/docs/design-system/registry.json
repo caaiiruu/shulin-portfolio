@@ -453,7 +453,8 @@
         "work-card-hover-radius",
         "work-card-hover-shadow",
         "work-card-hover-transform",
-        "project-card-company-title-gap"
+        "project-card-company-title-gap",
+        "project-card-media-ratio"
       ],
       "variants": [
         "Work featured card",
