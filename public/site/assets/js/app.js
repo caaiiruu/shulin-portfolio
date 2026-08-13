@@ -2281,6 +2281,7 @@
 
   function createDecisionCard(decision,index,{projectKey='',showVisual=true}={}){
     const card=element('article','decision-card-v46');
+    if(decision.fixedStageFields)card.classList.add('voucher-stage-decision');
     const number=element('span','decision-number-v48',`${ui("decision-3649f9fa")} ${String(index+1).padStart(2,'0')}`);
     const body=element('div','decision-body-v46');
     const title=localize([decision.title,decision.title_zh]);
@@ -2302,16 +2303,15 @@
       body.append(grid);
       card.append(number,body);
       if(showVisual&&projectKey){
-        const visual=element('figure','decision-visual-v58 evidence-frame voucher-stage-evidence');
-        const media=element('button','decision-visual-v67__crop evidence-frame__media voucher-stage-evidence__media');
-        media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
         const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
         if(resolved){
+          const visual=element('figure','decision-visual-v58 evidence-frame voucher-stage-evidence');
+          const media=element('button','decision-visual-v67__crop evidence-frame__media voucher-stage-evidence__media');
+          media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
           const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
           if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-          media.append(image);
+          media.append(image);visual.append(media);card.append(visual);
         }
-        visual.append(media);card.append(visual);
       }
       return card;
     }
@@ -2521,8 +2521,10 @@
     });
     const decisions=doc.getElementById('projectDecisions');clear(decisions);
     const showDecisionVisuals=p.presentation?.decisionOptions?.showVisuals ?? true;
+    const featuredDecisionFields=p.presentation?.decisionOptions?.variant==='featured';
     (p.decisions||[]).forEach((decision,index)=>{
-      decisions.appendChild(createDecisionCard(decision,index,{projectKey:key,showVisual:showDecisionVisuals}));
+      const model=featuredDecisionFields?{...decision,fixedStageFields:true}:decision;
+      decisions.appendChild(createDecisionCard(model,index,{projectKey:key,showVisual:showDecisionVisuals}));
     });
     list(p.interactive_flows).forEach(flow=>decisions.appendChild(createInteractiveFlow(flow)));
     const decisionSection=decisions?.closest('.decision-section-v45');

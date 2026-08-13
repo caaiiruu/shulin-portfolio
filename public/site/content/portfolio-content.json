@@ -8568,8 +8568,9 @@
           }
         ],
         "decisionOptions": {
-          "showVisuals": false,
-          "outcomeField": "outcome"
+          "showVisuals": true,
+          "outcomeField": "outcome",
+          "variant": "featured"
         },
         "sectionOrder": [
           "hero",
@@ -9458,7 +9459,11 @@
               "en": "Two cross-market journeys established the operating logic and priority pain points for each mode.",
               "zh": ""
             },
-            "status": "user-approved-public-copy"
+            "status": "user-approved-public-copy",
+            "whatThisRequired": {
+              "en": "Mapped separate cross-market journeys, clarified the actors and evidence needs in each mode, and aligned the product structure to reflect those distinct operating paths.",
+              "zh": ""
+            }
           },
           {
             "id": "dbs-excess-decision-02",
@@ -9478,7 +9483,11 @@
               "en": "Role-based workbenches gave teams a consistent way to review, act on and track exception cases across the operating flow.",
               "zh": ""
             },
-            "status": "user-approved-public-copy"
+            "status": "user-approved-public-copy",
+            "whatThisRequired": {
+              "en": "Defined role-based workbench structures, case hierarchy, action patterns and status visibility so the same case could be understood and progressed consistently.",
+              "zh": ""
+            }
           },
           {
             "id": "dbs-excess-decision-03",
@@ -9498,7 +9507,11 @@
               "en": "The cross-role architecture became the shared implementation reference connecting product behaviour with operational decision ownership.",
               "zh": ""
             },
-            "status": "user-approved-public-copy"
+            "status": "user-approved-public-copy",
+            "whatThisRequired": {
+              "en": "Aligned cross-role workflow states, ownership boundaries, escalation logic and implementation references so Product, Engineering and operational teams worked from one shared model.",
+              "zh": ""
+            }
           }
         ],
         "sourcePaths": [
