@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 // R159.3 acceptance is based on rendered geometry, computed style, interaction visibility, and fresh screenshots.
