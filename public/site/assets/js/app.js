@@ -1162,7 +1162,9 @@
     ['impact','projectImpactSection','Impact','影響與成果']
   ];
   function projectNavTarget(key,fallbackId){
-    return doc.querySelector(`[data-project-nav-target="${key}"]`)||doc.getElementById(fallbackId);
+    const configuredTarget=fallbackId?doc.getElementById(fallbackId):null;
+    if(configuredTarget)return configuredTarget;
+    return doc.querySelector(`[data-project-nav-target="${key}"]`);
   }
   function closeProjectSectionMenu(){
     projectSectionNav?.classList.remove('is-open');
