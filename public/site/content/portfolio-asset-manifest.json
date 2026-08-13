@@ -184,17 +184,22 @@
       "replacementRequired": true,
       "publicBuild": true
     },
-    "dbs-hero-exception-operating-system-public-v1": {
-      "id": "dbs-hero-exception-operating-system-public-v1",
+    "dbs-project-card-primary-01": {
+      "id": "dbs-project-card-primary-01",
       "projectId": "dbs",
-      "type": "image",
-      "publicPath": null,
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/dbs/dbs-project-card-primary-01.jpeg",
       "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "1a1baaa0938d3cd973a7b8b11d577d6a1757842e54a06b4e950e1605d0dd1cb9",
+      "width": 2400,
+      "height": 1080,
+      "alt": "Two DBS enterprise credit operations workbench views.",
+      "alt_zh": "兩個 DBS 企業信用營運工作台畫面。"
     },
     "booking-hero-connected-booking-public-v1": {
       "id": "booking-hero-connected-booking-public-v1",
