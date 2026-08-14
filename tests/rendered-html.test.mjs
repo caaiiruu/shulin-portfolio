@@ -1714,6 +1714,6 @@ test("R162.5 keeps Booking recruiter-first, approximate, complete, and confident
   assert.equal(strategy.title.en,"From uncertain expansion to a lower-risk taxi pickup experiment");
   assert.match(app,/supportingStatements/);
   assert.match(css,/recruiter-complexity-grid\{[^}]*align-items:stretch/);
-  assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{max-width:var\(--dimension-52ch\)\}/);
+  assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{width:100%;max-width:var\(--case-reading-max\)\}/);
   assert.match(css,/core-system-insight-section \.voucher-r149-foundations:has/);
 });
