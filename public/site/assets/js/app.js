@@ -2830,11 +2830,12 @@
     const legacyOwnership=doc.querySelector('.ownership-section-v45');if(legacyOwnership)legacyOwnership.hidden=true;
 
     const hardSource=projectContentRef(p,refs.whatMadeThisHard)||p.hard;
-    const hard=createRecruiterSection('',lang==='zh'?'困難之處':'What made this hard');
+    const hardItems=Array.isArray(hardSource)?hardSource:hardSource?.items;
+    const hard=createRecruiterSection('',lang==='zh'?'困難之處':'What made this hard',t(hardSource?.intro));
     hard.id='systemCaseComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';hard.dataset.componentOwner='WhatMadeThisHard';
     const hardRows=element('div','recruiter-complexity-grid');
     if(p.presentation?.complexityLayout==='featured-first')hardRows.classList.add('recruiter-complexity-grid--featured-first');
-    list(hardSource).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
+    list(hardItems).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
     hard.append(hardRows);
 
     const contributionSource=projectContentRef(p,refs.contribution)||p.valueIBrought;
