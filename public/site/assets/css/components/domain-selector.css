@@ -59,7 +59,7 @@
 #domains.has-floating-domain-nav .domain-stage{padding-bottom:var(--dimension-72px)}
 @media(max-width:900px){
   :root{--domain-panel-gap:var(--space-5);--domain-anchor-gap:var(--space-5)}
-  .domain-layout{grid-template-columns:1fr;gap:var(--space-7)}
+  .domain-layout{grid-template-columns:1fr;gap:var(--space-4)}
   .domain-sidebar{position:static}
   .domain-intro{padding-block:0}
   .domain-statement{max-width:var(--dimension-12ch)}

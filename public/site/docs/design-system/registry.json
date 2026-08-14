@@ -457,7 +457,8 @@
         "project-card-media-ratio",
         "project-card-mobile-panoramic-media-ratio",
         "project-card-media-focal-position",
-        "project-card-company-color"
+        "project-card-company-color",
+        "space-4"
       ],
       "variants": [
         "Work featured card",
@@ -469,8 +470,8 @@
       "layoutContract": [
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
         "featured cards use the shared horizontal desktop structure; compact cards use the shared stacked structure with a 22–26px title and 14px body/action tier",
-        "compact cards explicitly reset the general media minimum height so the visual remains inside its grid row and cannot overlap metadata or copy",
-        "compact media and content are separated by the shared card boundary",
+        "Compact and responsive Work cards use content-sized grid rows, so the manifest-ratio media block owns its complete height and cannot overlap metadata or copy.",
+        "ProjectCard media is full-bleed edge-to-edge inside the clipped card shell; only the content block receives card padding, and the media/content boundary remains explicit.",
         "both Work variants collapse to one stacked column on compact viewports",
         "related-experiment titles use a compact responsive tier and wider measure for readable mixed Chinese/English wrapping",
         "explicit internal grid or flex owner",
@@ -487,7 +488,7 @@
         "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
         "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain.",
         "Assets with a numeric source ratio of 2:1 or wider are classified generically as panoramic: desktop/tablet preserve the canonical source ratio; compact viewports use the shared 5:3 readability frame with cover and manifest-owned focal position.",
-        "Company metadata uses the neutral project-card-company-color token and the company-to-title relationship is owned once by project-card-company-title-gap = space-5 (24px)."
+        "Company metadata uses the neutral project-card-company-color token and the company-to-title relationship is owned once by project-card-company-title-gap = space-4 (16px)."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
