@@ -801,7 +801,8 @@
       "interactionContract": [
         "One Shell, Rail, and Item primitive owns fixed positioning, safe-area offset, surface, radius, elevation, motion, horizontal overflow, focus-visible, reduced motion, and forced colors",
         "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
-        "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior"
+        "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior",
+        "Homepage Domain rail and floating rail are both generated from the same domainSource canonical IDs; legacy shorthand IDs and legacy rail selectors are forbidden."
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",

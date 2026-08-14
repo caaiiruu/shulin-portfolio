@@ -1629,7 +1629,7 @@ test("R161.2 keeps ProjectCard media full-bleed and Domain content adjacent thro
 test("R161.2.1 converges Domain ProjectCards and floating navigation on canonical shared owners",()=>{
   const home=read("assets/js/home.js");
   const card=read("assets/css/components/project-card.css");
-  assert.match(home,/domain-floating-chip-v52 floating-navigator__item/);
+  assert.match(home,/querySelector\('\.floating-navigator__rail'\)/);\n  assert.doesNotMatch(home,/domain-floating-nav-v52__rail/);\n  assert.match(home,/domain-floating-chip-v52 floating-navigator__item/);
   assert.match(home,/card\.classList\.add\('related-project-card-v45--media-stack'\)/);
   assert.match(home,/related-project-card__heading-v1612/);
   assert.match(home,/related-project-card__content-v1612/);

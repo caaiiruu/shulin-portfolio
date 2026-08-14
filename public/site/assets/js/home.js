@@ -326,7 +326,7 @@ function scheduleDomainFloatingNav(){if(!domainFloatFrame)domainFloatFrame=reque
 
 function mountDomainSelectors(){
  const rail=document.getElementById('domainChipRail');
- const floatingRail=domainFloatingNav?.querySelector('.domain-floating-nav-v52__rail');
+ const floatingRail=domainFloatingNav?.querySelector('.floating-navigator__rail');
  if(!rail)return;
  const tabs=domainSource.map((item,index)=>{
   const tab=element('button','domain-tab domain-tab-v38');
