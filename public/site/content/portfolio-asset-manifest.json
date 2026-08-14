@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-14-r162.4",
+  "contentVersion": "2026-08-12-r158",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
