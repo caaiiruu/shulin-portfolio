@@ -1607,7 +1607,7 @@ test("R161.1 owns panoramic mobile readability and metadata hierarchy in shared 
   assert.match(home,/window\.projectAssetPresentation\?\.\(asset\)/);
   assert.match(css,/--project-card-mobile-panoramic-media-ratio:5\/3/);
   assert.match(css,/--project-card-company-color:var\(--color-text-secondary\)/);
-  assert.match(css,/--project-card-company-title-gap:var\(--space-4\)/);
+  assert.match(css,/--project-card-company-title-gap:var\(--space-5\)/);
   assert.match(css,/@media\(max-width:560px\)[\s\S]*data-media-format="panoramic"[^}]*var\(--project-card-mobile-panoramic-media-ratio\)/);
   assert.doesNotMatch(css,/dbs|voucher/i);
   assert.equal(manifest.items["dbs-project-card-primary-01"].projectCardFocalPosition,"center center");
@@ -1622,7 +1622,7 @@ test("R161.2 keeps ProjectCard media full-bleed and Domain content adjacent thro
   assert.match(card,/@media\(max-width:900px\)\{[\s\S]*grid-template-rows:auto minmax\(0,1fr\)/);
   assert.match(card,/@media\(max-width:560px\)\{:root\{[^}]*\}\.work-card-v32__content,\.related-project-card__content-v1612\{padding:var\(--space-5\)\}\.work-card-v32 \.work-card-v32__visual-v225\{padding:0\}/);
   assert.doesNotMatch(card,/\.work-card-v32__content,\.work-artifact\{padding:/);
-  assert.match(card,/--project-card-company-title-gap:var\(--space-4\)/);
+  assert.match(card,/--project-card-company-title-gap:var\(--space-5\)/);
   assert.match(domain,/@media\(max-width:900px\)\{[\s\S]*\.domain-layout\{grid-template-columns:1fr;gap:var\(--space-4\)\}/);
 });
 
