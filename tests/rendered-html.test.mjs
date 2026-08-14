@@ -1620,7 +1620,7 @@ test("R161.2 keeps ProjectCard media full-bleed and Domain content adjacent thro
   assert.match(card,/work-card-v32__button\{display:grid;width:100%;height:100%;min-height:0;padding:0;/);
   assert.match(card,/work-card-v32--compact \.work-card-v32__button\{grid-template-columns:1fr;grid-template-rows:auto minmax\(0,1fr\)/);
   assert.match(card,/@media\(max-width:900px\)\{[\s\S]*grid-template-rows:auto minmax\(0,1fr\)/);
-  assert.match(card,/@media\(max-width:560px\)\{[^}]*\.work-card-v32__content\{padding:var\(--space-5\)\}\.work-card-v32 \.work-card-v32__visual-v225\{padding:0\}/);
+  assert.match(card,/@media\(max-width:560px\)\{[^}]*\.work-card-v32__content,\.related-project-card__content-v1612\{padding:var\(--space-5\)\}\.work-card-v32 \.work-card-v32__visual-v225\{padding:0\}/);
   assert.doesNotMatch(card,/\.work-card-v32__content,\.work-artifact\{padding:/);
   assert.match(card,/--project-card-company-title-gap:var\(--space-4\)/);
   assert.match(domain,/@media\(max-width:900px\)\{[\s\S]*\.domain-layout\{grid-template-columns:1fr;gap:var\(--space-4\)\}/);
