@@ -292,16 +292,19 @@ function scrollToDomainStart(event){
 document.querySelectorAll('a[href="#domains"]').forEach(link=>
  link.addEventListener('click',scrollToDomainStart)
 );
-function syncFloatingDomain(key){
+function getFloatingDomainScrollTarget(selected,rail){
+ const desired=(selected.offsetLeft+(selected.offsetWidth/2))-(rail.clientWidth/2);
+ const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+ return Math.min(max,Math.max(0,desired));
+}
+function syncFloatingDomain(key,{immediate=false}={}){
  domainFloatingChips.forEach(chip=>chip.setAttribute('aria-pressed',String(domainSelectionActive&&chip.dataset.domainFloating===key)));
  const selected=domainSelectionActive?domainFloatingChips.find(chip=>chip.dataset.domainFloating===key):null;
  const rail=selected?.parentElement;
  if(selected&&rail&&domainFloatingNav?.classList.contains('is-visible')){
-  const inset=parseFloat(getComputedStyle(rail).paddingInlineStart)||0;
-  const ideal=selected.offsetLeft-((rail.clientWidth-selected.offsetWidth)/2);
-  const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
-  const target=Math.min(max,Math.max(0,ideal-inset));
-  rail.scrollTo({left:target,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  const target=getFloatingDomainScrollTarget(selected,rail);
+  const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  rail.scrollTo({left:target,behavior:immediate||reduceMotion?'auto':'smooth'});
  }
 }
 function updateDomainFloatingNav(){
@@ -318,9 +321,11 @@ function updateDomainFloatingNav(){
  const within=rect.top<header&&rect.bottom>window.innerHeight-90;
  const railHasPassed=Boolean(railRect&&railRect.bottom<=header+8);
  const show=within&&railHasPassed;
+ const wasVisible=domainFloatingNav.classList.contains('is-visible');
  domainFloatingNav.classList.toggle('is-visible',show);
  domainFloatingNav.setAttribute('aria-hidden',String(!show));
  domainSection.classList.toggle('has-floating-domain-nav',show);
+ if(show&&!wasVisible)syncFloatingDomain(domain,{immediate:true});
 }
 function scheduleDomainFloatingNav(){if(!domainFloatFrame)domainFloatFrame=requestAnimationFrame(updateDomainFloatingNav)}
 

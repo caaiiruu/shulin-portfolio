@@ -1639,3 +1639,14 @@ test("R161.2.1 converges Domain ProjectCards and floating navigation on canonica
   assert.match(card,/\.related-project-card__heading-v1612 \.related-project-card__title\{margin-top:0\}/);
   assert.doesNotMatch(home,/key===['"]dbs['"]/);
 });
+
+
+test("clamps floating Domain items inside the shared rail safe area", () => {
+  const home = read("assets/js/home.js");
+  const domain = read("assets/css/components/domain-selector.css");
+  assert.match(home, /const desired=\(selected\.offsetLeft\+\(selected\.offsetWidth\/2\)\)-\(rail\.clientWidth\/2\)/);
+  assert.match(home, /return Math\.min\(max,Math\.max\(0,desired\)\)/);
+  assert.match(home, /if\(show&&!wasVisible\)syncFloatingDomain\(domain,\{immediate:true\}\)/);
+  assert.match(domain, /\.floating-navigator__rail\{[^}]*box-sizing:border-box[^}]*padding:var\(--dimension-2px\) var\(--interactive-state-safe-area\)[^}]*scroll-padding-inline:var\(--interactive-state-safe-area\)/);
+  assert.doesNotMatch(home, /domain(?:Floating)?===['"](?:financial-services|enterprise-operations|complex-systems)['"].*(?:scroll|offset|target)/);
+});
