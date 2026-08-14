@@ -21755,32 +21755,66 @@
         },
         "booking": {
           "sections": {
-            "connected-trip-model": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "publicContent.strategyModel"
+                "whatMadeThisHard"
               ],
-              "presentationType": "system-model",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "conversion-evidence": {
+            "contribution": {
               "sourcePaths": [
-                "publicContent.primaryOutcome",
-                "publicContent.outcomes",
-                "impactEvidence"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "outcome-evidence",
+              "presentationType": "shared-contribution",
+              "renderRequired": true
+            },
+            "core-system-insight": {
+              "sourcePaths": [
+                "publicContent.coreSystemInsight"
+              ],
+              "presentationType": "shared-core-system-insight",
+              "renderRequired": true
+            },
+            "design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": [
+                "publicContent.decisionEvidence"
+              ],
+              "presentationType": "shared-structured-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel"
+              ],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           },
           "supporting": [
             {
               "sourcePath": "publicContent.continuousEvidenceLoop",
-              "parentSectionId": "key-decisions",
+              "parentSectionId": "design-decisions",
               "presentationType": "evidence-loop"
             },
             {
               "sourcePath": "publicContent.interviewDeckEvidence",
-              "parentSectionId": "connected-trip-model",
+              "parentSectionId": "evidence",
               "presentationType": "source-evidence"
             }
           ]
