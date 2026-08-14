@@ -1624,3 +1624,18 @@ test("R161.2 keeps ProjectCard media full-bleed and Domain content adjacent thro
   assert.match(card,/--project-card-company-title-gap:var\\(--space-4\\)/);
   assert.match(domain,/@media\\(max-width:900px\\)\\{[\\s\\S]*\\.domain-layout\\{grid-template-columns:1fr;gap:var\\(--space-4\\)\\}/);
 });
+
+
+test("R161.2.1 converges Domain ProjectCards and floating navigation on canonical shared owners",()=>{
+  const home=read("assets/js/home.js");
+  const card=read("assets/css/components/project-card.css");
+  assert.match(home,/domain-floating-chip-v52 floating-navigator__item/);
+  assert.match(home,/card\.classList\.add\('related-project-card-v45--media-stack'\)/);
+  assert.match(home,/related-project-card__heading-v1612/);
+  assert.match(home,/related-project-card__content-v1612/);
+  assert.match(card,/\.related-project-card-v45--media-stack\{padding:0;grid-template-rows:auto minmax\(0,1fr\);gap:0;overflow:hidden\}/);
+  assert.match(card,/\.related-project-card-v45--media-stack \.related-project-card__visual-v45\{border-radius:0\}/);
+  assert.match(card,/\.related-project-card__heading-v1612\{[^}]*gap:var\(--project-card-company-title-gap\)/);
+  assert.match(card,/\.related-project-card__heading-v1612 \.related-project-card__title\{margin-top:0\}/);
+  assert.doesNotMatch(home,/key===['"]dbs['"]/);
+});

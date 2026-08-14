@@ -471,7 +471,7 @@
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
         "featured cards use the shared horizontal desktop structure; compact cards use the shared stacked structure with a 22–26px title and 14px body/action tier",
         "Compact and responsive Work cards use content-sized grid rows, so the manifest-ratio media block owns its complete height and cannot overlap metadata or copy.",
-        "ProjectCard media is full-bleed edge-to-edge inside the clipped card shell; the interactive button resets native padding to zero, only the content block receives card padding, and the media/content boundary remains explicit.",
+        "Work and Homepage Domain ProjectCards use an explicit media-stack grammar: the card shell alone owns border/radius/clipping; media is the first full-width row with zero content padding; a separate content wrapper owns text padding.",
         "both Work variants collapse to one stacked column on compact viewports",
         "related-experiment titles use a compact responsive tier and wider measure for readable mixed Chinese/English wrapping",
         "explicit internal grid or flex owner",
@@ -488,13 +488,13 @@
         "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
         "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain.",
         "Assets with a numeric source ratio of 2:1 or wider are classified generically as panoramic: desktop/tablet preserve the canonical source ratio; compact viewports use the shared 5:3 readability frame with cover and manifest-owned focal position.",
-        "Company metadata uses the neutral project-card-company-color token and the company-to-title relationship is owned once by project-card-company-title-gap = space-4 (16px)."
+        "Company metadata uses the neutral project-card-company-color token; Work and Domain variants each project company and title through a non-expanding heading stack whose sole gap is project-card-company-title-gap = space-4 (16px)."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
         "contentOwner": "content/portfolio-asset-manifest.json",
         "runtimeOwner": "assets/js/app.js#resolveProjectAsset + projectAssetRatio",
-        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card__visual-v45",
+        "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card-v45--media-stack",
         "focalPositionOwner": "content/portfolio-asset-manifest.json#projectCardFocalPosition"
       },
       "interactionContract": [

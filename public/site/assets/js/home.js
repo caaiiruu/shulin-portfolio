@@ -111,7 +111,12 @@ function createProjectCard(key,variant){
   intro.append(top,title);
   card.append(intro,meta,action);
  }else{
-  card.append(createProjectVisual(key),top,title,meta,action);
+  card.classList.add('related-project-card-v45--media-stack');
+  const heading=element('div','related-project-card__heading-v1612');
+  heading.append(top,title);
+  const content=element('div','related-project-card__content-v1612');
+  content.append(heading,meta,action);
+  card.append(createProjectVisual(key),content);
  }
  return card;
 }
@@ -336,7 +341,7 @@ function mountDomainSelectors(){
  rail.replaceChildren(...tabs);
  if(floatingRail){
   const chips=domainSource.map((item,index)=>{
-   const chip=element('button','domain-floating-chip-v52',localize(item.label));
+   const chip=element('button','domain-floating-chip-v52 floating-navigator__item',localize(item.label));
    chip.type='button';chip.dataset.domainFloating=item.id;
    chip.setAttribute('aria-pressed','false');
    return chip;
