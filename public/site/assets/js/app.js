@@ -2314,10 +2314,15 @@
     body.append(element('h4','',title));
     if(decision.fixedStageFields){
       const grid=element('div','voucher-stage-decision__grid');
+      const featuredOptional=decision.optionalBlock||{};
+      const featuredOptionalLabel={
+        'TRADE-OFF ACCEPTED':lang==='zh'?'接受的取捨':'TRADE-OFF ACCEPTED',
+        'WHAT THIS REQUIRED':lang==='zh'?'系統要求':'WHAT THIS REQUIRED'
+      }[featuredOptional.type]||(lang==='zh'?'系統要求':'WHAT THIS REQUIRED');
       [
         [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
         [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
-        [lang==='zh'?'系統要求':'WHAT THIS REQUIRED',decision.whatThisRequired],
+        [featuredOptionalLabel,featuredOptional.content||decision.whatThisRequired],
         [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
       ].forEach(([label,value])=>{
         const field=element('section','voucher-stage-decision__field');
@@ -2436,7 +2441,8 @@
       title_zh:sourceTitle?.zh??source.title_zh,
       whatIDecided:source.whatIDecided,
       whyThisChoice:source.whyThisChoice,
-      whatThisRequired:source.whatThisRequired,
+      whatThisRequired:source.optionalBlock?.content?[source.optionalBlock.content,source.optionalBlock.content_zh]:source.whatThisRequired,
+      optionalBlock:source.optionalBlock?{...source.optionalBlock,content:[source.optionalBlock.content,source.optionalBlock.content_zh]}:null,
       outcome:source.outcome,
       evidenceAssetId:source.evidenceAssetId||source.evidence?.assetId||null,
       evidenceCaption:source.evidenceCaption||source.evidence?.caption||null
