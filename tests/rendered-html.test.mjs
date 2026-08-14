@@ -1678,3 +1678,42 @@ test("shared Outcomes supports change, measured outcome, and scale semantics", (
   assert.match(overview, /\.outcome-semantic-change\{/);
   assert.match(overview, /\.outcome-scale-grid\{/);
 });
+
+test("R162.5 keeps Booking recruiter-first, approximate, complete, and confidentiality-safe",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const booking=ssot.projects.booking;
+  const strategy=ssot.projects["booking-taxi-pickup-service-strategy"];
+  const outcomes=booking.publicContent.outcomes;
+  assert.deepEqual(outcomes.semanticHierarchy.measured.map(item=>[item.value,item.label.en]),[
+    ["+~7%","desktop conversion rate"],
+    ["+~3%","mobile conversion rate"],
+    ["+~10%","tablet conversion rate"],
+    ["~150","additional rides per day after launch"]
+  ]);
+  assert.equal(outcomes.evidence.length,0);
+  assert.match(outcomes.semanticHierarchy.supportingStatements[0].text.en,/6 of 7 analysed markets improved/);
+  assert.match(outcomes.semanticHierarchy.supportingStatements[1].text.en,/Spain was the only analysed market to decline/);
+  assert.match(outcomes.semanticHierarchy.closingStatement.en,/40\+ countries/);
+  assert.doesNotMatch(JSON.stringify(outcomes),/2-step|3-step|outcomes-cross-market|outcomes-post-launch/i);
+  for(const decision of booking.decisionNarrative.primaryDecisions){
+    assert.ok(decision.whatIDecided);
+    assert.ok(decision.whyThisChoice);
+    assert.ok(decision.optionalBlock?.content);
+    assert.ok(decision.outcome);
+  }
+  assert.deepEqual(booking.decisionNarrative.primaryDecisions,booking.publicContent.primaryDecisions);
+  assert.equal(booking.decisionEvidenceMap["booking-decision-01"].publicAssetId,"booking-evidence-decision-01-ride-mix-public-01");
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-public-01"].publicBuild,true);
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-public-01"].type,"image/svg+xml");
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-01"],undefined);
+  assert.equal(manifest.items["booking-evidence-outcomes-cross-market-conversion-01"],undefined);
+  assert.equal(manifest.items["booking-evidence-outcomes-post-launch-tradeoff-01"],undefined);
+  assert.equal(strategy.title.en,"From uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.match(app,/supportingStatements/);
+  assert.match(css,/recruiter-complexity-grid\{[^}]*align-items:stretch/);
+  assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{max-width:var\(--dimension-52ch\)\}/);
+  assert.match(css,/core-system-insight-section \.voucher-r149-foundations:has/);
+});

@@ -9701,18 +9701,14 @@
           "zh": "在處理語言、色彩與市場限制的同時，為四十多個國家交付一致的全球體驗。"
         },
         "principalSignalsConfirmed": [
-          "40+ country launch scale",
-          "Global consistency under constraints",
-          "Cross-market implementation"
+          "Conversion growth across desktop, mobile and tablet",
+          "Approximately 150 additional rides per day after launch",
+          "Connected Accommodation, Flight and Taxi context",
+          "Cross-market rollout across 40+ countries",
+          "Evidence-led option comparison and pickup guidance",
+          "Post-launch outlier investigation"
         ],
-        "principalEvidenceStillNeeded": [
-          "What product or system direction the user personally defined",
-          "Which standards or reusable patterns were created",
-          "How teams aligned across markets",
-          "Measured customer or business outcome",
-          "Trade-offs between global consistency and local requirements",
-          "Any governance or mentorship responsibility"
-        ],
+        "principalEvidenceStillNeeded": [],
         "contentStatus": "approved"
       },
       "title": {
@@ -9817,65 +9813,72 @@
             "id": "booking-decision-01",
             "title": "From one suggested taxi to scanable option comparison",
             "title_zh": "從單一建議計程車，到可快速掃描的選項比較",
-            "whatIDecided": "Tested a collapsed single recommendation against a horizontal option list and selected the horizontal model, then simplified card hierarchy, repetitive USPs, default selection and sorting logic.",
-            "whatIDecided_zh": "測試收合式單一建議與橫向選項列表後，選擇橫向模型，並同步簡化卡片層級、重複價值主張、預設選擇與排序邏輯。",
-            "whyThisChoice": "Customers wanted to see most options at a glance so they could compare price, capacity and value with each other and with other websites.",
-            "whyThisChoice_zh": "顧客希望第一眼看到多數選項，以比較價格、乘載量與價值，也能與其他網站快速對照。",
-            "optionalThirdBlock": {
+            "whatIDecided": "Tested a focused single recommendation against a horizontal option model, then selected the comparison approach and simplified card hierarchy, repetitive selling points, default selection and sorting logic.",
+            "whatIDecided_zh": "測試聚焦式單一建議與橫向選項模型後，選擇比較方案，並簡化卡片層級、重複賣點、預設選擇與排序邏輯。",
+            "whyThisChoice": "Travellers needed to understand available choices at a glance and compare price, capacity and value before committing.",
+            "whyThisChoice_zh": "旅客需要一眼理解可用選項，並在確認前比較價格、乘載量與價值。",
+            "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
-              "content": "Accepted greater on-screen density instead of a tightly focused recommendation in exchange for faster cross-option comparison and less hidden choice.",
-              "content_zh": "接受較高的畫面資訊密度，而非高度聚焦的單一建議，以換取更快的跨選項比較與更少被隱藏的選擇。"
+              "content": "We accepted greater on-screen density instead of a tightly focused recommendation in exchange for faster cross-option comparison and less hidden choice.",
+              "content_zh": "我們接受較高的畫面資訊密度，而非高度聚焦的單一建議，以換取更快的跨選項比較與更少被隱藏的選擇。"
             },
+            "outcome": "Established a faster comparison model grounded in observed ride behaviour, with Standard taxis representing about two-thirds of analysed bookings and the redesigned journey contributing to conversion improvement across devices.",
+            "outcome_zh": "建立以實際行程行為為依據的快速比較模型；Standard taxi 約佔分析預訂的三分之二，而重新設計的旅程也共同促成各裝置的轉換改善。",
             "supportingEvidence": [
-              "Standard taxi defaulted for parties under four based on a year of GA booking distribution.",
-              "Taxi ordering combined passenger capacity with existing booking behaviour.",
-              "Key information and value propositions were prioritised for first-impression comparison."
+              "The comparison model prioritised decision-critical information rather than presenting every vehicle attribute equally.",
+              "Default behaviour was grounded in observed booking patterns across approximately 944K analysed rides."
             ],
             "status": "shipped-and-iterated",
             "ownership": {
               "en": "Led the comparison model, hierarchy and interaction design; ordering and release logic were aligned with product, data and engineering.",
-              "zh": "主導比較模型、層級與互動設計；排序與上線邏輯則與產品團隊、數據團隊及工程團隊對齊。"
+              "zh": "主導比較模型、層級與互動設計；排序與上線邏輯則與產品、數據及工程團隊對齊。"
             },
             "evidenceStrength": "B-observed-and-validated-behaviour"
           },
           {
             "id": "booking-decision-02",
             "title": "From repeated form entry to connected itinerary confirmation",
-            "title_zh": "從重複填寫表單，到連結旅程資訊的確認流程",
-            "whatIDecided": "Prefilled hotel drop-off, flight pickup, party-size taxi selection and passenger details so signed-in customers mainly confirmed the journey rather than recreating it.",
-            "whatIDecided_zh": "預填飯店下車地點、航班接送資訊、依人數選擇計程車，以及乘客資料，使登入顧客主要確認旅程，而非重新建立資料。",
-            "whyThisChoice": "Accommodation, flight and taxi were owned as separate services even though customers experienced them as one trip.",
-            "whyThisChoice_zh": "住宿、航班與計程車在組織內由不同服務負責，但顧客實際經歷的是同一段旅程。",
+            "title_zh": "從重複填寫表單，到串連旅程資訊的確認流程",
+            "whatIDecided": "Reused accommodation, flight, passenger and taxi context so signed-in travellers could confirm known journey information instead of recreating it.",
+            "whatIDecided_zh": "重用住宿、航班、乘客與計程車脈絡，讓已登入旅客確認已知旅程資訊，而不必重新建立資料。",
+            "whyThisChoice": "Accommodation, Flight and Taxi were organisationally separate, but customers experienced them as one continuous trip.",
+            "whyThisChoice_zh": "住宿、航班與計程車在組織內彼此分立，但顧客經歷的是一段連續旅程。",
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": "Accommodation, Flight and Taxi teams had to align on which trusted itinerary and passenger data could carry forward, and where customers still needed explicit confirmation or edit control.",
+              "content_zh": "住宿、航班與計程車團隊必須對齊哪些可信的行程與乘客資料可沿用，以及顧客在哪些環節仍需明確確認或修改。"
+            },
+            "outcome": "Reduced avoidable re-entry and connected taxi booking more closely to the wider trip, contributing to a shorter booking path and measurable post-launch growth.",
+            "outcome_zh": "減少可避免的重複輸入，使計程車預訂更緊密連結整體旅程，並共同促成更短的預訂路徑與可衡量的上線後成長。",
+            "supportingEvidence": [
+              "Trusted itinerary and passenger context carried forward only where explicit confirmation and edit control remained available."
+            ],
             "status": "shipped-core-direction",
             "evidence": "Flight-related findings were brought into weekly cross-vertical design sessions for alignment, brainstorming and critique.",
             "ownership": {
               "en": "Led the UX model for reusing trip data; data availability and cross-vertical integration were co-decided with adjacent product teams.",
               "zh": "主導旅程資料重用的使用者體驗模型；資料可用性與跨產品整合則與相鄰產品團隊共同決定。"
             },
-            "optionalThirdBlock": {
-              "type": "WHAT THIS REQUIRED",
-              "content": "Required accommodation, flight and taxi teams to agree which trusted trip data could be carried forward and when customers still needed to confirm or edit it.",
-              "content_zh": "需要住宿、航班與計程車團隊共同確認哪些可信旅程資料可被延續，以及顧客何時仍需確認或修改。"
-            },
-            "supportingEvidence": [
-              "The historical case selected prefilling from accommodation or other business-unit data because it offered higher data reachability and better use of limited resources.",
-              "Cross-vertical design sessions were used to review flight-related findings and connected-trip implications."
-            ],
             "evidenceStrength": "C-shipped-core-direction"
           },
           {
             "id": "booking-decision-03",
-            "title": "From universal pickup promises to staged, context-aware guidance",
-            "title_zh": "從通用接送承諾，到分階段、具情境的接送指引",
-            "whatIDecided": "Translated luggage into cabin and checked-baggage terms, prioritised airport pickup guidance from Customer Service evidence and treated local road-closure prompts as a lower-priority, higher-cost extension.",
-            "whatIDecided_zh": "將行李容量轉譯為隨身與托運行李，依客服證據優先處理機場接送指引，並將在地道路封閉提示視為成本較高、優先度較低的延伸。",
-            "whyThisChoice": "A single global wait-time promise could not account for airport layout, traffic, supplier dispatch and parking regulations across markets.",
-            "whyThisChoice_zh": "單一全球等候時間承諾無法涵蓋各市場的機場動線、交通、供應商派車與停車規定。",
-            "optionalThirdBlock": {
+            "title": "From universal pickup promises to context-aware guidance",
+            "title_zh": "從通用接送承諾，到具情境的接送指引",
+            "whatIDecided": "Prioritised pickup information supported by Customer Service and behavioural evidence, translated baggage capacity into traveller-native language, and staged higher-cost market-specific guidance rather than forcing one universal promise.",
+            "whatIDecided_zh": "優先處理由客服與行為證據支持的接送資訊，將行李容量轉譯為旅客熟悉的語言，並分階段處理成本較高的市場特定引導，而非強套單一通用承諾。",
+            "whyThisChoice": "Airport layout, traffic, supplier dispatch and parking regulations made one universal pickup or waiting-time promise unreliable across markets.",
+            "whyThisChoice_zh": "機場動線、交通、供應商派車與停車規定，使單一接送或等候時間承諾無法可靠套用於各市場。",
+            "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
-              "content": "Accepted less personalised timing in the first step rather than publishing false precision, while using clearer precautions and Customer Service access until supplier-specific logic was feasible.",
-              "content_zh": "第一階段接受較不個人化的時間資訊，而不是提供錯誤精準度；在供應商-特定邏輯可行前，以更清楚的注意事項與客服存取補足。"
+              "content": "We accepted less personalised timing in the first step rather than introducing false precision, while providing clearer precautions and access to support until supplier-specific logic became feasible.",
+              "content_zh": "第一階段接受較不個人化的時間資訊，而非導入錯誤精準度；在供應商特定邏輯可行前，以更清楚的注意事項與客服管道補足。"
             },
+            "outcome": "Created a clearer framework for handling pickup uncertainty across markets and helped expose Spain as the main outlier requiring deeper behavioural investigation.",
+            "outcome_zh": "建立更清楚的跨市場接送不確定性處理框架，並辨識西班牙為需要進一步行為調查的主要離群市場。",
+            "supportingEvidence": [
+              "The direction translated operational and supplier constraints into customer-facing language while separating globally reusable guidance from market-specific exceptions."
+            ],
             "status": "prioritised-and-prototyped-shipment-by-item-needs-confirmation",
             "ownership": {
               "en": "Led the evidence synthesis and staged guidance direction; supplier-specific feasibility and rollout were shared product and operational decisions.",
@@ -10000,83 +10003,95 @@
             "en": "Outcomes",
             "zh": "成果"
           },
-          "cards": [
-            {
-              "heading": {
-                "en": "+7% desktop conversion rate",
-                "zh": "桌機轉換率 +7%"
+          "semanticHierarchy": {
+            "change": {
+              "label": {
+                "en": "BUSINESS OUTCOME",
+                "zh": "商業成果"
               },
-              "copy": {
-                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
-                "zh": "在兩週衡量期間內確認轉換率成長。"
+              "statement": {
+                "en": "The redesign improved conversion across devices while making the taxi journey easier to compare, confirm and act on across markets.",
+                "zh": "重新設計後，各裝置的轉換表現皆獲改善，也讓旅客在不同市場中更容易比較、確認並採取下一步。"
               }
             },
-            {
-              "heading": {
-                "en": "+2.6% mobile conversion rate",
-                "zh": "手機轉換率 +2.6%"
-              },
-              "copy": {
-                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
-                "zh": "在兩週衡量期間內確認轉換率成長。"
-              }
+            "measuredLabel": {
+              "en": "Measured after launch",
+              "zh": "上線後衡量結果"
             },
-            {
-              "heading": {
-                "en": "+10.4% tablet conversion rate",
-                "zh": "平板轉換率 +10.4%"
+            "measured": [
+              {
+                "value": "+~7%",
+                "label": {
+                  "en": "desktop conversion rate",
+                  "zh": "桌機轉換率"
+                },
+                "evidenceNote": {
+                  "en": "Approximate reported increase within the initial two-week measurement window.",
+                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
+                }
               },
-              "copy": {
-                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
-                "zh": "在兩週衡量期間內確認轉換率成長。"
-              }
-            },
-            {
-              "heading": {
-                "en": "~150 additional rides/day",
-                "zh": "每天約增加 150 趟行程"
+              {
+                "value": "+~3%",
+                "label": {
+                  "en": "mobile conversion rate",
+                  "zh": "手機轉換率"
+                },
+                "evidenceNote": {
+                  "en": "Approximate reported increase within the initial two-week measurement window.",
+                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
+                }
               },
-              "copy": {
-                "en": "Additional daily rides observed during the initial post-launch measurement period.",
-                "zh": "在上線後初期衡量期間觀察到的每日新增行程。"
-              }
-            },
-            {
-              "heading": {
-                "en": "40+ countries",
-                "zh": "40+ 個國家"
+              {
+                "value": "+~10%",
+                "label": {
+                  "en": "tablet conversion rate",
+                  "zh": "平板轉換率"
+                },
+                "evidenceNote": {
+                  "en": "Approximate reported increase within the initial two-week measurement window.",
+                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
+                }
               },
-              "copy": {
-                "en": "A connected booking model delivered across a globally varied transport context.",
-                "zh": "在全球差異化交通情境中交付串連預訂模型。"
+              {
+                "value": "~150",
+                "label": {
+                  "en": "additional rides per day after launch",
+                  "zh": "上線後每日新增行程"
+                },
+                "evidenceNote": {
+                  "en": "Approximate additional daily rides observed during the initial post-launch measurement period.",
+                  "zh": "上線後初期衡量期間觀察到的約略每日新增行程。"
+                }
               }
+            ],
+            "supportingStatements": [
+              {
+                "emphasis": true,
+                "text": {
+                  "en": "6 of 7 analysed markets improved, with an unweighted average reported uplift of about ~6%; Spain was the clear outlier and became the focus for follow-up investigation.",
+                  "zh": "七個分析市場中有六個改善，未加權平均回報增幅約為 ~6%；西班牙是明顯離群市場，並成為後續調查焦點。"
+                }
+              },
+              {
+                "text": {
+                  "en": "Spain was the only analysed market to decline. Behavioural review surfaced unresolved location, field-entry and pickup-information friction, giving the team a concrete follow-up direction.",
+                  "zh": "西班牙是唯一衰退的分析市場。行為檢視揭示尚未解決的地點、欄位輸入與接送資訊摩擦，為團隊提供具體的後續方向。"
+                }
+              },
+              {
+                "text": {
+                  "en": "Conversion improved, while a higher cancellation rate exposed the next optimisation problem around prefilled-field communication and pickup clarity.",
+                  "zh": "轉換獲得改善，但較高的取消率也揭示下一個優化問題：預填欄位溝通與接送資訊清晰度。"
+                }
+              }
+            ],
+            "closingStatement": {
+              "en": "The work also established a clearer model for reusing trip context and adapting pickup guidance across a service operating in 40+ countries.",
+              "zh": "這項工作也為服務於 40 多個國家的產品，建立更清楚的旅程脈絡重用與接送引導調整模型。"
             }
-          ],
-          "evidence": [
-            {
-              "title": {
-                "en": "Cross-market conversion movement",
-                "zh": "跨市場轉換變化"
-              },
-              "copy": {
-                "en": "Six of seven analysed country or region segments improved in the supplied conversion analysis.",
-                "zh": "提供的轉換分析中，七個國家或區域分群有六個改善。"
-              },
-              "publicAssetId": "booking-evidence-outcomes-cross-market-conversion-01"
-            },
-            {
-              "title": {
-                "en": "Post-launch conversion and cancellation trade-off",
-                "zh": "上線後轉換與取消率取捨"
-              },
-              "copy": {
-                "en": "Post-launch analysis compared the conversion benefit with a higher cancellation rate to guide the next iteration.",
-                "zh": "上線後分析同步比較轉換收益與較高取消率，以引導下一輪迭代。"
-              },
-              "publicAssetId": "booking-evidence-outcomes-post-launch-tradeoff-01"
-            }
-          ],
-          "contentStatus": "approved"
+          },
+          "evidence": [],
+          "contentStatus": "approved-r162.5"
         },
         "interviewDeckEvidence": {
           "sourceArchiveId": "booking-interview-deck-v1",
@@ -10169,8 +10184,8 @@
                 "zh": "優先處理主要易用性訊號"
               },
               "copy": {
-                "en": "155 feedback results included 122 Ease of Use or Navigation mentions, focusing attention on comparison and journey clarity.",
-                "zh": "155 筆回饋中有 122 筆提及易用性或導覽，使團隊聚焦於比較與旅程清晰度。"
+                "en": "~155 feedback results included ~120 Ease of Use or Navigation mentions, focusing attention on comparison and journey clarity.",
+                "zh": "約 155 筆回饋中，約 120 筆提及易用性或導覽，使團隊聚焦於比較與旅程清晰度。"
               },
               "publicAssetId": "booking-evidence-research-feedback-summary-01"
             }
@@ -10198,28 +10213,28 @@
               }
             },
             {
-              "value": "155",
+              "value": "~155",
               "label": {
-                "en": "feedback results",
-                "zh": "筆回饋結果"
+                "en": "feedback results reviewed",
+                "zh": "筆回饋結果完成檢視"
               }
             },
             {
-              "value": "122",
+              "value": "~120",
               "label": {
                 "en": "Ease of Use / Navigation mentions",
                 "zh": "筆易用性／導覽提及"
               }
             },
             {
-              "value": "943,818",
+              "value": "~944K",
               "label": {
                 "en": "rides analysed",
                 "zh": "趟行程完成分析"
               }
             },
             {
-              "value": "65.48%",
+              "value": "~65%",
               "label": {
                 "en": "Standard taxi share",
                 "zh": "Standard taxi 佔比"
@@ -10642,29 +10657,34 @@
       },
       "publicOutcomeEvidence": [
         {
-          "id": "booking-outcome-rides-per-day",
-          "tier": "A",
-          "publicValue": "~150 additional rides per day",
-          "period": "First two weeks after launch",
-          "sourceType": "Historical portfolio case source",
-          "attribution": "Product-team outcome; not attributed to design alone",
-          "publicUse": "approved-as-approximate"
-        },
-        {
           "id": "booking-outcome-device-conversion",
           "tier": "A",
-          "sourceReportedValues": {
-            "desktop": "~7%",
-            "mobile": "~2.6%",
-            "tablet": "~10.4%"
+          "publicValues": {
+            "desktop": "+~7%",
+            "mobile": "+~3%",
+            "tablet": "+~10%"
           },
           "period": "First two weeks after launch",
           "sourceType": "Historical portfolio case source",
-          "publicUse": "expandable-evidence-with-caveat",
-          "caveat": {
-            "en": "The historical source reports conversion increases, but the original calculation does not preserve whether these are relative changes or percentage-point changes.",
-            "zh": "歷史來源記錄轉換 increase，但未保留這些數字屬於相對變化或百分點變化的原始計算定義。"
-          }
+          "publicUse": "approved-as-approximate",
+          "attribution": "Product-team outcome; individual decisions are not credited with the full uplift."
+        },
+        {
+          "id": "booking-outcome-rides-per-day",
+          "tier": "A",
+          "publicValue": "~150 additional rides per day after launch",
+          "period": "First two weeks after launch",
+          "sourceType": "Historical portfolio case source",
+          "publicUse": "approved-as-approximate",
+          "attribution": "Product-team outcome; not attributed to design alone."
+        },
+        {
+          "id": "booking-outcome-cross-market",
+          "tier": "B",
+          "publicValue": "6 of 7 analysed markets improved; approximately ~6% unweighted mean",
+          "sourceType": "Supplied market-difference analysis",
+          "publicUse": "supporting-text-only",
+          "boundary": "Not traffic-weighted; Spain remained the outlier requiring follow-up."
         },
         {
           "id": "booking-research-delivery-scale",
@@ -10672,53 +10692,46 @@
           "values": [
             "18 interviews and testing sessions",
             "12 workshops",
-            "14 analysis reports"
+            "14 analysis reports",
+            "~155 feedback results reviewed",
+            "~120 Ease of Use / Navigation mentions",
+            "~944K rides analysed",
+            "~65% Standard taxi share"
           ],
           "sourceType": "Historical portfolio case source",
-          "publicUse": "approved-as-research-scale-not-outcome"
+          "publicUse": "approved-as-research-and-decision-evidence-not-outcome"
         }
       ],
       "outcomeEvidenceModel": [
         {
-          "id": "booking-outcome-rides-per-day",
-          "tier": "A",
-          "publicValue": "~150 additional rides per day",
-          "period": "First two weeks after launch",
-          "sourceType": "Historical portfolio case source",
-          "attribution": "Product-team outcome; not attributed to design alone",
-          "publicUse": "approved-as-approximate",
-          "outcomeType": {
-            "en": "Post-launch usage growth",
-            "zh": "上線後使用成長"
-          },
-          "claim": {
-            "en": "~150 additional rides per day",
-            "zh": "上線後前兩週，平均每天約增加 150 趟行程。"
-          }
-        },
-        {
           "id": "booking-outcome-device-conversion",
           "tier": "A",
-          "sourceReportedValues": {
-            "desktop": "~7%",
-            "mobile": "~2.6%",
-            "tablet": "~10.4%"
+          "publicValues": {
+            "desktop": "+~7%",
+            "mobile": "+~3%",
+            "tablet": "+~10%"
           },
           "period": "First two weeks after launch",
           "sourceType": "Historical portfolio case source",
-          "publicUse": "expandable-evidence-with-caveat",
-          "caveat": {
-            "en": "The historical source reports conversion increases, but the original calculation does not preserve whether these are relative changes or percentage-point changes.",
-            "zh": "歷史資料記錄了轉換提升，但未保留相對變化或百分點變化的原始計算定義。"
-          },
-          "outcomeType": {
-            "en": "Device conversion",
-            "zh": "裝置轉換表現"
-          },
-          "claim": {
-            "en": "~7% desktop · ~2.6% mobile · ~10.4% tablet conversion increase in the first two weeks after launch.",
-            "zh": "上線後前兩週，桌機約提升 7%、手機約提升 2.6%、平板約提升 10.4%。"
-          }
+          "publicUse": "approved-as-approximate",
+          "attribution": "Product-team outcome; individual decisions are not credited with the full uplift."
+        },
+        {
+          "id": "booking-outcome-rides-per-day",
+          "tier": "A",
+          "publicValue": "~150 additional rides per day after launch",
+          "period": "First two weeks after launch",
+          "sourceType": "Historical portfolio case source",
+          "publicUse": "approved-as-approximate",
+          "attribution": "Product-team outcome; not attributed to design alone."
+        },
+        {
+          "id": "booking-outcome-cross-market",
+          "tier": "B",
+          "publicValue": "6 of 7 analysed markets improved; approximately ~6% unweighted mean",
+          "sourceType": "Supplied market-difference analysis",
+          "publicUse": "supporting-text-only",
+          "boundary": "Not traffic-weighted; Spain remained the outlier requiring follow-up."
         },
         {
           "id": "booking-research-delivery-scale",
@@ -10726,18 +10739,14 @@
           "values": [
             "18 interviews and testing sessions",
             "12 workshops",
-            "14 analysis reports"
+            "14 analysis reports",
+            "~155 feedback results reviewed",
+            "~120 Ease of Use / Navigation mentions",
+            "~944K rides analysed",
+            "~65% Standard taxi share"
           ],
           "sourceType": "Historical portfolio case source",
-          "publicUse": "approved-as-research-scale-not-outcome",
-          "outcomeType": {
-            "en": "Research delivery scale",
-            "zh": "研究交付規模"
-          },
-          "claim": {
-            "en": "18 interviews and testing sessions · 12 workshops · 14 analysis reports",
-            "zh": "完成 18 場訪談與測試、12 場工作坊，以及 14 份分析報告。"
-          }
+          "publicUse": "approved-as-research-and-decision-evidence-not-outcome"
         }
       ],
       "heroVisualBrief": {
@@ -10855,65 +10864,72 @@
             "id": "booking-decision-01",
             "title": "From one suggested taxi to scanable option comparison",
             "title_zh": "從單一建議計程車，到可快速掃描的選項比較",
-            "whatIDecided": "Tested a collapsed single recommendation against a horizontal option list and selected the horizontal model, then simplified card hierarchy, repetitive USPs, default selection and sorting logic.",
-            "whatIDecided_zh": "測試收合式單一建議與橫向選項列表後，選擇橫向模型，並同步簡化卡片層級、重複價值主張、預設選擇與排序邏輯。",
-            "whyThisChoice": "Customers wanted to see most options at a glance so they could compare price, capacity and value with each other and with other websites.",
-            "whyThisChoice_zh": "顧客希望第一眼看到多數選項，以比較價格、乘載量與價值，也能與其他網站快速對照。",
-            "optionalThirdBlock": {
+            "whatIDecided": "Tested a focused single recommendation against a horizontal option model, then selected the comparison approach and simplified card hierarchy, repetitive selling points, default selection and sorting logic.",
+            "whatIDecided_zh": "測試聚焦式單一建議與橫向選項模型後，選擇比較方案，並簡化卡片層級、重複賣點、預設選擇與排序邏輯。",
+            "whyThisChoice": "Travellers needed to understand available choices at a glance and compare price, capacity and value before committing.",
+            "whyThisChoice_zh": "旅客需要一眼理解可用選項，並在確認前比較價格、乘載量與價值。",
+            "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
-              "content": "Accepted greater on-screen density instead of a tightly focused recommendation in exchange for faster cross-option comparison and less hidden choice.",
-              "content_zh": "接受較高的畫面資訊密度，而非高度聚焦的單一建議，以換取更快的跨選項比較與更少被隱藏的選擇。"
+              "content": "We accepted greater on-screen density instead of a tightly focused recommendation in exchange for faster cross-option comparison and less hidden choice.",
+              "content_zh": "我們接受較高的畫面資訊密度，而非高度聚焦的單一建議，以換取更快的跨選項比較與更少被隱藏的選擇。"
             },
+            "outcome": "Established a faster comparison model grounded in observed ride behaviour, with Standard taxis representing about two-thirds of analysed bookings and the redesigned journey contributing to conversion improvement across devices.",
+            "outcome_zh": "建立以實際行程行為為依據的快速比較模型；Standard taxi 約佔分析預訂的三分之二，而重新設計的旅程也共同促成各裝置的轉換改善。",
             "supportingEvidence": [
-              "Standard taxi defaulted for parties under four based on a year of GA booking distribution.",
-              "Taxi ordering combined passenger capacity with existing booking behaviour.",
-              "Key information and value propositions were prioritised for first-impression comparison."
+              "The comparison model prioritised decision-critical information rather than presenting every vehicle attribute equally.",
+              "Default behaviour was grounded in observed booking patterns across approximately 944K analysed rides."
             ],
             "status": "shipped-and-iterated",
             "ownership": {
               "en": "Led the comparison model, hierarchy and interaction design; ordering and release logic were aligned with product, data and engineering.",
-              "zh": "主導比較模型、層級與互動設計；排序與上線邏輯則與產品團隊、數據團隊及工程團隊對齊。"
+              "zh": "主導比較模型、層級與互動設計；排序與上線邏輯則與產品、數據及工程團隊對齊。"
             },
             "evidenceStrength": "B-observed-and-validated-behaviour"
           },
           {
             "id": "booking-decision-02",
             "title": "From repeated form entry to connected itinerary confirmation",
-            "title_zh": "從重複填寫表單，到連結旅程資訊的確認流程",
-            "whatIDecided": "Prefilled hotel drop-off, flight pickup, party-size taxi selection and passenger details so signed-in customers mainly confirmed the journey rather than recreating it.",
-            "whatIDecided_zh": "預填飯店下車地點、航班接送資訊、依人數選擇計程車，以及乘客資料，使登入顧客主要確認旅程，而非重新建立資料。",
-            "whyThisChoice": "Accommodation, flight and taxi were owned as separate services even though customers experienced them as one trip.",
-            "whyThisChoice_zh": "住宿、航班與計程車在組織內由不同服務負責，但顧客實際經歷的是同一段旅程。",
+            "title_zh": "從重複填寫表單，到串連旅程資訊的確認流程",
+            "whatIDecided": "Reused accommodation, flight, passenger and taxi context so signed-in travellers could confirm known journey information instead of recreating it.",
+            "whatIDecided_zh": "重用住宿、航班、乘客與計程車脈絡，讓已登入旅客確認已知旅程資訊，而不必重新建立資料。",
+            "whyThisChoice": "Accommodation, Flight and Taxi were organisationally separate, but customers experienced them as one continuous trip.",
+            "whyThisChoice_zh": "住宿、航班與計程車在組織內彼此分立，但顧客經歷的是一段連續旅程。",
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": "Accommodation, Flight and Taxi teams had to align on which trusted itinerary and passenger data could carry forward, and where customers still needed explicit confirmation or edit control.",
+              "content_zh": "住宿、航班與計程車團隊必須對齊哪些可信的行程與乘客資料可沿用，以及顧客在哪些環節仍需明確確認或修改。"
+            },
+            "outcome": "Reduced avoidable re-entry and connected taxi booking more closely to the wider trip, contributing to a shorter booking path and measurable post-launch growth.",
+            "outcome_zh": "減少可避免的重複輸入，使計程車預訂更緊密連結整體旅程，並共同促成更短的預訂路徑與可衡量的上線後成長。",
+            "supportingEvidence": [
+              "Trusted itinerary and passenger context carried forward only where explicit confirmation and edit control remained available."
+            ],
             "status": "shipped-core-direction",
             "evidence": "Flight-related findings were brought into weekly cross-vertical design sessions for alignment, brainstorming and critique.",
             "ownership": {
               "en": "Led the UX model for reusing trip data; data availability and cross-vertical integration were co-decided with adjacent product teams.",
               "zh": "主導旅程資料重用的使用者體驗模型；資料可用性與跨產品整合則與相鄰產品團隊共同決定。"
             },
-            "optionalThirdBlock": {
-              "type": "WHAT THIS REQUIRED",
-              "content": "Required accommodation, flight and taxi teams to agree which trusted trip data could be carried forward and when customers still needed to confirm or edit it.",
-              "content_zh": "需要住宿、航班與計程車團隊共同確認哪些可信旅程資料可被延續，以及顧客何時仍需確認或修改。"
-            },
-            "supportingEvidence": [
-              "The historical case selected prefilling from accommodation or other business-unit data because it offered higher data reachability and better use of limited resources.",
-              "Cross-vertical design sessions were used to review flight-related findings and connected-trip implications."
-            ],
             "evidenceStrength": "C-shipped-core-direction"
           },
           {
             "id": "booking-decision-03",
-            "title": "From universal pickup promises to staged, context-aware guidance",
-            "title_zh": "從通用接送承諾，到分階段、具情境的接送指引",
-            "whatIDecided": "Translated luggage into cabin and checked-baggage terms, prioritised airport pickup guidance from Customer Service evidence and treated local road-closure prompts as a lower-priority, higher-cost extension.",
-            "whatIDecided_zh": "將行李容量轉譯為隨身與托運行李，依客服證據優先處理機場接送指引，並將在地道路封閉提示視為成本較高、優先度較低的延伸。",
-            "whyThisChoice": "A single global wait-time promise could not account for airport layout, traffic, supplier dispatch and parking regulations across markets.",
-            "whyThisChoice_zh": "單一全球等候時間承諾無法涵蓋各市場的機場動線、交通、供應商派車與停車規定。",
-            "optionalThirdBlock": {
+            "title": "From universal pickup promises to context-aware guidance",
+            "title_zh": "從通用接送承諾，到具情境的接送指引",
+            "whatIDecided": "Prioritised pickup information supported by Customer Service and behavioural evidence, translated baggage capacity into traveller-native language, and staged higher-cost market-specific guidance rather than forcing one universal promise.",
+            "whatIDecided_zh": "優先處理由客服與行為證據支持的接送資訊，將行李容量轉譯為旅客熟悉的語言，並分階段處理成本較高的市場特定引導，而非強套單一通用承諾。",
+            "whyThisChoice": "Airport layout, traffic, supplier dispatch and parking regulations made one universal pickup or waiting-time promise unreliable across markets.",
+            "whyThisChoice_zh": "機場動線、交通、供應商派車與停車規定，使單一接送或等候時間承諾無法可靠套用於各市場。",
+            "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
-              "content": "Accepted less personalised timing in the first step rather than publishing false precision, while using clearer precautions and Customer Service access until supplier-specific logic was feasible.",
-              "content_zh": "第一階段接受較不個人化的時間資訊，而不是提供錯誤精準度；在供應商-特定邏輯可行前，以更清楚的注意事項與客服存取補足。"
+              "content": "We accepted less personalised timing in the first step rather than introducing false precision, while providing clearer precautions and access to support until supplier-specific logic became feasible.",
+              "content_zh": "第一階段接受較不個人化的時間資訊，而非導入錯誤精準度；在供應商特定邏輯可行前，以更清楚的注意事項與客服管道補足。"
             },
+            "outcome": "Created a clearer framework for handling pickup uncertainty across markets and helped expose Spain as the main outlier requiring deeper behavioural investigation.",
+            "outcome_zh": "建立更清楚的跨市場接送不確定性處理框架，並辨識西班牙為需要進一步行為調查的主要離群市場。",
+            "supportingEvidence": [
+              "The direction translated operational and supplier constraints into customer-facing language while separating globally reusable guidance from market-specific exceptions."
+            ],
             "status": "prioritised-and-prototyped-shipment-by-item-needs-confirmation",
             "ownership": {
               "en": "Led the evidence synthesis and staged guidance direction; supplier-specific feasibility and rollout were shared product and operational decisions.",
@@ -10970,7 +10986,8 @@
       "latestConfirmedCorrection": {
         "status": "approved-r162.4",
         "outcomesAreFinalConfirmed": true,
-        "conversionValuesAreNotPercentagePoints": true
+        "conversionValuesAreNotPercentagePoints": true,
+        "r1625": "Recruiter-first approximate outcomes, cross-market outlier framing, complete decisions, and confidentiality-safe ride-mix evidence approved on 2026-08-14."
       },
       "domain": {
         "en": "Travel booking",
@@ -11011,62 +11028,48 @@
         "variant": "measured-outcome",
         "primaryMetrics": [
           {
+            "value": "+~7%",
+            "label": "desktop conversion rate"
+          },
+          {
+            "value": "+~3%",
+            "label": "mobile conversion rate"
+          },
+          {
+            "value": "+~10%",
+            "label": "tablet conversion rate"
+          },
+          {
             "value": "~150",
-            "label": "additional rides per day",
-            "window": "within two weeks of launch"
+            "label": "additional rides per day after launch"
           }
         ],
         "supportingMetrics": [
           {
+            "value": "6 of 7",
+            "label": "analysed markets improved"
+          },
+          {
             "value": "40+",
             "label": "countries"
-          },
-          {
-            "value": "18",
-            "label": "interviews/tests"
-          },
-          {
-            "value": "12",
-            "label": "workshops"
-          },
-          {
-            "value": "14",
-            "label": "analysis reports"
           }
         ],
-        "conditionalMetrics": [
-          {
-            "value": "~7%",
-            "label": "desktop conversion movement",
-            "status": "definition needs confirmation"
-          },
-          {
-            "value": "~2.6%",
-            "label": "mobile conversion movement",
-            "status": "definition needs confirmation"
-          },
-          {
-            "value": "~10.4%",
-            "label": "tablet conversion movement",
-            "status": "definition needs confirmation"
-          }
-        ],
-        "recommendedHeadline": "Added ~150 rides per day within two weeks while supporting a 40+ country rollout.",
-        "boundary": "Do not publish the device-level conversion figures as final uplift until relative-vs-percentage-point meaning is confirmed."
+        "recommendedHeadline": "Improved conversion across devices and added approximately 150 rides per day after launch.",
+        "boundary": "Public values are rounded approximations; cross-market ~6% is an unweighted mean of supplied market differences, not a traffic-weighted global result."
       },
       "decisionEvidenceMap": {
         "booking-decision-01": {
-          "publicAssetId": "booking-evidence-decision-01-ride-mix-01",
+          "publicAssetId": "booking-evidence-decision-01-ride-mix-public-01",
           "caption": {
-            "en": "943,818 rides analysed; Standard taxis represented 65.48% of the observed ride mix.",
-            "zh": "分析 943,818 趟行程；Standard taxi 佔觀察行程組合的 65.48%。"
+            "en": "Across ~944K analysed rides, Standard taxis represented the majority of observed bookings.",
+            "zh": "在約 944K 趟分析行程中，Standard taxi 佔觀察預訂的多數。"
           }
         },
         "booking-decision-02": {
           "publicAssetId": "booking-evidence-decision-02-hotjar-edit-trip-01",
           "caption": {
-            "en": "Behavioural evidence showed customers verifying and editing known trip information.",
-            "zh": "行為證據顯示顧客會確認並修改已知旅程資訊。"
+            "en": "Behavioural evidence showed travellers reviewing and editing known trip information.",
+            "zh": "行為證據顯示旅客會檢視並修改已知旅程資訊。"
           }
         },
         "booking-decision-03": {

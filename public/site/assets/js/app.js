@@ -2799,7 +2799,18 @@
       });
       group.append(grid);section.append(group);
     }
+    if(list(source?.supportingStatements).length){
+      const support=element('div','outcome-semantic-support');
+      list(source.supportingStatements).forEach(item=>{
+        const note=element('p','outcome-semantic-note');
+        const copy=translate(item.text||item.copy||item);
+        if(item?.emphasis)note.append(element('strong','',copy));else safeText(note,copy);
+        support.append(note);
+      });
+      section.append(support);
+    }
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
+    if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
   function appendSharedAccountability(section,source,{translate=localize}={}){
     const groups=[source?.owned,source?.shared,source?.partnerOwned].filter(Boolean);
