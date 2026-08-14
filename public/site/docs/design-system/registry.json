@@ -471,7 +471,7 @@
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
         "featured cards use the shared horizontal desktop structure; compact cards use the shared stacked structure with a 22–26px title and 14px body/action tier",
         "Compact and responsive Work cards use content-sized grid rows, so the manifest-ratio media block owns its complete height and cannot overlap metadata or copy.",
-        "ProjectCard media is full-bleed edge-to-edge inside the clipped card shell; only the content block receives card padding, and the media/content boundary remains explicit.",
+        "ProjectCard media is full-bleed edge-to-edge inside the clipped card shell; the interactive button resets native padding to zero, only the content block receives card padding, and the media/content boundary remains explicit.",
         "both Work variants collapse to one stacked column on compact viewports",
         "related-experiment titles use a compact responsive tier and wider measure for readable mixed Chinese/English wrapping",
         "explicit internal grid or flex owner",
