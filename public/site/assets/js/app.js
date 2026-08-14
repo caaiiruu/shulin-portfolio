@@ -2774,6 +2774,33 @@
     });
     return grid;
   }
+  function appendOutcomeSemanticHierarchy(section,source,{translate=localize}={}){
+    const change=source?.change;
+    if(change){
+      const block=element('article','outcome-semantic-change');
+      block.append(element('span','voucher-r149-eyebrow',translate(change.label)));
+      block.append(element('h3','outcome-semantic-change__title',translate(change.statement)));
+      section.append(block);
+    }
+    if(list(source?.measured).length){
+      const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
+      group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
+      const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
+      appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
+    }
+    if(list(source?.scale).length){
+      const group=element('section','outcome-semantic-group outcome-semantic-group--scale');
+      group.append(element('h3','outcome-semantic-group__title',translate(source.scaleLabel)));
+      const grid=element('div','outcome-scale-grid');
+      list(source.scale).forEach(item=>{
+        const card=element('article','outcome-scale');
+        card.append(directionalValue(item.value,'outcome-scale__value'),element('p','outcome-scale__label',translate(item.label)));
+        grid.append(card);
+      });
+      group.append(grid);section.append(group);
+    }
+    if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
+  }
   function appendSharedAccountability(section,source,{translate=localize}={}){
     const groups=[source?.owned,source?.shared,source?.partnerOwned].filter(Boolean);
     const grid=element('div','voucher-r149-accountability');
@@ -2856,8 +2883,11 @@
     const outcomesSource=projectContentRef(p,refs.outcomes);
     const outcomes=createRecruiterSection('',t(outcomesSource?.title));
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
-    const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
-    appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});outcomes.append(outcomeGrid);
+    if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
+    else{
+      const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
+      appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});outcomes.append(outcomeGrid);
+    }
 
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;

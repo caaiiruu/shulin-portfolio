@@ -1661,3 +1661,17 @@ test("SharedAccountability supports an optional partner-owned group without proj
   assert.doesNotMatch(app, /booking.*partnerOwned|partnerOwned.*booking/i);
   assert.match(overview, /\.voucher-r149-accountability--three\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
 });
+
+
+test("shared Outcomes supports change, measured outcome, and scale semantics", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /function appendOutcomeSemanticHierarchy\(section,source/);
+  assert.match(app, /source\?\.change/);
+  assert.match(app, /source\?\.measured/);
+  assert.match(app, /source\?\.scale/);
+  assert.match(app, /if\(outcomesSource\?\.semanticHierarchy\)appendOutcomeSemanticHierarchy/);
+  assert.doesNotMatch(app, /booking.*semanticHierarchy|semanticHierarchy.*booking/i);
+  assert.match(overview, /\.outcome-semantic-change\{/);
+  assert.match(overview, /\.outcome-scale-grid\{/);
+});
