@@ -2895,7 +2895,7 @@
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(accountabilityPresentation?.intro||ownershipSource?.publicSummary));
-    accountability.dataset.canonicalSectionId='ownership-and-evidence';
+    accountability.dataset.canonicalSectionId='my-accountability';
     if(accountabilityPresentation)appendSharedAccountability(accountability,accountabilityPresentation,{translate:t});
     else accountability.dataset.componentOwner='SharedAccountability';
 
