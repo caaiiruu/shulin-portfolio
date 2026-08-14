@@ -10076,12 +10076,6 @@
               "publicAssetId": "booking-evidence-outcomes-post-launch-tradeoff-01"
             }
           ],
-          "privateExpandableEvidence": [
-            {
-              "publicAssetId": "booking-evidence-outcomes-conclusion-01",
-              "visibility": "private-expandable"
-            }
-          ],
           "contentStatus": "approved"
         },
         "interviewDeckEvidence": {

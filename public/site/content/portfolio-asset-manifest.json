@@ -857,26 +857,6 @@
       "alt_zh": "",
       "semanticSlotStable": true
     },
-    "booking-evidence-outcomes-conclusion-01": {
-      "id": "booking-evidence-outcomes-conclusion-01",
-      "projectId": "booking",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/booking/booking-evidence-outcomes-conclusion-01.jpg",
-      "aspectRatio": "16:9",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": false,
-      "sha256": "511b788573a90204b5f75b5e36829cff56be54a37d1a724a35b83777b14ac66c",
-      "byteSize": 226111,
-      "blobSha": "4d2dc040cd6e907a1f4c3fa13057d57755560b36",
-      "width": 1600,
-      "height": 900,
-      "alt": "Original conclusion and recommendation evidence retained for private expandable proof.",
-      "alt_zh": "",
-      "semanticSlotStable": true
-    },
     "booking-evidence-outcomes-cross-market-conversion-01": {
       "id": "booking-evidence-outcomes-cross-market-conversion-01",
       "projectId": "booking",
