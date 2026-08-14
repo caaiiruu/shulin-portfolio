@@ -12,7 +12,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -53,6 +53,15 @@ for (const viewport of viewports) {
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
   }
+
+  await page.goto(`${baseUrl}/site/work/booking`,{waitUntil:"networkidle"});
+  const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("img")].filter(image=>image.alt);await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));const required=["Connecting the global taxi-booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomes=[...dialog.querySelectorAll(".outcome-metric h3")].map(node=>node.textContent.trim()),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim());return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth}});
+  if(bookingCertification.requiredOrder.some(index=>index<0)||bookingCertification.requiredOrder.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} Booking architecture order failed: ${JSON.stringify(bookingCertification.requiredOrder)}`);
+  if(bookingCertification.legacy.length)failures.push(`${viewport.name} Booking legacy standalone sections visible: ${JSON.stringify(bookingCertification.legacy)}`);
+  if(JSON.stringify(bookingCertification.outcomes)!==JSON.stringify(["+7% desktop conversion rate","+2.6% mobile conversion rate","+10.4% tablet conversion rate","~150 additional rides/day","40+ countries"]))failures.push(`${viewport.name} Booking outcomes mismatch: ${JSON.stringify(bookingCertification.outcomes)}`);
+  if(JSON.stringify(bookingCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Booking navigator mismatch: ${JSON.stringify(bookingCertification.navigator)}`);
+  if(bookingCertification.evidenceImages.length!==10||bookingCertification.evidenceImages.some(image=>!image.complete||image.naturalWidth!==1600||image.naturalHeight!==900))failures.push(`${viewport.name} Booking evidence readiness failed: ${JSON.stringify(bookingCertification.evidenceImages)}`);
+  if(bookingCertification.overflow>0)failures.push(`${viewport.name} Booking dialog horizontal overflow: ${bookingCertification.overflow}`);
 
   const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
   await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});const fresh=await homepageState();
