@@ -10714,7 +10714,15 @@
           "period": "First two weeks after launch",
           "sourceType": "Historical portfolio case source",
           "publicUse": "approved-as-approximate",
-          "attribution": "Product-team outcome; individual decisions are not credited with the full uplift."
+          "attribution": "Product-team outcome; individual decisions are not credited with the full uplift.",
+          "outcomeType": {
+            "en": "Device conversion",
+            "zh": "裝置轉換成果"
+          },
+          "claim": {
+            "en": "Approximate conversion improvement across desktop, mobile and tablet after launch.",
+            "zh": "上線後桌機、手機與平板的轉換率皆獲得約略改善。"
+          }
         },
         {
           "id": "booking-outcome-rides-per-day",
@@ -10723,7 +10731,15 @@
           "period": "First two weeks after launch",
           "sourceType": "Historical portfolio case source",
           "publicUse": "approved-as-approximate",
-          "attribution": "Product-team outcome; not attributed to design alone."
+          "attribution": "Product-team outcome; not attributed to design alone.",
+          "outcomeType": {
+            "en": "Post-launch growth",
+            "zh": "上線後成長"
+          },
+          "claim": {
+            "en": "Approximately 150 additional rides per day after launch.",
+            "zh": "上線後每日約新增 150 趟行程。"
+          }
         },
         {
           "id": "booking-outcome-cross-market",
@@ -10731,7 +10747,15 @@
           "publicValue": "6 of 7 analysed markets improved; approximately ~6% unweighted mean",
           "sourceType": "Supplied market-difference analysis",
           "publicUse": "supporting-text-only",
-          "boundary": "Not traffic-weighted; Spain remained the outlier requiring follow-up."
+          "boundary": "Not traffic-weighted; Spain remained the outlier requiring follow-up.",
+          "outcomeType": {
+            "en": "Cross-market performance",
+            "zh": "跨市場表現"
+          },
+          "claim": {
+            "en": "Six of seven analysed markets improved; the unweighted mean reported uplift was about ~6%.",
+            "zh": "七個分析市場中有六個改善；未加權平均回報增幅約為 ~6%。"
+          }
         },
         {
           "id": "booking-research-delivery-scale",
@@ -10746,7 +10770,15 @@
             "~65% Standard taxi share"
           ],
           "sourceType": "Historical portfolio case source",
-          "publicUse": "approved-as-research-and-decision-evidence-not-outcome"
+          "publicUse": "approved-as-research-and-decision-evidence-not-outcome",
+          "outcomeType": {
+            "en": "Decision evidence",
+            "zh": "決策證據"
+          },
+          "claim": {
+            "en": "Research, behavioural signals and rounded booking-history evidence informed the public design rationale.",
+            "zh": "研究、行為訊號與四捨五入的預訂歷史證據共同支持公開的設計決策依據。"
+          }
         }
       ],
       "heroVisualBrief": {
