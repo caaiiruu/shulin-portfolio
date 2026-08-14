@@ -2775,14 +2775,18 @@
     return grid;
   }
   function appendSharedAccountability(section,source,{translate=localize}={}){
+    const groups=[source?.owned,source?.shared,source?.partnerOwned].filter(Boolean);
     const grid=element('div','voucher-r149-accountability');
-    [source?.owned,source?.shared].filter(Boolean).forEach(item=>{
+    if(groups.length===3)grid.classList.add('voucher-r149-accountability--three');
+    groups.forEach(item=>{
       const article=element('article');
-      article.append(
-        element('span','voucher-r149-eyebrow',translate(item.label)),
-        element('h3','',translate(item.title)),
-        element('p','',translate(item.text))
-      );
+      article.append(element('span','voucher-r149-eyebrow',translate(item.label)));
+      if(translate(item.title))article.append(element('h3','',translate(item.title)));
+      if(list(item.items).length){
+        const details=element('ul','voucher-r149-accountability__list');
+        list(item.items).forEach(entry=>details.append(element('li','',translate(entry))));
+        article.append(details);
+      }else if(translate(item.text))article.append(element('p','',translate(item.text)));
       grid.append(article);
     });
     section.append(grid);section.dataset.componentOwner='SharedAccountability';return grid;

@@ -1650,3 +1650,14 @@ test("clamps floating Domain items inside the shared rail safe area", () => {
   assert.match(domain, /\.floating-navigator__rail\{[^}]*box-sizing:border-box[^}]*padding:var\(--dimension-2px\) var\(--interactive-state-safe-area\)[^}]*scroll-padding-inline:var\(--interactive-state-safe-area\)/);
   assert.doesNotMatch(home, /domain(?:Floating)?===['"](?:financial-services|enterprise-operations|complex-systems)['"].*(?:scroll|offset|target)/);
 });
+
+
+test("SharedAccountability supports an optional partner-owned group without project conditions", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /\[source\?\.owned,source\?\.shared,source\?\.partnerOwned\]\.filter\(Boolean\)/);
+  assert.match(app, /if\(groups\.length===3\)grid\.classList\.add\('voucher-r149-accountability--three'\)/);
+  assert.match(app, /list\(item\.items\)\.forEach\(entry=>details\.append/);
+  assert.doesNotMatch(app, /booking.*partnerOwned|partnerOwned.*booking/i);
+  assert.match(overview, /\.voucher-r149-accountability--three\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
+});
