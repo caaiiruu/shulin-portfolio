@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-12-r158",
+  "contentVersion": "2026-08-14-r162.4",
   "supersedes": "2026-08-11-r157",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -9662,14 +9662,37 @@
     "booking": {
       "valueIBrought": {
         "headline": {
-          "en": "Within two weeks of launch, reported conversion movement was +7% on desktop, +2.6% on mobile and +10.4% on tablet.",
-          "zh": "上線兩週內，桌面版、手機版與平板版回報的轉換變動分別為 +7%、+2.6% 與 +10.4%。"
+          "en": "Connected immediate conversion optimisation with a longer-term model for reusing trip context across Booking.com’s transport journey.",
+          "zh": "將短期轉換優化與長期旅程脈絡重用模型串接，建立 Booking.com 交通預訂的共同方向。"
         },
         "supportingStatement": {
-          "en": "These are platform-specific conversion movements, not percentage-point changes and not proof that design alone caused the result.",
-          "zh": "這些是各平台的轉換變動，不代表百分點變化，也不表示成果可單獨歸因於設計。"
+          "en": "Led the research roadmap, evidence synthesis, interaction model, rapid validation and post-launch learning loop.",
+          "zh": "主導研究路線圖、證據統整、互動模型、快速驗證與上線後學習循環。"
         },
-        "contentStatus": "approved-with-metric-definition-caveat"
+        "evidence": [
+          {
+            "title": {
+              "en": "Run delivery and strategy in parallel",
+              "zh": "同步推進交付與策略"
+            },
+            "copy": {
+              "en": "Immediate experience optimisation and future transport integration were developed as two connected tracks.",
+              "zh": "即時體驗優化與未來交通整合以兩條相互連結的路線同步推進。"
+            },
+            "publicAssetId": "booking-evidence-contribution-two-track-process-01"
+          },
+          {
+            "title": {
+              "en": "Align decisions through critique",
+              "zh": "透過設計評圖對齊決策"
+            },
+            "copy": {
+              "en": "Recurring critique connected research, product constraints and cross-functional implementation decisions.",
+              "zh": "持續設計評圖串接研究、產品限制與跨職能實作決策。"
+            },
+            "publicAssetId": "booking-evidence-contribution-design-critique-01"
+          }
+        ]
       },
       "principalPositioning": {
         "portfolioRole": "principal-global-scale-constraint-case",
@@ -9693,37 +9716,33 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "From disconnected trip bookings to one clearer accommodation, flight and taxi journey",
-        "zh": "從分離的旅程預訂，到更清楚串連住宿、航班與計程車的旅程"
+        "en": "Connecting the global taxi-booking journey",
+        "zh": "串連全球計程車預訂旅程"
       },
       "problemTypes": {
         "en": [
-          "Repeated trip entry",
+          "Booking conversion",
           "Fragmented trip context",
-          "Unclear transport comparison"
+          "Cross-market pickup"
         ],
         "zh": [
-          "重複輸入行程",
+          "預訂轉換",
           "旅程脈絡分散",
-          "交通選項難以比較"
+          "跨市場接送"
         ]
       },
       "atAGlance": {
-        "en": "Led UX research and iterative web design for Booking.com’s connected taxi journey, improving option comparison, information hierarchy and passenger-based defaults while reusing accommodation and flight data across 40+ countries.",
-        "zh": "主導 Booking.com 串連計程車旅程的使用者研究與網頁迭代設計，改善選項比較、資訊層級與依乘客條件設定的預設值，並在 40 多個國家重用住宿與航班資料。"
+        "en": "Led research, system framing and iterative design for Booking.com’s connected taxi journey, reusing trip context and simplifying decisions across 40+ countries to increase conversion and add about 150 rides per day.",
+        "zh": "主導 Booking.com 串連計程車旅程的研究、系統定義與迭代設計，重用旅程脈絡並簡化決策，於 40 多個國家提升轉換，平均每天增加約 150 趟行程。"
       },
       "infoGrid": {
         "type": {
           "value": "Transaction System",
-          "visibility": "info-grid-only",
-          "rationale": {
-            "en": "Manages a stateful exchange such as payment, booking, entitlement, purchase or account completion.",
-            "zh": "管理付款、預訂、內容權限、購買或帳戶完成等具狀態的交換流程。"
-          }
+          "visibility": "info-grid-only"
         },
         "scope": {
-          "en": "Connected accommodation, flight and taxi booking context across option comparison, passenger defaults, itinerary reuse and market-specific pickup guidance.",
-          "zh": "涵蓋選項比較、乘客預設值、行程重用與市場特定接送引導的住宿、航班及計程車串連預訂脈絡。"
+          "en": "Connected accommodation, flight and taxi booking journey",
+          "zh": "串連住宿、航班與計程車的預訂旅程"
         },
         "audience": {
           "primary": {
@@ -9734,16 +9753,12 @@
             "en": [
               "Taxi suppliers",
               "Accommodation and Flight teams",
-              "Product and Engineering",
-              "Data and Research",
-              "Customer Service"
+              "Product, Engineering, Data and Research"
             ],
             "zh": [
               "計程車供應商",
               "住宿與航班團隊",
-              "產品與工程團隊",
-              "數據與研究團隊",
-              "客服團隊"
+              "產品、工程、數據與研究團隊"
             ]
           }
         },
@@ -9756,14 +9771,11 @@
             "en": "Apr–Oct 2019",
             "zh": "2019 年 4 月至 10 月"
           },
-          "status": "user-confirmed-2026-08-06",
           "measurementPeriod": {
             "en": "Conversion measured within two weeks of launch",
             "zh": "轉換成效於上線後兩週內衡量"
-          },
-          "displayRule": "The two-week measurement window must not replace the six-month project timeline."
-        },
-        "schemaVersion": "2026-08-06-r142"
+          }
+        }
       },
       "whyItMattered": {
         "en": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details, and interpret market-specific pickup rules without enough context.",
@@ -9984,38 +9996,93 @@
           "contentStatus": "approved"
         },
         "outcomes": {
-          "primary": {
-            "label": "Conversion uplift within two weeks",
-            "metrics": [
-              {
-                "platform": "Desktop",
-                "value": "~7%",
-                "definitionStatus": "relative uplift versus percentage-point change needs user confirmation"
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "+7% desktop conversion rate",
+                "zh": "桌機轉換率 +7%"
               },
-              {
-                "platform": "Mobile",
-                "value": "~2.6%",
-                "definitionStatus": "relative uplift versus percentage-point change needs user confirmation"
-              },
-              {
-                "platform": "Tablet",
-                "value": "~10.4%",
-                "definitionStatus": "relative uplift versus percentage-point change needs user confirmation"
+              "copy": {
+                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
+                "zh": "在兩週衡量期間內確認轉換率成長。"
               }
-            ],
-            "confidentialityTreatment": "Approximate public values"
-          },
-          "supporting": {
-            "value": "~150 additional rides per day",
-            "window": "Within the first two weeks",
-            "relationshipToConversionMetrics": "Likely same launch period; exact relationship needs user confirmation"
-          },
-          "researchScale": {
-            "interviewsAndTests": 18,
-            "workshops": 12,
-            "analysisReports": 14,
-            "countTreatment": "Non-confidential research counts may remain exact"
-          }
+            },
+            {
+              "heading": {
+                "en": "+2.6% mobile conversion rate",
+                "zh": "手機轉換率 +2.6%"
+              },
+              "copy": {
+                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
+                "zh": "在兩週衡量期間內確認轉換率成長。"
+              }
+            },
+            {
+              "heading": {
+                "en": "+10.4% tablet conversion rate",
+                "zh": "平板轉換率 +10.4%"
+              },
+              "copy": {
+                "en": "Confirmed conversion-rate growth within the two-week measurement window.",
+                "zh": "在兩週衡量期間內確認轉換率成長。"
+              }
+            },
+            {
+              "heading": {
+                "en": "~150 additional rides/day",
+                "zh": "每天約增加 150 趟行程"
+              },
+              "copy": {
+                "en": "Additional daily rides observed during the initial post-launch measurement period.",
+                "zh": "在上線後初期衡量期間觀察到的每日新增行程。"
+              }
+            },
+            {
+              "heading": {
+                "en": "40+ countries",
+                "zh": "40+ 個國家"
+              },
+              "copy": {
+                "en": "A connected booking model delivered across a globally varied transport context.",
+                "zh": "在全球差異化交通情境中交付串連預訂模型。"
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "title": {
+                "en": "Cross-market conversion movement",
+                "zh": "跨市場轉換變化"
+              },
+              "copy": {
+                "en": "Six of seven analysed country or region segments improved in the supplied conversion analysis.",
+                "zh": "提供的轉換分析中，七個國家或區域分群有六個改善。"
+              },
+              "publicAssetId": "booking-evidence-outcomes-cross-market-conversion-01"
+            },
+            {
+              "title": {
+                "en": "Post-launch conversion and cancellation trade-off",
+                "zh": "上線後轉換與取消率取捨"
+              },
+              "copy": {
+                "en": "Post-launch analysis compared the conversion benefit with a higher cancellation rate to guide the next iteration.",
+                "zh": "上線後分析同步比較轉換收益與較高取消率，以引導下一輪迭代。"
+              },
+              "publicAssetId": "booking-evidence-outcomes-post-launch-tradeoff-01"
+            }
+          ],
+          "privateExpandableEvidence": [
+            {
+              "publicAssetId": "booking-evidence-outcomes-conclusion-01",
+              "visibility": "private-expandable"
+            }
+          ],
+          "contentStatus": "approved"
         },
         "interviewDeckEvidence": {
           "sourceArchiveId": "booking-interview-deck-v1",
@@ -10033,45 +10100,140 @@
         },
         "hero": {
           "title": {
-            "en": "From repeated trip entry to a connected global booking journey",
-            "zh": "從重複輸入行程資料，到串連的全球預訂旅程"
+            "en": "Connecting the global taxi-booking journey",
+            "zh": "串連全球計程車預訂旅程"
           },
           "atAGlance": {
-            "en": "Led UX research and iterative design for Booking.com’s taxi journey across more than 40 countries, reusing trip data and simplifying choice to deliver about 150 additional rides per day within two weeks of launch.",
-            "zh": "主導 Booking.com 橫跨 40 多個國家的計程車旅程研究與迭代設計，重用既有行程資料並簡化選擇，上線兩週內每天增加約 150 趟預訂。"
+            "en": "Led research, system framing and iterative design for Booking.com’s connected taxi journey, reusing trip context and simplifying decisions across 40+ countries to increase conversion and add about 150 rides per day.",
+            "zh": "主導 Booking.com 串連計程車旅程的研究、系統定義與迭代設計，重用旅程脈絡並簡化決策，於 40 多個國家提升轉換，平均每天增加約 150 趟行程。"
           },
           "infoGrid": {
             "type": {
-              "en": "Marketplace Platform",
-              "zh": "市場平台"
+              "en": "Transaction System",
+              "zh": "交易系統"
             },
             "scope": {
-              "en": "Cross-market readiness across language, content, colour, interaction, and governed exceptions",
-              "zh": "跨市場的語言、內容、色彩、互動與受治理例外準備度"
+              "en": "Connected accommodation, flight and taxi booking journey",
+              "zh": "串連住宿、航班與計程車的預訂旅程"
             },
             "audience": {
-              "en": "Primary: Travellers\nSecondary: Localisation, product, engineering, and market teams",
-              "zh": "主要：旅客\n次要：在地化、產品、工程與市場團隊"
+              "en": "Primary: Travellers\nSecondary: Taxi suppliers, Accommodation and Flight teams, Product, Engineering, Data and Research",
+              "zh": "主要：旅客\n次要：計程車供應商、住宿與航班團隊、產品、工程、數據與研究團隊"
             },
             "timeline": {
-              "en": "2 weeks",
-              "zh": "2 週"
+              "en": "6 months",
+              "zh": "6 個月"
             }
           },
-          "whyItMattered": {
-            "en": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details, and interpret market-specific pickup rules without enough context.",
-            "zh": "計程車預訂與住宿、航班旅程彼此分離，使旅客必須比較不清楚的選項、重複輸入已知行程資料，並在脈絡不足下理解各市場的接送規則。"
-          },
-          "businessImpact": {
-            "en": "Established a repeatable research, experimentation, and measurement loop for global booking optimisation after launch.",
-            "zh": "建立可重複的研究、實驗與衡量循環，支援全球預訂體驗在上線後持續優化。"
-          },
-          "confidentialityNote": {
-            "en": "For confidentiality reasons, exact metrics are not disclosed.",
-            "zh": "基於保密原因，未公開精確數據。"
-          }
+          "sectionOrderRef": "projects.booking.sectionOrder"
         },
-        "sectionOrderRef": "projects.booking.sectionOrder"
+        "sectionOrderRef": "projects.booking.sectionOrder",
+        "coreSystemInsight": {
+          "headline": {
+            "en": "The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.",
+            "zh": "當已知旅程脈絡與市場特定接送引導形成同一套系統，預訂旅程才真正清楚。"
+          },
+          "supportingCopy": {
+            "en": "Customers should not rebuild information Booking.com already knows. Reusing itinerary and passenger data reduced effort, while airport-native language and staged guidance handled uncertainty without false precision.",
+            "zh": "顧客不應重新輸入 Booking.com 已知的資訊。重用行程與乘客資料可降低操作負擔；以機場熟悉用語與分階段引導處理不確定性，則能避免錯誤精準度。"
+          },
+          "evidence": [
+            {
+              "title": {
+                "en": "Design beyond the transaction",
+                "zh": "設計延伸至交易之外"
+              },
+              "copy": {
+                "en": "The journey curve exposed uncertainty before pickup and after booking, not only inside checkout.",
+                "zh": "旅程曲線揭示不確定性存在於接送前與預訂後，而不只是在結帳流程內。"
+              },
+              "publicAssetId": "booking-evidence-core-system-journey-curve-01"
+            }
+          ],
+          "contentStatus": "approved"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": "影響設計決策的證據"
+          },
+          "items": [
+            {
+              "title": {
+                "en": "Synthesize booking criteria across teams",
+                "zh": "跨團隊統整預訂準則"
+              },
+              "copy": {
+                "en": "Workshop synthesis connected customer needs, product constraints and implementation criteria.",
+                "zh": "工作坊統整串接顧客需求、產品限制與實作準則。"
+              },
+              "publicAssetId": "booking-evidence-workshop-phase2-synthesis-01"
+            },
+            {
+              "title": {
+                "en": "Prioritise the dominant usability signal",
+                "zh": "優先處理主要易用性訊號"
+              },
+              "copy": {
+                "en": "155 feedback results included 122 Ease of Use or Navigation mentions, focusing attention on comparison and journey clarity.",
+                "zh": "155 筆回饋中有 122 筆提及易用性或導覽，使團隊聚焦於比較與旅程清晰度。"
+              },
+              "publicAssetId": "booking-evidence-research-feedback-summary-01"
+            }
+          ],
+          "metrics": [
+            {
+              "value": "18",
+              "label": {
+                "en": "interviews and testing sessions",
+                "zh": "場訪談與測試"
+              }
+            },
+            {
+              "value": "12",
+              "label": {
+                "en": "workshops",
+                "zh": "場工作坊"
+              }
+            },
+            {
+              "value": "14",
+              "label": {
+                "en": "analysis reports",
+                "zh": "份分析報告"
+              }
+            },
+            {
+              "value": "155",
+              "label": {
+                "en": "feedback results",
+                "zh": "筆回饋結果"
+              }
+            },
+            {
+              "value": "122",
+              "label": {
+                "en": "Ease of Use / Navigation mentions",
+                "zh": "筆易用性／導覽提及"
+              }
+            },
+            {
+              "value": "943,818",
+              "label": {
+                "en": "rides analysed",
+                "zh": "趟行程完成分析"
+              }
+            },
+            {
+              "value": "65.48%",
+              "label": {
+                "en": "Standard taxi share",
+                "zh": "Standard taxi 佔比"
+              }
+            }
+          ],
+          "contentStatus": "approved"
+        }
       },
       "archiveIntegration": {
         "sourceArchiveId": "overall-project-archive-2020-v1",
@@ -10442,7 +10604,42 @@
             "zh": "技術實作與品質驗證"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "A clear line between the connected journey I led and decisions shared with product, engineering, research, data and operational partners.",
+            "zh": "清楚區分我主導的串連旅程，以及與產品、工程、研究、數據與營運夥伴共同決策的範圍。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我負責的成果"
+            },
+            "title": {
+              "en": "Connect research, trip context and interaction design into one clearer taxi-booking journey",
+              "zh": "將研究、旅程脈絡與互動設計串成更清楚的計程車預訂旅程"
+            },
+            "text": {
+              "en": "Led the research roadmap, evidence synthesis, comparison model, trip-data reuse direction, rapid validation and post-launch learning loop.",
+              "zh": "主導研究路線圖、證據統整、比較模型、旅程資料重用方向、快速驗證與上線後學習循環。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Make the journey feasible across products, suppliers and markets",
+              "zh": "讓旅程能跨產品、供應商與市場落地"
+            },
+            "text": {
+              "en": "Roadmap, experiment selection, data availability, supplier feasibility and release decisions were aligned with cross-functional partners.",
+              "zh": "與跨職能夥伴共同對齊路線圖、實驗選擇、資料可用性、供應商可行性與上線決策。"
+            }
+          },
+          "contentStatus": "approved"
+        }
       },
       "systemImpact": {
         "en": "Connected accommodation, flight and taxi context into one booking model and established a repeatable research–experiment–measurement loop for global optimisation.",
@@ -10559,85 +10756,87 @@
         ],
         "contentStatus": "approved"
       },
-      "type_zh": "市場平台",
-      "transformation_zh": "從分離的旅程預訂，到更清楚串連住宿、航班與計程車的旅程",
-      "transformation": "From disconnected trip bookings to one clearer accommodation, flight and taxi journey",
+      "type_zh": "交易系統",
+      "transformation_zh": "串連全球計程車預訂旅程",
+      "transformation": "Connecting the global taxi-booking journey",
       "problem_types": [
-        "Repeated trip entry",
+        "Booking conversion",
         "Fragmented trip context",
-        "Unclear transport comparison"
+        "Cross-market pickup"
       ],
       "problem_types_zh": [
-        "重複輸入行程",
+        "預訂轉換",
         "旅程脈絡分散",
-        "交通選項難以比較"
+        "跨市場接送"
       ],
-      "at_glance": "Led UX research and iterative web design for Booking.com’s connected taxi journey, improving option comparison, information hierarchy and passenger-based defaults while reusing accommodation and flight data across 40+ countries.",
-      "at_glance_zh": "主導 Booking.com 串連計程車旅程的使用者研究與網頁迭代設計，改善選項比較、資訊層級與依乘客條件設定的預設值，並在 40 多個國家重用住宿與航班資料。",
+      "at_glance": "Led research, system framing and iterative design for Booking.com’s connected taxi journey, reusing trip context and simplifying decisions across 40+ countries to increase conversion and add about 150 rides per day.",
+      "at_glance_zh": "主導 Booking.com 串連計程車旅程的研究、系統定義與迭代設計，重用旅程脈絡並簡化決策，於 40 多個國家提升轉換，平均每天增加約 150 趟行程。",
       "type": "Transaction System",
       "scope": "Cross-market readiness across language, content, colour, interaction, and governed exceptions",
       "scope_zh": "跨市場的語言、內容、色彩、互動與受治理例外準備度",
       "audience": "Primary: Travellers\nSecondary: Localisation, product, engineering, and market teams",
       "audience_zh": "主要：旅客\n次要：在地化、產品、工程與市場團隊",
-      "timeline": "2 weeks",
-      "timeline_zh": "2 週",
+      "timeline": "6 months",
+      "timeline_zh": "6 個月",
       "why": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details, and interpret market-specific pickup rules without enough context.",
       "why_zh": "計程車預訂與住宿、航班旅程彼此分離，使旅客必須比較不清楚的選項、重複輸入已知行程資料，並在脈絡不足下理解各市場的接送規則。",
       "impact": "Established a repeatable research, experimentation, and measurement loop for global booking optimisation after launch.",
       "impact_zh": "建立可重複的研究、實驗與衡量循環，支援全球預訂體驗在上線後持續優化。",
-      "whatMadeThisHard": [
-        {
-          "title": {
-            "en": "Trip context was split across product verticals",
-            "zh": "旅程脈絡分散在不同產品線"
-          },
-          "description": {
-            "en": "Accommodation, flight and taxi already held related trip data, but customers still had to reconstruct the same journey when arranging pickup.",
-            "zh": "住宿、航班與計程車已掌握相關旅程資料，但顧客安排接送時仍需重新建立相同行程。"
-          }
+      "whatMadeThisHard": {
+        "intro": {
+          "en": "The work had to improve conversion without treating a globally variable transport journey as one uniform checkout.",
+          "zh": "這項工作必須提升轉換，同時不能把全球差異極大的交通旅程視為單一一致的結帳流程。"
         },
-        {
-          "title": {
-            "en": "Comparison was buried under repeated selling points",
-            "zh": "重複賣點掩蓋真正比較資訊"
+        "items": [
+          {
+            "title": {
+              "en": "Trip context crossed product boundaries",
+              "zh": "旅程脈絡跨越不同產品線"
+            },
+            "description": {
+              "en": "Accommodation, flight and taxi data were owned separately even though travellers experienced them as one connected trip.",
+              "zh": "住宿、航班與計程車資料分屬不同產品線，但旅客實際經歷的是同一段串連旅程。"
+            }
           },
-          "description": {
-            "en": "Multiple taxi options repeated similar benefits, making price, passenger fit and pickup differences harder to scan.",
-            "zh": "多個計程車選項重複類似優勢，使價格、乘客適配與接送差異更難快速比較。"
-          }
-        },
-        {
-          "title": {
-            "en": "A shared journey still needed local pickup guidance",
-            "zh": "共用旅程仍需在地接送引導"
+          {
+            "title": {
+              "en": "Comparison and defaults affected conversion",
+              "zh": "比較方式與預設值會影響轉換"
+            },
+            "description": {
+              "en": "Price, capacity, passenger count and repeated selling points changed how quickly customers could identify a suitable ride.",
+              "zh": "價格、容量、乘客人數與重複賣點會影響顧客辨識合適車款的速度。"
+            }
           },
-          "description": {
-            "en": "Airport rules, luggage, pickup timing and local traffic varied across markets and had to remain supporting guidance rather than overwhelm the booking decision.",
-            "zh": "機場規則、行李、接送時間與當地交通因市場而異，必須作為輔助引導，而不能壓過預訂決策。"
+          {
+            "title": {
+              "en": "Pickup certainty varied by market",
+              "zh": "接送確定性因市場而異"
+            },
+            "description": {
+              "en": "Airport layout, traffic, supplier dispatch and baggage language made one universal pickup promise unreliable across 40+ countries.",
+              "zh": "機場動線、交通、供應商派車與行李用語，使單一接送承諾無法可靠套用於 40 多個國家。"
+            }
           }
-        }
-      ],
+        ]
+      },
       "keyInterventionMap": {
-        "status": "verified",
-        "sectionLabel": {
-          "en": "Where I changed the system",
-          "zh": "我改變系統的位置"
-        },
+        "status": "approved",
         "before": {
-          "en": "Repeated booking information",
-          "zh": "重複輸入訂房資料"
+          "en": "Isolated taxi flow with repeated trip entry",
+          "zh": "孤立的計程車流程與重複輸入"
         },
         "intervention": {
-          "en": "Prefilled booking and personal data",
-          "zh": "預填既有訂單與個人資料"
+          "en": "Connected trip context, comparable options and context-aware guidance",
+          "zh": "串連旅程脈絡、可比較選項與情境式引導"
         },
         "after": {
-          "en": "A shorter path to conversion",
-          "zh": "縮短完成路徑並提升轉換"
+          "en": "A clearer global booking journey with measurable conversion growth",
+          "zh": "更清楚的全球預訂旅程與可衡量的轉換成長"
         },
         "supportingCopy": {
-          "en": "I removed unnecessary re-entry for signed-in users by reusing existing booking and personal data, shortening the path to completion across more than 40 countries.",
-          "zh": "我重用已登入使用者的既有訂單與個人資料，移除不必要的重複輸入，縮短超過 40 個國家的完成路徑。"
+          "en": "I connected research, analytics and cross-vertical product context to redesign how travellers compared, confirmed and prepared for a taxi journey.",
+          "zh": "我串接研究、分析資料與跨產品旅程脈絡，重新設計旅客比較、確認並準備計程車行程的方式。"
         }
       },
       "cardTitle": {
@@ -10648,80 +10847,87 @@
         "計程車預訂旅程"
       ],
       "criticalProblem": {
-        "en": "Accommodation, flight and taxi bookings behaved as separate products, forcing travellers to compare unclear transport options and re-enter trip information the platform already knew.",
-        "zh": "住宿、航班與計程車預訂彼此分離，使旅客必須比較不清楚的交通選項，並重新輸入平台已掌握的行程資料。"
+        "en": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details and interpret market-specific pickup rules without enough context.",
+        "zh": "計程車預訂與住宿、航班旅程彼此分離，使旅客必須比較不清楚的選項、重複輸入已知行程資料，並在脈絡不足下理解各市場的接送規則。"
       },
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "booking-r137-decision-01",
-            "title": {
-              "en": "From a single taxi offer to multi-option comparison",
-              "zh": "從單一計程車方案，到多選項比較"
+            "id": "booking-decision-01",
+            "title": "From one suggested taxi to scanable option comparison",
+            "title_zh": "從單一建議計程車，到可快速掃描的選項比較",
+            "whatIDecided": "Tested a collapsed single recommendation against a horizontal option list and selected the horizontal model, then simplified card hierarchy, repetitive USPs, default selection and sorting logic.",
+            "whatIDecided_zh": "測試收合式單一建議與橫向選項列表後，選擇橫向模型，並同步簡化卡片層級、重複價值主張、預設選擇與排序邏輯。",
+            "whyThisChoice": "Customers wanted to see most options at a glance so they could compare price, capacity and value with each other and with other websites.",
+            "whyThisChoice_zh": "顧客希望第一眼看到多數選項，以比較價格、乘載量與價值，也能與其他網站快速對照。",
+            "optionalThirdBlock": {
+              "type": "TRADE-OFF ACCEPTED",
+              "content": "Accepted greater on-screen density instead of a tightly focused recommendation in exchange for faster cross-option comparison and less hidden choice.",
+              "content_zh": "接受較高的畫面資訊密度，而非高度聚焦的單一建議，以換取更快的跨選項比較與更少被隱藏的選擇。"
             },
-            "whatIDecided": {
-              "en": "Presented multiple eligible taxi options in a comparable structure instead of forcing customers into one offer path.",
-              "zh": "以可比較結構呈現多個符合條件的計程車選項，不強迫顧客進入單一方案。"
+            "supportingEvidence": [
+              "Standard taxi defaulted for parties under four based on a year of GA booking distribution.",
+              "Taxi ordering combined passenger capacity with existing booking behaviour.",
+              "Key information and value propositions were prioritised for first-impression comparison."
+            ],
+            "status": "shipped-and-iterated",
+            "ownership": {
+              "en": "Led the comparison model, hierarchy and interaction design; ordering and release logic were aligned with product, data and engineering.",
+              "zh": "主導比較模型、層級與互動設計；排序與上線邏輯則與產品團隊、數據團隊及工程團隊對齊。"
             },
-            "whyThisChoice": {
-              "en": "Customers needed to compare price, capacity and service fit before committing.",
-              "zh": "顧客需要在決定前比較價格、容量與服務適配度。"
-            }
+            "evidenceStrength": "B-observed-and-validated-behaviour"
           },
           {
-            "id": "booking-r137-decision-02",
-            "title": {
-              "en": "From repeated USPs to decision-critical information",
-              "zh": "從重複賣點，到決策關鍵資訊"
+            "id": "booking-decision-02",
+            "title": "From repeated form entry to connected itinerary confirmation",
+            "title_zh": "從重複填寫表單，到連結旅程資訊的確認流程",
+            "whatIDecided": "Prefilled hotel drop-off, flight pickup, party-size taxi selection and passenger details so signed-in customers mainly confirmed the journey rather than recreating it.",
+            "whatIDecided_zh": "預填飯店下車地點、航班接送資訊、依人數選擇計程車，以及乘客資料，使登入顧客主要確認旅程，而非重新建立資料。",
+            "whyThisChoice": "Accommodation, flight and taxi were owned as separate services even though customers experienced them as one trip.",
+            "whyThisChoice_zh": "住宿、航班與計程車在組織內由不同服務負責，但顧客實際經歷的是同一段旅程。",
+            "status": "shipped-core-direction",
+            "evidence": "Flight-related findings were brought into weekly cross-vertical design sessions for alignment, brainstorming and critique.",
+            "ownership": {
+              "en": "Led the UX model for reusing trip data; data availability and cross-vertical integration were co-decided with adjacent product teams.",
+              "zh": "主導旅程資料重用的使用者體驗模型；資料可用性與跨產品整合則與相鄰產品團隊共同決定。"
             },
-            "whatIDecided": {
-              "en": "Reduced repeated selling points and prioritised price, passenger fit, pickup conditions and the few differentiators that changed the choice.",
-              "zh": "減少重複賣點，優先呈現價格、乘客適配、接送條件與真正影響選擇的差異。"
+            "optionalThirdBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": "Required accommodation, flight and taxi teams to agree which trusted trip data could be carried forward and when customers still needed to confirm or edit it.",
+              "content_zh": "需要住宿、航班與計程車團隊共同確認哪些可信旅程資料可被延續，以及顧客何時仍需確認或修改。"
             },
-            "whyThisChoice": {
-              "en": "Repeated claims increased reading cost without improving comparison.",
-              "zh": "重複主張提高閱讀成本，卻沒有改善比較。"
-            }
+            "supportingEvidence": [
+              "The historical case selected prefilling from accommodation or other business-unit data because it offered higher data reachability and better use of limited resources.",
+              "Cross-vertical design sessions were used to review flight-related findings and connected-trip implications."
+            ],
+            "evidenceStrength": "C-shipped-core-direction"
           },
           {
-            "id": "booking-r137-decision-03",
-            "title": {
-              "en": "From generic defaults to passenger-based sorting",
-              "zh": "從通用預設值，到依乘客條件排序"
+            "id": "booking-decision-03",
+            "title": "From universal pickup promises to staged, context-aware guidance",
+            "title_zh": "從通用接送承諾，到分階段、具情境的接送指引",
+            "whatIDecided": "Translated luggage into cabin and checked-baggage terms, prioritised airport pickup guidance from Customer Service evidence and treated local road-closure prompts as a lower-priority, higher-cost extension.",
+            "whatIDecided_zh": "將行李容量轉譯為隨身與托運行李，依客服證據優先處理機場接送指引，並將在地道路封閉提示視為成本較高、優先度較低的延伸。",
+            "whyThisChoice": "A single global wait-time promise could not account for airport layout, traffic, supplier dispatch and parking regulations across markets.",
+            "whyThisChoice_zh": "單一全球等候時間承諾無法涵蓋各市場的機場動線、交通、供應商派車與停車規定。",
+            "optionalThirdBlock": {
+              "type": "TRADE-OFF ACCEPTED",
+              "content": "Accepted less personalised timing in the first step rather than publishing false precision, while using clearer precautions and Customer Service access until supplier-specific logic was feasible.",
+              "content_zh": "第一階段接受較不個人化的時間資訊，而不是提供錯誤精準度；在供應商-特定邏輯可行前，以更清楚的注意事項與客服存取補足。"
             },
-            "whatIDecided": {
-              "en": "Used passenger count and relevant trip history to set more useful defaults and sort options around likely fit.",
-              "zh": "使用乘客人數與相關旅程紀錄設定更有用的預設值，並依可能適配度排序選項。"
+            "status": "prioritised-and-prototyped-shipment-by-item-needs-confirmation",
+            "ownership": {
+              "en": "Led the evidence synthesis and staged guidance direction; supplier-specific feasibility and rollout were shared product and operational decisions.",
+              "zh": "主導證據統整與分階段引導方向；供應商特定可行性與推行則為共同的產品與營運決策。"
             },
-            "whyThisChoice": {
-              "en": "The same taxi order was not suitable for every party size or trip context.",
-              "zh": "相同的計程車排序不適合所有同行人數與旅程情境。"
-            }
-          },
-          {
-            "id": "booking-r137-decision-04",
-            "title": {
-              "en": "From repeated entry to shared trip data",
-              "zh": "從重複輸入，到共用旅程資料"
-            },
-            "whatIDecided": {
-              "en": "Reused accommodation, flight, passenger and taxi context so customers did not need to re-enter known itinerary details.",
-              "zh": "重用住宿、航班、乘客與計程車脈絡，避免顧客重新輸入已知行程資料。"
-            },
-            "whyThisChoice": {
-              "en": "Known trip data could reduce effort and make pickup guidance more relevant.",
-              "zh": "已知旅程資料能降低操作負擔，並讓接送引導更貼近情境。"
-            }
+            "evidenceStrength": "B-validated-direction-shipment-mixed"
           }
         ],
-        "supportingEvidenceOnly": [
-          "Airport rules",
-          "Luggage language",
-          "Pickup-time precautions",
-          "Local traffic reminders"
+        "sourcePaths": [
+          "projects.booking.publicContent.primaryDecisions"
         ],
-        "contentStatus": "r137-applied"
+        "contentStatus": "approved-r162.4"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -10747,42 +10953,26 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "connected-trip-model",
-        "key-decisions",
-        "conversion-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "measurementBoundary": {
-        "period": "within 2 weeks of launch",
-        "metrics": {
-          "desktop": "7%",
-          "mobile": "2.6%",
-          "tablet": "10.4%"
-        },
-        "rules": [
-          "Do not describe as percentage points.",
-          "Do not attribute to design alone.",
-          "Do not replace these metrics with ~150 rides/day without a separate verified source."
-        ],
-        "contentStatus": "approved"
+        "projectTimeline": "6 months",
+        "measurementWindow": "two weeks after launch",
+        "rule": "The measurement window does not replace the project timeline."
       },
       "latestConfirmedCorrection": {
-        "package": "r137",
-        "supersedes": [
-          "r131 thesis",
-          "r132 primary model and decisions"
-        ],
-        "retainsAsSupporting": [
-          "airport",
-          "luggage",
-          "pickup guidance"
-        ],
-        "status": "applied-in-candidate-2"
+        "status": "approved-r162.4",
+        "outcomesAreFinalConfirmed": true,
+        "conversionValuesAreNotPercentagePoints": true
       },
       "domain": {
         "en": "Travel booking",
@@ -10865,6 +11055,113 @@
         ],
         "recommendedHeadline": "Added ~150 rides per day within two weeks while supporting a 40+ country rollout.",
         "boundary": "Do not publish the device-level conversion figures as final uplift until relative-vs-percentage-point meaning is confirmed."
+      },
+      "decisionEvidenceMap": {
+        "booking-decision-01": {
+          "publicAssetId": "booking-evidence-decision-01-ride-mix-01",
+          "caption": {
+            "en": "943,818 rides analysed; Standard taxis represented 65.48% of the observed ride mix.",
+            "zh": "分析 943,818 趟行程；Standard taxi 佔觀察行程組合的 65.48%。"
+          }
+        },
+        "booking-decision-02": {
+          "publicAssetId": "booking-evidence-decision-02-hotjar-edit-trip-01",
+          "caption": {
+            "en": "Behavioural evidence showed customers verifying and editing known trip information.",
+            "zh": "行為證據顯示顧客會確認並修改已知旅程資訊。"
+          }
+        },
+        "booking-decision-03": {
+          "publicAssetId": "booking-evidence-decision-03-baggage-language-01",
+          "caption": {
+            "en": "Supplier specifications were translated into carry-on and checked-baggage language familiar to travellers.",
+            "zh": "將供應商規格轉譯為旅客熟悉的隨身與托運行李用語。"
+          }
+        }
+      },
+      "presentation": {
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "composition": "recruiter-first-system-case",
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "accountability": "ownershipModel",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": true,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       }
     },
     "bandzo": {

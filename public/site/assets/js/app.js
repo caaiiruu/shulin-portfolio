@@ -2852,11 +2852,12 @@
     }else{
       contribution.append(element('p','voucher-r149-intro case-reading-wrapper',t(contributionSource?.supportingStatement)));
     }
+    if(contributionSource?.evidence)appendVisualEvidenceModules(contribution,contributionSource.evidence,{translate:t});
 
     const insightSource=projectContentRef(p,refs.coreSystemInsight);
     const insight=visibility.coreSystemInsight!==false&&insightSource
       ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightSource.headline),t(insightSource.supportingCopy)):null;
-    if(insight){insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight'}
+    if(insight){insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';if(insightSource?.evidence)appendVisualEvidenceModules(insight,insightSource.evidence,{translate:t})}
 
     const evidenceSource=projectContentRef(p,refs.evidence);
     const evidence=visibility.evidence!==false&&evidenceSource
@@ -2889,6 +2890,7 @@
       const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
       appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});outcomes.append(outcomeGrid);
     }
+    if(outcomesSource?.evidence)appendVisualEvidenceModules(outcomes,outcomesSource.evidence,{translate:t});
 
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;
