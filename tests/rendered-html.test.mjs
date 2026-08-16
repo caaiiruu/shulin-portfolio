@@ -1717,3 +1717,17 @@ test("R162.5 keeps Booking recruiter-first, approximate, complete, and confident
   assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{width:100%;max-width:var\(--case-reading-max\)\}/);
   assert.match(css,/core-system-insight-section \.voucher-r149-foundations:has/);
 });
+
+test("R162.6 gives mobile Outcome groups independent rhythm and keeps Audience in one canonical Info Grid", () => {
+  const css = read("assets/css/components/project-detail-overview.css");
+  const app = read("assets/js/app.js");
+  const browserQa = read("../../tests/portfolio-browser-qa.mjs");
+  assert.match(css,/quick-view-v51\{display:grid;grid-template-columns:1fr;gap:var\(--space-5\);height:auto;padding:0\}/);
+  assert.match(css,/@media\(max-width:430px\)\{\.outcome-metric-grid\{row-gap:var\(--space-6\)\}/);
+  assert.doesNotMatch(css,/booking[^\n{]*\{[^}]*outcome-metric-grid/i);
+  assert.doesNotMatch(css,/outcome-metric-grid[^}]*!important/);
+  assert.match(app,/renderInfoGrid\('projectSignals',signalItems\)/);
+  assert.match(browserQa,/Booking mobile Outcome group rhythm failed/);
+  assert.match(browserQa,/Booking Audience projection duplicated/);
+  assert.match(browserQa,/Booking mobile Info Grid overflowed into Contribution/);
+});
