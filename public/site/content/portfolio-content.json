@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-12-r158",
-  "supersedes": "2026-08-11-r157",
+  "contentVersion": "2026-08-17-r164.1",
+  "supersedes": "2026-08-12-r158",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -13899,18 +13899,14 @@
     "payment": {
       "valueIBrought": {
         "headline": {
-          "en": "I established the in-store payment foundation across App, cashier and self-checkout, including LinkPoints, voucher visibility, recovery, refunds, internal transaction review and shared payment guidelines.",
-          "zh": "我建立橫跨 App、人工收銀與自助結帳的門市付款基礎，涵蓋 LinkPoints、優惠券顯示、失敗復原、退款、內部交易審查與共享付款規範。"
+          "en": "I reframed payment from channel-specific interactions into one end-to-end transaction model.",
+          "zh": "我將依通路分離的付款互動，重新定義為一套端到端交易模型。"
         },
         "supportingStatement": {
-          "en": "In the second month after launch, the source reported approximately 129% more transactions, 116% more unique users and 26% higher average order value against an undisclosed baseline; the product later scaled across about 190 stores.",
-          "zh": "上線後第二個月，來源顯示交易數約增加 129%、不重複使用者約增加 116%、平均訂單金額約增加 26%；比較基準未公開，產品後續推展至約 190 家門市。"
+          "en": "By connecting customer behaviour with POS execution, benefit logic and recovery states, I gave the team a shared structure for deciding how the experience should behave across App, cashier and self-checkout.",
+          "zh": "我串接顧客行為、POS 執行、權益邏輯與復原狀態，讓團隊能依據同一套結構，決定體驗在 App、人工收銀與自助結帳之間應如何運作。"
         },
-        "metricBoundary": {
-          "en": "The percentage-change baseline is not disclosed. Use these values as source-reported directional outcomes, not as causal proof attributable only to design.",
-          "zh": "百分比變化的比較基準未公開；這些數字只能作為來源回報的方向性成果，不可視為完全由設計單獨造成的因果證明。"
-        },
-        "contentStatus": "approved-source-backed-r143"
+        "contentStatus": "approved-r164.1"
       },
       "id": "payment",
       "company": "FairPrice Group",
@@ -13919,8 +13915,8 @@
       "projectRelationship": "independent-project",
       "parentProject": null,
       "title": {
-        "en": "From fragmented in-store checkout to one omni payment system",
-        "zh": "從分散的門市結帳，到單一全通路付款系統"
+        "en": "Transaction continuity across App and in-store checkout",
+        "zh": "串連 App 與門市結帳的交易連續性"
       },
       "problemTypes": {
         "en": [
@@ -13935,8 +13931,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led 0→1 research and end-to-end design of FairPrice’s in-store payment system, connecting App, cashier and self-checkout while integrating LinkPoints, vouchers and recovery flows across 100+ stores.",
-        "zh": "主導 FairPrice 門市付款系統的 0→1 研究與端到端設計，串接 App、人工收銀與自助結帳，並整合 LinkPoints、優惠券與失敗復原流程，推展至 100 多家門市。"
+        "en": "Led the 0→1 product design of FairPrice’s in-store payment system, connecting App payment entry with cashier and self-checkout execution, benefit visibility and transaction recovery across ~190 stores.",
+        "zh": "主導 FairPrice 門市付款系統的 0→1 產品設計，串接 App 付款入口、人工收銀與自助結帳執行、權益顯示及交易復原，推展至約 190 間門市。"
       },
       "infoGrid": {
         "type": {
@@ -13948,8 +13944,8 @@
           }
         },
         "scope": {
-          "en": "End-to-end 0→1 coverage across customer discovery, app payment, cashier and self-checkout operations, failure handling, frontline readiness, measurement and post-purchase records",
-          "zh": "涵蓋顧客探索、行動支付、人工與自助結帳營運、失敗處理、第一線準備、衡量方式與購後紀錄的端到端 0→1 範圍"
+          "en": "App-to-store payment journey across cashier and self-checkout",
+          "zh": "串接 App、人工收銀與自助結帳的門市付款旅程"
         },
         "audience": {
           "primary": {
@@ -13959,7 +13955,7 @@
           "secondary": {
             "en": [
               "Cashiers",
-              "Self-checkout support"
+              "Self-checkout support staff"
             ],
             "zh": [
               "收銀員",
@@ -14087,7 +14083,7 @@
           "relationship": "Checkout eligibility and application states later intersected with Voucher Center."
         }
       ],
-      "publicStatus": "principal-core-shipped-transaction-system-case",
+      "publicStatus": "principal-flagship-canonical-transaction-system-case",
       "contentPruning": {
         "showPrimary": [
           "Integrated LinkPoints model",
@@ -14126,7 +14122,7 @@
         "ownershipCorrection": "All Payment-related design, including customer recovery, refunds, internal systems, the transaction portal and email flows, was independently completed by the user.",
         "visualEvidenceAssessment": "Complete for publication. Additional static images are not required; only unique interaction clips or explicit production-status evidence add material value."
       },
-      "contentStatus": "approved",
+      "contentStatus": "approved-r164.1",
       "scaleAndOutcome": {
         "operationalScale": "100+ stores",
         "flowReduction": {
@@ -14932,7 +14928,119 @@
         "sectionOrderRef": "projects.payment.sectionOrder",
         "voucherIntegrationRef": "projects.payment.voucherIntegration",
         "crossFunctionalDeliveryRef": "projects.payment.crossFunctionalDelivery",
-        "recognitionRef": "projects.payment.recognition"
+        "recognitionRef": "projects.payment.recognition",
+        "coreSystemInsight": {
+          "headline": {
+            "en": "The transaction—not the screen or channel—had to remain coherent from entry through confirmation and recovery.",
+            "zh": "必須保持連續的是整筆交易，而不是單一畫面或通路；這份連續性要從進入付款延伸至確認與復原。"
+          },
+          "supportingCopy": {
+            "en": "Customers could begin in the App and complete payment at a cashier or self-checkout, while benefits, failures and records crossed other systems. Trust depended on preserving transaction continuity across those boundaries.",
+            "zh": "顧客可從 App 開始，並在人工收銀或自助結帳完成付款；權益、失敗與紀錄則跨越其他系統。信任取決於能否在這些邊界之間維持交易連續性。"
+          },
+          "contentStatus": "approved-r164.1"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": "影響設計決策的證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "structuredGroups": [
+            {
+              "heading": {
+                "en": "Queue pressure made the App-to-checkout handoff trust-critical",
+                "zh": "排隊壓力使 App 至結帳交接成為信任關鍵"
+              },
+              "summary": {
+                "en": "Live cashier and self-checkout research showed that unclear instructions and delayed recognition created hesitation during a time-sensitive checkout moment.",
+                "zh": "人工收銀與自助結帳的現場研究顯示，不清楚的指示與延遲辨識會在時間敏感的結帳時刻造成猶豫。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 01",
+                "zh": "導向決策 01"
+              }
+            },
+            {
+              "heading": {
+                "en": "Customers could not assume benefits carried across payment contexts",
+                "zh": "顧客無法確定權益會跨付款情境延續"
+              },
+              "summary": {
+                "en": "Field research and loyalty validation showed uncertainty around when LinkPoints, vouchers and discounts were actually applied.",
+                "zh": "實地研究與會員權益驗證顯示，顧客不確定 LinkPoints、優惠券與折扣何時真正套用。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 02",
+                "zh": "導向決策 02"
+              }
+            },
+            {
+              "heading": {
+                "en": "Payment exceptions continued beyond the failure screen",
+                "zh": "付款例外會延續至失敗畫面之後"
+              },
+              "summary": {
+                "en": "Failure-path mapping, refund work and transaction-record testing showed that recovery needed both visible next actions and traceable records.",
+                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原同時需要清楚的下一步與可追溯紀錄。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 03",
+                "zh": "導向決策 03"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r164.1"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "Shipped at retail scale",
+                "zh": "推展至零售規模"
+              },
+              "copy": {
+                "en": "Rolled out across ~190 stores, reaching ~57K users and ~228K monthly transactions by September 2021.",
+                "zh": "截至 2021 年 9 月，已推展至約 190 間門市，觸及約 5.7 萬名使用者與每月約 22.8 萬筆交易。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Reliable transaction performance",
+                "zh": "可靠的交易表現"
+              },
+              "copy": {
+                "en": "Reached a 98.5% transaction success rate, with NPS 70.2 across 1,798 responses.",
+                "zh": "交易成功率達 98.5%，並在 1,798 份回覆中取得 70.2 的 NPS。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A reusable payment operating model",
+                "zh": "可重用的付款運作模型"
+              },
+              "copy": {
+                "en": "Payment standards and interaction guidelines created a shared reference for related FairPrice product contexts.",
+                "zh": "付款標準與互動規範，成為 FairPrice 相關產品情境可共同參照的基礎。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Team recognition: Singapore User Experience Award of the Year, Retail — Asian Experience Awards 2021.",
+            "zh": "團隊肯定：2021 Asian Experience Awards — Singapore User Experience Award of the Year, Retail。"
+          },
+          "attributionBoundary": {
+            "en": "Transaction volume, success rate, NPS and rollout scale are product and team outcomes, not outcomes attributable to design alone.",
+            "zh": "交易量、成功率、NPS 與推展規模屬於產品與團隊成果，不可歸因於設計單一職能。"
+          },
+          "contentStatus": "approved-r164.1"
+        }
       },
       "zeroToOneMandate": {
         "programmeNeed": "Create the company’s dependable in-store digital-payment baseline and bring the product from exploration to launch.",
@@ -15346,7 +15454,42 @@
             "zh": "櫃台層優惠券整合——POS 與工程團隊"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "Two forms of leverage: defining the transaction model and making it implementable across customer, payment and operational constraints.",
+            "zh": "兩種關鍵影響力：定義交易模型，並使其能在顧客、付款與營運限制下落實。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我對成果負責"
+            },
+            "title": {
+              "en": "Defined the transaction model behind FairPrice’s 0→1 in-store payment capability",
+              "zh": "定義 FairPrice 0→1 門市付款能力背後的交易模型"
+            },
+            "text": {
+              "en": "As the only dedicated product designer on the core team, I led product framing, field research, transaction architecture, interaction design and validation across App, cashier and self-checkout contexts.",
+              "zh": "作為核心團隊唯一的專職產品設計師，我主導產品定義、實地研究、交易架構、互動設計與驗證，涵蓋 App、人工收銀與自助結帳情境。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Turned payment, retail and operational constraints into one buildable direction",
+              "zh": "將付款、零售與營運限制轉化為一個可實作方向"
+            },
+            "text": {
+              "en": "I connected customer behaviour, POS dependencies, benefit logic, recovery needs and frontline constraints into product decisions the team could implement consistently.",
+              "zh": "我將顧客行為、POS 相依關係、權益邏輯、復原需求與第一線限制，轉化為團隊能一致實作的產品決策。"
+            }
+          },
+          "contentStatus": "approved-r164.1"
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -15413,26 +15556,26 @@
       "type_zh": "交易系統",
       "transformation_zh": "從分散的門市結帳，到單一全通路付款系統",
       "keyInterventionMap": {
-        "status": "verified",
+        "status": "verified-r164.1",
         "sectionLabel": {
           "en": "Where I changed the system",
           "zh": "我改變系統的位置"
         },
         "before": {
-          "en": "App and in-store payment disconnected",
-          "zh": "App 與門市付款分離"
+          "en": "Channel-specific payment interactions",
+          "zh": "依通路分離的付款互動"
         },
         "intervention": {
-          "en": "Connected app decisions to POS payment",
-          "zh": "串接 App 決策與 POS 付款"
+          "en": "One shared transaction model",
+          "zh": "一套共享交易模型"
         },
         "after": {
-          "en": "A scalable in-store payment capability",
-          "zh": "建立可規模化的店內付款能力"
+          "en": "Continuous behaviour across App, cashier and self-checkout",
+          "zh": "跨 App、人工收銀與自助結帳的連續行為"
         },
         "supportingCopy": {
-          "en": "I designed the 0→1 flow that connected the FairPrice app with store payment decisions and POS execution, turning separate touchpoints into one transaction capability.",
-          "zh": "我從 0→1 設計串接 FairPrice App、付款決策與 POS 執行的流程，將原本分離的接觸點建立成完整交易能力。"
+          "en": "By connecting customer behaviour with POS execution, benefit logic and recovery states, I gave the team a shared structure for deciding how the experience should behave across App, cashier and self-checkout.",
+          "zh": "我串接顧客行為、POS 執行、權益邏輯與復原狀態，讓團隊能依據同一套結構，決定體驗在 App、人工收銀與自助結帳之間應如何運作。"
         }
       },
       "transformation": "From fragmented in-store checkout to one omni payment system",
@@ -15469,70 +15612,93 @@
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "payment-r143-decision-01",
+            "id": "payment-r1641-decision-01",
             "title": {
-              "en": "From separate App and checkout steps to one guided handoff",
-              "zh": "從分離的 App 與結帳步驟，到單一引導式交接"
+              "en": "Make the App-to-checkout handoff explicit",
+              "zh": "讓 App 至結帳的交接明確可見"
             },
             "whatIDecided": {
-              "en": "Created one explicit App-to-cashier or self-checkout handoff, clarifying when customers should generate, show and complete the QR payment.",
-              "zh": "建立一條明確的 App 至人工收銀或自助結帳交接，清楚說明何時產生、出示並完成 QR 付款。"
+              "en": "Define one clear sequence for generating, presenting and completing payment from the App at cashier or self-checkout.",
+              "zh": "定義一條清楚順序，讓顧客在 App 產生付款資訊、於人工收銀或自助結帳出示並完成付款。"
             },
             "whyThisChoice": {
-              "en": "Field research showed that queue pressure and unclear QR instructions made customers hesitate or return to familiar payment methods.",
-              "zh": "實地研究顯示，排隊壓力與模糊的 QR 操作指示會讓顧客猶豫，或回到熟悉的付款方式。"
+              "en": "Queue pressure and unclear QR instructions created hesitation at the most time-sensitive moment in the journey.",
+              "zh": "排隊壓力與不清楚的 QR 操作指示，會在旅程中時間最敏感的時刻造成猶豫。"
+            },
+            "optionalBlock": {
+              "type": "CONSTRAINT MANAGED",
+              "content": {
+                "en": "The handoff crossed the customer’s device, POS/SCO state and frontline behaviour.",
+                "zh": "這段交接跨越顧客裝置、POS／SCO 狀態與第一線人員行為。"
+              }
+            },
+            "outcome": {
+              "en": "A validated and shipped handoff that made the transition between App and physical checkout understandable.",
+              "zh": "經驗證並上線的交接模式，讓 App 與實體結帳之間的轉換更容易理解。"
             },
             "status": "validated-and-shipped"
           },
           {
-            "id": "payment-r143-decision-02",
+            "id": "payment-r1641-decision-02",
             "title": {
-              "en": "From separate benefits to visible vouchers and loyalty at checkout",
-              "zh": "從分離的會員權益，到結帳時可見的優惠券與點數"
+              "en": "Keep payment benefits visible inside the transaction",
+              "zh": "讓付款權益在交易中保持可見"
             },
             "whatIDecided": {
-              "en": "Integrated LinkPoints earning and redemption, available vouchers and applied discounts into the payable and confirmation states so customers could understand value before and after payment.",
-              "zh": "將 LinkPoints 累積與折抵、可用優惠券及已套用折扣整合進付款與確認狀態，讓顧客在付款前後都能理解所得價值。"
+              "en": "Surface LinkPoints, vouchers, applied discounts and payable value within payment and confirmation states.",
+              "zh": "在付款與確認狀態中呈現 LinkPoints、優惠券、已套用折扣與應付金額。"
             },
             "whyThisChoice": {
-              "en": "Research showed that customers struggled to carry physical cards, identify which vouchers worked at each counter and trust that changing payment method would preserve familiar benefits.",
-              "zh": "研究顯示，顧客難以攜帶實體卡片、判斷各結帳通路可使用哪些優惠券，也擔心改變付款方式會失去熟悉權益。"
+              "en": "Customers needed confidence that the benefits they expected had actually carried into the transaction.",
+              "zh": "顧客需要確信原本預期的權益確實已帶入交易。"
             },
             "optionalBlock": {
-              "type": "WHAT THIS REQUIRED",
+              "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "This required Retail and Membership teams to align voucher and loyalty rules, POS teams to support counter-level integration, and the Payment team to design the App-facing voucher experience and checkout states.",
-                "zh": "這需要 Retail 與 Membership 團隊對齊優惠券及會員規則、POS 團隊支援櫃台層整合，Payment 團隊則負責 App 端優惠券體驗與結帳狀態設計。"
+                "en": "Membership, voucher, payment and POS logic were distributed across different systems and teams.",
+                "zh": "會員、優惠券、付款與 POS 邏輯分布在不同系統與團隊。"
               }
+            },
+            "outcome": {
+              "en": "A shipped integration that made benefits and final payable value legible at checkout.",
+              "zh": "已上線的整合方案，讓顧客能在結帳時理解權益與最終應付金額。"
             },
             "status": "shipped-cross-team-integration"
           },
           {
-            "id": "payment-r143-decision-03",
+            "id": "payment-r1641-decision-03",
             "title": {
-              "en": "From payment success only to connected recovery and operations",
-              "zh": "從只處理付款成功，到串接復原與營運"
+              "en": "Treat recovery and traceability as part of payment",
+              "zh": "將復原與可追溯性納入付款本身"
             },
             "whatIDecided": {
-              "en": "Designed failure alternatives, refunds, order history, internal transaction search and payment guidelines as one operating model around the core checkout journey.",
-              "zh": "將失敗替代方案、退款、訂單紀錄、內部交易搜尋與付款規範設計成圍繞核心結帳旅程的一套營運模型。"
+              "en": "Connect failure alternatives, transaction records and recovery paths to the same transaction model.",
+              "zh": "將失敗替代方案、交易紀錄與復原路徑連接至同一套交易模型。"
             },
             "whyThisChoice": {
-              "en": "Customers needed assurance when payment failed, while cashiers, customer service and finance needed one traceable record and clear next action.",
-              "zh": "顧客在付款失敗時需要安心感；收銀員、客服與財務則需要可追溯紀錄與清楚的下一步操作。"
+              "en": "A payment problem could continue after the customer-facing error state, requiring both customers and staff to understand what happened and what came next.",
+              "zh": "付款問題可能在顧客端錯誤狀態之後持續發生，因此顧客與員工都需要理解發生了什麼及下一步。"
             },
             "optionalBlock": {
-              "type": "RISK MANAGED",
+              "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "The model reduced the risk of customers or frontline staff becoming blocked by making alternatives, ownership and transaction records explicit.",
-                "zh": "透過明確呈現替代方案、責任與交易紀錄，降低顧客或第一線人員被流程卡住的風險。"
+                "en": "Recovery crossed customer experience, cashier support, customer service and financial operations.",
+                "zh": "復原流程跨越顧客體驗、收銀支援、客服與財務營運。"
               }
+            },
+            "outcome": {
+              "en": "A coherent recovery direction spanning customer and operational needs.",
+              "zh": "建立同時涵蓋顧客與營運需求的一致復原方向。"
+            },
+            "deliveryBoundary": {
+              "en": "Failure alternatives were confirmed in the customer-facing delivery scope. Recovery, refund, transaction-record, internal-portal and related operational designs were validated or completed, but capability-level production status remains unconfirmed.",
+              "zh": "顧客端交付範圍已確認包含付款失敗替代方案。復原、退款、交易紀錄、內部平台及相關營運設計已完成或經過驗證，但各項能力的正式上線狀態仍未確認。"
             },
             "status": "design-complete-shipment-varies-by-capability"
           }
         ],
         "sourcePackage": "r143 user-provided Payment screenshots",
-        "contentStatus": "approved"
+        "contentStatus": "approved-r164.1"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -15559,65 +15725,53 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "App, POS and self-checkout had to behave as one transaction",
-            "zh": "App、POS 與自助結帳必須像同一筆交易"
+            "en": "Payment crossed systems customers could not see",
+            "zh": "付款跨越顧客看不見的系統"
           },
           "description": {
-            "en": "Customers started in the App but completed payment at cashier or self-checkout, so instructions, progress, benefits and recovery had to remain consistent across surfaces.",
-            "zh": "顧客從 App 開始，卻在人工收銀或自助結帳完成付款，因此操作指示、進度、權益與復原方式必須跨介面保持一致。"
+            "en": "A transaction could begin in the App but complete at a cashier or self-checkout, requiring several systems to behave like one continuous experience.",
+            "zh": "一筆交易可以從 App 開始，卻在人工收銀或自助結帳完成，因此多個系統必須呈現為一段連續體驗。"
           }
         },
         {
           "title": {
-            "en": "Voucher and loyalty logic crossed multiple team boundaries",
-            "zh": "優惠券與會員邏輯跨越多個團隊邊界"
+            "en": "Benefits and payable value depended on separate product logic",
+            "zh": "權益與應付金額取決於不同產品邏輯"
           },
           "description": {
-            "en": "Voucher eligibility, LinkPoints, discounts and POS behaviour depended on Retail, Membership, Voucher, payment and engineering systems rather than one product team.",
-            "zh": "優惠券資格、LinkPoints、折扣與 POS 行為依賴 Retail、Membership、Voucher、付款與工程系統，而不是由單一產品團隊決定。"
+            "en": "LinkPoints, vouchers, discounts and payment execution crossed different systems and ownership boundaries, while customers still needed one trustworthy payable state.",
+            "zh": "LinkPoints、優惠券、折扣與付款執行跨越不同系統及責任邊界，但顧客仍需要一個可信任的應付金額狀態。"
           }
         },
         {
           "title": {
-            "en": "Failures continued into refunds and internal operations",
-            "zh": "付款失敗會延伸至退款與內部營運"
+            "en": "A failed payment did not end at the error screen",
+            "zh": "付款失敗不會停在錯誤畫面"
           },
           "description": {
-            "en": "A failed or disputed transaction affected customers, cashiers, customer service and finance, requiring customer recovery, refund states, transaction search and operational ownership.",
-            "zh": "付款失敗或爭議會同時影響顧客、收銀員、客服與財務，因此需要顧客復原、退款狀態、交易搜尋與清楚的營運責任。"
+            "en": "Recovery could continue through retry, refunds, transaction records and staff support, making failure a cross-system service problem rather than a single UI state.",
+            "zh": "復原可能延續至重試、退款、交易紀錄與員工支援，使失敗成為跨系統服務問題，而非單一介面狀態。"
           }
         }
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "transaction-model",
-        "voucher-and-loyalty-integration",
-        "key-decisions",
-        "shipped-proof",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "recognition",
-        "prototype",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "latestConfirmedCorrection": {
-        "package": "r143",
-        "supersedes": [
-          "r130 wording that removed explicit Voucher integration",
-          "generic 2020–2021 timeline",
-          "under-specified cross-team delivery"
-        ],
-        "confirmedFacts": [
-          "Project duration: Dec 2020–Nov 2021",
-          "Checkout-level Voucher integration was part of Payment",
-          "Voucher integration was cross-team work",
-          "Source-reported second-month movement: ~129% transactions, ~116% unique users, ~26% AOV",
-          "Team received the 2021 Singapore User Experience Award of the Year — Retail"
-        ],
-        "status": "applied"
+        "round": "R164.1",
+        "date": "2026-08-17",
+        "summary": "Migrated Payment into the canonical shared Project Detail IA with a transaction-continuity decision spine.",
+        "productionMutable": false
       },
       "domain": {
         "en": "Retail payments",
@@ -15772,6 +15926,90 @@
         "additionalProof": "2021 Singapore User Experience Award of the Year — Retail (product-team recognition).",
         "recommendedHeadline": "Scaled a new in-store payment system to ~230K monthly transactions at ~99% payment success.",
         "attributionBoundary": "Present as product outcomes delivered by the cross-functional team; do not attribute the metrics to design alone."
+      },
+      "presentation": {
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "composition": "recruiter-first-system-case",
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "three-up"
       }
     },
     "cathay-sit-online-account-opening": {
