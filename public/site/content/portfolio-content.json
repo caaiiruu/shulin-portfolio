@@ -18139,15 +18139,8 @@
       },
       "problemTypes": [
         "mortgage application",
-        "application information architecture",
         "resumable application",
-        "multi-party application",
-        "contextual entry",
-        "form restructuring",
-        "application state",
-        "regulated self-service",
-        "related-party workflow",
-        "mortgage progress"
+        "multi-party application"
       ],
       "atAGlance": {
         "en": "Led the 0→1 product design of an in-app mortgage application, restructuring fragmented information into a staged, resumable journey that supported contextual entry, related-party participation and regulated guidance.",
@@ -18911,15 +18904,8 @@
       },
       "problemTypes_zh": [
         "房貸申請",
-        "申請資訊架構",
         "可續辦申請",
-        "多方申請",
-        "情境式進入",
-        "表單重整",
-        "申請狀態",
-        "受監管自助服務",
-        "關係人流程",
-        "房貸進度"
+        "多方申請"
       ],
       "confidentialityNote": {
         "en": "*Post-launch metrics were not available within the consulting engagement; outcomes are reported through validated decisions and delivered system change.*",
@@ -19175,27 +19161,13 @@
       "transformation_zh": "從分散的房貸入口，到單一可續辦申請",
       "problem_types": [
         "mortgage application",
-        "application information architecture",
         "resumable application",
-        "multi-party application",
-        "contextual entry",
-        "form restructuring",
-        "application state",
-        "regulated self-service",
-        "related-party workflow",
-        "mortgage progress"
+        "multi-party application"
       ],
       "problem_types_zh": [
         "房貸申請",
-        "申請資訊架構",
         "可續辦申請",
-        "多方申請",
-        "情境式進入",
-        "表單重整",
-        "申請狀態",
-        "受監管自助服務",
-        "關係人流程",
-        "房貸進度"
+        "多方申請"
       ],
       "at_glance": "Led the 0→1 product design of an in-app mortgage application, restructuring fragmented information into a staged, resumable journey that supported contextual entry, related-party participation and regulated guidance.",
       "at_glance_zh": "主導 App 內房貸申請的 0→1 產品設計，將分散資訊重整為可分階段、可續辦的旅程，支援情境式進入、關係人參與與受監管的資訊引導。",
