@@ -9,6 +9,35 @@
 - Delivery Boundary may be used when shipped/validated/scope distinction matters.
 - Never invent metrics or ownership.
 
+## Project title writing
+
+Project titles must be recruiter-readable and specific to the project's distinctive product/system problem.
+
+Hard rule:
+- Do NOT use the repeated `From X to Y` construction.
+
+A title should quickly communicate:
+- project or product identity
+- domain / problem space
+- distinctive system, capability, or product change
+
+Prefer product/system meaning over design-activity phrasing.
+
+Avoid formulaic titles such as:
+- `From X to Y`
+- `Improving the ... experience`
+- `Redesigning ...`
+- `Designing ...` when it merely describes the designer's activity
+
+Transformation may still be communicated semantically, but titles must not rely on one repeated syntax across projects.
+
+Cross-project quality gate:
+- flagship titles should not all share the same grammar
+- each title should expose a distinct hiring signal
+- avoid poetic ambiguity and internal jargon
+- avoid implying unsupported scope such as `omni`, `platform`, `global`, or `end-to-end` unless source truth supports it
+- natural authored casing only
+
 ## Typography role hierarchy
 
 Canonical semantic hierarchy:
