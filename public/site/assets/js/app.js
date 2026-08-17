@@ -1205,12 +1205,23 @@
     const correction=targetTop-rootTop-projectSectionInset();
     if(Math.abs(correction)>2)dialogScrollRoot.scrollTop=Math.max(0,dialogScrollRoot.scrollTop+correction);
   }
+  function positionActiveProjectNavItem(link){
+    const rail=projectSectionNavLinks;
+    if(!rail||!link)return;
+    const links=[...rail.querySelectorAll('a')];
+    const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+    const index=links.indexOf(link);
+    const target=index===0?0:index===links.length-1?max:Math.min(max,Math.max(0,link.offsetLeft+(link.offsetWidth/2)-(rail.clientWidth/2)));
+    rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
+  }
   function setActiveProjectSection(id){
     activeProjectSectionId=id||'';
+    let activeLink=null;
     projectSectionNavLinks?.querySelectorAll('a').forEach(link=>{
-      if(link.getAttribute('href')===`#${activeProjectSectionId}`)link.setAttribute('aria-current','location');
+      if(link.getAttribute('href')===`#${activeProjectSectionId}`){link.setAttribute('aria-current','location');activeLink=link}
       else link.removeAttribute('aria-current');
     });
+    if(activeLink)window.requestAnimationFrame(()=>positionActiveProjectNavItem(activeLink));
   }
   function cancelProjectSectionNavigation({restoreScrollSpy=true}={}){
     const transaction=projectSectionNavigation;
@@ -1303,6 +1314,7 @@
       const target=projectNavTarget(key,id);
       const link=element('a','pd-section-nav__link floating-navigator__item',lang==='zh'?zh:en);
       link.href=`#${target.id||id}`;
+      link.addEventListener('focus',()=>positionActiveProjectNavItem(link));
       link.addEventListener('click',event=>{
         event.preventDefault();
         scrollToProjectSection(target);
@@ -2736,7 +2748,12 @@
     node.append(heading);
     return node;
   }
-  function projectContentRef(project,path){
+  function naturalContentTitle(value){
+    const text=String(value||'').trim();
+    if(lang!=='en'||!text||text!==text.toUpperCase()||!/[A-Z]/.test(text))return text;
+    return text.toLowerCase().replace(/(^|[\s/–—-])([a-z])/g,(_,prefix,letter)=>prefix+letter.toUpperCase());
+  }
+    function projectContentRef(project,path){
     return String(path||'').split('.').filter(Boolean).reduce((value,key)=>value?.[key],project);
   }
   function appendAccountabilityList(article,label,items){
@@ -2896,7 +2913,7 @@
         list(evidenceSource.structuredGroups).forEach(item=>{
           const group=element('article','structured-evidence-v223__group');
           if(t(item.supportingLabel))group.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
-          group.append(element('h4','',t(item.heading)));
+          group.append(element('h4','',naturalContentTitle(t(item.heading))));
           if(t(item.summary))group.append(element('p','structured-evidence-v223__summary',t(item.summary)));
           if(list(item.bullets).length){
             const bullets=element('ul','structured-evidence-v223__list');

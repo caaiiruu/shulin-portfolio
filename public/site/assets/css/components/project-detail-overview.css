@@ -880,3 +880,5 @@
 @media(max-width:871px){.outcome-card-grid{grid-template-columns:1fr}}
 
 .voucher-r149-insight{justify-items:center;text-align:left}.voucher-r149-insight .voucher-r149-heading{justify-items:start}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child){grid-template-columns:minmax(0,var(--case-reading-max));justify-content:center;width:100%}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child) .voucher-r149-foundation__caption{justify-items:center;text-align:center}
+
+@media(max-width:430px){.core-system-insight-section .voucher-r149-heading{width:calc(100% - (2 * var(--page-gutter)));max-width:var(--case-reading-max)}}

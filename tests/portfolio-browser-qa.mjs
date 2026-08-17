@@ -131,6 +131,8 @@ for (const viewport of viewports) {
       outcomeColumns,
       problemTypesVisible:!document.querySelector(".modal-classification-v45")?.hidden,
       navigator:[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),
+      titleTransforms:[...dialog.querySelectorAll(".case-study-section__header h2,.structured-evidence-v223__group h4,.outcome-metric--qualitative h3,#projectSectionNav a")].map(node=>getComputedStyle(node).textTransform),
+      semanticLabels:[...dialog.querySelectorAll(".decision-field-label-v58,.voucher-r149-eyebrow")].map(node=>({text:node.textContent.trim(),transform:getComputedStyle(node).textTransform})),
       overflow:(dialog?.scrollWidth||0)-(dialog?.clientWidth||0)
     };
   });
@@ -143,6 +145,8 @@ for (const viewport of viewports) {
   if(ctbcCertification.outcomeHeadline!=="Established the 0→1 application model for CTBC’s in-app mortgage self-service journey."||JSON.stringify(ctbcCertification.outcomeCards)!==JSON.stringify(["One staged information model","Resumable application flow","Multi-party completion"])||!ctbcCertification.outcomeClosing?.includes("post-launch performance is outside the verified scope"))failures.push(`${viewport.name} CTBC qualitative Outcomes mismatch: ${JSON.stringify(ctbcCertification)}`);
   if(!ctbcCertification.text.includes("Existing acquisition entry points")||!ctbcCertification.text.includes("Production launch and post-launch measurement"))failures.push(`${viewport.name} CTBC accountability boundaries missing`);
   if(/conversion|task success|completion rate/i.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC invented metric detected`);
+  if(ctbcCertification.titleTransforms.some(value=>value==="uppercase"))failures.push(`${viewport.name} content title incorrectly uppercased`);
+  if(ctbcCertification.semanticLabels.some(item=>/[A-Za-z]/.test(item.text)&&item.transform!=="uppercase"&&item.text!==item.text.toUpperCase()))failures.push(`${viewport.name} semantic label casing contract failed`);
   if(ctbcCertification.overflow>0)failures.push(`${viewport.name} CTBC dialog horizontal overflow: ${ctbcCertification.overflow}`);
   if(viewport.width===430&&(ctbcCertification.evidenceColumns!==1||ctbcCertification.outcomeColumns!==1))failures.push(`${viewport.name} CTBC mobile stack mismatch: evidence=${ctbcCertification.evidenceColumns} outcomes=${ctbcCertification.outcomeColumns}`);
 
