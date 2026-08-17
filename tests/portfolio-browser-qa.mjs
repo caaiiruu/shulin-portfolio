@@ -530,5 +530,6 @@ report.humanVisualQa = "REQUIRED";
 fs.mkdirSync(outputRoot, { recursive: true });
 fs.writeFileSync(path.join(outputRoot, "browser-qa.json"), `${JSON.stringify(report, null, 2)}\n`);
 if (failures.length) throw new Error(failures.join("\n"));
+console.log("R163.1 CTBC READING EDGES", JSON.stringify(Object.fromEntries(Object.entries(report.viewports).filter(([name])=>["desktop-1419","tablet-871","mobile-430"].includes(name)).map(([name,value])=>[name,value.ctbcReadingEdges]))));
 console.log("ENGINEERING QA PASS");
 console.log("Human visual review remains required.");
