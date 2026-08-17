@@ -93,9 +93,27 @@ for (const viewport of viewports) {
     ].map(value=>text.indexOf(value));
     const decisionCards=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")];
     const decisionFields=decisionCards.map(card=>[...card.querySelectorAll(".decision-field-label-v58")].map(node=>node.textContent.trim()));
-    const evidenceGroups=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-card")].map(card=>card.querySelector("h3")?.textContent.trim());
+    const evidenceGroups=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group")].map(group=>group.querySelector("h4")?.textContent.trim());
     const outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric--qualitative")].map(card=>card.querySelector("h3")?.textContent.trim());
     const signals=[...dialog.querySelectorAll("#projectSignals>div")].map(node=>node.innerText.trim());
+    const rect=node=>{if(!node)return null;const value=node.getBoundingClientRect();return{x:Number(value.x.toFixed(1)),right:Number(value.right.toFixed(1)),width:Number(value.width.toFixed(1))}};
+    const edge=(name,rootSelector,contentSelector,edgeType)=>{
+      const root=dialog.querySelector(rootSelector);
+      return{name,edgeType,heading:rect(root?.querySelector(".case-study-section__header h2,.case-study-section__header h3,h2,h3")),content:rect(root?.querySelector(contentSelector))};
+    };
+    const geometry=[
+      edge("At a Glance","#projectView",".quick-view-v51__body, .quick-view-v51__grid, .info-grid-v45","READING EDGE"),
+      edge("Info Grid","#projectView","#projectSignals","EVIDENCE EDGE"),
+      edge("What Made This Hard","[data-canonical-section-id='what-made-this-hard']", ".recruiter-complexity-grid","EVIDENCE EDGE"),
+      edge("Contribution","[data-canonical-section-id='contribution']", ".voucher-r149-flow","READING EDGE"),
+      edge("Core System Insight","[data-canonical-section-id='core-system-insight']", ".voucher-r149-heading","READING EDGE"),
+      edge("Design Decisions","[data-canonical-section-id='key-design-decisions']", ".voucher-stage-decision-list","EVIDENCE EDGE"),
+      edge("Evidence","[data-canonical-section-id='evidence-to-operating-model']", ".structured-evidence-v223__groups","EVIDENCE EDGE"),
+      edge("Outcomes","[data-canonical-section-id='outcomes']", ".outcome-qualitative-hierarchy","EVIDENCE EDGE"),
+      edge("My Accountability","[data-canonical-section-id='my-accountability']", ".voucher-r149-accountability","EVIDENCE EDGE")
+    ];
+    const evidenceColumns=getComputedStyle(dialog.querySelector(".structured-evidence-v223__groups")).gridTemplateColumns.split(" ").length;
+    const outcomeColumns=getComputedStyle(dialog.querySelector(".outcome-card-grid")).gridTemplateColumns.split(" ").length;
     return{
       order,
       text,
@@ -107,6 +125,9 @@ for (const viewport of viewports) {
       outcomeCards,
       outcomeClosing:dialog.querySelector("#systemCaseOutcomesSection .outcome-semantic-closing")?.textContent.trim(),
       signals,
+      geometry,
+      evidenceColumns,
+      outcomeColumns,
       problemTypesVisible:!document.querySelector(".modal-classification-v45")?.hidden,
       navigator:[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),
       overflow:(dialog?.scrollWidth||0)-(dialog?.clientWidth||0)
@@ -122,6 +143,7 @@ for (const viewport of viewports) {
   if(!ctbcCertification.text.includes("Existing acquisition entry points")||!ctbcCertification.text.includes("Production launch and post-launch measurement"))failures.push(`${viewport.name} CTBC accountability boundaries missing`);
   if(/conversion|task success|completion rate/i.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC invented metric detected`);
   if(ctbcCertification.overflow>0)failures.push(`${viewport.name} CTBC dialog horizontal overflow: ${ctbcCertification.overflow}`);
+  if(viewport.width===430&&(ctbcCertification.evidenceColumns!==1||ctbcCertification.outcomeColumns!==1))failures.push(`${viewport.name} CTBC mobile stack mismatch: evidence=${ctbcCertification.evidenceColumns} outcomes=${ctbcCertification.outcomeColumns}`);
 
   const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
   await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});const fresh=await homepageState();
@@ -493,6 +515,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     interaction,
     r157Targeted: r156,
     r159Navigator: { contract: navigatorContract, interactions: navigatorInteractions },
+    ctbcReadingEdges: ctbcCertification.geometry,
   };
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);

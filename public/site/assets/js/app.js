@@ -2891,19 +2891,19 @@
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
       if(list(evidenceSource.structuredGroups).length){
-        const groups=element('div','structured-evidence-grid');
+        const groups=element('div','structured-evidence-v223 structured-evidence-v223__groups');
         groups.dataset.componentOwner='StructuredEvidence';
         list(evidenceSource.structuredGroups).forEach(item=>{
-          const card=element('article','structured-evidence-card');
-          if(t(item.supportingLabel))card.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
-          card.append(element('h3','structured-evidence-card__heading',t(item.heading)));
-          if(t(item.summary))card.append(element('p','structured-evidence-card__summary',t(item.summary)));
+          const group=element('article','structured-evidence-v223__group');
+          if(t(item.supportingLabel))group.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
+          group.append(element('h4','',t(item.heading)));
+          if(t(item.summary))group.append(element('p','structured-evidence-v223__summary',t(item.summary)));
           if(list(item.bullets).length){
-            const bullets=element('ul','structured-evidence-card__bullets');
+            const bullets=element('ul','structured-evidence-v223__list');
             list(item.bullets).forEach(entry=>bullets.append(element('li','',t(entry))));
-            card.append(bullets);
+            group.append(bullets);
           }
-          groups.append(card);
+          groups.append(group);
         });
         evidence.append(groups);
       }

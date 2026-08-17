@@ -870,19 +870,13 @@
 /* Shared qualitative variant of the canonical OutcomeMetric owner. */
 .outcome-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 .outcome-semantic-change{display:grid;gap:var(--space-3);max-width:var(--dimension-900px)}.outcome-semantic-change__title{max-width:var(--dimension-34ch);font-size:var(--cmp-popup-section-title-size);line-height:1.08;text-wrap:balance}.outcome-semantic-group{display:grid;gap:var(--space-5);padding-top:var(--space-6)}.outcome-semantic-group__title{font-size:var(--text-lead)}.outcome-semantic-group__grid{display:grid}.outcome-scale-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.outcome-scale{display:grid;gap:var(--space-3)}.outcome-scale__value{font-size:var(--cmp-popup-outcome-metric-size);font-weight:var(--sys-weight-heavy);line-height:1}.outcome-scale__label,.outcome-semantic-note{color:var(--color-text-secondary);line-height:var(--leading-body)}.outcome-semantic-note{max-width:var(--dimension-68ch);font-size:var(--text-sm)}.outcome-semantic-support{display:grid;gap:var(--space-3);padding-top:var(--space-5)}.outcome-semantic-support .outcome-semantic-note{margin:0}.outcome-semantic-closing{max-width:var(--dimension-68ch);padding-top:var(--space-5);color:var(--color-text-primary);font-weight:var(--sys-weight-bold);line-height:var(--leading-body)}@media(max-width:430px){.outcome-metric-grid{row-gap:var(--space-6)}.outcome-scale-grid{grid-template-columns:1fr}}
-.outcome-metric--qualitative{grid-template-rows:auto 1fr;gap:var(--space-3);padding:var(--space-5);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
+.outcome-metric--qualitative{grid-template-rows:auto 1fr;gap:var(--space-2);padding:0;border:0;border-radius:0;background:transparent}
 .outcome-metric__heading{margin:0;font-size:var(--cmp-popup-card-title-size);line-height:var(--leading-heading)}
 .outcome-metric__copy{margin:0;color:var(--color-text-secondary);line-height:var(--leading-body)}
 .outcome-qualitative-hierarchy{display:grid;gap:var(--space-6)}
 .outcome-semantic-change--qualitative{max-width:var(--case-reading-max)}
-.voucher-stage-decision__delivery-boundary{margin-top:var(--space-5)}
-.structured-evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5);padding-block:var(--space-6)}
-.structured-evidence-card{display:grid;align-content:start;gap:var(--space-3);min-width:0;padding:var(--space-5);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
-.structured-evidence-card__heading{margin:0;font-size:var(--cmp-popup-card-title-size);line-height:var(--leading-heading)}
-.structured-evidence-card__summary{margin:0;color:var(--color-text-secondary);line-height:var(--leading-body)}
-.structured-evidence-card__bullets{display:grid;gap:var(--space-2);margin:0;padding-inline-start:var(--space-5);color:var(--color-text-secondary);line-height:var(--leading-body)}
-@media(max-width:600px){.structured-evidence-grid{grid-template-columns:1fr}.structured-evidence-card{padding:var(--space-4)}}
-
+.voucher-stage-decision__delivery-boundary{box-sizing:border-box;width:100%;margin-top:var(--space-5)}
+.structured-evidence-v223__summary{margin:0;color:var(--color-text-secondary);font-size:var(--cmp-popup-supporting-size);line-height:1.5}
 @media(max-width:871px){.outcome-card-grid{grid-template-columns:1fr}}
 
-.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child){grid-template-columns:minmax(0,var(--case-reading-max));justify-content:center;width:100%}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child) .voucher-r149-foundation__caption{justify-items:center;text-align:center}
+.voucher-r149-insight{justify-items:start;text-align:left}.voucher-r149-insight .voucher-r149-heading{justify-items:start}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child){grid-template-columns:minmax(0,var(--case-reading-max));justify-content:center;width:100%}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child) .voucher-r149-foundation__caption{justify-items:center;text-align:center}

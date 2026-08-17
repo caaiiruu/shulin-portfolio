@@ -1741,9 +1741,11 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
 
   assert.match(app,/voucher-stage-decision__delivery-boundary/);
   assert.match(app,/outcome-qualitative-hierarchy/);
-  assert.match(app,/structured-evidence-grid/);
+  assert.match(app,/structured-evidence-v223__groups/);
   assert.doesNotMatch(app,/ctbc[^\n]*deliveryBoundary/i);
-  assert.match(css,/\.structured-evidence-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/\.structured-evidence-v223__groups\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.doesNotMatch(app,/structured-evidence-grid|structured-evidence-card/);
+  assert.doesNotMatch(css,/\.structured-evidence-grid|\.structured-evidence-card/);
   assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
   assert.doesNotMatch(css,/structured-evidence[^}]*!important/i);
 
