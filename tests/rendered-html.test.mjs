@@ -1768,3 +1768,31 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
 
 
 test("R163.3 converges Core Insight and Accountability through canonical shared owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");assert.match(app,/sourceRole:'I LED'/);assert.match(app,/sourceRole:'I CO-DECIDED'/);assert.match(app,/PARTNER-OWNED BOUNDARY/);assert.doesNotMatch(app,/voucher-r149-accountability--three/);assert.match(css,/\.voucher-r149-insight\{justify-items:center;text-align:center\}/);assert.doesNotMatch(css,/\.voucher-r149-insight\{justify-items:center;text-align:left\}/);assert.match(css,/\.voucher-r149-accountability__boundary\{[^}]*grid-column:1\/-1/);assert.match(css,/@media\(max-width:600px\)\{\.voucher-r149-accountability\{grid-template-columns:1fr\}/)});
+
+
+test("R163.3A keeps CTBC content strategic, factual, and inside shared structures", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const ctbc=ssot.projects["ctbc-mortgage-self-service-app"];
+  const accountability=ctbc.ownershipModel.accountabilityPresentation;
+  assert.equal(accountability.owned.items,undefined);
+  assert.equal(accountability.shared.items,undefined);
+  assert.ok(accountability.owned.title.en&&accountability.owned.text.en);
+  assert.ok(accountability.shared.title.en&&accountability.shared.text.en);
+  assert.equal(accountability.partnerOwned,undefined);
+  assert.equal(ctbc.ownershipModel.partnerOwned.length,4);
+  assert.equal(ctbc.publicContent.outcomes.cards.length,3);
+  assert.match(ctbc.publicContent.outcomes.cards[1].heading.en,/Resumable progress/);
+  assert.equal(ctbc.publicContent.decisionEvidence.structuredGroups.length,4);
+  for(const group of ctbc.publicContent.decisionEvidence.structuredGroups){
+    assert.ok(group.supportingLabel.en&&group.heading.en&&group.summary.en);
+    assert.equal(group.bullets.length,2);
+    assert.match(group.bullets[0].en,/^Observed:/);
+    assert.match(group.bullets[1].en,/^Design implication:/);
+  }
+  assert.equal(ctbc.decisionNarrative.primaryDecisions.length,3);
+  assert.match(ctbc.decisionNarrative.primaryDecisions[0].title.en,/application state/i);
+  assert.match(ctbc.decisionNarrative.primaryDecisions[1].title.en,/lending boundaries/i);
+  assert.match(ctbc.decisionNarrative.primaryDecisions[2].title.en,/multi-party completion/i);
+  assert.equal(ctbc.decisionNarrative.primaryDecisions[1].optionalBlock.type,"CONSTRAINT MANAGED");
+  assert.doesNotMatch(JSON.stringify({accountability:accountability,outcomes:ctbc.publicContent.outcomes,decisions:ctbc.decisionNarrative.primaryDecisions,evidence:ctbc.publicContent.decisionEvidence}),/conversion rate|task success|completion rate/i);
+});
