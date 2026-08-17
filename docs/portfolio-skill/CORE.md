@@ -16,3 +16,4 @@ Read this file + `registry.json` before every Work Order.
 11. QA: 1419 / 871 / 430. Shared changes regress Voucher / DBS / Booking.
 12. Engineering PASS != Human PASS.
 13. Verify real GitHub HEAD before trusting stale Work-session state.
+14. Semantic consistency: one role uses one shared treatment; content headings keep natural authored casing, uppercase is reserved for semantic micro-labels, and active/focused Project Floating Navigator items remain fully visible and centre where scroll space permits.

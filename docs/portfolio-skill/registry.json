@@ -1,5 +1,6 @@
 {
-  "version": "2026-08-17-v2",
+  "version": "2026-08-17-v2.1",
+  "skillVersion": "2026-08-17-v2.1",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "qaBranch": "qa/r146-r43-preview-2026-08-06",
@@ -39,6 +40,18 @@
     "qualitative outcomes headline+cards+closing",
     "structured non-image evidence"
   ],
+  "typographyCasing": {
+    "contentHeadings": "natural-authored-case",
+    "semanticLabels": "uppercase",
+    "navigatorLabels": "natural-title-case"
+  },
+  "navigatorQA": {
+    "activeItemMustBeFullyVisible": true,
+    "centerIntermediateItems": true,
+    "firstItemScrollLeft": 0,
+    "lastItemScrollLeft": "maxScroll",
+    "activeStateRepositionsRail": true
+  },
   "superseded": [
     "public Problem Types",
     "standalone Why It Mattered",

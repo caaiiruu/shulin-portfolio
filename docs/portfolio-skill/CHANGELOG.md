@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## 2026-08-17 — v2.1
+
+Human regression evidence established:
+- active Project Floating Navigator item could be clipped and fail to centre
+- content/group headings used inconsistent uppercase treatment
+- semantic hierarchy between section titles, group titles and micro-labels required explicit governance
+- full-bleed Core Insight background must not force copy to the background edge
+
+Canonical rules added:
+- natural casing for content headings
+- uppercase reserved for semantic micro-labels
+- natural Title Case for navigator labels
+- active-item geometry certification required in addition to ARIA state
+- one shared reposition path for every active-state change
+- semantic typography hierarchy governs visual treatment
+- mobile Core Insight copy retains canonical inner gutter
+
+Reference implementation:
+
+R163.2 final QA SHA:
+
+`c0932f70fcba650a1ccb09c1ef000e51dd09028a`
+
+Status: engineering-verified; subject to Human visual approval.
+
 ## 2026-08-17 v2
 - Added complete canonical Skill + compact Work Core
 - Retired public Problem Types; search-only metadata
