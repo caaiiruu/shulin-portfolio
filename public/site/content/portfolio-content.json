@@ -22394,20 +22394,54 @@
         },
         "ctbc-mortgage-self-service-app": {
           "sections": {
-            "confidence-model": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "targetSystemModel",
-                "userModel"
+                "whatMadeThisHard"
               ],
-              "presentationType": "system-model",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "delivery-proof": {
+            "contribution": {
               "sourcePaths": [
-                "deliveryHighlights",
-                "projectClosure.deliveryAndMeasurement"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "delivery-proof",
+              "presentationType": "shared-contribution",
+              "renderRequired": true
+            },
+            "core-system-insight": {
+              "sourcePaths": [
+                "publicContent.coreSystemInsight"
+              ],
+              "presentationType": "shared-core-system-insight",
+              "renderRequired": true
+            },
+            "design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": [
+                "publicContent.decisionEvidence"
+              ],
+              "presentationType": "shared-structured-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-qualitative-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel"
+              ],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           }
