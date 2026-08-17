@@ -19142,7 +19142,7 @@
       },
       "type_zh": "0→1 產品",
       "keyInterventionMap": {
-        "status": "approved-r163-no-launch-claim",
+        "status": "verified-r163-no-launch-claim",
         "sectionLabel": {
           "en": "WHERE I CHANGED THE SYSTEM",
           "zh": "我改變系統的位置"
