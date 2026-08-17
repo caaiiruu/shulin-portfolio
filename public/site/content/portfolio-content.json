@@ -19257,7 +19257,7 @@
               "zh": "顧客會在不同考慮階段進入，但沿用情境資訊不能在正式評估前暗示保證的房貸金額、利率或資格。"
             },
             "optionalBlock": {
-              "type": "CONSTRAINT MANAGED",
+              "type": "WHAT THIS REQUIRED",
               "content": {
                 "en": "The direction had to preserve existing acquisition routes, use only reliable contextual signals and keep guidance clearly distinct from lending approval.",
                 "zh": "此方向必須保留既有獲客路徑、僅使用可靠的情境訊號，並清楚區分引導與授信核准。"

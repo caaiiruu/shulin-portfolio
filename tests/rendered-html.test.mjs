@@ -1794,6 +1794,6 @@ test("R163.3A keeps CTBC content strategic, factual, and inside shared structure
   assert.match(ctbc.decisionNarrative.primaryDecisions[0].title.en,/application state/i);
   assert.match(ctbc.decisionNarrative.primaryDecisions[1].title.en,/lending boundaries/i);
   assert.match(ctbc.decisionNarrative.primaryDecisions[2].title.en,/multi-party completion/i);
-  assert.equal(ctbc.decisionNarrative.primaryDecisions[1].optionalBlock.type,"CONSTRAINT MANAGED");
+  assert.equal(ctbc.decisionNarrative.primaryDecisions[1].optionalBlock.type,"WHAT THIS REQUIRED");
   assert.doesNotMatch(JSON.stringify({accountability:accountability,outcomes:ctbc.publicContent.outcomes,decisions:ctbc.decisionNarrative.primaryDecisions,evidence:ctbc.publicContent.decisionEvidence}),/conversion rate|task success|completion rate/i);
 });
