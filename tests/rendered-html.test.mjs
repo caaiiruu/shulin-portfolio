@@ -1763,7 +1763,8 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
   assert.equal(ctbc.publicContent.outcomes.cards.length,3);
   assert.match(ctbc.publicContent.outcomes.closing.en,/post-launch performance is outside the verified scope/);
   assert.ok(!JSON.stringify(ctbc.publicContent.outcomes).match(/conversion|task success|completion rate/i));
-  assert.ok(ctbc.ownershipModel.partnerOwned.some(item=>item.en==="Existing acquisition entry points"));\n  assert.equal(ctbc.ownershipModel.accountabilityPresentation.partnerOwned,undefined);
+  assert.ok(ctbc.ownershipModel.partnerOwned.some(item=>item.en==="Existing acquisition entry points"));
+  assert.equal(ctbc.ownershipModel.accountabilityPresentation.partnerOwned,undefined);
 });
 
 
