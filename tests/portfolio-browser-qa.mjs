@@ -93,7 +93,12 @@ for (const viewport of viewports) {
     ].map(value=>text.indexOf(value));
     const decisionCards=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")];
     const decisionFields=decisionCards.map(card=>[...card.querySelectorAll(".decision-field-label-v58")].map(node=>node.textContent.trim()));
-    const evidenceGroups=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group")].map(group=>group.querySelector("h4")?.textContent.trim());
+    const evidenceGroups=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group")].map(group=>({
+      headline:group.querySelector("h4")?.textContent.trim(),
+      body:group.querySelector(".structured-evidence-v223__summary")?.textContent.trim(),
+      link:group.querySelector(".structured-evidence-v223__decision-link")?.textContent.trim(),
+      legacyLabels:[...group.querySelectorAll("li")].map(node=>node.textContent.trim())
+    }));
     const outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric--qualitative")].map(card=>card.querySelector("h3")?.textContent.trim());
     const signals=[...dialog.querySelectorAll("#projectSignals>div")].map(node=>node.innerText.trim());
     const rect=node=>{if(!node)return null;const value=node.getBoundingClientRect();return{x:Number(value.x.toFixed(1)),right:Number(value.right.toFixed(1)),width:Number(value.width.toFixed(1))}};
@@ -141,7 +146,15 @@ for (const viewport of viewports) {
   if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
-  if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(["Readiness and information dependencies made a fixed sequence insufficient","Missing information made interruption a normal condition","Related applicants contributed to the same underlying application"]))failures.push(`${viewport.name} CTBC decision-shaping Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
+  const expectedEvidence=[
+    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",link:"LED TO DECISION 01",legacyLabels:[]},
+    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",link:"LED TO DECISION 02",legacyLabels:[]},
+    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",link:"LED TO DECISION 03",legacyLabels:[]}
+  ];
+  if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(expectedEvidence))failures.push(`${viewport.name} CTBC recruiter-compressed Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
+  if(/OBSERVED|DESIGN IMPLICATION|SUPPORTS DECISION/.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC legacy Evidence layers remain`);
+  if(viewport.width===1419&&ctbcCertification.evidenceColumns!==3)failures.push(`${viewport.name} CTBC Evidence must scan in three columns: ${ctbcCertification.evidenceColumns}`);
+  if(viewport.width===871&&ctbcCertification.evidenceColumns!==1)failures.push(`${viewport.name} CTBC Evidence tablet balance mismatch: ${ctbcCertification.evidenceColumns}`);
   if(ctbcCertification.outcomeHeadline!=null||JSON.stringify(ctbcCertification.outcomeCards)!==JSON.stringify(["One staged application model","Resumable application progress","Coordinated multi-party completion"])||!ctbcCertification.outcomeClosing?.includes("production launch and post-launch performance were not confirmed"))failures.push(`${viewport.name} CTBC contribution-led Outcomes mismatch: ${JSON.stringify(ctbcCertification)}`);
   if(!ctbcCertification.text.includes("Defined the product model behind the 0→1 mortgage journey")||!ctbcCertification.text.includes("Turned business and lending constraints into a buildable direction")||ctbcCertification.text.includes("Existing acquisition entry points")||ctbcCertification.text.includes("Production launch and post-launch measurement"))failures.push(`${viewport.name} CTBC ownership presentation mismatch`);
   if(/conversion|task success|completion rate/i.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC invented metric detected`);

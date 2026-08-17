@@ -18540,91 +18540,50 @@
           "metrics": [],
           "structuredGroups": [
             {
-              "supportingLabel": {
-                "en": "EVIDENCE 01 → DECISION 01",
-                "zh": "證據 01 → 決策 01"
-              },
               "heading": {
-                "en": "Readiness and information dependencies made a fixed sequence insufficient",
-                "zh": "準備程度與資訊依賴使固定順序不足以應對"
+                "en": "Different readiness states required a state-driven journey",
+                "zh": "不同準備狀態需要以狀態驅動的旅程"
               },
               "summary": {
-                "en": "Customers could arrive from different mortgage contexts with different information available, while property, loan, personal, related-party and consent fields depended on one another.",
-                "zh": "顧客可能從不同房貸情境進入，手上可用資訊也不同；房產、貸款、個人、關係人與同意欄位之間同時存在依賴。"
+                "en": "Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",
+                "zh": "使用者進入時掌握的資訊與依賴關係各不相同，因此單一固定順序無法適用每一種申請狀態。"
               },
-              "bullets": [
-                {
-                  "en": "Observed: entry context, readiness and field dependencies varied across the journey.",
-                  "zh": "觀察：入口情境、準備程度與欄位依賴會隨旅程而異。"
-                },
-                {
-                  "en": "Design implication: a fixed screen sequence would not stage the information coherently.",
-                  "zh": "設計推論：固定畫面順序無法連貫地安排資訊。"
-                },
-                {
-                  "en": "Supports Decision 01: structure the journey around application state.",
-                  "zh": "支持決策 01：以申請狀態組織旅程。"
-                }
-              ]
+              "decisionLink": {
+                "en": "LED TO DECISION 01",
+                "zh": "導向決策 01"
+              }
             },
             {
-              "supportingLabel": {
-                "en": "EVIDENCE 02 → DECISION 02",
-                "zh": "證據 02 → 決策 02"
-              },
               "heading": {
-                "en": "Missing information made interruption a normal condition",
-                "zh": "資訊未備齊使中斷成為正常情境"
+                "en": "Interruption was part of the normal application journey",
+                "zh": "中斷是正常申請旅程的一部分"
               },
               "summary": {
-                "en": "Applicants might begin without complete property details or supporting documents, and the existing long-form journey could require re-entry after interruption.",
-                "zh": "申請人開始時可能尚未備妥完整房產資料或佐證文件；既有長篇流程在中斷後也可能需要重新輸入。"
+                "en": "Missing information or documents meant users needed to leave and return without losing progress.",
+                "zh": "資訊或文件未備齊，意味著使用者需要離開後再返回，同時保留既有進度。"
               },
-              "bullets": [
-                {
-                  "en": "Observed: required information and documents were not always available in the first session.",
-                  "zh": "觀察：必要資訊與文件不一定能在第一次使用時取得。"
-                },
-                {
-                  "en": "Design implication: pause, return and recovery had to be part of the normal journey.",
-                  "zh": "設計推論：暫停、返回與復原必須成為正常旅程的一部分。"
-                },
-                {
-                  "en": "Supports Decision 02: treat interruption and return as a first-class state.",
-                  "zh": "支持決策 02：將中斷與返回視為一級狀態。"
-                }
-              ]
+              "decisionLink": {
+                "en": "LED TO DECISION 02",
+                "zh": "導向決策 02"
+              }
             },
             {
-              "supportingLabel": {
-                "en": "EVIDENCE 03 → DECISION 03",
-                "zh": "證據 03 → 決策 03"
-              },
               "heading": {
-                "en": "Related applicants contributed to the same underlying application",
-                "zh": "關係申請人共同完成同一底層申請"
+                "en": "Multiple applicants still needed one coherent application",
+                "zh": "多位申請人仍需要一份連貫的申請"
               },
               "summary": {
-                "en": "Co-borrowers and guarantors had distinct information, identity, consent and follow-up needs, but their contribution still belonged to the main mortgage application.",
-                "zh": "共借人與保證人具有不同的資訊、身分、同意與後續需求，但其參與仍屬於主要房貸申請。"
+                "en": "Related applicants could contribute at different moments, but their input still had to remain within the same application.",
+                "zh": "關係申請人可能在不同時間提供資料，但其輸入仍須維持在同一份申請中。"
               },
-              "bullets": [
-                {
-                  "en": "Observed: completion could depend on actions from another applicant through separate invitation and return paths.",
-                  "zh": "觀察：完成申請可能依賴另一位申請人透過獨立邀請與返回路徑採取行動。"
-                },
-                {
-                  "en": "Design implication: participant contribution could not fragment the application into unrelated flows.",
-                  "zh": "設計推論：參與者的貢獻不能將申請割裂成互不相關的流程。"
-                },
-                {
-                  "en": "Supports Decision 03: keep multiple participants inside one coherent application.",
-                  "zh": "支持決策 03：讓多位參與者維持在同一連貫申請中。"
-                }
-              ]
+              "decisionLink": {
+                "en": "LED TO DECISION 03",
+                "zh": "導向決策 03"
+              }
             }
           ],
-          "contentStatus": "approved-r163-3b"
+          "contentStatus": "approved-r163-3c",
+          "presentation": "decision-support"
         },
         "outcomes": {
           "title": {

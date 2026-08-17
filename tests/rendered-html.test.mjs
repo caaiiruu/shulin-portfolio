@@ -1788,12 +1788,18 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
   assert.ok(decisions.every(item=>item.optionalBlock.type==="CONSTRAINT MANAGED"));
   assert.match(app,/'CONSTRAINT MANAGED':lang==='zh'\?'管理的限制':'CONSTRAINT MANAGED'/);
   assert.equal(evidence.length,3);
-  assert.deepEqual(evidence.map(item=>item.supportingLabel.en),[
-    "EVIDENCE 01 → DECISION 01",
-    "EVIDENCE 02 → DECISION 02",
-    "EVIDENCE 03 → DECISION 03"
+  assert.equal(ctbc.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.deepEqual(evidence.map(item=>item.heading.en),[
+    "Different readiness states required a state-driven journey",
+    "Interruption was part of the normal application journey",
+    "Multiple applicants still needed one coherent application"
   ]);
-  assert.ok(evidence.every((item,index)=>item.bullets[2].en.startsWith(`Supports Decision 0${index+1}:`)));
+  assert.deepEqual(evidence.map(item=>item.decisionLink.en),[
+    "LED TO DECISION 01",
+    "LED TO DECISION 02",
+    "LED TO DECISION 03"
+  ]);
+  assert.ok(evidence.every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
   assert.equal(outcomes.headline,undefined);
   assert.deepEqual(outcomes.cards.map(item=>item.heading.en),[
     "One staged application model",
@@ -1806,4 +1812,20 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
   assert.match(accountability.owned.title.en,/product model behind the 0→1 mortgage journey/);
   assert.match(accountability.shared.title.en,/business and lending constraints/);
   assert.doesNotMatch(JSON.stringify({accountability,outcomes,decisions,evidence}),/conversion rate|task success|completion rate/i);
+});
+
+
+test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support variant",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const evidence=ssot.projects["ctbc-mortgage-self-service-app"].publicContent.decisionEvidence;
+  assert.equal(evidence.structuredGroups.length,3);
+  assert.ok(evidence.structuredGroups.every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
+  assert.match(app,/evidenceSource\.presentation==='decision-support'/);
+  assert.match(app,/structured-evidence-v223__decision-link voucher-r149-eyebrow/);
+  assert.doesNotMatch(app,/ctbc[^\n]*decision-support/i);
+  assert.match(css,/\.structured-evidence-v223__groups--decision-support\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
+  assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
 });

@@ -2916,7 +2916,8 @@
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
       if(list(evidenceSource.structuredGroups).length){
-        const groups=element('div','structured-evidence-v223 structured-evidence-v223__groups');
+        const decisionSupport=evidenceSource.presentation==='decision-support';
+        const groups=element('div',`structured-evidence-v223 structured-evidence-v223__groups${decisionSupport?' structured-evidence-v223__groups--decision-support':''}`);
         groups.dataset.componentOwner='StructuredEvidence';
         list(evidenceSource.structuredGroups).forEach(item=>{
           const group=element('article','structured-evidence-v223__group');
@@ -2928,6 +2929,7 @@
             list(item.bullets).forEach(entry=>bullets.append(element('li','',t(entry))));
             group.append(bullets);
           }
+          if(t(item.decisionLink))group.append(element('span','structured-evidence-v223__decision-link voucher-r149-eyebrow',t(item.decisionLink)));
           groups.append(group);
         });
         evidence.append(groups);
