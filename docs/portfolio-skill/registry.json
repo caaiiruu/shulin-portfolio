@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-17-v2.2",
-  "skillVersion": "2026-08-17-v2.2",
+  "version": "2026-08-17-v2.3",
+  "skillVersion": "2026-08-17-v2.3",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "qaBranch": "qa/r146-r43-preview-2026-08-06",
@@ -39,8 +39,25 @@
     "semantic quantitative outcomes",
     "featured-decision deliveryBoundary",
     "qualitative outcomes headline+cards+closing",
-    "structured non-image evidence"
+    "structured non-image evidence",
+    "recruiter-facing decision-support evidence"
   ],
+  "titleNaming": {
+    "fromXToYAllowed": false,
+    "fixedCrossProjectGrammarAllowed": false,
+    "requiredQualities": [
+      "recruiter-readable",
+      "problem-space-specific",
+      "distinct-hiring-signal",
+      "natural-authored-case"
+    ],
+    "avoid": [
+      "generic improving phrasing",
+      "generic redesigning phrasing",
+      "design-activity titles without product meaning",
+      "unsupported scope claims"
+    ]
+  },
   "typographyCasing": {
     "contentHeadings": "natural-authored-case",
     "semanticLabels": "uppercase",
@@ -53,8 +70,21 @@
     "lastItemScrollLeft": "maxScroll",
     "activeStateRepositionsRail": true
   },
+  "governanceSync": {
+    "humanApprovedRulesMustBeRepoCanonical": true,
+    "requiredSurfaces": [
+      "CORE.md",
+      "relevant references file",
+      "SKILL.md",
+      "registry.json",
+      "CHANGELOG.md"
+    ],
+    "semanticRuleChangeRequiresVersionBump": true,
+    "projectCopyOnlyRequiresVersionBump": false
+  },
   "superseded": [
     "public Problem Types",
+    "From X to Y project-title pattern",
     "standalone Why It Mattered",
     "standalone Business Impact",
     "standalone Research Strategy",
