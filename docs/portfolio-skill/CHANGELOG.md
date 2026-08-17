@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2026-08-17 — v2.3
+
+Human governance sync established a hard project-title rule and a canonical Skill maintenance protocol.
+
+Project title changes:
+- retired the repeated `From X to Y` construction as a portfolio naming pattern
+- titles must communicate the project/problem space and a distinctive system, capability, or product-change signal without relying on one fixed grammar
+- generic design-activity titles such as `Improving…`, `Redesigning…`, or `Designing…` are discouraged when they describe designer activity rather than product meaning
+- unsupported scope terms such as `omni`, `platform`, `global`, or `end-to-end` must not be used without source support
+
+Governance maintenance changes:
+- Human-approved shared rules may not live only in chat or a one-off Work Order
+- semantic governance changes must be synchronized across `CORE.md`, the relevant `references/*` file, `SKILL.md`, `registry.json`, and `CHANGELOG.md`
+- semantic governance changes require a Skill version bump; project-copy-only changes do not
+- contradictory legacy guidance must be removed or explicitly marked superseded
+
+Also registered the recruiter-facing decision-support Evidence pattern as approved generic shared capacity.
+
 ## 2026-08-17 — v2.2
 
 R163.3 superseded the centered-column / left-copy Core Insight assumption with `centered-content-composition` across Voucher, DBS, Booking, and CTBC.
