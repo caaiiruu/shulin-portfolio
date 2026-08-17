@@ -1655,14 +1655,17 @@ test("clamps floating Domain items inside the shared rail safe area", () => {
 });
 
 
-test("SharedAccountability supports an optional partner-owned group without project conditions", () => {
+test("SharedAccountability preserves optional partner-owned data as a subordinate shared boundary", () => {
   const app = read("assets/js/app.js");
   const overview = read("assets/css/components/project-detail-overview.css");
-  assert.match(app, /\[source\?\.owned,source\?\.shared,source\?\.partnerOwned\]\.filter\(Boolean\)/);
-  assert.match(app, /if\(groups\.length===3\)grid\.classList\.add\('voucher-r149-accountability--three'\)/);
+  assert.match(app, /source\?\.owned,role:lang===/);
+  assert.match(app, /source\?\.shared,role:lang===/);
+  assert.match(app, /if\(source\?\.partnerOwned\)/);
+  assert.match(app, /boundary\.dataset\.accountabilitySource='PARTNER-OWNED'/);
   assert.match(app, /list\(item\.items\)\.forEach\(entry=>details\.append/);
   assert.doesNotMatch(app, /booking.*partnerOwned|partnerOwned.*booking/i);
-  assert.match(overview, /\.voucher-r149-accountability--three\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
+  assert.match(overview, /\.voucher-r149-accountability__boundary\{[^}]*grid-column:1\/-1/);
+  assert.doesNotMatch(overview, /voucher-r149-accountability--three/);
 });
 
 
