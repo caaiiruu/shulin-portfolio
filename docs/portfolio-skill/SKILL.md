@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-17-v2
+version: 2026-08-17-v2.3
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -109,13 +109,32 @@ Do NOT surface these as public Hero chips.
 # 4. Hero and At a Glance
 
 ## Hero title
-Do not force one naming grammar across all projects.
-`From X to Y` is optional, not mandatory.
 
-Use a title that quickly communicates:
+Hard rule:
+Do NOT use the repeated `From X to Y` construction.
+
+Do not force one naming grammar across all projects.
+
+Use a concise, recruiter-readable title that quickly communicates:
 - project identity
 - domain / problem space
-- system or transformation
+- distinctive system, capability, or product change
+
+Prefer product/system meaning over design-activity phrasing.
+Avoid formulaic or generic naming such as:
+- `From X to Y`
+- `Improving the ... experience`
+- `Redesigning ...`
+- `Designing ...` when it merely describes the designer's activity
+
+Transformation may still be communicated semantically, but not through a repeated fixed syntax.
+
+Cross-project title gate:
+- flagship titles should not all share the same grammar
+- each title should expose a distinct hiring signal
+- avoid poetic ambiguity and internal jargon
+- do not imply unsupported scope such as `omni`, `platform`, `global`, or `end-to-end`
+- use natural authored casing
 
 ## At a Glance
 Most important recruiter summary.
@@ -302,6 +321,14 @@ Examples:
 
 Do not force non-image evidence into fake metric cards or placeholder images.
 
+## Recruiter-facing decision-support evidence
+When Evidence exists primarily to explain why a Decision was necessary, prefer the compressed shared pattern:
+- recruiter-readable headline
+- one concise supporting sentence
+- weak semantic decision link such as `LED TO DECISION 01`
+
+Do not expose research-documentation layers such as separate OBSERVED / DESIGN IMPLICATION / SUPPORTS DECISION fields unless the project genuinely requires that depth and Human review approves it.
+
 ---
 
 # 11. Outcomes
@@ -357,6 +384,11 @@ when canonical data exists.
 Partner-owned is important because it shows attribution discipline.
 
 Do not inflate partner work into individual ownership.
+
+Presentation uses the shared two-primary-column model:
+- I LED → I OWNED THE OUTCOME
+- I CO-DECIDED → SHARED DECISIONS
+- PARTNER-OWNED → optional subordinate boundary
 
 ---
 
@@ -443,10 +475,11 @@ Current generic shared capacity includes or may be extended with Human approval 
    - qualitative cards
    - closing scope/measurement statement
 6. Structured non-image Evidence groups
+7. Recruiter-facing decision-support Evidence
 
 These are generic system capabilities.
 
-Do not implement them as CTBC-only branches.
+Do not implement them as project-only branches.
 
 When added:
 - preserve existing output when fields are absent
@@ -617,11 +650,33 @@ Show these through decisions, evidence, outcomes, and boundaries.
 
 ---
 
-# 23. Superseded rules
+# 23. Canonical governance maintenance
+
+Human-approved rules must never remain only in chat or a one-off Work Order.
+
+When a canonical rule changes, update before the next project migration:
+1. `CORE.md` — compact mandatory rule
+2. the relevant `references/*` file — detailed semantics and examples
+3. `SKILL.md` — complete operating rule
+4. `registry.json` — version/state/machine-readable flags where applicable
+5. `CHANGELOG.md` — what changed and what was superseded
+
+Maintenance rules:
+- latest explicit Human instruction supersedes older canonical wording
+- remove or explicitly mark contradictory legacy guidance as superseded
+- bump Skill version for semantic governance changes
+- do not bump merely for project copy changes
+- Work must read `CORE.md` + `registry.json` before every Work Order and consult the relevant reference before mutation
+- after governance sync, verify all five canonical surfaces agree
+- do not allow one project-specific preference to become global governance unless Human explicitly approves it as a shared rule
+
+---
+
+# 24. Superseded rules
 
 The following are retired unless explicitly reopened:
 - public Problem Type chips
-- mandatory `From X to Y`
+- any `From X to Y` project-title construction as a portfolio naming pattern
 - standalone Why It Mattered
 - standalone Business Impact
 - standalone Research Strategy
@@ -631,3 +686,5 @@ The following are retired unless explicitly reopened:
 - mandatory local repo-attached Work gate
 - repeated scratch recovery
 - allowing new projects to expand shared architecture before parity mapping
+- centered-column-left-copy
+- three-equal-column accountability
