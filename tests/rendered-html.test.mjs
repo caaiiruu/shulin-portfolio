@@ -1758,7 +1758,7 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
   assert.deepEqual(ctbc.infoGrid.audience.secondary.en,["Co-borrowers","Guarantors"]);
   assert.equal(ctbc.infoGrid.timeline.duration.en,"3 months");
   assert.equal(ctbc.decisionNarrative.primaryDecisions.length,3);
-  assert.equal(ctbc.decisionNarrative.primaryDecisions[1].deliveryBoundary.en,"Further contextual routing options were not validated within the project scope.");
+  assert.equal(ctbc.decisionNarrative.primaryDecisions[0].deliveryBoundary.en,"Further contextual routing options were not validated within the project scope.");
   assert.equal(ctbc.publicContent.decisionEvidence.structuredGroups.length,3);
   assert.equal(ctbc.publicContent.outcomes.cards.length,3);
   assert.match(ctbc.publicContent.outcomes.closing.en,/production launch and post-launch performance were not confirmed/);
