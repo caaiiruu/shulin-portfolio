@@ -45,3 +45,11 @@ At 1419, 871, and 430 verify page-title hierarchy, section-title hierarchy, card
 - Core System Insight cloud backgrounds may be full-bleed, but text uses the canonical readable inner gutter.
 - Reading edge and evidence edge remain semantically distinct.
 - Human screenshot evidence overrides automated PASS when they conflict.
+
+## R163.3 shared Project Detail parity
+
+At 1419 / 871 / 430, certify Voucher, DBS, Booking, and CTBC through the same shared owners.
+
+- Core System Insight: content column centered; eyebrow, headline, and body all compute to centered alignment; readable width retained; mobile inner gutter retained.
+- My Accountability: exactly two primary semantic groups in the order I OWNED THE OUTCOME then SHARED DECISIONS; tablet remains two columns while readable; mobile stacks in that order; an optional partner-owned boundary sits below and never becomes a third primary column.
+- Record geometry, computed alignment, grid columns, source-role mapping, boundary position, overflow, and mobile order. Automated state or owner checks alone are insufficient.

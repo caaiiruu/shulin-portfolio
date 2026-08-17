@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-17-v2.1",
-  "skillVersion": "2026-08-17-v2.1",
+  "version": "2026-08-17-v2.2",
+  "skillVersion": "2026-08-17-v2.2",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "qaBranch": "qa/r146-r43-preview-2026-08-06",
@@ -28,7 +28,8 @@
   "sharedRegressionTargets": [
     "voucher",
     "dbs",
-    "booking"
+    "booking",
+    "ctbc"
   ],
   "preferredExecution": "github-native",
   "humanPassRequired": true,
@@ -61,6 +62,22 @@
     "force all projects into numeric Outcomes",
     "whole-image heavy blur",
     "mandatory local repo-attached Work gate",
-    "repeated scratch recovery"
-  ]
+    "repeated scratch recovery",
+    "centered-column-left-copy",
+    "three-equal-column accountability"
+  ],
+  "coreSystemInsight": {
+    "composition": "centered-content-composition",
+    "eyebrowAlignment": "center",
+    "headlineAlignment": "center",
+    "bodyAlignment": "center"
+  },
+  "accountabilityPresentation": {
+    "composition": "two-primary-column-accountability",
+    "primaryRoles": [
+      "owned outcome",
+      "shared decisions"
+    ],
+    "partnerOwned": "optional-subordinate-boundary"
+  }
 }

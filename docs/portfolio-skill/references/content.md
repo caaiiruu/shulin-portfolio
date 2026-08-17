@@ -50,3 +50,11 @@ Normal content headings should be authored correctly in canonical content. Do no
 ### Localization safety
 
 Do not globally uppercase multilingual elements. Chinese and future localized content must preserve authored form. Do not make casing rules dependent on English-only assumptions.
+
+## Core System Insight presentation
+
+Equivalent Core System Insight content uses the shared `centered-content-composition`: centered eyebrow, centered headline, and centered supporting copy inside one centered readable column. A full-bleed cloud/background does not widen the text column. Project-specific alignment rules and the superseded `centered-column-left-copy` treatment are forbidden.
+
+## My Accountability presentation
+
+Use one shared `two-primary-column-accountability` composition. Map I LED to I OWNED THE OUTCOME and I CO-DECIDED to SHARED DECISIONS. Preserve their strongest concise ownership statements as headlines and supporting facts below. If PARTNER-OWNED is materially present, keep it as a subordinate PARTNER-OWNED BOUNDARY below the two primary columns; never render it as a third equal-weight primary column.

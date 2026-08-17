@@ -2844,20 +2844,27 @@
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
   function appendSharedAccountability(section,source,{translate=localize}={}){
-    const groups=[source?.owned,source?.shared,source?.partnerOwned].filter(Boolean);
+    const primary=[
+      {item:source?.owned,role:lang==='zh'?'我對成果負責':'I OWNED THE OUTCOME',sourceRole:'I LED'},
+      {item:source?.shared,role:lang==='zh'?'共同決策':'SHARED DECISIONS',sourceRole:'I CO-DECIDED'}
+    ].filter(group=>group.item);
     const grid=element('div','voucher-r149-accountability');
-    if(groups.length===3)grid.classList.add('voucher-r149-accountability--three');
-    groups.forEach(item=>{
-      const article=element('article');
-      article.append(element('span','voucher-r149-eyebrow',translate(item.label)));
+    primary.forEach(({item,role,sourceRole})=>{
+      const article=element('article','voucher-r149-accountability__primary');article.dataset.accountabilitySource=sourceRole;
+      article.append(element('span','voucher-r149-eyebrow',role));
       if(translate(item.title))article.append(element('h3','',translate(item.title)));
-      if(list(item.items).length){
-        const details=element('ul','voucher-r149-accountability__list');
-        list(item.items).forEach(entry=>details.append(element('li','',translate(entry))));
-        article.append(details);
-      }else if(translate(item.text))article.append(element('p','',translate(item.text)));
+      if(list(item.items).length){const details=element('ul','voucher-r149-accountability__list');list(item.items).forEach(entry=>details.append(element('li','',translate(entry))));article.append(details)}
+      else if(translate(item.text))article.append(element('p','',translate(item.text)));
       grid.append(article);
     });
+    if(source?.partnerOwned){
+      const item=source.partnerOwned,boundary=element('aside','voucher-r149-accountability__boundary');boundary.dataset.accountabilitySource='PARTNER-OWNED';
+      boundary.append(element('span','voucher-r149-eyebrow',lang==='zh'?'合作夥伴負責邊界':'PARTNER-OWNED BOUNDARY'));
+      if(translate(item.title))boundary.append(element('h3','',translate(item.title)));
+      if(list(item.items).length){const details=element('ul','voucher-r149-accountability__list');list(item.items).forEach(entry=>details.append(element('li','',translate(entry))));boundary.append(details)}
+      else if(translate(item.text))boundary.append(element('p','',translate(item.text)));
+      grid.append(boundary);
+    }
     section.append(grid);section.dataset.componentOwner='SharedAccountability';return grid;
   }
   function renderSystemCaseParent(p){

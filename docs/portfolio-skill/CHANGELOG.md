@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-08-17 — v2.2
+
+R163.3 superseded the centered-column / left-copy Core Insight assumption with `centered-content-composition` across Voucher, DBS, Booking, and CTBC.
+
+My Accountability now uses `two-primary-column-accountability`: I LED maps to I OWNED THE OUTCOME, I CO-DECIDED maps to SHARED DECISIONS, and PARTNER-OWNED is preserved as a subordinate boundary.
+
+Factual content, outcomes, attribution, and IA remain unchanged.
+
 ## 2026-08-17 — v2.1
 
 Human regression evidence established:

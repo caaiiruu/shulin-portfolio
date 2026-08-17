@@ -1762,3 +1762,6 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
   assert.ok(!JSON.stringify(ctbc.publicContent.outcomes).match(/conversion|task success|completion rate/i));
   assert.ok(ctbc.ownershipModel.accountabilityPresentation.partnerOwned.items.some(item=>item.en==="Existing acquisition entry points"));
 });
+
+
+test("R163.3 converges Core Insight and Accountability through canonical shared owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");assert.match(app,/sourceRole:'I LED'/);assert.match(app,/sourceRole:'I CO-DECIDED'/);assert.match(app,/PARTNER-OWNED BOUNDARY/);assert.doesNotMatch(app,/voucher-r149-accountability--three/);assert.match(css,/\.voucher-r149-insight\{justify-items:center;text-align:center\}/);assert.doesNotMatch(css,/\.voucher-r149-insight\{justify-items:center;text-align:left\}/);assert.match(css,/\.voucher-r149-accountability__boundary\{[^}]*grid-column:1\/-1/);assert.match(css,/@media\(max-width:600px\)\{\.voucher-r149-accountability\{grid-template-columns:1fr\}/)});
