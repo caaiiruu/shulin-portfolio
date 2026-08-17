@@ -105,12 +105,13 @@ for (const viewport of viewports) {
       edge("At a Glance","#projectView",".quick-view-v51__body, .quick-view-v51__grid, .info-grid-v45","READING EDGE"),
       edge("Info Grid","#projectView","#projectSignals","EVIDENCE EDGE"),
       edge("What Made This Hard","[data-canonical-section-id='what-made-this-hard']", ".recruiter-complexity-grid","EVIDENCE EDGE"),
-      edge("Contribution","[data-canonical-section-id='contribution']", ".voucher-r149-flow","READING EDGE"),
+      edge("Contribution","#my-contribution", ".voucher-r149-flow","READING EDGE"),
       edge("Core System Insight","[data-canonical-section-id='core-system-insight']", ".voucher-r149-heading","READING EDGE"),
       edge("Design Decisions","[data-canonical-section-id='key-design-decisions']", ".voucher-stage-decision-list","EVIDENCE EDGE"),
       edge("Evidence","[data-canonical-section-id='evidence-to-operating-model']", ".structured-evidence-v223__groups","EVIDENCE EDGE"),
       edge("Outcomes","[data-canonical-section-id='outcomes']", ".outcome-qualitative-hierarchy","EVIDENCE EDGE"),
-      edge("My Accountability","[data-canonical-section-id='my-accountability']", ".voucher-r149-accountability","EVIDENCE EDGE")
+      edge("My Accountability","[data-canonical-section-id='my-accountability']", ".voucher-r149-accountability","EVIDENCE EDGE"),
+      edge("Decision 02 Delivery Boundary","#systemCaseDecisionsSection .decision-card-v46:nth-child(2)", ".voucher-stage-decision__delivery-boundary","READING EDGE")
     ];
     const evidenceColumns=getComputedStyle(dialog.querySelector(".structured-evidence-v223__groups")).gridTemplateColumns.split(" ").length;
     const outcomeColumns=getComputedStyle(dialog.querySelector(".outcome-card-grid")).gridTemplateColumns.split(" ").length;
