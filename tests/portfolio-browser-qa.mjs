@@ -84,7 +84,7 @@ for (const viewport of viewports) {
       "At a glance",
       "What made this hard",
       "Contribution",
-      "The scalable unit was the application state—not the individual screen.",
+      "The scalable unit was the application state—not the screen.",
       "Design decisions",
       "Evidence that shaped the decisions",
       "Outcomes",
@@ -111,7 +111,7 @@ for (const viewport of viewports) {
       edge("Evidence","[data-canonical-section-id='evidence-to-operating-model']", ".structured-evidence-v223__groups","EVIDENCE EDGE"),
       edge("Outcomes","[data-canonical-section-id='outcomes']", ".outcome-qualitative-hierarchy","EVIDENCE EDGE"),
       edge("My Accountability","[data-canonical-section-id='my-accountability']", ".voucher-r149-accountability","EVIDENCE EDGE"),
-      edge("Decision 02 Delivery Boundary","#systemCaseDecisionsSection .decision-card-v46:nth-child(2)", ".voucher-stage-decision__delivery-boundary","READING EDGE")
+      edge("Decision 01 Delivery Boundary","#systemCaseDecisionsSection .decision-card-v46:nth-child(1)", ".voucher-stage-decision__delivery-boundary","READING EDGE")
     ];
     const evidenceColumns=getComputedStyle(dialog.querySelector(".structured-evidence-v223__groups")).gridTemplateColumns.split(" ").length;
     const outcomeColumns=getComputedStyle(dialog.querySelector(".outcome-card-grid")).gridTemplateColumns.split(" ").length;
@@ -142,7 +142,7 @@ for (const viewport of viewports) {
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
   if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(["Readiness and information dependencies made a fixed sequence insufficient","Missing information made interruption a normal condition","Related applicants contributed to the same underlying application"]))failures.push(`${viewport.name} CTBC decision-shaping Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
-  if(ctbcCertification.outcomeHeadline!==""||JSON.stringify(ctbcCertification.outcomeCards)!==JSON.stringify(["One staged application model","Resumable application progress","Coordinated multi-party completion"])||!ctbcCertification.outcomeClosing?.includes("production launch and post-launch performance were not confirmed"))failures.push(`${viewport.name} CTBC contribution-led Outcomes mismatch: ${JSON.stringify(ctbcCertification)}`);
+  if(ctbcCertification.outcomeHeadline!=null||JSON.stringify(ctbcCertification.outcomeCards)!==JSON.stringify(["One staged application model","Resumable application progress","Coordinated multi-party completion"])||!ctbcCertification.outcomeClosing?.includes("production launch and post-launch performance were not confirmed"))failures.push(`${viewport.name} CTBC contribution-led Outcomes mismatch: ${JSON.stringify(ctbcCertification)}`);
   if(!ctbcCertification.text.includes("Defined the product model behind the 0→1 mortgage journey")||!ctbcCertification.text.includes("Turned business and lending constraints into a buildable direction")||ctbcCertification.text.includes("Existing acquisition entry points")||ctbcCertification.text.includes("Production launch and post-launch measurement"))failures.push(`${viewport.name} CTBC ownership presentation mismatch`);
   if(/conversion|task success|completion rate/i.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC invented metric detected`);
   if(ctbcCertification.titleTransforms.some(value=>value==="uppercase"))failures.push(`${viewport.name} content title incorrectly uppercased`);
