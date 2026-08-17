@@ -2330,6 +2330,12 @@
         grid.append(field);
       });
       body.append(grid);
+      const featuredDeliveryBoundary=localize([decision.deliveryBoundary,decision.deliveryBoundary_zh]);
+      if(featuredDeliveryBoundary){
+        const boundary=element('div','decision-delivery-boundary-v147 voucher-stage-decision__delivery-boundary');
+        boundary.append(element('span','decision-field-label-v58',ui("delivery-boundary-c71a736f")),element('p','',featuredDeliveryBoundary));
+        body.append(boundary);
+      }
       card.append(number,body);
       if(showVisual&&projectKey){
         const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
@@ -2444,6 +2450,8 @@
       whatThisRequired:source.optionalBlock?.content?[source.optionalBlock.content,source.optionalBlock.content_zh]:source.whatThisRequired,
       optionalBlock:source.optionalBlock?{...source.optionalBlock,content:[source.optionalBlock.content,source.optionalBlock.content_zh]}:null,
       outcome:source.outcome,
+      deliveryBoundary:source.deliveryBoundary&&typeof source.deliveryBoundary==='object'?source.deliveryBoundary.en:source.deliveryBoundary,
+      deliveryBoundary_zh:source.deliveryBoundary&&typeof source.deliveryBoundary==='object'?source.deliveryBoundary.zh:source.deliveryBoundary_zh,
       evidenceAssetId:source.evidenceAssetId||source.evidence?.assetId||null,
       evidenceCaption:source.evidenceCaption||source.evidence?.caption||null
     };
@@ -2882,6 +2890,23 @@
     if(evidence){
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
+      if(list(evidenceSource.structuredGroups).length){
+        const groups=element('div','structured-evidence-grid');
+        groups.dataset.componentOwner='StructuredEvidence';
+        list(evidenceSource.structuredGroups).forEach(item=>{
+          const card=element('article','structured-evidence-card');
+          if(t(item.supportingLabel))card.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
+          card.append(element('h3','structured-evidence-card__heading',t(item.heading)));
+          if(t(item.summary))card.append(element('p','structured-evidence-card__summary',t(item.summary)));
+          if(list(item.bullets).length){
+            const bullets=element('ul','structured-evidence-card__bullets');
+            list(item.bullets).forEach(entry=>bullets.append(element('li','',t(entry))));
+            card.append(bullets);
+          }
+          groups.append(card);
+        });
+        evidence.append(groups);
+      }
       const metrics=element('div','research-evidence-metrics recruiter-system-case__metrics');
       list(evidenceSource.metrics).forEach(item=>{
         const metric=element('article','research-evidence-metric');
@@ -2904,8 +2929,16 @@
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
     if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
     else{
+      const qualitative=element('div','outcome-qualitative-hierarchy');
+      if(t(outcomesSource?.headline)){
+        const headline=element('article','outcome-semantic-change outcome-semantic-change--qualitative');
+        headline.append(element('h3','outcome-semantic-change__title',t(outcomesSource.headline)));
+        qualitative.append(headline);
+      }
       const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
-      appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});outcomes.append(outcomeGrid);
+      appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});qualitative.append(outcomeGrid);
+      if(t(outcomesSource?.closing))qualitative.append(element('p','outcome-semantic-closing',t(outcomesSource.closing)));
+      outcomes.append(qualitative);
     }
     if(outcomesSource?.evidence)appendVisualEvidenceModules(outcomes,outcomesSource.evidence,{translate:t});
 

@@ -1,0 +1,53 @@
+{
+  "version": "2026-08-17-v2",
+  "status": "canonical",
+  "canonicalSSOT": "public/site/content/portfolio-content.json",
+  "qaBranch": "qa/r146-r43-preview-2026-08-06",
+  "pr": 3,
+  "productionMutable": false,
+  "projectDetailIA": [
+    "Hero",
+    "At a Glance + Info Grid",
+    "What Made This Hard",
+    "Contribution",
+    "Core System Insight",
+    "Design Decisions",
+    "Evidence",
+    "Outcomes",
+    "My Accountability",
+    "Related Work"
+  ],
+  "publicProblemTypes": false,
+  "problemTermsPurpose": "search-only",
+  "qaBreakpoints": [
+    1419,
+    871,
+    430
+  ],
+  "sharedRegressionTargets": [
+    "voucher",
+    "dbs",
+    "booking"
+  ],
+  "preferredExecution": "github-native",
+  "humanPassRequired": true,
+  "approvedGenericCapabilities": [
+    "optional complexity intro",
+    "partnerOwned accountability",
+    "semantic quantitative outcomes",
+    "featured-decision deliveryBoundary",
+    "qualitative outcomes headline+cards+closing",
+    "structured non-image evidence"
+  ],
+  "superseded": [
+    "public Problem Types",
+    "standalone Why It Mattered",
+    "standalone Business Impact",
+    "standalone Research Strategy",
+    "research counts as Outcomes",
+    "force all projects into numeric Outcomes",
+    "whole-image heavy blur",
+    "mandatory local repo-attached Work gate",
+    "repeated scratch recovery"
+  ]
+}

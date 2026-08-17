@@ -75,6 +75,54 @@ for (const viewport of viewports) {
   if(viewport.width===430&&(bookingCertification.audience.quickHeight==="100%"||bookingCertification.audience.quickOverflow>1))failures.push(`${viewport.name} Booking mobile Info Grid overflowed into Contribution: ${JSON.stringify(bookingCertification.audience)}`);
   if(bookingCertification.overflow>0)failures.push(`${viewport.name} Booking dialog horizontal overflow: ${bookingCertification.overflow}`);
 
+  await page.goto(`${baseUrl}/site/work/ctbc-mortgage-self-service-app`,{waitUntil:"networkidle"});
+  const ctbcCertification=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog");
+    const text=dialog?.innerText||"";
+    const order=[
+      "Building one self-service mortgage application from fragmented application tasks",
+      "At a glance",
+      "What made this hard",
+      "Contribution",
+      "The scalable unit was the application state—not the individual screen.",
+      "Design decisions",
+      "Evidence that shaped the decisions",
+      "Outcomes",
+      "My accountability",
+      "Related work"
+    ].map(value=>text.indexOf(value));
+    const decisionCards=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")];
+    const decisionFields=decisionCards.map(card=>[...card.querySelectorAll(".decision-field-label-v58")].map(node=>node.textContent.trim()));
+    const evidenceGroups=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-card")].map(card=>card.querySelector("h3")?.textContent.trim());
+    const outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric--qualitative")].map(card=>card.querySelector("h3")?.textContent.trim());
+    const signals=[...dialog.querySelectorAll("#projectSignals>div")].map(node=>node.innerText.trim());
+    return{
+      order,
+      text,
+      decisionCount:decisionCards.length,
+      decisionFields,
+      deliveryBoundary:dialog.querySelector("#systemCaseDecisionsSection .voucher-stage-decision__delivery-boundary")?.innerText.trim(),
+      evidenceGroups,
+      outcomeHeadline:dialog.querySelector("#systemCaseOutcomesSection .outcome-semantic-change__title")?.textContent.trim(),
+      outcomeCards,
+      outcomeClosing:dialog.querySelector("#systemCaseOutcomesSection .outcome-semantic-closing")?.textContent.trim(),
+      signals,
+      problemTypesVisible:!document.querySelector(".modal-classification-v45")?.hidden,
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),
+      overflow:(dialog?.scrollWidth||0)-(dialog?.clientWidth||0)
+    };
+  });
+  if(ctbcCertification.order.some(index=>index<0)||ctbcCertification.order.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} CTBC architecture order failed: ${JSON.stringify(ctbcCertification.order)}`);
+  if(ctbcCertification.problemTypesVisible)failures.push(`${viewport.name} CTBC Problem Types rendered publicly`);
+  if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
+  if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","WHAT THIS REQUIRED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
+  if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
+  if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(["APPLICATION INVENTORY","JOURNEY-STATE EVIDENCE","ENTRY-CONTEXT ANALYSIS","LENDING / GUIDANCE BOUNDARIES"]))failures.push(`${viewport.name} CTBC structured Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
+  if(ctbcCertification.outcomeHeadline!=="Established the 0→1 application model for CTBC’s in-app mortgage self-service journey."||JSON.stringify(ctbcCertification.outcomeCards)!==JSON.stringify(["One staged information model","Resumable application flow","Multi-party completion"])||!ctbcCertification.outcomeClosing?.includes("post-launch performance is outside the verified scope"))failures.push(`${viewport.name} CTBC qualitative Outcomes mismatch: ${JSON.stringify(ctbcCertification)}`);
+  if(!ctbcCertification.text.includes("Existing acquisition entry points")||!ctbcCertification.text.includes("Production launch and post-launch measurement"))failures.push(`${viewport.name} CTBC accountability boundaries missing`);
+  if(/conversion|task success|completion rate/i.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC invented metric detected`);
+  if(ctbcCertification.overflow>0)failures.push(`${viewport.name} CTBC dialog horizontal overflow: ${ctbcCertification.overflow}`);
+
   const homepageState=()=>page.evaluate(()=>({scrollY:window.scrollY,hash:location.hash,hero:document.querySelector(".hero")?.getBoundingClientRect().bottom>0,selected:[...document.querySelectorAll(".domain-tab[aria-selected='true']")].map(n=>n.dataset.domain)}));
   await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});const fresh=await homepageState();
   assert(fresh.scrollY===0&&fresh.hero&&fresh.selected.length===0,"Fresh Homepage must open at Hero with neutral Domain state");

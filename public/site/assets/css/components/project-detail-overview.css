@@ -873,6 +873,16 @@
 .outcome-metric--qualitative{grid-template-rows:auto 1fr;gap:var(--space-3);padding:var(--space-5);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
 .outcome-metric__heading{margin:0;font-size:var(--cmp-popup-card-title-size);line-height:var(--leading-heading)}
 .outcome-metric__copy{margin:0;color:var(--color-text-secondary);line-height:var(--leading-body)}
+.outcome-qualitative-hierarchy{display:grid;gap:var(--space-6)}
+.outcome-semantic-change--qualitative{max-width:var(--case-reading-max)}
+.voucher-stage-decision__delivery-boundary{margin-top:var(--space-5)}
+.structured-evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5);padding-block:var(--space-6)}
+.structured-evidence-card{display:grid;align-content:start;gap:var(--space-3);min-width:0;padding:var(--space-5);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
+.structured-evidence-card__heading{margin:0;font-size:var(--cmp-popup-card-title-size);line-height:var(--leading-heading)}
+.structured-evidence-card__summary{margin:0;color:var(--color-text-secondary);line-height:var(--leading-body)}
+.structured-evidence-card__bullets{display:grid;gap:var(--space-2);margin:0;padding-inline-start:var(--space-5);color:var(--color-text-secondary);line-height:var(--leading-body)}
+@media(max-width:600px){.structured-evidence-grid{grid-template-columns:1fr}.structured-evidence-card{padding:var(--space-4)}}
+
 @media(max-width:871px){.outcome-card-grid{grid-template-columns:1fr}}
 
 .core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child){grid-template-columns:minmax(0,var(--case-reading-max));justify-content:center;width:100%}.core-system-insight-section .voucher-r149-foundations:has(>.voucher-r149-foundation:only-child) .voucher-r149-foundation__caption{justify-items:center;text-align:center}

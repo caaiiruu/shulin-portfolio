@@ -1731,3 +1731,32 @@ test("R162.6 gives mobile Outcome groups independent rhythm and keeps Audience i
   assert.match(browserQa,/Booking Audience projection duplicated/);
   assert.match(browserQa,/Booking mobile Info Grid overflowed into Contribution/);
 });
+
+
+test("R163 installs the canonical Portfolio Skill v2 and extends only shared Project Detail owners", () => {
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const content = JSON.parse(read("content/portfolio-content.json"));
+  const ctbc = content.projects["ctbc-mortgage-self-service-app"];
+
+  assert.match(app,/voucher-stage-decision__delivery-boundary/);
+  assert.match(app,/outcome-qualitative-hierarchy/);
+  assert.match(app,/structured-evidence-grid/);
+  assert.doesNotMatch(app,/ctbc[^\n]*deliveryBoundary/i);
+  assert.match(css,/\.structured-evidence-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
+  assert.doesNotMatch(css,/structured-evidence[^}]*!important/i);
+
+  assert.equal(ctbc.presentation.composition,"recruiter-first-system-case");
+  assert.equal(ctbc.presentation.visibility.problemTypes,false);
+  assert.equal(ctbc.infoGrid.type.value,"0→1 Product");
+  assert.deepEqual(ctbc.infoGrid.audience.secondary.en,["Co-borrowers","Guarantors"]);
+  assert.equal(ctbc.infoGrid.timeline.duration.en,"3 months");
+  assert.equal(ctbc.decisionNarrative.primaryDecisions.length,3);
+  assert.equal(ctbc.decisionNarrative.primaryDecisions[1].deliveryBoundary.en,"Further contextual routing options were not validated within the project scope.");
+  assert.equal(ctbc.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(ctbc.publicContent.outcomes.cards.length,3);
+  assert.match(ctbc.publicContent.outcomes.closing.en,/post-launch performance is outside the verified scope/);
+  assert.ok(!JSON.stringify(ctbc.publicContent.outcomes).match(/conversion|task success|completion rate/i));
+  assert.ok(ctbc.ownershipModel.accountabilityPresentation.partnerOwned.items.some(item=>item.en==="Existing acquisition entry points"));
+});
