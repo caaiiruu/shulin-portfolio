@@ -18137,11 +18137,18 @@
         "en": "Building one self-service mortgage application from fragmented application tasks",
         "zh": "將分散的申請任務整合為單一房貸自助申請"
       },
-      "problemTypes": [
-        "mortgage application",
-        "resumable application",
-        "multi-party application"
-      ],
+      "problemTypes": {
+        "en": [
+          "mortgage application",
+          "resumable application",
+          "multi-party application"
+        ],
+        "zh": [
+          "房貸申請",
+          "可續辦申請",
+          "多方申請"
+        ]
+      },
       "atAGlance": {
         "en": "Led the 0→1 product design of an in-app mortgage application, restructuring fragmented information into a staged, resumable journey that supported contextual entry, related-party participation and regulated guidance.",
         "zh": "主導 App 內房貸申請的 0→1 產品設計，將分散資訊重整為可分階段、可續辦的旅程，支援情境式進入、關係人參與與受監管的資訊引導。"
