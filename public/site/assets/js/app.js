@@ -1209,9 +1209,9 @@
     const rail=projectSectionNavLinks;
     if(!rail||!link)return;
     const links=[...rail.querySelectorAll('a')];
-    const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+    const maximumScroll=Math.max(0,rail.scrollWidth-rail.clientWidth);
     const index=links.indexOf(link);
-    const target=index===0?0:index===links.length-1?max:Math.min(max,Math.max(0,link.offsetLeft+(link.offsetWidth/2)-(rail.clientWidth/2)));
+    const target=index===0?0:index===links.length-1?maximumScroll:Math.min(maximumScroll,Math.max(0,link.offsetLeft+(link.offsetWidth/2)-(rail.clientWidth/2)));
     rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
   }
   function setActiveProjectSection(id){
