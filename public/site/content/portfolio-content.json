@@ -18511,7 +18511,7 @@
           ]
         },
         "confidentialityNote": "*Metrics are rounded or abstracted for confidentiality.*",
-        "contentStatus": "approved-r163",
+        "contentStatus": "approved-r163-3b",
         "sectionOrderRef": "projects.ctbc-mortgage-self-service-app.sectionOrder",
         "hero": {
           "title": {
@@ -18522,14 +18522,14 @@
         },
         "coreSystemInsight": {
           "headline": {
-            "en": "The scalable unit was the application state—not the individual screen.",
-            "zh": "可擴展的單位是申請狀態，而非單一畫面。"
+            "en": "The scalable unit was the application state—not the screen.",
+            "zh": "可擴展的單位是申請狀態，而非畫面。"
           },
           "supportingCopy": {
-            "en": "Applicants could enter with different context, pause at different stages and depend on information from other people, while the underlying mortgage application still needed to remain coherent. Structuring the experience around persistent application state made it possible to simplify information without creating separate journeys for every situation.",
-            "zh": "申請人可能帶著不同情境進入、在不同階段暫停，並依賴其他人的資訊；底層房貸申請仍必須保持一致。以可持續的申請狀態組織體驗，使資訊得以簡化，而無須為每種情況建立獨立旅程。"
+            "en": "A screen describes one moment. Application state connects the information, progress and dependencies that must remain coherent across the mortgage journey.",
+            "zh": "畫面只描述單一時刻；申請狀態則連結房貸旅程中必須保持一致的資訊、進度與依賴關係。"
           },
-          "contentStatus": "approved-r163"
+          "contentStatus": "approved-r163-3b"
         },
         "decisionEvidence": {
           "title": {
@@ -18541,111 +18541,95 @@
           "structuredGroups": [
             {
               "supportingLabel": {
-                "en": "APPLICATION STRUCTURE",
-                "zh": "申請結構"
+                "en": "EVIDENCE 01 → DECISION 01",
+                "zh": "證據 01 → 決策 01"
               },
               "heading": {
-                "en": "The application had to be structured before it could be simplified",
-                "zh": "必須先建立申請結構，才能真正簡化"
+                "en": "Readiness and information dependencies made a fixed sequence insufficient",
+                "zh": "準備程度與資訊依賴使固定順序不足以應對"
               },
               "summary": {
-                "en": "The field inventory showed that mortgage information served different purposes and carried dependencies. Simplifying screens before reorganising those relationships would have hidden complexity rather than removed it.",
-                "zh": "欄位盤點顯示房貸資訊具有不同目的與依賴關係。若在重組這些關係前先簡化畫面，只會掩蓋複雜度，而非消除它。"
+                "en": "Customers could arrive from different mortgage contexts with different information available, while property, loan, personal, related-party and consent fields depended on one another.",
+                "zh": "顧客可能從不同房貸情境進入，手上可用資訊也不同；房產、貸款、個人、關係人與同意欄位之間同時存在依賴。"
               },
               "bullets": [
                 {
-                  "en": "Observed: fields needed to be understood by purpose, dependency and position in the journey.",
-                  "zh": "觀察：欄位必須依目的、依賴與旅程位置來理解。"
+                  "en": "Observed: entry context, readiness and field dependencies varied across the journey.",
+                  "zh": "觀察：入口情境、準備程度與欄位依賴會隨旅程而異。"
                 },
                 {
-                  "en": "Design implication: define a staged information architecture and progress model before refining individual interactions.",
-                  "zh": "設計推論：先定義分階段資訊架構與進度模型，再優化個別互動。"
+                  "en": "Design implication: a fixed screen sequence would not stage the information coherently.",
+                  "zh": "設計推論：固定畫面順序無法連貫地安排資訊。"
+                },
+                {
+                  "en": "Supports Decision 01: structure the journey around application state.",
+                  "zh": "支持決策 01：以申請狀態組織旅程。"
                 }
               ]
             },
             {
               "supportingLabel": {
-                "en": "JOURNEY STATE",
-                "zh": "旅程狀態"
+                "en": "EVIDENCE 02 → DECISION 02",
+                "zh": "證據 02 → 決策 02"
               },
               "heading": {
-                "en": "Interruption was part of the normal journey",
-                "zh": "中斷是正常旅程的一部分"
+                "en": "Missing information made interruption a normal condition",
+                "zh": "資訊未備齊使中斷成為正常情境"
               },
               "summary": {
-                "en": "Applicants could start without complete property details, documents or another participant’s input. The experience therefore had to preserve progress instead of assuming one-session completion.",
-                "zh": "申請人開始時可能尚未備妥房產資料、文件或其他參與者的輸入。因此體驗必須保留進度，而不能假設一次完成。"
+                "en": "Applicants might begin without complete property details or supporting documents, and the existing long-form journey could require re-entry after interruption.",
+                "zh": "申請人開始時可能尚未備妥完整房產資料或佐證文件；既有長篇流程在中斷後也可能需要重新輸入。"
               },
               "bullets": [
                 {
-                  "en": "Observed: incomplete information, document dependencies and related-party participation could interrupt progress.",
-                  "zh": "觀察：資訊未完整、文件依賴與關係人參與都可能中斷進度。"
+                  "en": "Observed: required information and documents were not always available in the first session.",
+                  "zh": "觀察：必要資訊與文件不一定能在第一次使用時取得。"
                 },
                 {
-                  "en": "Design implication: make save, resume and persistent state core product behaviours.",
-                  "zh": "設計推論：將儲存、續辦與持續狀態設為核心產品行為。"
+                  "en": "Design implication: pause, return and recovery had to be part of the normal journey.",
+                  "zh": "設計推論：暫停、返回與復原必須成為正常旅程的一部分。"
+                },
+                {
+                  "en": "Supports Decision 02: treat interruption and return as a first-class state.",
+                  "zh": "支持決策 02：將中斷與返回視為一級狀態。"
                 }
               ]
             },
             {
               "supportingLabel": {
-                "en": "ENTRY CONTEXT",
-                "zh": "入口情境"
+                "en": "EVIDENCE 03 → DECISION 03",
+                "zh": "證據 03 → 決策 03"
               },
               "heading": {
-                "en": "Entry context changed what users needed first",
-                "zh": "入口情境會改變使用者最先需要的內容"
+                "en": "Related applicants contributed to the same underlying application",
+                "zh": "關係申請人共同完成同一底層申請"
               },
               "summary": {
-                "en": "Existing mortgage traffic brought customers into the app with different levels of context. Reliable signals could reduce repetition, but acquisition traffic and application logic still needed separate responsibilities.",
-                "zh": "既有房貸流量讓顧客帶著不同程度的情境進入 App。可靠訊號可減少重複，但獲客流量與申請邏輯仍需維持不同責任。"
+                "en": "Co-borrowers and guarantors had distinct information, identity, consent and follow-up needs, but their contribution still belonged to the main mortgage application.",
+                "zh": "共借人與保證人具有不同的資訊、身分、同意與後續需求，但其參與仍屬於主要房貸申請。"
               },
               "bullets": [
                 {
-                  "en": "Observed: available contextual information varied by traffic source and stage of consideration.",
-                  "zh": "觀察：可用情境資訊會因流量來源與考慮階段而不同。"
+                  "en": "Observed: completion could depend on actions from another applicant through separate invitation and return paths.",
+                  "zh": "觀察：完成申請可能依賴另一位申請人透過獨立邀請與返回路徑採取行動。"
                 },
                 {
-                  "en": "Design implication: use reliable context to shape the starting state without depending on unvalidated routing.",
-                  "zh": "設計推論：以可靠情境調整起始狀態，但不依賴未驗證的路由。"
-                }
-              ]
-            },
-            {
-              "supportingLabel": {
-                "en": "LENDING BOUNDARY",
-                "zh": "授信邊界"
-              },
-              "heading": {
-                "en": "Guidance had to remain distinct from formal approval",
-                "zh": "引導必須與正式核准保持區別"
-              },
-              "summary": {
-                "en": "Preliminary information could help customers understand the journey, but it could not promise mortgage amount, rate or eligibility before consent and formal assessment.",
-                "zh": "初步資訊可協助顧客理解旅程，但在同意與正式評估前，不能承諾房貸金額、利率或資格。"
-              },
-              "bullets": [
-                {
-                  "en": "Observed: guidance, consent and credit assessment represented different levels of commitment.",
-                  "zh": "觀察：引導、同意與授信評估代表不同程度的承諾。"
+                  "en": "Design implication: participant contribution could not fragment the application into unrelated flows.",
+                  "zh": "設計推論：參與者的貢獻不能將申請割裂成互不相關的流程。"
                 },
                 {
-                  "en": "Design implication: keep explanatory support useful while making the boundary of formal lending decisions explicit.",
-                  "zh": "設計推論：讓說明性支援保持實用，同時明確呈現正式授信決策的邊界。"
+                  "en": "Supports Decision 03: keep multiple participants inside one coherent application.",
+                  "zh": "支持決策 03：讓多位參與者維持在同一連貫申請中。"
                 }
               ]
             }
           ],
-          "contentStatus": "approved-r163"
+          "contentStatus": "approved-r163-3b"
         },
         "outcomes": {
           "title": {
             "en": "Outcomes",
             "zh": "成果"
-          },
-          "headline": {
-            "en": "Established the 0→1 application model for CTBC’s in-app mortgage self-service journey.",
-            "zh": "建立 CTBC App 內房貸自助旅程的 0→1 申請模型。"
           },
           "cards": [
             {
@@ -18654,37 +18638,37 @@
                 "zh": "一套分階段申請模型"
               },
               "copy": {
-                "en": "Defined mortgage information around user intent, field dependencies and application progress, creating one coherent structure instead of a sequence of isolated screens.",
-                "zh": "依使用者目的、欄位依賴與申請進度定義房貸資訊，建立單一連貫結構，而非一連串割裂畫面。"
+                "en": "A coherent structure for presenting mortgage information according to applicant readiness and application progress.",
+                "zh": "依申請人準備程度與申請進度呈現房貸資訊的連貫結構。"
               }
             },
             {
               "heading": {
-                "en": "Resumable progress as a core product behaviour",
-                "zh": "將可續辦進度設為核心產品行為"
+                "en": "Resumable application progress",
+                "zh": "可續辦的申請進度"
               },
               "copy": {
-                "en": "Designed pause, return and continuation as normal application states so completed work could persist across an interrupted mortgage journey.",
-                "zh": "將暫停、返回與繼續設計為正常申請狀態，讓已完成工作能在中斷的房貸旅程中持續保留。"
+                "en": "A journey designed to preserve completed work across pauses, missing information and return visits.",
+                "zh": "能在暫停、資訊未備齊與再次返回時保留已完成工作的旅程。"
               }
             },
             {
               "heading": {
-                "en": "Multi-party completion within one application",
-                "zh": "在單一申請內完成多方參與"
+                "en": "Coordinated multi-party completion",
+                "zh": "協調一致的多方完成"
               },
               "copy": {
-                "en": "Enabled related applicants to contribute through clear completion paths while preserving the integrity and continuity of the underlying application.",
-                "zh": "透過清楚的完成路徑讓關係申請人參與，同時維持底層申請的完整性與連續性。"
+                "en": "One application structure that supported co-borrower and guarantor contribution without fragmenting the underlying journey.",
+                "zh": "一套支援共借人與保證人參與、同時不割裂底層旅程的申請結構。"
               }
             }
           ],
           "closing": {
-            "en": "The end-to-end UX and application-state specification was delivered to CTBC; post-launch performance is outside the verified scope of the external engagement.",
-            "zh": "端到端 UX 與申請狀態規格已交付 CTBC；上線後成效不在此外部合作的可驗證範圍內。"
+            "en": "The end-to-end UX and application-state specification was delivered to CTBC; production launch and post-launch performance were not confirmed within the external engagement.",
+            "zh": "端到端 UX 與申請狀態規格已交付 CTBC；正式上線與上線後成效未在此外部合作期間確認。"
           },
           "evidence": [],
-          "contentStatus": "approved-r163"
+          "contentStatus": "approved-r163-3b"
         }
       },
       "imagePlan": {
@@ -18992,8 +18976,8 @@
         ],
         "accountabilityPresentation": {
           "intro": {
-            "en": "I led the product framing and experience strategy that turned fragmented mortgage tasks into one coherent in-app application model.",
-            "zh": "我主導產品定義與體驗策略，將分散的房貸任務轉化為單一連貫的 App 內申請模型。"
+            "en": "I turned a structurally complex mortgage process into a product direction the team could implement.",
+            "zh": "我將結構複雜的房貸流程轉化為團隊可實作的產品方向。"
           },
           "owned": {
             "label": {
@@ -19001,12 +18985,12 @@
               "zh": "我主導"
             },
             "title": {
-              "en": "Shaped the 0→1 application model",
-              "zh": "塑造 0→1 申請模型"
+              "en": "Defined the product model behind the 0→1 mortgage journey",
+              "zh": "定義 0→1 房貸旅程背後的產品模型"
             },
             "text": {
-              "en": "I defined the service framing, journey architecture, interaction strategy and application-state structure—including resumable progress and related-party participation.",
-              "zh": "我定義服務框架、旅程架構、互動策略與申請狀態結構，涵蓋可續辦進度與關係人參與。"
+              "en": "I led the product framing, journey architecture and interaction strategy that turned fragmented mortgage tasks into one coherent in-app experience.",
+              "zh": "我主導產品定義、旅程架構與互動策略，將分散的房貸任務轉化為單一連貫的 App 內體驗。"
             }
           },
           "shared": {
@@ -19015,16 +18999,16 @@
               "zh": "我共同決策"
             },
             "title": {
-              "en": "Turned complex requirements into a buildable product direction",
-              "zh": "將複雜需求轉化為可實作的產品方向"
+              "en": "Turned business and lending constraints into a buildable direction",
+              "zh": "將商業與授信限制轉化為可實作方向"
             },
             "text": {
-              "en": "I connected customer needs with operational constraints, lending boundaries and implementation feasibility to establish a scalable direction CTBC could take forward.",
-              "zh": "我連結顧客需求、營運限制、授信邊界與實作可行性，建立 CTBC 可持續推進的擴展性產品方向。"
+              "en": "I connected customer needs, operational requirements, lending boundaries and implementation feasibility into product decisions the team could take forward without losing the intended experience model.",
+              "zh": "我將顧客需求、營運要求、授信邊界與實作可行性連結成團隊可持續推進的產品決策，同時維持原定體驗模型。"
             }
           }
         },
-        "contentStatus": "approved-r163"
+        "contentStatus": "approved-r163-3b"
       },
       "outcomeEvidenceModel": [
         {
@@ -19206,12 +19190,12 @@
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "valueIBrought": {
         "headline": {
-          "en": "Defined the application model, not just the screens.",
-          "zh": "定義申請模型，而不只是畫面。"
+          "en": "Changed the work from screen redesign to product-model definition.",
+          "zh": "將工作從畫面重設轉向產品模型定義。"
         },
         "supportingStatement": {
-          "en": "I reorganised the mortgage information architecture, defined how application state should persist across interruption and related-party participation, and evaluated where existing entry context could reduce unnecessary repetition.",
-          "zh": "我重整房貸資訊架構，定義申請狀態如何在中斷與關係人參與時持續保留，並評估既有入口情境可在哪些位置減少不必要的重複輸入。"
+          "en": "I mapped the fragmented requirements into one working model of stages, states and dependencies, giving the team a coherent basis for product and interaction decisions.",
+          "zh": "我將分散需求整理成一套涵蓋階段、狀態與依賴關係的工作模型，讓團隊能以一致基礎做出產品與互動決策。"
         }
       },
       "decisionNarrative": {
@@ -19219,53 +19203,27 @@
           {
             "id": "ctbc-r163-decision-01",
             "title": {
-              "en": "Make application state—not screens—the organising unit",
-              "zh": "以申請狀態而非畫面作為組織單位"
+              "en": "Structure the journey around application state",
+              "zh": "以申請狀態組織旅程"
             },
             "whatIDecided": {
-              "en": "Structured the mortgage journey as a staged application model, grouping information by user intent, field dependencies and progress rather than preserving the existing screen or field sequence.",
-              "zh": "將房貸旅程建構為分階段申請模型，依使用者目的、欄位依賴與進度組織資訊，而非沿用既有畫面或欄位順序。"
+              "en": "Organised mortgage information into stages defined by user intent, field dependencies, readiness and application progress instead of a fixed sequence of screens.",
+              "zh": "依使用者目的、欄位依賴、準備程度與申請進度，將房貸資訊組織成不同階段，而非固定畫面順序。"
             },
             "whyThisChoice": {
-              "en": "The application inventory showed that fields served different purposes and depended on one another. Simplifying individual screens first would have hidden that complexity rather than creating a coherent application.",
-              "zh": "申請盤點顯示各欄位具有不同目的且彼此依賴。若先簡化個別畫面，只會掩蓋複雜度，無法形成連貫的申請。"
+              "en": "Applicants entered with different context and available information, while the field inventory showed dependencies that a single linear sequence could not represent coherently.",
+              "zh": "申請人進入時帶有不同情境與可用資訊；欄位盤點也顯示彼此依賴，單一線性順序無法連貫呈現。"
             },
             "optionalBlock": {
-              "type": "WHAT THIS REQUIRED",
+              "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "This required auditing the complete information set, mapping purpose and dependencies, and defining stages, progress, section-level editing and contextual explanation as one application-state system.",
-                "zh": "這需要盤點完整資訊集合、對應目的與依賴，並將階段、進度、區段編輯與情境說明定義為同一套申請狀態系統。"
+                "en": "Existing context could shape the starting state, but product guidance could not imply an approved amount, rate or eligibility before formal assessment.",
+                "zh": "既有情境可影響起始狀態，但產品引導不能在正式評估前暗示已核准的金額、利率或資格。"
               }
             },
             "outcome": {
-              "en": "Established one staged application architecture that made purpose, progress and remaining work understandable while creating a scalable foundation for the experience.",
-              "zh": "建立一套分階段申請架構，讓目的、進度與剩餘工作清楚可理解，並形成可擴展的體驗基礎。"
-            }
-          },
-          {
-            "id": "ctbc-r163-decision-02",
-            "title": {
-              "en": "Use entry context without blurring lending boundaries",
-              "zh": "運用入口情境，同時維持清楚的授信邊界"
-            },
-            "whatIDecided": {
-              "en": "Defined how reliable context from existing mortgage traffic could shape the application’s starting state and reduce repetition, while keeping acquisition entry points separate from formal application and approval logic.",
-              "zh": "定義既有房貸流量中的可靠情境如何影響申請起始狀態並減少重複，同時讓獲客入口與正式申請及核准邏輯保持分離。"
-            },
-            "whyThisChoice": {
-              "en": "Customers entered at different stages of consideration, but carrying context forward could not imply a guaranteed mortgage amount, rate or eligibility before assessment.",
-              "zh": "顧客會在不同考慮階段進入，但沿用情境資訊不能在正式評估前暗示保證的房貸金額、利率或資格。"
-            },
-            "optionalBlock": {
-              "type": "WHAT THIS REQUIRED",
-              "content": {
-                "en": "The direction had to preserve existing acquisition routes, use only reliable contextual signals and keep guidance clearly distinct from lending approval.",
-                "zh": "此方向必須保留既有獲客路徑、僅使用可靠的情境訊號，並清楚區分引導與授信核准。"
-              }
-            },
-            "outcome": {
-              "en": "Established a context-aware starting model that could reduce unnecessary repetition without weakening the integrity of the formal mortgage application.",
-              "zh": "建立具情境感知的起始模型，可減少不必要的重複，同時不削弱正式房貸申請的完整性。"
+              "en": "Enabled one staged application model that could present the right information according to readiness and progress.",
+              "zh": "形成一套分階段申請模型，可依準備程度與進度呈現適當資訊。"
             },
             "deliveryBoundary": {
               "en": "Further contextual routing options were not validated within the project scope.",
@@ -19273,33 +19231,59 @@
             }
           },
           {
-            "id": "ctbc-r163-decision-03",
+            "id": "ctbc-r163-decision-02",
             "title": {
-              "en": "Treat interruption and multi-party completion as core states",
-              "zh": "將中斷與多方完成視為核心狀態"
+              "en": "Treat interruption and return as a first-class application state",
+              "zh": "將中斷與返回視為一級申請狀態"
             },
             "whatIDecided": {
-              "en": "Designed save, resume and related-party participation into the core application model so one mortgage application could continue across time and contributors without splitting into disconnected flows.",
-              "zh": "將儲存、續辦與關係人參與納入核心申請模型，讓同一房貸申請能跨時間與參與者持續進行，而不被拆成彼此割裂的流程。"
+              "en": "Designed save, pause, return and recovery as normal parts of the application model so completed work could persist across sessions.",
+              "zh": "將儲存、暫停、返回與復原設計為申請模型的正常部分，讓已完成工作能跨使用階段保留。"
             },
             "whyThisChoice": {
-              "en": "Applicants might begin without complete property information, documents or another participant’s input. Interruption and dependency on other people were normal conditions of the journey, not edge cases.",
-              "zh": "申請人開始時可能尚未備妥房產資訊、文件或其他參與者的輸入。中斷與依賴他人是旅程的正常狀態，而非邊緣情境。"
+              "en": "Applicants might not have property details or supporting documents available when they started, so one uninterrupted completion path was not a realistic assumption.",
+              "zh": "申請人開始時可能尚未備妥房產資料或佐證文件，因此假設一次不中斷地完成並不符合實際情境。"
             },
             "optionalBlock": {
-              "type": "WHAT THIS REQUIRED",
+              "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "This required persistent application state, clear ownership of incomplete information, predictable return behaviour and related-party completion paths that preserved work already entered.",
-                "zh": "這需要持續保留的申請狀態、未完成資訊的清楚責任、可預期的返回行為，以及能保留既有輸入的關係人完成路徑。"
+                "en": "Application data could be preserved, but consent had to be accepted again when an applicant re-entered.",
+                "zh": "申請資料可以保留，但申請人重新進入時仍必須再次同意。"
               }
             },
             "outcome": {
-              "en": "Created a coherent self-service model that supported pause, return and multi-party completion without forcing applicants to restart or fragment the underlying application.",
-              "zh": "建立連貫的自助服務模型，支援暫停、返回與多方完成，而不迫使申請人重新開始或割裂底層申請。"
+              "en": "Enabled resumable application progress without forcing applicants to restart completed work.",
+              "zh": "形成可續辦的申請進度，不必迫使申請人重新開始已完成的工作。"
+            }
+          },
+          {
+            "id": "ctbc-r163-decision-03",
+            "title": {
+              "en": "Keep multiple participants inside one coherent application",
+              "zh": "讓多位參與者維持在同一連貫申請中"
+            },
+            "whatIDecided": {
+              "en": "Modelled co-borrower and guarantor contribution as related completion paths within the same mortgage application rather than as disconnected participant flows.",
+              "zh": "將共借人與保證人的參與建模為同一房貸申請中的關聯完成路徑，而非彼此割裂的參與者流程。"
+            },
+            "whyThisChoice": {
+              "en": "The main applicant could depend on information and actions from related applicants, while the underlying application still needed one consistent status and progression model.",
+              "zh": "主申請人可能依賴關係申請人的資訊與操作，但底層申請仍需要一致的狀態與進度模型。"
+            },
+            "optionalBlock": {
+              "type": "CONSTRAINT MANAGED",
+              "content": {
+                "en": "Related applicants required distinct invitation, identity-verification, consent and return paths, including cases that opened another banking app.",
+                "zh": "關係申請人需要獨立的邀請、身分驗證、同意與返回路徑，包括需開啟另一個銀行 App 的情境。"
+              }
+            },
+            "outcome": {
+              "en": "Enabled coordinated multi-party completion while preserving the integrity of one application.",
+              "zh": "形成協調一致的多方完成方式，同時維持單一申請的完整性。"
             }
           }
         ],
-        "contentStatus": "approved-r163"
+        "contentStatus": "approved-r163-3b"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -19325,42 +19309,42 @@
       },
       "whatMadeThisHard": {
         "intro": {
-          "en": "CTBC wanted mortgage applicants to complete more of the journey inside the app, but the application contained dense financial information, different entry contexts, related-party dependencies and states that could not be completed in one session.",
-          "zh": "CTBC 希望房貸申請人能在 App 內完成更多流程，但申請包含密集的金融資訊、不同的進入情境、關係人依賴，以及無法在單次使用中完成的狀態。"
+          "en": "CTBC wanted mortgage applicants to complete more of the journey inside the app, but the work crossed dense financial information, different levels of readiness, information that might not be available yet, and tasks involving more than one applicant.",
+          "zh": "CTBC 希望房貸申請人能在 App 內完成更多流程，但此問題橫跨密集的金融資訊、不同準備程度、當下可能尚未取得的資料，以及涉及多位申請人的任務。"
         },
         "items": [
           {
             "title": {
-              "en": "A long application did not have a clear information model",
-              "zh": "長篇申請缺乏清楚的資訊模型"
+              "en": "The information had dependencies",
+              "zh": "資訊之間存在依賴關係"
             },
             "description": {
-              "en": "Related fields were spread across the journey without always making their purpose or relationship clear. Applicants needed to understand what stage they were in, why each group of information was required and what remained before submission.",
-              "zh": "相關欄位分散在整段旅程中，其用途與彼此關係未必清楚。申請人需要理解目前所在階段、每組資訊為何必須提供，以及送件前還剩哪些工作。"
+              "en": "Property, loan, personal, related-party and consent information served different purposes and could not be treated as one flat form.",
+              "zh": "房產、貸款、個人、關係人與同意資訊各有不同目的，無法被視為單一扁平表單。"
             }
           },
           {
             "title": {
-              "en": "Customers could arrive with different amounts of known context",
-              "zh": "顧客進入時可能帶有不同程度的已知情境"
+              "en": "Applicants did not begin from the same point",
+              "zh": "申請人並非都從相同起點開始"
             },
             "description": {
-              "en": "Existing traffic could bring customers into the app from different mortgage contexts. The new application needed to determine when useful context could carry forward without redesigning or duplicating the existing acquisition routes.",
-              "zh": "既有流量可能從不同房貸情境將顧客帶入 App。新申請需要判斷何時可沿用有用情境，而不重新設計或複製既有獲客入口。"
+              "en": "Customers could arrive from direct application, comparison activity or a relationship-manager referral with different context and levels of readiness.",
+              "zh": "顧客可能從直接申請、比較活動或客戶關係經理轉介進入，帶著不同情境與準備程度。"
             }
           },
           {
             "title": {
-              "en": "Completion depended on information that might not be available yet",
-              "zh": "完成申請依賴當下可能尚未取得的資訊"
+              "en": "Completion could span time and people",
+              "zh": "完成申請可能跨越時間與多人"
             },
             "description": {
-              "en": "Property details, supporting documents or input from another participant might be missing when the application started, while financial guidance still had to avoid implying approval before formal assessment.",
-              "zh": "開始申請時，房產資料、佐證文件或其他參與者的輸入可能尚未備妥；金融引導同時必須避免在正式審核前暗示已獲核准。"
+              "en": "Required details, documents or another applicant’s input might not be available in the first session, while formal lending assessment remained a separate institutional process.",
+              "zh": "必要資料、文件或其他申請人的輸入可能無法在第一次使用時取得，而正式授信評估仍屬獨立的機構流程。"
             }
           }
         ],
-        "contentStatus": "approved-r163"
+        "contentStatus": "approved-r163-3b"
       },
       "sectionOrder": [
         "hero",

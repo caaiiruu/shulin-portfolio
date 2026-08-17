@@ -2329,7 +2329,8 @@
       const featuredOptional=decision.optionalBlock||{};
       const featuredOptionalLabel={
         'TRADE-OFF ACCEPTED':lang==='zh'?'接受的取捨':'TRADE-OFF ACCEPTED',
-        'WHAT THIS REQUIRED':lang==='zh'?'系統要求':'WHAT THIS REQUIRED'
+        'WHAT THIS REQUIRED':lang==='zh'?'系統要求':'WHAT THIS REQUIRED',
+        'CONSTRAINT MANAGED':lang==='zh'?'管理的限制':'CONSTRAINT MANAGED'
       }[featuredOptional.type]||(lang==='zh'?'系統要求':'WHAT THIS REQUIRED');
       [
         [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
