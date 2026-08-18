@@ -22448,28 +22448,54 @@
         },
         "payment": {
           "sections": {
-            "transaction-model": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "zeroToOneMandate",
-                "operationalSystemOwnership"
+                "whatMadeThisHard"
               ],
-              "presentationType": "transaction-model",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "voucher-and-loyalty-integration": {
+            "contribution": {
               "sourcePaths": [
-                "voucherIntegration"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "integration-model",
+              "presentationType": "shared-contribution",
               "renderRequired": true
             },
-            "shipped-proof": {
+            "core-system-insight": {
               "sourcePaths": [
-                "impactEvidence",
-                "outcomeEvidenceModel",
-                "deliveryHighlights"
+                "publicContent.coreSystemInsight"
               ],
-              "presentationType": "outcome-evidence",
+              "presentationType": "shared-core-system-insight",
+              "renderRequired": true
+            },
+            "design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": [
+                "publicContent.decisionEvidence"
+              ],
+              "presentationType": "shared-decision-support-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel"
+              ],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           }
