@@ -1240,6 +1240,8 @@
     const offset=dialogScrollRoot.getBoundingClientRect().top+projectSectionInset();
     let current=visible[0];
     visible.forEach(node=>{if(node.getBoundingClientRect().top<=offset+2)current=node});
+    const atScrollEnd=dialogScrollRoot.scrollTop+dialogScrollRoot.clientHeight>=dialogScrollRoot.scrollHeight-2;
+    if(atScrollEnd&&visible.length)current=visible[visible.length-1];
     visibleProjectSectionId=current?.id||'';
     setActiveProjectSection(visibleProjectSectionId);
   }
