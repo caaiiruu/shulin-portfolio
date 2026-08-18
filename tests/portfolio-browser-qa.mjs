@@ -227,33 +227,42 @@ for (const viewport of viewports) {
   if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
   if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
-  const navigatorInteractions={clicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
-  for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"]){
+  const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
+  const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
+    const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
     await link.click();
-    await page.waitForTimeout(950);
-    const current=await link.getAttribute("aria-current");
-    navigatorInteractions.clicks.push({label,current});
-    if(current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
-  }
+    await page.waitForTimeout(80);
+    const state=await link.evaluate(node=>{
+      const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),rootRect=root.getBoundingClientRect(),targetRect=target.getBoundingClientRect();
+      return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,targetOffset:targetRect.top-rootRect.top};
+    });
+    state.before=before;collection.push({label,...state});
+    if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
+    if(label!=="Overview"&&Math.abs(state.after-state.before)<=2)failures.push(`${viewport.name} navigator ${label} click did not move .dialog-scroll`);
+    if(state.targetOffset<0||state.targetOffset>180)failures.push(`${viewport.name} navigator ${label} heading landed outside safe area: ${state.targetOffset}`);
+  };
+  for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
+  for(const label of ["Outcomes","Evidence","Decisions","Complexity","Overview"])await certifyNavigatorClick(label,navigatorInteractions.reverseClicks);
   const outcomesLink=navigator.getByRole("link",{name:"Outcomes",exact:true});
-  await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(950);
+  await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(80);
   navigatorInteractions.repeated=(await outcomesLink.getAttribute("aria-current"))==="location";
   if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
   const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
-  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(950);
+  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(80);
   navigatorInteractions.keyboard=(await overviewLink.getAttribute("aria-current"))==="location" && !(await page.locator("#projectOverviewSection").evaluate(node=>node===document.activeElement));
   if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
   const scrollRootForNav=page.locator(".dialog-scroll").first();
   await scrollRootForNav.hover();
-  await page.mouse.wheel(0,700);
-  await page.waitForTimeout(150);
-  navigatorInteractions.manualScroll=await navigator.locator('a[aria-current="location"]').count()===1;
-  if(!navigatorInteractions.manualScroll)failures.push(`${viewport.name} manual wheel did not restore one scroll-spy owner`);
+  await page.mouse.wheel(0,1800);
+  await page.waitForTimeout(180);
+  const manualActive=await navigator.locator('a[aria-current="location"]').allTextContents();
+  navigatorInteractions.manualScroll=manualActive.length===1&&manualActive[0]!=="Overview";
+  if(!navigatorInteractions.manualScroll)failures.push(`${viewport.name} manual wheel did not synchronize visible section: ${JSON.stringify(manualActive)}`);
   if(viewport.width<=430){
     const decisionsLink=navigator.getByRole("link",{name:"Decisions",exact:true});
     const box=await decisionsLink.boundingBox();
-    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(950);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
+    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(80);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
     if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
   }
 
