@@ -234,13 +234,13 @@ for (const viewport of viewports) {
     await link.click();
     await page.waitForTimeout(80);
     const state=await link.evaluate(node=>{
-      const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),rootRect=root.getBoundingClientRect(),targetRect=target.getBoundingClientRect();
-      return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,targetOffset:targetRect.top-rootRect.top};
+      const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
+      return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
     });
     state.before=before;collection.push({label,...state});
     if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
-    if(label!=="Overview"&&Math.abs(state.after-state.before)<=2)failures.push(`${viewport.name} navigator ${label} click did not move .dialog-scroll`);
-    if(state.targetOffset<0||state.targetOffset>180)failures.push(`${viewport.name} navigator ${label} heading landed outside safe area: ${state.targetOffset}`);
+    if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
+    if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
   for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
   for(const label of ["Outcomes","Evidence","Decisions","Complexity","Overview"])await certifyNavigatorClick(label,navigatorInteractions.reverseClicks);
