@@ -14999,47 +14999,100 @@
             "en": "Outcomes",
             "zh": "成果"
           },
-          "cards": [
-            {
-              "heading": {
-                "en": "Shipped at retail scale",
-                "zh": "推展至零售規模"
-              },
-              "copy": {
-                "en": "Rolled out across ~190 stores, reaching ~57K users and ~228K monthly transactions by September 2021.",
-                "zh": "截至 2021 年 9 月，已推展至約 190 間門市，觸及約 5.7 萬名使用者與每月約 22.8 萬筆交易。"
-              }
+          "semanticHierarchy": {
+            "measuredLabel": {
+              "en": "The payment system launched at retail scale and proved reliable in live use.",
+              "zh": "付款系統已推展至零售規模，並在實際使用中展現可靠性。"
             },
-            {
-              "heading": {
-                "en": "Reliable transaction performance",
-                "zh": "可靠的交易表現"
+            "measured": [
+              {
+                "value": "~190",
+                "label": {
+                  "en": "stores",
+                  "zh": "間門市"
+                },
+                "primaryCopy": {
+                  "en": "stores — rollout coverage across FairPrice retail locations",
+                  "zh": "間門市 — 覆蓋 FairPrice 零售據點的推展範圍"
+                },
+                "evidenceNote": {
+                  "en": "Product and team rollout coverage; not attributable to design alone.",
+                  "zh": "產品與團隊的推展成果，不可歸因於設計單一職能。"
+                }
               },
-              "copy": {
-                "en": "Reached a 98.5% transaction success rate, with NPS 70.2 across 1,798 responses.",
-                "zh": "交易成功率達 98.5%，並在 1,798 份回覆中取得 70.2 的 NPS。"
-              }
-            },
-            {
-              "heading": {
-                "en": "A reusable payment operating model",
-                "zh": "可重用的付款運作模型"
+              {
+                "value": "~57K",
+                "label": {
+                  "en": "users",
+                  "zh": "名使用者"
+                },
+                "primaryCopy": {
+                  "en": "users — using the in-store payment system by September 2021",
+                  "zh": "名使用者 — 截至 2021 年 9 月使用門市付款系統"
+                },
+                "evidenceNote": {
+                  "en": "Product and team usage outcome reported for September 2021; not attributable to design alone.",
+                  "zh": "2021 年 9 月回報的產品與團隊使用成果，不可歸因於設計單一職能。"
+                }
               },
-              "copy": {
-                "en": "Payment standards and interaction guidelines created a shared reference for related FairPrice product contexts.",
-                "zh": "付款標準與互動規範，成為 FairPrice 相關產品情境可共同參照的基礎。"
+              {
+                "value": "~228K",
+                "label": {
+                  "en": "monthly transactions",
+                  "zh": "每月交易筆數"
+                },
+                "primaryCopy": {
+                  "en": "monthly transactions — completed by September 2021",
+                  "zh": "每月交易筆數 — 截至 2021 年 9 月完成"
+                },
+                "evidenceNote": {
+                  "en": "Product and team transaction volume reported for September 2021; not attributable to design alone.",
+                  "zh": "2021 年 9 月回報的產品與團隊交易量，不可歸因於設計單一職能。"
+                }
+              },
+              {
+                "value": "98.5%",
+                "label": {
+                  "en": "transaction success rate",
+                  "zh": "交易成功率"
+                },
+                "primaryCopy": {
+                  "en": "transaction success rate — across the launched in-store payment experience",
+                  "zh": "交易成功率 — 涵蓋已上線的門市付款體驗"
+                },
+                "evidenceNote": {
+                  "en": "Product and team reliability outcome; not attributable to design alone.",
+                  "zh": "產品與團隊的可靠性成果，不可歸因於設計單一職能。"
+                }
               }
-            }
-          ],
-          "closing": {
-            "en": "Team recognition: Singapore User Experience Award of the Year, Retail — Asian Experience Awards 2021.",
-            "zh": "團隊肯定：2021 Asian Experience Awards — Singapore User Experience Award of the Year, Retail。"
+            ],
+            "supportingStatements": [
+              {
+                "emphasis": true,
+                "text": {
+                  "en": "The work also established reusable payment standards and interaction guidelines across related FairPrice product contexts.",
+                  "zh": "這項工作也為 FairPrice 相關產品情境建立了可重用的付款標準與互動規範。"
+                }
+              },
+              {
+                "text": {
+                  "en": "Team recognition: Singapore User Experience Award of the Year, Retail — Asian Experience Awards 2021.",
+                  "zh": "團隊肯定：2021 Asian Experience Awards — Singapore User Experience Award of the Year, Retail。"
+                }
+              },
+              {
+                "text": {
+                  "en": "Customer confidence remained strong, with NPS 70.2 across 1,798 responses.",
+                  "zh": "顧客信心維持良好，1,798 份回覆的 NPS 為 70.2。"
+                }
+              }
+            ]
           },
           "attributionBoundary": {
             "en": "Transaction volume, success rate, NPS and rollout scale are product and team outcomes, not outcomes attributable to design alone.",
             "zh": "交易量、成功率、NPS 與推展規模屬於產品與團隊成果，不可歸因於設計單一職能。"
           },
-          "contentStatus": "approved-r164.1"
+          "contentStatus": "approved-r164.1d"
         }
       },
       "zeroToOneMandate": {
@@ -15614,8 +15667,8 @@
           {
             "id": "payment-r1641-decision-01",
             "title": {
-              "en": "Make the App-to-checkout handoff explicit",
-              "zh": "讓 App 至結帳的交接明確可見"
+              "en": "Structure one coherent transaction across App and checkout",
+              "zh": "建構一條貫穿 App 與結帳的完整交易"
             },
             "whatIDecided": {
               "en": "Define one clear sequence for generating, presenting and completing payment from the App at cashier or self-checkout.",
@@ -15641,8 +15694,8 @@
           {
             "id": "payment-r1641-decision-02",
             "title": {
-              "en": "Keep payment benefits visible inside the transaction",
-              "zh": "讓付款權益在交易中保持可見"
+              "en": "Keep payment value visible inside the transaction",
+              "zh": "讓付款價值在交易中保持可見"
             },
             "whatIDecided": {
               "en": "Surface LinkPoints, vouchers, applied discounts and payable value within payment and confirmation states.",
@@ -16009,7 +16062,7 @@
           "heroMetadata.domain"
         ],
         "accountabilityMode": "structured",
-        "complexityLayout": "three-up"
+        "complexityLayout": "featured-first"
       }
     },
     "cathay-sit-online-account-opening": {
