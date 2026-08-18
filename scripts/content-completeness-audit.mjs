@@ -55,7 +55,11 @@ for(const [id,project] of Object.entries(data.projects||{})){
   const demoted=resolved.filter(item=>item.publicRole==='DEMOTED');
   const privateBlocks=resolved.filter(item=>item.publicRole==='PRIVATE');
   const orphaned=resolved.filter(item=>!allowed.has(item.publicRole));
-  const unexpectedMissing=renderRequired.filter(item=>!project.sectionOrder?.includes(item.sectionId)||!hasPath(project,item.sourcePath)||!app.includes(`'${item.sectionId}'`));
+  const presentationSources=new Set(Object.values(project.presentation?.contentRefs||{}));
+  const hasRuntimeOwner=item=>app.includes(`'${item.sectionId}'`)||(
+    project.presentation?.sectionOrder?.includes(item.sectionId)&&presentationSources.has(item.sourcePath)
+  );
+  const unexpectedMissing=renderRequired.filter(item=>!project.sectionOrder?.includes(item.sectionId)||!hasPath(project,item.sourcePath)||!hasRuntimeOwner(item));
   const invalidSupporting=supportingBlocks.filter(item=>!item.parentSectionId||!project.sectionOrder?.includes(item.parentSectionId)||!hasPath(project,item.sourcePath));
   const invalidDemoted=demoted.filter(item=>!item.reasonIfDemoted);
   const duplicates=renderRequired.filter((item,index,all)=>all.findIndex(other=>other.blockPath===item.blockPath&&other.sectionId===item.sectionId)!==index);
