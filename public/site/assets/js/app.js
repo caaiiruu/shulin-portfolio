@@ -1171,8 +1171,6 @@
   }
   syncProjectFloatingPrimitive();
   let suppressHistorySync=false;
-  let projectSectionNavigation=null;
-  let projectSectionNavigationId=0;
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
   const PROJECT_NAV_ITEMS=[
@@ -1223,61 +1221,16 @@
     });
     if(activeLink)window.requestAnimationFrame(()=>positionActiveProjectNavItem(activeLink));
   }
-  function cancelProjectSectionNavigation({restoreScrollSpy=true}={}){
-    const transaction=projectSectionNavigation;
-    if(transaction){
-      transaction.frames.forEach(frame=>window.cancelAnimationFrame(frame));
-      transaction.timers.forEach(timer=>window.clearTimeout(timer));
-      transaction.cleanup?.();
-      projectSectionNavigation=null;
-    }
-    if(restoreScrollSpy)updateProjectSectionLocation();
-  }
-  function scheduleProjectSectionFrame(transaction,callback){
-    const frame=window.requestAnimationFrame(time=>{
-      transaction.frames.delete(frame);
-      if(projectSectionNavigation===transaction)callback(time);
-    });
-    transaction.frames.add(frame);
-  }
   function scrollToProjectSection(target){
     if(!target||!dialogScrollRoot)return;
-    cancelProjectSectionNavigation({restoreScrollSpy:false});
     closeProjectSectionMenu();
-    const transaction={id:++projectSectionNavigationId,targetId:target.id,frames:new Set(),timers:new Set()};
-    projectSectionNavigation=transaction;
-    setActiveProjectSection(target.id);
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
     const targetTop=target.getBoundingClientRect().top;
     const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
-    const finish=()=>{
-      if(projectSectionNavigation!==transaction)return;
-      alignProjectSectionTarget(target);
-      visibleProjectSectionId=target.id;
-      setActiveProjectSection(target.id);
-      projectSectionNavigation=null;
-      updateProjectSectionLocation();
-    };
-    if(prefersReduced.matches){
-      dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
-      finish();
-      return;
-    }
-    let settled=false;
-    let timer=0;
-    const settle=()=>{
-      if(settled||projectSectionNavigation!==transaction)return;
-      settled=true;
-      dialogScrollRoot.removeEventListener('scrollend',settle);
-      transaction.cleanup=null;
-      if(timer){window.clearTimeout(timer);transaction.timers.delete(timer)}
-      finish();
-    };
-    transaction.cleanup=()=>dialogScrollRoot.removeEventListener('scrollend',settle);
-    dialogScrollRoot.addEventListener('scrollend',settle,{once:true});
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'smooth'});
-    timer=window.setTimeout(settle,900);
-    transaction.timers.add(timer);
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
+    alignProjectSectionTarget(target);
+    visibleProjectSectionId=target.id;
+    setActiveProjectSection(target.id);
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
@@ -1288,11 +1241,10 @@
     let current=visible[0];
     visible.forEach(node=>{if(node.getBoundingClientRect().top<=offset+2)current=node});
     visibleProjectSectionId=current?.id||'';
-    if(!projectSectionNavigation)setActiveProjectSection(visibleProjectSectionId);
+    setActiveProjectSection(visibleProjectSectionId);
   }
   function renderProjectSectionNav(){
     if(!projectSectionNav||!projectSectionNavLinks)return;
-    cancelProjectSectionNavigation({restoreScrollSpy:false});
     activeProjectSectionId='';
     visibleProjectSectionId='';
     clear(projectSectionNavLinks);
@@ -1315,10 +1267,13 @@
       const link=element('a','pd-section-nav__link floating-navigator__item',lang==='zh'?zh:en);
       link.href=`#${target.id||id}`;
       link.addEventListener('focus',()=>positionActiveProjectNavItem(link));
-      link.addEventListener('click',event=>{
+      const activate=event=>{
         event.preventDefault();
         scrollToProjectSection(target);
-      });
+      };
+      link.addEventListener('click',activate);
+      link.addEventListener('keydown',event=>{if(event.key===' '){activate(event)}});
+
       projectSectionNavLinks.appendChild(link);
     });
     updateProjectSectionLocation();
@@ -1331,12 +1286,7 @@
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
     updateProjectSectionLocation();
   },{passive:true});
-  const restoreManualProjectSectionScrollSpy=()=>cancelProjectSectionNavigation();
-  dialogScrollRoot?.addEventListener('wheel',restoreManualProjectSectionScrollSpy,{passive:true});
-  dialogScrollRoot?.addEventListener('touchstart',restoreManualProjectSectionScrollSpy,{passive:true});
-  dialogScrollRoot?.addEventListener('keydown',event=>{
-    if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))restoreManualProjectSectionScrollSpy();
-  });
+
 
   function setDialogOpenState(open){body.classList.toggle('is-locked',open);cursor.hide()}
   function updateCloseControl(){
