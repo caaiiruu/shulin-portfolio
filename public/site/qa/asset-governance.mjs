@@ -19,8 +19,8 @@ const placeholderIds = [
   "project-video-placeholder-wide-v1",
 ];
 
-fail(content.contentVersion === "2026-08-12-r158" && projectIds.length === 13, "Content r158 roster changed");
-fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r158");
+fail(content.contentVersion === "2026-08-17-r164.1" && projectIds.length === 13, "Content r164.1 roster changed");
+fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must be r45 aligned to r164.1");
 const lockedReusableImages = {
   "voucher-offer-reusable-system-shared-rules-01.jpg": "ea25dc84274b4b9575911e273ef8ed7f0a80e0223dcd2001b5dbd3ef6db0b333",
   "voucher-offer-reusable-system-shared-states-01.jpg": "d694f400aad6539c5eec44863f3dfc27510b66efacd6bbe8cd9f2bb6d9c9ef8f",
