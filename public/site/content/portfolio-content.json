@@ -15889,14 +15889,7 @@
               "en": "A validated and shipped handoff that made the transition between App and physical checkout understandable.",
               "zh": "經驗證並上線的交接模式，讓 App 與實體結帳之間的轉換更容易理解。"
             },
-            "status": "validated-and-shipped",
-            "evidence": {
-              "assetId": "payment-evidence-sco-entry-public-v2",
-              "caption": {
-                "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
-                "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
-              }
-            }
+            "status": "validated-and-shipped"
           },
           {
             "id": "payment-r1641-decision-02",
@@ -15923,14 +15916,7 @@
               "en": "A shipped integration that made benefits and final payable value legible at checkout.",
               "zh": "已上線的整合方案，讓顧客能在結帳時理解權益與最終應付金額。"
             },
-            "status": "shipped-cross-team-integration",
-            "evidence": {
-              "assetId": "payment-evidence-value-visibility-public-v1",
-              "caption": {
-                "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
-                "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
-              }
-            }
+            "status": "shipped-cross-team-integration"
           },
           {
             "id": "payment-r1641-decision-03",
@@ -15957,14 +15943,7 @@
               "en": "The shipped Payment service covered customer-facing failure alternatives, recovery and refund flows, transaction records, internal transaction lookup and supporting operational workflows.",
               "zh": "已上線的付款服務涵蓋顧客端失敗替代方案、復原與退款流程、交易紀錄、內部交易查詢及支援營運流程。"
             },
-            "status": "shipped-complete-service-scope",
-            "evidence": {
-              "assetId": "payment-evidence-operational-recovery-public-v2",
-              "caption": {
-                "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
-                "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
-              }
-            }
+            "status": "shipped-complete-service-scope"
           }
         ],
         "sourcePackage": "r143 user-provided Payment screenshots",
@@ -16280,6 +16259,29 @@
         ],
         "accountabilityMode": "structured",
         "complexityLayout": "featured-first"
+      },
+      "decisionEvidenceMap": {
+        "payment-r1641-decision-01": {
+          "publicAssetId": "payment-evidence-sco-entry-public-v2",
+          "caption": {
+            "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
+            "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
+          }
+        },
+        "payment-r1641-decision-02": {
+          "publicAssetId": "payment-evidence-value-visibility-public-v1",
+          "caption": {
+            "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
+            "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
+          }
+        },
+        "payment-r1641-decision-03": {
+          "publicAssetId": "payment-evidence-operational-recovery-public-v2",
+          "caption": {
+            "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
+            "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+          }
+        }
       }
     },
     "cathay-sit-online-account-opening": {
