@@ -6,6 +6,7 @@ on:
       - qa/r146-r43-preview-2026-08-06
   pull_request:
     branches:
+      - qa/r146-r43-preview-2026-08-06
       - recovery/r146-runtime-2026-08-06
   workflow_dispatch:
     inputs:
@@ -150,6 +151,7 @@ jobs:
 
       - name: Upload exact-SHA engineering QA artifacts
         if: always()
+        continue-on-error: true # Evidence retention must not override core engineering validation.
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-engineering-qa-${{ steps.commit.outputs.sha }}
