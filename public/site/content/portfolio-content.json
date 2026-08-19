@@ -14487,7 +14487,7 @@
           },
           {
             "order": 5,
-            "assetId": "payment-evidence-operational-recovery-public-v2",
+            "assetId": "payment-evidence-operational-recovery-public-v3",
             "role": "decision",
             "purpose": "Combine portal, refund and communication evidence into one readable operational-system story.",
             "loading": "lazy"
