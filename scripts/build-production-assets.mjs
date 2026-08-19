@@ -131,8 +131,8 @@ const expectedProjectIds = [
   "ctbc-mortgage-self-service-app",
   "booking-taxi-pickup-service-strategy",
 ];
-if (typeof content.contentVersion !== "string" || !/^\\d{4}-\\d{2}-\\d{2}-r[0-9A-Za-z][0-9A-Za-z.-]*$/.test(content.contentVersion)) {
-  throw new Error("The active Content SSOT must define a valid dated revision contentVersion");
+if (typeof content.contentVersion !== "string" || !content.contentVersion.trim() || content.contentVersion !== content.contentVersion.trim()) {
+  throw new Error("The active Content SSOT must define a non-empty canonical contentVersion");
 }
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
