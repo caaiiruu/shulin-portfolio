@@ -15890,10 +15890,12 @@
               "zh": "經驗證並上線的交接模式，讓 App 與實體結帳之間的轉換更容易理解。"
             },
             "status": "validated-and-shipped",
-            "evidenceAssetId": "payment-evidence-sco-entry-public-v2",
-            "evidenceCaption": {
-              "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
-              "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
+            "evidence": {
+              "assetId": "payment-evidence-sco-entry-public-v2",
+              "caption": {
+                "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
+                "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
+              }
             }
           },
           {
@@ -15922,10 +15924,12 @@
               "zh": "已上線的整合方案，讓顧客能在結帳時理解權益與最終應付金額。"
             },
             "status": "shipped-cross-team-integration",
-            "evidenceAssetId": "payment-evidence-value-visibility-public-v1",
-            "evidenceCaption": {
-              "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
-              "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
+            "evidence": {
+              "assetId": "payment-evidence-value-visibility-public-v1",
+              "caption": {
+                "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
+                "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
+              }
             }
           },
           {
@@ -15954,10 +15958,12 @@
               "zh": "已上線的付款服務涵蓋顧客端失敗替代方案、復原與退款流程、交易紀錄、內部交易查詢及支援營運流程。"
             },
             "status": "shipped-complete-service-scope",
-            "evidenceAssetId": "payment-evidence-operational-recovery-public-v2",
-            "evidenceCaption": {
-              "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
-              "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+            "evidence": {
+              "assetId": "payment-evidence-operational-recovery-public-v2",
+              "caption": {
+                "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
+                "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+              }
             }
           }
         ],
