@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-17-r164.1",
+  "contentVersion": "2026-08-19-r164.8",
   "supersedes": "2026-08-12-r158",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -14123,7 +14123,7 @@
         "ownershipCorrection": "All Payment-related design, including customer recovery, refunds, internal systems, the transaction portal and email flows, was independently completed by the user.",
         "visualEvidenceAssessment": "Complete for publication. Additional static images are not required; only unique interaction clips or explicit production-status evidence add material value."
       },
-      "contentStatus": "approved-r164.2",
+      "contentStatus": "approved-r164.8-repair-branch",
       "scaleAndOutcome": {
         "operationalScale": "100+ stores",
         "flowReduction": {
@@ -14466,34 +14466,41 @@
           },
           {
             "order": 2,
+            "assetId": "payment-core-checkout-compression-approved-v3",
+            "role": "core-system-insight",
+            "purpose": "Human-approved proof of one-QR transaction compression.",
+            "loading": "lazy"
+          },
+          {
+            "order": 3,
             "assetId": "payment-evidence-field-research-synthesis-public-v1",
             "role": "research",
             "purpose": "Combine anonymised fieldwork photography with behavioural findings.",
             "loading": "lazy"
           },
           {
-            "order": 3,
+            "order": 4,
             "assetId": "payment-evidence-sco-entry-public-v2",
             "role": "decision",
             "purpose": "Show the final SCO entry and the tested payment/loyalty relationship.",
             "loading": "lazy"
           },
           {
-            "order": 4,
+            "order": 5,
             "assetId": "payment-evidence-operational-recovery-public-v2",
             "role": "decision",
             "purpose": "Combine portal, refund and communication evidence into one readable operational-system story.",
             "loading": "lazy"
           },
           {
-            "order": 5,
+            "order": 6,
             "assetId": "payment-evidence-outcomes-award-public-v2",
             "role": "outcome",
             "purpose": "Show selected product metrics, store scale, NPS and award.",
             "loading": "lazy"
           }
         ],
-        "contentStatus": "approved-r164.2-visual-evidence",
+        "contentStatus": "approved-r164.8-visual-integration",
         "programmeLeadership": {
           "title": {
             "en": "Built as a product, operating model and launch programme",
@@ -14942,14 +14949,14 @@
           "contentStatus": "approved-r164.1",
           "evidence": [
             {
-              "assetId": "payment-system-transaction-map-public-v1",
+              "assetId": "payment-core-checkout-compression-approved-v3",
               "title": {
-                "en": "Transaction continuity across systems",
-                "zh": "跨系統的交易連續性"
+                "en": "From separate loyalty and payment steps to one QR transaction",
+                "zh": "從分離的會員與付款步驟，整合為一次 QR 交易"
               },
               "copy": {
-                "en": "A simplified public-safe map of the customer, App, payment and loyalty logic, POS/SCO execution, completion and exception loop.",
-                "zh": "經簡化且適合公開的系統圖，呈現顧客、App、付款與會員邏輯、POS／SCO 執行、完成與例外循環。"
+                "en": "The launched flow reached the same Payment complete endpoint in 7.29 seconds instead of 19.78 seconds—12.49 seconds faster.",
+                "zh": "已上線流程以 7.29 秒抵達相同的「付款完成」終點，原流程為 19.78 秒，快了 12.49 秒。"
               }
             }
           ]
@@ -15030,8 +15037,8 @@
                 "zh": "付款例外會延續至失敗畫面之後"
               },
               "summary": {
-                "en": "Failure-path mapping, refund design and transaction-record testing showed that recovery needed clear next actions and traceable records.",
-                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原需要清楚的下一步與可追溯紀錄。"
+                "en": "Return entry, QR and payment-reference fallback, refunded outcomes and transaction lookup kept recovery usable without forcing every store context into one mechanism.",
+                "zh": "退貨入口、QR 與付款編號備援、退款結果及交易查詢，讓復原保持可用，也不強迫所有門市情境只能採用單一機制。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
@@ -15191,7 +15198,29 @@
           "mappingTitle": {
             "en": "What the validation changed",
             "zh": "驗證如何改變決策"
-          }
+          },
+          "quotes": [
+            {
+              "quote": {
+                "en": "“I have to fish out 2 cards — MyNTUC and a credit card. Here, it’s only one app.”",
+                "zh": "「我原本得拿出兩張卡——MyNTUC 和信用卡；現在只需要一個 App。」"
+              },
+              "role": {
+                "en": "Shopper voice",
+                "zh": "購物者回饋"
+              }
+            },
+            {
+              "quote": {
+                "en": "“It’s express payment. It cuts down the steps of swiping cards, and it’s cashless.”",
+                "zh": "「這是快速付款，減少刷卡步驟，而且不用現金。」"
+              },
+              "role": {
+                "en": "Shopper voice",
+                "zh": "購物者回饋"
+              }
+            }
+          ]
         },
         "outcomes": {
           "title": {
@@ -15205,33 +15234,34 @@
             },
             "measured": [
               {
-                "value": "~190",
+                "value": "70.2",
                 "label": {
-                  "en": "stores",
-                  "zh": "間門市"
+                  "en": "NPS",
+                  "zh": "NPS"
                 },
                 "supportingCopy": {
-                  "en": "rollout coverage across FairPrice retail locations",
-                  "zh": "覆蓋 FairPrice 零售據點的推展範圍"
+                  "en": "from 1,798 responses",
+                  "zh": "來自 1,798 份回覆"
                 },
                 "evidenceNote": {
-                  "en": "Product and team rollout coverage measured across the launched service.",
-                  "zh": "已上線服務的產品與團隊推展範圍。"
-                }
+                  "en": "Customer experience signal measured after launch.",
+                  "zh": "上線後衡量的顧客體驗訊號。"
+                },
+                "featured": true
               },
               {
-                "value": "~57K",
+                "value": "98.5%",
                 "label": {
-                  "en": "users",
-                  "zh": "名使用者"
+                  "en": "transaction success rate",
+                  "zh": "交易成功率"
                 },
                 "supportingCopy": {
-                  "en": "using the in-store payment system by September 2021",
-                  "zh": "截至 2021 年 9 月使用門市付款系統"
+                  "en": "across the launched in-store payment experience",
+                  "zh": "涵蓋已上線的門市付款體驗"
                 },
                 "evidenceNote": {
-                  "en": "Live service usage reported for September 2021.",
-                  "zh": "2021 年 9 月的實際服務使用量。"
+                  "en": "Live service reliability metric from the launched Payment experience.",
+                  "zh": "已上線付款體驗的實際服務可靠性指標。"
                 }
               },
               {
@@ -15250,33 +15280,33 @@
                 }
               },
               {
-                "value": "98.5%",
+                "value": "~57K",
                 "label": {
-                  "en": "transaction success rate",
-                  "zh": "交易成功率"
+                  "en": "users",
+                  "zh": "名使用者"
                 },
                 "supportingCopy": {
-                  "en": "across the launched in-store payment experience",
-                  "zh": "涵蓋已上線的門市付款體驗"
+                  "en": "using the in-store payment system by September 2021",
+                  "zh": "截至 2021 年 9 月使用門市付款系統"
                 },
                 "evidenceNote": {
-                  "en": "Live service reliability metric from the launched Payment experience.",
-                  "zh": "已上線付款體驗的實際服務可靠性指標。"
+                  "en": "Live service usage reported for September 2021.",
+                  "zh": "2021 年 9 月的實際服務使用量。"
                 }
               },
               {
-                "value": "70.2",
+                "value": "~190",
                 "label": {
-                  "en": "NPS",
-                  "zh": "NPS"
+                  "en": "stores",
+                  "zh": "間門市"
                 },
                 "supportingCopy": {
-                  "en": "from 1,798 responses",
-                  "zh": "來自 1,798 份回覆"
+                  "en": "rollout coverage across FairPrice retail locations",
+                  "zh": "覆蓋 FairPrice 零售據點的推展範圍"
                 },
                 "evidenceNote": {
-                  "en": "Customer experience signal measured after launch.",
-                  "zh": "上線後衡量的顧客體驗訊號。"
+                  "en": "Product and team rollout coverage measured across the launched service.",
+                  "zh": "已上線服務的產品與團隊推展範圍。"
                 }
               },
               {
@@ -15292,7 +15322,8 @@
                 "evidenceNote": {
                   "en": "Measured checkout timing from the launched 0→1 Payment experience.",
                   "zh": "0→1 付款體驗上線後的結帳時間量測。"
-                }
+                },
+                "subordinate": true
               }
             ],
             "supportingStatements": [
@@ -15304,7 +15335,7 @@
                 }
               }
             ],
-            "metricLayout": "aligned",
+            "metricLayout": "primary-nps",
             "recognition": {
               "label": {
                 "en": "TEAM RECOGNITION",
@@ -15323,7 +15354,8 @@
                 "zh": "此為團隊肯定，並非個人獎項。"
               },
               "assetId": "payment-evidence-outcomes-award-public-v2",
-              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout"
+              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout",
+              "presentation": "direct"
             }
           },
           "attributionBoundary": {
@@ -15331,19 +15363,7 @@
             "zh": "交易量、成功率、NPS、速度與推展規模皆以實際使用中量測的產品與團隊成果呈現。"
           },
           "contentStatus": "approved-r164.1e",
-          "evidence": [
-            {
-              "assetId": "payment-outcome-checkout-speed-public-v2",
-              "title": {
-                "en": "Checkout completed 12.49 seconds faster",
-                "zh": "結帳加快 12.49 秒"
-              },
-              "copy": {
-                "en": "Measured timing fell from 19.78 seconds to 7.29 seconds in the launched 0→1 Payment experience.",
-                "zh": "已上線的 0→1 付款體驗將量測時間由 19.78 秒降至 7.29 秒。"
-              }
-            }
-          ]
+          "evidence": []
         }
       },
       "zeroToOneMandate": {
@@ -16328,10 +16348,10 @@
           }
         },
         "payment-r1641-decision-03": {
-          "publicAssetId": "payment-evidence-operational-recovery-public-v2",
+          "publicAssetId": "payment-evidence-operational-recovery-public-v3",
           "caption": {
-            "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
-            "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+            "en": "Customer return entry, QR and payment-reference fallback, refunded outcome and transaction lookup remained connected to one traceable record.",
+            "zh": "顧客退貨入口、QR 與付款編號備援、退款結果及交易查詢，皆連接至同一筆可追溯紀錄。"
           }
         }
       }

@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-17-r164.1",
+  "contentVersion": "2026-08-19-r164.8",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -308,8 +308,8 @@
       "type": "image/jpeg",
       "publicPath": "/site/assets/projects/payment/payment-decision-03-recovery-traceability-v2.jpg",
       "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
+      "assetStatus": "superseded",
+      "implementationStatus": "inactive-superseded",
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
@@ -317,7 +317,9 @@
       "height": 920,
       "sha256": "64121060eb7a62ec770da24f7b694c8cafebc7165af6f3c71f4c7d85c402957d",
       "alt": "Service sequence connecting payment failure, next action, recovery or refund, transaction record and operational traceability.",
-      "alt_zh": "Service sequence connecting payment failure, next action, recovery or refund, transaction record and operational traceability."
+      "alt_zh": "Service sequence connecting payment failure, next action, recovery or refund, transaction record and operational traceability.",
+      "supersededIn": "R164.8",
+      "supersededBy": "payment-evidence-operational-recovery-public-v3"
     },
     "payment-evidence-outcomes-award-public-v2": {
       "id": "payment-evidence-outcomes-award-public-v2",
@@ -929,8 +931,8 @@
       "type": "image/jpeg",
       "publicPath": "/site/assets/projects/payment/payment-system-transaction-map-v2.jpg",
       "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
+      "assetStatus": "superseded",
+      "implementationStatus": "inactive-superseded",
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
@@ -938,7 +940,9 @@
       "height": 980,
       "sha256": "a0d3b7e29e7608a0df9222f5edeb759618c347415b313f109c9fe24d77b045c6",
       "alt": "Simplified transaction-system map connecting customer, FairPrice App, payment and loyalty logic, POS or self-checkout, completion and recovery.",
-      "alt_zh": "Simplified transaction-system map connecting customer, FairPrice App, payment and loyalty logic, POS or self-checkout, completion and recovery."
+      "alt_zh": "Simplified transaction-system map connecting customer, FairPrice App, payment and loyalty logic, POS or self-checkout, completion and recovery.",
+      "supersededIn": "R164.8",
+      "supersededBy": "payment-core-checkout-compression-approved-v3"
     },
     "payment-evidence-value-visibility-public-v1": {
       "id": "payment-evidence-value-visibility-public-v1",
@@ -1007,6 +1011,46 @@
       "sha256": "2cfd59160d5b74085bde812e0ddaea434e0a25fa6c0592116bac6885ab7132ce",
       "alt": "Checkout timing result showing a reduction from 19.78 seconds to 7.29 seconds, 12.49 seconds faster.",
       "alt_zh": "結帳時間由 19.78 秒降至 7.29 秒，快 12.49 秒。"
+    },
+    "payment-core-checkout-compression-approved-v3": {
+      "id": "payment-core-checkout-compression-approved-v3",
+      "projectId": "payment",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72",
+      "blobSha": "77f9c60eec2ca3839bbd7c6773eff7b4cbf42353",
+      "width": 2400,
+      "height": 1500,
+      "alt": "Before-and-shipped checkout comparison showing separate loyalty and payment steps compressed into one QR transaction, reducing measured time from 19.78 to 7.29 seconds.",
+      "alt_zh": "結帳前後比較：將分離的會員與付款步驟整合成一次 QR 交易，量測時間由 19.78 秒降至 7.29 秒。",
+      "semanticSlotStable": true,
+      "humanApproved": true
+    },
+    "payment-evidence-operational-recovery-public-v3": {
+      "id": "payment-evidence-operational-recovery-public-v3",
+      "projectId": "payment",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/payment/payment-decision-03-recovery-pos-traceability-v3.png",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "ecc44862532846b5bb11c36fda52a0856cb15bcf55690d1fbdf0a3bf60b5a74e",
+      "blobSha": "5dcae000f2771b391db575940a4c3d67b25fc456",
+      "width": 2400,
+      "height": 1500,
+      "alt": "Three-stage recovery evidence showing customer Return QR entry, POS payment-reference verification and a traceable completed refund outcome.",
+      "alt_zh": "三階段復原證據：顧客退貨 QR 入口、POS 付款編號驗證，以及可追溯的退款完成結果。",
+      "semanticSlotStable": true,
+      "privacyTreatment": "Public-safe source UI; no personal identity exposed."
     }
   },
   "frameSystemContract": {
