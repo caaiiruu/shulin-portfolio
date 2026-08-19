@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-17-v2.3",
-  "skillVersion": "2026-08-17-v2.3",
+  "version": "2026-08-19-v2.4",
+  "skillVersion": "2026-08-19-v2.4",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "qaBranch": "qa/r146-r43-preview-2026-08-06",
@@ -40,7 +40,10 @@
     "featured-decision deliveryBoundary",
     "qualitative outcomes headline+cards+closing",
     "structured non-image evidence",
-    "recruiter-facing decision-support evidence"
+    "recruiter-facing decision-support evidence",
+    "validation-scale evidence layer",
+    "team-recognition proof block",
+    "aligned quantitative outcome metrics"
   ],
   "titleNaming": {
     "fromXToYAllowed": false,
@@ -94,7 +97,8 @@
     "mandatory local repo-attached Work gate",
     "repeated scratch recovery",
     "centered-column-left-copy",
-    "three-equal-column accountability"
+    "three-equal-column accountability",
+    "duration-only public project timelines"
   ],
   "coreSystemInsight": {
     "composition": "centered-content-composition",
@@ -109,5 +113,14 @@
       "shared decisions"
     ],
     "partnerOwned": "optional-subordinate-boundary"
+  },
+  "timelinePresentation": {
+    "publicValue": "short-form-actual-project-period",
+    "examples": [
+      "Dec 2020–Nov 2021",
+      "2022–2025"
+    ],
+    "durationOnlyAllowed": false,
+    "doNotInferMissingDates": true
   }
 }

@@ -13965,14 +13965,15 @@
         },
         "timeline": {
           "duration": {
-            "en": "1 year",
-            "zh": "1 年"
+            "en": "Dec 2020–Nov 2021",
+            "zh": "2020 年 12 月至 2021 年 11 月"
           },
           "dateRange": {
             "en": "Dec 2020–Nov 2021",
             "zh": "2020 年 12 月至 2021 年 11 月"
           },
-          "status": "source-screenshot-confirmed-2026-08-06"
+          "status": "source-screenshot-confirmed-2026-08-06",
+          "presentation": "short-form-actual-project-period"
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -14059,11 +14060,11 @@
           "title": "From a successful payment screen to an end-to-end recovery and operations model",
           "whatIDecided": "Designed customer recovery, refund, internal transaction-review and email communication flows as one connected operating model around the core payment journey.",
           "whyThisChoice": "A dependable payment foundation had to remain understandable and actionable when transactions failed, required refunds, or moved into staff, support and finance workflows.",
-          "status": "design-complete-shipment-by-capability-pending-confirmation",
+          "status": "shipped-complete-service-scope",
           "title_zh": "從付款成功畫面，到端到端恢復與營運模型",
           "whatIDecided_zh": "將顧客復原、退款、內部交易審查與電子郵件溝通流程設計成圍繞核心付款旅程的一套連續營運模型。",
           "whyThisChoice_zh": "可靠的付款基礎必須在交易失敗、需要退款，或進入門市、客服與財務流程時，仍然清楚且可採取行動。",
-          "evidence": "I independently completed the design of all Payment-related recovery, refund, internal-system, portal and email flows. Production status is recorded separately for each capability."
+          "evidence": "The launched Payment service included customer recovery, refunds, transaction records, internal transaction lookup and supporting operational workflows."
         }
       ],
       "prototypeEvidence": [
@@ -14954,8 +14955,8 @@
                 "zh": "排隊壓力使 App 至結帳交接成為信任關鍵"
               },
               "summary": {
-                "en": "Live cashier and self-checkout research showed that unclear instructions and delayed recognition created hesitation during a time-sensitive checkout moment.",
-                "zh": "人工收銀與自助結帳的現場研究顯示，不清楚的指示與延遲辨識會在時間敏感的結帳時刻造成猶豫。"
+                "en": "Live cashier and self-checkout validation showed that unclear instructions and delayed recognition created hesitation at a time-sensitive checkout moment.",
+                "zh": "人工收銀與自助結帳驗證顯示，不清楚的指示與延遲辨識會在時間敏感的結帳時刻造成猶豫。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 01",
@@ -14968,8 +14969,8 @@
                 "zh": "顧客無法確定權益會跨付款情境延續"
               },
               "summary": {
-                "en": "Field research and loyalty validation showed uncertainty around when LinkPoints, vouchers and discounts were actually applied.",
-                "zh": "實地研究與會員權益驗證顯示，顧客不確定 LinkPoints、優惠券與折扣何時真正套用。"
+                "en": "Fieldwork and loyalty validation showed that customers were unsure when LinkPoints, vouchers and discounts had actually carried into payment.",
+                "zh": "實地研究與會員權益驗證顯示，顧客不確定 LinkPoints、優惠券與折扣何時真正帶入付款。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 02",
@@ -14982,8 +14983,8 @@
                 "zh": "付款例外會延續至失敗畫面之後"
               },
               "summary": {
-                "en": "Failure-path mapping, refund work and transaction-record testing showed that recovery needed both visible next actions and traceable records.",
-                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原同時需要清楚的下一步與可追溯紀錄。"
+                "en": "Failure-path mapping, refund design and transaction-record testing showed that recovery needed clear next actions and traceable records.",
+                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原需要清楚的下一步與可追溯紀錄。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
@@ -14992,7 +14993,98 @@
             }
           ],
           "metrics": [],
-          "contentStatus": "approved-r164.1"
+          "contentStatus": "approved-r164.1e",
+          "validationLayer": {
+            "title": {
+              "en": "Research and validation",
+              "zh": "研究與驗證"
+            },
+            "intro": {
+              "en": "I led field research and repeated validation across live checkout, loyalty, self-checkout entry and transaction history.",
+              "zh": "我主導實體結帳、會員權益、自助結帳入口與交易紀錄的實地研究及多輪驗證。"
+            },
+            "metrics": [
+              {
+                "value": "3 days",
+                "label": {
+                  "en": "live-store fieldwork",
+                  "zh": "門市實地研究"
+                },
+                "supportingCopy": {
+                  "en": "cashier and self-checkout observation",
+                  "zh": "人工收銀與自助結帳觀察"
+                },
+                "evidenceNote": {
+                  "en": "Designer-led fieldwork across cashier and self-checkout contexts.",
+                  "zh": "設計師主導的人工收銀與自助結帳實地研究。"
+                }
+              },
+              {
+                "value": "8",
+                "label": {
+                  "en": "shoppers observed and interviewed",
+                  "zh": "位受觀察與訪談的購物者"
+                },
+                "supportingCopy": {
+                  "en": "during live-store checkout research",
+                  "zh": "於門市結帳實地研究中"
+                },
+                "evidenceNote": {
+                  "en": "Designer-led live-store observation and interviews.",
+                  "zh": "設計師主導的門市觀察與訪談。"
+                }
+              },
+              {
+                "value": "6 + 7",
+                "label": {
+                  "en": "self-checkout entry participants",
+                  "zh": "位自助結帳入口測試參與者"
+                },
+                "supportingCopy": {
+                  "en": "across structured and guerrilla testing",
+                  "zh": "涵蓋結構化與游擊測試"
+                },
+                "evidenceNote": {
+                  "en": "Six structured and seven guerrilla participants tested self-checkout entry.",
+                  "zh": "6 位結構化測試與 7 位游擊測試參與者驗證自助結帳入口。"
+                }
+              },
+              {
+                "value": "12",
+                "label": {
+                  "en": "loyalty and instruction participants",
+                  "zh": "位會員權益與指示測試參與者"
+                },
+                "supportingCopy": {
+                  "en": "validating benefit visibility and cashier guidance",
+                  "zh": "驗證權益可見性與收銀指示"
+                },
+                "evidenceNote": {
+                  "en": "Designer-led loyalty and cashier-instruction validation.",
+                  "zh": "設計師主導的會員權益與收銀指示驗證。"
+                }
+              },
+              {
+                "value": "14",
+                "label": {
+                  "en": "transaction-history participants",
+                  "zh": "位交易紀錄測試參與者"
+                },
+                "supportingCopy": {
+                  "en": "testing Order History concepts and terminology",
+                  "zh": "測試訂單紀錄概念與用語"
+                },
+                "evidenceNote": {
+                  "en": "Designer-led Order History concept and terminology testing.",
+                  "zh": "設計師主導的訂單紀錄概念與用語測試。"
+                }
+              }
+            ]
+          },
+          "mappingTitle": {
+            "en": "What the validation changed",
+            "zh": "驗證如何改變決策"
+          }
         },
         "outcomes": {
           "title": {
@@ -15011,9 +15103,9 @@
                   "en": "stores",
                   "zh": "間門市"
                 },
-                "primaryCopy": {
-                  "en": "stores — rollout coverage across FairPrice retail locations",
-                  "zh": "間門市 — 覆蓋 FairPrice 零售據點的推展範圍"
+                "supportingCopy": {
+                  "en": "rollout coverage across FairPrice retail locations",
+                  "zh": "覆蓋 FairPrice 零售據點的推展範圍"
                 },
                 "evidenceNote": {
                   "en": "Product and team rollout coverage; not attributable to design alone.",
@@ -15026,9 +15118,9 @@
                   "en": "users",
                   "zh": "名使用者"
                 },
-                "primaryCopy": {
-                  "en": "users — using the in-store payment system by September 2021",
-                  "zh": "名使用者 — 截至 2021 年 9 月使用門市付款系統"
+                "supportingCopy": {
+                  "en": "using the in-store payment system by September 2021",
+                  "zh": "截至 2021 年 9 月使用門市付款系統"
                 },
                 "evidenceNote": {
                   "en": "Product and team usage outcome reported for September 2021; not attributable to design alone.",
@@ -15041,9 +15133,9 @@
                   "en": "monthly transactions",
                   "zh": "每月交易筆數"
                 },
-                "primaryCopy": {
-                  "en": "monthly transactions — completed by September 2021",
-                  "zh": "每月交易筆數 — 截至 2021 年 9 月完成"
+                "supportingCopy": {
+                  "en": "completed by September 2021",
+                  "zh": "截至 2021 年 9 月完成"
                 },
                 "evidenceNote": {
                   "en": "Product and team transaction volume reported for September 2021; not attributable to design alone.",
@@ -15056,13 +15148,28 @@
                   "en": "transaction success rate",
                   "zh": "交易成功率"
                 },
-                "primaryCopy": {
-                  "en": "transaction success rate — across the launched in-store payment experience",
-                  "zh": "交易成功率 — 涵蓋已上線的門市付款體驗"
+                "supportingCopy": {
+                  "en": "across the launched in-store payment experience",
+                  "zh": "涵蓋已上線的門市付款體驗"
                 },
                 "evidenceNote": {
                   "en": "Product and team reliability outcome; not attributable to design alone.",
                   "zh": "產品與團隊的可靠性成果，不可歸因於設計單一職能。"
+                }
+              },
+              {
+                "value": "70.2",
+                "label": {
+                  "en": "NPS",
+                  "zh": "NPS"
+                },
+                "supportingCopy": {
+                  "en": "from 1,798 responses",
+                  "zh": "來自 1,798 份回覆"
+                },
+                "evidenceNote": {
+                  "en": "Product and team customer-confidence outcome; not attributable to design alone.",
+                  "zh": "產品與團隊的顧客信心成果，不可歸因於設計單一職能。"
                 }
               }
             ],
@@ -15073,26 +15180,34 @@
                   "en": "The work also established reusable payment standards and interaction guidelines across related FairPrice product contexts.",
                   "zh": "這項工作也為 FairPrice 相關產品情境建立了可重用的付款標準與互動規範。"
                 }
-              },
-              {
-                "text": {
-                  "en": "Team recognition: Singapore User Experience Award of the Year, Retail — Asian Experience Awards 2021.",
-                  "zh": "團隊肯定：2021 Asian Experience Awards — Singapore User Experience Award of the Year, Retail。"
-                }
-              },
-              {
-                "text": {
-                  "en": "Customer confidence remained strong, with NPS 70.2 across 1,798 responses.",
-                  "zh": "顧客信心維持良好，1,798 份回覆的 NPS 為 70.2。"
-                }
               }
-            ]
+            ],
+            "metricLayout": "aligned-five",
+            "recognition": {
+              "label": {
+                "en": "TEAM RECOGNITION",
+                "zh": "團隊肯定"
+              },
+              "title": {
+                "en": "Singapore User Experience Award of the Year, Retail",
+                "zh": "Singapore User Experience Award of the Year, Retail"
+              },
+              "programme": {
+                "en": "Asian Experience Awards 2021",
+                "zh": "Asian Experience Awards 2021"
+              },
+              "attribution": {
+                "en": "Team recognition—not an individual award.",
+                "zh": "此為團隊肯定，並非個人獎項。"
+              },
+              "assetId": "payment-evidence-outcomes-award-public-v2"
+            }
           },
           "attributionBoundary": {
             "en": "Transaction volume, success rate, NPS and rollout scale are product and team outcomes, not outcomes attributable to design alone.",
             "zh": "交易量、成功率、NPS 與推展規模屬於產品與團隊成果，不可歸因於設計單一職能。"
           },
-          "contentStatus": "approved-r164.1d"
+          "contentStatus": "approved-r164.1e"
         }
       },
       "zeroToOneMandate": {
@@ -15233,14 +15348,16 @@
           "Cross-channel refund process map",
           "Core payment and post-payment videos"
         ],
-        "productionStatusStillNeedsConfirmation": [
-          "Customer payment recovery",
-          "Refund journey",
-          "Internal transaction portal",
-          "Internal operational workflows",
-          "Payment email and status communications"
-        ],
-        "contentStatus": "approved"
+        "productionStatusStillNeedsConfirmation": [],
+        "contentStatus": "human-confirmed-r164.1e",
+        "shippedServiceCapabilities": [
+          "Customer payment recovery and failed-payment alternatives",
+          "Refund journey across app and POS",
+          "Order history and transaction records",
+          "Internal transaction search and portal",
+          "Payment and refund email receipts",
+          "Supporting operational workflows"
+        ]
       },
       "domainTags": {
         "primaryDomainId": "retail-commerce",
@@ -15740,14 +15857,10 @@
               }
             },
             "outcome": {
-              "en": "A coherent recovery direction spanning customer and operational needs.",
-              "zh": "建立同時涵蓋顧客與營運需求的一致復原方向。"
+              "en": "The shipped Payment service covered customer-facing failure alternatives, recovery and refund flows, transaction records, internal transaction lookup and supporting operational workflows.",
+              "zh": "已上線的付款服務涵蓋顧客端失敗替代方案、復原與退款流程、交易紀錄、內部交易查詢及支援營運流程。"
             },
-            "deliveryBoundary": {
-              "en": "Failure alternatives were confirmed in the customer-facing delivery scope. Recovery, refund, transaction-record, internal-portal and related operational designs were validated or completed, but capability-level production status remains unconfirmed.",
-              "zh": "顧客端交付範圍已確認包含付款失敗替代方案。復原、退款、交易紀錄、內部平台及相關營運設計已完成或經過驗證，但各項能力的正式上線狀態仍未確認。"
-            },
-            "status": "design-complete-shipment-varies-by-capability"
+            "status": "shipped-complete-service-scope"
           }
         ],
         "sourcePackage": "r143 user-provided Payment screenshots",
@@ -31908,7 +32021,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-11",
+  "lastUpdated": "2026-08-19",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",

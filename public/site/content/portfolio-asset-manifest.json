@@ -302,14 +302,19 @@
     "payment-evidence-outcomes-award-public-v2": {
       "id": "payment-evidence-outcomes-award-public-v2",
       "projectId": "payment",
-      "type": "image",
-      "publicPath": null,
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/projects/payment/payment-team-recognition-asian-experience-awards-2021.jpg",
       "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 960,
+      "height": 400,
+      "sha256": "328352a85120e8165195f311ee7cdca2fde149985b962ea828b9dc4b1ea894fb",
+      "alt": "Asian Experience Awards 2021 event banner supporting the Payment team recognition.",
+      "alt_zh": "用於證明付款專案團隊肯定的 2021 Asian Experience Awards 活動橫幅。"
     },
     "payment-evidence-order-history-public-v1": {
       "id": "payment-evidence-order-history-public-v1",

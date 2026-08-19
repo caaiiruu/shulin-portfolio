@@ -1,3 +1,8 @@
+## 2026-08-19-v2.4
+
+- Public timelines use source-supported short-form actual project periods.
+- Registered validation-scale Evidence, aligned quantitative Outcomes, and subordinate team-recognition proof.
+
 # CHANGELOG
 
 ## 2026-08-17 — v2.3

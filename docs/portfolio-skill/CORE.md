@@ -21,3 +21,10 @@ Read this file + `registry.json` before every Work Order.
 16. My Accountability uses two equal primary columns—owned outcome and shared decisions—with any partner-owned boundary subordinate below.
 17. Project titles must NOT use the repeated `From X to Y` construction. Express transformation through a concise, recruiter-readable title that identifies the product/problem space and distinctive system or capability signal without a fixed naming formula. Avoid generic `Improving…`, `Redesigning…`, or `Designing…` labels when they merely describe design activity rather than the product problem or system change.
 18. Canonical governance changes must never live only in chat. When a Human-approved rule changes, sync it before the next migration into: `CORE.md` + the relevant `references/*` file + `SKILL.md` + `registry.json` version/state + `CHANGELOG.md`. The latest explicit Human rule supersedes older wording everywhere; contradictory legacy guidance must be removed or marked superseded.
+
+## 19. Public timeline presentation
+
+- Public Project Detail timelines use the short-form actual project period.
+- Prefer `Dec 2020–Nov 2021`, `2022–2025`, or the closest source-supported period.
+- Do not publish duration-only values when an actual period is known.
+- Never infer missing dates from duration.

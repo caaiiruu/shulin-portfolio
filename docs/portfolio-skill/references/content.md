@@ -87,3 +87,7 @@ Equivalent Core System Insight content uses the shared `centered-content-composi
 ## My Accountability presentation
 
 Use one shared `two-primary-column-accountability` composition. Map I LED to I OWNED THE OUTCOME and I CO-DECIDED to SHARED DECISIONS. Preserve their strongest concise ownership statements as headlines and supporting facts below. If PARTNER-OWNED is materially present, keep it as a subordinate PARTNER-OWNED BOUNDARY below the two primary columns; never render it as a third equal-weight primary column.
+
+## Timeline presentation
+
+Public Project Detail Info Grids display a short-form actual project period, not duration-only copy. Use the closest source-supported period and never calculate or invent dates from duration.

@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-17-v2.3
+version: 2026-08-19-v2.4
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -688,3 +688,7 @@ The following are retired unless explicitly reopened:
 - allowing new projects to expand shared architecture before parity mapping
 - centered-column-left-copy
 - three-equal-column accountability
+
+## Public timeline presentation
+
+Project Detail Info Grids must show the short-form actual project period when canonical dates exist. Duration-only values are superseded for public presentation. Never infer missing dates.
