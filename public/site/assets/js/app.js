@@ -80,7 +80,6 @@
         };
         return [value.value,typeZh[value.value]||''];
       }
-      if(value&&typeof value==='object'&&!Array.isArray(value)&&value.dateRange)return pair(value.dateRange);
       if(value&&typeof value==='object'&&!Array.isArray(value)&&value.duration)return pair(value.duration);
       return pair(value);
     };
