@@ -2512,6 +2512,17 @@
     // the title metadata prevents duplicate signals and preserves title focus.
     safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(p.title));
+    const existingHeroVisual=doc.getElementById('projectDetailHeroVisual');
+    if(existingHeroVisual)existingHeroVisual.remove();
+    if(p.presentation?.detailHeroVisual){
+      const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
+      if(heroAsset&&!heroAsset.isPlaceholder){
+        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailHeroVisual';
+        const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='eager';image.decoding='async';
+        if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
+        figure.append(image);doc.querySelector('.modal-head-v45')?.after(figure);
+      }
+    }
     renderDeliveryStatus('');
     const showProblemTypes=p.presentation?.visibility?.problemTypes ?? !p.recruiterFirstPopup;
     renderTags(showProblemTypes?(localize(p.problemTypes)||[]):[]);
@@ -2793,7 +2804,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside','outcome-recognition-proof');proof.dataset.componentOwner='RecognitionProof';const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);proof.append(media)}proof.append(copy);section.append(proof)}
+    if(source?.recognition){const proof=element('aside','outcome-recognition-proof');proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
