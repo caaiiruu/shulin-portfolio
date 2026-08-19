@@ -462,7 +462,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       await page.goto(`${baseUrl}/site/work/voucher?case=voucher&stage=${stage}`, { waitUntil: "networkidle" });
       await capture(`child-${stage}-overview`, ".voucher-stage-hero");
       await captureCloudEdges(`child-${stage}-cloud`, ".voucher-stage-surface.case-study-cloud-emphasis");
-      await capture(`child-${stage}-footer", ".child-stage-navigation");
+      await capture(`child-${stage}-footer`, ".child-stage-navigation");
       if (stage === "discover") {
         const decisionGroups = page.locator(".voucher-stage-decision-list > .voucher-stage-decision-group:visible");
         const decisions = decisionGroups.locator(":scope > .voucher-r149-decision");
