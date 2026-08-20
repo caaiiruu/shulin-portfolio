@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-20-r164.9f",
+  "contentVersion": "2026-08-20-r164.9g",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -14967,17 +14967,19 @@
                 "en": "3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.",
                 "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
               },
-              "presentation": "raw",
-              "finding": {
-                "title": {
-                  "en": "Checkout assurance",
-                  "zh": "結帳安心感"
-                },
-                "copy": {
-                  "en": "87.5% of participants showed assurance, social-pressure or time-sensitivity needs during digital checkout, reinforcing the need for a shorter, clearer handoff.",
-                  "zh": "87.5% 的參與者在數位結帳中呈現安心感、社交壓力或時間敏感需求，強化了更短、更清楚交接的必要性。"
-                }
-              }
+              "presentation": "raw"
+            },
+            {
+              "assetId": "payment-evidence-sco-entry-research-r1649e",
+              "title": {
+                "en": "SCO entry recognition validation",
+                "zh": "SCO 入口辨識驗證"
+              },
+              "copy": {
+                "en": "6 structured + 7 guerrilla participants tested the SCO entry point and QR handoff, validating clearer entry recognition and action language.",
+                "zh": "6 位結構化＋7 位游擊參與者測試 SCO 入口與 QR 交接，驗證更清楚的入口辨識與行動語言。"
+              },
+              "presentation": "raw"
             },
             {
               "assetId": "payment-evidence-journey-synthesis-r1649c",
@@ -15000,18 +15002,6 @@
                   "zh": "85.7% 偏好更清楚分隔的紀錄結構，支持在結帳後更快查找付款紀錄。"
                 }
               }
-            },
-            {
-              "assetId": "payment-evidence-sco-entry-research-r1649e",
-              "title": {
-                "en": "SCO entry recognition validation",
-                "zh": "SCO 入口辨識驗證"
-              },
-              "copy": {
-                "en": "6 structured + 7 guerrilla participants tested the SCO entry point and QR handoff, validating clearer entry recognition and action language.",
-                "zh": "6 位結構化＋7 位游擊參與者測試 SCO 入口與 QR 交接，驗證更清楚的入口辨識與行動語言。"
-              },
-              "presentation": "raw"
             }
           ],
           "quotes": [
@@ -15036,7 +15026,191 @@
               }
             }
           ],
-          "contentStatus": "human-corrected-r164.9e"
+          "contentStatus": "human-approved-r164.9g",
+          "researchSynthesis": {
+            "title": {
+              "en": "Research synthesis I led",
+              "zh": "我主導的研究綜整"
+            },
+            "intro": {
+              "en": "I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.",
+              "zh": "我主導門市研究、行為分析與綜整，將結帳行為轉化為橫跨 App、人工收銀與自助結帳的產品策略。"
+            },
+            "visual": [
+              {
+                "assetId": "payment-research-design-opportunities-r1649g",
+                "presentation": "informational",
+                "showCaption": false
+              }
+            ],
+            "insights": [
+              {
+                "heading": {
+                  "en": "87.5% — Assurance",
+                  "zh": "87.5% — 安心感"
+                },
+                "summary": {
+                  "en": "Shoppers needed transparency, confirmation and recovery alternatives before trusting digital payment.",
+                  "zh": "購物者需要透明資訊、確認與復原替代方案，才會信任數位付款。"
+                },
+                "details": [
+                  {
+                    "en": "25% double-checked transaction details at checkout",
+                    "zh": "25% 會在結帳時再次核對交易明細"
+                  },
+                  {
+                    "en": "12.5% needed tracking history for assurance",
+                    "zh": "12.5% 需要可追蹤的交易紀錄來獲得安心感"
+                  },
+                  {
+                    "en": "Unexpected situations required visible alternatives",
+                    "zh": "非預期情況需要清楚可見的替代方案"
+                  }
+                ],
+                "implication": {
+                  "en": "Make payment state, history and recovery options visible.",
+                  "zh": "讓付款狀態、交易紀錄與復原選項清楚可見。"
+                }
+              },
+              {
+                "heading": {
+                  "en": "87.5% — Social pressure",
+                  "zh": "87.5% — 社交壓力"
+                },
+                "summary": {
+                  "en": "Checkout friction became more stressful when shoppers risked blocking others or needed staff assistance.",
+                  "zh": "當購物者可能阻擋他人或需要員工協助時，結帳摩擦會帶來更大壓力。"
+                },
+                "details": [
+                  {
+                    "en": "62.5% — “No one help me at SCO”",
+                    "zh": "62.5% —「在 SCO 沒有人幫我」"
+                  },
+                  {
+                    "en": "37.5% — “Avoid blocking others”",
+                    "zh": "37.5% —「避免擋到其他人」"
+                  }
+                ],
+                "implication": {
+                  "en": "Reduce dependencies that make shoppers stop, wait or ask for help at checkout.",
+                  "zh": "減少讓購物者在結帳時停下、等待或求助的相依環節。"
+                }
+              },
+              {
+                "heading": {
+                  "en": "87.5% — Time is money",
+                  "zh": "87.5% — 時間就是成本"
+                },
+                "summary": {
+                  "en": "Shoppers prioritised the fastest path and avoided steps that slowed the queue.",
+                  "zh": "購物者優先選擇最快路徑，並避開會拖慢隊伍的步驟。"
+                },
+                "details": [
+                  {
+                    "en": "62.5% chose the fastest flow, especially when packing support reduced effort",
+                    "zh": "62.5% 選擇最快流程，尤其當有人協助裝袋、能降低負擔時"
+                  },
+                  {
+                    "en": "50% chose the shorter queue",
+                    "zh": "50% 選擇較短的隊伍"
+                  }
+                ],
+                "implication": {
+                  "en": "Shorten the critical handoff between App, cashier and self-checkout.",
+                  "zh": "縮短 App、人工收銀與自助結帳之間的關鍵交接。"
+                }
+              },
+              {
+                "heading": {
+                  "en": "75% — Loyalty value awareness",
+                  "zh": "75% — 會員價值認知"
+                },
+                "summary": {
+                  "en": "Points and rebates influenced payment behaviour, but value was often invisible or dependent on cashier prompts.",
+                  "zh": "點數與回饋會影響付款行為，但其價值常不可見，或依賴收銀員提醒。"
+                },
+                "details": [
+                  {
+                    "en": "37.5% were passively informed about LinkPoints",
+                    "zh": "37.5% 被動得知 LinkPoints 資訊"
+                  },
+                  {
+                    "en": "75% showed points / rebates influencing behaviour",
+                    "zh": "75% 顯示點數／回饋會影響行為"
+                  },
+                  {
+                    "en": "Shoppers relied on cashier prompts or checked value only at specific moments",
+                    "zh": "購物者仰賴收銀員提醒，或只在特定時刻查看價值"
+                  }
+                ],
+                "implication": {
+                  "en": "Keep points, rewards and value legible at the payment decision.",
+                  "zh": "在付款決策時，讓點數、獎勵與價值清楚可讀。"
+                },
+                "synthesisBoundary": {
+                  "en": "Portfolio synthesis of LinkPoints awareness (75%) and Rebates awareness (75%).",
+                  "zh": "作品集綜整自 LinkPoints 認知（75%）與回饋認知（75%）。"
+                }
+              }
+            ],
+            "strategyLabel": {
+              "en": "WHAT I TURNED THESE FINDINGS INTO",
+              "zh": "我將這些發現轉化為"
+            },
+            "strategies": [
+              {
+                "index": "01",
+                "title": {
+                  "en": "Visible assurance and recovery",
+                  "zh": "可見的安心感與復原"
+                },
+                "copy": {
+                  "en": "Made payment state, transaction history and alternatives for unexpected situations visible.",
+                  "zh": "讓付款狀態、交易紀錄與非預期情況的替代方案清楚可見。"
+                }
+              },
+              {
+                "index": "02",
+                "title": {
+                  "en": "A shorter checkout handoff",
+                  "zh": "更短的結帳交接"
+                },
+                "copy": {
+                  "en": "Reduced steps and dependencies across App, cashier and self-checkout.",
+                  "zh": "減少 App、人工收銀與自助結帳之間的步驟與相依關係。"
+                }
+              },
+              {
+                "index": "03",
+                "title": {
+                  "en": "Visible loyalty value at payment",
+                  "zh": "付款時可見的會員價值"
+                },
+                "copy": {
+                  "en": "Kept points, rewards and transaction value legible at the moment of commitment.",
+                  "zh": "在做出付款承諾的時刻，讓點數、獎勵與交易價值清楚可讀。"
+                }
+              }
+            ],
+            "sourceTraceability": {
+              "sourceFile": "Research Findings for Digital Checkout_Jan 2021(3).pdf",
+              "assurance": "pages 13–23",
+              "socialPressure": "pages 24–27",
+              "timeIsMoney": "pages 28–32",
+              "linkPointsAwareness": "pages 33–38",
+              "rebatesAwareness": "pages 39–43",
+              "designOpportunities": "page 58",
+              "designIterations": "pages 60–62"
+            },
+            "implicationLabel": {
+              "en": "STRATEGIC IMPLICATION",
+              "zh": "策略意涵"
+            },
+            "visualLabel": {
+              "en": "SOURCE SYNTHESIS — DESIGN OPPORTUNITIES",
+              "zh": "來源綜整 — 設計機會"
+            }
+          }
         },
         "outcomes": {
           "title": {

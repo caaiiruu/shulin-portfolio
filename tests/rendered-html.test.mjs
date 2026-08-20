@@ -1463,7 +1463,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-20-r164.9f");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-20-r164.9g");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
 
 test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
 
@@ -1861,7 +1861,7 @@ test("R164.9E separates Engineering PASS from Human visual acceptance",()=>{
   const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
   const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const p=data.projects.payment,e=p.publicContent.decisionEvidence,o=p.publicContent.outcomes.semanticHierarchy;
-  assert.equal(data.contentVersion,"2026-08-20-r164.9f");
+  assert.equal(data.contentVersion,"2026-08-20-r164.9g");
   assert.equal(manifest.contentVersion,data.contentVersion);
   assert.equal(p.presentation.contentRefs.contributionIntervention,"keyInterventionMap");
   assert.ok(["before","intervention","after"].every(key=>p.keyInterventionMap[key].en));
@@ -1888,7 +1888,7 @@ test("R164.9F converges Payment Outcomes, informational media and navigator nami
   const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
   const payment=data.projects.payment,hierarchy=payment.publicContent.outcomes.semanticHierarchy;
-  assert.equal(data.contentVersion,"2026-08-20-r164.9f");assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(data.contentVersion,"2026-08-20-r164.9g");assert.equal(manifest.contentVersion,data.contentVersion);
   assert.equal(hierarchy.measuredLabel.en,"After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.");
   assert.deepEqual(hierarchy.measured.map(item=>item.value),["70.2","~190","~57K","~228K","98.5%","2.7× faster"]);
   assert.equal(hierarchy.measured[2].supportingCopy.en,"by Sep 2021");assert.equal(hierarchy.measured[3].supportingCopy.en,"by Sep 2021");assert.equal(hierarchy.measured[5].supportingCopy.en,"19.78 sec → 7.29 sec");
@@ -1898,4 +1898,22 @@ test("R164.9F converges Payment Outcomes, informational media and navigator nami
   assert.match(css,/\.voucher-r149-foundation--informational \.voucher-r149-foundation__media\{[^}]*aspect-ratio:auto/);
   assert.equal((css.match(/\.outcome-semantic-group__grid--aligned\{/g)||[]).length,3);
   assert.doesNotMatch(css,/\.outcome-semantic-group__grid--aligned \.outcome-metric\{[^}]*gap:var\(--space-4\)/);
+});
+
+
+test("R164.9G makes research leadership, synthesis and strategy traceable through StructuredEvidence",()=>{
+  const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
+  const evidence=data.projects.payment.publicContent.decisionEvidence,research=evidence.researchSynthesis;
+  assert.equal(data.contentVersion,"2026-08-20-r164.9g");assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(research.intro.en,"I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.");
+  assert.deepEqual(research.insights.map(item=>item.heading.en),["87.5% — Assurance","87.5% — Social pressure","87.5% — Time is money","75% — Loyalty value awareness"]);
+  assert.deepEqual(research.strategies.map(item=>item.title.en),["Visible assurance and recovery","A shorter checkout handoff","Visible loyalty value at payment"]);
+  assert.equal(research.sourceTraceability.designOpportunities,"page 58");assert.equal(research.sourceTraceability.designIterations,"pages 60–62");
+  assert.deepEqual(evidence.items.map(item=>item.assetId),["payment-evidence-live-checkout-image-only-r1649d","payment-evidence-sco-entry-research-r1649e","payment-evidence-journey-synthesis-r1649c"]);
+  assert.equal(evidence.items[0].finding,undefined);assert.equal(evidence.validationLayer,undefined);
+  assert.equal(manifest.items["payment-research-design-opportunities-r1649g"].implementationStatus,"real-active");
+  assert.match(app,/function appendResearchSynthesis\(section,source/);assert.match(app,/evidenceSource\.researchSynthesis/);
+  assert.match(css,/\.structured-evidence-research-synthesis__insights\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:600px\)\{[^}]*structured-evidence-research-synthesis__insights\{grid-template-columns:1fr/);
 });
