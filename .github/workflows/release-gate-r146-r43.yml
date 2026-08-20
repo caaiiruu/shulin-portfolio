@@ -151,6 +151,7 @@ jobs:
 
       - name: Upload exact-SHA engineering QA artifacts
         if: always()
+        continue-on-error: true # Evidence retention must not override core engineering validation.
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-engineering-qa-${{ steps.commit.outputs.sha }}
