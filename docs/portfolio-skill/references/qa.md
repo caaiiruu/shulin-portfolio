@@ -53,3 +53,22 @@ At 1419 / 871 / 430, certify Voucher, DBS, Booking, and CTBC through the same sh
 - Core System Insight: content column centered; eyebrow, headline, and body all compute to centered alignment; readable width retained; mobile inner gutter retained.
 - My Accountability: exactly two primary semantic groups in the order I OWNED THE OUTCOME then SHARED DECISIONS; tablet remains two columns while readable; mobile stacks in that order; an optional partner-owned boundary sits below and never becomes a third primary column.
 - Record geometry, computed alignment, grid columns, source-role mapping, boundary position, overflow, and mobile order. Automated state or owner checks alone are insufficient.
+
+## Engineering control-plane certification
+
+Canonical Engineering QA must protect all of the following:
+- canonical QA remains in the workflow push target
+- canonical QA remains in the workflow pull-request target
+- PR validation checks out and records the exact PR head SHA
+- runtime generation, SSOT/design validation, tests, routes, build, artifact validation, Chromium runtime, static serving, and browser certification remain blocking core checks
+- artifact upload is evidence retention only and may remain non-blocking; quota failure must be reported separately and must never convert a genuine engineering failure into PASS
+
+## Active-asset ProjectCard / visual certification
+
+For `real-active` ProjectCards and public visual assets, semantic expectations must derive from the active canonical asset/runtime metadata: actual asset status, intrinsic/declared semantic ratio, media classification, and responsive presentation rules.
+
+Do not hard-code historical placeholder/fallback semantics against a currently real-active asset.
+
+Placeholder-specific assertions may run only when the runtime actually classifies that asset as placeholder/fallback.
+
+This rule does not weaken ProjectCard QA: active assets must still satisfy their exact desktop/tablet/mobile geometry, object-fit, overflow, and responsive contracts.
