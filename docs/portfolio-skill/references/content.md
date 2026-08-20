@@ -91,3 +91,19 @@ Use one shared `two-primary-column-accountability` composition. Map I LED to I O
 ## Timeline presentation
 
 Public Project Detail Info Grids display a short-form actual project period, not duration-only copy. Use the closest source-supported period and never calculate or invent dates from duration.
+
+## Canonical Content / Asset ownership
+
+Hard rules:
+- No public content implementation without canonical Content SSOT ownership: `public/site/content/portfolio-content.json`.
+- No public asset implementation without canonical Asset Manifest ownership: `public/site/content/portfolio-asset-manifest.json`.
+- Chat, handoff text, evidence packages, screenshots, and temporary files are inputs only; they are not production SSOT until written into the canonical repository owner.
+- Direct edits to generated public runtime are not a substitute for Content SSOT mutation. Deterministic generation must reproduce a clean runtime from canonical owners.
+- Public project asset changes must update the Asset Manifest in the same atomic implementation change.
+- `portfolio-content.json.contentVersion` must exist and be non-empty.
+- `portfolio-asset-manifest.json.contentVersion` must equal the Content SSOT `contentVersion`.
+- A legitimate Content revision must never require editing a validator merely to replace one historical fixed revision string.
+- If a Content change introduces a new content revision, the Asset Manifest must be updated in the same atomic change and resolve to that same revision.
+- Engineering-only governance changes do not require a fake Content version bump.
+
+For later Payment implementation, approved public content and approved public assets must enter their canonical owners in the same implementation round whenever both change.
