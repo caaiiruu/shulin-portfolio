@@ -33,7 +33,7 @@ jobs:
           fs.writeFileSync(p,JSON.stringify(m,null,2)+'\n');
           NODE
           rm .github/workflows/r1649a-manifest-runtime-cleanup.yml
-          node public/site/qa/ssot-governance.mjs
+          node public/site/qa/asset-governance.mjs
           git diff --check
       - name: Commit narrow manifest repair
         shell: bash
