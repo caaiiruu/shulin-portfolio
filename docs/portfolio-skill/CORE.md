@@ -11,8 +11,8 @@ Read this file + `registry.json` before every Work Order.
 6. Evidence ≠ Outcomes. Research counts belong in Evidence.
 7. Accountability: I LED / I CO-DECIDED / PARTNER-OWNED.
 8. No heavy whole-image blur; use semantic redaction.
-9. Preferred execution: GitHub-native → QA branch → PR #3 → GitHub Actions → Vercel QA.
-10. Do not repeat scratch `.git` recovery or full large-SSOT connector rewrite.
+9. Preferred execution: capability preflight → verify actual canonical QA HEAD → isolated project branch → PR directly to canonical QA → automatic Engineering QA → Vercel Preview → exact-head QA → Human review → merge.
+10. Never assume repo attachment, local Git auth, `gh`, or workflow dispatch. Do not repeat scratch `.git` recovery or unauthenticated clone loops; use an already-supported canonical alternative after capability detection.
 11. QA: 1419 / 871 / 430. Shared changes regress Voucher / DBS / Booking.
 12. Engineering PASS != Human PASS.
 13. Verify real GitHub HEAD before trusting stale Work-session state.
@@ -28,3 +28,37 @@ Read this file + `registry.json` before every Work Order.
 - Prefer `Dec 2020–Nov 2021`, `2022–2025`, or the closest source-supported period.
 - Do not publish duration-only values when an actual period is known.
 - Never infer missing dates from duration.
+
+## 20. Canonical CI control plane
+
+Canonical QA is `qa/r146-r43-preview-2026-08-06`.
+
+The canonical Engineering QA workflow must preserve:
+- QA in `push.branches`
+- QA in `pull_request.branches`
+- exact PR-head checkout / recorded validated SHA
+- blocking runtime generation, validation, tests, build, Chromium, static-server, and browser certification
+- artifact upload as non-blocking evidence retention only
+
+Do not weaken a blocking engineering check to solve artifact quota or CI convenience.
+
+## 21. Content / Asset ownership
+
+- No public content implementation without `public/site/content/portfolio-content.json` ownership.
+- No public asset implementation without `public/site/content/portfolio-asset-manifest.json` ownership.
+- Chat, handoff, screenshot, and package material is input, not production SSOT.
+- Content `contentVersion` must exist; Asset Manifest `contentVersion` must match it.
+- Runtime/validation must never pin one historical Content revision.
+- Engineering-only governance changes do not require a fake contentVersion bump.
+
+## 22. Active-asset QA
+
+Real-active ProjectCard / visual assertions derive semantic expectations from current canonical runtime/asset metadata. Placeholder-specific assertions may run only for actual placeholder/fallback assets. Do not weaken responsive geometry or visual certification.
+
+## 23. Work execution capability preflight
+
+Before mutation, record connector read/write, branch/PR write, workflow dispatch/rerun/log access, local repo, local Git auth, `gh`, and binary/blob write availability. Choose the execution path only after this preflight.
+
+## 24. Normal project pipeline
+
+Normal work branches from the actual canonical QA HEAD and opens an isolated PR directly back to canonical QA. Stacked repair PRs are exception handling only, not the normal project path.
