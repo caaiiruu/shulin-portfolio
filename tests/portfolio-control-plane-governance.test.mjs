@@ -8,6 +8,7 @@ const workflowPath = ".github/workflows/release-gate-r146-r43.yml";
 const contentPath = "public/site/content/portfolio-content.json";
 const manifestPath = "public/site/content/portfolio-asset-manifest.json";
 const assetRoot = "public/site/assets/projects/";
+const gitTextHeadroomBytes = 1024 * 1024;
 
 const workflow = fs.readFileSync(workflowPath, "utf8");
 const content = JSON.parse(fs.readFileSync(contentPath, "utf8"));
@@ -27,12 +28,30 @@ function stepBlock(name) {
   return match?.[1] || "";
 }
 
-function git(args) {
-  return execFileSync("git", args, { encoding: "utf8" }).trim();
+function git(args, options = {}) {
+  return execFileSync("git", args, { encoding: "utf8", ...options }).trim();
+}
+
+function gitBlobSize(spec) {
+  const value = Number(git(["cat-file", "-s", spec]));
+  assert.ok(Number.isSafeInteger(value) && value >= 0, `Invalid Git blob size for ${spec}: ${value}`);
+  return value;
+}
+
+function gitTextObject(spec) {
+  const blobSize = gitBlobSize(spec);
+  return execFileSync("git", ["show", spec], {
+    encoding: "utf8",
+    maxBuffer: blobSize + gitTextHeadroomBytes,
+  });
+}
+
+function textAt(commit, file) {
+  return gitTextObject(`${commit}:${file}`);
 }
 
 function jsonAt(commit, file) {
-  return JSON.parse(git(["show", `${commit}:${file}`]));
+  return JSON.parse(textAt(commit, file));
 }
 
 test("CI-01 canonical QA remains a pull-request target", () => {
@@ -82,6 +101,16 @@ test("active-asset ProjectCard QA derives expectations from current runtime asse
   assert.match(browserQa, /assetStatus:frame\?\.dataset\.assetStatus/);
   assert.match(browserQa, /x\.assetStatus==="real-active"&&x\.naturalRatio/);
   assert.doesNotMatch(browserQa, /Placeholder ProjectCard semantic ratio failed/);
+});
+
+test("historical Git blob reader handles output beyond Node's default subprocess buffer", () => {
+  const payload = "x".repeat(1024 * 1024 + 128 * 1024);
+  const blob = execFileSync("git", ["hash-object", "-w", "--stdin"], {
+    input: payload,
+    encoding: "utf8",
+  }).trim();
+  assert.equal(gitBlobSize(blob), Buffer.byteLength(payload, "utf8"));
+  assert.equal(gitTextObject(blob), payload);
 });
 
 test("SSOT-05/06 PR commits keep public project assets and version revisions atomic", { skip: !process.env.GITHUB_BASE_REF }, () => {
