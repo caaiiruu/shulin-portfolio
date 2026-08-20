@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-20-r164.9d",
+  "contentVersion": "2026-08-20-r164.9e",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -1021,6 +1021,33 @@
       ],
       "privacyTreatment": "Human-provided portfolio-ready composition using approved synthetic replacement transaction data; composition unchanged.",
       "sectionUsage": "evidence-return-recovery",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
+      "humanApprovalStatus": "pending-re-review"
+    },
+    "payment-evidence-sco-entry-research-r1649e": {
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-sco-entry-research-r1649e.webp",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1800,
+      "height": 1020,
+      "sha256": "be6c18ba0bbcb698b036dcd3e16c884c90ff4939d10358517ca651f4fe64851a",
+      "blobSha": "937c40b21c010be324119c8569c16f43daef898f",
+      "alt": "Source research screens showing tested SCO LinkPay entry, clearer QR presentation instructions and App QR continuation.",
+      "alt_zh": "來源研究畫面：經測試的 SCO LinkPay 入口、更清楚的 QR 出示指示，以及 App QR 延續流程。",
+      "sourcePackage": "payment_visual_evidence_package_v3.zip",
+      "sourceFiles": [
+        "02_research_source_docs/LinkPay_SCO_Entry_Learnings_Mar2021.pdf#page=7 Version C",
+        "02_research_source_docs/LinkPay_SCO_Entry_Learnings_Mar2021.pdf#page=9 iterated copy",
+        "02_research_source_docs/LinkPay_SCO_Entry_Learnings_Mar2021.pdf#page=13 App QR continuation"
+      ],
+      "privacyTreatment": "Exact source UI screenshots extracted from the approved research PDF; no editorial overlays or participant data.",
+      "sectionUsage": "evidence-sco-entry-validation",
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
       "humanApprovalStatus": "pending-re-review"
     }
