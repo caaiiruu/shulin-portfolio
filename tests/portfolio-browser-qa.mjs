@@ -229,12 +229,17 @@ for (const viewport of viewports) {
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
   if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
   const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null,motionObserved:false};
-  const waitForNavigatorSettlement=async link=>page.waitForFunction(node=>{
-    const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target?.querySelector("h2,h3")||target;
-    if(!root||!heading)return false;
-    const rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
-    return node.getAttribute("aria-current")==="location"&&headingRect.top>=rootRect.top&&headingRect.bottom<=rootRect.bottom;
-  },await link.elementHandle(),{timeout:3000});
+  const waitForNavigatorSettlement=async link=>{
+    let previous=null,stableFrames=0;
+    for(let attempt=0;attempt<80;attempt+=1){
+      await page.waitForTimeout(50);
+      const state=await link.evaluate(node=>({current:node.getAttribute("aria-current"),scrollTop:document.querySelector(".dialog-scroll")?.scrollTop||0}));
+      stableFrames=previous!==null&&Math.abs(state.scrollTop-previous)<.5?stableFrames+1:0;
+      if(state.current==="location"&&stableFrames>=3)return;
+      previous=state.scrollTop;
+    }
+    throw new Error(`${viewport.name} navigator smooth scroll did not settle`);
+  };
   const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
     const root=page.locator(".dialog-scroll").first();
