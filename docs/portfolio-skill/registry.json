@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-20-v2.5",
-  "skillVersion": "2026-08-20-v2.5",
+  "version": "2026-08-20-v2.6",
+  "skillVersion": "2026-08-20-v2.6",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
@@ -67,7 +67,12 @@
     "historicalFixedContentRevisionForbidden": true,
     "publicContentRequiresCanonicalOwner": true,
     "publicAssetsRequireManifestOwner": true,
-    "engineeringOnlyVersionBumpRequired": false
+    "engineeringOnlyVersionBumpRequired": false,
+    "ssotAtomicityEnforcedFrom": "e9e488f3780381d0244044bdc6c69d9e09b0d14a",
+    "atomicityBoundaryType": "git-ancestry",
+    "legacyPreBoundaryCommitsAreHistoricalEvidence": true,
+    "postBoundaryAtomicityBlocking": true,
+    "oldBranchNewCommitsRemainGoverned": true
   },
   "activeAssetQa": {
     "deriveFromCanonicalRuntimeMetadata": true,
@@ -141,7 +146,8 @@
     "three-equal-column accountability",
     "duration-only public project timelines",
     "PR #3 as the normal project-mutation path",
-    "historical fixed contentVersion validation"
+    "historical fixed contentVersion validation",
+    "retroactive SSOT atomicity over pre-governance history"
   ],
   "coreSystemInsight": {
     "composition": "centered-content-composition",
