@@ -4,7 +4,7 @@ on:
     branches:
       - qa/r146-r43-preview-2026-08-06
 permissions:
-  contents: read
+  contents: write
 jobs:
   cleanup:
     if: github.head_ref == 'repair/r164-payment-final'
@@ -17,38 +17,37 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
-      - name: Diagnose Manifest runtime set difference
+      - name: Remove proven non-runtime Manifest records
         shell: bash
         run: |
           set -euo pipefail
           node - <<'NODE'
           const fs=require('fs');
-          const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
-          const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
-          const placeholders=new Set([
-            'project-visual-placeholder-wide-v1',
-            'project-visual-placeholder-portrait-v1',
-            'project-visual-placeholder-square-v1',
-            'project-video-placeholder-wide-v1',
-          ]);
-          const slots=[];
-          function walk(value,projectId,location=[]){
-            if(Array.isArray(value)) return value.forEach((entry,index)=>walk(entry,projectId,[...location,index]));
-            if(!value||typeof value!=='object') return;
-            for(const [key,child] of Object.entries(value)){
-              const next=[...location,key];
-              if(['assetId','publicAssetId','beforeAssetId','shippedAssetId'].includes(key)&&typeof child==='string') slots.push({projectId,slotId:next.join('.'),assetId:child});
-              else if(key!=='sourceArchives') walk(child,projectId,next);
-            }
+          const p='public/site/content/portfolio-asset-manifest.json';
+          const m=JSON.parse(fs.readFileSync(p,'utf8'));
+          if(m.contentVersion!=='2026-08-20-r164.9') throw new Error(`Unexpected manifest version ${m.contentVersion}`);
+          const extras=[
+            'payment-outcome-checkout-speed-public-v2',
+            'payment-system-transaction-map-public-v1',
+            'payment-validation-sco-entry-public-v2',
+            'payment-validation-value-history-public-v2',
+          ];
+          for(const id of extras){
+            if(!m.items[id]) throw new Error(`Expected proven non-runtime record missing: ${id}`);
+            delete m.items[id];
           }
-          for(const [projectId,project] of Object.entries(content.projects||{})) walk(project,projectId);
-          const runtime=new Set(slots.map(x=>x.assetId));
-          const manifestIds=new Set(Object.keys(manifest.items||{}));
-          const extras=[...manifestIds].filter(id=>!runtime.has(id)&&!placeholders.has(id)).sort();
-          const missing=[...runtime].filter(id=>!manifestIds.has(id)).sort();
-          console.log('RUNTIME_UNIQUE='+runtime.size);
-          console.log('MANIFEST_ITEMS='+manifestIds.size);
-          console.log('EXTRA='+JSON.stringify(extras));
-          console.log('MISSING='+JSON.stringify(missing));
-          if(missing.length) process.exitCode=2;
+          fs.writeFileSync(p,JSON.stringify(m,null,2)+'\n');
           NODE
+          rm .github/workflows/r1649a-manifest-runtime-cleanup.yml
+          node public/site/qa/asset-governance.mjs
+          git diff --check
+      - name: Commit narrow manifest repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Portfolio R164.9 Integration'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A -- public/site/content/portfolio-asset-manifest.json .github/workflows/r1649a-manifest-runtime-cleanup.yml
+          git commit -m 'R164.9A remove proven non-runtime Payment asset records'
+          echo "REPAIR_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:repair/r164-payment-final
