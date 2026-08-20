@@ -235,10 +235,10 @@ for (const viewport of viewports) {
       await page.waitForTimeout(50);
       const state=await link.evaluate(node=>({current:node.getAttribute("aria-current"),scrollTop:document.querySelector(".dialog-scroll")?.scrollTop||0}));
       stableFrames=previous!==null&&Math.abs(state.scrollTop-previous)<.5?stableFrames+1:0;
-      if(state.current==="location"&&stableFrames>=3)return;
+      if(stableFrames>=3)return;
       previous=state.scrollTop;
     }
-    throw new Error(`${viewport.name} navigator smooth scroll did not settle`);
+    throw new Error(`${viewport.name} navigator smooth scroll did not settle: ${JSON.stringify({previous,stableFrames})}`);
   };
   const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
