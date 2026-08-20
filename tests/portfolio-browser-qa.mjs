@@ -228,29 +228,40 @@ for (const viewport of viewports) {
   if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
   if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
-  const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
+  const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null,motionObserved:false};
+  const waitForNavigatorSettlement=async link=>page.waitForFunction(node=>{
+    const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target?.querySelector("h2,h3")||target;
+    if(!root||!heading)return false;
+    const rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
+    return node.getAttribute("aria-current")==="location"&&headingRect.top>=rootRect.top&&headingRect.bottom<=rootRect.bottom;
+  },await link.elementHandle(),{timeout:3000});
   const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
-    const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
+    const root=page.locator(".dialog-scroll").first();
+    const before=await root.evaluate(node=>node.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    const intermediate=await root.evaluate(node=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(node.scrollTop)))));
+    await waitForNavigatorSettlement(link);
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
-      return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
+      return {current:node.getAttribute("aria-current"),before:null,intermediate:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight,reduced:matchMedia("(prefers-reduced-motion: reduce)").matches};
     });
-    state.before=before;collection.push({label,...state});
+    state.before=before;state.intermediate=intermediate;
+    if(!state.reduced&&Math.abs(state.after-state.before)>4&&Math.abs(state.intermediate-state.after)>1)navigatorInteractions.motionObserved=true;
+    collection.push({label,...state});
     if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
     if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
     if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
   for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
   for(const label of ["Outcomes","Evidence","Decisions","Complexity","Overview"])await certifyNavigatorClick(label,navigatorInteractions.reverseClicks);
+  if(!navigatorInteractions.motionObserved)failures.push(`${viewport.name} navigator smooth activation did not demonstrate an intermediate scroll state`);
   const outcomesLink=navigator.getByRole("link",{name:"Outcomes",exact:true});
-  await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(80);
+  await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);
   navigatorInteractions.repeated=(await outcomesLink.getAttribute("aria-current"))==="location";
   if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
   const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
-  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(80);
+  await overviewLink.focus();await overviewLink.press("Enter");await waitForNavigatorSettlement(overviewLink);
   navigatorInteractions.keyboard=(await overviewLink.getAttribute("aria-current"))==="location" && !(await page.locator("#projectOverviewSection").evaluate(node=>node===document.activeElement));
   if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
   const scrollRootForNav=page.locator(".dialog-scroll").first();
@@ -263,7 +274,7 @@ for (const viewport of viewports) {
   if(viewport.width<=430){
     const decisionsLink=navigator.getByRole("link",{name:"Decisions",exact:true});
     const box=await decisionsLink.boundingBox();
-    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(80);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
+    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await waitForNavigatorSettlement(decisionsLink);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
     if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
   }
 
