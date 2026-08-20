@@ -1167,6 +1167,7 @@
   let suppressHistorySync=false;
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
+  let pendingProjectSectionId='';
   const PROJECT_NAV_ITEMS=[
     ['overview','projectOverviewSection','Overview','概覽'],
     ['complexity','projectComplexitySection','Complexity','複雜度'],
@@ -1223,9 +1224,11 @@
     const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
     const behavior=prefersReduced.matches?'auto':'smooth';
     history.replaceState(history.state,'',`#${target.id}`);
+    pendingProjectSectionId=behavior==='smooth'?target.id:'';
     dialogScrollRoot.scrollTo({left:0,top:destination,behavior});
     visibleProjectSectionId=target.id;
     setActiveProjectSection(target.id);
+    if(behavior==='auto')updateProjectSectionLocation();
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
@@ -1238,7 +1241,7 @@
     const atScrollEnd=dialogScrollRoot.scrollTop+dialogScrollRoot.clientHeight>=dialogScrollRoot.scrollHeight-2;
     if(atScrollEnd&&visible.length)current=visible[visible.length-1];
     visibleProjectSectionId=current?.id||'';
-    setActiveProjectSection(visibleProjectSectionId);
+    setActiveProjectSection(pendingProjectSectionId||visibleProjectSectionId);
   }
   function renderProjectSectionNav(){
     if(!projectSectionNav||!projectSectionNavLinks)return;
@@ -1281,6 +1284,10 @@
   });
   dialogScrollRoot?.addEventListener('scroll',()=>{
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
+    updateProjectSectionLocation();
+  },{passive:true});
+  dialogScrollRoot?.addEventListener('scrollend',()=>{
+    pendingProjectSectionId='';
     updateProjectSectionLocation();
   },{passive:true});
 
