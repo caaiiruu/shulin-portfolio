@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-20-v2.5
+version: 2026-08-20-v2.6
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -720,6 +720,19 @@ Hard rules:
 - Engineering-only governance changes do not require a fake Content version bump.
 - Deterministic generation must return the public runtime to the canonical owners; direct generated-runtime edits are not a substitute for Content SSOT ownership.
 
+## SSOT atomicity activation boundary
+
+Same-commit Content / Asset Manifest atomicity is prospective from the canonical Git activation boundary stored in `registry.json` as `ssotGovernance.ssotAtomicityEnforcedFrom`.
+
+Rules:
+- the boundary is a full Git commit SHA and must be interpreted through Git ancestry only
+- legacy commits genuinely before that boundary remain historical evidence and are not retroactively reclassified as present-day SSOT-05/06 violations
+- every governed commit at or after the boundary remains blocking under SSOT-05/06
+- normal QA-targeted PRs validate their merge-base-to-head introduced commit range
+- QA post-merge validation must not replay unrelated pre-governance history merely because another comparison branch is old
+- a branch created from pre-activation history cannot bypass atomicity: when it targets governed canonical history, its newly introduced commits are still enforced
+- no SHA ignore list, date threshold, commit-message matching, output truncation, `continue-on-error`, or blanket historical exemption may replace ancestry-aware selection
+
 Active-asset QA:
 - `real-active` ProjectCards/public visuals derive semantic expectations from current canonical asset/runtime metadata
 - placeholder/fallback assertions may only run when runtime state is actually placeholder/fallback
@@ -748,6 +761,7 @@ The following are retired unless explicitly reopened:
 - PR #3 as the normal project implementation target
 - stacked repair PRs as the normal project workflow
 - historical fixed Content revision validation
+- retroactive SSOT atomicity over pre-governance repository history
 
 ## Public timeline presentation
 
