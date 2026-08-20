@@ -996,7 +996,8 @@
       ],
       "privacyTreatment": "Human-approved source photographs; image-only crop contains no editorial overlay.",
       "sectionUsage": "evidence-live-checkout",
-      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
+      "humanApprovalStatus": "pending-re-review"
     },
     "payment-return-recovery-human-r1649d": {
       "id": "payment-return-recovery-human-r1649d",
@@ -1020,7 +1021,8 @@
       ],
       "privacyTreatment": "Human-provided portfolio-ready composition using approved synthetic replacement transaction data; composition unchanged.",
       "sectionUsage": "evidence-return-recovery",
-      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
+      "humanApprovalStatus": "pending-re-review"
     }
   },
   "frameSystemContract": {
