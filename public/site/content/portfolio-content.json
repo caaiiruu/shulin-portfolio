@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-20-r164.9d",
+  "contentVersion": "2026-08-20-r164.9e",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -14967,7 +14967,17 @@
                 "en": "3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.",
                 "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
               },
-              "presentation": "raw"
+              "presentation": "raw",
+              "finding": {
+                "title": {
+                  "en": "Checkout assurance",
+                  "zh": "結帳安心感"
+                },
+                "copy": {
+                  "en": "87.5% of participants showed assurance, social-pressure or time-sensitivity needs during digital checkout, reinforcing the need for a shorter, clearer handoff.",
+                  "zh": "87.5% 的參與者在數位結帳中呈現安心感、社交壓力或時間敏感需求，強化了更短、更清楚交接的必要性。"
+                }
+              }
             },
             {
               "assetId": "payment-evidence-journey-synthesis-r1649c",
@@ -14979,29 +14989,27 @@
                 "en": "Mapped queue, preparation, checkout and post-checkout as one journey, exposing where speed, loyalty clarity, payment assurance and recovery broke across the transaction.",
                 "zh": "將排隊、準備、結帳與結帳後映射成一段旅程，揭示速度、會員價值清晰度、付款安心感與復原在交易中的斷點。"
               },
-              "presentation": "raw"
+              "presentation": "raw",
+              "finding": {
+                "title": {
+                  "en": "Transaction-history retrieval",
+                  "zh": "交易紀錄查找"
+                },
+                "copy": {
+                  "en": "85.7% preferred the clearer separated history structure, supporting faster retrieval of payment records after checkout.",
+                  "zh": "85.7% 偏好更清楚分隔的紀錄結構，支持在結帳後更快查找付款紀錄。"
+                }
+              }
             },
             {
-              "assetId": "payment-evidence-sco-entry-public-v2",
+              "assetId": "payment-evidence-sco-entry-research-r1649e",
               "title": {
                 "en": "SCO entry recognition validation",
                 "zh": "SCO 入口辨識驗證"
               },
               "copy": {
-                "en": "6 structured + 7 guerrilla SCO participants. Validated clearer entry recognition and QR action language.",
-                "zh": "6 位結構化＋7 位游擊 SCO 參與者。驗證更清楚的入口辨識與 QR 行動語言。"
-              },
-              "presentation": "raw"
-            },
-            {
-              "assetId": "payment-return-recovery-human-r1649d",
-              "title": {
-                "en": "Return recovery in the shipped flow",
-                "zh": "已上線流程中的退貨復原"
-              },
-              "copy": {
-                "en": "Returns moved from a separate support path into the payment record, giving shoppers a direct starting point for recovery after payment.",
-                "zh": "退貨由分離的支援路徑移入付款紀錄，讓購物者能在付款後直接開始復原。"
+                "en": "6 structured + 7 guerrilla participants tested the SCO entry point and QR handoff, validating clearer entry recognition and action language.",
+                "zh": "6 位結構化＋7 位游擊參與者測試 SCO 入口與 QR 交接，驗證更清楚的入口辨識與行動語言。"
               },
               "presentation": "raw"
             }
@@ -15028,41 +15036,7 @@
               }
             }
           ],
-          "validationLayer": {
-            "title": {
-              "en": "Focused validation",
-              "zh": "聚焦驗證"
-            },
-            "intro": {
-              "en": "Two distinct validation signals clarified checkout assurance and transaction-history retrieval.",
-              "zh": "兩個不同驗證訊號釐清結帳安心感與交易紀錄查找。"
-            },
-            "metrics": [
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "showed assurance, social-pressure or time-sensitivity needs during digital checkout",
-                  "zh": "在數位結帳中呈現安心感、社交壓力或時間敏感需求"
-                },
-                "supportingCopy": {
-                  "en": "Supported a shorter checkout handoff with clearer recovery options.",
-                  "zh": "支持更短的結帳交接與更清楚的復原選項。"
-                }
-              },
-              {
-                "value": "85.7%",
-                "label": {
-                  "en": "preferred a clearly separated transaction-history structure",
-                  "zh": "偏好清楚分隔的交易紀錄結構"
-                },
-                "supportingCopy": {
-                  "en": "Supported separating payment records from other activity for faster retrieval.",
-                  "zh": "支持將付款紀錄與其他活動分開，以便更快查找。"
-                }
-              }
-            ]
-          },
-          "contentStatus": "approved-r164.9d"
+          "contentStatus": "human-corrected-r164.9e"
         },
         "outcomes": {
           "title": {
@@ -15084,8 +15058,7 @@
                 "supportingCopy": {
                   "en": "from 1,798 responses",
                   "zh": "來自 1,798 份回覆"
-                },
-                "featured": true
+                }
               },
               {
                 "value": "~190",
@@ -15599,8 +15572,8 @@
               "zh": "我對成果負責"
             },
             "title": {
-              "en": "Defined the transaction model behind FairPrice’s 0→1 in-store payment capability",
-              "zh": "定義 FairPrice 0→1 門市付款能力背後的交易模型"
+              "en": "Defined FairPrice’s 0→1 in-store payment model",
+              "zh": "定義 FairPrice 的 0→1 門市付款模型"
             },
             "text": {
               "en": "As the only dedicated product designer on the core team, I led product framing, field research, transaction architecture, interaction design and validation across App, cashier and self-checkout contexts.",
@@ -15613,8 +15586,8 @@
               "zh": "共同決策"
             },
             "title": {
-              "en": "Turned payment, retail and operational constraints into one buildable direction",
-              "zh": "將付款、零售與營運限制轉化為一個可實作方向"
+              "en": "Turned payment, retail and operational constraints into a buildable direction",
+              "zh": "將付款、零售與營運限制轉化為可實作方向"
             },
             "text": {
               "en": "I connected customer behaviour, POS dependencies, benefit logic, recovery needs and frontline constraints into product decisions the team could implement consistently.",
@@ -15921,12 +15894,7 @@
         "my-accountability",
         "related-work"
       ],
-      "latestConfirmedCorrection": {
-        "round": "R164.9",
-        "date": "2026-08-20",
-        "summary": "Integrated Human-approved transaction-compression proof, focused validation, verified real recovery UI, outcome hierarchy and team recognition from stabilized QA.",
-        "productionMutable": false
-      },
+      "latestConfirmedCorrection": "r164.9e-human-blocking-repair",
       "domain": {
         "en": "Retail payments",
         "zh": "零售支付"
@@ -16095,7 +16063,8 @@
           "decisions": "decisionNarrative.primaryDecisions",
           "evidence": "publicContent.decisionEvidence",
           "outcomes": "publicContent.outcomes",
-          "accountability": "ownershipModel"
+          "accountability": "ownershipModel",
+          "contributionIntervention": "keyInterventionMap"
         },
         "navigation": [
           {

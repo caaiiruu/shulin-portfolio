@@ -1157,6 +1157,7 @@
   const projectSectionNavToggle=doc.getElementById('projectSectionNavToggle');
   const projectSectionNavLinks=doc.getElementById('projectSectionNavLinks');
   function syncProjectFloatingPrimitive(){
+    if(projectSectionNav)projectSectionNav.dataset.componentOwner='SectionNavigator';
     projectSectionNav?.classList.add('floating-navigator');
     projectSectionNavLinks?.classList.add('floating-navigator__rail');
     projectSectionNavLinks?.querySelectorAll('a').forEach(link=>link.classList.add('floating-navigator__item'));
@@ -1220,8 +1221,9 @@
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
     const targetTop=target.getBoundingClientRect().top;
     const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
-    alignProjectSectionTarget(target);
+    const behavior=prefersReduced.matches?'auto':'smooth';
+    history.replaceState(history.state,'',`#${target.id}`);
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior});
     visibleProjectSectionId=target.id;
     setActiveProjectSection(target.id);
   }
@@ -2711,7 +2713,9 @@
     return text.toLowerCase().replace(/(^|[\s/–—-])([a-z])/g,(_,prefix,letter)=>prefix+letter.toUpperCase());
   }
     function projectContentRef(project,path){
-    return String(path||'').split('.').filter(Boolean).reduce((value,key)=>value?.[key],project);
+    const keys=String(path||'').split('.').filter(Boolean);
+    if(!keys.length)return undefined;
+    return keys.reduce((value,key)=>value?.[key],project);
   }
   function appendAccountabilityList(article,label,items){
     article.append(element('span','voucher-r149-eyebrow',label));
@@ -2743,7 +2747,15 @@
       const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(item.presentation==='raw')card.classList.add('voucher-r149-foundation--raw');
       if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
       media.append(image);card.append(media);
-      if(item.showCaption!==false){caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));card.append(caption)}
+      if(item.showCaption!==false){
+        caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
+        if(item.finding){
+          const finding=element('aside','voucher-r149-foundation__finding');
+          finding.append(element('h4','',translate(item.finding.title)),element('p','',translate(item.finding.copy)));
+          caption.append(finding);
+        }
+        card.append(caption);
+      }
       grid.append(card);
     });
     section.append(grid);return grid;
@@ -2754,8 +2766,9 @@
       if(metric){
         const primary=element('div','outcome-metric__primary');
         const labelCopy=translate(item.label),supportingCopy=translate(item.supportingCopy),fallbackCopy=translate(item.primaryCopy)||labelCopy;
-        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote)||labelCopy,lang==='zh'?'查看成果證據':'View outcome evidence');
-        appendInlineEndTooltip(label,supportingCopy?labelCopy:fallbackCopy,tip);primary.append(label);if(supportingCopy)primary.append(element('p','outcome-metric__supporting',supportingCopy));
+        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote),lang==='zh'?'查看成果證據':'View outcome evidence');
+        if(tip)appendInlineEndTooltip(label,supportingCopy?labelCopy:fallbackCopy,tip);else safeText(label,supportingCopy?labelCopy:fallbackCopy);
+        primary.append(label);if(supportingCopy)primary.append(element('p','outcome-metric__supporting',supportingCopy));
         card.append(directionalValue(item.value,'outcome-metric__value'),primary);
       }else card.append(element('h3','outcome-metric__heading',translate(item.heading)),element('p','outcome-metric__copy',translate(item.copy)));
       grid.append(card);

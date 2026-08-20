@@ -330,7 +330,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-20-r164.9d");
+  assert.equal(ssot.contentVersion, "2026-08-20-r164.9e");
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -1463,7 +1463,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-20-r164.9d");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-20-r164.9e");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
 
 test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
 
@@ -1855,4 +1855,31 @@ test("R164.9D applies Human Payment QA corrections through shared owners", () =>
   assert.match(cardCss, /outer owns hover\/border; media owns clipping/);
   assert.equal(payment.publicContent.decisionEvidence.items.length, 4);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.attribution, undefined);
+});
+
+test("R164.9E separates Engineering PASS from Human visual acceptance",()=>{
+  const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
+  const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const p=data.projects.payment,e=p.publicContent.decisionEvidence,o=p.publicContent.outcomes.semanticHierarchy;
+  assert.equal(data.contentVersion,"2026-08-20-r164.9e");
+  assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(p.presentation.contentRefs.contributionIntervention,"keyInterventionMap");
+  assert.ok(["before","intervention","after"].every(key=>p.keyInterventionMap[key].en));
+  assert.equal(e.items.some(item=>item.assetId==="payment-return-recovery-human-r1649d"),false);
+  assert.equal(e.items.filter(item=>item.assetId==="payment-evidence-sco-entry-research-r1649e").length,1);
+  assert.equal("validationLayer" in e,false);
+  assert.equal(JSON.stringify(e).match(/87\.5%/g)?.length,1);
+  assert.equal(JSON.stringify(e).match(/85\.7%/g)?.length,1);
+  assert.equal(o.measured.length,6);
+  assert.equal(o.measured.some(item=>item.evidenceNote),false);
+  assert.match(app,/if\(!keys\.length\)return undefined/);
+  assert.match(app,/prefersReduced\.matches\?'auto':'smooth'/);
+  assert.match(app,/history\.replaceState\(history\.state,'',`#\$\{target\.id\}`\)/);
+  assert.doesNotMatch(app,/dialogScrollRoot\.scrollTo\(\{left:0,top:destination,behavior:'auto'\}\)/);
+  assert.match(css,/\.core-system-insight-section__statement\{[^}]*margin-inline:auto;[^}]*text-align:center/);
+  assert.match(css,/\.voucher-r149-foundation__media\{[^}]*border-radius:var\(--evidence-visual-radius\)/);
+  assert.match(css,/\.outcome-semantic-group__grid--aligned\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:871px\)\{\.outcome-semantic-group__grid--aligned\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)\}\}/);
+  assert.match(css,/@media\(max-width:430px\)\{\.outcome-semantic-group__grid--aligned\{grid-template-columns:1fr\}\}/);
+  assert.doesNotMatch(css,/\.outcome-metric--featured\{grid-column:span 2/);
 });
