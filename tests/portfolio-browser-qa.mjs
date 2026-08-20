@@ -302,10 +302,10 @@ for (const viewport of viewports) {
   await page.locator("#systemCaseOutcomesSection .outcome-metric").nth(5).screenshot({path:path.join(r1649fDirectory,"payment-speed-metric.png")});
   await page.locator(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media").screenshot({path:path.join(r1649fDirectory,"payment-checkout-compression.png")});
   await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"payment-floating-navigator.png")});
-  for(const [projectName,route] of [["Voucher","/site/work/voucher"],["DBS","/site/work/dbs"],["Booking","/site/work/booking"],["CTBC","/site/work/ctbc-mortgage-self-service-app"]]){
+  if(viewport.name==="desktop-1419")for(const [projectName,route] of [["Voucher","/site/work/voucher"],["DBS","/site/work/dbs"],["Booking","/site/work/booking"],["CTBC","/site/work/ctbc-mortgage-self-service-app"]]){
     await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});const labels=await page.locator("#projectSectionNav a").allTextContents();
     if(labels.includes("Impact")||!labels.includes("Outcomes"))failures.push(`${viewport.name} ${projectName} navigator did not normalize Outcomes: ${JSON.stringify(labels)}`);
-    if(viewport.name==="desktop-1419"&&projectName==="Voucher"){await page.locator("#voucherImpactSection").screenshot({path:path.join(r1649fDirectory,"voucher-approved-outcomes-reference.png")});await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"voucher-outcomes-navigator.png")});}
+    if(projectName==="Voucher"){await page.locator("#voucherImpactSection").screenshot({path:path.join(r1649fDirectory,"voucher-approved-outcomes-reference.png")});await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"voucher-outcomes-navigator.png")});}
   }
 
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
