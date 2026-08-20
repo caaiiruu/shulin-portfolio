@@ -304,7 +304,8 @@
         "Supporting Evidence",
         "System / Journey Diagram",
         "Before / After Evidence",
-        "Informational Media"
+        "Informational Media",
+        "Research Leadership Synthesis"
       ],
       "interactionContract": [
         "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
@@ -355,7 +356,8 @@
         "Caption is HTML aligned to the image edge with the canonical 8px caption gap",
         "Placeholder and production sources use the same frame component and role identity",
         "Informational diagrams and UI composites use the shared intrinsic media variant: source aspect ratio, full edge content, semantic evidence radius, contain behavior, and no crop-safe photo treatment.",
-        "OutcomeMetric uses one header composition for title and post-launch framing, followed by the shared metric grid with deterministic 3×2, 2×3 and 1×6 layouts."
+        "OutcomeMetric uses one header composition for title and post-launch framing, followed by the shared metric grid with deterministic 3×2, 2×3 and 1×6 layouts.",
+        "Research Leadership Synthesis is a StructuredEvidence variant that renders one ownership statement, a prioritised 2×2 insight grid, genuine source synthesis media, and a separate three-part strategy translation; responsive layouts preserve semantic order and never duplicate the same research metric in standalone validation."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {

@@ -2771,6 +2771,41 @@
     });
     section.append(grid);return grid;
   }
+  function appendResearchSynthesis(section,source,{translate=localize}={}){
+    if(!source)return null;
+    const block=element('section','structured-evidence-research-synthesis');
+    block.dataset.componentOwner='StructuredEvidence';
+    const heading=element('header','structured-evidence-research-synthesis__header');
+    heading.append(element('h3','',translate(source.title)),element('p','',translate(source.intro)));
+    block.append(heading);
+    const insights=element('div','structured-evidence-research-synthesis__insights');
+    list(source.insights).forEach(item=>{
+      const card=element('article','structured-evidence-research-synthesis__insight');
+      card.append(element('h4','',translate(item.heading)),element('p','structured-evidence-research-synthesis__summary',translate(item.summary)));
+      const details=element('ul','structured-evidence-research-synthesis__details');
+      list(item.details).forEach(detail=>details.append(element('li','',translate(detail))));
+      if(details.childElementCount)card.append(details);
+      const implication=element('div','structured-evidence-research-synthesis__implication');
+      implication.append(element('span','voucher-r149-eyebrow',translate(source.implicationLabel)),element('p','',translate(item.implication)));
+      card.append(implication);insights.append(card);
+    });
+    block.append(insights);
+    if(list(source.visual).length){
+      const proof=element('div','structured-evidence-research-synthesis__proof');
+      proof.append(element('span','voucher-r149-eyebrow',translate(source.visualLabel)));
+      appendVisualEvidenceModules(proof,source.visual,{translate});
+      block.append(proof);
+    }
+    const strategy=element('section','structured-evidence-research-synthesis__strategy');
+    strategy.append(element('h3','voucher-r149-eyebrow',translate(source.strategyLabel)));
+    const strategyGrid=element('div','structured-evidence-research-synthesis__strategy-grid');
+    list(source.strategies).forEach(item=>{
+      const card=element('article','structured-evidence-research-synthesis__strategy-card');
+      card.append(element('span','structured-evidence-research-synthesis__strategy-index',item.index),element('h4','',translate(item.title)),element('p','',translate(item.copy)));
+      strategyGrid.append(card);
+    });
+    strategy.append(strategyGrid);block.append(strategy);section.append(block);return block;
+  }
   function appendOutcomeCards(grid,items,{metric=false,translate=localize}={}){
     list(items).forEach(item=>{
       const metricClasses=metric?`outcome-metric${item?.featured?' outcome-metric--featured':''}`:'outcome-metric outcome-metric--qualitative';const card=element('article',metricClasses);
@@ -2915,6 +2950,7 @@
       ?createRecruiterSection('',t(evidenceSource.title)):null;
     if(evidence){
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
+      if(evidenceSource.researchSynthesis)appendResearchSynthesis(evidence,evidenceSource.researchSynthesis,{translate:t});
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
       if(list(evidenceSource.quotes).length){const voices=element('div','structured-evidence-quotes');voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});evidence.append(voices)}
       if(evidenceSource.validationLayer){const validation=element('section','structured-evidence-v223__validation');validation.dataset.componentOwner='StructuredEvidence';validation.append(element('h3','structured-evidence-v223__validation-title',t(evidenceSource.validationLayer.title)));if(t(evidenceSource.validationLayer.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(evidenceSource.validationLayer.intro)));const grid=element('div','structured-evidence-v223__validation-metrics');list(evidenceSource.validationLayer.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),evidenceNote=t(item.evidenceNote);if(evidenceNote){const tip=createInfoTooltip(evidenceNote,lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(item.label),tip)}else safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid);evidence.append(validation)}

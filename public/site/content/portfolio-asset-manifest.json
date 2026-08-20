@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-20-r164.9f",
+  "contentVersion": "2026-08-20-r164.9g",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -1051,6 +1051,32 @@
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
       "humanApprovalStatus": "pending-re-review",
       "id": "payment-evidence-sco-entry-research-r1649e"
+    },
+    "payment-research-design-opportunities-r1649g": {
+      "id": "payment-research-design-opportunities-r1649g",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-research-design-opportunities-r1649g.webp",
+      "aspectRatio": "2439:1500",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "9d4dd395fe7e01a6fa5c1a9948117375ae42e0c3ca94ff63c59fec1679cb5382",
+      "blobSha": "4d1bfafa14e70e5bfd48a1bd48e0f35312d1cd95",
+      "width": 2439,
+      "height": 1500,
+      "alt": "Research synthesis slide mapping assurance, ease of use, focused payment completion and rewards awareness to design opportunities.",
+      "alt_zh": "研究綜整投影片，將安心感、易用性、聚焦付款完成與回饋認知映射至設計機會。",
+      "sourcePackage": "Human-provided Research Findings for Digital Checkout_Jan 2021(3).pdf",
+      "sourceFiles": [
+        "Research Findings for Digital Checkout_Jan 2021(3).pdf#page=58"
+      ],
+      "privacyTreatment": "Exact source slide rendered as a public derivative; no participant PII or editorial overlays.",
+      "sectionUsage": "evidence-research-leadership-synthesis",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence.researchSynthesis.visual",
+      "humanApprovalStatus": "human-approved-source"
     }
   },
   "frameSystemContract": {

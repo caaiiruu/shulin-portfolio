@@ -297,11 +297,44 @@ for (const viewport of viewports) {
   if(paymentOutcome.columns!==expectedColumns||paymentOutcome.tooltips!==0||paymentOutcome.overflow>0)failures.push(`${viewport.name} Payment Outcome shared layout failed: ${JSON.stringify(paymentOutcome)}`);
   if(!paymentOutcome.image.complete||paymentOutcome.image.naturalWidth!==2400||paymentOutcome.image.naturalHeight!==1500||Math.abs(paymentOutcome.image.wrapperRatio-1.6)>.01||Math.abs(paymentOutcome.image.imageRatio-1.6)>.01||paymentOutcome.image.topDelta>1||paymentOutcome.image.bottomDelta>1||paymentOutcome.image.objectFit!=="contain"||paymentOutcome.image.radius==="0px")failures.push(`${viewport.name} Payment checkout informational media clipped: ${JSON.stringify(paymentOutcome.image)}`);
   if(paymentOutcome.nav.includes("Impact")||!paymentOutcome.nav.includes("Outcomes"))failures.push(`${viewport.name} Payment navigator naming mismatch: ${JSON.stringify(paymentOutcome.nav)}`);
+  if(["desktop-1419","tablet-871","mobile-430"].includes(viewport.name)){
+    const research=await page.evaluate(async()=>{
+      const section=document.querySelector("#systemCaseEvidenceSection"),block=section?.querySelector(".structured-evidence-research-synthesis"),insights=[...block.querySelectorAll(".structured-evidence-research-synthesis__insight")],strategies=[...block.querySelectorAll(".structured-evidence-research-synthesis__strategy-card")],image=block.querySelector(".structured-evidence-research-synthesis__proof img");
+      if(image&&!image.complete)await new Promise(resolve=>{image.addEventListener("load",resolve,{once:true});image.addEventListener("error",resolve,{once:true})});
+      const text=section?.innerText||"",columns=node=>node?getComputedStyle(node).gridTemplateColumns.trim().split(/\\s+/).length:0;
+      return{intro:block?.querySelector(".structured-evidence-research-synthesis__header p")?.textContent.trim(),headings:insights.map(card=>card.querySelector("h4")?.textContent.trim()),summaries:insights.map(card=>card.querySelector(".structured-evidence-research-synthesis__summary")?.textContent.trim()),implications:insights.map(card=>card.querySelector(".structured-evidence-research-synthesis__implication p")?.textContent.trim()),strategyTitles:strategies.map(card=>card.querySelector("h4")?.textContent.trim()),insightColumns:columns(block?.querySelector(".structured-evidence-research-synthesis__insights")),strategyColumns:columns(block?.querySelector(".structured-evidence-research-synthesis__strategy-grid")),assuranceCount:(text.match(/87\\.5%/g)||[]).length,scoCount:(text.match(/6 structured \\+ 7 guerrilla/g)||[]).length,focusedValidation:text.includes("Focused validation"),source:{complete:image?.complete,naturalWidth:image?.naturalWidth,naturalHeight:image?.naturalHeight,src:image?.currentSrc},overflow:(section?.scrollWidth||0)-(section?.clientWidth||0)};
+    });
+    const expectedInsightColumns=viewport.width===430?1:2,expectedStrategyColumns=viewport.width===1419?3:1;
+    if(research.intro!=="I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.")failures.push(`${viewport.name} Payment research leadership intro mismatch`);
+    if(JSON.stringify(research.headings)!==JSON.stringify(["87.5% — Assurance","87.5% — Social pressure","87.5% — Time is money","75% — Loyalty value awareness"]))failures.push(`${viewport.name} Payment research priorities mismatch: ${JSON.stringify(research.headings)}`);
+    if(JSON.stringify(research.strategyTitles)!==JSON.stringify(["Visible assurance and recovery","A shorter checkout handoff","Visible loyalty value at payment"]))failures.push(`${viewport.name} Payment research strategy synthesis mismatch: ${JSON.stringify(research.strategyTitles)}`);
+    if(research.summaries.some(value=>!value)||research.implications.some(value=>!value)||research.insightColumns!==expectedInsightColumns||research.strategyColumns!==expectedStrategyColumns||research.assuranceCount!==3||research.scoCount!==1||research.focusedValidation||research.overflow>0)failures.push(`${viewport.name} Payment research synthesis layout/deduplication failed: ${JSON.stringify(research)}`);
+    if(!research.source.complete||research.source.naturalWidth!==2439||research.source.naturalHeight!==1500||!research.source.src.includes("payment-research-design-opportunities-r1649g.webp"))failures.push(`${viewport.name} Payment research source proof failed: ${JSON.stringify(research.source)}`);
+  }
   const r1649fDirectory=path.join(directory,"r1649f");fs.mkdirSync(r1649fDirectory,{recursive:true});
   await page.locator("#systemCaseOutcomesSection").screenshot({path:path.join(r1649fDirectory,"payment-outcomes.png")});
   await page.locator("#systemCaseOutcomesSection .outcome-metric").nth(5).screenshot({path:path.join(r1649fDirectory,"payment-speed-metric.png")});
   await page.locator(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media").screenshot({path:path.join(r1649fDirectory,"payment-checkout-compression.png")});
   await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"payment-floating-navigator.png")});
+  if(["desktop-1419","tablet-871","mobile-430"].includes(viewport.name)){
+    const r1649gDirectory=path.join(directory,"r1649g");fs.mkdirSync(r1649gDirectory,{recursive:true});
+    await page.locator(".structured-evidence-research-synthesis__header").screenshot({path:path.join(r1649gDirectory,"research-introduction.png")});
+    await page.locator(".structured-evidence-research-synthesis__insights").screenshot({path:path.join(r1649gDirectory,"research-four-insights.png")});
+    await page.locator(".structured-evidence-research-synthesis__strategy").screenshot({path:path.join(r1649gDirectory,"research-strategy-synthesis.png")});
+    const evidenceItems=page.locator("#systemCaseEvidenceSection>.voucher-r149-foundations>.voucher-r149-foundation");
+    await evidenceItems.nth(0).screenshot({path:path.join(r1649gDirectory,"evidence-live-checkout.png")});
+    await evidenceItems.nth(1).screenshot({path:path.join(r1649gDirectory,"evidence-sco-validation.png")});
+    await evidenceItems.nth(2).screenshot({path:path.join(r1649gDirectory,"evidence-journey-synthesis.png")});
+    const evidenceLink=page.locator('#projectSectionNav a[href="#systemCaseEvidenceSection"]'),outcomesLink=page.locator('#projectSectionNav a[href="#systemCaseOutcomesSection"]');
+    await evidenceLink.click();await waitForNavigatorSettlement(evidenceLink);
+    if((await evidenceLink.getAttribute("aria-current"))!=="location"||!page.url().endsWith("#systemCaseEvidenceSection"))failures.push(`${viewport.name} Payment Evidence navigator settlement failed after research media load`);
+    await page.locator("#projectSectionNav").screenshot({path:path.join(r1649gDirectory,"navigator-evidence-active.png")});
+    await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);
+    if((await outcomesLink.getAttribute("aria-current"))!=="location"||!page.url().endsWith("#systemCaseOutcomesSection"))failures.push(`${viewport.name} Payment Evidence to Outcomes navigator settlement failed`);
+    await page.locator("#systemCaseOutcomesSection").evaluate(element=>{const root=element.closest(".dialog-scroll"),top=element.offsetTop-(root?.clientHeight||0)*.55;if(root)root.scrollTop=Math.max(0,top)});
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    await page.locator(".dialog-scroll").screenshot({path:path.join(r1649gDirectory,"evidence-outcomes-transition.png")});
+  }
   if(viewport.name==="desktop-1419")for(const [projectName,route] of [["Voucher","/site/work/voucher"],["DBS","/site/work/dbs"],["Booking","/site/work/booking"],["CTBC","/site/work/ctbc-mortgage-self-service-app"]]){
     await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});const labels=await page.locator("#projectSectionNav a").allTextContents();
     if(labels.includes("Impact")||!labels.includes("Outcomes"))failures.push(`${viewport.name} ${projectName} navigator did not normalize Outcomes: ${JSON.stringify(labels)}`);
