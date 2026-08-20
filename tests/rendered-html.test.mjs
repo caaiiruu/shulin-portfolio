@@ -1676,7 +1676,7 @@ test("shared Outcomes supports change, measured outcome, and scale semantics", (
   assert.match(app, /source\?\.change/);
   assert.match(app, /source\?\.measured/);
   assert.match(app, /source\?\.scale/);
-  assert.match(app, /if\(outcomesSource\?\.semanticHierarchy\)appendOutcomeSemanticHierarchy/);
+  assert.match(app, /if\(outcomesHierarchy\)appendOutcomeSemanticHierarchy\(outcomes,outcomesHierarchy/);
   assert.doesNotMatch(app, /booking.*semanticHierarchy|semanticHierarchy.*booking/i);
   assert.match(overview, /\.outcome-semantic-change\{/);
   assert.match(overview, /\.outcome-scale-grid\{/);
