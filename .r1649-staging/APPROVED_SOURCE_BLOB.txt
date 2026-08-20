@@ -1,1 +1,0 @@
-payment-core-checkout-compression-approved-v3.png uses verified repository blob 77f9c60eec2ca3839bbd7c6773eff7b4cbf42353 and source SHA-256 f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72.
