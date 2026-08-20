@@ -17507,8 +17507,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led research synthesis and operating-model definition for an internal review and remediation workflow, turning fragmented operational knowledge into a traceable five-phase baseline and prioritised optimisation recommendations.",
-        "zh": "主導內部審件與補件流程的研究統整與營運模型定義，將分散的營運知識轉化為可追溯的五階段基準與完成優先排序的優化建議。"
+        "en": "Led the remediation operating-model investigation and prioritisation, turning fragmented review knowledge into a verifiable workflow and phased optimisation direction.",
+        "zh": "主導補件營運模型調查與優先排序，將分散的審件知識轉化為可驗證的流程與分階段優化方向。"
       },
       "infoGrid": {
         "type": {
@@ -17520,8 +17520,8 @@
           }
         },
         "scope": {
-          "en": "End-to-end internal review and remediation operations",
-          "zh": "端到端內部審件與補件營運"
+          "en": "End-to-end review remediation operating model",
+          "zh": "端到端審件補件營運模型"
         },
         "audience": {
           "primary": {
@@ -18196,76 +18196,45 @@
             "en": "Outcomes",
             "zh": "成果"
           },
-          "semanticHierarchy": {
-            "change": {
-              "label": {
-                "en": "DELIVERED OPERATING-MODEL CHANGE",
-                "zh": "已交付的營運模型改變"
+          "headline": {
+            "en": "Established a shared basis for improving review remediation without overstating implementation.",
+            "zh": "建立改善審件補件的共同基礎，同時不誇大實作狀態。"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A shared operating model",
+                "zh": "共享的營運模型"
               },
-              "statement": {
-                "en": "The engagement established a shared operating baseline and prioritised remediation direction; post-launch implementation metrics were outside the consulting scope.",
-                "zh": "本次合作建立共享營運基準與完成優先排序的補件方向；上線後實作數據不在顧問合作範圍內。"
+              "copy": {
+                "en": "Established a reviewable end-to-end representation of the remediation workflow and its handoffs.",
+                "zh": "建立可供檢視的端到端補件流程與交接模型。"
               }
             },
-            "measuredLabel": {
-              "en": "Delivery scale",
-              "zh": "交付規模"
-            },
-            "measured": [
-              {
-                "value": "80%+",
-                "label": {
-                  "en": "routine case-flow coverage",
-                  "zh": "日常案件流程涵蓋"
-                },
-                "supportingCopy": {
-                  "en": "represented in the reconstructed interview flows",
-                  "zh": "呈現在訪談重建的流程中"
-                },
-                "evidenceNote": {
-                  "en": "Coverage evidence, not a performance metric or independently measured production volume.",
-                  "zh": "這是涵蓋證據，不是績效指標或獨立量測的正式案件量。"
-                }
+            {
+              "heading": {
+                "en": "Defensible prioritisation",
+                "zh": "可辯護的優先排序"
               },
-              {
-                "value": "5 phases",
-                "label": {
-                  "en": "shared operating baseline",
-                  "zh": "共享營運基準"
-                },
-                "supportingCopy": {
-                  "en": "covering review, risk, remediation and re-review",
-                  "zh": "涵蓋審件、風險、補件與再審核"
-                }
-              },
-              {
-                "value": "1",
-                "label": {
-                  "en": "benefit × feasibility priority model",
-                  "zh": "效益 × 可行性優先模型"
-                },
-                "supportingCopy": {
-                  "en": "separated value from implementation difficulty",
-                  "zh": "將價值與實作難度分開"
-                }
-              },
-              {
-                "value": "3",
-                "label": {
-                  "en": "planning horizons",
-                  "zh": "規劃階段"
-                },
-                "supportingCopy": {
-                  "en": "near · mid · long-term recommendations",
-                  "zh": "近程・中程・長期建議"
-                }
+              "copy": {
+                "en": "Created a clearer basis for comparing remediation opportunities by benefit and feasibility.",
+                "zh": "建立更清楚的基礎，依效益與可行性比較補件改善機會。"
               }
-            ],
-            "supportingStatements": [],
-            "closingStatement": {
-              "en": "Post-launch metrics were not available within the consulting engagement; outcomes are reported through validated decisions and delivered operating-model change.",
-              "zh": "受顧問合作範圍限制，無法取得上線後數據；成果以已驗證決策與已交付的營運模型改變呈現。"
+            },
+            {
+              "heading": {
+                "en": "Phased product direction",
+                "zh": "分階段產品方向"
+              },
+              "copy": {
+                "en": "Translated research findings into sequenced optimisation recommendations rather than one undifferentiated digitisation scope.",
+                "zh": "將研究發現轉化為有順序的優化建議，而非單一、未分化的數位化範圍。"
+              }
             }
+          ],
+          "closing": {
+            "en": "These are delivered definition and recommendation outcomes; implementation, adoption and post-launch metrics remained outside the engagement.",
+            "zh": "以上為已交付的定義與建議成果；實作、採用與上線後數據不在本次合作範圍內。"
           },
           "evidence": [],
           "contentStatus": "approved-r165.1"
@@ -18719,12 +18688,12 @@
               "zh": "從分散經驗，到可驗證的端到端營運模型"
             },
             "whatIDecided": {
-              "en": "Reconstruct the review and remediation workflow as one five-phase operating model spanning people, systems, decision logic, handoffs and exception paths.",
-              "zh": "將審件與補件流程重建為一套五階段營運模型，涵蓋人員、系統、決策邏輯、交接與例外路徑。"
+              "en": "Make the remediation workflow explicit across review, document request, customer resubmission and re-review so the process could be evaluated as one operating system rather than disconnected tasks.",
+              "zh": "明確呈現審件、文件要求、客戶重新提交與再審核的補件流程，使整體能以一套營運系統評估，而非彼此分離的工作。"
             },
             "whyThisChoice": {
-              "en": "Separate screenshots, PDFs, notes and individual memory made it difficult to verify where review decisions broke down or where remediation actually moved between owners.",
-              "zh": "分散的截圖、PDF、筆記與個人記憶，使團隊難以驗證審件決策在哪裡中斷，或補件實際如何在負責人之間移轉。"
+              "en": "The work could not be prioritised reliably while critical steps, ownership and handoffs remained implicit or distributed across teams.",
+              "zh": "當關鍵步驟、責任歸屬與交接仍隱含或分散於團隊之間時，工作無法被可靠排序。"
             },
             "optionalBlock": {
               "type": "WHAT THIS REQUIRED",
@@ -18742,12 +18711,12 @@
               "zh": "從等權重回饋，到依效益與可行性排序"
             },
             "whatIDecided": {
-              "en": "Separate expected benefit from implementation difficulty so operational issues could be evaluated by value and feasibility rather than urgency alone.",
-              "zh": "將預期效益與實作難度分開，使營運問題能依價值與可行性評估，而非只依急迫性。"
+              "en": "Structure findings so improvement opportunities could be compared by likely benefit and feasibility rather than treated as an undifferentiated list of issues.",
+              "zh": "將研究發現結構化，使改善機會可依可能效益與可行性比較，而非被視為未分化的問題清單。"
             },
             "whyThisChoice": {
-              "en": "High-impact structural problems and easier implementation ideas were being discussed together, obscuring which issues deserved attention first.",
-              "zh": "高影響的結構性問題與較容易實作的想法被一起討論，使哪些問題應優先受到關注變得不清楚。"
+              "en": "The research surfaced multiple problems, but the organisation needed a defensible way to decide what deserved attention first.",
+              "zh": "研究揭露多項問題，但組織需要一套可辯護的方法，決定哪些問題應優先處理。"
             },
             "status": "prioritisation-delivered"
           },
@@ -18758,12 +18727,12 @@
               "zh": "從一次完成全面數位化，到分階段優化建議"
             },
             "whatIDecided": {
-              "en": "Translate the operating-model findings into near-, mid- and long-term recommendations instead of presenting every issue as one large digitisation programme.",
-              "zh": "將營運模型發現轉化為近、中、長期建議，而不是把每個問題呈現為一項大型數位化計畫。"
+              "en": "Translate the operating-model findings into phased recommendations rather than assuming the entire remediation flow should be digitised at once.",
+              "zh": "將營運模型發現轉化為分階段建議，而非假設整個補件流程應一次全面數位化。"
             },
             "whyThisChoice": {
-              "en": "The highest-benefit structural improvements also carried greater implementation difficulty, while narrower interventions could be considered earlier.",
-              "zh": "效益最高的結構性改善同時具有較高實作難度；較聚焦的介入則可較早納入考量。"
+              "en": "Different problems depended on different operational, policy or system foundations; they could not credibly be represented as one immediate implementation scope.",
+              "zh": "不同問題依賴不同的營運、政策或系統基礎，無法可信地被呈現為單一立即實作範圍。"
             },
             "optionalBlock": {
               "type": "CONSTRAINT MANAGED",
@@ -18813,32 +18782,32 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Fragmented operational knowledge",
-            "zh": "分散的營運知識"
+            "en": "Distributed operating knowledge",
+            "zh": "營運知識分散"
           },
           "description": {
-            "en": "Critical review logic lived across people, screenshots, PDFs, notes and multiple internal systems, making the end-to-end workflow difficult to verify.",
-            "zh": "關鍵審件邏輯分散在人員、截圖、PDF、筆記與多個內部系統中，使端到端流程難以驗證。"
+            "en": "The remediation process existed across people, steps, documents and tacit operational knowledge rather than one verifiable end-to-end model.",
+            "zh": "補件流程分散在人員、步驟、文件與隱性營運知識中，而非一套可驗證的端到端模型。"
           }
         },
         {
           "title": {
-            "en": "Exceptions crossed systems and roles",
-            "zh": "例外情境橫跨系統與角色"
+            "en": "Feedback had unequal value",
+            "zh": "回饋價值並不相等"
           },
           "description": {
-            "en": "AML checks, high-risk approvals, incomplete documents and remediation requests moved across systems, manual handoffs and different operational owners.",
-            "zh": "防制洗錢檢核、高風險核准、文件不完整與補件要求，橫跨多個系統、人工交接與不同營運負責人。"
+            "en": "Issues and opportunities could not be treated as equally important; prioritisation needed to balance expected benefit and feasibility.",
+            "zh": "問題與機會不能被視為同等重要；優先排序必須同時衡量預期效益與可行性。"
           }
         },
         {
           "title": {
-            "en": "Priority was unclear",
-            "zh": "優先順序不清楚"
+            "en": "Full digitisation was not a credible immediate assumption",
+            "zh": "全面數位化並非可信的立即假設"
           },
           "description": {
-            "en": "Operational urgency and implementation difficulty were discussed together, making it difficult to distinguish high-value problems from easier but lower-impact fixes.",
-            "zh": "營運急迫性與實作難度被一起討論，使高價值問題難以與較容易但影響較低的修正區分。"
+            "en": "Recommendations needed to distinguish what could be improved first from what required deeper operational or system change.",
+            "zh": "建議必須區分可先改善的項目，以及需要更深層營運或系統變革的項目。"
           }
         }
       ],
@@ -18928,7 +18897,7 @@
       },
       "presentation": {
         "visibility": {
-          "problemTypes": true,
+          "problemTypes": false,
           "coreSystemInsight": true,
           "evidence": true
         },
