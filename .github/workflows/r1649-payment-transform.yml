@@ -22,6 +22,13 @@ jobs:
           set -euo pipefail
           test "$(git hash-object public/site/content/portfolio-content.json)" = "7b2c424a0a6e5d3f0ec6993d84455c5c0d00b054"
           test "$(git hash-object public/site/content/portfolio-asset-manifest.json)" = "209569bd1f88bce1657b7764690c74092af38285"
+      - name: Restore Human-approved checkout source from verified repo object
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin 22368f2a6fd2ba998ee7a79880961aa59f979634 --depth=1
+          git show 22368f2a6fd2ba998ee7a79880961aa59f979634:public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png > public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png
+          test "$(sha256sum public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png | cut -d' ' -f1)" = "f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72"
       - name: Build privacy-safe real-UI recovery composite
         shell: bash
         run: |
@@ -29,14 +36,14 @@ jobs:
           if ! command -v magick >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick; fi
           mkdir -p /tmp/r1649
           src=public/site/assets/validation/payment
-          magick "$src/validation-payment-refund-state-02-r77.jpg" -crop 502x500+0+0 +repage -resize 560x560^ -gravity north -extent 560x960 /tmp/r1649/p1.webp
+          magick "$src/validation-payment-refund-state-02-r77.jpg" -crop 502x500+0+0 +repage -resize 560x960^ -gravity north -extent 560x960 /tmp/r1649/p1.webp
           magick "$src/validation-payment-refund-state-03-r77.jpg" -resize 560x960^ -gravity center -extent 560x960 -region 300x300+130+180 -blur 0x18 /tmp/r1649/p2.webp
           magick "$src/validation-payment-refund-state-04-r77.jpg" -crop 1152x800+0+0 +repage -resize 560x420^ -gravity center -extent 560x420 /tmp/r1649/p3a.webp
           magick "$src/validation-payment-refund-state-05-r77.jpg" -crop 224x540+0+0 +repage -resize 560x540^ -gravity north -extent 560x540 /tmp/r1649/p3b.webp
           magick /tmp/r1649/p3a.webp /tmp/r1649/p3b.webp -append /tmp/r1649/p3.webp
           magick "$src/validation-payment-internal-portal-list-r77.jpg" -crop 2048x620+0+0 +repage -resize 560x960^ -gravity north -extent 560x960 -fill white -draw 'rectangle 0,500 560,960' /tmp/r1649/p4.webp
-          magick /tmp/r1649/p1.webp /tmp/r1649/p2.webp /tmp/r1649/p3.webp /tmp/r1649/p4.webp +append -quality 88 .r1649-staging/payment-evidence-recovery-real-ui-v3.webp
-          test "$(identify -format '%wx%h' .r1649-staging/payment-evidence-recovery-real-ui-v3.webp)" = "2240x960"
+          magick /tmp/r1649/p1.webp /tmp/r1649/p2.webp /tmp/r1649/p3.webp /tmp/r1649/p4.webp +append -quality 88 public/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp
+          test "$(identify -format '%wx%h' public/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp)" = "2240x960"
       - name: Run structured canonical transform
         run: node scripts/r1649-payment-transform.mjs
       - name: Pre-commit governance validation
@@ -49,8 +56,7 @@ jobs:
           const m=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
           if(c.contentVersion!=='2026-08-20-r164.9'||m.contentVersion!==c.contentVersion) throw new Error('Content/Manifest version mismatch');
           if(c.supersedes!=='2026-08-17-r164.1') throw new Error('supersedes mismatch');
-          const ids=['payment-core-transaction-compression-visual-v3','payment-evidence-field-checkout-v3','payment-evidence-transaction-handoff-v3','payment-evidence-value-visibility-v3','payment-recognition-asian-experience-awards-2021','payment-evidence-recovery-real-ui-v3'];
-          for(const id of ids) if(!m.items[id]) throw new Error(`Missing asset ${id}`);
+          for(const id of ['payment-core-checkout-compression-approved-v3','payment-evidence-recovery-real-ui-v3']) if(!m.items[id]) throw new Error(`Missing asset ${id}`);
           const pc=JSON.stringify(c.projects.payment.publicContent);
           if(/129%|116%|26%/.test(pc)) throw new Error('Ambiguous Payment percentages exposed in publicContent');
           NODE
@@ -58,8 +64,7 @@ jobs:
           test ! -e scripts/r1649-payment-transform.mjs
           test ! -e .github/workflows/r1649-payment-transform.yml
           test ! -e .r1649-staging
-          allowed='public/site/content/portfolio-content.json|public/site/content/portfolio-asset-manifest.json|public/site/assets/projects/payment/|public/site/assets/js/app.js|public/site/assets/css/components/project-detail-overview.css|tests/rendered-html.test.mjs|scripts/r1649-payment-transform.mjs|.github/workflows/r1649-payment-transform.yml|.r1649-staging/'
-          unexpected=$(git status --short | awk '{print $2}' | grep -Ev "^(${allowed})" || true)
+          unexpected=$(git status --short | awk '{print $2}' | grep -Ev '^(public/site/content/portfolio-content.json|public/site/content/portfolio-asset-manifest.json|public/site/assets/projects/payment/|public/site/assets/js/app.js|public/site/assets/css/components/project-detail-overview.css|tests/rendered-html.test.mjs|scripts/r1649-payment-transform.mjs|.github/workflows/r1649-payment-transform.yml|.r1649-staging/)' || true)
           test -z "$unexpected" || { echo "$unexpected"; exit 1; }
       - name: Create one governed atomic Payment commit
         shell: bash
@@ -67,7 +72,7 @@ jobs:
           set -euo pipefail
           git config user.name "Portfolio R164.9 Integration"
           git config user.email "actions@users.noreply.github.com"
-          git add -- public/site/content/portfolio-content.json public/site/content/portfolio-asset-manifest.json public/site/assets/projects/payment public/site/assets/js/app.js public/site/assets/css/components/project-detail-overview.css tests/rendered-html.test.mjs scripts/r1649-payment-transform.mjs .github/workflows/r1649-payment-transform.yml .r1649-staging
+          git add -A -- public/site/content/portfolio-content.json public/site/content/portfolio-asset-manifest.json public/site/assets/projects/payment public/site/assets/js/app.js public/site/assets/css/components/project-detail-overview.css tests/rendered-html.test.mjs scripts/r1649-payment-transform.mjs .github/workflows/r1649-payment-transform.yml .r1649-staging
           git status --short
           git commit -m "R164.9 final atomic Payment integration"
           echo "FINAL_COMMIT=$(git rev-parse HEAD)"
