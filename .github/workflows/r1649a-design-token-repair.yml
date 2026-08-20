@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
+      - name: Install canonical dependencies
+        run: npm run install:ci
       - name: Replace local Payment typography and spacing with shared tokens
         shell: bash
         run: |
@@ -32,6 +34,7 @@ jobs:
           fs.writeFileSync(p,s);
           NODE
           rm .github/workflows/r1649a-design-token-repair.yml
+          node scripts/build-production-assets.mjs
           node public/site/qa/design-system-lint.mjs
           node public/site/qa/token-governance.mjs
           git diff --check
