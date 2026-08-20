@@ -1287,7 +1287,9 @@
     updateProjectSectionLocation();
   },{passive:true});
   dialogScrollRoot?.addEventListener('scrollend',()=>{
+    const completedTarget=pendingProjectSectionId?doc.getElementById(pendingProjectSectionId):null;
     pendingProjectSectionId='';
+    if(completedTarget)alignProjectSectionTarget(completedTarget);
     updateProjectSectionLocation();
   },{passive:true});
 
