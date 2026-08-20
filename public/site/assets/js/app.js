@@ -2938,13 +2938,26 @@
     const ownershipSource=projectContentRef(p,refs.accountability);
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(accountabilityPresentation?.intro||ownershipSource?.publicSummary));
-    accountability.dataset.canonicalSectionId='my-accountability';
+    accountability.id='systemCaseAccountabilitySection';accountability.dataset.projectNavTarget='ownership';accountability.dataset.canonicalSectionId='my-accountability';
     if(accountabilityPresentation)appendSharedAccountability(accountability,accountabilityPresentation,{translate:t});
     else accountability.dataset.componentOwner='SharedAccountability';
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
-    [hard,contribution,insight,decisions,evidence,outcomes,accountability,related].filter(Boolean).forEach(node=>surface.append(node));
+    const systemCaseSections={
+      'what-made-this-hard':hard,
+      'contribution':contribution,
+      'core-system-insight':insight,
+      'evidence':evidence,
+      'design-decisions':decisions,
+      'outcomes':outcomes,
+      'my-accountability':accountability,
+      'related-work':related
+    };
+    const orderedKeys=list(p.presentation?.sectionOrder).filter(key=>systemCaseSections[key]);
+    const fallbackKeys=['what-made-this-hard','contribution','core-system-insight','design-decisions','evidence','outcomes','my-accountability','related-work'];
+    [...orderedKeys,...fallbackKeys.filter(key=>!orderedKeys.includes(key))]
+      .map(key=>systemCaseSections[key]).filter(Boolean).forEach(node=>surface.append(node));
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
