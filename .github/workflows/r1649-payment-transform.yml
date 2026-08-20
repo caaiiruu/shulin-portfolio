@@ -1,8 +1,7 @@
 name: R164.9 Payment atomic transform
 on:
   pull_request:
-    branches:
-      - qa/r146-r43-preview-2026-08-06
+    branches: [qa/r146-r43-preview-2026-08-06]
 permissions:
   contents: write
 jobs:
@@ -24,12 +23,11 @@ jobs:
           echo "TRANSFORM_SOURCE_HEAD=$(git rev-parse HEAD)"
           test "$(git hash-object public/site/content/portfolio-content.json)" = "7b2c424a0a6e5d3f0ec6993d84455c5c0d00b054"
           test "$(git hash-object public/site/content/portfolio-asset-manifest.json)" = "209569bd1f88bce1657b7764690c74092af38285"
-      - name: Restore Human-approved checkout source from verified repo object
+      - name: Restore Human-approved checkout source from verified staged blob
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin 22368f2a6fd2ba998ee7a79880961aa59f979634 --depth=1
-          git show 22368f2a6fd2ba998ee7a79880961aa59f979634:public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png > public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png
+          cp .r1649-staging/payment-core-checkout-compression-approved-v3.png public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png
           test "$(sha256sum public/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png | cut -d' ' -f1)" = "f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72"
       - name: Build privacy-safe real-UI recovery composite
         shell: bash
