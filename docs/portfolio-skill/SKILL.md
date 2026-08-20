@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-20-v2.6
+version: 2026-08-20-v2.7
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -227,6 +227,15 @@ Fit content to the existing shared Contribution grammar before requesting new sh
 
 Purpose:
 Show the scalable system insight that changed the design direction.
+
+Core System Insight is insight-first, not artifact-first or metric-first.
+
+Required cognitive structure:
+1. `INSIGHT` — the reusable system truth discovered
+2. `WHAT THIS CHANGED` — how that truth redirected the product or operating model
+3. `VISUAL PROOF` — evidence that makes the change inspectable
+
+Visual proof may be a simplified Journey Map, system model, state model, architecture, before/after transformation, or transaction model. Do not mandate Journey Maps across projects.
 
 Good examples:
 - application state instead of screen

@@ -303,7 +303,9 @@
         "Portrait Evidence",
         "Supporting Evidence",
         "System / Journey Diagram",
-        "Before / After Evidence"
+        "Before / After Evidence",
+        "Informational Media",
+        "Research Leadership Synthesis"
       ],
       "interactionContract": [
         "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
@@ -352,7 +354,10 @@
         "Portrait evidence is capped at 420px and never expands to the full Evidence edge",
         "Before / After aligns top edges, uses a 40/60 hierarchy when shipped evidence is primary, and stacks Before then After on compact viewports",
         "Caption is HTML aligned to the image edge with the canonical 8px caption gap",
-        "Placeholder and production sources use the same frame component and role identity"
+        "Placeholder and production sources use the same frame component and role identity",
+        "Informational diagrams and UI composites use the shared intrinsic media variant: source aspect ratio, full edge content, semantic evidence radius, contain behavior, and no crop-safe photo treatment.",
+        "OutcomeMetric uses one header composition for title and post-launch framing, followed by the shared metric grid with deterministic 3×2, 2×3 and 1×6 layouts.",
+        "Research Leadership Synthesis is a StructuredEvidence variant that renders one ownership statement, a prioritised 2×2 insight grid, genuine source synthesis media, and a separate three-part strategy translation; responsive layouts preserve semantic order and never duplicate the same research metric in standalone validation."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
@@ -800,10 +805,11 @@
       ],
       "interactionContract": [
         "One Shell, Rail, and Item primitive owns fixed positioning, safe-area offset, surface, radius, elevation, motion, horizontal overflow, focus-visible, reduced motion, and forced colors",
-        "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
+        "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Outcomes targets and aria-current",
         "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior",
         "Homepage Domain rail and floating rail are both generated from the same domainSource canonical IDs; legacy shorthand IDs and legacy rail selectors are forbidden.",
-        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing."
+        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing.",
+        "Equivalent result destinations resolve through localizationRegistry.projectSectionNavigationLabels.outcomes and render the canonical Outcomes label; legacy Impact aliases normalize at the shared renderer boundary."
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",

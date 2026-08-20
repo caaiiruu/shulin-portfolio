@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-17-r164.1",
-  "supersedes": "2026-08-12-r158",
+  "contentVersion": "2026-08-20-r164.9h",
+  "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -14466,16 +14466,16 @@
           },
           {
             "order": 2,
-            "assetId": "payment-evidence-field-research-synthesis-public-v1",
+            "assetId": "payment-evidence-live-checkout-image-only-r1649d",
             "role": "research",
-            "purpose": "Combine anonymised fieldwork photography with behavioural findings.",
+            "purpose": "Show the two strongest live cashier and self-checkout research photographs without embedded editorial copy.",
             "loading": "lazy"
           },
           {
             "order": 3,
-            "assetId": "payment-evidence-sco-entry-public-v2",
+            "assetId": "payment-decision-01-app-entry-r1649h",
             "role": "decision",
-            "purpose": "Show the final SCO entry and the tested payment/loyalty relationship.",
+            "purpose": "Show the Human-approved transformation from multiple payment paths to one App entry for in-store payment.",
             "loading": "lazy"
           },
           {
@@ -14493,7 +14493,7 @@
             "loading": "lazy"
           }
         ],
-        "contentStatus": "approved-r164.2-visual-evidence",
+        "contentStatus": "human-approved-r164.9h",
         "programmeLeadership": {
           "title": {
             "en": "Built as a product, operating model and launch programme",
@@ -14931,266 +14931,285 @@
         "crossFunctionalDeliveryRef": "projects.payment.crossFunctionalDelivery",
         "recognitionRef": "projects.payment.recognition",
         "coreSystemInsight": {
-          "headline": {
-            "en": "The transaction—not the screen or channel—had to remain coherent from entry through confirmation and recovery.",
-            "zh": "必須保持連續的是整筆交易，而不是單一畫面或通路；這份連續性要從進入付款延伸至確認與復原。"
+          "insight": {
+            "en": "Payment trust broke across the seams between loyalty, checkout and post-payment recovery.",
+            "zh": "付款信任在會員權益、結帳與付款後復原之間的接縫處中斷。"
           },
-          "supportingCopy": {
-            "en": "Customers could begin in the App and complete payment at a cashier or self-checkout, while benefits, failures and records crossed other systems. Trust depended on preserving transaction continuity across those boundaries.",
-            "zh": "顧客可從 App 開始，並在人工收銀或自助結帳完成付款；權益、失敗與紀錄則跨越其他系統。信任取決於能否在這些邊界之間維持交易連續性。"
+          "whatThisChanged": {
+            "en": "I reframed these moments as one shared transaction model across App, cashier and self-checkout — keeping value visible, reducing checkout friction and preserving recovery after payment.",
+            "zh": "我將這些時刻重新定義為橫跨 App、人工收銀與自助結帳的一套共享交易模型——讓價值保持可見、降低結帳摩擦，並保留付款後的復原能力。"
           },
-          "contentStatus": "approved-r164.1",
+          "contentStatus": "human-approved-r164.9d",
           "evidence": [
             {
-              "assetId": "payment-system-transaction-map-public-v1",
-              "title": {
-                "en": "Transaction continuity across systems",
-                "zh": "跨系統的交易連續性"
-              },
-              "copy": {
-                "en": "A simplified public-safe map of the customer, App, payment and loyalty logic, POS/SCO execution, completion and exception loop.",
-                "zh": "經簡化且適合公開的系統圖，呈現顧客、App、付款與會員邏輯、POS／SCO 執行、完成與例外循環。"
-              }
+              "assetId": "payment-core-checkout-compression-approved-v3",
+              "presentation": "informational",
+              "showCaption": false
             }
-          ]
+          ],
+          "showInsightLabel": false,
+          "showVisualProofLabel": false
         },
         "decisionEvidence": {
           "title": {
             "en": "Evidence that shaped the decisions",
-            "zh": "影響設計決策的證據"
+            "zh": "形塑設計決策的證據"
           },
           "presentation": "decision-support",
           "items": [
             {
-              "assetId": "payment-evidence-field-research-synthesis-public-v1",
+              "assetId": "payment-evidence-live-checkout-image-only-r1649d",
               "title": {
-                "en": "Live checkout fieldwork",
-                "zh": "門市結帳實地研究"
+                "en": "Live checkout behaviour",
+                "zh": "真實結帳行為"
               },
               "copy": {
-                "en": "Three days with eight shoppers exposed the pressure, assurance and timing needs at cashier and self-checkout.",
-                "zh": "三天、八位購物者的實地研究，揭示人工收銀與自助結帳中的壓力、安心感與時間需求。"
+                "en": "3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.",
+                "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
+              },
+              "presentation": "raw",
+              "finding": {
+                "title": {
+                  "en": "Supporting research signal",
+                  "zh": "支持性研究訊號"
+                },
+                "copy": {
+                  "en": "These observations connected directly to the prioritised assurance, social-pressure and time-is-money patterns.",
+                  "zh": "這些觀察直接連結至已優先排序的安心感、社交壓力與時間成本模式。"
+                }
               }
             },
             {
-              "assetId": "payment-validation-sco-entry-public-v2",
+              "assetId": "payment-evidence-sco-entry-research-r1649e",
               "title": {
-                "en": "Repeated self-checkout entry validation",
-                "zh": "多輪自助結帳入口驗證"
+                "en": "SCO entry recognition validation",
+                "zh": "SCO 入口辨識驗證"
               },
               "copy": {
-                "en": "Structured and guerrilla testing clarified entry recognition, QR guidance and the handoff into payment.",
-                "zh": "結構化與游擊測試釐清入口辨識、QR 指示及進入付款的交接方式。"
-              }
+                "en": "6 structured + 7 guerrilla participants tested the SCO entry point and QR handoff, validating clearer entry recognition and action language.",
+                "zh": "6 位結構化＋7 位游擊參與者測試 SCO 入口與 QR 交接，驗證更清楚的入口辨識與行動語言。"
+              },
+              "presentation": "raw"
             },
             {
-              "assetId": "payment-validation-value-history-public-v2",
+              "assetId": "payment-evidence-journey-synthesis-r1649c",
               "title": {
-                "en": "Value and transaction-history validation",
-                "zh": "價值與交易紀錄驗證"
+                "en": "Journey synthesis across the transaction",
+                "zh": "橫跨交易流程的旅程綜整"
               },
               "copy": {
-                "en": "Copy and concept tests made benefits, confirmation and post-transaction records easier to interpret.",
-                "zh": "文案與概念測試讓權益、確認及交易後紀錄更容易理解。"
+                "en": "Mapped queue, preparation, checkout and post-checkout as one journey, exposing where speed, loyalty clarity, payment assurance and recovery broke across the transaction.",
+                "zh": "將排隊、準備、結帳與結帳後映射成一段旅程，揭示速度、會員價值清晰度、付款安心感與復原在交易中的斷點。"
+              },
+              "presentation": "raw",
+              "finding": {
+                "title": {
+                  "en": "Transaction-history retrieval",
+                  "zh": "交易紀錄查找"
+                },
+                "copy": {
+                  "en": "85.7% preferred the clearer separated history structure, supporting faster retrieval of payment records after checkout.",
+                  "zh": "85.7% 偏好更清楚分隔的紀錄結構，支持在結帳後更快查找付款紀錄。"
+                }
               }
             }
           ],
-          "structuredGroups": [
+          "quotes": [
             {
-              "heading": {
-                "en": "Queue pressure made the App-to-checkout handoff trust-critical",
-                "zh": "排隊壓力使 App 至結帳交接成為信任關鍵"
+              "quote": {
+                "en": "“I have to fish out 2 cards — MyNTUC and a credit card. Here, it’s only one app.”",
+                "zh": "「我原本要拿出兩張卡——MyNTUC 和信用卡。這裡只需要一個 App。」"
               },
-              "summary": {
-                "en": "Live cashier and self-checkout validation showed that unclear instructions and delayed recognition created hesitation at a time-sensitive checkout moment.",
-                "zh": "人工收銀與自助結帳驗證顯示，不清楚的指示與延遲辨識會在時間敏感的結帳時刻造成猶豫。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 01",
-                "zh": "導向決策 01"
+              "role": {
+                "en": "SHOPPER VOICE",
+                "zh": "購物者心聲"
               }
             },
             {
-              "heading": {
-                "en": "Customers could not assume benefits carried across payment contexts",
-                "zh": "顧客無法確定權益會跨付款情境延續"
+              "quote": {
+                "en": "“It’s express payment. It cuts down the steps of swiping cards, and it’s cashless.”",
+                "zh": "「這是快速付款。它減少刷卡步驟，而且是無現金的。」"
               },
-              "summary": {
-                "en": "Fieldwork and loyalty validation showed that customers were unsure when LinkPoints, vouchers and discounts had actually carried into payment.",
-                "zh": "實地研究與會員權益驗證顯示，顧客不確定 LinkPoints、優惠券與折扣何時真正帶入付款。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 02",
-                "zh": "導向決策 02"
-              }
-            },
-            {
-              "heading": {
-                "en": "Payment exceptions continued beyond the failure screen",
-                "zh": "付款例外會延續至失敗畫面之後"
-              },
-              "summary": {
-                "en": "Failure-path mapping, refund design and transaction-record testing showed that recovery needed clear next actions and traceable records.",
-                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原需要清楚的下一步與可追溯紀錄。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 03",
-                "zh": "導向決策 03"
+              "role": {
+                "en": "SHOPPER VOICE",
+                "zh": "購物者心聲"
               }
             }
           ],
-          "metrics": [],
-          "contentStatus": "approved-r164.1e",
-          "validationLayer": {
+          "contentStatus": "human-approved-r164.9h",
+          "researchSynthesis": {
             "title": {
-              "en": "Research and validation",
-              "zh": "研究與驗證"
+              "en": "Research synthesis I led",
+              "zh": "我主導的研究綜整"
             },
             "intro": {
-              "en": "I led field research and repeated validation across live checkout, loyalty, self-checkout entry and transaction history.",
-              "zh": "我主導實體結帳、會員權益、自助結帳入口與交易紀錄的實地研究及多輪驗證。"
+              "en": "I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.",
+              "zh": "我主導門市研究、行為分析與綜整，將結帳行為轉化為橫跨 App、人工收銀與自助結帳的產品策略。"
             },
-            "metrics": [
+            "visual": [],
+            "insights": [
               {
-                "value": "3 days",
-                "label": {
-                  "en": "live-store fieldwork",
-                  "zh": "門市實地研究"
+                "heading": {
+                  "en": "87.5% — Assurance",
+                  "zh": "87.5% — 安心感"
                 },
-                "supportingCopy": {
-                  "en": "cashier and self-checkout observation",
-                  "zh": "人工收銀與自助結帳觀察"
+                "summary": {
+                  "en": "Shoppers needed transparency, confirmation and recovery alternatives before trusting digital payment.",
+                  "zh": "購物者需要透明資訊、確認與復原替代方案，才會信任數位付款。"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led fieldwork across cashier and self-checkout contexts.",
-                  "zh": "設計師主導的人工收銀與自助結帳實地研究。"
+                "details": [
+                  {
+                    "en": "25% double-checked transaction details at checkout",
+                    "zh": "25% 會在結帳時再次核對交易明細"
+                  },
+                  {
+                    "en": "12.5% needed tracking history for assurance",
+                    "zh": "12.5% 需要可追蹤的交易紀錄來獲得安心感"
+                  },
+                  {
+                    "en": "Unexpected situations required visible alternatives",
+                    "zh": "非預期情況需要清楚可見的替代方案"
+                  }
+                ],
+                "implication": {
+                  "en": "Make payment state, history and recovery options visible.",
+                  "zh": "讓付款狀態、交易紀錄與復原選項清楚可見。"
                 }
               },
               {
-                "value": "8",
-                "label": {
-                  "en": "shoppers observed and interviewed",
-                  "zh": "位受觀察與訪談的購物者"
+                "heading": {
+                  "en": "87.5% — Social pressure",
+                  "zh": "87.5% — 社交壓力"
                 },
-                "supportingCopy": {
-                  "en": "during live-store checkout research",
-                  "zh": "於門市結帳實地研究中"
+                "summary": {
+                  "en": "Checkout friction became more stressful when shoppers risked blocking others or needed staff assistance.",
+                  "zh": "當購物者可能阻擋他人或需要員工協助時，結帳摩擦會帶來更大壓力。"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led live-store observation and interviews.",
-                  "zh": "設計師主導的門市觀察與訪談。"
+                "details": [
+                  {
+                    "en": "62.5% — “No one help me at SCO”",
+                    "zh": "62.5% —「在 SCO 沒有人幫我」"
+                  },
+                  {
+                    "en": "37.5% — “Avoid blocking others”",
+                    "zh": "37.5% —「避免擋到其他人」"
+                  }
+                ],
+                "implication": {
+                  "en": "Reduce dependencies that make shoppers stop, wait or ask for help at checkout.",
+                  "zh": "減少讓購物者在結帳時停下、等待或求助的相依環節。"
                 }
               },
               {
-                "value": "6 + 7",
-                "label": {
-                  "en": "self-checkout entry participants",
-                  "zh": "位自助結帳入口測試參與者"
+                "heading": {
+                  "en": "87.5% — Time is money",
+                  "zh": "87.5% — 時間就是成本"
                 },
-                "supportingCopy": {
-                  "en": "across structured and guerrilla testing",
-                  "zh": "涵蓋結構化與游擊測試"
+                "summary": {
+                  "en": "Shoppers prioritised the fastest path and avoided steps that slowed the queue.",
+                  "zh": "購物者優先選擇最快路徑，並避開會拖慢隊伍的步驟。"
                 },
-                "evidenceNote": {
-                  "en": "Six structured and seven guerrilla participants tested self-checkout entry.",
-                  "zh": "6 位結構化測試與 7 位游擊測試參與者驗證自助結帳入口。"
+                "details": [
+                  {
+                    "en": "62.5% chose the fastest flow, especially when packing support reduced effort",
+                    "zh": "62.5% 選擇最快流程，尤其當有人協助裝袋、能降低負擔時"
+                  },
+                  {
+                    "en": "50% chose the shorter queue",
+                    "zh": "50% 選擇較短的隊伍"
+                  }
+                ],
+                "implication": {
+                  "en": "Shorten the critical handoff between App, cashier and self-checkout.",
+                  "zh": "縮短 App、人工收銀與自助結帳之間的關鍵交接。"
                 }
               },
               {
-                "value": "12",
-                "label": {
-                  "en": "loyalty and instruction participants",
-                  "zh": "位會員權益與指示測試參與者"
+                "heading": {
+                  "en": "75% — Loyalty value awareness",
+                  "zh": "75% — 會員價值認知"
                 },
-                "supportingCopy": {
-                  "en": "validating benefit visibility and cashier guidance",
-                  "zh": "驗證權益可見性與收銀指示"
+                "summary": {
+                  "en": "Points and rebates influenced payment behaviour, but value was often invisible or dependent on cashier prompts.",
+                  "zh": "點數與回饋會影響付款行為，但其價值常不可見，或依賴收銀員提醒。"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led loyalty and cashier-instruction validation.",
-                  "zh": "設計師主導的會員權益與收銀指示驗證。"
-                }
-              },
-              {
-                "value": "14",
-                "label": {
-                  "en": "transaction-history participants",
-                  "zh": "位交易紀錄測試參與者"
+                "details": [
+                  {
+                    "en": "37.5% were passively informed about LinkPoints",
+                    "zh": "37.5% 被動得知 LinkPoints 資訊"
+                  },
+                  {
+                    "en": "75% showed points / rebates influencing behaviour",
+                    "zh": "75% 顯示點數／回饋會影響行為"
+                  },
+                  {
+                    "en": "Shoppers relied on cashier prompts or checked value only at specific moments",
+                    "zh": "購物者仰賴收銀員提醒，或只在特定時刻查看價值"
+                  }
+                ],
+                "implication": {
+                  "en": "Keep points, rewards and value legible at the payment decision.",
+                  "zh": "在付款決策時，讓點數、獎勵與價值清楚可讀。"
                 },
-                "supportingCopy": {
-                  "en": "testing Order History concepts and terminology",
-                  "zh": "測試訂單紀錄概念與用語"
-                },
-                "evidenceNote": {
-                  "en": "Designer-led Order History concept and terminology testing.",
-                  "zh": "設計師主導的訂單紀錄概念與用語測試。"
-                }
-              },
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "assurance signal",
-                  "zh": "安心感訊號"
-                },
-                "supportingCopy": {
-                  "en": "customers needed transparency and visible alternatives",
-                  "zh": "顧客需要透明度與可見替代方案"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants surfaced assurance as a payment need.",
-                  "zh": "8 位門市研究參與者中有 7 位顯示安心感是付款需求。"
-                }
-              },
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "social-pressure signal",
-                  "zh": "社交壓力訊號"
-                },
-                "supportingCopy": {
-                  "en": "hesitation increased when others were waiting",
-                  "zh": "他人等待時，猶豫感會增加"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants described social pressure at checkout.",
-                  "zh": "8 位門市研究參與者中有 7 位描述結帳時的社交壓力。"
-                }
-              },
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "time-sensitivity signal",
-                  "zh": "時間敏感訊號"
-                },
-                "supportingCopy": {
-                  "en": "shorter, clearer checkout paths mattered",
-                  "zh": "更短且更清楚的結帳路徑很重要"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants treated checkout time as a key concern.",
-                  "zh": "8 位門市研究參與者中有 7 位將結帳時間視為關鍵考量。"
-                }
-              },
-              {
-                "value": "85.7%",
-                "label": {
-                  "en": "preferred clearer transaction history",
-                  "zh": "偏好更清楚的交易紀錄"
-                },
-                "supportingCopy": {
-                  "en": "a separated, clearly labelled history structure",
-                  "zh": "分開且標示清楚的紀錄結構"
-                },
-                "evidenceNote": {
-                  "en": "Twelve of fourteen Order History participants preferred the clearer separated structure.",
-                  "zh": "14 位訂單紀錄測試參與者中有 12 位偏好更清楚的分開結構。"
+                "synthesisBoundary": {
+                  "en": "Portfolio synthesis of LinkPoints awareness (75%) and Rebates awareness (75%).",
+                  "zh": "作品集綜整自 LinkPoints 認知（75%）與回饋認知（75%）。"
                 }
               }
-            ]
-          },
-          "mappingTitle": {
-            "en": "What the validation changed",
-            "zh": "驗證如何改變決策"
+            ],
+            "strategyLabel": {
+              "en": "WHAT I TURNED THESE FINDINGS INTO",
+              "zh": "我將這些發現轉化為"
+            },
+            "strategies": [
+              {
+                "index": "01",
+                "title": {
+                  "en": "Visible assurance and recovery",
+                  "zh": "可見的安心感與復原"
+                },
+                "copy": {
+                  "en": "Made payment state, transaction history and alternatives for unexpected situations visible.",
+                  "zh": "讓付款狀態、交易紀錄與非預期情況的替代方案清楚可見。"
+                }
+              },
+              {
+                "index": "02",
+                "title": {
+                  "en": "A shorter checkout handoff",
+                  "zh": "更短的結帳交接"
+                },
+                "copy": {
+                  "en": "Reduced steps and dependencies across App, cashier and self-checkout.",
+                  "zh": "減少 App、人工收銀與自助結帳之間的步驟與相依關係。"
+                }
+              },
+              {
+                "index": "03",
+                "title": {
+                  "en": "Visible loyalty value at payment",
+                  "zh": "付款時可見的會員價值"
+                },
+                "copy": {
+                  "en": "Kept points, rewards and transaction value legible at the moment of commitment.",
+                  "zh": "在做出付款承諾的時刻，讓點數、獎勵與交易價值清楚可讀。"
+                }
+              }
+            ],
+            "sourceTraceability": {
+              "sourceFile": "Research Findings for Digital Checkout_Jan 2021(3).pdf",
+              "assurance": "pages 13–23",
+              "socialPressure": "pages 24–27",
+              "timeIsMoney": "pages 28–32",
+              "linkPointsAwareness": "pages 33–38",
+              "rebatesAwareness": "pages 39–43",
+              "designOpportunities": "page 58",
+              "designIterations": "pages 60–62"
+            },
+            "implicationLabel": {
+              "en": "STRATEGIC IMPLICATION",
+              "zh": "策略意涵"
+            }
           }
         },
         "outcomes": {
@@ -15200,23 +15219,22 @@
           },
           "semanticHierarchy": {
             "measuredLabel": {
-              "en": "The payment system launched at retail scale and proved reliable in live use.",
-              "zh": "付款系統已推展至零售規模，並在實際使用中展現可靠性。"
+              "en": "After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.",
+              "zh": "上線後，這項全新的付款服務在維持高度可靠性與顧客體驗的同時，達到具意義的採用與交易規模。"
             },
             "measured": [
+              {
+                "value": "70.2",
+                "label": {
+                  "en": "NPS",
+                  "zh": "NPS"
+                }
+              },
               {
                 "value": "~190",
                 "label": {
                   "en": "stores",
                   "zh": "間門市"
-                },
-                "supportingCopy": {
-                  "en": "rollout coverage across FairPrice retail locations",
-                  "zh": "覆蓋 FairPrice 零售據點的推展範圍"
-                },
-                "evidenceNote": {
-                  "en": "Product and team rollout coverage measured across the launched service.",
-                  "zh": "已上線服務的產品與團隊推展範圍。"
                 }
               },
               {
@@ -15226,12 +15244,8 @@
                   "zh": "名使用者"
                 },
                 "supportingCopy": {
-                  "en": "using the in-store payment system by September 2021",
-                  "zh": "截至 2021 年 9 月使用門市付款系統"
-                },
-                "evidenceNote": {
-                  "en": "Live service usage reported for September 2021.",
-                  "zh": "2021 年 9 月的實際服務使用量。"
+                  "en": "by Sep 2021",
+                  "zh": "截至 2021 年 9 月"
                 }
               },
               {
@@ -15241,12 +15255,8 @@
                   "zh": "每月交易筆數"
                 },
                 "supportingCopy": {
-                  "en": "completed by September 2021",
-                  "zh": "截至 2021 年 9 月完成"
-                },
-                "evidenceNote": {
-                  "en": "Live transaction volume reported for September 2021.",
-                  "zh": "2021 年 9 月的實際交易量。"
+                  "en": "by Sep 2021",
+                  "zh": "截至 2021 年 9 月"
                 }
               },
               {
@@ -15254,53 +15264,17 @@
                 "label": {
                   "en": "transaction success rate",
                   "zh": "交易成功率"
-                },
-                "supportingCopy": {
-                  "en": "across the launched in-store payment experience",
-                  "zh": "涵蓋已上線的門市付款體驗"
-                },
-                "evidenceNote": {
-                  "en": "Live service reliability metric from the launched Payment experience.",
-                  "zh": "已上線付款體驗的實際服務可靠性指標。"
                 }
               },
               {
-                "value": "70.2",
-                "label": {
-                  "en": "NPS",
-                  "zh": "NPS"
-                },
-                "supportingCopy": {
-                  "en": "from 1,798 responses",
-                  "zh": "來自 1,798 份回覆"
-                },
-                "evidenceNote": {
-                  "en": "Customer experience signal measured after launch.",
-                  "zh": "上線後衡量的顧客體驗訊號。"
-                }
-              },
-              {
-                "value": "12.49s",
+                "value": "2.7× faster",
                 "label": {
                   "en": "faster checkout",
                   "zh": "結帳加快"
                 },
                 "supportingCopy": {
-                  "en": "reduced from 19.78s to 7.29s",
-                  "zh": "由 19.78 秒降至 7.29 秒"
-                },
-                "evidenceNote": {
-                  "en": "Measured checkout timing from the launched 0→1 Payment experience.",
-                  "zh": "0→1 付款體驗上線後的結帳時間量測。"
-                }
-              }
-            ],
-            "supportingStatements": [
-              {
-                "emphasis": true,
-                "text": {
-                  "en": "The work also established reusable payment standards and interaction guidelines across related FairPrice product contexts.",
-                  "zh": "這項工作也為 FairPrice 相關產品情境建立了可重用的付款標準與互動規範。"
+                  "en": "19.78 sec → 7.29 sec",
+                  "zh": "19.78 秒 → 7.29 秒"
                 }
               }
             ],
@@ -15318,32 +15292,20 @@
                 "en": "Asian Experience Awards 2021",
                 "zh": "Asian Experience Awards 2021"
               },
-              "attribution": {
-                "en": "Team recognition—not an individual award.",
-                "zh": "此為團隊肯定，並非個人獎項。"
-              },
               "assetId": "payment-evidence-outcomes-award-public-v2",
-              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout"
+              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout",
+              "presentation": "direct",
+              "ctaLabel": {
+                "en": "View award announcement ↗",
+                "zh": "查看獎項公告 ↗"
+              }
             }
           },
           "attributionBoundary": {
-            "en": "Transaction volume, success rate, NPS, speed and rollout scale are reported as product and team outcomes measured in live use.",
-            "zh": "交易量、成功率、NPS、速度與推展規模皆以實際使用中量測的產品與團隊成果呈現。"
+            "en": "Product and team outcomes measured in live use.",
+            "zh": "實際使用中量測的產品與團隊成果。"
           },
-          "contentStatus": "approved-r164.1e",
-          "evidence": [
-            {
-              "assetId": "payment-outcome-checkout-speed-public-v2",
-              "title": {
-                "en": "Checkout completed 12.49 seconds faster",
-                "zh": "結帳加快 12.49 秒"
-              },
-              "copy": {
-                "en": "Measured timing fell from 19.78 seconds to 7.29 seconds in the launched 0→1 Payment experience.",
-                "zh": "已上線的 0→1 付款體驗將量測時間由 19.78 秒降至 7.29 秒。"
-              }
-            }
-          ]
+          "contentStatus": "approved-r164.9d"
         }
       },
       "zeroToOneMandate": {
@@ -15772,8 +15734,8 @@
               "zh": "我對成果負責"
             },
             "title": {
-              "en": "Defined the transaction model behind FairPrice’s 0→1 in-store payment capability",
-              "zh": "定義 FairPrice 0→1 門市付款能力背後的交易模型"
+              "en": "Defined FairPrice’s 0→1 in-store payment model",
+              "zh": "定義 FairPrice 的 0→1 門市付款模型"
             },
             "text": {
               "en": "As the only dedicated product designer on the core team, I led product framing, field research, transaction architecture, interaction design and validation across App, cashier and self-checkout contexts.",
@@ -15786,8 +15748,8 @@
               "zh": "共同決策"
             },
             "title": {
-              "en": "Turned payment, retail and operational constraints into one buildable direction",
-              "zh": "將付款、零售與營運限制轉化為一個可實作方向"
+              "en": "Turned payment, retail and operational constraints into a buildable direction",
+              "zh": "將付款、零售與營運限制轉化為可實作方向"
             },
             "text": {
               "en": "I connected customer behaviour, POS dependencies, benefit logic, recovery needs and frontline constraints into product decisions the team could implement consistently.",
@@ -15918,87 +15880,114 @@
           {
             "id": "payment-r1641-decision-01",
             "title": {
-              "en": "Structure one coherent transaction across App and checkout",
-              "zh": "建構一條貫穿 App 與結帳的完整交易"
+              "en": "Orchestrate one shared transaction across App, cashier and self-checkout",
+              "zh": "協調橫跨 App、人工收銀與自助結帳的一套共享交易"
             },
             "whatIDecided": {
-              "en": "Define one clear sequence for generating, presenting and completing payment from the App at cashier or self-checkout.",
-              "zh": "定義一條清楚順序，讓顧客在 App 產生付款資訊、於人工收銀或自助結帳出示並完成付款。"
+              "en": "Defined one transaction model spanning App entry, QR payment handoff, cashier, SCO, loyalty, payment and completion — so the service behaved as one system rather than a sequence of disconnected screens.",
+              "zh": "定義一套涵蓋 App 入口、QR 付款交接、人工收銀、SCO、會員權益、付款與完成狀態的交易模型，讓服務以一套系統運作，而非彼此斷裂的畫面。"
             },
             "whyThisChoice": {
-              "en": "Queue pressure and unclear QR instructions created hesitation at the most time-sensitive moment in the journey.",
-              "zh": "排隊壓力與不清楚的 QR 操作指示，會在旅程中時間最敏感的時刻造成猶豫。"
+              "en": "Queue pressure, physical checkout constraints and unclear handoffs made speed and assurance dependent on coordinated behaviour across customer devices and store systems.",
+              "zh": "排隊壓力、實體結帳限制與不清楚的交接，使速度與安心感取決於顧客裝置與門市系統之間的協同行為。"
             },
             "optionalBlock": {
-              "type": "CONSTRAINT MANAGED",
+              "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "The handoff crossed the customer’s device, POS/SCO state and frontline behaviour.",
-                "zh": "這段交接跨越顧客裝置、POS／SCO 狀態與第一線人員行為。"
+                "en": "A shared sequence and state model across App, POS/SCO and frontline execution.",
+                "zh": "在 App、POS／SCO 與第一線執行之間建立共享順序與狀態模型。"
               }
             },
             "outcome": {
-              "en": "A validated and shipped handoff that made the transition between App and physical checkout understandable.",
-              "zh": "經驗證並上線的交接模式，讓 App 與實體結帳之間的轉換更容易理解。"
+              "en": "A validated and shipped App-to-checkout handoff, with the visible SCO journey reduced from 9 to 6 steps.",
+              "zh": "經驗證並上線的 App-to-checkout 交接，SCO 可見旅程由 9 步縮減為 6 步。"
             },
             "status": "validated-and-shipped"
           },
           {
             "id": "payment-r1641-decision-02",
             "title": {
-              "en": "Keep payment value visible inside the transaction",
-              "zh": "讓付款價值在交易中保持可見"
+              "en": "Keep loyalty value legible and trustworthy at the moment of payment",
+              "zh": "讓會員價值在付款承諾時保持清楚且可信"
             },
             "whatIDecided": {
-              "en": "Surface LinkPoints, vouchers, applied discounts and payable value within payment and confirmation states.",
-              "zh": "在付款與確認狀態中呈現 LinkPoints、優惠券、已套用折扣與應付金額。"
+              "en": "Structured loyalty value, discounts, benefit application, payable amount, confirmation and history as one legible information sequence at the moment customers committed to payment.",
+              "zh": "將會員價值、折扣、權益套用、應付金額、確認與歷史紀錄，建構成顧客承諾付款時的一條清楚資訊序列。"
             },
             "whyThisChoice": {
-              "en": "Customers needed confidence that the benefits they expected had actually carried into the transaction.",
-              "zh": "顧客需要確信原本預期的權益確實已帶入交易。"
+              "en": "Customers needed to verify that expected benefits had carried into the transaction before committing, not discover missing value after payment.",
+              "zh": "顧客需要在承諾付款前確認預期權益已帶入交易，而不是付款後才發現價值遺失。"
             },
             "optionalBlock": {
               "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "Membership, voucher, payment and POS logic were distributed across different systems and teams.",
-                "zh": "會員、優惠券、付款與 POS 邏輯分布在不同系統與團隊。"
+                "en": "Membership, voucher, payment and POS logic were distributed across different systems and ownership boundaries.",
+                "zh": "會員、優惠券、付款與 POS 邏輯分布在不同系統及責任邊界。"
               }
             },
             "outcome": {
-              "en": "A shipped integration that made benefits and final payable value legible at checkout.",
-              "zh": "已上線的整合方案，讓顧客能在結帳時理解權益與最終應付金額。"
+              "en": "A shipped value and confirmation model that kept LinkPoints, discounts and payable value understandable through completion and history.",
+              "zh": "已上線的價值與確認模型，讓 LinkPoints、折扣與應付金額一路至完成與紀錄都保持可理解。"
             },
             "status": "shipped-cross-team-integration"
           },
           {
             "id": "payment-r1641-decision-03",
             "title": {
-              "en": "Treat recovery and traceability as part of payment",
-              "zh": "將復原與可追溯性納入付款本身"
+              "en": "Design recovery and traceability as part of the transaction",
+              "zh": "將復原與可追溯性設計為交易的一部分"
             },
             "whatIDecided": {
-              "en": "Connect failure alternatives, transaction records and recovery paths to the same transaction model.",
-              "zh": "將失敗替代方案、交易紀錄與復原路徑連接至同一套交易模型。"
+              "en": "Connected return entry from the payment record, Return QR, refund processing and completion, refund amount and method, payment-reference lookup and recovery alternatives to one transaction model — preserving customer and operational traceability after payment.",
+              "zh": "將付款紀錄中的退貨入口、Return QR、退款處理與完成、退款金額與方式、付款參照查詢及復原替代方案連接至同一套交易模型，保留付款後的顧客與營運可追溯性。"
             },
             "whyThisChoice": {
-              "en": "A payment problem could continue after the customer-facing error state, requiring both customers and staff to understand what happened and what came next.",
-              "zh": "付款問題可能在顧客端錯誤狀態之後持續發生，因此顧客與員工都需要理解發生了什麼及下一步。"
+              "en": "A payment problem continued beyond the error screen; customers and internal teams needed a traceable record of what happened, what could be recovered and what action came next.",
+              "zh": "付款問題會延續至錯誤畫面之後；顧客與內部團隊都需要可追溯的紀錄，以理解發生了什麼、可如何復原及下一步行動。"
             },
             "optionalBlock": {
-              "type": "CONSTRAINT MANAGED",
+              "type": "RISK MANAGED",
               "content": {
-                "en": "Recovery crossed customer experience, cashier support, customer service and financial operations.",
-                "zh": "復原流程跨越顧客體驗、收銀支援、客服與財務營運。"
+                "en": "Explicit recovery states reduced the risk of customer uncertainty and operational dead ends while preserving a common transaction reference.",
+                "zh": "明確的復原狀態降低顧客不確定性與營運死角，同時保留共同的交易參照。"
               }
             },
             "outcome": {
-              "en": "The shipped Payment service covered customer-facing failure alternatives, recovery and refund flows, transaction records, internal transaction lookup and supporting operational workflows.",
-              "zh": "已上線的付款服務涵蓋顧客端失敗替代方案、復原與退款流程、交易紀錄、內部交易查詢及支援營運流程。"
+              "en": "Shipped customer and internal flows connected return entry from the payment record, refund handling, completion states and operational lookup.",
+              "zh": "已上線的顧客端與內部流程串連付款紀錄中的退貨入口、退款處理、完成狀態與營運查詢。"
             },
             "status": "shipped-complete-service-scope"
+          },
+          {
+            "id": "payment-r1641-decision-04",
+            "title": {
+              "en": "Extend the payment model into operations, POS and cross-functional delivery",
+              "zh": "將付款模型延伸至營運、POS 與跨職能交付"
+            },
+            "whatIDecided": {
+              "en": "A payment service could not scale through App UI alone. I worked across Payments Engineering, POS, Finance, Security, Customer Service, NCR and store-operation stakeholders to align how payment behaved across customer, checkout and internal-support systems.",
+              "zh": "付款服務無法只靠 App UI 擴展。我橫跨 Payments Engineering、POS、財務、資安、客服、NCR 與門市營運利害關係人，對齊付款在顧客、結帳與內部支援系統中的行為。"
+            },
+            "whyThisChoice": {
+              "en": "I also designed internal operational interfaces for transaction review and refund handling, aligned POS/SCO flows for new payment services, and established reusable Payment design guidance for related teams.",
+              "zh": "我也設計交易審查與退款處理的內部營運介面，對齊新付款服務的 POS／SCO 流程，並為相關團隊建立可重用的 Payment 設計規範。"
+            },
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "Payments Engineering, Engineering leadership, POS technology, NCR/SCO, Finance, Security/Infrastructure, Customer Service, store managers, cashiers and SCO staff aligned around one operating model, with frontline training readiness and relevant payment collateral reviewed before scale.",
+                "zh": "Payments Engineering、工程主管、POS 技術、NCR／SCO、財務、資安／基礎設施、客服、門市主管、收銀員與 SCO 人員需圍繞同一營運模型對齊，並在擴展前完成第一線培訓準備及相關付款素材檢視。"
+              }
+            },
+            "outcome": {
+              "en": "Reusable Payment standards and operational interfaces made the service extensible beyond a single customer-facing flow.",
+              "zh": "可重用的 Payment 標準與營運介面，讓服務得以延伸至單一顧客流程之外。"
+            },
+            "status": "shipped-and-operationalised"
           }
         ],
         "sourcePackage": "r143 user-provided Payment screenshots",
-        "contentStatus": "approved-r164.1"
+        "contentStatus": "approved-r164.9d"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -16067,12 +16056,7 @@
         "my-accountability",
         "related-work"
       ],
-      "latestConfirmedCorrection": {
-        "round": "R164.1",
-        "date": "2026-08-17",
-        "summary": "Migrated Payment into the canonical shared Project Detail IA with a transaction-continuity decision spine.",
-        "productionMutable": false
-      },
+      "latestConfirmedCorrection": "R164.9F — shared Outcomes composition, intrinsic informational media, and canonical Outcomes navigation",
       "domain": {
         "en": "Retail payments",
         "zh": "零售支付"
@@ -16237,12 +16221,12 @@
         "contentRefs": {
           "whatMadeThisHard": "whatMadeThisHard",
           "contribution": "valueIBrought",
-          "contributionIntervention": "keyInterventionMap",
           "coreSystemInsight": "publicContent.coreSystemInsight",
           "decisions": "decisionNarrative.primaryDecisions",
           "evidence": "publicContent.decisionEvidence",
           "outcomes": "publicContent.outcomes",
-          "accountability": "ownershipModel"
+          "accountability": "ownershipModel",
+          "contributionIntervention": "keyInterventionMap"
         },
         "navigation": [
           {
@@ -16314,24 +16298,31 @@
       },
       "decisionEvidenceMap": {
         "payment-r1641-decision-01": {
-          "publicAssetId": "payment-evidence-sco-entry-public-v2",
+          "publicAssetId": "payment-decision-01-app-entry-r1649h",
           "caption": {
-            "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
-            "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
+            "en": "Multiple cards and payment paths became one App entry for in-store payment.",
+            "zh": "多張卡片與付款路徑整合為一個門市付款 App 入口。"
           }
         },
         "payment-r1641-decision-02": {
-          "publicAssetId": "payment-evidence-value-visibility-public-v1",
+          "publicAssetId": "payment-decision-02-loyalty-history-r1649h",
           "caption": {
-            "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
-            "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
+            "en": "Loyalty value stayed visible before payment, after payment, in history and in the final receipt.",
+            "zh": "會員價值在付款前、付款後、歷史紀錄與最終收據中都保持可見。"
           }
         },
         "payment-r1641-decision-03": {
-          "publicAssetId": "payment-evidence-operational-recovery-public-v2",
+          "publicAssetId": "payment-decision-03-return-record-r1649h",
           "caption": {
-            "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
-            "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+            "en": "Return support moved from a separate help path into the payment record.",
+            "zh": "退貨支援由分離的協助路徑移入付款紀錄。"
+          }
+        },
+        "payment-r1641-decision-04": {
+          "publicAssetId": "payment-decision-04-operations-pos-guidelines-r1649h",
+          "caption": {
+            "en": "The payment model extended into SCO, internal operations, cashier POS verification and shared guidance.",
+            "zh": "付款模型延伸至 SCO、內部營運、收銀 POS 驗證與共享規範。"
           }
         }
       }
@@ -30036,13 +30027,13 @@
         "en": "Decisions",
         "zh": "關鍵決策"
       },
-      "impact": {
-        "en": "Impact",
-        "zh": "影響與成果"
-      },
       "evidence": {
         "en": "Evidence",
         "zh": "證據與交付"
+      },
+      "outcomes": {
+        "en": "Outcomes",
+        "zh": "成果"
       }
     },
     "missingTranslationPolicy": {

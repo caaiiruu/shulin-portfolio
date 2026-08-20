@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-20-v2.6",
-  "skillVersion": "2026-08-20-v2.6",
+  "version": "2026-08-20-v2.7",
+  "skillVersion": "2026-08-20-v2.7",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
@@ -89,7 +89,8 @@
     "recruiter-facing decision-support evidence",
     "validation-scale evidence layer",
     "team-recognition proof block",
-    "aligned quantitative outcome metrics"
+    "aligned quantitative outcome metrics",
+    "insight-first Core System Insight semantic sequence"
   ],
   "titleNaming": {
     "fromXToYAllowed": false,
@@ -151,9 +152,23 @@
   ],
   "coreSystemInsight": {
     "composition": "centered-content-composition",
-    "eyebrowAlignment": "center",
-    "headlineAlignment": "center",
-    "bodyAlignment": "center"
+    "cognitiveSequence": [
+      "INSIGHT",
+      "WHAT THIS CHANGED",
+      "VISUAL PROOF"
+    ],
+    "insightFirst": true,
+    "artifactFirst": false,
+    "metricFirst": false,
+    "allowedVisualProof": [
+      "simplified journey map",
+      "system model",
+      "state model",
+      "architecture",
+      "before/after transformation",
+      "transaction model"
+    ],
+    "journeyMapRequired": false
   },
   "accountabilityPresentation": {
     "composition": "two-primary-column-accountability",

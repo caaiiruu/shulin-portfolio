@@ -97,14 +97,7 @@
       const evidence=p.decisionEvidenceMap?.[decision.id];
       return {...decision,evidenceAssetId:evidence?.publicAssetId||null,evidenceCaption:evidence?.caption||null};
     });
-    const gallery=id==='payment'?[
-      {assetId:'payment-evidence-sco-entry-public-v2',title:['Self-checkout entry','自助結帳入口'],text:['Responsive evidence with a reserved aspect ratio and deferred loading.','保留固定比例並延後載入的 Responsive evidence。'],src:'/site/assets/validation/payment/validation-payment-sco-entry-final-r77.jpg',alt:['The self-checkout loyalty and discount screen with a FairPrice app payment entry.','Self-checkout 會員與折扣畫面中的 FairPrice App 支付入口。']},
-      {assetId:'payment-evidence-operational-recovery-public-v2',title:['Operational transaction review','營運交易檢視'],text:['A representative internal payment-operations view.','代表性的內部 Payment operations 畫面。'],src:'/site/assets/validation/payment/validation-payment-internal-portal-list-r77.jpg',alt:['An internal payment transaction review list.','內部 Payment transaction review 清單。']},
-      ...['01','02','03','04','05'].map((step,index)=>({title:[`Refund state ${index+1}`,`退款狀態 ${index+1}`],text:['A deferred-loading state from the cross-channel refund flow.','跨通路退款流程中延後載入的狀態畫面。'],src:`/site/assets/validation/payment/validation-payment-refund-state-${step}-r77.jpg`,alt:[`Refund flow state ${index+1}.`,`退款流程狀態 ${index+1}。`]})),
-      {title:['Payment receipt','付款收據'],text:['Supporting customer communication loaded only with this evidence section.','僅在此證據區塊載入的顧客溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-receipt-email-mobile-r77.jpg',alt:['Mobile payment receipt email.','Mobile 付款收據 Email。']},
-      {title:['Refund receipt','退款收據'],text:['Supporting refund communication loaded only with this evidence section.','僅在此證據區塊載入的退款溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-refund-email-mobile-r77.jpg',alt:['Mobile refund receipt email.','Mobile 退款收據 Email。']},
-      {assetId:'payment-video-core-app-pos-public-v1',title:['Order-details interaction','訂單詳情互動'],text:['Poster-first video; media mounts only on demand.','Poster-first 影片；媒體僅在需要時掛載。'],poster:'/site/assets/validation/payment/validation-payment-video-order-details-poster-r77.png',video:'/site/assets/validation/payment/validation-payment-video-order-details-r77.mov',alt:['Order details interaction preview.','Order details 互動預覽。']}
-    ]:[[title[0],atGlance[0],title[1],atGlance[1]]];
+    const gallery=[[title[0],atGlance[0],title[1],atGlance[1]]];
     const status=String(p.status||p.publicStatus||p.contentStatus||'');
     const confidentiality=pair(
       p.confidentialityNote||
@@ -1164,6 +1157,7 @@
   const projectSectionNavToggle=doc.getElementById('projectSectionNavToggle');
   const projectSectionNavLinks=doc.getElementById('projectSectionNavLinks');
   function syncProjectFloatingPrimitive(){
+    if(projectSectionNav)projectSectionNav.dataset.componentOwner='SectionNavigator';
     projectSectionNav?.classList.add('floating-navigator');
     projectSectionNavLinks?.classList.add('floating-navigator__rail');
     projectSectionNavLinks?.querySelectorAll('a').forEach(link=>link.classList.add('floating-navigator__item'));
@@ -1173,11 +1167,14 @@
   let suppressHistorySync=false;
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
+  let pendingProjectSectionId='';
+  const canonicalProjectNavLabel=(key,en,zh)=>{const labels=pair(DATA.localizationRegistry?.projectSectionNavigationLabels?.[key]);return [labels[0]||en,labels[1]||zh]};
+  const [outcomesNavEn,outcomesNavZh]=canonicalProjectNavLabel('outcomes','Outcomes','成果');
   const PROJECT_NAV_ITEMS=[
     ['overview','projectOverviewSection','Overview','概覽'],
     ['complexity','projectComplexitySection','Complexity','複雜度'],
     ['decisions','projectDecisionsSection','Decisions','設計決策'],
-    ['impact','projectImpactSection','Impact','影響與成果']
+    ['outcomes','projectImpactSection',outcomesNavEn,outcomesNavZh]
   ];
   function projectNavTarget(key,fallbackId){
     const configuredTarget=fallbackId?doc.getElementById(fallbackId):null;
@@ -1227,10 +1224,13 @@
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
     const targetTop=target.getBoundingClientRect().top;
     const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
-    alignProjectSectionTarget(target);
+    const behavior=prefersReduced.matches?'auto':'smooth';
+    history.replaceState(history.state,'',`#${target.id}`);
+    pendingProjectSectionId=behavior==='smooth'?target.id:'';
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior});
     visibleProjectSectionId=target.id;
     setActiveProjectSection(target.id);
+    if(behavior==='auto')updateProjectSectionLocation();
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
@@ -1243,7 +1243,7 @@
     const atScrollEnd=dialogScrollRoot.scrollTop+dialogScrollRoot.clientHeight>=dialogScrollRoot.scrollHeight-2;
     if(atScrollEnd&&visible.length)current=visible[visible.length-1];
     visibleProjectSectionId=current?.id||'';
-    setActiveProjectSection(visibleProjectSectionId);
+    setActiveProjectSection(pendingProjectSectionId||visibleProjectSectionId);
   }
   function renderProjectSectionNav(){
     if(!projectSectionNav||!projectSectionNavLinks)return;
@@ -1252,8 +1252,8 @@
     clear(projectSectionNavLinks);
     const project=currentDetail?.type==='project'?DATA.projects[currentDetail.key]:null;
     const configured=list(project?.presentation?.navigation).map(item=>{
-      const labels=pair(item.label);
-      return [item.key,item.target,labels[0],labels[1]];
+      const labels=['outcomes','impact'].includes(item.key)?[outcomesNavEn,outcomesNavZh]:pair(item.label);
+      return [item.key==='impact'?'outcomes':item.key,item.target,labels[0],labels[1]];
     });
     const items=(configured.length?configured:PROJECT_NAV_ITEMS).filter(([key,id])=>{
       const target=projectNavTarget(key,id);
@@ -1286,6 +1286,12 @@
   });
   dialogScrollRoot?.addEventListener('scroll',()=>{
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
+    updateProjectSectionLocation();
+  },{passive:true});
+  dialogScrollRoot?.addEventListener('scrollend',()=>{
+    const completedTarget=pendingProjectSectionId?doc.getElementById(pendingProjectSectionId):null;
+    pendingProjectSectionId='';
+    if(completedTarget)alignProjectSectionTarget(completedTarget);
     updateProjectSectionLocation();
   },{passive:true});
 
@@ -2718,7 +2724,9 @@
     return text.toLowerCase().replace(/(^|[\s/–—-])([a-z])/g,(_,prefix,letter)=>prefix+letter.toUpperCase());
   }
     function projectContentRef(project,path){
-    return String(path||'').split('.').filter(Boolean).reduce((value,key)=>value?.[key],project);
+    const keys=String(path||'').split('.').filter(Boolean);
+    if(!keys.length)return undefined;
+    return keys.reduce((value,key)=>value?.[key],project);
   }
   function appendAccountabilityList(article,label,items){
     article.append(element('span','voucher-r149-eyebrow',label));
@@ -2747,28 +2755,73 @@
       const media=element('div','voucher-r149-foundation__media');
       const caption=element('div','voucher-r149-foundation__caption');
       const resolved=resolveProjectAsset(item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1');
-      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
+      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(item.presentation==='raw')card.classList.add('voucher-r149-foundation--raw');if(item.presentation==='informational')card.classList.add('voucher-r149-foundation--informational');
       if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-      media.append(image);caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
-      card.append(media,caption);grid.append(card);
+      media.append(image);card.append(media);
+      if(item.showCaption!==false){
+        caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
+        if(item.finding){
+          const finding=element('aside','voucher-r149-foundation__finding');
+          finding.append(element('h4','',translate(item.finding.title)),element('p','',translate(item.finding.copy)));
+          caption.append(finding);
+        }
+        card.append(caption);
+      }
+      grid.append(card);
     });
     section.append(grid);return grid;
   }
+  function appendResearchSynthesis(section,source,{translate=localize}={}){
+    if(!source)return null;
+    const block=element('section','structured-evidence-research-synthesis');
+    block.dataset.componentOwner='StructuredEvidence';
+    const heading=element('header','structured-evidence-research-synthesis__header');
+    heading.append(element('h3','',translate(source.title)),element('p','',translate(source.intro)));
+    block.append(heading);
+    const insights=element('div','structured-evidence-research-synthesis__insights');
+    list(source.insights).forEach(item=>{
+      const card=element('article','structured-evidence-research-synthesis__insight');
+      card.append(element('h4','',translate(item.heading)),element('p','structured-evidence-research-synthesis__summary',translate(item.summary)));
+      const details=element('ul','structured-evidence-research-synthesis__details');
+      list(item.details).forEach(detail=>details.append(element('li','',translate(detail))));
+      if(details.childElementCount)card.append(details);
+      const implication=element('div','structured-evidence-research-synthesis__implication');
+      implication.append(element('span','voucher-r149-eyebrow',translate(source.implicationLabel)),element('p','',translate(item.implication)));
+      card.append(implication);insights.append(card);
+    });
+    block.append(insights);
+    if(list(source.visual).length){
+      const proof=element('div','structured-evidence-research-synthesis__proof');
+      proof.append(element('span','voucher-r149-eyebrow',translate(source.visualLabel)));
+      appendVisualEvidenceModules(proof,source.visual,{translate});
+      block.append(proof);
+    }
+    const strategy=element('section','structured-evidence-research-synthesis__strategy');
+    strategy.append(element('h3','voucher-r149-eyebrow',translate(source.strategyLabel)));
+    const strategyGrid=element('div','structured-evidence-research-synthesis__strategy-grid');
+    list(source.strategies).forEach(item=>{
+      const card=element('article','structured-evidence-research-synthesis__strategy-card');
+      card.append(element('span','structured-evidence-research-synthesis__strategy-index',item.index),element('h4','',translate(item.title)),element('p','',translate(item.copy)));
+      strategyGrid.append(card);
+    });
+    strategy.append(strategyGrid);block.append(strategy);section.append(block);return block;
+  }
   function appendOutcomeCards(grid,items,{metric=false,translate=localize}={}){
     list(items).forEach(item=>{
-      const card=element('article',metric?'outcome-metric':'outcome-metric outcome-metric--qualitative');
+      const metricClasses=metric?`outcome-metric${item?.featured?' outcome-metric--featured':''}`:'outcome-metric outcome-metric--qualitative';const card=element('article',metricClasses);
       if(metric){
         const primary=element('div','outcome-metric__primary');
         const labelCopy=translate(item.label),supportingCopy=translate(item.supportingCopy),fallbackCopy=translate(item.primaryCopy)||labelCopy;
-        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote)||labelCopy,lang==='zh'?'查看成果證據':'View outcome evidence');
-        appendInlineEndTooltip(label,supportingCopy?labelCopy:fallbackCopy,tip);primary.append(label);if(supportingCopy)primary.append(element('p','outcome-metric__supporting',supportingCopy));
+        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote),lang==='zh'?'查看成果證據':'View outcome evidence');
+        if(tip)appendInlineEndTooltip(label,supportingCopy?labelCopy:fallbackCopy,tip);else safeText(label,supportingCopy?labelCopy:fallbackCopy);
+        primary.append(label);if(supportingCopy)primary.append(element('p','outcome-metric__supporting',supportingCopy));
         card.append(directionalValue(item.value,'outcome-metric__value'),primary);
       }else card.append(element('h3','outcome-metric__heading',translate(item.heading)),element('p','outcome-metric__copy',translate(item.copy)));
       grid.append(card);
     });
     return grid;
   }
-  function appendOutcomeSemanticHierarchy(section,source,{translate=localize}={}){
+  function appendOutcomeSemanticHierarchy(section,source,{translate=localize,measuredLabelInHeader=false}={}){
     const change=source?.change;
     if(change){
       const block=element('article','outcome-semantic-change');
@@ -2777,10 +2830,10 @@
       section.append(block);
     }
     if(list(source?.measured).length){
-      const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
-      group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
+      const group=element('section',`outcome-semantic-group outcome-semantic-group--measured${measuredLabelInHeader?' outcome-semantic-group--label-in-header':''}`);
+      if(!measuredLabelInHeader)group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
-      if(source.metricLayout==='aligned-five')grid.classList.add('outcome-semantic-group__grid--aligned');
+      if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
       appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
     }
     if(list(source?.scale).length){
@@ -2804,7 +2857,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside','outcome-recognition-proof');proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel))copy.append(element('span','outcome-recognition-proof__cta',translate(source.recognition.ctaLabel)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
@@ -2869,17 +2922,38 @@
     if(contributionSource?.evidence)appendVisualEvidenceModules(contribution,contributionSource.evidence,{translate:t});
 
     const insightSource=projectContentRef(p,refs.coreSystemInsight);
+    const semanticInsight=Boolean(insightSource?.insight||insightSource?.whatThisChanged);
+    const insightTitle=insightSource?.insight||insightSource?.headline;
+    const insightCopy=insightSource?.whatThisChanged||insightSource?.supportingCopy;
     const insight=visibility.coreSystemInsight!==false&&insightSource
-      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightSource.headline),t(insightSource.supportingCopy)):null;
-    if(insight){insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';if(insightSource?.evidence)appendVisualEvidenceModules(insight,insightSource.evidence,{translate:t})}
+      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightTitle),semanticInsight?'':t(insightSource?.supportingCopy)):null;
+    if(insight){
+      insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');
+      insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';
+      const heading=insight.querySelector('.voucher-r149-heading');
+      if(insightSource?.insight&&insightSource?.showInsightLabel!==false&&heading)heading.insertBefore(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'洞察':'INSIGHT'),heading.querySelector('h2'));
+      if(semanticInsight&&t(insightCopy)){
+        const changed=element('div','core-system-insight-section__change');
+        if(insightSource?.whatThisChanged)changed.append(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'這改變了什麼':'WHAT THIS CHANGED'));
+        changed.append(element('p','core-system-insight-section__statement',t(insightCopy)));
+        if(t(insightSource?.supportingOutcome))changed.append(element('p','core-system-insight-section__supporting-outcome',t(insightSource.supportingOutcome)));
+        insight.append(changed);
+      }
+      if(insightSource?.evidence){
+        if(insightSource?.showVisualProofLabel!==false)insight.append(element('span','voucher-r149-eyebrow core-system-insight-section__visual-proof-label',lang==='zh'?'視覺證據':'VISUAL PROOF'));
+        appendVisualEvidenceModules(insight,insightSource.evidence,{translate:t});
+      }
+    }
 
     const evidenceSource=projectContentRef(p,refs.evidence);
     const evidence=visibility.evidence!==false&&evidenceSource
       ?createRecruiterSection('',t(evidenceSource.title)):null;
     if(evidence){
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
+      if(evidenceSource.researchSynthesis)appendResearchSynthesis(evidence,evidenceSource.researchSynthesis,{translate:t});
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
-      if(evidenceSource.validationLayer){const validation=element('section','structured-evidence-v223__validation');validation.dataset.componentOwner='StructuredEvidence';validation.append(element('h3','structured-evidence-v223__validation-title',t(evidenceSource.validationLayer.title)));if(t(evidenceSource.validationLayer.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(evidenceSource.validationLayer.intro)));const grid=element('div','structured-evidence-v223__validation-metrics');list(evidenceSource.validationLayer.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid);evidence.append(validation)}
+      if(list(evidenceSource.quotes).length){const voices=element('div','structured-evidence-quotes');voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});evidence.append(voices)}
+      if(evidenceSource.validationLayer){const validation=element('section','structured-evidence-v223__validation');validation.dataset.componentOwner='StructuredEvidence';validation.append(element('h3','structured-evidence-v223__validation-title',t(evidenceSource.validationLayer.title)));if(t(evidenceSource.validationLayer.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(evidenceSource.validationLayer.intro)));const grid=element('div','structured-evidence-v223__validation-metrics');list(evidenceSource.validationLayer.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),evidenceNote=t(item.evidenceNote);if(evidenceNote){const tip=createInfoTooltip(evidenceNote,lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(item.label),tip)}else safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid);evidence.append(validation)}
       if(t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(list(evidenceSource.structuredGroups).length){
         const decisionSupport=evidenceSource.presentation==='decision-support';
@@ -2918,9 +2992,11 @@
     if(decisionListNode)decisions.append(decisionListNode);
 
     const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomes=createRecruiterSection('',t(outcomesSource?.title));
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
+    const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
-    if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
+    if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
       const qualitative=element('div','outcome-qualitative-hierarchy');
       if(t(outcomesSource?.headline)){
@@ -2967,7 +3043,7 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');appendVisualEvidenceModules(reusable,c.reusableSystem?.foundations,{translate:t});
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';

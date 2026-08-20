@@ -228,29 +228,45 @@ for (const viewport of viewports) {
   if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
   if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
-  const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
+  const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null,motionObserved:false};
+  const waitForNavigatorSettlement=async link=>{
+    let previous=null,stableFrames=0;
+    for(let attempt=0;attempt<80;attempt+=1){
+      await page.waitForTimeout(50);
+      const state=await link.evaluate(node=>({current:node.getAttribute("aria-current"),scrollTop:document.querySelector(".dialog-scroll")?.scrollTop||0}));
+      stableFrames=previous!==null&&Math.abs(state.scrollTop-previous)<.5?stableFrames+1:0;
+      if(stableFrames>=3)return;
+      previous=state.scrollTop;
+    }
+    throw new Error(`${viewport.name} navigator smooth scroll did not settle: ${JSON.stringify({previous,stableFrames})}`);
+  };
   const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
-    const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
+    const root=page.locator(".dialog-scroll").first();
+    const before=await root.evaluate(node=>node.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    const intermediate=await root.evaluate(node=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(node.scrollTop)))));
+    await waitForNavigatorSettlement(link);
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
-      return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
+      return {current:node.getAttribute("aria-current"),before:null,intermediate:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight,reduced:matchMedia("(prefers-reduced-motion: reduce)").matches};
     });
-    state.before=before;collection.push({label,...state});
+    state.before=before;state.intermediate=intermediate;
+    if(!state.reduced&&Math.abs(state.after-state.before)>4&&Math.abs(state.intermediate-state.after)>1)navigatorInteractions.motionObserved=true;
+    collection.push({label,...state});
     if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
     if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
     if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
   for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
   for(const label of ["Outcomes","Evidence","Decisions","Complexity","Overview"])await certifyNavigatorClick(label,navigatorInteractions.reverseClicks);
+  if(!navigatorInteractions.motionObserved)failures.push(`${viewport.name} navigator smooth activation did not demonstrate an intermediate scroll state`);
   const outcomesLink=navigator.getByRole("link",{name:"Outcomes",exact:true});
-  await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(80);
+  await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);
   navigatorInteractions.repeated=(await outcomesLink.getAttribute("aria-current"))==="location";
   if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
   const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
-  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(80);
+  await overviewLink.focus();await overviewLink.press("Enter");await waitForNavigatorSettlement(overviewLink);
   navigatorInteractions.keyboard=(await overviewLink.getAttribute("aria-current"))==="location" && !(await page.locator("#projectOverviewSection").evaluate(node=>node===document.activeElement));
   if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
   const scrollRootForNav=page.locator(".dialog-scroll").first();
@@ -263,8 +279,73 @@ for (const viewport of viewports) {
   if(viewport.width<=430){
     const decisionsLink=navigator.getByRole("link",{name:"Decisions",exact:true});
     const box=await decisionsLink.boundingBox();
-    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(80);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
+    if(box){await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await waitForNavigatorSettlement(decisionsLink);navigatorInteractions.touch=(await decisionsLink.getAttribute("aria-current"))==="location";}
     if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
+  }
+
+  await page.goto(`${baseUrl}/site/work/payment`,{waitUntil:"networkidle"});
+  const paymentOutcome=await page.evaluate(async()=>{
+    const root=document.querySelector("#detailDialog"),section=document.querySelector("#systemCaseOutcomesSection"),grid=section?.querySelector(".outcome-semantic-group__grid--aligned"),cards=[...section.querySelectorAll(".outcome-metric")],media=document.querySelector(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media"),image=media?.querySelector("img");
+    if(image&&!image.complete)await new Promise(resolve=>{image.addEventListener("load",resolve,{once:true});image.addEventListener("error",resolve,{once:true})});
+    const mr=media?.getBoundingClientRect(),ir=image?.getBoundingClientRect(),style=image?getComputedStyle(image):null;
+    return{intro:section?.querySelector(".case-study-section__header .voucher-r149-intro")?.textContent.trim(),values:cards.map(card=>card.querySelector(".outcome-metric__value")?.textContent.trim()),supports:cards.map(card=>card.querySelector(".outcome-metric__supporting")?.textContent.trim()||""),columns:grid?getComputedStyle(grid).gridTemplateColumns.trim().split(/\\s+/).length:0,tooltips:section?.querySelectorAll(".info-tooltip__trigger").length||0,overflow:(root?.scrollWidth||0)-(root?.clientWidth||0),image:{complete:image?.complete,naturalWidth:image?.naturalWidth,naturalHeight:image?.naturalHeight,objectFit:style?.objectFit,wrapperRatio:mr?mr.width/mr.height:null,imageRatio:ir?ir.width/ir.height:null,topDelta:mr&&ir?Math.abs(mr.top-ir.top):null,bottomDelta:mr&&ir?Math.abs(mr.bottom-ir.bottom):null,radius:media?getComputedStyle(media).borderRadius:null},nav:[...document.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim())};
+  });
+  const expectedColumns=viewport.width===430?1:viewport.width===871?2:3;
+  if(paymentOutcome.intro!=="After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.")failures.push(`${viewport.name} Payment post-launch Outcomes framing mismatch`);
+  if(JSON.stringify(paymentOutcome.values)!==JSON.stringify(["70.2","~190","~57K","~228K","98.5%","2.7× faster"]))failures.push(`${viewport.name} Payment Outcome values mismatch: ${JSON.stringify(paymentOutcome.values)}`);
+  if(paymentOutcome.supports[2]!=="by Sep 2021"||paymentOutcome.supports[3]!=="by Sep 2021"||paymentOutcome.supports[5]!=="19.78 sec → 7.29 sec")failures.push(`${viewport.name} Payment Outcome support mismatch: ${JSON.stringify(paymentOutcome.supports)}`);
+  if(paymentOutcome.columns!==expectedColumns||paymentOutcome.tooltips!==0||paymentOutcome.overflow>0)failures.push(`${viewport.name} Payment Outcome shared layout failed: ${JSON.stringify(paymentOutcome)}`);
+  if(!paymentOutcome.image.complete||paymentOutcome.image.naturalWidth!==2400||paymentOutcome.image.naturalHeight!==1500||Math.abs(paymentOutcome.image.wrapperRatio-1.6)>.01||Math.abs(paymentOutcome.image.imageRatio-1.6)>.01||paymentOutcome.image.topDelta>1||paymentOutcome.image.bottomDelta>1||paymentOutcome.image.objectFit!=="contain"||paymentOutcome.image.radius==="0px")failures.push(`${viewport.name} Payment checkout informational media clipped: ${JSON.stringify(paymentOutcome.image)}`);
+  if(paymentOutcome.nav.includes("Impact")||!paymentOutcome.nav.includes("Outcomes"))failures.push(`${viewport.name} Payment navigator naming mismatch: ${JSON.stringify(paymentOutcome.nav)}`);
+  if(["desktop-1419","tablet-871","mobile-430"].includes(viewport.name)){
+    const research=await page.evaluate(async()=>{
+      const section=document.querySelector("#systemCaseEvidenceSection"),block=section?.querySelector(".structured-evidence-research-synthesis"),insights=[...block.querySelectorAll(".structured-evidence-research-synthesis__insight")],strategies=[...block.querySelectorAll(".structured-evidence-research-synthesis__strategy-card")],image=block.querySelector(".structured-evidence-research-synthesis__proof img");
+      if(image&&!image.complete)await new Promise(resolve=>{image.addEventListener("load",resolve,{once:true});image.addEventListener("error",resolve,{once:true})});
+      const text=section?.innerText||"",columns=node=>node?getComputedStyle(node).gridTemplateColumns.trim().split(/\\s+/).length:0;
+      return{intro:block?.querySelector(".structured-evidence-research-synthesis__header p")?.textContent.trim(),headings:insights.map(card=>card.querySelector("h4")?.textContent.trim()),summaries:insights.map(card=>card.querySelector(".structured-evidence-research-synthesis__summary")?.textContent.trim()),implications:insights.map(card=>card.querySelector(".structured-evidence-research-synthesis__implication p")?.textContent.trim()),strategyTitles:strategies.map(card=>card.querySelector("h4")?.textContent.trim()),insightColumns:columns(block?.querySelector(".structured-evidence-research-synthesis__insights")),strategyColumns:columns(block?.querySelector(".structured-evidence-research-synthesis__strategy-grid")),assuranceCount:(text.match(/87\\.5%/g)||[]).length,scoCount:(text.match(/6 structured \\+ 7 guerrilla/g)||[]).length,focusedValidation:text.includes("Focused validation"),source:{complete:image?.complete,naturalWidth:image?.naturalWidth,naturalHeight:image?.naturalHeight,src:image?.currentSrc},overflow:(section?.scrollWidth||0)-(section?.clientWidth||0)};
+    });
+    const expectedInsightColumns=viewport.width===430?1:2,expectedStrategyColumns=viewport.width===1419?3:1;
+    if(research.intro!=="I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.")failures.push(`${viewport.name} Payment research leadership intro mismatch`);
+    if(JSON.stringify(research.headings)!==JSON.stringify(["87.5% — Assurance","87.5% — Social pressure","87.5% — Time is money","75% — Loyalty value awareness"]))failures.push(`${viewport.name} Payment research priorities mismatch: ${JSON.stringify(research.headings)}`);
+    if(JSON.stringify(research.strategyTitles)!==JSON.stringify(["Visible assurance and recovery","A shorter checkout handoff","Visible loyalty value at payment"]))failures.push(`${viewport.name} Payment research strategy synthesis mismatch: ${JSON.stringify(research.strategyTitles)}`);
+    if(research.summaries.some(value=>!value)||research.implications.some(value=>!value)||research.insightColumns!==expectedInsightColumns||research.strategyColumns!==expectedStrategyColumns||research.assuranceCount!==3||research.scoCount!==1||research.focusedValidation||research.overflow>0)failures.push(`${viewport.name} Payment research synthesis layout/deduplication failed: ${JSON.stringify(research)}`);
+    if(research.source.src)failures.push(`${viewport.name} Payment removed research-deck visual still rendered: ${JSON.stringify(research.source)}`);
+  }
+  if(["desktop-1419","tablet-871","mobile-430"].includes(viewport.name)){
+    const decisionVisuals=await page.locator("#systemCaseDecisionsSection .decision-visual-v58 img").evaluateAll(images=>images.map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,fit:getComputedStyle(image).objectFit,radius:getComputedStyle(image).borderRadius})));
+    const expectedDecisionAssets=["payment-decision-01-app-entry-r1649h.jpg","payment-decision-02-loyalty-history-r1649h.jpg","payment-decision-03-return-record-r1649h.jpg","payment-decision-04-operations-pos-guidelines-r1649h.jpg"];
+    if(decisionVisuals.length!==4||decisionVisuals.some((item,index)=>!item.complete||item.naturalWidth!==2048||item.naturalHeight!==1280||!item.src.includes(expectedDecisionAssets[index])||item.fit==="cover"||item.radius==="0px"))failures.push(`${viewport.name} Payment R164.9H Decision visual integration failed: ${JSON.stringify(decisionVisuals)}`);
+    const evidenceHierarchy=await page.evaluate(()=>{const main=document.querySelector("#systemCaseEvidenceSection h2"),group=document.querySelector(".structured-evidence-research-synthesis__header h3"),strategy=document.querySelector(".structured-evidence-research-synthesis__strategy>h3"),live=document.querySelector("#systemCaseEvidenceSection>.voucher-r149-foundations>.voucher-r149-foundation");return{mainSize:parseFloat(getComputedStyle(main).fontSize),groupSize:parseFloat(getComputedStyle(group).fontSize),strategySize:parseFloat(getComputedStyle(strategy).fontSize),liveText:live?.innerText||"",deck:Boolean(document.querySelector('img[src*="payment-research-design-opportunities-r1649g"]'))}});
+    if(!(evidenceHierarchy.mainSize>evidenceHierarchy.groupSize)||evidenceHierarchy.strategySize<evidenceHierarchy.groupSize||!evidenceHierarchy.liveText.includes("3 days · 8 shoppers across cashier and self-checkout")||!evidenceHierarchy.liveText.includes("assurance, social-pressure and time-is-money")||evidenceHierarchy.deck)failures.push(`${viewport.name} Payment R164.9H Evidence hierarchy/context failed: ${JSON.stringify(evidenceHierarchy)}`);
+  }
+  const r1649fDirectory=path.join(directory,"r1649f");fs.mkdirSync(r1649fDirectory,{recursive:true});
+  await page.locator("#systemCaseOutcomesSection").screenshot({path:path.join(r1649fDirectory,"payment-outcomes.png")});
+  await page.locator("#systemCaseOutcomesSection .outcome-metric").nth(5).screenshot({path:path.join(r1649fDirectory,"payment-speed-metric.png")});
+  await page.locator(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media").screenshot({path:path.join(r1649fDirectory,"payment-checkout-compression.png")});
+  await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"payment-floating-navigator.png")});
+  if(["desktop-1419","tablet-871","mobile-430"].includes(viewport.name)){
+    const r1649gDirectory=path.join(directory,"r1649g");fs.mkdirSync(r1649gDirectory,{recursive:true});
+    await page.locator(".structured-evidence-research-synthesis__header").screenshot({path:path.join(r1649gDirectory,"research-introduction.png")});
+    await page.locator(".structured-evidence-research-synthesis__insights").screenshot({path:path.join(r1649gDirectory,"research-four-insights.png")});
+    await page.locator(".structured-evidence-research-synthesis__strategy").screenshot({path:path.join(r1649gDirectory,"research-strategy-synthesis.png")});
+    const evidenceItems=page.locator("#systemCaseEvidenceSection>.voucher-r149-foundations>.voucher-r149-foundation");
+    await evidenceItems.nth(0).screenshot({path:path.join(r1649gDirectory,"evidence-live-checkout.png")});
+    await evidenceItems.nth(1).screenshot({path:path.join(r1649gDirectory,"evidence-sco-validation.png")});
+    await evidenceItems.nth(2).screenshot({path:path.join(r1649gDirectory,"evidence-journey-synthesis.png")});
+    const evidenceLink=page.locator('#projectSectionNav a[href="#systemCaseEvidenceSection"]'),outcomesLink=page.locator('#projectSectionNav a[href="#systemCaseOutcomesSection"]');
+    await evidenceLink.click();await waitForNavigatorSettlement(evidenceLink);
+    if((await evidenceLink.getAttribute("aria-current"))!=="location"||!page.url().endsWith("#systemCaseEvidenceSection"))failures.push(`${viewport.name} Payment Evidence navigator settlement failed after research media load`);
+    await page.locator("#projectSectionNav").screenshot({path:path.join(r1649gDirectory,"navigator-evidence-active.png")});
+    await outcomesLink.click();await waitForNavigatorSettlement(outcomesLink);
+    if((await outcomesLink.getAttribute("aria-current"))!=="location"||!page.url().endsWith("#systemCaseOutcomesSection"))failures.push(`${viewport.name} Payment Evidence to Outcomes navigator settlement failed`);
+    await page.locator("#systemCaseOutcomesSection").evaluate(element=>{const root=element.closest(".dialog-scroll"),top=element.offsetTop-(root?.clientHeight||0)*.55;if(root)root.scrollTop=Math.max(0,top)});
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    await page.locator(".dialog-scroll").screenshot({path:path.join(r1649gDirectory,"evidence-outcomes-transition.png")});
+  }
+  if(viewport.name==="desktop-1419")for(const [projectName,route] of [["Voucher","/site/work/voucher"],["DBS","/site/work/dbs"],["Booking","/site/work/booking"],["CTBC","/site/work/ctbc-mortgage-self-service-app"]]){
+    await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});const labels=await page.locator("#projectSectionNav a").allTextContents();
+    if(labels.includes("Impact")||!labels.includes("Outcomes"))failures.push(`${viewport.name} ${projectName} navigator did not normalize Outcomes: ${JSON.stringify(labels)}`);
+    if(projectName==="Voucher"){await page.locator("#voucherImpactSection").screenshot({path:path.join(r1649fDirectory,"voucher-approved-outcomes-reference.png")});await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"voucher-outcomes-navigator.png")});}
   }
 
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });

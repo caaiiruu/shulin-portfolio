@@ -1,3 +1,10 @@
+## 2026-08-20-v2.7
+
+- Registered the Human-approved shared Core System Insight cognitive sequence: `INSIGHT → WHAT THIS CHANGED → VISUAL PROOF`.
+- Core System Insight is explicitly insight-first, not artifact-first or metric-first.
+- Visual proof may use a simplified Journey Map, system model, state model, architecture, before/after transformation, or transaction model; Journey Maps are not mandatory.
+- Added generic shared renderer capacity while preserving existing project output when the semantic fields are absent.
+
 ## 2026-08-20-v2.6
 
 - Added the canonical Git ancestry activation boundary for SSOT-05/06 at `e9e488f3780381d0244044bdc6c69d9e09b0d14a`, the canonical QA merge where the same-commit Content / Asset Manifest atomicity contract first became active.

@@ -330,7 +330,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-17-r164.1");
+  assert.equal(ssot.contentVersion, "2026-08-20-r164.9f");
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -1463,7 +1463,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-17-r164.1");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-20-r164.9h");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
 
 test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
 
@@ -1636,7 +1636,7 @@ test("R161.2.1 converges Domain ProjectCards and floating navigation on canonica
   assert.match(home,/card\.classList\.add\('related-project-card-v45--media-stack'\)/);
   assert.match(home,/related-project-card__heading-v1612/);
   assert.match(home,/related-project-card__content-v1612/);
-  assert.match(card,/\.related-project-card-v45--media-stack\{padding:0;grid-template-rows:auto minmax\(0,1fr\);gap:0;overflow:hidden\}/);
+  assert.match(card,/\.related-project-card-v45--media-stack\{padding:0;grid-template-rows:auto minmax\(0,1fr\);gap:0;overflow:visible\}/);
   assert.match(card,/\.related-project-card-v45--media-stack \.related-project-card__visual-v45\{border-radius:0\}/);
   assert.match(card,/\.related-project-card__heading-v1612\{[^}]*gap:var\(--project-card-company-title-gap\)/);
   assert.match(card,/\.related-project-card__heading-v1612 \.related-project-card__title\{margin-top:0\}/);
@@ -1676,7 +1676,7 @@ test("shared Outcomes supports change, measured outcome, and scale semantics", (
   assert.match(app, /source\?\.change/);
   assert.match(app, /source\?\.measured/);
   assert.match(app, /source\?\.scale/);
-  assert.match(app, /if\(outcomesSource\?\.semanticHierarchy\)appendOutcomeSemanticHierarchy/);
+  assert.match(app, /if\(outcomesHierarchy\)appendOutcomeSemanticHierarchy\(outcomes,outcomesHierarchy/);
   assert.doesNotMatch(app, /booking.*semanticHierarchy|semanticHierarchy.*booking/i);
   assert.match(overview, /\.outcome-semantic-change\{/);
   assert.match(overview, /\.outcome-scale-grid\{/);
@@ -1828,4 +1828,101 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   assert.match(css,/\.structured-evidence-v223__groups--decision-support\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
   assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
+});
+
+
+test("R164.9D applies Human Payment QA corrections through shared owners", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app = read("assets/js/app.js");
+  const cardCss = read("assets/css/components/project-card.css");
+  const payment = ssot.projects.payment;
+  assert.equal(ssot.contentVersion, manifest.contentVersion);
+  assert.equal(payment.presentation.contentRefs.contributionIntervention, "keyInterventionMap");
+  assert.equal(payment.decisionNarrative.primaryDecisions.length, 4);
+  assert.equal(payment.publicContent.decisionEvidence.validationLayer, undefined);
+  assert.equal(payment.publicContent.decisionEvidence.mappingTitle, undefined);
+  assert.equal(payment.publicContent.decisionEvidence.structuredGroups, undefined);
+  assert.ok(payment.publicContent.coreSystemInsight.insight.en);
+  assert.ok(payment.publicContent.coreSystemInsight.whatThisChanged.en);
+  assert.equal(manifest.items["payment-evidence-journey-synthesis-r1649c"].implementationStatus, "real-active");
+  assert.equal(manifest.items["payment-return-recovery-human-r1649d"].implementationStatus, "real-active");
+  assert.equal(manifest.items["payment-evidence-live-checkout-image-only-r1649d"].implementationStatus, "real-active");
+  assert.match(app, /WHAT THIS CHANGED/);
+  assert.equal(payment.publicContent.coreSystemInsight.showVisualProofLabel, false);
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].showCaption, false);
+  assert.doesNotMatch(app, /outcome-metric--subordinate/);
+  assert.match(cardCss, /outer owns hover\/border; media owns clipping/);
+  assert.equal(payment.publicContent.decisionEvidence.items.length, 3);
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.attribution, undefined);
+});
+
+test("R164.9E separates Engineering PASS from Human visual acceptance",()=>{
+  const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
+  const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const p=data.projects.payment,e=p.publicContent.decisionEvidence,o=p.publicContent.outcomes.semanticHierarchy;
+  assert.equal(data.contentVersion,"2026-08-20-r164.9h");
+  assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(p.presentation.contentRefs.contributionIntervention,"keyInterventionMap");
+  assert.ok(["before","intervention","after"].every(key=>p.keyInterventionMap[key].en));
+  assert.equal(e.items.some(item=>item.assetId==="payment-return-recovery-human-r1649d"),false);
+  assert.equal(e.items.filter(item=>item.assetId==="payment-evidence-sco-entry-research-r1649e").length,1);
+  assert.equal("validationLayer" in e,false);
+  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Checkout assurance"&&item.finding.copy?.en.startsWith("87.5%")).length,1);
+  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Transaction-history retrieval"&&item.finding.copy?.en.startsWith("85.7%")).length,1);
+  assert.equal(o.measured.length,6);
+  assert.equal(o.measured.some(item=>item.evidenceNote),false);
+  assert.match(app,/if\(!keys\.length\)return undefined/);
+  assert.match(app,/prefersReduced\.matches\?'auto':'smooth'/);
+  assert.match(app,/history\.replaceState\(history\.state,'',`#\$\{target\.id\}`\)/);
+  assert.doesNotMatch(app,/dialogScrollRoot\.scrollTo\(\{left:0,top:destination,behavior:'auto'\}\)/);
+  assert.match(css,/\.core-system-insight-section__statement\{[^}]*margin-inline:auto;[^}]*text-align:center/);
+  assert.match(css,/\.voucher-r149-foundation__media\{[^}]*border-radius:var\(--evidence-visual-radius\)/);
+  assert.match(css,/\.outcome-semantic-group__grid--aligned\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:871px\)\{\.outcome-semantic-group__grid--aligned\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)\}\}/);
+  assert.match(css,/@media\(max-width:430px\)\{\.outcome-semantic-group__grid--aligned\{grid-template-columns:1fr\}\}/);
+  assert.doesNotMatch(css,/\.outcome-metric--featured\{grid-column:span 2/);
+});
+
+test("R164.9F converges Payment Outcomes, informational media and navigator naming through shared owners",()=>{
+  const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
+  const payment=data.projects.payment,hierarchy=payment.publicContent.outcomes.semanticHierarchy;
+  assert.equal(data.contentVersion,"2026-08-20-r164.9h");assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(hierarchy.measuredLabel.en,"After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.");
+  assert.deepEqual(hierarchy.measured.map(item=>item.value),["70.2","~190","~57K","~228K","98.5%","2.7× faster"]);
+  assert.equal(hierarchy.measured[2].supportingCopy.en,"by Sep 2021");assert.equal(hierarchy.measured[3].supportingCopy.en,"by Sep 2021");assert.equal(hierarchy.measured[5].supportingCopy.en,"19.78 sec → 7.29 sec");
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].presentation,"informational");
+  assert.equal(data.localizationRegistry.projectSectionNavigationLabels.impact,undefined);assert.equal(data.localizationRegistry.projectSectionNavigationLabels.outcomes.en,"Outcomes");
+  assert.match(app,/measuredLabelInHeader/);assert.match(app,/voucher-r149-foundation--informational/);assert.match(app,/canonicalProjectNavLabel\('outcomes','Outcomes','成果'\)/);
+  assert.match(css,/\.voucher-r149-foundation--informational \.voucher-r149-foundation__media\{[^}]*aspect-ratio:auto/);
+  assert.equal((css.match(/\.outcome-semantic-group__grid--aligned\{/g)||[]).length,3);
+  assert.doesNotMatch(css,/\.outcome-semantic-group__grid--aligned \.outcome-metric\{[^}]*gap:var\(--space-4\)/);
+});
+
+
+test("R164.9G makes research leadership, synthesis and strategy traceable through StructuredEvidence",()=>{
+  const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");
+  const evidence=data.projects.payment.publicContent.decisionEvidence,research=evidence.researchSynthesis;
+  assert.equal(data.contentVersion,"2026-08-20-r164.9h");assert.equal(manifest.contentVersion,data.contentVersion);
+  assert.equal(research.intro.en,"I led in-store research, behavioural analysis and synthesis, translating checkout behaviour into product strategy across App, cashier and self-checkout.");
+  assert.deepEqual(research.insights.map(item=>item.heading.en),["87.5% — Assurance","87.5% — Social pressure","87.5% — Time is money","75% — Loyalty value awareness"]);
+  assert.deepEqual(research.strategies.map(item=>item.title.en),["Visible assurance and recovery","A shorter checkout handoff","Visible loyalty value at payment"]);
+  assert.equal(research.sourceTraceability.designOpportunities,"page 58");assert.equal(research.sourceTraceability.designIterations,"pages 60–62");
+  assert.deepEqual(evidence.items.map(item=>item.assetId),["payment-evidence-live-checkout-image-only-r1649d","payment-evidence-sco-entry-research-r1649e","payment-evidence-journey-synthesis-r1649c"]);
+  assert.equal(evidence.items[0].finding,undefined);assert.equal(evidence.validationLayer,undefined);
+  assert.equal(manifest.items["payment-research-design-opportunities-r1649g"].implementationStatus,"real-active");
+  assert.match(app,/function appendResearchSynthesis\(section,source/);assert.match(app,/evidenceSource\.researchSynthesis/);
+  assert.match(css,/\.structured-evidence-research-synthesis__insights\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:600px\)\{[^}]*structured-evidence-research-synthesis__insights\{grid-template-columns:1fr/);
+});
+
+
+test("R164.9H integrates four Human Decision visuals and refines shared Evidence hierarchy",()=>{
+ const data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json")),css=read("assets/css/components/project-detail-overview.css"),p=data.projects.payment,e=p.publicContent.decisionEvidence,map=p.decisionEvidenceMap;
+ assert.equal(data.contentVersion,"2026-08-20-r164.9h");assert.equal(manifest.contentVersion,data.contentVersion);assert.equal(e.researchSynthesis.visual.length,0);assert.equal(e.researchSynthesis.visualLabel,undefined);
+ assert.equal(e.items[0].copy.en,"3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.");assert.match(e.items[0].finding.copy.en,/assurance, social-pressure and time-is-money/);
+ assert.deepEqual(Object.values(map).map(item=>item.publicAssetId),["payment-decision-01-app-entry-r1649h","payment-decision-02-loyalty-history-r1649h","payment-decision-03-return-record-r1649h","payment-decision-04-operations-pos-guidelines-r1649h"]);for(const id of ["payment-decision-01-app-entry-r1649h","payment-decision-02-loyalty-history-r1649h","payment-decision-03-return-record-r1649h","payment-decision-04-operations-pos-guidelines-r1649h"]){const item=manifest.items[id];assert.equal(item.implementationStatus,"real-active");assert.equal(item.publicBuild,true);assert.equal(item.width,2048);assert.equal(item.height,1280)}
+ assert.equal(manifest.items["payment-research-design-opportunities-r1649g"].publicBuild,false);assert.match(css,/structured-evidence-research-synthesis__header h3\{font-size:var\(--cmp-popup-card-title-size\)/);assert.match(css,/structured-evidence-research-synthesis__strategy>h3\.voucher-r149-eyebrow\{font-size:var\(--cmp-popup-card-title-size\)/);
 });
