@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-20-r164.9c",
+  "contentVersion": "2026-08-20-r164.9d",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -267,23 +267,6 @@
       "sha256": "6093c98d60aef324b704a9e70099291aa0eb97f1a0f3eab5d05511c88df06387",
       "alt": "Launched FairPrice App payment journey connecting QR payment, physical checkout and transaction completion.",
       "alt_zh": "Launched FairPrice App payment journey connecting QR payment, physical checkout and transaction completion."
-    },
-    "payment-evidence-field-research-synthesis-public-v1": {
-      "id": "payment-evidence-field-research-synthesis-public-v1",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1600,
-      "height": 920,
-      "sha256": "6c4b8e4470d8ca1dc5f8f4bf2d87fa48ed8108751616a85fedc4ecd6d37f4ce3",
-      "alt": "Privacy-cropped live-store checkout fieldwork showing cashier and self-checkout context.",
-      "alt_zh": "經隱私裁切的門市結帳研究，呈現人工收銀與自助結帳情境。"
     },
     "payment-evidence-sco-entry-public-v2": {
       "id": "payment-evidence-sco-entry-public-v2",
@@ -965,34 +948,6 @@
       "sectionUsage": "core-system-insight",
       "contentSsotReference": "projects.payment.publicContent.coreSystemInsight"
     },
-    "payment-evidence-recovery-real-ui-v3": {
-      "id": "payment-evidence-recovery-real-ui-v3",
-      "projectId": "payment",
-      "type": "image/webp",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "sha256": "54f376da5a1536420d41f29fa6c89e9d3bdd830cff9a35575bfac458a8d5a3e3",
-      "width": 2240,
-      "height": 960,
-      "alt": "Privacy-safe composite of shipped Payment recovery UI: Create a return, Return QR, refund processing/completion and internal transaction lookup.",
-      "alt_zh": "已上線 Payment 復原 UI 的隱私安全組合：Create a return、Return QR、退款處理／完成與內部交易查詢。",
-      "sourcePackage": "canonical-repo-validation-assets",
-      "sourceFiles": [
-        "validation-payment-refund-state-02-r77.jpg",
-        "validation-payment-refund-state-03-r77.jpg",
-        "validation-payment-refund-state-04-r77.jpg",
-        "validation-payment-refund-state-05-r77.jpg",
-        "validation-payment-internal-portal-list-r77.jpg"
-      ],
-      "privacyTreatment": "Cropped/redacted canonical validation UI; QR payload and transaction/store/cashier identifiers obscured.",
-      "sectionUsage": "decision-03-recovery",
-      "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03"
-    },
     "payment-evidence-journey-synthesis-r1649c": {
       "id": "payment-evidence-journey-synthesis-r1649c",
       "projectId": "payment",
@@ -1018,30 +973,54 @@
       "sectionUsage": "evidence-research-synthesis",
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
     },
-    "payment-decision-03-return-integration-r1649c": {
-      "id": "payment-decision-03-return-integration-r1649c",
+    "payment-evidence-live-checkout-image-only-r1649d": {
+      "id": "payment-evidence-live-checkout-image-only-r1649d",
       "projectId": "payment",
       "type": "image/webp",
-      "publicPath": "/site/assets/projects/payment/payment-decision-03-return-integration-r1649c.webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-image-only-r1649d.webp",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1600,
+      "height": 900,
+      "sha256": "32139b3fd14c84141b28f2430b44771ff170771fccd4d96f21902a341e3cf32e",
+      "alt": "Two live-store research photographs showing cashier and self-checkout payment behaviour.",
+      "alt_zh": "兩張門市研究照片，呈現人工收銀與自助結帳的付款行為。",
+      "sourcePackage": "payment_visual_evidence_package_v3.zip",
+      "sourceFiles": [
+        "01_selected_sources/live_store_research_photo_01.jpg",
+        "01_selected_sources/live_store_research_photo_02.jpg"
+      ],
+      "privacyTreatment": "Human-approved source photographs; image-only crop contains no editorial overlay.",
+      "sectionUsage": "evidence-live-checkout",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
+    },
+    "payment-return-recovery-human-r1649d": {
+      "id": "payment-return-recovery-human-r1649d",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-return-recovery-human-r1649d.webp",
       "aspectRatio": "8:5",
       "assetStatus": "production",
       "implementationStatus": "real-active",
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "445e35a920ed40a9960e6a6efda318ebfc8e0e7a170c3ba11c0ed6f381a4df26",
-      "blobSha": "eda6eba38adee624b05c6a6a76bebd03c876f5b6",
       "width": 2048,
       "height": 1280,
-      "alt": "Before-and-shipped comparison showing return support move from a separate help journey into the payment record.",
-      "alt_zh": "Before 與 Shipped 比較：退貨支援由分離的客服旅程移入付款紀錄。",
-      "sourcePackage": "payment_r1649c_supplemental_assets.zip",
+      "sha256": "67d8e30aae15600fc11b6a2bb00b0890081bb02974f8ba30f34f1f73b3d302d7",
+      "alt": "Before-and-shipped comparison showing return support move from a separate help path into the payment record.",
+      "alt_zh": "Before 與 Shipped 比較：退貨支援由分離的協助路徑移入付款紀錄。",
+      "sourcePackage": "Human-provided R164.9D correction asset",
       "sourceFiles": [
-        "payment-return-integration-correct-source.jpg"
+        "payment recovery(2).jpg"
       ],
-      "privacyTreatment": "Opaque semantic masks remove payment references, transaction identifiers, staff/store details, addresses, amounts and item/order details while preserving UI hierarchy and the before/shipped comparison.",
-      "sectionUsage": "decision-03-return-integration",
-      "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03"
+      "privacyTreatment": "Human-provided portfolio-ready composition using approved synthetic replacement transaction data; composition unchanged.",
+      "sectionUsage": "evidence-return-recovery",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
     }
   },
   "frameSystemContract": {

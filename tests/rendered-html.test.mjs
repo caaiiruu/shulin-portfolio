@@ -1831,7 +1831,7 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
 });
 
 
-test("R164.9C keeps Payment insight-first, non-duplicative and system-level", () => {
+test("R164.9D applies Human Payment QA corrections through shared owners", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
   const app = read("assets/js/app.js");
@@ -1840,14 +1840,19 @@ test("R164.9C keeps Payment insight-first, non-duplicative and system-level", ()
   assert.equal(ssot.contentVersion, manifest.contentVersion);
   assert.equal(payment.presentation.contentRefs.contributionIntervention, undefined);
   assert.equal(payment.decisionNarrative.primaryDecisions.length, 4);
-  assert.equal(payment.publicContent.decisionEvidence.validationLayer.metrics.length, 3);
+  assert.equal(payment.publicContent.decisionEvidence.validationLayer.metrics.length, 2);
   assert.equal(payment.publicContent.decisionEvidence.mappingTitle, undefined);
   assert.equal(payment.publicContent.decisionEvidence.structuredGroups, undefined);
   assert.ok(payment.publicContent.coreSystemInsight.insight.en);
   assert.ok(payment.publicContent.coreSystemInsight.whatThisChanged.en);
   assert.equal(manifest.items["payment-evidence-journey-synthesis-r1649c"].implementationStatus, "real-active");
-  assert.equal(manifest.items["payment-decision-03-return-integration-r1649c"].implementationStatus, "real-active");
+  assert.equal(manifest.items["payment-return-recovery-human-r1649d"].implementationStatus, "real-active");
+  assert.equal(manifest.items["payment-evidence-live-checkout-image-only-r1649d"].implementationStatus, "real-active");
   assert.match(app, /WHAT THIS CHANGED/);
-  assert.match(app, /VISUAL PROOF/);
+  assert.equal(payment.publicContent.coreSystemInsight.showVisualProofLabel, false);
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].showCaption, false);
+  assert.doesNotMatch(app, /outcome-metric--subordinate/);
   assert.match(cardCss, /outer owns hover\/border; media owns clipping/);
+  assert.equal(payment.publicContent.decisionEvidence.items.length, 4);
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.attribution, undefined);
 });
