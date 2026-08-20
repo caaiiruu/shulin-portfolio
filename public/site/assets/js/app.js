@@ -97,14 +97,7 @@
       const evidence=p.decisionEvidenceMap?.[decision.id];
       return {...decision,evidenceAssetId:evidence?.publicAssetId||null,evidenceCaption:evidence?.caption||null};
     });
-    const gallery=id==='payment'?[
-      {assetId:'payment-evidence-sco-entry-public-v2',title:['Self-checkout entry','自助結帳入口'],text:['Responsive evidence with a reserved aspect ratio and deferred loading.','保留固定比例並延後載入的 Responsive evidence。'],src:'/site/assets/validation/payment/validation-payment-sco-entry-final-r77.jpg',alt:['The self-checkout loyalty and discount screen with a FairPrice app payment entry.','Self-checkout 會員與折扣畫面中的 FairPrice App 支付入口。']},
-      {assetId:'payment-evidence-operational-recovery-public-v2',title:['Operational transaction review','營運交易檢視'],text:['A representative internal payment-operations view.','代表性的內部 Payment operations 畫面。'],src:'/site/assets/validation/payment/validation-payment-internal-portal-list-r77.jpg',alt:['An internal payment transaction review list.','內部 Payment transaction review 清單。']},
-      ...['01','02','03','04','05'].map((step,index)=>({title:[`Refund state ${index+1}`,`退款狀態 ${index+1}`],text:['A deferred-loading state from the cross-channel refund flow.','跨通路退款流程中延後載入的狀態畫面。'],src:`/site/assets/validation/payment/validation-payment-refund-state-${step}-r77.jpg`,alt:[`Refund flow state ${index+1}.`,`退款流程狀態 ${index+1}。`]})),
-      {title:['Payment receipt','付款收據'],text:['Supporting customer communication loaded only with this evidence section.','僅在此證據區塊載入的顧客溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-receipt-email-mobile-r77.jpg',alt:['Mobile payment receipt email.','Mobile 付款收據 Email。']},
-      {title:['Refund receipt','退款收據'],text:['Supporting refund communication loaded only with this evidence section.','僅在此證據區塊載入的退款溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-refund-email-mobile-r77.jpg',alt:['Mobile refund receipt email.','Mobile 退款收據 Email。']},
-      {assetId:'payment-video-core-app-pos-public-v1',title:['Order-details interaction','訂單詳情互動'],text:['Poster-first video; media mounts only on demand.','Poster-first 影片；媒體僅在需要時掛載。'],poster:'/site/assets/validation/payment/validation-payment-video-order-details-poster-r77.png',video:'/site/assets/validation/payment/validation-payment-video-order-details-r77.mov',alt:['Order details interaction preview.','Order details 互動預覽。']}
-    ]:[[title[0],atGlance[0],title[1],atGlance[1]]];
+    const gallery=[[title[0],atGlance[0],title[1],atGlance[1]]];
     const status=String(p.status||p.publicStatus||p.contentStatus||'');
     const confidentiality=pair(
       p.confidentialityNote||
@@ -2747,7 +2740,7 @@
       const media=element('div','voucher-r149-foundation__media');
       const caption=element('div','voucher-r149-foundation__caption');
       const resolved=resolveProjectAsset(item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1');
-      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
+      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(item.presentation==='raw')card.classList.add('voucher-r149-foundation--raw');
       if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
       media.append(image);caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
       card.append(media,caption);grid.append(card);
@@ -2756,7 +2749,7 @@
   }
   function appendOutcomeCards(grid,items,{metric=false,translate=localize}={}){
     list(items).forEach(item=>{
-      const card=element('article',metric?'outcome-metric':'outcome-metric outcome-metric--qualitative');
+      const metricClasses=metric?`outcome-metric${item?.featured?' outcome-metric--featured':''}${item?.subordinate?' outcome-metric--subordinate':''}`:'outcome-metric outcome-metric--qualitative';const card=element('article',metricClasses);
       if(metric){
         const primary=element('div','outcome-metric__primary');
         const labelCopy=translate(item.label),supportingCopy=translate(item.supportingCopy),fallbackCopy=translate(item.primaryCopy)||labelCopy;
@@ -2804,7 +2797,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside','outcome-recognition-proof');proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
@@ -2879,6 +2872,7 @@
     if(evidence){
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';
       appendVisualEvidenceModules(evidence,evidenceSource.items,{translate:t});
+      if(list(evidenceSource.quotes).length){const voices=element('div','structured-evidence-quotes');voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});evidence.append(voices)}
       if(evidenceSource.validationLayer){const validation=element('section','structured-evidence-v223__validation');validation.dataset.componentOwner='StructuredEvidence';validation.append(element('h3','structured-evidence-v223__validation-title',t(evidenceSource.validationLayer.title)));if(t(evidenceSource.validationLayer.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(evidenceSource.validationLayer.intro)));const grid=element('div','structured-evidence-v223__validation-metrics');list(evidenceSource.validationLayer.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid);evidence.append(validation)}
       if(t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(list(evidenceSource.structuredGroups).length){

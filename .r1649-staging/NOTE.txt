@@ -1,1 +1,0 @@
-Staging object will be attached by Git tree API in the next commit.

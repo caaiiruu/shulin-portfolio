@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-17-r164.1",
+  "contentVersion": "2026-08-20-r164.9",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -1007,6 +1007,59 @@
       "sha256": "2cfd59160d5b74085bde812e0ddaea434e0a25fa6c0592116bac6885ab7132ce",
       "alt": "Checkout timing result showing a reduction from 19.78 seconds to 7.29 seconds, 12.49 seconds faster.",
       "alt_zh": "結帳時間由 19.78 秒降至 7.29 秒，快 12.49 秒。"
+    },
+    "payment-core-checkout-compression-approved-v3": {
+      "id": "payment-core-checkout-compression-approved-v3",
+      "projectId": "payment",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72",
+      "blobSha": "77f9c60eec2ca3839bbd7c6773eff7b4cbf42353",
+      "width": 2400,
+      "height": 1500,
+      "alt": "Before-and-shipped checkout comparison showing separate loyalty and payment steps compressed into one QR transaction, reducing measured time from 19.78 to 7.29 seconds.",
+      "alt_zh": "結帳前後比較：將分離的會員與付款步驟整合成一次 QR 交易，量測時間由 19.78 秒降至 7.29 秒。",
+      "sourcePackage": "payment_visual_evidence_package_v3.zip",
+      "sourceFiles": [
+        "00_human_approved/checkout_flow_speed_comparison_2400x1500.png"
+      ],
+      "privacyTreatment": "Human-approved public visual; exact source composition preserved.",
+      "sectionUsage": "core-system-insight",
+      "contentSsotReference": "projects.payment.publicContent.coreSystemInsight"
+    },
+    "payment-evidence-recovery-real-ui-v3": {
+      "id": "payment-evidence-recovery-real-ui-v3",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "54f376da5a1536420d41f29fa6c89e9d3bdd830cff9a35575bfac458a8d5a3e3",
+      "width": 2240,
+      "height": 960,
+      "alt": "Privacy-safe composite of shipped Payment recovery UI: Create a return, Return QR, refund processing/completion and internal transaction lookup.",
+      "alt_zh": "已上線 Payment 復原 UI 的隱私安全組合：Create a return、Return QR、退款處理／完成與內部交易查詢。",
+      "sourcePackage": "canonical-repo-validation-assets",
+      "sourceFiles": [
+        "validation-payment-refund-state-02-r77.jpg",
+        "validation-payment-refund-state-03-r77.jpg",
+        "validation-payment-refund-state-04-r77.jpg",
+        "validation-payment-refund-state-05-r77.jpg",
+        "validation-payment-internal-portal-list-r77.jpg"
+      ],
+      "privacyTreatment": "Cropped/redacted canonical validation UI; QR payload and transaction/store/cashier identifiers obscured.",
+      "sectionUsage": "decision-03-recovery",
+      "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03"
     }
   },
   "frameSystemContract": {
