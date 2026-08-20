@@ -1868,8 +1868,8 @@ test("R164.9E separates Engineering PASS from Human visual acceptance",()=>{
   assert.equal(e.items.some(item=>item.assetId==="payment-return-recovery-human-r1649d"),false);
   assert.equal(e.items.filter(item=>item.assetId==="payment-evidence-sco-entry-research-r1649e").length,1);
   assert.equal("validationLayer" in e,false);
-  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Checkout assurance"&&item.finding.body.en.startsWith("87.5%")).length,1);
-  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Transaction-history retrieval"&&item.finding.body.en.startsWith("85.7%")).length,1);
+  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Checkout assurance"&&item.finding.copy?.en.startsWith("87.5%")).length,1);
+  assert.equal(e.items.filter(item=>item.finding?.title?.en==="Transaction-history retrieval"&&item.finding.copy?.en.startsWith("85.7%")).length,1);
   assert.equal(o.measured.length,6);
   assert.equal(o.measured.some(item=>item.evidenceNote),false);
   assert.match(app,/if\(!keys\.length\)return undefined/);
