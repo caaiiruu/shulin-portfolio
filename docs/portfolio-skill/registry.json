@@ -1,8 +1,9 @@
 {
-  "version": "2026-08-19-v2.4",
-  "skillVersion": "2026-08-19-v2.4",
+  "version": "2026-08-20-v2.5",
+  "skillVersion": "2026-08-20-v2.5",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
+  "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
   "qaBranch": "qa/r146-r43-preview-2026-08-06",
   "pr": 3,
   "productionMutable": false,
@@ -31,8 +32,48 @@
     "booking",
     "ctbc"
   ],
-  "preferredExecution": "github-native",
+  "preferredExecution": "capability-preflight-then-github-native-when-available",
   "humanPassRequired": true,
+  "controlPlaneGovernance": {
+    "validator": "tests/portfolio-control-plane-governance.test.mjs",
+    "workflow": ".github/workflows/release-gate-r146-r43.yml",
+    "canonicalQa": "qa/r146-r43-preview-2026-08-06",
+    "qaPushTargetRequired": true,
+    "qaPullRequestTargetRequired": true,
+    "exactPrHeadCheckoutRequired": true,
+    "artifactRetentionNonBlocking": true,
+    "coreEngineeringChecksBlocking": true,
+    "capabilityPreflightRequired": true,
+    "stackedRepairPrs": "exception-only",
+    "normalProjectPipeline": [
+      "verify actual QA HEAD",
+      "create isolated project branch from QA",
+      "update Content SSOT / Asset Manifest when applicable",
+      "generate runtime",
+      "open PR directly to canonical QA",
+      "automatic Engineering QA",
+      "Vercel Preview",
+      "exact PR-head QA",
+      "responsive review at canonical breakpoints",
+      "Human approval",
+      "merge"
+    ]
+  },
+  "ssotGovernance": {
+    "contentOwner": "public/site/content/portfolio-content.json",
+    "assetManifestOwner": "public/site/content/portfolio-asset-manifest.json",
+    "contentVersionRequired": true,
+    "contentAndManifestVersionMustMatch": true,
+    "historicalFixedContentRevisionForbidden": true,
+    "publicContentRequiresCanonicalOwner": true,
+    "publicAssetsRequireManifestOwner": true,
+    "engineeringOnlyVersionBumpRequired": false
+  },
+  "activeAssetQa": {
+    "deriveFromCanonicalRuntimeMetadata": true,
+    "placeholderAssertionsRequirePlaceholderState": true,
+    "responsiveCertificationMayNotBeWeakened": true
+  },
   "approvedGenericCapabilities": [
     "optional complexity intro",
     "partnerOwned accountability",
@@ -98,7 +139,9 @@
     "repeated scratch recovery",
     "centered-column-left-copy",
     "three-equal-column accountability",
-    "duration-only public project timelines"
+    "duration-only public project timelines",
+    "PR #3 as the normal project-mutation path",
+    "historical fixed contentVersion validation"
   ],
   "coreSystemInsight": {
     "composition": "centered-content-composition",
