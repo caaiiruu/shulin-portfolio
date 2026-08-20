@@ -33,16 +33,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if ! command -v magick >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick; fi
+          if ! command -v convert >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick; fi
           mkdir -p /tmp/r1649
           src=public/site/assets/validation/payment
-          magick "$src/validation-payment-refund-state-02-r77.jpg" -crop 502x500+0+0 +repage -resize 560x960^ -gravity north -extent 560x960 /tmp/r1649/p1.webp
-          magick "$src/validation-payment-refund-state-03-r77.jpg" -resize 560x960^ -gravity center -extent 560x960 -region 300x300+130+180 -blur 0x18 /tmp/r1649/p2.webp
-          magick "$src/validation-payment-refund-state-04-r77.jpg" -crop 1152x800+0+0 +repage -resize 560x420^ -gravity center -extent 560x420 /tmp/r1649/p3a.webp
-          magick "$src/validation-payment-refund-state-05-r77.jpg" -crop 224x540+0+0 +repage -resize 560x540^ -gravity north -extent 560x540 /tmp/r1649/p3b.webp
-          magick /tmp/r1649/p3a.webp /tmp/r1649/p3b.webp -append /tmp/r1649/p3.webp
-          magick "$src/validation-payment-internal-portal-list-r77.jpg" -crop 2048x620+0+0 +repage -resize 560x960^ -gravity north -extent 560x960 -fill white -draw 'rectangle 0,500 560,960' /tmp/r1649/p4.webp
-          magick /tmp/r1649/p1.webp /tmp/r1649/p2.webp /tmp/r1649/p3.webp /tmp/r1649/p4.webp +append -quality 88 public/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp
+          convert "$src/validation-payment-refund-state-02-r77.jpg" -crop 502x500+0+0 +repage -resize '560x960^' -gravity north -extent 560x960 /tmp/r1649/p1.webp
+          convert "$src/validation-payment-refund-state-03-r77.jpg" -resize '560x960^' -gravity center -extent 560x960 -region 300x300+130+180 -blur 0x18 /tmp/r1649/p2.webp
+          convert "$src/validation-payment-refund-state-04-r77.jpg" -crop 1152x800+0+0 +repage -resize '560x420^' -gravity center -extent 560x420 /tmp/r1649/p3a.webp
+          convert "$src/validation-payment-refund-state-05-r77.jpg" -crop 224x540+0+0 +repage -resize '560x540^' -gravity north -extent 560x540 /tmp/r1649/p3b.webp
+          convert /tmp/r1649/p3a.webp /tmp/r1649/p3b.webp -append /tmp/r1649/p3.webp
+          convert "$src/validation-payment-internal-portal-list-r77.jpg" -crop 2048x620+0+0 +repage -resize '560x960^' -gravity north -extent 560x960 -fill white -draw 'rectangle 0,500 560,960' /tmp/r1649/p4.webp
+          convert /tmp/r1649/p1.webp /tmp/r1649/p2.webp /tmp/r1649/p3.webp /tmp/r1649/p4.webp +append -quality 88 public/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp
           test "$(identify -format '%wx%h' public/site/assets/projects/payment/payment-evidence-recovery-real-ui-v3.webp)" = "2240x960"
       - name: Run structured canonical transform
         run: node scripts/r1649-payment-transform.mjs
