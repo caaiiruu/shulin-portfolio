@@ -283,6 +283,31 @@ for (const viewport of viewports) {
     if(!navigatorInteractions.touch)failures.push(`${viewport.name} touch navigator activation failed`);
   }
 
+  await page.goto(`${baseUrl}/site/work/payment`,{waitUntil:"networkidle"});
+  const paymentOutcome=await page.evaluate(async()=>{
+    const root=document.querySelector("#detailDialog"),section=document.querySelector("#systemCaseOutcomesSection"),grid=section?.querySelector(".outcome-semantic-group__grid--aligned"),cards=[...section.querySelectorAll(".outcome-metric")],media=document.querySelector(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media"),image=media?.querySelector("img");
+    if(image&&!image.complete)await new Promise(resolve=>{image.addEventListener("load",resolve,{once:true});image.addEventListener("error",resolve,{once:true})});
+    const mr=media?.getBoundingClientRect(),ir=image?.getBoundingClientRect(),style=image?getComputedStyle(image):null;
+    return{intro:section?.querySelector(".case-study-section__header .voucher-r149-intro")?.textContent.trim(),values:cards.map(card=>card.querySelector(".outcome-metric__value")?.textContent.trim()),supports:cards.map(card=>card.querySelector(".outcome-metric__supporting")?.textContent.trim()||""),columns:grid?getComputedStyle(grid).gridTemplateColumns.trim().split(/\\s+/).length:0,tooltips:section?.querySelectorAll(".info-tooltip__trigger").length||0,overflow:(root?.scrollWidth||0)-(root?.clientWidth||0),image:{complete:image?.complete,naturalWidth:image?.naturalWidth,naturalHeight:image?.naturalHeight,objectFit:style?.objectFit,wrapperRatio:mr?mr.width/mr.height:null,imageRatio:ir?ir.width/ir.height:null,topDelta:mr&&ir?Math.abs(mr.top-ir.top):null,bottomDelta:mr&&ir?Math.abs(mr.bottom-ir.bottom):null,radius:media?getComputedStyle(media).borderRadius:null},nav:[...document.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim())};
+  });
+  const expectedColumns=viewport.width===430?1:viewport.width===871?2:3;
+  if(paymentOutcome.intro!=="After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.")failures.push(`${viewport.name} Payment post-launch Outcomes framing mismatch`);
+  if(JSON.stringify(paymentOutcome.values)!==JSON.stringify(["70.2","~190","~57K","~228K","98.5%","2.7× faster"]))failures.push(`${viewport.name} Payment Outcome values mismatch: ${JSON.stringify(paymentOutcome.values)}`);
+  if(paymentOutcome.supports[2]!=="by Sep 2021"||paymentOutcome.supports[3]!=="by Sep 2021"||paymentOutcome.supports[5]!=="19.78 sec → 7.29 sec")failures.push(`${viewport.name} Payment Outcome support mismatch: ${JSON.stringify(paymentOutcome.supports)}`);
+  if(paymentOutcome.columns!==expectedColumns||paymentOutcome.tooltips!==0||paymentOutcome.overflow>0)failures.push(`${viewport.name} Payment Outcome shared layout failed: ${JSON.stringify(paymentOutcome)}`);
+  if(!paymentOutcome.image.complete||paymentOutcome.image.naturalWidth!==2400||paymentOutcome.image.naturalHeight!==1500||Math.abs(paymentOutcome.image.wrapperRatio-1.6)>.01||Math.abs(paymentOutcome.image.imageRatio-1.6)>.01||paymentOutcome.image.topDelta>1||paymentOutcome.image.bottomDelta>1||paymentOutcome.image.objectFit!=="contain"||paymentOutcome.image.radius==="0px")failures.push(`${viewport.name} Payment checkout informational media clipped: ${JSON.stringify(paymentOutcome.image)}`);
+  if(paymentOutcome.nav.includes("Impact")||!paymentOutcome.nav.includes("Outcomes"))failures.push(`${viewport.name} Payment navigator naming mismatch: ${JSON.stringify(paymentOutcome.nav)}`);
+  const r1649fDirectory=path.join(directory,"r1649f");fs.mkdirSync(r1649fDirectory,{recursive:true});
+  await page.locator("#systemCaseOutcomesSection").screenshot({path:path.join(r1649fDirectory,"payment-outcomes.png")});
+  await page.locator("#systemCaseOutcomesSection .outcome-metric").nth(5).screenshot({path:path.join(r1649fDirectory,"payment-speed-metric.png")});
+  await page.locator(".core-system-insight-section .voucher-r149-foundation--informational .voucher-r149-foundation__media").screenshot({path:path.join(r1649fDirectory,"payment-checkout-compression.png")});
+  await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"payment-floating-navigator.png")});
+  for(const [projectName,route] of [["Voucher","/site/work/voucher"],["DBS","/site/work/dbs"],["Booking","/site/work/booking"],["CTBC","/site/work/ctbc-mortgage-self-service-app"]]){
+    await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});const labels=await page.locator("#projectSectionNav a").allTextContents();
+    if(labels.includes("Impact")||!labels.includes("Outcomes"))failures.push(`${viewport.name} ${projectName} navigator did not normalize Outcomes: ${JSON.stringify(labels)}`);
+    if(viewport.name==="desktop-1419"&&projectName==="Voucher"){await page.locator("#voucherImpactSection").screenshot({path:path.join(r1649fDirectory,"voucher-approved-outcomes-reference.png")});await page.locator("#projectSectionNav").screenshot({path:path.join(r1649fDirectory,"voucher-outcomes-navigator.png")});}
+  }
+
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
 
   const targetedDirectory = path.join(directory, "targeted");

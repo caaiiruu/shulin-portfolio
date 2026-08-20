@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-20-r164.9e",
+  "contentVersion": "2026-08-20-r164.9f",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -14943,7 +14943,7 @@
           "evidence": [
             {
               "assetId": "payment-core-checkout-compression-approved-v3",
-              "presentation": "raw",
+              "presentation": "informational",
               "showCaption": false
             }
           ],
@@ -15045,8 +15045,8 @@
           },
           "semanticHierarchy": {
             "measuredLabel": {
-              "en": "NPS was the primary customer-experience outcome; scale, reliability and speed support the shipped-system story.",
-              "zh": "NPS 是主要顧客體驗成果；規模、可靠性與速度作為已上線系統的支援證據。"
+              "en": "After launch, the new payment service reached meaningful adoption and transaction scale while maintaining strong reliability and customer experience.",
+              "zh": "上線後，這項全新的付款服務在維持高度可靠性與顧客體驗的同時，達到具意義的採用與交易規模。"
             },
             "measured": [
               {
@@ -15054,10 +15054,6 @@
                 "label": {
                   "en": "NPS",
                   "zh": "NPS"
-                },
-                "supportingCopy": {
-                  "en": "from 1,798 responses",
-                  "zh": "來自 1,798 份回覆"
                 }
               },
               {
@@ -15065,10 +15061,6 @@
                 "label": {
                   "en": "stores",
                   "zh": "間門市"
-                },
-                "supportingCopy": {
-                  "en": "retail rollout coverage",
-                  "zh": "零售推展範圍"
                 }
               },
               {
@@ -15098,14 +15090,10 @@
                 "label": {
                   "en": "transaction success rate",
                   "zh": "交易成功率"
-                },
-                "supportingCopy": {
-                  "en": "live service reliability",
-                  "zh": "實際服務可靠性"
                 }
               },
               {
-                "value": "12.49 sec",
+                "value": "2.7× faster",
                 "label": {
                   "en": "faster checkout",
                   "zh": "結帳加快"
@@ -15894,7 +15882,7 @@
         "my-accountability",
         "related-work"
       ],
-      "latestConfirmedCorrection": "r164.9e-human-blocking-repair",
+      "latestConfirmedCorrection": "R164.9F — shared Outcomes composition, intrinsic informational media, and canonical Outcomes navigation",
       "domain": {
         "en": "Retail payments",
         "zh": "零售支付"
@@ -29858,13 +29846,13 @@
         "en": "Decisions",
         "zh": "關鍵決策"
       },
-      "impact": {
-        "en": "Impact",
-        "zh": "影響與成果"
-      },
       "evidence": {
         "en": "Evidence",
         "zh": "證據與交付"
+      },
+      "outcomes": {
+        "en": "Outcomes",
+        "zh": "成果"
       }
     },
     "missingTranslationPolicy": {

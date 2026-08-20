@@ -1168,11 +1168,13 @@
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
   let pendingProjectSectionId='';
+  const canonicalProjectNavLabel=(key,en,zh)=>{const labels=pair(DATA.localizationRegistry?.projectSectionNavigationLabels?.[key]);return [labels[0]||en,labels[1]||zh]};
+  const [outcomesNavEn,outcomesNavZh]=canonicalProjectNavLabel('outcomes','Outcomes','成果');
   const PROJECT_NAV_ITEMS=[
     ['overview','projectOverviewSection','Overview','概覽'],
     ['complexity','projectComplexitySection','Complexity','複雜度'],
     ['decisions','projectDecisionsSection','Decisions','設計決策'],
-    ['impact','projectImpactSection','Impact','影響與成果']
+    ['outcomes','projectImpactSection',outcomesNavEn,outcomesNavZh]
   ];
   function projectNavTarget(key,fallbackId){
     const configuredTarget=fallbackId?doc.getElementById(fallbackId):null;
@@ -1250,8 +1252,8 @@
     clear(projectSectionNavLinks);
     const project=currentDetail?.type==='project'?DATA.projects[currentDetail.key]:null;
     const configured=list(project?.presentation?.navigation).map(item=>{
-      const labels=pair(item.label);
-      return [item.key,item.target,labels[0],labels[1]];
+      const labels=['outcomes','impact'].includes(item.key)?[outcomesNavEn,outcomesNavZh]:pair(item.label);
+      return [item.key==='impact'?'outcomes':item.key,item.target,labels[0],labels[1]];
     });
     const items=(configured.length?configured:PROJECT_NAV_ITEMS).filter(([key,id])=>{
       const target=projectNavTarget(key,id);
@@ -2753,7 +2755,7 @@
       const media=element('div','voucher-r149-foundation__media');
       const caption=element('div','voucher-r149-foundation__caption');
       const resolved=resolveProjectAsset(item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1');
-      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(item.presentation==='raw')card.classList.add('voucher-r149-foundation--raw');
+      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(item.presentation==='raw')card.classList.add('voucher-r149-foundation--raw');if(item.presentation==='informational')card.classList.add('voucher-r149-foundation--informational');
       if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
       media.append(image);card.append(media);
       if(item.showCaption!==false){
@@ -2784,7 +2786,7 @@
     });
     return grid;
   }
-  function appendOutcomeSemanticHierarchy(section,source,{translate=localize}={}){
+  function appendOutcomeSemanticHierarchy(section,source,{translate=localize,measuredLabelInHeader=false}={}){
     const change=source?.change;
     if(change){
       const block=element('article','outcome-semantic-change');
@@ -2793,8 +2795,8 @@
       section.append(block);
     }
     if(list(source?.measured).length){
-      const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
-      group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
+      const group=element('section',`outcome-semantic-group outcome-semantic-group--measured${measuredLabelInHeader?' outcome-semantic-group--label-in-header':''}`);
+      if(!measuredLabelInHeader)group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
       if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
       appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
@@ -2954,9 +2956,11 @@
     if(decisionListNode)decisions.append(decisionListNode);
 
     const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomes=createRecruiterSection('',t(outcomesSource?.title));
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
+    const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
-    if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
+    if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
       const qualitative=element('div','outcome-qualitative-hierarchy');
       if(t(outcomesSource?.headline)){
@@ -3003,7 +3007,7 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');appendVisualEvidenceModules(reusable,c.reusableSystem?.foundations,{translate:t});
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';

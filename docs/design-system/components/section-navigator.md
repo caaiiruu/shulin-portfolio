@@ -17,4 +17,8 @@ Interaction contract:
 - The dialog scroll owner performs smooth scrolling unless prefers-reduced-motion is reduce.
 - The shared header/control inset is applied once.
 - history.replaceState preserves the target hash without a second browser jump.
-- Scroll position remains the source of truth for aria-current.
+- Scroll position remains the source of truth for aria-current after motion settlement; the activated target owns state while smooth motion is in flight.
+
+Naming contract:
+- Equivalent result destinations use the canonical `Outcomes` label from `localizationRegistry.projectSectionNavigationLabels.outcomes`.
+- Legacy `impact` keys normalize to `outcomes` at the shared renderer boundary; genuinely different sections retain their own names.

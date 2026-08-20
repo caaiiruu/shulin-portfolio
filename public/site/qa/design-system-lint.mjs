@@ -171,6 +171,10 @@ if (!canonicalCss.includes("min-width:max-content") || !canonicalCss.includes("t
 if (!projectDetail.includes(".case-study-section{") || !projectDetail.includes(".case-study-section--canvas{background:transparent}") || !projectDetail.includes(".case-study-section__header{") || !projectDetail.includes(".info-grid-v45>div{") || !projectDetail.includes("border-radius:0;background:transparent")) errors.push("ProjectDetailOverview: every major section and flat Info Grid must use the shared CaseStudySection grammar");
 if (!experimentCard.includes(".experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}")) errors.push("ExperimentDetail: overview content must reuse the Project Detail surface instead of nested card styling");
 if (!canonicalCss.includes("border-radius:var(--cmp-search-form-radius)")) errors.push("Matcher: search radius must use the shared component token");
+if (!projectDetail.includes(".outcome-semantic-group--label-in-header{padding-top:0}") || (projectDetail.match(/\\.outcome-semantic-group__grid--aligned\\{/g) || []).length !== 3) errors.push("OutcomeMetric: one shared desktop/tablet/mobile aligned grid owner and header-integrated framing are required");
+if (!projectDetail.includes(".voucher-r149-foundation--informational .voucher-r149-foundation__media{aspect-ratio:auto") || !app.includes("voucher-r149-foundation--informational")) errors.push("ProjectDetailOverview: informational media must preserve intrinsic ratio through the shared media owner");
+if (!app.includes("canonicalProjectNavLabel('outcomes','Outcomes','成果')") || portfolioContent.localizationRegistry.projectSectionNavigationLabels?.impact || portfolioContent.localizationRegistry.projectSectionNavigationLabels?.outcomes?.en !== "Outcomes") errors.push("FloatingNavigator: equivalent result destinations must use the canonical Outcomes label owner");
+
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
