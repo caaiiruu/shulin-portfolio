@@ -1049,7 +1049,8 @@
       "privacyTreatment": "Exact source UI screenshots extracted from the approved research PDF; no editorial overlays or participant data.",
       "sectionUsage": "evidence-sco-entry-validation",
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
-      "humanApprovalStatus": "pending-re-review"
+      "humanApprovalStatus": "pending-re-review",
+      "id": "payment-evidence-sco-entry-research-r1649e"
     }
   },
   "frameSystemContract": {
