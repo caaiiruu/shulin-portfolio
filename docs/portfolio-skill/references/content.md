@@ -99,11 +99,15 @@ Hard rules:
 - No public asset implementation without canonical Asset Manifest ownership: `public/site/content/portfolio-asset-manifest.json`.
 - Chat, handoff text, evidence packages, screenshots, and temporary files are inputs only; they are not production SSOT until written into the canonical repository owner.
 - Direct edits to generated public runtime are not a substitute for Content SSOT mutation. Deterministic generation must reproduce a clean runtime from canonical owners.
-- Public project asset changes must update the Asset Manifest in the same atomic implementation change.
+- Public project asset changes must update the Asset Manifest in the same governed commit.
 - `portfolio-content.json.contentVersion` must exist and be non-empty.
 - `portfolio-asset-manifest.json.contentVersion` must equal the Content SSOT `contentVersion`.
 - A legitimate Content revision must never require editing a validator merely to replace one historical fixed revision string.
-- If a Content change introduces a new content revision, the Asset Manifest must be updated in the same atomic change and resolve to that same revision.
+- If a Content change introduces a new content revision, the Asset Manifest must be updated in the same governed commit and resolve to that same revision.
+- Same-commit Content / Asset atomicity is prospective from `registry.json:ssotGovernance.ssotAtomicityEnforcedFrom`, which is a full Git commit SHA and is interpreted only through Git ancestry.
+- Commits genuinely before the activation boundary remain historical evidence and are not retroactively reclassified as present violations.
+- Every governed commit at or after activation remains blocking under SSOT-05/06.
+- A new commit cannot bypass atomicity merely because its branch started from pre-activation history; when the target/base is governed, newly introduced branch commits are still validated.
 - Engineering-only governance changes do not require a fake Content version bump.
 
 For later Payment implementation, approved public content and approved public assets must enter their canonical owners in the same implementation round whenever both change.
