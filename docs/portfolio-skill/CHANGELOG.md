@@ -1,3 +1,13 @@
+## 2026-08-20-v2.5
+
+- Stabilized canonical QA as the normal PR Engineering-QA target.
+- Added machine-verifiable control-plane governance for QA push/PR targets, exact PR-head checkout, and non-blocking artifact evidence retention.
+- Removed the remaining historical fixed Content revision pin from Asset Governance while preserving package, roster, Content/Manifest identity, and asset-resolution contracts.
+- Registered Content SSOT / Asset Manifest ownership and version-alignment rules without bumping the portfolio Content version for this engineering-only change.
+- Registered real-active asset certification: active visual expectations derive from canonical runtime/asset metadata; placeholder assertions require actual placeholder/fallback state.
+- Added mandatory Work capability preflight before selecting connector, workflow, or local-Git execution paths.
+- Replaced PR #3 / stacked repair flow as the normal mutation path with isolated branch → PR directly to canonical QA → automatic Engineering QA → Vercel Preview → exact-head QA → Human approval → merge.
+
 ## 2026-08-19-v2.4
 
 - Public timelines use source-supported short-form actual project periods.

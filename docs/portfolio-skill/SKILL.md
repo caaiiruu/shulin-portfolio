@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-19-v2.4
+version: 2026-08-20-v2.5
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -44,6 +44,9 @@ Never let stale Work-session memory override GitHub reality.
 
 Canonical SSOT:
 `public/site/content/portfolio-content.json`
+
+Canonical Asset Manifest:
+`public/site/content/portfolio-asset-manifest.json`
 
 Architecture A:
 canonical source
@@ -525,44 +528,63 @@ Report `Content Integration Conflict` or `Shared Capacity Issue`.
 
 ---
 
-# 18. GitHub-native execution
+# 18. Execution capability preflight and canonical path
 
-Known recurring problem:
-Work scratch environments may have empty `.git` and no package.json.
+Before choosing any implementation strategy, Work must record:
 
-Do NOT repeatedly restart local repo-recovery loops when GitHub-native execution is available.
+```text
+Repository read via GitHub connector: YES / NO
+GitHub connector writes: YES / NO
+Branch create/update: YES / NO
+PR create/update: YES / NO
+Workflow dispatch: YES / NO
+Workflow rerun: YES / NO
+Workflow logs: YES / NO
+Local repo available: YES / NO
+Local Git auth available: YES / NO
+gh CLI available: YES / NO
+Binary/blob write available: YES / NO
+```
 
-Preferred path:
-GitHub connector-native data
-→ QA branch
-→ blob/tree/commit
-→ PR #3
-→ GitHub Actions clean checkout
-→ validation/build/browser QA
-→ Vercel QA
-→ Human review
+Never assume repo attachment, local Git auth, `gh`, or workflow dispatch. Never repeat unauthenticated clone or empty-scratch `.git` recovery loops.
+
+After capability detection, use an already-supported canonical path. GitHub-native execution remains preferred when the required connector capabilities are present; a local repo is not required when the connector-native path works.
+
+Canonical normal project pipeline:
+
+```text
+verify actual QA HEAD
+→ create isolated project branch from QA
+→ update Content SSOT / Asset Manifest when applicable
+→ generate runtime
+→ open PR directly to canonical QA
+→ automatic Engineering QA
+→ Vercel Preview
+→ exact PR-head QA
+→ responsive review at canonical breakpoints
+→ Human approval
+→ merge
+```
+
+Canonical QA:
+`qa/r146-r43-preview-2026-08-06`
+
+Stacked repair PRs are exception handling only. PR #3 is not the normal project-mutation target.
 
 Known failed paths to avoid:
 - scratch empty `.git`
 - fake Git init
 - unauthenticated clone retry loops
 - parallel repo copies
-- full ~1.4MB SSOT replacement through connector path proven to truncate
+- full large-SSOT replacement through a connector path proven to truncate
 
-For large SSOT:
-- fetch current blob/tree
-- apply targeted deterministic mutation
-- create/verify Git blob
-- create tree/commit
-- fast-forward QA branch
-- no rollback
-- no force push
+For large SSOT, use the smallest deterministic mutation supported by the active tooling. No rollback. No force push.
 
-GitHub Actions is the trusted clean checkout.
+GitHub Actions clean checkout is the trusted remote engineering environment.
 
 ---
 
-# 19. QA
+# 19. QA and CI control plane
 
 Required breakpoints:
 - 1419
@@ -588,9 +610,17 @@ Check:
 - confidentiality
 - no legacy duplicate sections
 
-Engineering PASS != Human PASS.
+Canonical Engineering QA must preserve:
+- canonical QA in workflow `push.branches`
+- canonical QA in workflow `pull_request.branches`
+- PR-triggered checkout / validated SHA tied to the exact PR head SHA
+- blocking runtime generation and two-pass determinism
+- blocking SSOT/design validation, canonical tests, route tests, production build, artifact validation, Chromium runtime, static-server startup, and browser certification
+- artifact upload as non-blocking evidence retention only when repository policy treats quota as secondary
 
-Artifact-upload quota failure does not invalidate engineering QA if all engineering steps passed; report separately.
+Artifact-storage quota failure does not invalidate Engineering QA when every core engineering check passed; it must still be reported separately.
+
+Engineering PASS != Human PASS.
 
 ---
 
@@ -609,7 +639,7 @@ Do not restart completed work because a stale session reports an older state.
 
 # 21. Project migration workflow
 
-For each remaining project:
+For each project:
 
 1. Resolve canonical project ID
 2. Audit facts / ownership / outcome boundaries
@@ -622,11 +652,15 @@ For each remaining project:
 9. Define Accountability
 10. Map to shared components
 11. Report true generic gaps only
-12. Implement via GitHub-native path
-13. QA
-14. Human review
-15. Freeze content/architecture
-16. Defer optional image polish if non-blocking
+12. Verify actual canonical QA HEAD and capability preflight
+13. Create an isolated project branch from canonical QA
+14. Update Content SSOT and Asset Manifest in the same implementation round when applicable
+15. Generate runtime and open PR directly to canonical QA
+16. Automatic Engineering QA
+17. Vercel Preview + exact PR-head responsive/runtime QA
+18. Human review
+19. Merge only after approval
+20. Freeze content/architecture; defer optional image polish only when non-blocking
 
 ---
 
@@ -672,7 +706,30 @@ Maintenance rules:
 
 ---
 
-# 24. Superseded rules
+# 24. Content / Asset SSOT and active-asset governance
+
+Hard rules:
+- No public content implementation without canonical Content SSOT ownership: `public/site/content/portfolio-content.json`.
+- No public asset implementation without canonical Asset Manifest ownership: `public/site/content/portfolio-asset-manifest.json`.
+- Chat, handoff, screenshot, and package material is not production SSOT until written into the canonical repository owner.
+- Content `contentVersion` must exist and be non-empty.
+- Asset Manifest `contentVersion` must equal Content `contentVersion`.
+- Runtime generation and governance validation must never require one historical fixed Content revision. Validate schema, required roster/package contract, Content/Manifest identity, asset resolution, and deterministic generation instead.
+- If a Content change introduces a new content revision, the Asset Manifest must be updated atomically and resolve to the same revision.
+- Public project asset implementation must update the Asset Manifest in the same atomic implementation change.
+- Engineering-only governance changes do not require a fake Content version bump.
+- Deterministic generation must return the public runtime to the canonical owners; direct generated-runtime edits are not a substitute for Content SSOT ownership.
+
+Active-asset QA:
+- `real-active` ProjectCards/public visuals derive semantic expectations from current canonical asset/runtime metadata
+- placeholder/fallback assertions may only run when runtime state is actually placeholder/fallback
+- do not broadly weaken responsive geometry, object-fit, overflow, or visual certification
+
+For later Payment implementation, approved content and approved assets must be written into Content SSOT and Asset Manifest in the same implementation round whenever both change.
+
+---
+
+# 25. Superseded rules
 
 The following are retired unless explicitly reopened:
 - public Problem Type chips
@@ -688,6 +745,9 @@ The following are retired unless explicitly reopened:
 - allowing new projects to expand shared architecture before parity mapping
 - centered-column-left-copy
 - three-equal-column accountability
+- PR #3 as the normal project implementation target
+- stacked repair PRs as the normal project workflow
+- historical fixed Content revision validation
 
 ## Public timeline presentation
 
