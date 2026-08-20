@@ -1829,3 +1829,25 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
   assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
 });
+
+
+test("R164.9C keeps Payment insight-first, non-duplicative and system-level", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app = read("assets/js/app.js");
+  const cardCss = read("assets/css/components/project-card.css");
+  const payment = ssot.projects.payment;
+  assert.equal(ssot.contentVersion, manifest.contentVersion);
+  assert.equal(payment.presentation.contentRefs.contributionIntervention, undefined);
+  assert.equal(payment.decisionNarrative.primaryDecisions.length, 4);
+  assert.equal(payment.publicContent.decisionEvidence.validationLayer.metrics.length, 3);
+  assert.equal(payment.publicContent.decisionEvidence.mappingTitle, undefined);
+  assert.equal(payment.publicContent.decisionEvidence.structuredGroups, undefined);
+  assert.ok(payment.publicContent.coreSystemInsight.insight.en);
+  assert.ok(payment.publicContent.coreSystemInsight.whatThisChanged.en);
+  assert.equal(manifest.items["payment-evidence-journey-synthesis-r1649c"].implementationStatus, "real-active");
+  assert.equal(manifest.items["payment-decision-03-return-integration-r1649c"].implementationStatus, "real-active");
+  assert.match(app, /WHAT THIS CHANGED/);
+  assert.match(app, /VISUAL PROOF/);
+  assert.match(cardCss, /outer owns hover\/border; media owns clipping/);
+});

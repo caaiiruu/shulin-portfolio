@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-20-r164.9",
+  "contentVersion": "2026-08-20-r164.9c",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -991,6 +991,56 @@
       ],
       "privacyTreatment": "Cropped/redacted canonical validation UI; QR payload and transaction/store/cashier identifiers obscured.",
       "sectionUsage": "decision-03-recovery",
+      "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03"
+    },
+    "payment-evidence-journey-synthesis-r1649c": {
+      "id": "payment-evidence-journey-synthesis-r1649c",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-journey-synthesis-r1649c.webp",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "2d7a7f241b58cfcb2b1406f4444bdb77c3b89c411946c3f2d0aabb2fd8ba1b38",
+      "blobSha": "dbf19a90797f662481b1328830fad76656adecd2",
+      "width": 2048,
+      "height": 1153,
+      "alt": "Simplified journey synthesis across queue, preparation, checkout and post-checkout, mapping speed pressure, value uncertainty, assurance and transaction history.",
+      "alt_zh": "涵蓋排隊、準備、結帳與結帳後的簡化旅程綜整，對應速度壓力、價值不確定、安心感與交易紀錄。",
+      "sourcePackage": "payment_r1649c_supplemental_assets.zip",
+      "sourceFiles": [
+        "payment-simplified-journey-map-source.jpg"
+      ],
+      "privacyTreatment": "Public-safe simplified synthesis; no participant PII.",
+      "sectionUsage": "evidence-research-synthesis",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
+    },
+    "payment-decision-03-return-integration-r1649c": {
+      "id": "payment-decision-03-return-integration-r1649c",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-decision-03-return-integration-r1649c.webp",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "445e35a920ed40a9960e6a6efda318ebfc8e0e7a170c3ba11c0ed6f381a4df26",
+      "blobSha": "eda6eba38adee624b05c6a6a76bebd03c876f5b6",
+      "width": 2048,
+      "height": 1280,
+      "alt": "Before-and-shipped comparison showing return support move from a separate help journey into the payment record.",
+      "alt_zh": "Before 與 Shipped 比較：退貨支援由分離的客服旅程移入付款紀錄。",
+      "sourcePackage": "payment_r1649c_supplemental_assets.zip",
+      "sourceFiles": [
+        "payment-return-integration-correct-source.jpg"
+      ],
+      "privacyTreatment": "Opaque semantic masks remove payment references, transaction identifiers, staff/store details, addresses, amounts and item/order details while preserving UI hierarchy and the before/shipped comparison.",
+      "sectionUsage": "decision-03-return-integration",
       "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03"
     }
   },
