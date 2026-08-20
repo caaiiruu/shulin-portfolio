@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-20-v2.6
+version: 2026-08-20-v2.7
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
