@@ -1,3 +1,11 @@
+## 2026-08-20-v2.6
+
+- Added the canonical Git ancestry activation boundary for SSOT-05/06 at `e9e488f3780381d0244044bdc6c69d9e09b0d14a`, the canonical QA merge where the same-commit Content / Asset Manifest atomicity contract first became active.
+- Made same-commit Content / Asset atomicity prospective: legacy pre-boundary commits remain historical evidence rather than retroactive violations.
+- Added one ancestry-aware governed-history selector shared by SSOT-05/06 for normal QA-targeted PRs, QA post-merge validation, and branches created from old history.
+- Added regression coverage proving pre-boundary legacy violations are excluded, post-activation unaligned Content revision changes fail, and aligned Content / Manifest revisions pass.
+- Preserved blocking SSOT-05/06 semantics, current Content/Manifest identity, runtime determinism, and active-asset QA without changing portfolio Content version.
+
 ## 2026-08-20-v2.5
 
 - Stabilized canonical QA as the normal PR Engineering-QA target.
