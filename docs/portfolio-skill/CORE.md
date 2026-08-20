@@ -49,6 +49,8 @@ Do not weaken a blocking engineering check to solve artifact quota or CI conveni
 - Chat, handoff, screenshot, and package material is input, not production SSOT.
 - Content `contentVersion` must exist; Asset Manifest `contentVersion` must match it.
 - Runtime/validation must never pin one historical Content revision.
+- Same-commit Content / Asset atomicity is prospective from the canonical Git activation boundary in `registry.json`; legacy pre-boundary commits remain historical evidence, while every governed commit after activation is blocking.
+- A new branch cannot bypass atomicity by starting from pre-activation history.
 - Engineering-only governance changes do not require a fake contentVersion bump.
 
 ## 22. Active-asset QA
