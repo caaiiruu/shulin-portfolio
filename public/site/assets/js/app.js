@@ -2862,16 +2862,17 @@
     if(contributionSource?.evidence)appendVisualEvidenceModules(contribution,contributionSource.evidence,{translate:t});
 
     const insightSource=projectContentRef(p,refs.coreSystemInsight);
+    const semanticInsight=Boolean(insightSource?.insight||insightSource?.whatThisChanged);
     const insightTitle=insightSource?.insight||insightSource?.headline;
     const insightCopy=insightSource?.whatThisChanged||insightSource?.supportingCopy;
     const insight=visibility.coreSystemInsight!==false&&insightSource
-      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightTitle),''):null;
+      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightTitle),semanticInsight?'':t(insightSource?.supportingCopy)):null;
     if(insight){
       insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');
       insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';
       const heading=insight.querySelector('.voucher-r149-heading');
       if(insightSource?.insight&&heading)heading.insertBefore(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'洞察':'INSIGHT'),heading.querySelector('h2'));
-      if(t(insightCopy)){
+      if(semanticInsight&&t(insightCopy)){
         const changed=element('div','core-system-insight-section__change');
         if(insightSource?.whatThisChanged)changed.append(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'這改變了什麼':'WHAT THIS CHANGED'));
         changed.append(element('p','core-system-insight-section__statement',t(insightCopy)));
