@@ -1972,5 +1972,7 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.match(app,/if\(!evidenceItems\.length\)return null/);
   assert.match(app,/\['aligned','aligned-five'\]\.includes\(source\.metricLayout\)/);
   assert.match(app,/outcomesHierarchy&&!outcomesHierarchy\.change/);
+  assert.match(app,/measuredLabelInHeader=false/);
+  assert.match(app,/if\(!measuredLabelInHeader\)group\.append/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });

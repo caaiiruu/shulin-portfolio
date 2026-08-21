@@ -2791,7 +2791,7 @@
     });
     return grid;
   }
-  function appendOutcomeSemanticHierarchy(section,source,{translate=localize}={}){
+  function appendOutcomeSemanticHierarchy(section,source,{translate=localize,measuredLabelInHeader=false}={}){
     const change=source?.change;
     if(change){
       const block=element('article','outcome-semantic-change');
@@ -2801,7 +2801,7 @@
     }
     if(list(source?.measured).length){
       const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
-      group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
+      if(!measuredLabelInHeader)group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
       if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
       appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
