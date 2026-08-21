@@ -2803,7 +2803,7 @@
       const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
       group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
-      if(source.metricLayout==='aligned-five')grid.classList.add('outcome-semantic-group__grid--aligned');
+      if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
       appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
     }
     if(list(source?.scale).length){
@@ -2943,9 +2943,11 @@
     if(decisionListNode)decisions.append(decisionListNode);
 
     const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomes=createRecruiterSection('',t(outcomesSource?.title));
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
+    const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
-    if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
+    if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
       const qualitative=element('div','outcome-qualitative-hierarchy');
       if(t(outcomesSource?.headline)){

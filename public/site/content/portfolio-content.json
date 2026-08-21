@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r166.1",
+  "contentVersion": "2026-08-21-r166.2",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -16850,19 +16850,9 @@
             "zh": "成果"
           },
           "semanticHierarchy": {
-            "change": {
-              "label": {
-                "en": "DELIVERED SYSTEM CHANGE",
-                "zh": "已交付的系統改變"
-              },
-              "statement": {
-                "en": "The engagement established one aligned account-opening model and development-ready specification set; production launch and post-launch metrics were outside the verified project record.",
-                "zh": "本次合作建立一套已對齊的開戶模型與可供開發的規格；正式上線與上線後指標不在已驗證的專案紀錄內。"
-              }
-            },
             "measuredLabel": {
-              "en": "Delivery and system coverage",
-              "zh": "交付與系統涵蓋"
+              "en": "One aligned account-opening model and a development-ready specification set.",
+              "zh": "一套已對齊的開戶模型與可供開發的完整規格。"
             },
             "measured": [
               {
@@ -16932,6 +16922,7 @@
                 }
               }
             ],
+            "metricLayout": "aligned",
             "supportingStatements": [
               {
                 "text": {
@@ -16941,7 +16932,7 @@
               }
             ]
           },
-          "contentStatus": "approved-r166.1"
+          "contentStatus": "approved-r166.2"
         }
       },
       "imagePlan": {
