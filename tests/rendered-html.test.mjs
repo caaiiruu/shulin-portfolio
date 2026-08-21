@@ -43,7 +43,10 @@ test("loads one fingerprinted stylesheet and runtime on every page", () => {
     assert.ok(!html.includes("<title>Work — Shulin Chou</title>"));
     assert.ok(html.includes(`data-project-route-summary="${id}"`));
     assert.ok(html.includes(project.title.en));
-    assert.ok(html.includes(project.criticalProblem.en));
+    if(project.presentation?.composition==="recruiter-first-system-case"){
+      assert.ok(html.includes(project.atAGlance.en));
+      assert.doesNotMatch(html,/Critical problem:|Business impact:/);
+    }else assert.ok(html.includes(project.criticalProblem.en));
   }
 });
 
@@ -1497,6 +1500,29 @@ test("keeps Search Mapping independent from recruiter-first Hero presentation", 
   assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
 });
 
+test("keeps recruiter-first static routes free of legacy summary headings", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition==="recruiter-first-system-case")){
+    const html=read(`work/${id}.html`);
+    assert.doesNotMatch(html,/Critical problem:|Business impact:/,`${id}: legacy static summary leaked`);
+    assert.match(html,new RegExp(project.atAGlance.en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
+  }
+});
+
+test("contracts Cathay Evidence to four ordered visual proofs without duplicate presentation", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const evidence=ssot.projects["cathay-sit-review-remediation-operations"].publicContent.operatingEvidence;
+  const expected=["research-coverage","operating-model","prioritisation","phased-direction"];
+  assert.equal(evidence.presentation,"ordered-visual-proofs");
+  assert.deepEqual(evidence.blockOrder,expected);
+  assert.deepEqual(evidence.items.map(item=>item.id),expected);
+  assert.equal(evidence.items[0].supportingFacts.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
+  assert.equal(evidence.items.some(item=>/supporting Decision|支援決策/.test(JSON.stringify(item))),false);
+  const app=read("assets/js/app.js");
+  assert.match(app,/orderedVisualProofs/);
+  assert.match(app,/data(?:set)?\.evidenceBlockId|dataset\.evidenceBlockId/);
+});
+
 test("executes the Human-approved recruiter-first presentation contract prospectively", () => {
   const ssot=JSON.parse(read("content/portfolio-content.json"));
   const app=read("assets/js/app.js");
@@ -1896,10 +1922,9 @@ test("R165.1G binds public-safe Cathay Evidence while preserving internal Search
     assert.ok(item.searchIndexV2,`${id}: Search Mapping missing`);
     assert.ok(item.searchIndexV2.problemTags?.en?.length||item.searchIndexV2.intentIds?.length,`${id}: Search Mapping relevance metadata missing`);
   }
-  assert.equal(evidence.validationLayer.presentation,"image-text");
-  assert.equal(evidence.validationLayer.assetId,expectedAssets[0]);
-  assert.deepEqual(evidence.items.map(item=>item.assetId),expectedAssets.slice(1));
-  assert.equal(evidence.validationLayer.metrics.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
+  assert.equal(evidence.presentation,"ordered-visual-proofs");
+  assert.deepEqual(evidence.items.map(item=>item.assetId),expectedAssets);
+  assert.equal(evidence.items[0].supportingFacts.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
   for(const assetId of expectedAssets){
     const asset=manifest.items[assetId];
     assert.ok(asset?.publicPath?.startsWith("/site/assets/projects/cathay-review/"),`${assetId}: canonical path missing`);

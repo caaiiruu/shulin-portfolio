@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r165.1g",
+  "contentVersion": "2026-08-21-r165.1h",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -17507,8 +17507,8 @@
         ]
       },
       "atAGlance": {
-        "en": "As Lead Product Designer (independent consultant), I reconstructed the five-month review-remediation workflow, turning fragmented operating knowledge into a shared model and phased priorities.",
-        "zh": "身為產品設計主管（獨立顧問），我重建五個月的審件補件流程，將分散的營運知識轉化為共享模型與分階段優先方向。"
+        "en": "As Lead Product Designer (independent consultant), I led workflow reconstruction and prioritisation across the review-remediation operating model, turning fragmented operational knowledge into a shared baseline and phased direction over a five-month engagement.",
+        "zh": "身為首席產品設計師（獨立顧問），我主導審件補件營運模型的流程重建與優先排序，並在五個月的合作期間，將分散的營運知識轉化為共享基線與分階段方向。"
       },
       "infoGrid": {
         "type": {
@@ -18056,19 +18056,34 @@
           },
           "items": [
             {
+              "id": "research-coverage",
+              "assetId": "cathay-review-research-operating-baseline-public-v1",
+              "title": {"en": "Research coverage", "zh": "研究涵蓋"},
+              "copy": {"en": "Research reconstructed the routine review and remediation flow before the operating model was defined.", "zh": "研究先重建日常審件與補件流程，再據此定義營運模型。"},
+              "supportingFacts": [
+                {"value": "1", "label": {"en": "full-team workshop", "zh": "場全團隊工作坊"}},
+                {"value": "2 × 1 hour", "label": {"en": "workflow interviews", "zh": "流程訪談"}},
+                {"value": "3", "label": {"en": "primary interview participants", "zh": "位主要訪談參與者"}},
+                {"value": "80%+", "label": {"en": "routine case-flow coverage", "zh": "日常案件流程涵蓋"}}
+              ]
+            },
+            {
+              "id": "operating-model",
               "assetId": "cathay-review-process-complexity-public-v1",
               "title": {"en": "Operating-model complexity", "zh": "營運模型複雜度"},
-              "copy": {"en": "A public-safe view of the roles, systems and remediation handoffs supporting Decision 01.", "zh": "以公開安全方式呈現支援決策一的角色、系統與補件交接。"}
+              "copy": {"en": "Reconstructed roles, systems, decision points and remediation handoffs into one end-to-end operating view.", "zh": "將角色、系統、決策點與補件交接重建為一套端到端營運視圖。"}
             },
             {
+              "id": "prioritisation",
               "assetId": "cathay-review-prioritisation-public-v1",
               "title": {"en": "Benefit-and-feasibility prioritisation", "zh": "效益與可行性排序"},
-              "copy": {"en": "Relative prioritisation structure supporting Decision 02; positions are not quantitative scores.", "zh": "支援決策二的相對優先排序結構；位置不代表量化分數。"}
+              "copy": {"en": "Separated expected benefit from implementation difficulty to make meaningful priority differences visible.", "zh": "將預期效益與實作難度分開，使有意義的優先差異清楚可見。"}
             },
             {
+              "id": "phased-direction",
               "assetId": "cathay-review-phased-direction-public-v1",
               "title": {"en": "Phased direction", "zh": "分階段方向"},
-              "copy": {"en": "Proposed operating direction supporting Decision 03; implementation remained client-owned.", "zh": "支援決策三的建議營運方向；實作仍由客戶負責。"}
+              "copy": {"en": "Sequenced opportunities into near-, mid- and long-term recommendations rather than one undifferentiated digitisation scope.", "zh": "將機會排序為近、中、長期建議，而非一個未分化的數位化範圍。"}
             }
           ],
           "validationLayer": {
@@ -18133,7 +18148,8 @@
             "en": "From workflow evidence to prioritised direction",
             "zh": "從流程證據到完成優先排序的方向"
           },
-          "presentation": "decision-support",
+          "presentation": "ordered-visual-proofs",
+          "blockOrder": ["research-coverage", "operating-model", "prioritisation", "phased-direction"],
           "structuredGroups": [
             {
               "supportingLabel": {
@@ -18915,7 +18931,6 @@
       },
       "presentation": {
         "visibility": {
-          "problemTypes": true,
           "coreSystemInsight": true,
           "evidence": true
         },
@@ -32564,7 +32579,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-20",
+  "lastUpdated": "2026-08-21",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",
