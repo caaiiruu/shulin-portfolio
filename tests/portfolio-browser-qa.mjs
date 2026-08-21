@@ -54,6 +54,44 @@ for (const viewport of viewports) {
     routeResults.push({ route, status: response?.status(), metrics });
   }
 
+  await page.goto(`${baseUrl}/site/work/cathay-sit-review-remediation-operations`,{waitUntil:"networkidle"});
+  const cathayPresentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog");
+    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    const legacyHeadings=["Critical problem","Business impact","One journey — five stages","Key Intervention Map","Delivery proof","Initial strategies","Ownership and collaboration","Delivery and measurement"];
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      problemTypes:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      evidenceVariant:dialog.querySelector("[data-evidence-variant]")?.dataset.evidenceVariant,
+      evidenceBlocks:[...dialog.querySelectorAll("#systemCaseEvidenceSection [data-evidence-block-id]")].filter(visible).map(node=>({id:node.dataset.evidenceBlockId,title:node.querySelector("h3")?.textContent.trim()})),
+      evidenceAssets:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].map(image=>({src:image.getAttribute("src"),placeholder:image.dataset.assetStatus||null,complete:image.complete,naturalWidth:image.naturalWidth})),
+      kpiStripVisible:visible(dialog.querySelector(".structured-evidence-v223__validation-metrics")),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
+      headings:surface.map(node=>node.querySelector("h2,h3")?.textContent.trim()),
+      owners:surface.map(node=>node.dataset.componentOwner||null),
+      legacy:legacyHeadings.filter(heading=>[...dialog.querySelectorAll("h2,h3")].some(node=>visible(node)&&node.textContent.trim()===heading)),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      overflow:dialog.scrollWidth-dialog.clientWidth,
+      text:dialog.innerText
+    };
+  });
+  const expectedCathaySections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
+  if(cathayPresentation.title!=="Fragmented review knowledge to a shared remediation operating model"||cathayPresentation.title.startsWith("From "))failures.push(`${viewport.name} Cathay Hero presentation contract failed: ${cathayPresentation.title}`);
+  if(cathayPresentation.problemTypes.length||cathayPresentation.classificationVisible)failures.push(`${viewport.name} Cathay Hero taxonomy must be empty: ${JSON.stringify(cathayPresentation.problemTypes)}`);
+  if(cathayPresentation.evidenceVariant!=="ordered-visual-proofs"||cathayPresentation.kpiStripVisible)failures.push(`${viewport.name} Cathay Research Coverage primitive mismatch: ${JSON.stringify(cathayPresentation)}`);
+  if(JSON.stringify(cathayPresentation.evidenceBlocks.map(block=>block.id))!==JSON.stringify(["research-coverage","operating-model","prioritisation","phased-direction"]))failures.push(`${viewport.name} Cathay Evidence block order/duplication mismatch: ${JSON.stringify(cathayPresentation.evidenceBlocks)}`);
+  if(cathayPresentation.evidenceAssets.length!==4||cathayPresentation.evidenceAssets.some(image=>image.placeholder||!image.complete||!image.naturalWidth||!image.src?.includes("/site/assets/projects/cathay-review/")))failures.push(`${viewport.name} Cathay public-safe Evidence assets failed: ${JSON.stringify(cathayPresentation.evidenceAssets)}`);
+  if(JSON.stringify(cathayPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Cathay navigator mismatch: ${JSON.stringify(cathayPresentation.navigator)}`);
+  if(JSON.stringify(cathayPresentation.sectionOrder)!==JSON.stringify(expectedCathaySections)||!(cathayPresentation.decisionTop<cathayPresentation.evidenceTop))failures.push(`${viewport.name} Cathay rendered IA mismatch: ${JSON.stringify(cathayPresentation)}`);
+  if(cathayPresentation.legacy.length)failures.push(`${viewport.name} Cathay legacy leakage: ${JSON.stringify(cathayPresentation.legacy)}`);
+  if(/leaving applicants unclear|guiding applicants through remediation|RECOMMENDATION — NOT VERIFIED AS IMPLEMENTED/.test(cathayPresentation.text))failures.push(`${viewport.name} Cathay rejected framing leaked into rendered copy`);
+  if(!cathayPresentation.text.includes("80%+")||!cathayPresentation.text.includes("routine case-flow coverage"))failures.push(`${viewport.name} Cathay routine case-flow coverage evidence missing`);
+  if(cathayPresentation.overflow>0)failures.push(`${viewport.name} Cathay dialog horizontal overflow: ${cathayPresentation.overflow}`);
+
   await page.goto(`${baseUrl}/site/work/booking`,{waitUntil:"networkidle"});
   const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("img")].filter(image=>image.alt);await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));const required=["Connecting the global taxi-booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric")],outcomes=outcomeCards.map(card=>({value:card.querySelector(".outcome-metric__value")?.textContent.trim(),label:(()=>{const node=card.querySelector(".outcome-metric__label")?.cloneNode(true);node?.querySelectorAll(".info-tooltip").forEach(tip=>tip.remove());return node?.textContent.trim()})()})),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),publicText=dialog.innerText,decisionFields=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")].map(card=>[...card.querySelectorAll(".decision-field-label-v58,dt")].map(label=>({label:label.textContent.trim(),copy:((label.tagName==="DT"?label.parentElement?.querySelector("dd"):label.nextElementSibling)?.textContent||"").trim()}))),flow=dialog.querySelector(".contribution-block .voucher-r149-flow"),flowNodes=[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")],flowSupport=dialog.querySelector(".contribution-block>.voucher-r149-intro"),insight=dialog.querySelector(".core-system-insight-section"),insightTitle=dialog.querySelector(".core-system-insight-section h2"),insightVisual=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation"),insightCaption=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation__caption"),complexity=[...dialog.querySelectorAll(".recruiter-complexity-grid--featured-first>.recruiter-complexity-card")],outcomeGrid=dialog.querySelector("#systemCaseOutcomesSection .outcome-metric-grid"),quickView=dialog.querySelector(".quick-view-v51--project"),audienceNodes=[...dialog.querySelectorAll(".info-grid-v45__audience")],contributionSection=flow?.closest(".contribution-block");const rect=node=>{const r=node?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,center:r.left+r.width/2}:null},titleStyle=insightTitle?getComputedStyle(insightTitle):null;return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,publicText,decisionFields,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth,contribution:{count:visibleHeadings.filter(text=>text==="Contribution").length,flow:rect(flow),nodes:flowNodes.map(rect),support:rect(flowSupport)},insight:{section:rect(insight),title:rect(insightTitle),titleLines:insightTitle&&titleStyle?Math.round(insightTitle.getBoundingClientRect().height/parseFloat(titleStyle.lineHeight)):null,visual:rect(insightVisual),captionAlign:insightCaption?getComputedStyle(insightCaption).textAlign:null},complexity:complexity.map(rect),complexityColumns:dialog.querySelector(".recruiter-complexity-grid--featured-first")?getComputedStyle(dialog.querySelector(".recruiter-complexity-grid--featured-first")).gridTemplateColumns:null,outcomeRhythm:{rowGap:parseFloat(getComputedStyle(outcomeGrid).rowGap)||0,cards:outcomeCards.map(rect),innerGaps:outcomeCards.map(card=>{const value=card.querySelector(".outcome-metric__value")?.getBoundingClientRect(),label=card.querySelector(".outcome-metric__label")?.getBoundingClientRect();return value&&label?label.top-value.bottom:null})},audience:{total:audienceNodes.length,inInfoGrid:audienceNodes.filter(node=>node.closest("#projectSignals")).length,inProgramme:audienceNodes.filter(node=>node.closest("#programmeSurface")).length,quickHeight:getComputedStyle(quickView).height,quickOverflow:Math.max(0,quickView.scrollHeight-quickView.clientHeight),contributionHasAudience:/Primary:|Secondary:/.test(contributionSection?.innerText||"")}}});
   if(bookingCertification.requiredOrder.some(index=>index<0)||bookingCertification.requiredOrder.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} Booking architecture order failed: ${JSON.stringify(bookingCertification.requiredOrder)}`);
@@ -61,7 +99,7 @@ for (const viewport of viewports) {
   if(JSON.stringify(bookingCertification.outcomes)!==JSON.stringify([{value:"+~7%",label:"desktop conversion rate"},{value:"+~3%",label:"mobile conversion rate"},{value:"+~10%",label:"tablet conversion rate"},{value:"~150",label:"additional rides per day after launch"}]))failures.push(`${viewport.name} Booking outcomes mismatch: ${JSON.stringify(bookingCertification.outcomes)}`);
   if(/\b2-step\b|\b3-step\b|943,818|65\.48%/.test(bookingCertification.publicText))failures.push(`${viewport.name} Booking confidential/internal public text regression`);
   if(!bookingCertification.publicText.includes("6 of 7 analysed markets improved")||!bookingCertification.publicText.includes("Spain was the only analysed market to decline")||!bookingCertification.publicText.includes("40+ countries"))failures.push(`${viewport.name} Booking recruiter-first supporting outcome story missing`);
-  if(JSON.stringify(bookingCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Booking navigator mismatch: ${JSON.stringify(bookingCertification.navigator)}`);
+  if(JSON.stringify(bookingCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Booking navigator mismatch: ${JSON.stringify(bookingCertification.navigator)}`);
   if(bookingCertification.evidenceImages.length!==8||bookingCertification.evidenceImages.some(image=>!image.complete||image.naturalWidth!==1600||image.naturalHeight!==900)||!bookingCertification.evidenceImages.some(image=>image.src.includes("ride-mix-public-01.svg"))||bookingCertification.evidenceImages.some(image=>image.src.includes("outcomes-cross-market")||image.src.includes("outcomes-post-launch")))failures.push(`${viewport.name} Booking evidence readiness/confidentiality failed: ${JSON.stringify(bookingCertification.evidenceImages)}`);
   if(bookingCertification.decisionFields.length!==3||bookingCertification.decisionFields.some(fields=>!fields.some(x=>x.label==="WHAT I DECIDED"&&x.copy)||!fields.some(x=>x.label==="WHY THIS CHOICE"&&x.copy)||!fields.some(x=>["TRADE-OFF ACCEPTED","WHAT THIS REQUIRED"].includes(x.label)&&x.copy)||!fields.some(x=>x.label==="OUTCOME"&&x.copy)))failures.push(`${viewport.name} Booking decision field completeness failed: ${JSON.stringify(bookingCertification.decisionFields)}`);
   if(bookingCertification.contribution.count!==1||!bookingCertification.contribution.flow||bookingCertification.contribution.nodes.length!==3||Math.abs(bookingCertification.contribution.nodes[1].center-bookingCertification.contribution.flow.center)>.75||Math.abs(bookingCertification.contribution.support.left-bookingCertification.contribution.flow.left)>.75)failures.push(`${viewport.name} Booking contribution alignment failed: ${JSON.stringify(bookingCertification.contribution)}`);
@@ -142,7 +180,7 @@ for (const viewport of viewports) {
     };
   });
   if(ctbcCertification.order.some(index=>index<0)||ctbcCertification.order.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} CTBC architecture order failed: ${JSON.stringify(ctbcCertification.order)}`);
-  if(ctbcCertification.problemTypesVisible)failures.push(`${viewport.name} CTBC Problem Types rendered publicly`);
+  if(ctbcCertification.problemTypesVisible)failures.push(`${viewport.name} CTBC recruiter-first Hero taxonomy must remain hidden`);
   if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
@@ -227,7 +265,7 @@ for (const viewport of viewports) {
   }));
   if(!navigatorContract.floating)failures.push(`${viewport.name} Project navigator is not the shared FloatingNavigator`);
   if(navigatorContract.toggleVisible)failures.push(`${viewport.name} legacy Project navigator disclosure remains visible`);
-  if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
+  if(JSON.stringify(navigatorContract.labels)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Project navigator labels mismatch: ${JSON.stringify(navigatorContract.labels)}`);
   const navigatorInteractions={clicks:[],reverseClicks:[],repeated:false,keyboard:false,manualScroll:false,touch:viewport.width<=430?false:null};
   const certifyNavigatorClick=async(label,collection)=>{
     const link=navigator.getByRole("link",{name:label,exact:true});
@@ -243,7 +281,7 @@ for (const viewport of viewports) {
     if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
     if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
-  for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
+  for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
   for(const label of ["Outcomes","Evidence","Decisions","Complexity","Overview"])await certifyNavigatorClick(label,navigatorInteractions.reverseClicks);
   const outcomesLink=navigator.getByRole("link",{name:"Outcomes",exact:true});
   await outcomesLink.click();await outcomesLink.click();await page.waitForTimeout(80);
@@ -255,7 +293,7 @@ for (const viewport of viewports) {
   if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
   const scrollRootForNav=page.locator(".dialog-scroll").first();
   await scrollRootForNav.hover();
-  await page.mouse.wheel(0,1800);
+  await page.mouse.wheel(0,2400);
   await page.waitForTimeout(180);
   const manualActive=await navigator.locator('a[aria-current="location"]').allTextContents();
   navigatorInteractions.manualScroll=manualActive.length===1&&manualActive[0]!=="Overview";
