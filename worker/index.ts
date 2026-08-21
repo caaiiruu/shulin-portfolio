@@ -40,16 +40,33 @@ const worker = {
       }, allowedWidths);
     }
 
-    // Keep one Work document and one shared dialog owner while allowing every
-    // project detail path to survive direct navigation and reload.
-    if (/^\/site\/work\/[^/]+(?:\/[^/]+)?\/?$/.test(url.pathname)) {
-      const workDocumentUrl = new URL("/site/work.html", request.url);
-      const assetResponse = await env.ASSETS.fetch(new Request(workDocumentUrl, {
+    // Project routes use generated initial documents from the canonical SSOT.
+    // The shared client renderer then enhances the same identity into the dialog.
+    const projectMatch = url.pathname.match(/^\/site\/work\/([^/]+)\/?$/);
+    if (projectMatch) {
+      const projectDocumentUrl = new URL(`/site/work/${projectMatch[1]}.html`, request.url);
+      const projectResponse = await env.ASSETS.fetch(new Request(projectDocumentUrl, {
         method: "GET",
         headers: request.headers,
       }));
-      if (assetResponse.ok) {
-        const routedResponse = new Response(assetResponse.body, assetResponse);
+      if (projectResponse.ok) {
+        const routedResponse = new Response(projectResponse.body, projectResponse);
+        routedResponse.headers.set("Content-Location", `/site/work/${projectMatch[1]}.html`);
+        return routedResponse;
+      }
+    }
+
+    // Preserve the existing two-segment programme/stage route contract. These
+    // pages are enhanced from the shared work shell rather than canonical
+    // top-level project documents.
+    if (/^\/site\/work\/[^/]+\/[^/]+\/?$/.test(url.pathname)) {
+      const workShellUrl = new URL("/site/work.html", request.url);
+      const workShellResponse = await env.ASSETS.fetch(new Request(workShellUrl, {
+        method: "GET",
+        headers: request.headers,
+      }));
+      if (workShellResponse.ok) {
+        const routedResponse = new Response(workShellResponse.body, workShellResponse);
         routedResponse.headers.set("Content-Location", "/site/work.html");
         return routedResponse;
       }

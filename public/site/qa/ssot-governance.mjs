@@ -88,7 +88,7 @@ if (activeStyleFiles.filter((name) => name === "tokens.css").length !== 1) {
 const structuredContentFiles = fs.readdirSync(contentDirectory)
   .filter((name) => name.endsWith(".json"));
 const expectedStructuredOwners = ["portfolio-asset-manifest.json", "portfolio-content.json"];
-if (structuredContentFiles.length !== 2 || expectedStructuredOwners.some((name) => !structuredContentFiles.includes(name))) {
+if (structuredContentFiles.length !== expectedStructuredOwners.length || expectedStructuredOwners.some((name) => !structuredContentFiles.includes(name))) {
   failures.push(`content: expected the Content and Asset Manifest owners, found ${structuredContentFiles.join(", ") || "none"}`);
 }
 if (structuredContentFiles.some((name) => /(?:v\d+|new|final|latest|fixed)/i.test(name))) {
@@ -259,3 +259,4 @@ if (failures.length) {
   process.exit(1);
 }
 console.log("Canonical SSOT governance passed.");
+await import("./asset-governance.mjs");

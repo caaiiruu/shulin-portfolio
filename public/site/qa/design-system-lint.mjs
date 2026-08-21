@@ -109,7 +109,7 @@ for (const token of ["--cmp-popup-page-title-size", "--cmp-popup-section-title-s
 }
 if (/font-size:clamp\(/.test(projectDetail)) errors.push("ProjectDetailOverview: popup typography must use semantic component tokens instead of local clamp scales");
 if (!canonicalCss.includes('.gallery-thumbs-v45>*[aria-selected="true"]') || !canonicalCss.includes("border:var(--dimension-2px) solid var(--color-state-selected-ring)")) errors.push("DetailDialog: selected thumbnail must use a non-clipping 2px inset state");
-if (/\.decision-(?:result-block-v58|considerations-v46)[^{]*\{[^}]*border-top/s.test(canonicalCss)) errors.push("DetailDialog: decision information hierarchy must not use divider lines");
+if (!canonicalCss.includes(".decision-number-v48{align-self:start;display:inline-flex;width:max-content;padding:var(--space-1) var(--space-2);border:var(--dimension-1px) solid var(--color-text-accent)")) errors.push("DetailDialog: Decision must use the shared semantic tag surface");
 if (!app.includes("if(tradeoffText)") || !app.includes("if(considerations.childElementCount)")) errors.push("DetailDialog: trade-off must be conditional on real SSOT content");
 if (!canonicalCss.includes(".rail-button:disabled{border-color:var(--color-state-disabled-border);background:var(--color-state-disabled-bg);color:var(--color-state-disabled-text)")) errors.push("HorizontalRail: disabled state must use semantic surface, border, and text");
 
@@ -119,11 +119,25 @@ if (/principle-card-v48|principle-evidence-v48/.test(homepage)) errors.push("Hom
 if (!canonicalCss.includes(".icon-download") || !fs.existsSync(path.join(root, "assets/img/download.svg"))) errors.push("ArrowIcon: CV download must use its distinct canonical SVG affordance");
 if (!canonicalCss.includes(".text-cta::after") || !canonicalCss.includes(".text-cta:hover::after")) errors.push("Foundation: supplementary text CTAs must use the shared interaction contract");
 if (/timeline-evidence-v34[^<]*[\s\S]{0,240}<b>→<\/b>/.test(fs.readFileSync(path.join(root, "profile.html"), "utf8"))) errors.push("Profile: timeline CTA arrows must use the canonical SVG icon");
-if (!canonicalCss.includes(".ownership-grid-v45>article{padding:var(--space-5);border-radius:var(--radius-md);background:var(--color-surface-evidence-item)}")) errors.push("ProjectDetailOverview: parent and child evidence surfaces must use the neutral hierarchy");
+if (!projectDetail.includes(".ownership-grid-v45>article{") || !projectDetail.includes("border-radius:0;background:transparent}")) errors.push("ProjectDetailOverview: ownership must use typography and dividers, not page-level cards");
 if (!app.includes("'button button--dark programme-stage-case__cta'")) errors.push("ProjectDetailOverview: stage-case CTA must reuse the canonical primary button contract");
 if (/\.programme-stage-case__cta:(?:hover|active)\{/.test(canonicalCss)) errors.push("ProjectDetailOverview: stage-case CTA must not maintain a parallel hover or active contract");
-if (!app.includes("voucher-stage-summary") || !app.includes('ui("customer-breakpoint-') || !app.includes('ui("system-response-')) errors.push("ProjectDetailOverview: stage summary must keep one SSOT-localized breakpoint-to-system-response hierarchy");
-if (!app.includes("createDecisionCard") || !app.includes("voucher-stage-decision-list")) errors.push("ProjectDetailOverview: stage deep dives must reuse the canonical Design Decision renderer");
+const recruiterStageSource = app.slice(app.indexOf("if(isStage){"), app.indexOf("}else if(isInitiative)", app.indexOf("if(isStage){")));
+if (recruiterStageSource.includes("stage-focus-v148__statement") || recruiterStageSource.includes("createProgrammeSection(stageLabel,'')") || !recruiterStageSource.includes("const stageProjection=parent.recruiterFirstPopup")) errors.push("ProjectDetailOverview: recruiter-first stage details must use the primary dialog stage title and must not render a duplicate Stage Focus or stage heading wrapper");
+const featuredDecisionSource = app.slice(app.indexOf("function createFeaturedDecisionGroup("), app.indexOf("function interactiveFlowById(", app.indexOf("function createFeaturedDecisionGroup(")));
+const canonicalDecisionEvidenceChain = [
+  "const card=createDecisionCard(model,index,{projectKey,showVisual:showVisual&&Boolean(model.evidenceAssetId)})",
+  "card.querySelector('.decision-visual-v58.evidence-frame')",
+  "evidence.classList.add('case-evidence-wrapper')",
+  "group.dataset.componentOwner='FeaturedDecision'"
+];
+const recruiterDecisionProjection = app.includes("p.presentation?.decisionOptions?.variant==='featured'") &&
+  app.includes("createFeaturedDecisionGroup(decision,index,{projectKey:key,showVisual:showDecisionVisuals");
+if (!canonicalDecisionEvidenceChain.every((contract) => featuredDecisionSource.includes(contract)) ||
+    !recruiterDecisionProjection ||
+    !app.includes("voucher-r149-decision-list")) {
+  errors.push("ProjectDetailOverview: recruiter-first stage details must reuse the canonical Design Decision and EvidenceFrame renderer");
+}
 if (/\.home-page\s+:is\([^)]*\.principles/.test(editorial)) errors.push("HomepageEvidence: EditorialSection must not override the dark Principles surface");
 if (!homeRuntime.includes("localize(project?.company)") || !homeRuntime.includes("localize(project?.domain_label)")) errors.push("ProjectCard: related cards must render company first and domain second from SSOT");
 if (homeRuntime.includes("localize([p.context,p.context_zh])")) errors.push("ProjectCard: related-card metadata must not repeat the company through legacy context copy");
@@ -149,12 +163,12 @@ for (const phrase of ["renderSuggestions();", "if(!results.hidden&&input.value.t
 }
 if (!projectDetail.includes(".modal-classification-v45{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start")) errors.push("ProjectDetailOverview: classification must preserve its label-to-chip alignment grid");
 if (!projectDetail.includes(".detail-status{display:grid;grid-template-columns:max-content max-content;align-items:start")) errors.push("ProjectDetailOverview: delivery status must remain a compact semantic label, not a full-width field");
-if (!projectDetail.includes(".pd-section-nav{position:absolute") || !projectDetail.includes("safe-area-inset-bottom")) errors.push("ProjectDetailOverview: recruiter navigator must remain dialog-floating and safe-area aware");
+if (!canonicalCss.includes(".floating-navigator{position:fixed") || !canonicalCss.includes("safe-area-inset-bottom") || !app.includes("classList.add(\'floating-navigator\')") || projectDetail.includes(".pd-section-nav:not(.floating-navigator)")) errors.push("FloatingNavigator: Project navigation must reuse the single shared fixed and safe-area-aware primitive at every viewport");
 if (projectDetail.includes(".project-section-nav")) errors.push("ProjectDetailOverview: retired navigator namespace must not coexist with .pd-section-nav");
 if (!app.includes("function scrollToProjectSection(target)") || !app.includes("function projectSectionInset()")) errors.push("ProjectDetailOverview: navigator must use the canonical scroll-root and sticky-control offset owner");
-if (!app.includes("function cancelProjectSectionNavigation") || !app.includes("projectSectionNavigation===transaction") || !app.includes("if(!projectSectionNavigation)setActiveProjectSection(visibleProjectSectionId)")) errors.push("ProjectDetailOverview: navigator must keep one cancellable last-click-wins transaction separate from scroll-spy");
+if (!app.includes("dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'})") || !app.includes("setActiveProjectSection(visibleProjectSectionId)") || app.includes("setTimeout(settle,900)")) errors.push("ProjectDetailOverview: navigator click and scroll-spy must share one deterministic .dialog-scroll state path");
 if (!canonicalCss.includes("min-width:max-content") || !canonicalCss.includes("text-wrap:nowrap;white-space:nowrap")) errors.push("ProjectCard: company names must remain one unbroken line across every card variant");
-if (!projectDetail.includes(".detail-commerce-v45{display:grid") || !projectDetail.includes("align-items:stretch") || !projectDetail.includes(".key-intervention-map__flow{display:grid") || !projectDetail.includes("min-height:var(--dimension-220px)")) errors.push("ProjectDetailOverview: overview summary and intervention map must retain the governed balanced container");
+if (!projectDetail.includes(".case-study-section{") || !projectDetail.includes(".case-study-section--canvas{background:transparent}") || !projectDetail.includes(".case-study-section__header{") || !projectDetail.includes(".info-grid-v45>div{") || !projectDetail.includes("border-radius:0;background:transparent")) errors.push("ProjectDetailOverview: every major section and flat Info Grid must use the shared CaseStudySection grammar");
 if (!experimentCard.includes(".experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}")) errors.push("ExperimentDetail: overview content must reuse the Project Detail surface instead of nested card styling");
 if (!canonicalCss.includes("border-radius:var(--cmp-search-form-radius)")) errors.push("Matcher: search radius must use the shared component token");
 if (errors.length) {

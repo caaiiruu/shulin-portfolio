@@ -1,0 +1,36 @@
+{
+  "packageId": "CP-VOUCHER-OFFER-VISION-2026-08-07",
+  "mode": "merge-only",
+  "target": "public/site/content/portfolio-content.json",
+  "source": "User-approved merge patch and update summary",
+  "fields": [
+    {
+      "patchField": "projects.voucher.publicContent.journeyDisplayContract",
+      "previousCanonicalValue": "Equivalent labels and runtime rules already distributed across journeyChapters and renderer.",
+      "mergedCanonicalValue": "Kept canonical stage labels; added visualEvidence contracts to journeyChapters; renderer reads label/problem/title/direction distinctly.",
+      "conflict": "Patch governance object is not a production schema field.",
+      "action": "Merged supported production fields only; did not import the contract object."
+    },
+    {
+      "patchField": "projects.voucher.publicContent.portfolioHierarchy",
+      "previousCanonicalValue": "Hierarchy already represented by selectedInitiatives, journeyStageOptimisations, systemFoundations, futureVision and continueExploring.",
+      "mergedCanonicalValue": "Preserved existing approved hierarchy and boundaries.",
+      "conflict": "Patch duplicates existing production structures.",
+      "action": "No duplicate runtime hierarchy added."
+    },
+    {
+      "patchField": "projects.voucher.systemFoundations.voucherCardComponentSystem2024_2025",
+      "previousCanonicalValue": "Title and ownership implied the reusable card need began as one-off work.",
+      "mergedCanonicalValue": "Existing white card → Voucher Center state evolution → reusable Tangram abstraction; ownership boundaries retained.",
+      "conflict": "Previous wording contradicted user-confirmed history.",
+      "action": "Replaced conflicting title/history/at-a-glance/attribution and added forbidden claims."
+    },
+    {
+      "patchField": "contentQualityGate",
+      "previousCanonicalValue": "Existing global content and test contracts.",
+      "mergedCanonicalValue": "Hierarchy and Stage visual evidence enforced by existing test owners.",
+      "conflict": "Top-level patch metadata is governance, not runtime content.",
+      "action": "Kept out of runtime schema; translated into regression tests."
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+name: Portfolio Remote Engineering QA
+
+on:
+  push:
+    branches:
+      - qa/r146-r43-preview-2026-08-06
+  pull_request:
+    branches:
+      - qa/r146-r43-preview-2026-08-06
+      - recovery/r146-runtime-2026-08-06
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Exact QA branch, tag, or commit to validate
+        required: true
+        default: qa/r146-r43-preview-2026-08-06
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-engineering-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  engineering-qa:
+    name: Engineering QA (human visual review remains required)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      EVIDENCE_DIR: /tmp/portfolio-engineering-qa
+      BASE_URL: http://127.0.0.1:3000
+    steps:
+      - name: Clean checkout of exact validation commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Record exact validation commit
+        id: commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$EVIDENCE_DIR"
+          validated_sha="$(git rev-parse HEAD)"
+          expected_sha="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}"
+          test "$validated_sha" = "$(git rev-parse "$expected_sha^{commit}")"
+          test -z "$(git status --short)"
+          {
+            echo "repository=$GITHUB_REPOSITORY"
+            echo "event=$GITHUB_EVENT_NAME"
+            echo "source_branch=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+            echo "validated_sha=$validated_sha"
+            echo "workflow_run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          } | tee "$EVIDENCE_DIR/checkout-audit.txt"
+          echo "sha=$validated_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Use repository Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+
+      - name: Canonical dependency install
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install-result.txt"
+
+      - name: Regenerate canonical production runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          runtime_manifest() {
+            {
+              printf '%s\0' public/site/index.html public/site/work.html public/site/experiments.html public/site/profile.html
+              find public/site/work -maxdepth 1 -type f -name '*.html' -print0
+              find public/site/assets/css -maxdepth 1 -type f -name 'production.*.css' -print0
+              find public/site/assets/js -maxdepth 1 -type f -name 'production.*.js' -print0
+            } | sort -z | xargs -0 sha256sum
+          }
+          node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-pass-a.txt"
+          runtime_manifest > /tmp/generated-runtime-a.txt
+          node scripts/build-production-assets.mjs 2>&1 | tee "$EVIDENCE_DIR/production-assets-pass-b.txt"
+          runtime_manifest > /tmp/generated-runtime-b.txt
+          diff -u /tmp/generated-runtime-a.txt /tmp/generated-runtime-b.txt | tee "$EVIDENCE_DIR/generated-runtime-determinism.txt"
+          test "$(wc -l < /tmp/generated-runtime-b.txt)" -eq 19
+          git diff --exit-code -- public/site
+          test -z "$(git status --porcelain --untracked-files=all -- public/site)"
+
+      - name: Canonical validation and existing tests
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run validate:ssot 2>&1 | tee "$EVIDENCE_DIR/ssot-validation-result.txt"
+          npm run validate:design 2>&1 | tee "$EVIDENCE_DIR/design-validation-result.txt"
+          npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
+          node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
+
+      - name: Canonical verified production build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee "$EVIDENCE_DIR/build-result.txt"
+          npm run validate:artifact 2>&1 | tee "$EVIDENCE_DIR/artifact-validation-result.txt"
+
+      - name: Install isolated Chromium browser runtime
+        shell: bash
+        run: |
+          set -o pipefail
+          npm install --no-save --package-lock=false playwright@1.55.0 2>&1 | tee "$EVIDENCE_DIR/playwright-install-result.txt"
+          npx playwright install chromium 2>&1 | tee "$EVIDENCE_DIR/chromium-install-result.txt"
+
+      - name: Start production-like static server
+        shell: bash
+        run: |
+          node tests/portfolio-static-server.mjs > "$EVIDENCE_DIR/server.log" 2>&1 &
+          echo $! > /tmp/portfolio-static-server.pid
+          for attempt in {1..30}; do
+            if curl -fsS "$BASE_URL/site/" >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$EVIDENCE_DIR/server.log"
+          exit 1
+
+      - name: Run R159 responsive runtime and interaction certification
+        shell: bash
+        run: |
+          set -o pipefail
+          node tests/portfolio-browser-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r159-browser-qa-result.txt"
+
+      - name: Compose engineering QA report
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "# Portfolio Engineering QA"
+            echo
+            echo "- Validated SHA: ${{ steps.commit.outputs.sha }}"
+            echo "- State: ENGINEERING QA only"
+            echo "- Final visual pass: NOT DECLARED"
+            echo "- Human visual review: REQUIRED"
+            echo "- Production changed: NO"
+            echo "- Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          } > "$EVIDENCE_DIR/engineering-qa-report.md"
+
+      - name: Upload exact-SHA engineering QA artifacts
+        if: always()
+        continue-on-error: true # Evidence retention must not override core engineering validation.
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-engineering-qa-${{ steps.commit.outputs.sha }}
+          path: /tmp/portfolio-engineering-qa
+          if-no-files-found: error
+          retention-days: 30

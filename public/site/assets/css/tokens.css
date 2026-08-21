@@ -39,6 +39,11 @@
   --color-text-accent: var(--brand-700);
   --color-text-inverse: var(--paper-0);
   --color-text-inverse-secondary: color-mix(in srgb, var(--paper-0) 78%, transparent);
+  --color-surface-dark: var(--ink-950);
+  --color-text-on-dark-primary: var(--paper-0);
+  --color-text-on-dark-secondary: color-mix(in srgb, var(--paper-0) 82%, transparent);
+  --color-border-on-dark: color-mix(in srgb, var(--paper-0) 38%, var(--ink-950));
+  --color-focus-on-dark: var(--paper-0);
   --color-surface: var(--paper-0);
   --color-surface-subtle: var(--paper-50);
   --color-surface-soft: var(--paper-50);
@@ -46,6 +51,7 @@
   --color-surface-evidence-neutral: var(--paper-50);
   --color-surface-evidence-accent: var(--paper-50);
   --color-surface-evidence-item: var(--paper-0);
+  --case-study-emphasis-surface: var(--portfolio-cloud-surface);
   --color-border: var(--line-200);
   --color-border-strong: var(--line-300);
   --color-focus: var(--brand-700);
@@ -248,6 +254,26 @@
   --popup-control-inset-inline: clamp(var(--dimension-32px), var(--dimension-4vw), var(--dimension-56px));
   --domain-anchor-gap: var(--space-7);
 
+  /* Canonical Case Study layout and rhythm system */
+  --case-page-max: var(--dimension-1280px);
+  --case-reading-max: var(--dimension-760px);
+  --case-evidence-max: var(--dimension-1120px);
+  --case-gutter-desktop: var(--space-8);
+  --case-gutter-tablet: var(--space-7);
+  --case-gutter-mobile: var(--space-5);
+  --case-page-gutter: var(--case-gutter-desktop);
+  --case-gap-chapter: var(--space-9);
+  --case-gap-section: var(--space-8);
+  --case-gap-subsection: var(--space-7);
+  --case-gap-content: var(--space-5);
+  --case-gap-caption: var(--space-2);
+  --project-detail-copy-measure: var(--case-reading-max);
+  --project-detail-section-gap: var(--case-gap-section);
+  --project-detail-section-pad-block: var(--case-gap-section);
+  --project-detail-section-pad-inline: var(--case-page-gutter);
+  --project-detail-mobile-section-gap: var(--case-gap-content);
+  --project-detail-mobile-section-pad-block: var(--case-gap-subsection);
+
   /* SelectedEvidence component tokens */
   --evidence-section-gap: var(--space-8);
   --evidence-content-gap: var(--space-7);
@@ -412,6 +438,7 @@
   --dimension-10vw: 10vw;
   --dimension-11px: 11px;
   --dimension-11vw: 11vw;
+  --dimension-12vw: 12vw;
   --dimension-12ch: 12ch;
   --dimension-12px: 12px;
   --dimension-13ch: 13ch;
@@ -681,10 +708,11 @@
   --sys-weight-heavy:860;
   --sys-weight-regular:450;
   /* Semantic typography roles: HTML heading level owns structure; these roles own appearance. */
-  --type-page-title:clamp(var(--dimension-2-2rem),var(--dimension-3vw),var(--dimension-3-2rem));
-  --type-page-title-compact:clamp(var(--dimension-1-8rem),var(--dimension-9vw),var(--dimension-2-75rem));
-  --type-section-title:clamp(var(--dimension-1-65rem),var(--dimension-2-5vw),var(--dimension-2-35rem));
-  --type-subsection-title:clamp(var(--dimension-1-35rem),var(--dimension-1-5vw),var(--dimension-1-75rem));
+  --type-page-title:clamp(3.5rem,5vw,4.25rem);
+  --type-page-title-compact:clamp(2.25rem,9vw,2.625rem);
+  --type-section-title:clamp(2.375rem,3.2vw,2.75rem);
+  --type-subsection-title:clamp(1.5rem,2vw,1.75rem);
+  --type-core-statement:clamp(1.625rem,2.2vw,1.875rem);
   --type-body:var(--text-body);
   --type-meta:var(--text-sm);
   --type-eyebrow:var(--text-xs);
@@ -719,6 +747,7 @@
   --cmp-popup-outcome-metric-size:var(--type-outcome-metric);
   --cmp-popup-value-headline-size:var(--text-lead);
   --cmp-popup-value-supporting-size:var(--cmp-popup-body-size);
+  --cmp-popup-core-statement-size:var(--type-core-statement);
   --cmp-popup-body-size:var(--type-body);
   --cmp-popup-supporting-size:var(--type-meta);
   --cmp-popup-label-size:var(--type-eyebrow);

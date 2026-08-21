@@ -2,8 +2,10 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import postcss from "postcss";
+import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "./visual-asset-governance.mjs";
 
 const root = path.resolve("public/site");
+const templateRoot = path.resolve("site-source/templates");
 const pages = ["index.html", "work.html", "experiments.html", "profile.html"];
 const cssSources = [
   "assets/css/tokens.css",
@@ -129,7 +131,9 @@ const expectedProjectIds = [
   "ctbc-mortgage-self-service-app",
   "booking-taxi-pickup-service-strategy",
 ];
-if (content.contentVersion !== "2026-08-06-r146") throw new Error("The active Content SSOT must be r146");
+if (typeof content.contentVersion !== "string" || !content.contentVersion.trim() || content.contentVersion !== content.contentVersion.trim()) {
+  throw new Error("The active Content SSOT must define a non-empty canonical contentVersion");
+}
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
 const projectIds = Object.keys(content.projects || {});
@@ -155,9 +159,20 @@ const publicExplorations = [...Object.values(content.sideProjects || {}), ...Obj
 if (publicExplorations.length !== 6) {
   throw new Error("The active Content SSOT must contain 6 Explorations");
 }
-if (assetManifest.packageVersion !== "r42" || Object.keys(assetManifest.items || {}).length !== 250) {
-  throw new Error("The active Asset Manifest must be r42 with 250 records");
+if (assetManifest.packageVersion !== "r45") {
+  throw new Error("The active Asset Manifest must use the canonical r45 package contract");
 }
+if (assetManifest.contentVersion !== content.contentVersion) {
+  throw new Error(`The active Asset Manifest must align to Content ${content.contentVersion}`);
+}
+const derivedVisualSlots = deriveRuntimeVisualSlots(content);
+validateRuntimeVisualAssets({
+  slots: derivedVisualSlots,
+  assetManifest,
+  publicAssetExists(publicPath) {
+    return fs.existsSync(path.join(root, publicPath.slice("/site/".length)));
+  },
+});
 
 function fingerprint(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 16);
@@ -170,6 +185,12 @@ function replaceProductionAssets(html, cssFile, jsFile) {
     .replace('<h2 class="heading-2" data-en="What are you trying to solve?"', '<h2 data-en="What are you trying to solve?"')
     .replace("</head>", `<link rel="stylesheet" href="/site/assets/css/${cssFile}"></head>`)
     .replace("</body>", `<script defer src="/site/assets/js/${jsFile}"></script></body>`);
+}
+
+for (const page of pages) {
+  const template = path.join(templateRoot, page);
+  if (!fs.existsSync(template)) throw new Error(`Canonical HTML template is missing: ${template}`);
+  fs.copyFileSync(template, path.join(root, page));
 }
 
 for (const directory of ["assets/css", "assets/js"]) {
@@ -285,3 +306,5 @@ for (const page of pages) {
 }
 
 console.log(`Production assets: ${cssFile}, ${jsFile}`);
+
+await import("./generate-project-pages.mjs");
