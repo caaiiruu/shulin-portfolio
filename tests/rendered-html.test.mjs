@@ -1327,7 +1327,8 @@ test("closes the final P1 case-study runtime contracts", () => {
   const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
   assert.doesNotMatch(app, /representative-shipped-work-94a1458e/);
   assert.doesNotMatch(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
-  assert.match(overview, /@media\(max-width:600px\)\{#detailClassification,\.modal-classification-v45\{display:none\}\}/);
+  assert.match(overview, /@media\(max-width:600px\)[\s\S]*\.modal-classification-v45\{grid-template-columns:1fr;align-items:start;gap:var\(--space-2\)\}/);
+  assert.doesNotMatch(overview, /#detailClassification[^}]*display:none/);
   assert.match(overview, /\.decision-number-v48\{[^}]*border:var\(--dimension-1px\) solid var\(--color-text-accent\)[^}]*background:var\(--color-surface-evidence-accent\)/);
   assert.match(overview, /\.quick-view-v51\{[^}]*padding:0;[^}]*background:transparent/);
   assert.match(overview, /\.decision-card-v46\{[^}]*border-radius:0;[^}]*background:transparent/);
@@ -1403,9 +1404,7 @@ test("contracts every approved recruiter block to an explicit public role", () =
       const order=project.presentation.sectionOrder;
       assert.ok(Array.isArray(order),`${id}: missing shared presentation sectionOrder`);
       assert.equal(new Set(order).size,order.length,`${id}: duplicate shared presentation section`);
-      for(const sectionId of ["what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]){
-        assert.ok(order.includes(sectionId),`${id}: ${sectionId} missing from shared presentation sectionOrder`);
-      }
+      assert.deepEqual(order,ssot.implementationContracts.recruiterFirstPresentation.sectionOrder,`${id}: shared presentation sectionOrder diverged`);
       for(const [owner,path] of Object.entries(project.presentation.contentRefs||{})){
         const value=String(path).split(".").reduce((current,key)=>current?.[key],project);
         assert.notEqual(value,undefined,`${id}: shared content owner ${owner} does not resolve ${path}`);
@@ -1490,9 +1489,37 @@ test("R157 locks Voucher visual correction content and shared interaction owners
 test("uses generic presentation visibility for public Problem Types without project identity conditionals", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
-  assert.equal(ssot.projects.dbs.presentation.visibility.problemTypes, false);
-  assert.match(app, /p\.presentation\?\.visibility\?\.problemTypes \?\? !p\.recruiterFirstPopup/);
+  assert.equal(ssot.implementationContracts.recruiterFirstPresentation.problemTypes.visible, true);
+  assert.equal(ssot.implementationContracts.recruiterFirstPresentation.problemTypes.maximum, 3);
+  assert.match(app, /recruiterContract\?\.problemTypes\?\.visible \?\? p\.presentation\?\.visibility\?\.problemTypes/);
   assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
+});
+
+test("executes the Human-approved recruiter-first presentation contract prospectively", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const contract=ssot.implementationContracts.recruiterFirstPresentation;
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNavigation=["overview","complexity","decisions","evidence","outcomes","ownership"];
+  assert.deepEqual(contract.sectionOrder,expectedOrder);
+  assert.deepEqual(contract.navigation.map(item=>item.key),expectedNavigation);
+  assert.deepEqual(contract.hero.forbiddenVisiblePrefixes,["From "]);
+  assert.equal(contract.problemTypes.visible,true);
+  assert.match(app,/recruiterFirstDisplayTitle\(p\)/);
+  assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
+  assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
+  for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
+    assert.equal(project.title.en.startsWith("From "),false,`${id}: visible Hero title starts with From`);
+    assert.ok(project.problemTypes.en.length>0&&project.problemTypes.en.length<=contract.problemTypes.maximum,`${id}: invalid Problem Types`);
+    assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
+    for(const ref of contract.requiredContentRefs){
+      const path=project.presentation.contentRefs?.[ref];
+      assert.ok(path,`${id}: missing ${ref} contentRef`);
+      assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`${id}: unresolved ${ref} contentRef`);
+    }
+    assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"),`${id}: Decisions must precede Evidence`);
+    assert.equal(project.presentation.sectionOrder.some(section=>contract.disallowedVisibleLegacySections.includes(section)),false,`${id}: legacy section leaked into recruiter-first order`);
+  }
 });
 
 
@@ -1505,7 +1532,7 @@ test("projects DBS through the shared recruiter-first system-case composition", 
   assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes"]);
   assert.match(app, /function renderSystemCaseParent\(p\)/);
   assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
-  assert.match(app, /const configured=list\(project\?\.presentation\?\.navigation\)/);
+  assert.match(app, /const configured=list\(recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
   assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
 });
@@ -1599,7 +1626,7 @@ test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric
   assert.equal(dbs.publicContent.outcomes.cards.length, 3);
   assert.equal("validatedOutcomes" in dbs.publicContent, false);
   assert.equal(dbs.presentation.contentRefs.outcomes, "publicContent.outcomes");
-  assert.deepEqual(dbs.presentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Outcomes"]);
+  assert.deepEqual(ssot.implementationContracts.recruiterFirstPresentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Outcomes", "Ownership"]);
   assert.match(app, /function appendOutcomeCards\(grid,items/);
   assert.match(app, /appendOutcomeCards\(metrics,c\.outcomes\?\.metrics,\{metric:true,translate:t\}\)/);
   assert.match(css, /\.outcome-metric--qualitative\{/);
@@ -1773,7 +1800,7 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
   assert.doesNotMatch(css,/structured-evidence[^}]*!important/i);
 
   assert.equal(ctbc.presentation.composition,"recruiter-first-system-case");
-  assert.equal(ctbc.presentation.visibility.problemTypes,false);
+  assert.equal(content.implementationContracts.recruiterFirstPresentation.problemTypes.visible,true);
   assert.equal(ctbc.infoGrid.type.value,"0→1 Product");
   assert.deepEqual(ctbc.infoGrid.audience.secondary.en,["Co-borrowers","Guarantors"]);
   assert.equal(ctbc.infoGrid.timeline.duration.en,"3 months");

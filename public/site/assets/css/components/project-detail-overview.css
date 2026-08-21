@@ -735,7 +735,6 @@
   .evidence-lightbox-v147{width:100%;max-height:100%;padding:var(--space-4);border-radius:0}
   .evidence-lightbox-v147__image{max-height:var(--dimension-720px)}
   .modal-content-v45{padding-inline:clamp(var(--dimension-16px),var(--dimension-5vw),var(--dimension-24px))}
-  .modal-head-v45 #detailClassification{display:none}
 }
 @media (max-width:376px){
   .impact-evidence-v147__metrics{grid-template-columns:1fr}
@@ -746,7 +745,6 @@
 .stage-focus-v148>.section-heading-v45{margin:0}
 .stage-focus-v148>.section-heading-v45 h3{color:var(--color-text-secondary);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase}
 .stage-focus-v148__statement{max-width:var(--dimension-68ch);margin:0;color:var(--color-text-primary);font-size:var(--text-body);font-weight:var(--sys-weight-bold);line-height:var(--leading-body)}
-@media(max-width:600px){#detailClassification,.modal-classification-v45{display:none}}
 
 /* Editorial outcome grammar — major chapters use hierarchy and whitespace, not repeated rules. */
 .case-study-impact-copy__label{display:block;margin-bottom:var(--space-3);color:var(--color-text-secondary);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase}
