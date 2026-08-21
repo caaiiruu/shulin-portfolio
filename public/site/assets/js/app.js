@@ -1251,7 +1251,8 @@
     visibleProjectSectionId='';
     clear(projectSectionNavLinks);
     const project=currentDetail?.type==='project'?DATA.projects[currentDetail.key]:null;
-    const configured=list(project?.presentation?.navigation).map(item=>{
+    const recruiterContract=recruiterFirstPresentationContract(project);
+    const configured=list(recruiterContract?.navigation||project?.presentation?.navigation).map(item=>{
       const labels=pair(item.label);
       return [item.key,item.target,labels[0],labels[1]];
     });
@@ -2500,6 +2501,16 @@
     section.append(copy,stage);
     return section;
   }
+  function recruiterFirstPresentationContract(project){
+    const contract=DATA.implementationContracts?.recruiterFirstPresentation;
+    return project?.presentation?.composition===contract?.appliesToComposition?contract:null;
+  }
+  function recruiterFirstDisplayTitle(project){
+    let title=String(localize(project?.title)||'');
+    const contract=recruiterFirstPresentationContract(project);
+    for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix))title=title.slice(prefix.length);
+    return title;
+  }
   function renderProject(key){
     const p=DATA.projects[key];
     const classification=doc.getElementById('detailClassification');
@@ -2511,7 +2522,7 @@
     // Type and timeline belong to the structured scan grid. Keeping them out of
     // the title metadata prevents duplicate signals and preserves title focus.
     safeText(doc.getElementById('detailPeriod'),'');
-    safeText(dialogTitle,localize(p.title));
+    safeText(dialogTitle,recruiterFirstDisplayTitle(p));
     const existingHeroVisual=doc.getElementById('projectDetailHeroVisual');
     if(existingHeroVisual)existingHeroVisual.remove();
     if(p.presentation?.detailHeroVisual){
@@ -2524,8 +2535,10 @@
       }
     }
     renderDeliveryStatus('');
-    const showProblemTypes=p.presentation?.visibility?.problemTypes ?? !p.recruiterFirstPopup;
-    renderTags(showProblemTypes?(localize(p.problemTypes)||[]):[]);
+    const recruiterContract=recruiterFirstPresentationContract(p);
+    const showProblemTypes=recruiterContract?.problemTypes?.visible ?? p.presentation?.visibility?.problemTypes ?? !p.recruiterFirstPopup;
+    const maximumProblemTypes=Number(recruiterContract?.problemTypes?.maximum)||Infinity;
+    renderTags(showProblemTypes?(localize(p.problemTypes)||[]).slice(0,maximumProblemTypes):[]);
     if(classification)classification.hidden=!showProblemTypes;
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
     safeText(doc.getElementById('projectAtGlance'),localize(p.atAGlance));
@@ -2954,7 +2967,8 @@
       'my-accountability':accountability,
       'related-work':related
     };
-    const orderedKeys=list(p.presentation?.sectionOrder).filter(key=>systemCaseSections[key]);
+    const presentationContract=recruiterFirstPresentationContract(p);
+    const orderedKeys=list(presentationContract?.sectionOrder||p.presentation?.sectionOrder).filter(key=>systemCaseSections[key]);
     const fallbackKeys=['what-made-this-hard','contribution','core-system-insight','design-decisions','evidence','outcomes','my-accountability','related-work'];
     [...orderedKeys,...fallbackKeys.filter(key=>!orderedKeys.includes(key))]
       .map(key=>systemCaseSections[key]).filter(Boolean).forEach(node=>surface.append(node));

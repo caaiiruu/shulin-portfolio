@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-20-r165.1",
+  "contentVersion": "2026-08-21-r165.1c",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -17491,7 +17491,7 @@
         ]
       },
       "title": {
-        "en": "From fragmented review knowledge to a shared remediation operating model",
+        "en": "Fragmented review knowledge to a shared remediation operating model",
         "zh": "從分散的審件知識，到共享的補件營運模型"
       },
       "problemTypes": {
@@ -17507,8 +17507,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the remediation operating-model investigation and prioritisation, turning fragmented review knowledge into a verifiable workflow and phased optimisation direction.",
-        "zh": "主導補件營運模型調查與優先排序，將分散的審件知識轉化為可驗證的流程與分階段優化方向。"
+        "en": "As Lead Product Designer (independent consultant), I reconstructed the five-month review-remediation workflow, turning fragmented operating knowledge into a shared model and phased priorities.",
+        "zh": "身為產品設計主管（獨立顧問），我重建五個月的審件補件流程，將分散的營運知識轉化為共享模型與分階段優先方向。"
       },
       "infoGrid": {
         "type": {
@@ -17547,8 +17547,8 @@
         },
         "timeline": {
           "duration": {
-            "en": "5 months",
-            "zh": "5 個月"
+            "en": "5 months · Sep 2024–Jan 2025",
+            "zh": "5 個月 · 2024 年 9 月至 2025 年 1 月"
           },
           "dateRange": {
             "en": "Sep 2024–Jan 2025",
@@ -17559,8 +17559,8 @@
         "schemaVersion": "2026-08-06-r142"
       },
       "whyItMattered": {
-        "en": "Remediation requests were passed through fragmented channels, leaving applicants unclear about what was missing and what to do next.",
-        "zh": "補件要求透過分散管道傳遞，使申請人不清楚缺少哪些資料，也不知道下一步該做什麼。"
+        "en": "Review and remediation logic was distributed across people, documents, systems and handoffs, preventing staff from verifying one end-to-end operating model.",
+        "zh": "審件與補件邏輯分散在人員、文件、系統與交接之間，使內部人員無法驗證一套端到端營運模型。"
       },
       "businessImpact": {
         "en": "Established a shared operating reference for review and remediation, reducing dependency on fragmented documents and individual memory.",
@@ -18175,16 +18175,16 @@
             },
             {
               "supportingLabel": {
-                "en": "RECOMMENDATION — NOT VERIFIED AS IMPLEMENTED",
-                "zh": "建議—未驗證已實作"
+                "en": "PHASED DIRECTION",
+                "zh": "分階段方向"
               },
               "heading": {
                 "en": "Turned the operating model into phased recommendations",
                 "zh": "將營運模型轉化為分階段建議"
               },
               "summary": {
-                "en": "Grouped opportunities into near-, mid- and long-term recommendations while keeping implementation priority and final roadmap ownership with the client.",
-                "zh": "將機會整理為近、中、長期建議，同時保留實作優先順序與最終路線圖由客戶負責。"
+                "en": "Grouped opportunities into near-, mid- and long-term recommendations. This was recommendation scope; implementation remained client-owned.",
+                "zh": "將機會整理為近、中、長期建議；此處為建議範圍，實作仍由客戶負責。"
               }
             }
           ],
@@ -18663,10 +18663,10 @@
       ],
       "at_glance": "Led research synthesis and operating-model definition for an internal review and remediation workflow, turning fragmented operational knowledge into a traceable five-phase baseline and prioritised optimisation recommendations.",
       "at_glance_zh": "主導內部審件與補件流程的研究統整與營運模型定義，將分散的營運知識轉化為可追溯的五階段基準與完成優先排序的優化建議。",
-      "why": "Remediation requests were passed through fragmented channels, leaving applicants unclear about what was missing and what to do next.",
-      "why_zh": "補件要求透過分散管道傳遞，使申請人不清楚缺少哪些資料，也不知道下一步該做什麼。",
-      "impact": "Established a clearer shared model for identifying review issues and guiding applicants through remediation.",
-      "impact_zh": "建立更清楚的共同模式，協助團隊辨識審件問題，並引導申請人完成補件。",
+      "why": "Review and remediation logic was distributed across people, documents, systems and handoffs, preventing staff from verifying one end-to-end operating model.",
+      "why_zh": "審件與補件邏輯分散在人員、文件、系統與交接之間，使內部人員無法驗證一套端到端營運模型。",
+      "impact": "Established a shared operating model for internal review, document requests, customer resubmission and re-review.",
+      "impact_zh": "建立涵蓋內部審件、文件要求、客戶重新提交與再審核的共享營運模型。",
       "cardTitle": {
         "en": "Clarifying the review and remediation journey",
         "zh": "釐清審件與補件流程"
@@ -18818,8 +18818,8 @@
         "what-made-this-hard",
         "contribution",
         "core-system-insight",
-        "evidence",
         "design-decisions",
+        "evidence",
         "outcomes",
         "my-accountability",
         "related-work"
@@ -18897,7 +18897,7 @@
       },
       "presentation": {
         "visibility": {
-          "problemTypes": false,
+          "problemTypes": true,
           "coreSystemInsight": true,
           "evidence": true
         },
@@ -18930,19 +18930,19 @@
             }
           },
           {
-            "key": "evidence",
-            "target": "systemCaseEvidenceSection",
-            "label": {
-              "en": "Evidence",
-              "zh": "證據"
-            }
-          },
-          {
             "key": "decisions",
             "target": "systemCaseDecisionsSection",
             "label": {
               "en": "Decisions",
               "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
             }
           },
           {
@@ -18974,8 +18974,8 @@
           "what-made-this-hard",
           "contribution",
           "core-system-insight",
-          "evidence",
           "design-decisions",
+          "evidence",
           "outcomes",
           "my-accountability",
           "related-work"
@@ -22235,6 +22235,62 @@
     }
   },
   "implementationContracts": {
+    "recruiterFirstPresentation": {
+      "appliesToComposition": "recruiter-first-system-case",
+      "hero": {
+        "semanticRule": "Transformation semantics are required, but the visible title must not add a literal presentation prefix.",
+        "forbiddenVisiblePrefixes": [
+          "From "
+        ]
+      },
+      "problemTypes": {
+        "visible": true,
+        "maximum": 3
+      },
+      "sectionOrder": [
+        "hero",
+        "at-a-glance",
+        "info-grid",
+        "what-made-this-hard",
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
+      ],
+      "navigation": [
+        {"key": "overview", "target": "projectOverviewSection", "label": {"en": "Overview", "zh": "概覽"}},
+        {"key": "complexity", "target": "systemCaseComplexitySection", "label": {"en": "Complexity", "zh": "複雜度"}},
+        {"key": "decisions", "target": "systemCaseDecisionsSection", "label": {"en": "Decisions", "zh": "設計決策"}},
+        {"key": "evidence", "target": "systemCaseEvidenceSection", "label": {"en": "Evidence", "zh": "證據"}},
+        {"key": "outcomes", "target": "systemCaseOutcomesSection", "label": {"en": "Outcomes", "zh": "成果"}},
+        {"key": "ownership", "target": "systemCaseAccountabilitySection", "label": {"en": "Ownership", "zh": "責任範圍"}}
+      ],
+      "requiredContentRefs": [
+        "whatMadeThisHard",
+        "contribution",
+        "contributionIntervention",
+        "coreSystemInsight",
+        "decisions",
+        "evidence",
+        "outcomes",
+        "accountability"
+      ],
+      "disallowedVisibleLegacySections": [
+        "critical-problem",
+        "business-impact",
+        "five-phase-journey-map",
+        "key-intervention-map",
+        "delivery-proof",
+        "initial-strategies",
+        "ownership-and-collaboration",
+        "delivery-and-measurement"
+      ],
+      "sectionPurposeRule": "Each visible section owns one recruiter question; duplicated legacy blocks cannot substitute for a required canonical section.",
+      "contentStatus": "human-approved-r165.1c"
+    },
     "productCase": {
       "productEvolution": {
         "purpose": "Show how a shipped focused implementation informed a later persistent product without introducing another Project Popup framework.",
