@@ -178,7 +178,7 @@ for (const viewport of viewports) {
     };
   });
   if(ctbcCertification.order.some(index=>index<0)||ctbcCertification.order.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} CTBC architecture order failed: ${JSON.stringify(ctbcCertification.order)}`);
-  if(!ctbcCertification.problemTypesVisible)failures.push(`${viewport.name} CTBC Problem Types missing from recruiter-first presentation`);
+  if(ctbcCertification.problemTypesVisible)failures.push(`${viewport.name} CTBC recruiter-first Hero taxonomy must remain hidden`);
   if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
