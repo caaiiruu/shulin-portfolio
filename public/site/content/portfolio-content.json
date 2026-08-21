@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-17-r164.1",
-  "supersedes": "2026-08-12-r158",
+  "contentVersion": "2026-08-21-r165.1h",
+  "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -17491,24 +17491,24 @@
         ]
       },
       "title": {
-        "en": "From fragmented review knowledge to one five-phase operating map",
-        "zh": "從分散的審件知識，到單一五階段營運地圖"
+        "en": "Fragmented review knowledge to a shared remediation operating model",
+        "zh": "從分散的審件知識，到共享的補件營運模型"
       },
       "problemTypes": {
         "en": [
-          "Fragmented review workflow",
-          "Hidden system dependencies",
-          "Manual handoff risk"
+          "Review operations",
+          "Remediation workflows",
+          "AML operations"
         ],
         "zh": [
-          "審查流程分散",
-          "系統依賴不可見",
-          "人工交接風險"
+          "審件營運",
+          "補件流程",
+          "防制洗錢營運"
         ]
       },
       "atAGlance": {
-        "en": "Led research synthesis and operating-model definition for Cathay SIT’s review and remediation process, turning workshops and interviews into a five-phase journey map across screen, system, logic, input, handoff and opportunity layers.",
-        "zh": "主導國泰投信審件與補件流程的研究統整與營運模型定義，將工作坊及訪談轉化為涵蓋畫面、系統、邏輯、輸入、交接與機會層的五階段旅程地圖。"
+        "en": "As Lead Product Designer (independent consultant), I led workflow reconstruction and prioritisation across the review-remediation operating model, turning fragmented operational knowledge into a shared baseline and phased direction over a five-month engagement.",
+        "zh": "身為首席產品設計師（獨立顧問），我主導審件補件營運模型的流程重建與優先排序，並在五個月的合作期間，將分散的營運知識轉化為共享基線與分階段方向。"
       },
       "infoGrid": {
         "type": {
@@ -17520,8 +17520,8 @@
           }
         },
         "scope": {
-          "en": "End-to-end application review, AML/name checks, high-risk approval, rejection/remediation, stock-system handoff and customer status communication",
-          "zh": "端到端申請審查、防制洗錢／姓名檢核、高風險核准、退件／補件、股務系統交接與客戶狀態溝通"
+          "en": "End-to-end review remediation operating model",
+          "zh": "端到端審件補件營運模型"
         },
         "audience": {
           "primary": {
@@ -17531,24 +17531,24 @@
           "secondary": {
             "en": [
               "Product managers",
-              "AML and compliance teams",
+              "AML/compliance",
               "Customer Service",
               "Engineering",
               "Referral agents"
             ],
             "zh": [
               "產品經理",
-              "防制洗錢 與法遵團隊",
-              "客服團隊",
-              "工程團隊",
+              "防制洗錢／法遵",
+              "客服",
+              "工程",
               "推薦業務員"
             ]
           }
         },
         "timeline": {
           "duration": {
-            "en": "5 months",
-            "zh": "5 個月"
+            "en": "5 months · Sep 2024–Jan 2025",
+            "zh": "5 個月 · 2024 年 9 月至 2025 年 1 月"
           },
           "dateRange": {
             "en": "Sep 2024–Jan 2025",
@@ -17559,8 +17559,8 @@
         "schemaVersion": "2026-08-06-r142"
       },
       "whyItMattered": {
-        "en": "Remediation requests were passed through fragmented channels, leaving applicants unclear about what was missing and what to do next.",
-        "zh": "補件要求透過分散管道傳遞，使申請人不清楚缺少哪些資料，也不知道下一步該做什麼。"
+        "en": "Review and remediation logic was distributed across people, documents, systems and handoffs, preventing staff from verifying one end-to-end operating model.",
+        "zh": "審件與補件邏輯分散在人員、文件、系統與交接之間，使內部人員無法驗證一套端到端營運模型。"
       },
       "businessImpact": {
         "en": "Established a shared operating reference for review and remediation, reducing dependency on fragmented documents and individual memory.",
@@ -18039,19 +18039,239 @@
         },
         "sectionOrderRef": "projects.cathay-sit-review-remediation-operations.sectionOrder",
         "coreSystemInsight": {
-          "eyebrow": {
-            "en": "CORE SYSTEM INSIGHT",
-            "zh": "核心系統洞察"
-          },
-          "title": {
+          "headline": {
             "en": "Review remediation needed a shared internal operating model before it needed more screens.",
             "zh": "審件補件改善，首先需要的是共享的內部營運模型，而不是更多畫面。"
           },
-          "statement": {
-            "en": "The core workflow was primarily internal: review, request for additional documents, customer resubmission and re-review. Making this end-to-end operating model visible helped fragmented review knowledge become prioritised, traceable remediation decisions, while customer upload served as only one handoff point in a broader internal process.",
-            "zh": "這個流程的核心主要落在銀行內部：審件、要求補件、客戶回補、再審核。當這條端到端營運流程被看見後，原本分散的作業知識才能轉化為可排序、可追蹤、可驗證的改善決策；而客戶補件只是整體內部流程中的其中一個交接節點。"
+          "supportingCopy": {
+            "en": "I reframed the work from isolated interface and process issues into one internal operating model — making roles, systems, exception paths and remediation handoffs visible before prioritising improvements.",
+            "zh": "我將工作從分散的介面與流程問題，重新定義為一套內部營運模型；在排序改善方向前，先讓角色、系統、例外路徑與補件交接變得可見。"
           },
-          "contentStatus": "approved"
+          "contentStatus": "approved-r165.1"
+        },
+        "operatingEvidence": {
+          "title": {
+            "en": "Research & operating-model evidence",
+            "zh": "研究與營運模型證據"
+          },
+          "items": [
+            {
+              "id": "research-coverage",
+              "assetId": "cathay-review-research-operating-baseline-public-v1",
+              "title": {"en": "Research coverage", "zh": "研究涵蓋"},
+              "copy": {"en": "Research reconstructed the routine review and remediation flow before the operating model was defined.", "zh": "研究先重建日常審件與補件流程，再據此定義營運模型。"},
+              "supportingFacts": [
+                {"value": "1", "label": {"en": "full-team workshop", "zh": "場全團隊工作坊"}},
+                {"value": "2 × 1 hour", "label": {"en": "workflow interviews", "zh": "流程訪談"}},
+                {"value": "3", "label": {"en": "primary interview participants", "zh": "位主要訪談參與者"}},
+                {"value": "80%+", "label": {"en": "routine case-flow coverage", "zh": "日常案件流程涵蓋"}}
+              ]
+            },
+            {
+              "id": "operating-model",
+              "assetId": "cathay-review-process-complexity-public-v1",
+              "title": {"en": "Operating-model complexity", "zh": "營運模型複雜度"},
+              "copy": {"en": "Reconstructed roles, systems, decision points and remediation handoffs into one end-to-end operating view.", "zh": "將角色、系統、決策點與補件交接重建為一套端到端營運視圖。"}
+            },
+            {
+              "id": "prioritisation",
+              "assetId": "cathay-review-prioritisation-public-v1",
+              "title": {"en": "Benefit-and-feasibility prioritisation", "zh": "效益與可行性排序"},
+              "copy": {"en": "Separated expected benefit from implementation difficulty to make meaningful priority differences visible.", "zh": "將預期效益與實作難度分開，使有意義的優先差異清楚可見。"}
+            },
+            {
+              "id": "phased-direction",
+              "assetId": "cathay-review-phased-direction-public-v1",
+              "title": {"en": "Phased direction", "zh": "分階段方向"},
+              "copy": {"en": "Sequenced opportunities into near-, mid- and long-term recommendations rather than one undifferentiated digitisation scope.", "zh": "將機會排序為近、中、長期建議，而非一個未分化的數位化範圍。"}
+            }
+          ],
+          "validationLayer": {
+            "presentation": "image-text",
+            "assetId": "cathay-review-research-operating-baseline-public-v1",
+            "title": {
+              "en": "Research coverage",
+              "zh": "研究涵蓋"
+            },
+            "intro": {
+              "en": "The interviews reconstructed routine review and remediation flows described as representing more than 80% of normal case-flow coverage.",
+              "zh": "訪談重建日常審件與補件流程；來源描述這些流程涵蓋超過 80% 的一般案件流程。"
+            },
+            "metrics": [
+              {
+                "value": "1",
+                "label": {
+                  "en": "full-team workshop",
+                  "zh": "場全團隊工作坊"
+                },
+                "supportingCopy": {
+                  "en": "Shared operational issues",
+                  "zh": "彙整共同營運問題"
+                }
+              },
+              {
+                "value": "2 × 1 hour",
+                "label": {
+                  "en": "workflow interviews",
+                  "zh": "流程訪談"
+                },
+                "supportingCopy": {
+                  "en": "Screen-led walkthroughs",
+                  "zh": "以畫面引導的流程走查"
+                }
+              },
+              {
+                "value": "3",
+                "label": {
+                  "en": "primary interview participants",
+                  "zh": "位主要訪談參與者"
+                },
+                "supportingCopy": {
+                  "en": "Two core users and one supervisor",
+                  "zh": "兩位核心使用者與一位主管"
+                }
+              },
+              {
+                "value": "80%+",
+                "label": {
+                  "en": "routine case-flow coverage",
+                  "zh": "日常案件流程涵蓋"
+                },
+                "supportingCopy": {
+                  "en": "Coverage evidence, not a performance metric",
+                  "zh": "涵蓋證據，非績效指標"
+                }
+              }
+            ]
+          },
+          "mappingTitle": {
+            "en": "From workflow evidence to prioritised direction",
+            "zh": "從流程證據到完成優先排序的方向"
+          },
+          "presentation": "ordered-visual-proofs",
+          "blockOrder": ["research-coverage", "operating-model", "prioritisation", "phased-direction"],
+          "structuredGroups": [
+            {
+              "supportingLabel": {
+                "en": "OPERATING BASELINE",
+                "zh": "營運基準"
+              },
+              "heading": {
+                "en": "Reconstructed the end-to-end operating model",
+                "zh": "重建端到端營運模型"
+              },
+              "summary": {
+                "en": "Connected customer submission, early review, AML screening, high-risk approval, remediation, resubmission and re-review into one shared five-phase model.",
+                "zh": "將客戶提交、初步審件、防制洗錢篩查、高風險核准、補件、重新提交與再審核，連結成共享的五階段模型。"
+              }
+            },
+            {
+              "supportingLabel": {
+                "en": "DEPENDENCIES",
+                "zh": "依賴關係"
+              },
+              "heading": {
+                "en": "Mapped what each review step depended on",
+                "zh": "盤點每個審件步驟的依賴"
+              },
+              "summary": {
+                "en": "Connected screens, systems, logic, inputs and handoffs across AML tools, internal transaction management, external lookups, PDF case lists, SMS, local notes and paper approvals.",
+                "zh": "串連防制洗錢工具、內部交易管理、外部查詢、PDF 案件清單、簡訊、在地筆記與紙本核准中的畫面、系統、邏輯、輸入與交接。"
+              }
+            },
+            {
+              "supportingLabel": {
+                "en": "REMEDIATION",
+                "zh": "補件與復原"
+              },
+              "heading": {
+                "en": "Made exception and recovery paths explicit",
+                "zh": "明確呈現例外與復原路徑"
+              },
+              "summary": {
+                "en": "Mapped failed checks, incomplete documents, additional-document requests, customer resubmission, re-review and high-risk approval as part of the normal operating model rather than edge cases outside it.",
+                "zh": "將檢核失敗、文件不完整、追加文件要求、客戶重新提交、再審核與高風險核准，納入正常營運模型，而非視為模型之外的邊緣情況。"
+              }
+            },
+            {
+              "supportingLabel": {
+                "en": "PRIORITISATION",
+                "zh": "優先排序"
+              },
+              "heading": {
+                "en": "Separated value from implementation difficulty",
+                "zh": "將價值與實作難度分開"
+              },
+              "summary": {
+                "en": "Workshop findings were assessed by expected benefit and implementation difficulty separately, making high-value structural problems visible without treating every idea as equally urgent.",
+                "zh": "將工作坊發現分別依預期效益與實作難度評估，使高價值結構性問題可見，且不把每個想法視為同等急迫。"
+              }
+            },
+            {
+              "supportingLabel": {
+                "en": "PHASED DIRECTION",
+                "zh": "分階段方向"
+              },
+              "heading": {
+                "en": "Turned the operating model into phased recommendations",
+                "zh": "將營運模型轉化為分階段建議"
+              },
+              "summary": {
+                "en": "Grouped opportunities into near-, mid- and long-term recommendations. This was recommendation scope; implementation remained client-owned.",
+                "zh": "將機會整理為近、中、長期建議；此處為建議範圍，實作仍由客戶負責。"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r165.1"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "Established a shared basis for improving review remediation without overstating implementation.",
+            "zh": "建立改善審件補件的共同基礎，同時不誇大實作狀態。"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A shared operating model",
+                "zh": "共享的營運模型"
+              },
+              "copy": {
+                "en": "Established a reviewable end-to-end representation of the remediation workflow and its handoffs.",
+                "zh": "建立可供檢視的端到端補件流程與交接模型。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Defensible prioritisation",
+                "zh": "可辯護的優先排序"
+              },
+              "copy": {
+                "en": "Created a clearer basis for comparing remediation opportunities by benefit and feasibility.",
+                "zh": "建立更清楚的基礎，依效益與可行性比較補件改善機會。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Phased product direction",
+                "zh": "分階段產品方向"
+              },
+              "copy": {
+                "en": "Translated research findings into sequenced optimisation recommendations rather than one undifferentiated digitisation scope.",
+                "zh": "將研究發現轉化為有順序的優化建議，而非單一、未分化的數位化範圍。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "These are delivered definition and recommendation outcomes; implementation, adoption and post-launch metrics remained outside the engagement.",
+            "zh": "以上為已交付的定義與建議成果；實作、採用與上線後數據不在本次合作範圍內。"
+          },
+          "evidence": [],
+          "contentStatus": "approved-r165.1"
         }
       },
       "imagePlan": {
@@ -18110,7 +18330,7 @@
         "contentStatus": "approved",
         "outcomeBoundary": "Implementation metrics are unavailable due to the external consulting boundary and are not treated as a completeness gap."
       },
-      "contentStatus": "approved",
+      "contentStatus": "approved-r165.1-migration",
       "sourceEvidence": {
         "workshopPhase": {
           "dateRange": "Sep-Oct 2024",
@@ -18318,8 +18538,8 @@
       },
       "problemTypes_zh": [
         "審件營運",
-        "缺漏資料補正",
-        "客戶溝通"
+        "補件流程",
+        "防制洗錢營運"
       ],
       "confidentialityNote": {
         "en": "*Post-launch metrics were not available within the consulting engagement; outcomes are reported through validated decisions and delivered system change.*",
@@ -18381,7 +18601,33 @@
             "zh": "實作與採用"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I owned the operating-model reconstruction and prioritisation direction; roadmap, implementation and adoption remained client-owned.",
+            "zh": "我負責營運模型重建與優先排序方向；路線圖、實作與採用仍由客戶負責。"
+          },
+          "owned": {
+            "title": {
+              "en": "Built the operating model behind the review and remediation system",
+              "zh": "建立審件與補件系統背後的營運模型"
+            },
+            "text": {
+              "en": "Led workflow interviews, workshop synthesis and current-state reconstruction across roles, systems, decision logic, remediation paths and operational handoffs.",
+              "zh": "主導流程訪談、工作坊統整與目前狀態重建，涵蓋角色、系統、決策邏輯、補件路徑與營運交接。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Turned operational complexity into prioritised planning direction",
+              "zh": "將營運複雜度轉化為優先規劃方向"
+            },
+            "text": {
+              "en": "Structured benefit/feasibility prioritisation and translated the shared operating baseline into phased recommendations while keeping roadmap and implementation ownership with the client.",
+              "zh": "建立效益／可行性排序，並將共享營運基準轉化為分階段建議，同時保留路線圖與實作由客戶負責。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -18410,55 +18656,51 @@
         }
       ],
       "heroVisualBrief": {
-        "assetId": "cathay-sit-review-hero-operating-model-public-v1",
+        "assetId": "cathay-review-research-operating-baseline-public-v1",
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": [],
+        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"],
         "contentStatus": "approved"
       },
       "type_zh": "內部系統",
       "keyInterventionMap": {
-        "status": "verified_no_outcome_metric",
-        "sectionLabel": {
-          "en": "Where I changed the system",
-          "zh": "我改變系統的位置"
-        },
+        "status": "verified_no_implementation_claim",
         "before": {
-          "en": "Fragmented remediation requests",
-          "zh": "補件需求分散傳遞"
+          "en": "Review logic, exceptions and handoffs were distributed across individual memory, screenshots, PDFs, external lookups and manual operational practices.",
+          "zh": "審件邏輯、例外與交接分散於個人記憶、截圖、PDF、外部查詢與人工營運做法。"
         },
         "intervention": {
-          "en": "Unified review issues and remediation steps",
-          "zh": "統一審件問題與補件步驟"
+          "en": "I led workflow interviews, workshop synthesis and process reconstruction to connect roles, systems, decision logic, inputs, handoffs and remediation paths into one verifiable model.",
+          "zh": "我主導流程訪談、工作坊統整與流程重建，將角色、系統、決策邏輯、輸入、交接與補件路徑連結成一套可驗證模型。"
         },
         "after": {
-          "en": "A clearer path for identifying and resolving missing information",
-          "zh": "更清楚辨識缺漏資訊與完成補件"
+          "en": "The team had a shared five-phase operating baseline, clearer exception visibility and a structured way to separate expected benefit from implementation difficulty.",
+          "zh": "團隊取得共享的五階段營運基準、更清楚的例外可視性，以及區分預期效益與實作難度的結構化方法。"
         },
         "supportingCopy": {
-          "en": "I used a cross-functional workshop and user interviews to clarify how review issues should be identified, communicated, and resolved.",
-          "zh": "我透過跨部門工作坊與使用者訪談，釐清審件問題應如何被辨識、傳達與完成補件。"
+          "en": "Built a shared operating baseline before defining optimisation direction; no software implementation is implied.",
+          "zh": "先建立共享營運基準，再定義優化方向；不代表軟體已實作。"
         }
       },
-      "transformation": "From fragmented review knowledge to one five-phase operating map",
-      "transformation_zh": "從分散的審件知識，到單一五階段營運地圖",
+      "transformation": "From fragmented review knowledge to a shared remediation operating model",
+      "transformation_zh": "從分散的審件知識，到共享的補件營運模型",
       "problem_types": [
-        "Fragmented review workflow",
-        "Hidden system dependencies",
-        "Manual handoff risk"
+        "Review operations",
+        "Remediation workflows",
+        "AML operations"
       ],
       "problem_types_zh": [
-        "審查流程分散",
-        "系統依賴不可見",
-        "人工交接風險"
+        "審件營運",
+        "補件流程",
+        "防制洗錢營運"
       ],
-      "at_glance": "Led research synthesis and operating-model definition for Cathay SIT’s review and remediation process, turning workshops and interviews into a five-phase journey map across screen, system, logic, input, handoff and opportunity layers.",
-      "at_glance_zh": "主導國泰投信審件與補件流程的研究統整與營運模型定義，將工作坊及訪談轉化為涵蓋畫面、系統、邏輯、輸入、交接與機會層的五階段旅程地圖。",
-      "why": "Remediation requests were passed through fragmented channels, leaving applicants unclear about what was missing and what to do next.",
-      "why_zh": "補件要求透過分散管道傳遞，使申請人不清楚缺少哪些資料，也不知道下一步該做什麼。",
-      "impact": "Established a clearer shared model for identifying review issues and guiding applicants through remediation.",
-      "impact_zh": "建立更清楚的共同模式，協助團隊辨識審件問題，並引導申請人完成補件。",
+      "at_glance": "Led research synthesis and operating-model definition for an internal review and remediation workflow, turning fragmented operational knowledge into a traceable five-phase baseline and prioritised optimisation recommendations.",
+      "at_glance_zh": "主導內部審件與補件流程的研究統整與營運模型定義，將分散的營運知識轉化為可追溯的五階段基準與完成優先排序的優化建議。",
+      "why": "Review and remediation logic was distributed across people, documents, systems and handoffs, preventing staff from verifying one end-to-end operating model.",
+      "why_zh": "審件與補件邏輯分散在人員、文件、系統與交接之間，使內部人員無法驗證一套端到端營運模型。",
+      "impact": "Established a shared operating model for internal review, document requests, customer resubmission and re-review.",
+      "impact_zh": "建立涵蓋內部審件、文件要求、客戶重新提交與再審核的共享營運模型。",
       "cardTitle": {
         "en": "Clarifying the review and remediation journey",
         "zh": "釐清審件與補件流程"
@@ -18474,62 +18716,69 @@
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "cathay-review-r136-decision-01",
+            "id": "cathay-sit-review-decision-01",
             "title": {
-              "en": "From distributed know-how to a five-phase operating baseline",
-              "zh": "從分散經驗，到五階段營運基準"
+              "en": "From distributed know-how to a verifiable end-to-end operating model",
+              "zh": "從分散經驗，到可驗證的端到端營運模型"
             },
             "whatIDecided": {
-              "en": "Mapped the actual review and remediation journey into five phases spanning success, exception, high-risk approval, rejection and customer follow-up.",
-              "zh": "將實際審件與補件旅程整理為五個階段，涵蓋成功、例外、高風險核准、退件與顧客後續處理。"
+              "en": "Make the remediation workflow explicit across review, document request, customer resubmission and re-review so the process could be evaluated as one operating system rather than disconnected tasks.",
+              "zh": "明確呈現審件、文件要求、客戶重新提交與再審核的補件流程，使整體能以一套營運系統評估，而非彼此分離的工作。"
             },
             "whyThisChoice": {
-              "en": "The team could not reliably discuss breakpoints or ownership while the process remained distributed across separate sources.",
-              "zh": "當流程仍分散於不同來源時，團隊無法可靠討論斷點與責任歸屬。"
+              "en": "The work could not be prioritised reliably while critical steps, ownership and handoffs remained implicit or distributed across teams.",
+              "zh": "當關鍵步驟、責任歸屬與交接仍隱含或分散於團隊之間時，工作無法被可靠排序。"
             },
-            "status": "delivered"
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "Reconstruct roles, systems, inputs, logic and handoffs before evaluating optimisation opportunities.",
+                "zh": "在評估優化機會前，先重建角色、系統、輸入、邏輯與交接。"
+              }
+            },
+            "status": "delivered-operating-model"
           },
           {
-            "id": "cathay-review-r136-decision-02",
+            "id": "cathay-sit-review-decision-02",
             "title": {
-              "en": "From a step list to a layered operating map",
-              "zh": "從步驟清單，到分層營運地圖"
+              "en": "From equal-weight feedback to benefit-and-feasibility prioritisation",
+              "zh": "從等權重回饋，到依效益與可行性排序"
             },
             "whatIDecided": {
-              "en": "Documented each phase through screen, system, logic, input, handoff and opportunity layers so dependencies and decision points remained traceable.",
-              "zh": "以畫面、系統、邏輯、輸入、交接與機會層記錄各階段，使依賴關係與決策點可被追溯。"
+              "en": "Structure findings so improvement opportunities could be compared by likely benefit and feasibility rather than treated as an undifferentiated list of issues.",
+              "zh": "將研究發現結構化，使改善機會可依可能效益與可行性比較，而非被視為未分化的問題清單。"
             },
             "whyThisChoice": {
-              "en": "A linear customer journey alone would not expose the internal systems and handoffs that caused review friction.",
-              "zh": "只有線性顧客旅程，無法揭露造成審件阻力的內部系統與交接。"
+              "en": "The research surfaced multiple problems, but the organisation needed a defensible way to decide what deserved attention first.",
+              "zh": "研究揭露多項問題，但組織需要一套可辯護的方法，決定哪些問題應優先處理。"
             },
-            "status": "delivered"
+            "status": "prioritisation-delivered"
           },
           {
-            "id": "cathay-review-r136-decision-03",
+            "id": "cathay-sit-review-decision-03",
             "title": {
-              "en": "From implied roadmap to clearly bounded initial strategies",
-              "zh": "從暗示路線圖，到明確界定的初步策略"
+              "en": "From all-at-once digitisation to phased optimisation recommendations",
+              "zh": "從一次完成全面數位化，到分階段優化建議"
             },
             "whatIDecided": {
-              "en": "Delivered initial optimisation strategies as recommendation-level opportunities tied to the map, without presenting them as approved priorities or implemented solutions.",
-              "zh": "將初步優化策略作為與旅程地圖連結的建議型機會交付，不將其呈現為已核准優先項目或已實作方案。"
+              "en": "Translate the operating-model findings into phased recommendations rather than assuming the entire remediation flow should be digitised at once.",
+              "zh": "將營運模型發現轉化為分階段建議，而非假設整個補件流程應一次全面數位化。"
             },
             "whyThisChoice": {
-              "en": "The evidence supported alignment and opportunity definition, but not a claim of roadmap approval, UI delivery or implementation impact.",
-              "zh": "現有證據支持對齊與機會定義，但不足以宣稱路線圖已核准、介面已交付或產生實作成效。"
+              "en": "Different problems depended on different operational, policy or system foundations; they could not credibly be represented as one immediate implementation scope.",
+              "zh": "不同問題依賴不同的營運、政策或系統基礎，無法可信地被呈現為單一立即實作範圍。"
             },
             "optionalBlock": {
               "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "The public case preserves the distinction between delivered operating evidence and recommendation-level future work.",
-                "zh": "公開案例明確區分已交付的營運證據與建議層級的未來工作。"
+                "en": "The engagement could recommend sequence and opportunity areas, but final roadmap priority, implementation and adoption remained client-owned.",
+                "zh": "本次合作可建議順序與機會領域，但最終路線圖優先順序、實作與採用仍由客戶負責。"
               }
             },
-            "status": "recommendation-delivered-not-approved-roadmap"
+            "status": "recommendations-delivered-not-implemented"
           }
         ],
-        "contentStatus": "r136-applied"
+        "contentStatus": "approved-r165.1"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -18555,76 +18804,76 @@
       },
       "valueIBrought": {
         "headline": {
-          "en": "In five months, I turned fragmented review knowledge into a complete five-phase journey map across six operating layers.",
-          "zh": "在五個月內，我將分散的審件知識整理為涵蓋六個營運層的完整五階段旅程地圖。"
+          "en": "Built a shared operating baseline",
+          "zh": "建立共享的營運基準"
         },
         "supportingStatement": {
-          "en": "The delivery included screen, system, logic, input and handoff documentation, a cross-stakeholder alignment reference and initial optimisation strategies—without claiming UI or implementation outcomes.",
-          "zh": "交付包含畫面、系統、邏輯、輸入與交接文件、跨利害關係人的對齊參考，以及初步優化策略；不宣稱介面或實作成果。"
+          "en": "Led workflow reconstruction and prioritisation without implying implemented software.",
+          "zh": "主導流程重建與優先排序，不暗示軟體已實作。"
         },
-        "contentStatus": "r136-applied"
+        "contentStatus": "approved-r165.1"
       },
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "The real process lived across people and artefacts",
-            "zh": "真實流程分散在人員與文件中"
+            "en": "Distributed operating knowledge",
+            "zh": "營運知識分散"
           },
           "description": {
-            "en": "Screenshots, PDFs, notes, internal systems and individual memory each held only part of the review journey.",
-            "zh": "截圖、PDF、筆記、內部系統與個人記憶各自只掌握審件旅程的一部分。"
+            "en": "The remediation process existed across people, steps, documents and tacit operational knowledge rather than one verifiable end-to-end model.",
+            "zh": "補件流程分散在人員、步驟、文件與隱性營運知識中，而非一套可驗證的端到端模型。"
           }
         },
         {
           "title": {
-            "en": "Every phase crossed multiple operating layers",
-            "zh": "每個階段跨越多個營運層"
+            "en": "Feedback had unequal value",
+            "zh": "回饋價值並不相等"
           },
           "description": {
-            "en": "A useful baseline had to connect screen, system, logic, required input, handoff and opportunity—not only document visible steps.",
-            "zh": "有效基準必須連結畫面、系統、邏輯、必要輸入、交接與改善機會，而不只是記錄表面步驟。"
+            "en": "Issues and opportunities could not be treated as equally important; prioritisation needed to balance expected benefit and feasibility.",
+            "zh": "問題與機會不能被視為同等重要；優先排序必須同時衡量預期效益與可行性。"
           }
         },
         {
           "title": {
-            "en": "Recommendations could not be presented as implementation",
-            "zh": "建議不能被呈現為已實作"
+            "en": "Full digitisation was not a credible immediate assumption",
+            "zh": "全面數位化並非可信的立即假設"
           },
           "description": {
-            "en": "The engagement established a shared map and initial strategies, but did not include UI design, prototype, approved roadmap or implementation outcomes.",
-            "zh": "本專案建立共同地圖與初步策略，但不包含介面設計、原型、核准路線圖或實作成果。"
+            "en": "Recommendations needed to distinguish what could be improved first from what required deeper operational or system change.",
+            "zh": "建議必須區分可先改善的項目，以及需要更深層營運或系統變革的項目。"
           }
         }
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "five-phase-journey-map",
-        "key-decisions",
-        "delivery-proof",
-        "initial-strategies",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "latestConfirmedCorrection": {
-        "package": "r136",
+        "package": "r165.1",
         "deliveredOnly": [
-          "complete five-phase journey map",
-          "screen / system / logic / input / handoff / opportunity documentation",
-          "cross-stakeholder alignment reference",
-          "initial optimisation strategies"
+          "shared five-phase operating baseline",
+          "benefit-and-feasibility prioritisation",
+          "near-, mid- and long-term recommendations"
         ],
         "forbiddenClaims": [
           "UI design",
           "prototype",
           "approved roadmap",
-          "implementation implication",
-          "implementation outcome"
+          "software implementation",
+          "adoption",
+          "post-launch metric"
         ],
-        "status": "applied-in-candidate-2"
+        "status": "implemented-in-shared-ia"
       },
       "domain": {
         "en": "Investment operations",
@@ -18679,6 +18928,97 @@
         ],
         "recommendedHeadline": "Mapped the end-to-end remediation operation and separated screen issues from system, input and handoff breakdowns.",
         "boundary": "Recommendation/definition outcome; no verified efficiency uplift."
+      },
+      "presentation": {
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "composition": "recruiter-first-system-case",
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "evidence": "publicContent.operatingEvidence",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       }
     },
     "ctbc-mortgage-self-service-app": {
@@ -21928,6 +22268,66 @@
     }
   },
   "implementationContracts": {
+    "recruiterFirstPresentation": {
+      "appliesToComposition": "recruiter-first-system-case",
+      "hero": {
+        "semanticRule": "Transformation semantics are required, but the visible title must not add a literal presentation prefix.",
+        "forbiddenVisiblePrefixes": [
+          "From "
+        ]
+      },
+      "heroTaxonomy": {
+        "publicOwner": "none",
+        "forbiddenFallbacks": [
+          "problemTypes",
+          "keyProblems",
+          "searchIndexV2"
+        ]
+      },
+      "sectionOrder": [
+        "hero",
+        "at-a-glance",
+        "info-grid",
+        "what-made-this-hard",
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
+      ],
+      "navigation": [
+        {"key": "overview", "target": "projectOverviewSection", "label": {"en": "Overview", "zh": "概覽"}},
+        {"key": "complexity", "target": "systemCaseComplexitySection", "label": {"en": "Complexity", "zh": "複雜度"}},
+        {"key": "decisions", "target": "systemCaseDecisionsSection", "label": {"en": "Decisions", "zh": "設計決策"}},
+        {"key": "evidence", "target": "systemCaseEvidenceSection", "label": {"en": "Evidence", "zh": "證據"}},
+        {"key": "outcomes", "target": "systemCaseOutcomesSection", "label": {"en": "Outcomes", "zh": "成果"}},
+        {"key": "ownership", "target": "systemCaseAccountabilitySection", "label": {"en": "Ownership", "zh": "責任範圍"}}
+      ],
+      "requiredContentRefs": [
+        "whatMadeThisHard",
+        "contribution",
+        "contributionIntervention",
+        "coreSystemInsight",
+        "decisions",
+        "evidence",
+        "outcomes",
+        "accountability"
+      ],
+      "disallowedVisibleLegacySections": [
+        "critical-problem",
+        "business-impact",
+        "five-phase-journey-map",
+        "key-intervention-map",
+        "delivery-proof",
+        "initial-strategies",
+        "ownership-and-collaboration",
+        "delivery-and-measurement"
+      ],
+      "sectionPurposeRule": "Each visible section owns one recruiter question; duplicated legacy blocks cannot substitute for a required canonical section.",
+      "contentStatus": "human-approved-r165.1c"
+    },
     "productCase": {
       "productEvolution": {
         "purpose": "Show how a shipped focused implementation informed a later persistent product without introducing another Project Popup framework.",
@@ -29554,11 +29954,11 @@
         "sourceAssetIds": []
       },
       "cathay-sit-review-remediation-operations": {
-        "assetId": "cathay-sit-review-hero-operating-model-public-v1",
+        "assetId": "cathay-review-research-operating-baseline-public-v1",
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": []
+        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"]
       },
       "ctbc-mortgage-self-service-app": {
         "assetId": "ctbc-mortgage-hero-final-flow-public-v1",
@@ -32179,7 +32579,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-19",
+  "lastUpdated": "2026-08-21",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",

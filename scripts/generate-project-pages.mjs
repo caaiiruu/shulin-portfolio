@@ -36,7 +36,9 @@ function replaceHead(html,project,id){
     .replace(/<meta\s+content="[^"]*"\s+name="description"\s*\/>/i,"");
 }
 function routeSummary(project,id){
-  return `<section class="page-shell direct-project-summary" data-project-route-summary="${escapeHtml(id)}"><p>${escapeHtml(project.company)}</p><h1>${escapeHtml(project.title.en)}</h1><p>${escapeHtml(project.atAGlance.en)}</p><p><strong>Critical problem:</strong> ${escapeHtml(project.criticalProblem.en)}</p></section>`;
+  const recruiterFirst=project.presentation?.composition==="recruiter-first-system-case";
+  const legacySummary=recruiterFirst?"":`<p><strong>Critical problem:</strong> ${escapeHtml(project.criticalProblem.en)}</p>`;
+  return `<section class="page-shell direct-project-summary" data-project-route-summary="${escapeHtml(id)}"><p>${escapeHtml(project.company)}</p><h1>${escapeHtml(project.title.en)}</h1><p>${escapeHtml(project.atAGlance.en)}</p>${legacySummary}</section>`;
 }
 for(const [id,project] of Object.entries(content.projects||{})){
   if(!project.title?.en||!project.atAGlance?.en||!project.criticalProblem?.en)throw new Error(`Incomplete direct-route content: ${id}`);
