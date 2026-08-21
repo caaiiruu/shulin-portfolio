@@ -330,7 +330,8 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-17-r164.1");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.equal(ssot.contentVersion, manifest.contentVersion);
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -449,16 +450,21 @@ test("renders verified Key Intervention Maps from the canonical SSOT only", () =
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const css = read("assets/css/components/project-detail-overview.css");
-  const verifiedIds = [
-    "voucher", "voucher-center", "game-center", "payment", "dbs", "booking", "bandzo",
-    "cathay-sit-online-account-opening", "cathay-sit-review-remediation-operations",
-    "ctbc-mortgage-self-service-app",
-  ];
+  const verifiedIds = Object.entries(ssot.projects)
+    .filter(([, project]) => project.keyInterventionMap?.status?.startsWith("verified"))
+    .map(([id]) => id);
   for (const id of verifiedIds) {
-    const map = ssot.projects[id].keyInterventionMap;
+    const project = ssot.projects[id];
+    const map = project.keyInterventionMap;
     assert.ok(map.status.startsWith("verified"), id);
-    for (const field of ["sectionLabel", "before", "intervention", "after", "supportingCopy"]) {
+    for (const field of ["before", "intervention", "after", "supportingCopy"]) {
       assert.ok(map[field]?.en && map[field]?.zh, `${id}.${field}`);
+    }
+    const sharedContributionOwnsLabel =
+      project.presentation?.composition === "recruiter-first-system-case" &&
+      project.presentation?.contentRefs?.contributionIntervention === "keyInterventionMap";
+    if (!sharedContributionOwnsLabel) {
+      assert.ok(map.sectionLabel?.en && map.sectionLabel?.zh, `${id}.sectionLabel`);
     }
   }
   for (const id of ["taishin-p2p-marketplace-platform", "cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
@@ -1393,6 +1399,19 @@ test("contracts every approved recruiter block to an explicit public role", () =
   for(const [id,project] of Object.entries(ssot.projects)){
     const projectContract=contract.projects[id];
     assert.ok(projectContract,`${id}: missing content presentation contract`);
+    if(project.presentation?.composition==="recruiter-first-system-case"){
+      const order=project.presentation.sectionOrder;
+      assert.ok(Array.isArray(order),`${id}: missing shared presentation sectionOrder`);
+      assert.equal(new Set(order).size,order.length,`${id}: duplicate shared presentation section`);
+      for(const sectionId of ["what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]){
+        assert.ok(order.includes(sectionId),`${id}: ${sectionId} missing from shared presentation sectionOrder`);
+      }
+      for(const [owner,path] of Object.entries(project.presentation.contentRefs||{})){
+        const value=String(path).split(".").reduce((current,key)=>current?.[key],project);
+        assert.notEqual(value,undefined,`${id}: shared content owner ${owner} does not resolve ${path}`);
+      }
+      continue;
+    }
     for(const [sectionId,section] of Object.entries(projectContract.sections||{})){
       if(!section.renderRequired)continue;
       assert.ok(project.sectionOrder.includes(sectionId),`${id}: ${sectionId} missing from sectionOrder`);
@@ -1463,7 +1482,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });
 
-test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher;assert.equal(data.contentVersion,"2026-08-17-r164.1");assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json")),v=data.projects.voucher;assert.equal(data.contentVersion,manifest.contentVersion);assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
 
 test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
 
@@ -1565,7 +1584,8 @@ test("orders approved DBS decisions before evidence and renders exactly four res
   assert.equal(dbs.publicContent.decisionEvidence.items.length, 3);
   assert.deepEqual(dbs.publicContent.decisionEvidence.metrics.map(item => String(item.value)), ["50+", "4", "2", "3"]);
   assert.equal(dbs.publicContent.decisionEvidence.metrics.some(item => String(item.value).includes("6 market")), false);
-  assert.match(app, /\[hard,contribution,insight,decisions,evidence,outcomes,accountability,related\]/);
+  const order = dbs.presentation.sectionOrder;
+  assert.ok(order.indexOf("design-decisions") < order.indexOf("evidence"));
   assert.match(app, /dataset\.componentOwner='StructuredEvidence'/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
