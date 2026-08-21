@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r165.1c",
+  "contentVersion": "2026-08-21-r165.1g",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -18054,8 +18054,26 @@
             "en": "Research & operating-model evidence",
             "zh": "研究與營運模型證據"
           },
-          "items": [],
+          "items": [
+            {
+              "assetId": "cathay-review-process-complexity-public-v1",
+              "title": {"en": "Operating-model complexity", "zh": "營運模型複雜度"},
+              "copy": {"en": "A public-safe view of the roles, systems and remediation handoffs supporting Decision 01.", "zh": "以公開安全方式呈現支援決策一的角色、系統與補件交接。"}
+            },
+            {
+              "assetId": "cathay-review-prioritisation-public-v1",
+              "title": {"en": "Benefit-and-feasibility prioritisation", "zh": "效益與可行性排序"},
+              "copy": {"en": "Relative prioritisation structure supporting Decision 02; positions are not quantitative scores.", "zh": "支援決策二的相對優先排序結構；位置不代表量化分數。"}
+            },
+            {
+              "assetId": "cathay-review-phased-direction-public-v1",
+              "title": {"en": "Phased direction", "zh": "分階段方向"},
+              "copy": {"en": "Proposed operating direction supporting Decision 03; implementation remained client-owned.", "zh": "支援決策三的建議營運方向；實作仍由客戶負責。"}
+            }
+          ],
           "validationLayer": {
+            "presentation": "image-text",
+            "assetId": "cathay-review-research-operating-baseline-public-v1",
             "title": {
               "en": "Research coverage",
               "zh": "研究涵蓋"
@@ -18622,11 +18640,11 @@
         }
       ],
       "heroVisualBrief": {
-        "assetId": "cathay-sit-review-hero-operating-model-public-v1",
+        "assetId": "cathay-review-research-operating-baseline-public-v1",
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": [],
+        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"],
         "contentStatus": "approved"
       },
       "type_zh": "內部系統",
@@ -22243,9 +22261,13 @@
           "From "
         ]
       },
-      "problemTypes": {
-        "visible": true,
-        "maximum": 3
+      "heroTaxonomy": {
+        "publicOwner": "none",
+        "forbiddenFallbacks": [
+          "problemTypes",
+          "keyProblems",
+          "searchIndexV2"
+        ]
       },
       "sectionOrder": [
         "hero",
@@ -29917,11 +29939,11 @@
         "sourceAssetIds": []
       },
       "cathay-sit-review-remediation-operations": {
-        "assetId": "cathay-sit-review-hero-operating-model-public-v1",
+        "assetId": "cathay-review-research-operating-baseline-public-v1",
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": []
+        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"]
       },
       "ctbc-mortgage-self-service-app": {
         "assetId": "ctbc-mortgage-hero-final-flow-public-v1",

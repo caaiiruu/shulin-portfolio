@@ -1486,12 +1486,14 @@ test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owner
 test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
 
 
-test("uses generic presentation visibility for public Problem Types without project identity conditionals", () => {
+test("keeps Search Mapping independent from recruiter-first Hero presentation", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
-  assert.equal(ssot.implementationContracts.recruiterFirstPresentation.problemTypes.visible, true);
-  assert.equal(ssot.implementationContracts.recruiterFirstPresentation.problemTypes.maximum, 3);
-  assert.match(app, /recruiterContract\?\.problemTypes\?\.visible \?\? p\.presentation\?\.visibility\?\.problemTypes/);
+  const contract=ssot.implementationContracts.recruiterFirstPresentation;
+  assert.equal(contract.heroTaxonomy.publicOwner,"none");
+  assert.deepEqual(contract.heroTaxonomy.forbiddenFallbacks,["problemTypes","keyProblems","searchIndexV2"]);
+  assert.match(app, /const showProblemTypes=!recruiterContract/);
+  assert.doesNotMatch(app, /renderTags\([^\n]*(?:searchIndexV2|keyProblems)/);
   assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
 });
 
@@ -1504,13 +1506,13 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   assert.deepEqual(contract.sectionOrder,expectedOrder);
   assert.deepEqual(contract.navigation.map(item=>item.key),expectedNavigation);
   assert.deepEqual(contract.hero.forbiddenVisiblePrefixes,["From "]);
-  assert.equal(contract.problemTypes.visible,true);
+  assert.equal(contract.heroTaxonomy.publicOwner,"none");
   assert.match(app,/recruiterFirstDisplayTitle\(p\)/);
   assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
   assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
   for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
     assert.equal(project.title.en.startsWith("From "),false,`${id}: visible Hero title starts with From`);
-    assert.ok(project.problemTypes.en.length>0&&project.problemTypes.en.length<=contract.problemTypes.maximum,`${id}: invalid Problem Types`);
+    assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
     assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
     for(const ref of contract.requiredContentRefs){
       const path=project.presentation.contentRefs?.[ref];
@@ -1800,7 +1802,7 @@ test("R163 installs the canonical Portfolio Skill v2 and extends only shared Pro
   assert.doesNotMatch(css,/structured-evidence[^}]*!important/i);
 
   assert.equal(ctbc.presentation.composition,"recruiter-first-system-case");
-  assert.equal(content.implementationContracts.recruiterFirstPresentation.problemTypes.visible,true);
+  assert.equal(content.implementationContracts.recruiterFirstPresentation.heroTaxonomy.publicOwner,"none");
   assert.equal(ctbc.infoGrid.type.value,"0→1 Product");
   assert.deepEqual(ctbc.infoGrid.audience.secondary.en,["Co-borrowers","Guarantors"]);
   assert.equal(ctbc.infoGrid.timeline.duration.en,"3 months");
@@ -1875,4 +1877,34 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   assert.match(css,/\.structured-evidence-v223__groups--decision-support\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
   assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
+});
+
+test("R165.1G binds public-safe Cathay Evidence while preserving internal Search Mapping",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["cathay-sit-review-remediation-operations"];
+  const evidence=project.publicContent.operatingEvidence;
+  const expectedTags=["review handoffs","AML operations","remediation","manual screening","process visibility"];
+  const expectedAssets=[
+    "cathay-review-research-operating-baseline-public-v1",
+    "cathay-review-process-complexity-public-v1",
+    "cathay-review-prioritisation-public-v1",
+    "cathay-review-phased-direction-public-v1"
+  ];
+  assert.deepEqual(project.searchIndexV2.problemTags.en,expectedTags);
+  for(const [id,item] of Object.entries(ssot.projects).filter(([,item])=>!String(item.contentStatus||"").includes("hidden"))){
+    assert.ok(item.searchIndexV2,`${id}: Search Mapping missing`);
+    assert.ok(item.searchIndexV2.problemTags?.en?.length||item.searchIndexV2.intentIds?.length,`${id}: Search Mapping relevance metadata missing`);
+  }
+  assert.equal(evidence.validationLayer.presentation,"image-text");
+  assert.equal(evidence.validationLayer.assetId,expectedAssets[0]);
+  assert.deepEqual(evidence.items.map(item=>item.assetId),expectedAssets.slice(1));
+  assert.equal(evidence.validationLayer.metrics.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
+  for(const assetId of expectedAssets){
+    const asset=manifest.items[assetId];
+    assert.ok(asset?.publicPath?.startsWith("/site/assets/projects/cathay-review/"),`${assetId}: canonical path missing`);
+    assert.equal(asset.implementationStatus,"real-active");
+    assert.equal(asset.replacementRequired,false);
+  }
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
 });

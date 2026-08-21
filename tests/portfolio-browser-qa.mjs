@@ -63,6 +63,10 @@ for (const viewport of viewports) {
     return{
       title:dialog.querySelector("#detailTitle")?.textContent.trim(),
       problemTypes:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      evidenceVariant:dialog.querySelector("[data-evidence-variant]")?.dataset.evidenceVariant,
+      evidenceAssets:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].map(image=>({src:image.getAttribute("src"),placeholder:image.dataset.assetStatus||null,complete:image.complete,naturalWidth:image.naturalWidth})),
+      kpiStripVisible:visible(dialog.querySelector(".structured-evidence-v223__validation-metrics")),
       navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
       sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
       headings:surface.map(node=>node.querySelector("h2,h3")?.textContent.trim()),
@@ -76,7 +80,9 @@ for (const viewport of viewports) {
   });
   const expectedCathaySections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
   if(cathayPresentation.title!=="Fragmented review knowledge to a shared remediation operating model"||cathayPresentation.title.startsWith("From "))failures.push(`${viewport.name} Cathay Hero presentation contract failed: ${cathayPresentation.title}`);
-  if(JSON.stringify(cathayPresentation.problemTypes)!==JSON.stringify(["Review operations","Remediation workflows","AML operations"]))failures.push(`${viewport.name} Cathay Problem Types mismatch: ${JSON.stringify(cathayPresentation.problemTypes)}`);
+  if(cathayPresentation.problemTypes.length||cathayPresentation.classificationVisible)failures.push(`${viewport.name} Cathay Hero taxonomy must be empty: ${JSON.stringify(cathayPresentation.problemTypes)}`);
+  if(cathayPresentation.evidenceVariant!=="image-text"||cathayPresentation.kpiStripVisible)failures.push(`${viewport.name} Cathay Research Coverage primitive mismatch: ${JSON.stringify(cathayPresentation)}`);
+  if(cathayPresentation.evidenceAssets.length!==4||cathayPresentation.evidenceAssets.some(image=>image.placeholder||!image.complete||!image.naturalWidth||!image.src?.includes("/site/assets/projects/cathay-review/")))failures.push(`${viewport.name} Cathay public-safe Evidence assets failed: ${JSON.stringify(cathayPresentation.evidenceAssets)}`);
   if(JSON.stringify(cathayPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Cathay navigator mismatch: ${JSON.stringify(cathayPresentation.navigator)}`);
   if(JSON.stringify(cathayPresentation.sectionOrder)!==JSON.stringify(expectedCathaySections)||!(cathayPresentation.decisionTop<cathayPresentation.evidenceTop))failures.push(`${viewport.name} Cathay rendered IA mismatch: ${JSON.stringify(cathayPresentation)}`);
   if(cathayPresentation.legacy.length)failures.push(`${viewport.name} Cathay legacy leakage: ${JSON.stringify(cathayPresentation.legacy)}`);
