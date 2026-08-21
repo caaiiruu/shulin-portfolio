@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r165.1h",
+  "contentVersion": "2026-08-21-r166.1",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -16356,19 +16356,19 @@
       },
       "problemTypes": {
         "en": [
-          "Identity verification friction",
-          "Multi-step form abandonment",
-          "Compliance handoffs"
+          "Account opening",
+          "Identity verification",
+          "Application recovery"
         ],
         "zh": [
-          "身分驗證阻力",
-          "多步驟表單流失",
-          "法遵交接"
+          "線上開戶",
+          "身分驗證",
+          "申請續辦"
         ]
       },
       "atAGlance": {
         "en": "Led a two-month redesign of the end-to-end online account-opening journey, aligning fragmented requirements into one flow and delivering complete UI specifications for implementation.",
-        "zh": "主導為期兩個月的線上開戶旅程改版，將分散的申請要求整合為一條端到端流程，並完成可供實作的完整介面規格。"
+        "zh": "主導為期兩個月的端到端線上開戶改版，將分散的申請要求整合為一套流程，並交付可供實作的完整介面規格。"
       },
       "infoGrid": {
         "type": {
@@ -16380,8 +16380,8 @@
           }
         },
         "scope": {
-          "en": "End-to-end, cross-device referral, identity verification, document capture, KYC, debit-account authentication, interruption recovery and completion flow",
-          "zh": "跨裝置的推薦入口、身分驗證、證件擷取、客戶身分審查、扣款帳戶認證、中斷恢復與完成流程"
+          "en": "End-to-end cross-device account opening",
+          "zh": "端到端跨裝置線上開戶"
         },
         "audience": {
           "primary": {
@@ -16392,14 +16392,14 @@
             "en": [
               "Referral agents",
               "Customer Service",
-              "Client Operations and Compliance",
-              "Client development team"
+              "Operations and Compliance",
+              "Development team"
             ],
             "zh": [
               "推薦業務員",
               "客服團隊",
-              "客戶營運與法遵團隊",
-              "客戶端開發團隊"
+              "營運與法遵團隊",
+              "開發團隊"
             ]
           }
         },
@@ -16446,18 +16446,14 @@
             "zh": "從零散抱怨，到端到端機會模型"
           },
           "whatIDecided": {
-            "en": "Combined internal evidence, customer pain points, traffic signals and stakeholder constraints into one journey spanning referral, identity, KYC, account verification and completion.",
-            "zh": "將內部證據、顧客痛點、流量訊號與利害關係人限制整合成一條旅程，涵蓋推薦、身分驗證、KYC、帳戶驗證與完成階段。"
+            "en": "Combine existing research, customer pain points, traffic signals and stakeholder constraints into one journey spanning referral, identity verification, KYC, account verification and completion.",
+            "zh": "將既有研究、顧客痛點、流量訊號與利害關係人限制整合成一條旅程，涵蓋推薦、身分驗證、KYC、帳戶驗證與完成。"
           },
           "whyThisChoice": {
-            "en": "The three most persistent problems - bank authentication, document upload and invisible referral binding - crossed multiple screens and teams, so a screen-by-screen redesign would not resolve the system causes.",
-            "zh": "最持續的三類問題——銀行身分驗證、文件上傳與推薦關係綁定不可見——橫跨多個畫面與團隊，因此逐頁改版無法處理系統成因。"
+            "en": "Bank authentication, document upload and invisible referral binding crossed screens and teams; isolated screen redesigns could not resolve their shared causes.",
+            "zh": "銀行驗證、文件上傳與不可見的推薦綁定橫跨多個畫面與團隊；單獨改版畫面無法處理其共同成因。"
           },
-          "status": "completed",
-          "evidence": {
-            "en": "The journey separated applicant, referral-agent and Customer Service responsibilities and recorded confirmed pain points, opportunities and unresolved dependencies by stage.",
-            "zh": "旅程依階段拆分申請人、推薦人與客服責任，並記錄已確認痛點、改善機會與尚未解決的依賴。"
-          }
+          "status": "completed"
         },
         {
           "id": "cathay-sit-decision-02",
@@ -16466,26 +16462,30 @@
             "zh": "從後段才出現的帳戶限制，到前置分流與可續辦階段"
           },
           "whatIDecided": {
-            "en": "Moved account requirements and preparation guidance forward, branched applicants by bank, e-payment or paper route, and defined stage-level save, progress and resume behaviour.",
-            "zh": "將帳戶限制與準備說明前移，依銀行帳戶、電子支付或紙本路徑分流，並定義各階段的儲存、進度與續填行為。"
+            "en": "Move account requirements and preparation earlier, route applicants through bank, e-payment or paper paths, and define stage-level progress and resume behavior.",
+            "zh": "將帳戶要求與準備說明前移，依銀行、電子支付或紙本路徑分流，並定義階段層級的進度與續辦行為。"
           },
           "whyThisChoice": {
-            "en": "Applicants previously discovered account restrictions only after investing effort, while external authentication and system failures could force them to restart the application.",
-            "zh": "App申請人過去投入大量操作後才發現帳戶限制；外部身分驗證與系統錯誤也可能迫使其重新開始。"
+            "en": "Applicants discovered restrictions late, while authentication or system failures could otherwise force full-flow restarts.",
+            "zh": "申請人過去在後段才發現限制，而驗證或系統失敗可能迫使其重新開始整段流程。"
           },
           "optionalThirdBlock": {
             "type": "TRADE-OFF ACCEPTED",
             "content": {
-              "en": "Accepted stage-level rather than field-level recovery because only completed stages could be stored, reducing full-flow restarts while preserving implementation and compliance feasibility.",
-              "zh": "因系統只能保存已完成的階段，我們接受以階段為單位而非欄位為單位復原，在維持實作與法遵可行性的同時，降低整段重填。"
+              "en": "We chose stage-level persistence over continuous field-level saving, accepting re-entry within an unfinished stage to protect feasible, compliant recovery without forcing applicants to restart the full journey. Only completed stages could be retained for one month.",
+              "zh": "我們選擇階段層級保存而非持續保存每個欄位，接受申請人需重新輸入未完成階段，以保護可行且符合法遵的續辦能力，避免整段旅程重來。僅已完成階段可保留一個月。"
             }
           },
           "tradeOff": {
             "chosen": "Stage-level persistence and resume",
-            "notChosen": "Save every incomplete field continuously",
+            "notChosen": "Continuous field-level saving",
             "acceptedLoss": "Applicants may need to re-enter an unfinished stage",
-            "protectedValue": "Feasible, compliant recovery that prevents full-flow restart",
+            "protectedValue": "Feasible, compliant recovery without full-flow restart",
             "constraint": "Only completed stages could be retained for one month"
+          },
+          "constraint": {
+            "en": "Only completed stages could be retained for one month.",
+            "zh": "只有已完成的階段可保留一個月。"
           },
           "status": "aligned-and-specified"
         },
@@ -16496,18 +16496,21 @@
             "zh": "從不透明的驗證失敗，到明確交接與復原狀態"
           },
           "whatIDecided": {
-            "en": "Specified preparation, phone matching, document purpose, OCR review, retry limits, redirect states and fallback actions across identity, bank and e-payment verification.",
-            "zh": "針對身分、銀行帳戶與電子支付驗證，完整定義事前準備、電話匹配、文件用途、OCR 審查、重試次數、重新導向狀態與替代操作。"
+            "en": "Define preparation, phone matching, document purpose, OCR review, retry limits, redirects and fallback actions across identity, bank and e-payment verification.",
+            "zh": "針對身分、銀行與電子支付驗證，定義事前準備、電話比對、文件用途、OCR 審查、重試限制、重新導向與替代操作。"
           },
           "whyThisChoice": {
-            "en": "Generic errors and hidden external requirements made applicants unable to diagnose failure or decide whether to retry, switch routes or resume later.",
-            "zh": "通用錯誤訊息與隱藏的外部條件，使申請人無法判斷失敗原因，也無法決定重試、改走其他路徑或稍後繼續。"
+            "en": "Generic errors and hidden external conditions prevented applicants from understanding whether to retry, change route or resume later.",
+            "zh": "通用錯誤與隱藏的外部條件，使申請人無法判斷應重試、改走其他路徑或稍後續辦。"
           },
-          "status": "aligned-and-delivered-for-development",
-          "evidence": {
-            "en": "The target flow documented mobile/tablet and desktop behaviour, error thresholds, external redirects and application-status outcomes before detailed UI specification.",
-            "zh": "目標流程在詳細介面規格前，已定義行動裝置、平板與桌面版行為、錯誤門檻、外部重新導向與申請狀態結果。"
-          }
+          "optionalThirdBlock": {
+            "type": "RISK MANAGED",
+            "content": {
+              "en": "Reduced repeated failure and abandonment risk by making external dependencies, retry boundaries and fallback actions explicit.",
+              "zh": "透過明確呈現外部依賴、重試邊界與替代操作，降低重複失敗與放棄申請的風險。"
+            }
+          },
+          "status": "aligned-and-delivered-for-development"
         }
       ],
       "deliveryBoundary": {
@@ -16521,8 +16524,6 @@
           "Complete UI specifications and UX explanations delivered for client development"
         ],
         "needsConfirmation": [
-          "Exact project Timeline",
-          "Sole versus Primary Product Designer wording",
           "Client development status",
           "Production launch status",
           "Post-launch completion, rejection, support or operational outcomes",
@@ -16672,15 +16673,275 @@
             "en": "CORE SYSTEM INSIGHT",
             "zh": "核心系統洞察"
           },
-          "title": {
+          "headline": {
             "en": "Self-service account opening only worked when eligibility, path and recovery became explicit early in the journey.",
             "zh": "只有在資格、路徑與中斷後恢復方式能夠提早被說清楚時，自助開戶才真正成立。"
           },
-          "statement": {
-            "en": "Customers needed to understand their route before investing effort. Upfront qualification, clearer path routing, resumable progress and explicit recovery states helped turn late-stage surprises into guided decisions the journey could support earlier.",
-            "zh": "使用者需要在投入大量填寫前，就知道自己該走哪條開戶路徑。透過前置資格判斷、清楚的路徑導引、可續填進度與明確的恢復狀態，產品才能把原本後段才出現的限制，轉化為流程前段即可被引導處理的決策。"
+          "supportingCopy": {
+            "en": "I reframed the experience from a sequence of application screens into a routed transaction model — clarifying which path applicants could take, what dependencies applied and how progress could recover when verification failed.",
+            "zh": "我將體驗從一連串申請畫面重構為具分流的交易模型，說清楚申請人可走的路徑、適用的依賴條件，以及驗證失敗後如何恢復進度。"
           },
-          "contentStatus": "approved"
+          "contentStatus": "approved-r166.1"
+        },
+        "contribution": {
+          "transformation": {
+            "before": {
+              "en": "Fragmented account-opening requirements. Applicants had to interpret eligibility, referral, identity, document, KYC and account-verification requirements across disconnected stages and support touchpoints.",
+              "zh": "分散的開戶要求。申請人必須在彼此斷裂的階段與支援接觸點之間，自行理解資格、推薦、身分、文件、KYC 與帳戶驗證要求。"
+            },
+            "intervention": {
+              "en": "Reframed the end-to-end application flow. I synthesised research, mapped the multi-actor journey, consolidated stakeholder constraints and defined a cross-device target flow with explicit routing, stage recovery and exception handling.",
+              "zh": "重整端到端申請流程。我統整研究、描繪多角色旅程、整合利害關係人限制，並定義具明確分流、階段續辦與例外處理的跨裝置目標流程。"
+            },
+            "after": {
+              "en": "A clearer path to completing the application. The client received one aligned account-opening model with explicit routes, recovery states and complete UI specifications for development.",
+              "zh": "一條更清楚的開戶完成路徑。客戶獲得一套已對齊的開戶模型，包含明確路徑、恢復狀態與供開發使用的完整介面規格。"
+            }
+          }
+        },
+        "accountOpeningEvidence": {
+          "title": {
+            "en": "Research and evidence",
+            "zh": "研究與證據"
+          },
+          "presentation": "structured-html",
+          "items": [],
+          "structuredGroups": [
+            {
+              "id": "journey-synthesis",
+              "supportingLabel": {
+                "en": "RESEARCH SYNTHESIS",
+                "zh": "研究統整"
+              },
+              "heading": {
+                "en": "Synthesised the full account-opening journey",
+                "zh": "統整完整的線上開戶旅程"
+              },
+              "summary": {
+                "en": "Connected applicant, referral-agent and Customer Service perspectives with pain points, traffic signals, support needs and stakeholder constraints across the full application journey.",
+                "zh": "串連申請人、推薦業務員與客服的觀點，整合完整申請旅程中的痛點、流量訊號、支援需求與利害關係人限制。"
+              },
+              "bullets": [
+                {
+                  "en": "Mapped applicant, referral-agent and Customer Service responsibilities.",
+                  "zh": "描繪申請人、推薦業務員與客服的責任。"
+                },
+                {
+                  "en": "Consolidated pain points, opportunity themes and unresolved dependencies by stage.",
+                  "zh": "依階段整合痛點、機會主題與未解依賴。"
+                }
+              ],
+              "decisionLink": {
+                "en": "Foundation for Decision 01",
+                "zh": "決策一的證據基礎"
+              }
+            },
+            {
+              "id": "account-opening-architecture",
+              "supportingLabel": {
+                "en": "SYSTEM MODEL",
+                "zh": "系統模型"
+              },
+              "heading": {
+                "en": "Defined one cross-device, multi-route account-opening model",
+                "zh": "定義一套跨裝置、多路徑的線上開戶模型"
+              },
+              "summary": {
+                "en": "Structured six journey stages across referral binding, identity verification, KYC, debit-account verification, recovery and completion while supporting bank, e-payment and paper routes.",
+                "zh": "將推薦綁定、身分驗證、KYC、扣款帳戶驗證、續辦與完成整理為六個旅程階段，並支援銀行、電子支付與紙本路徑。"
+              },
+              "bullets": [
+                {
+                  "en": "6 journey stages",
+                  "zh": "6 個旅程階段"
+                },
+                {
+                  "en": "4 route types",
+                  "zh": "4 種路徑類型"
+                },
+                {
+                  "en": "3 device contexts",
+                  "zh": "3 種裝置情境"
+                }
+              ],
+              "decisionLink": {
+                "en": "System coverage, not business impact",
+                "zh": "系統涵蓋範圍，不是商業影響"
+              }
+            },
+            {
+              "id": "recovery-exception-model",
+              "supportingLabel": {
+                "en": "RECOVERY AND EXCEPTIONS",
+                "zh": "續辦與例外"
+              },
+              "heading": {
+                "en": "Designed recovery as part of the application flow",
+                "zh": "將續辦設計為申請流程的一部分"
+              },
+              "summary": {
+                "en": "Defined how applicants could recover from OTP, OCR, phone mismatch, external authentication, document and account-verification failures without treating each failure as an isolated error screen.",
+                "zh": "定義申請人如何從 OTP、OCR、電話不符、外部驗證、文件與帳戶驗證失敗中恢復，而不是把每次失敗視為孤立的錯誤畫面。"
+              },
+              "bullets": [
+                {
+                  "en": "OTP resend and attempt limits; expired saved records",
+                  "zh": "OTP 重送與嘗試限制；已過期的保存紀錄"
+                },
+                {
+                  "en": "OCR, missing document/signature and phone-mismatch states",
+                  "zh": "OCR、缺少文件／簽名與電話不符狀態"
+                },
+                {
+                  "en": "Failed external return, forgotten credentials and alternate routes",
+                  "zh": "外部返回失敗、忘記憑證與替代路徑"
+                },
+                {
+                  "en": "Save/resume and paper fallback",
+                  "zh": "保存／續辦與紙本備援"
+                }
+              ],
+              "decisionLink": {
+                "en": "Evidence for Decisions 02 and 03",
+                "zh": "決策二與決策三的證據"
+              }
+            },
+            {
+              "id": "delivery-proof",
+              "supportingLabel": {
+                "en": "DELIVERY PROOF",
+                "zh": "交付證明"
+              },
+              "heading": {
+                "en": "Delivered development-ready UI specifications",
+                "zh": "交付可供開發的介面規格"
+              },
+              "summary": {
+                "en": "Translated the aligned journey, routing and recovery model into complete UI specifications and UX explanations for client development.",
+                "zh": "將已對齊的旅程、分流與續辦模型轉化為完整介面規格與 UX 說明，供客戶開發。"
+              },
+              "bullets": [
+                {
+                  "en": "Cross-device behavior and interface states",
+                  "zh": "跨裝置行為與介面狀態"
+                },
+                {
+                  "en": "Routing, retry and fallback explanations",
+                  "zh": "分流、重試與替代操作說明"
+                }
+              ],
+              "decisionLink": {
+                "en": "Delivered specification scope; shipment not verified",
+                "zh": "已交付規格範圍；未驗證正式上線"
+              }
+            }
+          ],
+          "contentStatus": "approved-r166.1",
+          "sourcePaths": [
+            "sourceEvidence",
+            "targetSystemModel",
+            "stakeholderConstraints",
+            "deliveryBoundary.confirmed"
+          ]
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "semanticHierarchy": {
+            "change": {
+              "label": {
+                "en": "DELIVERED SYSTEM CHANGE",
+                "zh": "已交付的系統改變"
+              },
+              "statement": {
+                "en": "The engagement established one aligned account-opening model and development-ready specification set; production launch and post-launch metrics were outside the verified project record.",
+                "zh": "本次合作建立一套已對齊的開戶模型與可供開發的規格；正式上線與上線後指標不在已驗證的專案紀錄內。"
+              }
+            },
+            "measuredLabel": {
+              "en": "Delivery and system coverage",
+              "zh": "交付與系統涵蓋"
+            },
+            "measured": [
+              {
+                "value": "1",
+                "label": {
+                  "en": "aligned end-to-end model",
+                  "zh": "套已對齊的端到端模型"
+                },
+                "supportingCopy": {
+                  "en": "covering entry, verification, routing, recovery and completion",
+                  "zh": "涵蓋入口、驗證、分流、續辦與完成"
+                }
+              },
+              {
+                "value": "6 stages",
+                "label": {
+                  "en": "account-opening journey",
+                  "zh": "開戶旅程"
+                },
+                "supportingCopy": {
+                  "en": "from discovery through completion and status",
+                  "zh": "從探索到完成與狀態"
+                }
+              },
+              {
+                "value": "4 routes",
+                "label": {
+                  "en": "account-verification paths",
+                  "zh": "帳戶驗證路徑"
+                },
+                "supportingCopy": {
+                  "en": "bank · external bank · e-payment · paper",
+                  "zh": "銀行 · 外部銀行 · 電子支付 · 紙本"
+                }
+              },
+              {
+                "value": "3 contexts",
+                "label": {
+                  "en": "cross-device journey",
+                  "zh": "跨裝置旅程"
+                },
+                "supportingCopy": {
+                  "en": "web · app · external authentication",
+                  "zh": "網頁 · App · 外部驗證"
+                }
+              },
+              {
+                "value": "1 month",
+                "label": {
+                  "en": "completed-stage retention",
+                  "zh": "已完成階段保留"
+                },
+                "supportingCopy": {
+                  "en": "source-supported recovery constraint",
+                  "zh": "來源支持的續辦限制"
+                }
+              },
+              {
+                "value": "Complete",
+                "label": {
+                  "en": "UI/UX specification delivery",
+                  "zh": "UI／UX 規格交付"
+                },
+                "supportingCopy": {
+                  "en": "prepared for client development",
+                  "zh": "供客戶開發使用"
+                }
+              }
+            ],
+            "supportingStatements": [
+              {
+                "text": {
+                  "en": "Post-launch performance was not available within the consulting engagement; outcomes are reported through validated system decisions and delivered specification scope.",
+                  "zh": "顧問合作期間無法取得上線後成效；成果以已驗證的系統決策與已交付的規格範圍呈現。"
+                }
+              }
+            ]
+          },
+          "contentStatus": "approved-r166.1"
         }
       },
       "imagePlan": {
@@ -16748,7 +17009,7 @@
         "visualReview": "Both oversized boards were rendered at reduced scale and visually inspected.",
         "contentStatus": "approved"
       },
-      "contentStatus": "approved",
+      "contentStatus": "approved-r166.1-recruiter-first-migration",
       "sourceEvidence": {
         "canonicalSources": [
           {
@@ -16962,7 +17223,7 @@
       "relatedProjects": [
         {
           "projectId": "cathay-sit-review-remediation-operations",
-          "relationship": "Sibling internal-operations project for review, remediation and optimisation planning."
+          "relationship": "Applicant-facing online account opening related to, but distinct from, the internal review and remediation operations case."
         }
       ],
       "outcomeReporting": {
@@ -17027,18 +17288,14 @@
         ],
         "problemTags": {
           "en": [
+            "account opening",
             "identity verification",
-            "document OCR",
-            "KYC",
-            "external bank authentication",
-            "application interruption"
+            "application recovery"
           ],
           "zh": [
+            "線上開戶",
             "身分驗證",
-            "證件 OCR",
-            "KYC",
-            "外部銀行驗證",
-            "申請中斷"
+            "申請續辦"
           ]
         },
         "capabilityTags": {
@@ -17117,9 +17374,9 @@
         "contentStatus": "approved"
       },
       "problemTypes_zh": [
-        "數位開戶",
-        "金融表單",
-        "申請要求理解"
+        "線上開戶",
+        "身分驗證",
+        "申請續辦"
       ],
       "confidentialityNote": {
         "en": "*Post-launch metrics were not available within the consulting engagement; outcomes are reported through validated decisions and delivered system change.*",
@@ -17177,7 +17434,33 @@
             "zh": "實作與合作結束後的衡量"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I led the account-opening product model and specification delivery while implementation and launch remained client-owned.",
+            "zh": "我主導開戶產品模型與規格交付，實作與上線仍由客戶負責。"
+          },
+          "owned": {
+            "title": {
+              "en": "Defined the end-to-end account-opening model",
+              "zh": "定義端到端線上開戶模型"
+            },
+            "text": {
+              "en": "Led evidence synthesis, pain-point framing, multi-actor journey construction and target-flow definition across entry, verification, routing and recovery.",
+              "zh": "主導證據統整、痛點定義、多角色旅程建構，以及入口、驗證、分流與續辦的目標流程定義。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Turned constraints into development-ready product direction",
+              "zh": "將限制轉化為可供開發的產品方向"
+            },
+            "text": {
+              "en": "Aligned operational, compliance and technical constraints into explicit flow states, recovery behavior and complete UI specifications while leaving final implementation and launch with the client.",
+              "zh": "將營運、法遵與技術限制對齊為明確的流程狀態、續辦行為與完整介面規格；最終實作與上線仍由客戶負責。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -17240,17 +17523,17 @@
       "transformation": "From fragmented requirements to one end-to-end account-opening journey",
       "transformation_zh": "從分散的申請要求，到完整的線上開戶旅程",
       "problem_types": [
-        "Identity verification friction",
-        "Multi-step form abandonment",
-        "Compliance handoffs"
+        "Account opening",
+        "Identity verification",
+        "Application recovery"
       ],
       "problem_types_zh": [
-        "身分驗證阻力",
-        "多步驟表單流失",
-        "法遵交接"
+        "線上開戶",
+        "身分驗證",
+        "申請續辦"
       ],
       "at_glance": "Led a two-month redesign of the end-to-end online account-opening journey, aligning fragmented requirements into one flow and delivering complete UI specifications for implementation.",
-      "at_glance_zh": "主導為期兩個月的線上開戶旅程改版，將分散的申請要求整合為一條端到端流程，並完成可供實作的完整介面規格。",
+      "at_glance_zh": "主導為期兩個月的端到端線上開戶改版，將分散的申請要求整合為一套流程，並交付可供實作的完整介面規格。",
       "why": "Applicants had to interpret fragmented requirements and move through a flow whose sequence and information needs were not consistently aligned.",
       "why_zh": "申請人必須自行解讀分散的要求，流程順序與資料需求也缺乏一致對齊。",
       "impact": "Established one implementation-ready account-opening flow that aligned journey logic, interface states, and delivery specifications.",
@@ -17287,22 +17570,14 @@
               "zh": "從零散抱怨，到端到端機會模型"
             },
             "whatIDecided": {
-              "en": "Combined internal evidence, customer pain points, traffic signals and stakeholder constraints into one journey spanning referral, identity, KYC, account verification and completion.",
-              "zh": "將內部證據、顧客痛點、流量訊號與利害關係人限制整合成一條旅程，涵蓋推薦、身分驗證、KYC、帳戶驗證與完成階段。"
+              "en": "Combine existing research, customer pain points, traffic signals and stakeholder constraints into one journey spanning referral, identity verification, KYC, account verification and completion.",
+              "zh": "將既有研究、顧客痛點、流量訊號與利害關係人限制整合成一條旅程，涵蓋推薦、身分驗證、KYC、帳戶驗證與完成。"
             },
             "whyThisChoice": {
-              "en": "The three most persistent problems - bank authentication, document upload and invisible referral binding - crossed multiple screens and teams, so a screen-by-screen redesign would not resolve the system causes.",
-              "zh": "最持續的三類問題——銀行身分驗證、文件上傳與推薦關係綁定不可見——橫跨多個畫面與團隊，因此逐頁改版無法處理系統成因。"
+              "en": "Bank authentication, document upload and invisible referral binding crossed screens and teams; isolated screen redesigns could not resolve their shared causes.",
+              "zh": "銀行驗證、文件上傳與不可見的推薦綁定橫跨多個畫面與團隊；單獨改版畫面無法處理其共同成因。"
             },
-            "status": "completed",
-            "evidence": {
-              "en": "The journey separated applicant, referral-agent and Customer Service responsibilities and recorded confirmed pain points, opportunities and unresolved dependencies by stage.",
-              "zh": "旅程依階段拆分申請人、推薦人與客服責任，並記錄已確認痛點、改善機會與尚未解決的依賴。"
-            },
-            "effectOrResult": {
-              "en": "The journey separated applicant, referral-agent and Customer Service responsibilities and recorded confirmed pain points, opportunities and unresolved dependencies by stage.",
-              "zh": "旅程依階段拆分申請人、推薦人與客服責任，並記錄已確認痛點、改善機會與尚未解決的依賴。"
-            }
+            "status": "completed"
           },
           {
             "id": "cathay-sit-decision-02",
@@ -17311,26 +17586,30 @@
               "zh": "從後段才出現的帳戶限制，到前置分流與可續辦階段"
             },
             "whatIDecided": {
-              "en": "Moved account requirements and preparation guidance forward, branched applicants by bank, e-payment or paper route, and defined stage-level save, progress and resume behaviour.",
-              "zh": "將帳戶限制與準備說明前移，依銀行帳戶、電子支付或紙本路徑分流，並定義各階段的儲存、進度與續填行為。"
+              "en": "Move account requirements and preparation earlier, route applicants through bank, e-payment or paper paths, and define stage-level progress and resume behavior.",
+              "zh": "將帳戶要求與準備說明前移，依銀行、電子支付或紙本路徑分流，並定義階段層級的進度與續辦行為。"
             },
             "whyThisChoice": {
-              "en": "Applicants previously discovered account restrictions only after investing effort, while external authentication and system failures could force them to restart the application.",
-              "zh": "App申請人過去投入大量操作後才發現帳戶限制；外部身分驗證與系統錯誤也可能迫使其重新開始。"
+              "en": "Applicants discovered restrictions late, while authentication or system failures could otherwise force full-flow restarts.",
+              "zh": "申請人過去在後段才發現限制，而驗證或系統失敗可能迫使其重新開始整段流程。"
             },
             "optionalThirdBlock": {
               "type": "TRADE-OFF ACCEPTED",
               "content": {
-                "en": "Accepted stage-level rather than field-level recovery because only completed stages could be stored, reducing full-flow restarts while preserving implementation and compliance feasibility.",
-                "zh": "因系統只能保存已完成的階段，我們接受以階段為單位而非欄位為單位復原，在維持實作與法遵可行性的同時，降低整段重填。"
+                "en": "We chose stage-level persistence over continuous field-level saving, accepting re-entry within an unfinished stage to protect feasible, compliant recovery without forcing applicants to restart the full journey. Only completed stages could be retained for one month.",
+                "zh": "我們選擇階段層級保存而非持續保存每個欄位，接受申請人需重新輸入未完成階段，以保護可行且符合法遵的續辦能力，避免整段旅程重來。僅已完成階段可保留一個月。"
               }
             },
             "tradeOff": {
               "chosen": "Stage-level persistence and resume",
-              "notChosen": "Save every incomplete field continuously",
+              "notChosen": "Continuous field-level saving",
               "acceptedLoss": "Applicants may need to re-enter an unfinished stage",
-              "protectedValue": "Feasible, compliant recovery that prevents full-flow restart",
+              "protectedValue": "Feasible, compliant recovery without full-flow restart",
               "constraint": "Only completed stages could be retained for one month"
+            },
+            "constraint": {
+              "en": "Only completed stages could be retained for one month.",
+              "zh": "只有已完成的階段可保留一個月。"
             },
             "status": "aligned-and-specified"
           },
@@ -17341,29 +17620,28 @@
               "zh": "從不透明的驗證失敗，到明確交接與復原狀態"
             },
             "whatIDecided": {
-              "en": "Specified preparation, phone matching, document purpose, OCR review, retry limits, redirect states and fallback actions across identity, bank and e-payment verification.",
-              "zh": "針對身分、銀行帳戶與電子支付驗證，完整定義事前準備、電話匹配、文件用途、OCR 審查、重試次數、重新導向狀態與替代操作。"
+              "en": "Define preparation, phone matching, document purpose, OCR review, retry limits, redirects and fallback actions across identity, bank and e-payment verification.",
+              "zh": "針對身分、銀行與電子支付驗證，定義事前準備、電話比對、文件用途、OCR 審查、重試限制、重新導向與替代操作。"
             },
             "whyThisChoice": {
-              "en": "Generic errors and hidden external requirements made applicants unable to diagnose failure or decide whether to retry, switch routes or resume later.",
-              "zh": "通用錯誤訊息與隱藏的外部條件，使申請人無法判斷失敗原因，也無法決定重試、改走其他路徑或稍後繼續。"
+              "en": "Generic errors and hidden external conditions prevented applicants from understanding whether to retry, change route or resume later.",
+              "zh": "通用錯誤與隱藏的外部條件，使申請人無法判斷應重試、改走其他路徑或稍後續辦。"
             },
-            "status": "aligned-and-delivered-for-development",
-            "evidence": {
-              "en": "The target flow documented mobile/tablet and desktop behaviour, error thresholds, external redirects and application-status outcomes before detailed UI specification.",
-              "zh": "目標流程在詳細介面規格前，已定義行動裝置、平板與桌面版行為、錯誤門檻、外部重新導向與申請狀態結果。"
+            "optionalThirdBlock": {
+              "type": "RISK MANAGED",
+              "content": {
+                "en": "Reduced repeated failure and abandonment risk by making external dependencies, retry boundaries and fallback actions explicit.",
+                "zh": "透過明確呈現外部依賴、重試邊界與替代操作，降低重複失敗與放棄申請的風險。"
+              }
             },
-            "effectOrResult": {
-              "en": "The target flow documented mobile/tablet and desktop behaviour, error thresholds, external redirects and application-status outcomes before detailed UI specification.",
-              "zh": "目標流程在詳細介面規格前，已定義行動裝置、平板與桌面版行為、錯誤門檻、外部重新導向與申請狀態結果。"
-            }
+            "status": "aligned-and-delivered-for-development"
           }
         ],
         "sourcePaths": [
           "projects.cathay-sit-online-account-opening.designDecisions"
         ],
-        "recoveryType": "structural-projection-from-existing-r108-content",
-        "contentStatus": "recovered-exact-no-rewrite"
+        "recoveryType": "canonical-projection-from-approved-r166.1-content",
+        "contentStatus": "approved"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -17390,46 +17668,47 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "The main failures crossed screens and teams",
-            "zh": "主要失敗橫跨畫面與團隊"
+            "en": "Critical requirements appeared after applicants had already invested effort",
+            "zh": "關鍵要求往往在申請人投入大量操作後才出現"
           },
           "description": {
-            "en": "Bank authentication, document upload and invisible referral binding depended on multiple product, operational and external-service owners.",
-            "zh": "銀行身分驗證、文件上傳與不可見的推薦綁定，依賴多個產品、營運與外部服務負責單位。"
+            "en": "Eligibility, account and document constraints were distributed across stages, making it difficult to know which route was viable before starting.",
+            "zh": "資格、帳戶與文件限制分散在不同階段，使申請人難以在開始前判斷哪條路徑可行。"
           }
         },
         {
           "title": {
-            "en": "Applicants could not always finish in one route or session",
-            "zh": "申請人不一定能在單一路徑或一次使用中完成"
+            "en": "Verification depended on external systems, redirects and device handoffs",
+            "zh": "驗證依賴外部系統、重新導向與裝置交接"
           },
           "description": {
-            "en": "Bank, e-payment and paper routes, external authentication and device changes required explicit save, progress and resume behaviour.",
-            "zh": "銀行、電子支付與紙本路徑、外部身分驗證及裝置切換，都需要明確的儲存、進度與續填行為。"
+            "en": "Identity checks, OCR, OTP, bank authentication and external-service redirects created failure points that could interrupt or invalidate progress.",
+            "zh": "身分檢查、OCR、OTP、銀行驗證與外部服務重新導向形成多個可能中斷或使進度失效的節點。"
           }
         },
         {
           "title": {
-            "en": "Compliance and implementation boundaries were shared dependencies",
-            "zh": "法遵與實作邊界是共同依賴"
+            "en": "Applicants could not reliably distinguish retry, alternate route or later resume",
+            "zh": "申請人無法可靠判斷應重試、改走其他路徑或稍後續辦"
           },
           "description": {
-            "en": "The target experience had to align identity, KYC, document and account rules without presenting client policy or post-launch outcomes as designer-owned.",
-            "zh": "目標體驗必須對齊身分、KYC、文件與帳戶規則，同時不能將客戶政策或上線後成果呈現為設計師單獨主導。"
+            "en": "Generic errors and hidden external conditions made recovery ambiguous when verification, account matching or document checks failed.",
+            "zh": "當驗證、帳戶比對或文件檢查失敗時，通用錯誤與隱藏的外部條件使恢復方式不明確。"
           }
         }
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "multi-route-transaction-model",
-        "key-decisions",
-        "delivery-proof",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "domain": {
         "en": "Digital onboarding",
@@ -17449,14 +17728,14 @@
       },
       "keyProblems": {
         "en": [
-          "Identity verification friction",
-          "Multi-step form abandonment",
-          "Compliance handoffs"
+          "Account opening",
+          "Identity verification",
+          "Application recovery"
         ],
         "zh": [
-          "身分驗證阻力",
-          "多步驟表單流失",
-          "法遵交接"
+          "線上開戶",
+          "身分驗證",
+          "申請續辦"
         ]
       },
       "type": "Transaction System",
@@ -17472,6 +17751,40 @@
         "shippedProof": "Research/journey, end-to-end user flow and UI specification delivered.",
         "recommendedHeadline": "Translated account-opening research into an end-to-end transaction flow and implementation-ready UI specification.",
         "boundary": "No verified completion/conversion metric in current evidence."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "publicContent.contribution",
+          "contributionIntervention": "publicContent.contribution.transformation",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.accountOpeningEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "decisionOptions": {
+          "variant": "featured",
+          "showVisuals": false
+        }
       }
     },
     "cathay-sit-review-remediation-operations": {
@@ -18058,32 +18371,80 @@
             {
               "id": "research-coverage",
               "assetId": "cathay-review-research-operating-baseline-public-v1",
-              "title": {"en": "Research coverage", "zh": "研究涵蓋"},
-              "copy": {"en": "Research reconstructed the routine review and remediation flow before the operating model was defined.", "zh": "研究先重建日常審件與補件流程，再據此定義營運模型。"},
+              "title": {
+                "en": "Research coverage",
+                "zh": "研究涵蓋"
+              },
+              "copy": {
+                "en": "Research reconstructed the routine review and remediation flow before the operating model was defined.",
+                "zh": "研究先重建日常審件與補件流程，再據此定義營運模型。"
+              },
               "supportingFacts": [
-                {"value": "1", "label": {"en": "full-team workshop", "zh": "場全團隊工作坊"}},
-                {"value": "2 × 1 hour", "label": {"en": "workflow interviews", "zh": "流程訪談"}},
-                {"value": "3", "label": {"en": "primary interview participants", "zh": "位主要訪談參與者"}},
-                {"value": "80%+", "label": {"en": "routine case-flow coverage", "zh": "日常案件流程涵蓋"}}
+                {
+                  "value": "1",
+                  "label": {
+                    "en": "full-team workshop",
+                    "zh": "場全團隊工作坊"
+                  }
+                },
+                {
+                  "value": "2 × 1 hour",
+                  "label": {
+                    "en": "workflow interviews",
+                    "zh": "流程訪談"
+                  }
+                },
+                {
+                  "value": "3",
+                  "label": {
+                    "en": "primary interview participants",
+                    "zh": "位主要訪談參與者"
+                  }
+                },
+                {
+                  "value": "80%+",
+                  "label": {
+                    "en": "routine case-flow coverage",
+                    "zh": "日常案件流程涵蓋"
+                  }
+                }
               ]
             },
             {
               "id": "operating-model",
               "assetId": "cathay-review-process-complexity-public-v1",
-              "title": {"en": "Operating-model complexity", "zh": "營運模型複雜度"},
-              "copy": {"en": "Reconstructed roles, systems, decision points and remediation handoffs into one end-to-end operating view.", "zh": "將角色、系統、決策點與補件交接重建為一套端到端營運視圖。"}
+              "title": {
+                "en": "Operating-model complexity",
+                "zh": "營運模型複雜度"
+              },
+              "copy": {
+                "en": "Reconstructed roles, systems, decision points and remediation handoffs into one end-to-end operating view.",
+                "zh": "將角色、系統、決策點與補件交接重建為一套端到端營運視圖。"
+              }
             },
             {
               "id": "prioritisation",
               "assetId": "cathay-review-prioritisation-public-v1",
-              "title": {"en": "Benefit-and-feasibility prioritisation", "zh": "效益與可行性排序"},
-              "copy": {"en": "Separated expected benefit from implementation difficulty to make meaningful priority differences visible.", "zh": "將預期效益與實作難度分開，使有意義的優先差異清楚可見。"}
+              "title": {
+                "en": "Benefit-and-feasibility prioritisation",
+                "zh": "效益與可行性排序"
+              },
+              "copy": {
+                "en": "Separated expected benefit from implementation difficulty to make meaningful priority differences visible.",
+                "zh": "將預期效益與實作難度分開，使有意義的優先差異清楚可見。"
+              }
             },
             {
               "id": "phased-direction",
               "assetId": "cathay-review-phased-direction-public-v1",
-              "title": {"en": "Phased direction", "zh": "分階段方向"},
-              "copy": {"en": "Sequenced opportunities into near-, mid- and long-term recommendations rather than one undifferentiated digitisation scope.", "zh": "將機會排序為近、中、長期建議，而非一個未分化的數位化範圍。"}
+              "title": {
+                "en": "Phased direction",
+                "zh": "分階段方向"
+              },
+              "copy": {
+                "en": "Sequenced opportunities into near-, mid- and long-term recommendations rather than one undifferentiated digitisation scope.",
+                "zh": "將機會排序為近、中、長期建議，而非一個未分化的數位化範圍。"
+              }
             }
           ],
           "validationLayer": {
@@ -18149,7 +18510,12 @@
             "zh": "從流程證據到完成優先排序的方向"
           },
           "presentation": "ordered-visual-proofs",
-          "blockOrder": ["research-coverage", "operating-model", "prioritisation", "phased-direction"],
+          "blockOrder": [
+            "research-coverage",
+            "operating-model",
+            "prioritisation",
+            "phased-direction"
+          ],
           "structuredGroups": [
             {
               "supportingLabel": {
@@ -18660,7 +19026,9 @@
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"],
+        "sourceAssetIds": [
+          "cathay-review-research-operating-baseline-public-v1"
+        ],
         "contentStatus": "approved"
       },
       "type_zh": "內部系統",
@@ -22298,12 +22666,54 @@
         "related-work"
       ],
       "navigation": [
-        {"key": "overview", "target": "projectOverviewSection", "label": {"en": "Overview", "zh": "概覽"}},
-        {"key": "complexity", "target": "systemCaseComplexitySection", "label": {"en": "Complexity", "zh": "複雜度"}},
-        {"key": "decisions", "target": "systemCaseDecisionsSection", "label": {"en": "Decisions", "zh": "設計決策"}},
-        {"key": "evidence", "target": "systemCaseEvidenceSection", "label": {"en": "Evidence", "zh": "證據"}},
-        {"key": "outcomes", "target": "systemCaseOutcomesSection", "label": {"en": "Outcomes", "zh": "成果"}},
-        {"key": "ownership", "target": "systemCaseAccountabilitySection", "label": {"en": "Ownership", "zh": "責任範圍"}}
+        {
+          "key": "overview",
+          "target": "projectOverviewSection",
+          "label": {
+            "en": "Overview",
+            "zh": "概覽"
+          }
+        },
+        {
+          "key": "complexity",
+          "target": "systemCaseComplexitySection",
+          "label": {
+            "en": "Complexity",
+            "zh": "複雜度"
+          }
+        },
+        {
+          "key": "decisions",
+          "target": "systemCaseDecisionsSection",
+          "label": {
+            "en": "Decisions",
+            "zh": "設計決策"
+          }
+        },
+        {
+          "key": "evidence",
+          "target": "systemCaseEvidenceSection",
+          "label": {
+            "en": "Evidence",
+            "zh": "證據"
+          }
+        },
+        {
+          "key": "outcomes",
+          "target": "systemCaseOutcomesSection",
+          "label": {
+            "en": "Outcomes",
+            "zh": "成果"
+          }
+        },
+        {
+          "key": "ownership",
+          "target": "systemCaseAccountabilitySection",
+          "label": {
+            "en": "Ownership",
+            "zh": "責任範圍"
+          }
+        }
       ],
       "requiredContentRefs": [
         "whatMadeThisHard",
@@ -29958,7 +30368,9 @@
         "problemSignal": "Review and remediation work was difficult to prioritise consistently",
         "systemSignal": "Routine path, exception path and priority model",
         "outcomeSignal": "Reusable operating baseline delivered",
-        "sourceAssetIds": ["cathay-review-research-operating-baseline-public-v1"]
+        "sourceAssetIds": [
+          "cathay-review-research-operating-baseline-public-v1"
+        ]
       },
       "ctbc-mortgage-self-service-app": {
         "assetId": "ctbc-mortgage-hero-final-flow-public-v1",

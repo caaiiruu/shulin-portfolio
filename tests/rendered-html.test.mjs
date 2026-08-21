@@ -1537,7 +1537,11 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
   assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
   for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
-    assert.equal(project.title.en.startsWith("From "),false,`${id}: visible Hero title starts with From`);
+    const visibleTitle=contract.hero.forbiddenVisiblePrefixes.reduce(
+      (title,prefix)=>title.startsWith(prefix)?title.slice(prefix.length):title,
+      project.title.en
+    );
+    assert.equal(visibleTitle.startsWith("From "),false,`${id}: visible Hero title starts with From`);
     assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
     assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
     for(const ref of contract.requiredContentRefs){
@@ -1932,4 +1936,34 @@ test("R165.1G binds public-safe Cathay Evidence while preserving internal Search
     assert.equal(asset.replacementRequired,false);
   }
   assert.equal(ssot.contentVersion,manifest.contentVersion);
+});
+
+test("R166.1 projects Cathay OA through the recruiter-first shared IA without placeholder evidence",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-sit-online-account-opening"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.equal(project.title.en,"From fragmented requirements to one end-to-end account-opening journey");
+  assert.deepEqual(project.searchIndexV2.problemTags.en,["account opening","identity verification","application recovery"]);
+  assert.equal(project.presentation.visibility.problemTypes,undefined);
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions,project.designDecisions);
+  assert.equal(project.decisionNarrative.primaryDecisions[1].optionalThirdBlock.type,"TRADE-OFF ACCEPTED");
+  assert.equal(project.decisionNarrative.primaryDecisions[2].optionalThirdBlock.type,"RISK MANAGED");
+  assert.equal(project.publicContent.accountOpeningEvidence.presentation,"structured-html");
+  assert.equal(project.publicContent.accountOpeningEvidence.items.length,0);
+  assert.deepEqual(project.publicContent.accountOpeningEvidence.structuredGroups.map(item=>item.id),["journey-synthesis","account-opening-architecture","recovery-exception-model","delivery-proof"]);
+  assert.deepEqual(project.publicContent.outcomes.semanticHierarchy.measured.map(item=>item.value),["1","6 stages","4 routes","3 contexts","1 month","Complete"]);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Exact project Timeline"),false);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Sole versus Primary Product Designer wording"),false);
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"placeholder-active");
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,null);
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.match(app,/if\(!evidenceItems\.length\)return null/);
+  assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });

@@ -31,13 +31,14 @@
     const effect=decisionText(decision,['effectOrResult','resultingModel','preservedDirection','impactAndOwnership']);
     const outcome=decisionText(decision,['outcome']);
     const delivery=decisionText(decision,['deliveryBoundary','claimBoundary']);
-    const optionalSource=decision.optionalBlock||{};
+    const optionalSource=decision.optionalBlock||decision.optionalThirdBlock||{};
     const optional=decisionText(decision,['tradeOffAccepted','tradeoff','tradeOff','whatThisRequired','constraintManaged','riskManaged']);
     const optionalType=optionalSource.type||
       (decision.tradeOffAccepted||decision.tradeoff||decision.tradeOff?'TRADE-OFF ACCEPTED':
         decision.whatThisRequired?'WHAT THIS REQUIRED':
           decision.constraintManaged?'CONSTRAINT MANAGED':
             decision.riskManaged?'RISK MANAGED':'');
+    const hasOptionalBlock=Boolean(optionalType||optional[0]||optional[1]||optionalSource.content);
     return {
       ...decision,
       title:title[0],title_zh:title[1],
@@ -48,7 +49,7 @@
       outcome:outcome[0],outcome_zh:outcome[1],
       deliveryBoundary:delivery[0],deliveryBoundary_zh:delivery[1],
       tradeoff:optional[0],tradeoff_zh:optional[1],
-      optionalBlock:{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]},
+      optionalBlock:hasOptionalBlock?{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]}:null,
       optional_block_type:optionalType
     };
   }
@@ -2283,14 +2284,15 @@
       const featuredOptionalLabel={
         'TRADE-OFF ACCEPTED':lang==='zh'?'接受的取捨':'TRADE-OFF ACCEPTED',
         'WHAT THIS REQUIRED':lang==='zh'?'系統要求':'WHAT THIS REQUIRED',
-        'CONSTRAINT MANAGED':lang==='zh'?'管理的限制':'CONSTRAINT MANAGED'
+        'CONSTRAINT MANAGED':lang==='zh'?'管理的限制':'CONSTRAINT MANAGED',
+        'RISK MANAGED':lang==='zh'?'管理的風險':'RISK MANAGED'
       }[featuredOptional.type]||(lang==='zh'?'系統要求':'WHAT THIS REQUIRED');
       [
         [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
         [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
         [featuredOptionalLabel,featuredOptional.content||decision.whatThisRequired],
         [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
-      ].forEach(([label,value])=>{
+      ].filter(([,value])=>String(localize(value)||'').trim()).forEach(([label,value])=>{
         const field=element('section','voucher-stage-decision__field');
         field.append(element('span','decision-field-label-v58',label),element('p','',localize(value)));
         grid.append(field);
@@ -2508,7 +2510,10 @@
   function recruiterFirstDisplayTitle(project){
     let title=String(localize(project?.title)||'');
     const contract=recruiterFirstPresentationContract(project);
-    for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix))title=title.slice(prefix.length);
+    for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix)){
+      title=title.slice(prefix.length);
+      title=title?title.charAt(0).toLocaleUpperCase(lang==='zh'?'zh-TW':'en')+title.slice(1):title;
+    }
     return title;
   }
   function renderProject(key){
@@ -2755,8 +2760,10 @@
     return flow;
   }
   function appendVisualEvidenceModules(section,items,{translate=localize}={}){
+    const evidenceItems=list(items);
+    if(!evidenceItems.length)return null;
     const grid=element('div','voucher-r149-foundations');
-    list(items).forEach(item=>{
+    evidenceItems.forEach(item=>{
       const card=element('article','voucher-r149-foundation');
       if(item.id)card.dataset.evidenceBlockId=item.id;
       const media=element('div','voucher-r149-foundation__media');
