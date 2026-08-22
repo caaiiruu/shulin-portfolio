@@ -519,7 +519,7 @@ test("keeps domain selectors concise and card hover states inside their rails", 
   assert.doesNotMatch(tokens, /--work-card-hover-transform:[^;]*rotate/);
 });
 
-test("keeps project metadata on one line and global search in the active language", () => {
+test("keeps project metadata on one desktop line, allows a two-line mobile eyebrow, and keeps global search in the active language", () => {
   const foundation = read("assets/css/components/foundation.css");
   const overview = read("assets/css/components/project-detail-overview.css");
   const app = read("assets/js/app.js");
@@ -528,6 +528,7 @@ test("keeps project metadata on one line and global search in the active languag
   assert.doesNotMatch(foundation, /\.company-context-v132::before\{content:"·"/);
   assert.match(app, /element\('span','company-separator-v159','·'\)/);
   assert.match(overview, /\.modal-head-meta-v60\{[^}]*align-items:baseline;[^}]*flex-wrap:nowrap/);
+  assert.match(overview, /\.modal-head-meta-v60\{display:flex;flex-wrap:wrap;[^}]*max-block-size:var\(--project-hero-eyebrow-mobile-max-block-size\)/);
   assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-separator-v159,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
   for (const contract of [
     "safeText(title,ui(",
@@ -1974,5 +1975,8 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.match(app,/outcomesHierarchy&&!outcomesHierarchy\.change/);
   assert.match(app,/measuredLabelInHeader=false/);
   assert.match(app,/if\(!measuredLabelInHeader\)group\.append/);
+  assert.match(app,/createInfoTooltip\(translate\(item\.evidenceNote\)[^\n]*\[labelCopy,supportingCopy,fallbackCopy\]\)/);
+  assert.match(app,/if\(list\(visibleCopy\)\.some\(copy=>normalizedTooltipCopy\(copy\)===normalizedSource\)\)return null/);
+  assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });

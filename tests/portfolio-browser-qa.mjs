@@ -421,6 +421,29 @@ for (const viewport of viewports) {
   for(let index=0;index<await oaDecisions.count();index+=1)await captureOaDialogCheckpoint(`cathay-oa-decision-${String(index+1).padStart(2,"0")}`,oaDecisions.nth(index));
   const oaEvidenceGroups=page.locator("#systemCaseEvidenceSection .structured-evidence-v223__group");
   for(let index=0;index<await oaEvidenceGroups.count();index+=1)await captureOaDialogCheckpoint(`cathay-oa-evidence-${String(index+1).padStart(2,"0")}`,oaEvidenceGroups.nth(index));
+  const oaTooltipAudit=await page.evaluate(()=>({
+    triggers:document.querySelectorAll('#detailDialog .info-tooltip__trigger').length,
+    panels:[...document.querySelectorAll('#detailDialog .info-tooltip__panel')].map(node=>node.textContent.trim())
+  }));
+  if(oaTooltipAudit.triggers||oaTooltipAudit.panels.some(text=>!text))failures.push(`${viewport.name} Cathay OA meaningless or empty tooltip remains: ${JSON.stringify(oaTooltipAudit)}`);
+  if(viewport.width===430){
+    const eyebrowRoutes=[
+      'cathay-sit-online-account-opening',
+      'cathay-sit-review-remediation-operations',
+      'payment',
+      'dbs',
+      'booking',
+      'ctbc-mortgage-self-service-app',
+      'voucher'
+    ];
+    for(const projectId of eyebrowRoutes){
+      await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:'networkidle'});
+      const eyebrow=page.locator('.modal-head-meta-v60');
+      if(!(await eyebrow.count())||!(await eyebrow.isVisible())){failures.push(`mobile-430 ${projectId} Hero eyebrow missing`);continue}
+      const measurement=await eyebrow.evaluate(node=>{const style=getComputedStyle(node),lineHeight=parseFloat(style.lineHeight),height=node.getBoundingClientRect().height;return{text:node.textContent.trim(),height,lineHeight,lines:lineHeight?Math.round(height/lineHeight):null,overflow:node.scrollHeight-node.clientHeight}});
+      if(!measurement.text||measurement.lines===null||measurement.lines<1||measurement.lines>2||measurement.overflow>1)failures.push(`mobile-430 ${projectId} Hero eyebrow exceeds shared two-line contract: ${JSON.stringify(measurement)}`);
+    }
+  }
 
   await page.goto(`${baseUrl}/site/work/voucher`, { waitUntil: "networkidle" });
   for (const [name, selector] of [
