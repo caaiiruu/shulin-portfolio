@@ -2003,7 +2003,11 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
   assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
-  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);\n  assert.equal(project.publicContent.decisionEvidence.items.length,5);\n  assert.equal(project.presentation.detailHeroVisual,true);\n  assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");\n  for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.decisionEvidence.items.length,5);
+  assert.equal(project.presentation.detailHeroVisual,true);
+  assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");
+  for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
   assert.equal(project.publicContent.outcomes.cards.length,3);
   assert.match(project.publicContent.outcomes.closing.en,/Production launch and measured business impact remain unverified/);
   assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"OWNED / CO-LED");
