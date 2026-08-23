@@ -1995,7 +1995,7 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
   assert.equal(project.presentation.visibility.problemTypes,false);
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
-  assert.equal(project.title.en,"Trust and transaction governance for a P2P marketplace");
+  assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
   assert.ok(!project.title.en.startsWith("From "));
   assert.equal(project.infoGrid.type.value,"Marketplace Platform");
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
@@ -2003,11 +2003,11 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
   assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
-  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);\n  assert.equal(project.publicContent.decisionEvidence.items.length,5);\n  assert.equal(project.presentation.detailHeroVisual,true);\n  assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");\n  for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
   assert.equal(project.publicContent.outcomes.cards.length,3);
-  assert.match(project.publicContent.outcomes.closing.en,/Production launch, usage, adoption and commercial outcomes are unavailable/);
-  assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"I OWNED THE OUTCOME");
-  assert.equal(project.ownershipModel.accountabilityPresentation.shared.label.en,"SHARED DECISIONS");
+  assert.match(project.publicContent.outcomes.closing.en,/Production launch and measured business impact remain unverified/);
+  assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"OWNED / CO-LED");
+  assert.equal(project.ownershipModel.accountabilityPresentation.shared.label.en,"PARTNERED");
   assert.ok(project.ownershipModel.accountabilityPresentation.partnerOwned);
   assert.equal(project.searchIndexV2.canonicalId,"taishin-p2p-marketplace-platform");
   assert.ok(project.searchIndexV2.problemTags.en.includes("transaction exception handling"));
