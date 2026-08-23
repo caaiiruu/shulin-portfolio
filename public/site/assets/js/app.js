@@ -31,13 +31,14 @@
     const effect=decisionText(decision,['effectOrResult','resultingModel','preservedDirection','impactAndOwnership']);
     const outcome=decisionText(decision,['outcome']);
     const delivery=decisionText(decision,['deliveryBoundary','claimBoundary']);
-    const optionalSource=decision.optionalBlock||{};
+    const optionalSource=decision.optionalBlock||decision.optionalThirdBlock||{};
     const optional=decisionText(decision,['tradeOffAccepted','tradeoff','tradeOff','whatThisRequired','constraintManaged','riskManaged']);
     const optionalType=optionalSource.type||
       (decision.tradeOffAccepted||decision.tradeoff||decision.tradeOff?'TRADE-OFF ACCEPTED':
         decision.whatThisRequired?'WHAT THIS REQUIRED':
           decision.constraintManaged?'CONSTRAINT MANAGED':
             decision.riskManaged?'RISK MANAGED':'');
+    const hasOptionalBlock=Boolean(optionalType||optional[0]||optional[1]||optionalSource.content);
     return {
       ...decision,
       title:title[0],title_zh:title[1],
@@ -48,7 +49,7 @@
       outcome:outcome[0],outcome_zh:outcome[1],
       deliveryBoundary:delivery[0],deliveryBoundary_zh:delivery[1],
       tradeoff:optional[0],tradeoff_zh:optional[1],
-      optionalBlock:{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]},
+      optionalBlock:hasOptionalBlock?{...optionalSource,type:optionalType,content:optionalSource.content||optional[0]}:null,
       optional_block_type:optionalType
     };
   }
@@ -2283,14 +2284,15 @@
       const featuredOptionalLabel={
         'TRADE-OFF ACCEPTED':lang==='zh'?'接受的取捨':'TRADE-OFF ACCEPTED',
         'WHAT THIS REQUIRED':lang==='zh'?'系統要求':'WHAT THIS REQUIRED',
-        'CONSTRAINT MANAGED':lang==='zh'?'管理的限制':'CONSTRAINT MANAGED'
+        'CONSTRAINT MANAGED':lang==='zh'?'管理的限制':'CONSTRAINT MANAGED',
+        'RISK MANAGED':lang==='zh'?'管理的風險':'RISK MANAGED'
       }[featuredOptional.type]||(lang==='zh'?'系統要求':'WHAT THIS REQUIRED');
       [
         [lang==='zh'?'我的決策':'WHAT I DECIDED',decision.whatIDecided],
         [lang==='zh'?'決策依據':'WHY THIS CHOICE',decision.whyThisChoice],
         [featuredOptionalLabel,featuredOptional.content||decision.whatThisRequired],
         [lang==='zh'?'設計結果':'OUTCOME',decision.outcome]
-      ].forEach(([label,value])=>{
+      ].filter(([,value])=>String(localize(value)||'').trim()).forEach(([label,value])=>{
         const field=element('section','voucher-stage-decision__field');
         field.append(element('span','decision-field-label-v58',label),element('p','',localize(value)));
         grid.append(field);
@@ -2508,7 +2510,10 @@
   function recruiterFirstDisplayTitle(project){
     let title=String(localize(project?.title)||'');
     const contract=recruiterFirstPresentationContract(project);
-    for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix))title=title.slice(prefix.length);
+    for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix)){
+      title=title.slice(prefix.length);
+      title=title?title.charAt(0).toLocaleUpperCase(lang==='zh'?'zh-TW':'en')+title.slice(1):title;
+    }
     return title;
   }
   function renderProject(key){
@@ -2686,9 +2691,14 @@
     else signals.after(context);
   }
   let activeInfoTooltipClose=null;
-  function createInfoTooltip(content,label='Evidence details'){
+  function normalizedTooltipCopy(value){
+    return String(value||'').trim().replace(/\s+/g,' ').replace(/[.!?。！？]+$/u,'').toLocaleLowerCase();
+  }
+  function createInfoTooltip(content,label='Evidence details',visibleCopy=[]){
     const sourceText=String(content||'').trim();
     if(!sourceText)return null;
+    const normalizedSource=normalizedTooltipCopy(sourceText);
+    if(list(visibleCopy).some(copy=>normalizedTooltipCopy(copy)===normalizedSource))return null;
     const text=sourceText.replace(/[A-Za-z]/,character=>character.toUpperCase());
     const root=element('span','info-tooltip');
     const id=`info-tooltip-${Math.random().toString(36).slice(2)}`;
@@ -2755,8 +2765,10 @@
     return flow;
   }
   function appendVisualEvidenceModules(section,items,{translate=localize}={}){
+    const evidenceItems=list(items);
+    if(!evidenceItems.length)return null;
     const grid=element('div','voucher-r149-foundations');
-    list(items).forEach(item=>{
+    evidenceItems.forEach(item=>{
       const card=element('article','voucher-r149-foundation');
       if(item.id)card.dataset.evidenceBlockId=item.id;
       const media=element('div','voucher-r149-foundation__media');
@@ -2776,7 +2788,7 @@
       if(metric){
         const primary=element('div','outcome-metric__primary');
         const labelCopy=translate(item.label),supportingCopy=translate(item.supportingCopy),fallbackCopy=translate(item.primaryCopy)||labelCopy;
-        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote)||labelCopy,lang==='zh'?'查看成果證據':'View outcome evidence');
+        const label=element('span','outcome-metric__label'),tip=createInfoTooltip(translate(item.evidenceNote),lang==='zh'?'查看成果證據':'View outcome evidence',[labelCopy,supportingCopy,fallbackCopy]);
         appendInlineEndTooltip(label,supportingCopy?labelCopy:fallbackCopy,tip);primary.append(label);if(supportingCopy)primary.append(element('p','outcome-metric__supporting',supportingCopy));
         card.append(directionalValue(item.value,'outcome-metric__value'),primary);
       }else card.append(element('h3','outcome-metric__heading',translate(item.heading)),element('p','outcome-metric__copy',translate(item.copy)));
@@ -2784,7 +2796,7 @@
     });
     return grid;
   }
-  function appendOutcomeSemanticHierarchy(section,source,{translate=localize}={}){
+  function appendOutcomeSemanticHierarchy(section,source,{translate=localize,measuredLabelInHeader=false}={}){
     const change=source?.change;
     if(change){
       const block=element('article','outcome-semantic-change');
@@ -2794,9 +2806,9 @@
     }
     if(list(source?.measured).length){
       const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
-      group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
+      if(!measuredLabelInHeader)group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
-      if(source.metricLayout==='aligned-five')grid.classList.add('outcome-semantic-group__grid--aligned');
+      if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
       appendOutcomeCards(grid,source.measured,{metric:true,translate});group.append(grid);section.append(group);
     }
     if(list(source?.scale).length){
@@ -2897,7 +2909,7 @@
       const orderedVisualProofs=evidenceSource.presentation==='ordered-visual-proofs';
       const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
-      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
+      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
       if(!orderedVisualProofs&&t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length){
         const decisionSupport=evidenceSource.presentation==='decision-support';
@@ -2923,7 +2935,7 @@
         const metric=element('article','research-evidence-metric');
         const label=element('span','research-evidence-metric__label');
         if(item.note){
-          const tip=createInfoTooltip(t(item.note),lang==='zh'?'查看研究證據':'View research evidence');
+          const tip=createInfoTooltip(t(item.note),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label)]);
           appendInlineEndTooltip(label,t(item.label),tip);
         }else safeText(label,t(item.label));
         metric.append(element('strong','',t(item.value)||String(item.value||'')),label);metrics.append(metric);
@@ -2936,9 +2948,11 @@
     if(decisionListNode)decisions.append(decisionListNode);
 
     const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomes=createRecruiterSection('',t(outcomesSource?.title));
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
+    const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
-    if(outcomesSource?.semanticHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesSource.semanticHierarchy,{translate:t});
+    if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
       const qualitative=element('div','outcome-qualitative-hierarchy');
       if(t(outcomesSource?.headline)){
@@ -2999,7 +3013,7 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');appendVisualEvidenceModules(reusable,c.reusableSystem?.foundations,{translate:t});
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence');appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence',[t(x.label)]);appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';
