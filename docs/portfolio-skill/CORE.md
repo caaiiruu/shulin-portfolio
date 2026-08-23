@@ -64,3 +64,7 @@ Before mutation, record connector read/write, branch/PR write, workflow dispatch
 ## 24. Normal project pipeline
 
 Normal work branches from the actual canonical QA HEAD and opens an isolated PR directly back to canonical QA. Stacked repair PRs are exception handling only, not the normal project path.
+
+## 25. Permanent root-cause closure
+
+A defect is closed only after Work verifies the real state, classifies the failure layer/class, proves the root cause, identifies one canonical owner, removes conflicting owners, updates every consumer, adds prospective machine-enforced regression coverage, searches the repository for recurrence, runs dependency-scoped regression, and records exact-SHA evidence. Symptom disappearance alone is not PASS. Branch bypasses, skip flags, revision pins, scattered SHA exceptions, and project-specific suppression are forbidden closure mechanisms.

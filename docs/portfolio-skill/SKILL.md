@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-20-v2.6
+version: 2026-08-23-v2.7
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -742,7 +742,25 @@ For later Payment implementation, approved content and approved assets must be w
 
 ---
 
-# 25. Superseded rules
+# 25. Permanent root-cause closure
+
+A current symptom disappearing is not sufficient closure. Every defect must complete this prospective contract:
+
+1. verify real repository/runtime state
+2. classify the defect layer and reusable failure class
+3. prove the root cause
+4. identify one canonical owner
+5. remove every conflicting live owner
+6. make all consumers read the canonical owner
+7. apply the smallest canonical fix
+8. add or update machine-enforceable anti-regression coverage
+9. search the whole repository for recurrence of the failure class
+10. run dependency-scoped regression
+11. verify and record the exact tested SHA/state
+
+PASS means the same failure class cannot silently recur. Do not close through a branch bypass, skip flag, fixed current revision, scattered SHA exception, project-specific suppression, or a second parallel registry/owner. Historical release identifiers may remain only in clearly historical fixtures, migration records, or documentation; live current-state consumers must derive the current Content/Manifest identity from the canonical owners.
+
+# 26. Superseded rules
 
 The following are retired unless explicitly reopened:
 - public Problem Type chips
