@@ -1,3 +1,10 @@
+## 2026-08-23-v2.7
+
+- Activated the permanent root-cause closure contract: symptom disappearance is not PASS without failure-class classification, one canonical owner, conflicting-owner removal, consumer alignment, repo-wide recurrence search, machine-enforced regression, dependency-scoped QA, and exact-state evidence.
+- Registered the canonical generation owner and the registry field as the single live SSOT atomicity activation owner.
+- Expanded current-version anti-regression coverage across live generation/governance consumers.
+- Added explicit Manifest-only post-activation failure coverage and duplicate live activation-owner detection while preserving pre-activation legacy tolerance and aligned Content+Manifest PASS behavior.
+
 ## 2026-08-20-v2.6
 
 - Added the canonical Git ancestry activation boundary for SSOT-05/06 at `e9e488f3780381d0244044bdc6c69d9e09b0d14a`, the canonical QA merge where the same-commit Content / Asset Manifest atomicity contract first became active.

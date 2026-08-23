@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-20-v2.6",
-  "skillVersion": "2026-08-20-v2.6",
+  "version": "2026-08-23-v2.7",
+  "skillVersion": "2026-08-23-v2.7",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
@@ -68,11 +68,46 @@
     "publicContentRequiresCanonicalOwner": true,
     "publicAssetsRequireManifestOwner": true,
     "engineeringOnlyVersionBumpRequired": false,
+    "activationOwner": "docs/portfolio-skill/registry.json#ssotGovernance.ssotAtomicityEnforcedFrom",
     "ssotAtomicityEnforcedFrom": "e9e488f3780381d0244044bdc6c69d9e09b0d14a",
     "atomicityBoundaryType": "git-ancestry",
     "legacyPreBoundaryCommitsAreHistoricalEvidence": true,
     "postBoundaryAtomicityBlocking": true,
-    "oldBranchNewCommitsRemainGoverned": true
+    "oldBranchNewCommitsRemainGoverned": true,
+    "duplicateLiveActivationOwnersForbidden": true
+  },
+  "generationContract": {
+    "contentInput": "public/site/content/portfolio-content.json",
+    "assetManifestInput": "public/site/content/portfolio-asset-manifest.json",
+    "generator": "scripts/build-production-assets.mjs",
+    "projectPageGenerator": "scripts/generate-project-pages.mjs",
+    "generatedRuntimeRoot": "public/site",
+    "manualGeneratedRuntimeOwnerAllowed": false,
+    "historicalCurrentRevisionPinsAllowed": false
+  },
+  "rootCauseClosure": {
+    "required": true,
+    "validator": "tests/portfolio-control-plane-governance.test.mjs",
+    "steps": [
+      "verify real state",
+      "classify defect layer and failure class",
+      "prove root cause",
+      "identify one canonical owner",
+      "remove conflicting owner",
+      "update all consumers",
+      "add prospective anti-regression coverage",
+      "search repository for recurrence",
+      "run dependency-scoped regression",
+      "record exact-SHA evidence"
+    ],
+    "symptomDisappearanceIsPass": false,
+    "forbiddenClosureMechanisms": [
+      "branch bypass",
+      "skip flag",
+      "fixed current revision",
+      "scattered SHA exception",
+      "project-specific suppression"
+    ]
   },
   "activeAssetQa": {
     "deriveFromCanonicalRuntimeMetadata": true,

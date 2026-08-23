@@ -17,10 +17,17 @@ const workflow = fs.readFileSync(workflowPath, "utf8");
 const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
 const content = JSON.parse(fs.readFileSync(contentPath, "utf8"));
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-const builder = fs.readFileSync("scripts/build-production-assets.mjs", "utf8");
-const assetGovernance = fs.readFileSync("public/site/qa/asset-governance.mjs", "utf8");
 const browserQa = fs.readFileSync("tests/portfolio-browser-qa.mjs", "utf8");
 const ssotAtomicityEnforcedFrom = registry.ssotGovernance?.ssotAtomicityEnforcedFrom;
+const liveCurrentStateConsumers = [
+  "scripts/build-production-assets.mjs",
+  "scripts/generate-project-pages.mjs",
+  "public/site/qa/asset-governance.mjs",
+  "public/site/qa/ssot-governance.mjs",
+  "public/site/qa/runtime-self-test.js",
+  "tests/rendered-html.test.mjs",
+  "tests/project-detail-routes.test.mjs",
+];
 
 function triggerBlock(name) {
   const match = workflow.match(new RegExp(`(?:^|\\n)  ${name}:\\n([\\s\\S]*?)(?=\\n  [A-Za-z_][A-Za-z0-9_-]*:|\\npermissions:)`));
@@ -77,13 +84,16 @@ function validateAtomicCommit(commit, cwd = process.cwd()) {
   const assetChanged = [...changed].some((file) => file.startsWith(assetRoot));
   if (assetChanged) assert.ok(changed.has(manifestPath), `${commit}: public project asset changes require Asset Manifest in the same commit`);
 
-  if (changed.has(contentPath)) {
-    const before = jsonAt(parent, contentPath, cwd);
-    const after = jsonAt(commit, contentPath, cwd);
-    if (before.contentVersion !== after.contentVersion) {
-      assert.ok(changed.has(manifestPath), `${commit}: Content revision change requires Asset Manifest in the same commit`);
-      const manifestAtCommit = jsonAt(commit, manifestPath, cwd);
-      assert.equal(manifestAtCommit.contentVersion, after.contentVersion, `${commit}: Content and Asset Manifest revisions must match`);
+  if (changed.has(contentPath) || changed.has(manifestPath)) {
+    const contentBefore = jsonAt(parent, contentPath, cwd);
+    const contentAfter = jsonAt(commit, contentPath, cwd);
+    const manifestBefore = jsonAt(parent, manifestPath, cwd);
+    const manifestAfter = jsonAt(commit, manifestPath, cwd);
+    const contentVersionChanged = contentBefore.contentVersion !== contentAfter.contentVersion;
+    const manifestVersionChanged = manifestBefore.contentVersion !== manifestAfter.contentVersion;
+    if (contentVersionChanged || manifestVersionChanged) {
+      assert.ok(changed.has(contentPath) && changed.has(manifestPath), `${commit}: Content and Asset Manifest revision changes must be atomic`);
+      assert.equal(manifestAfter.contentVersion, contentAfter.contentVersion, `${commit}: Content and Asset Manifest revisions must match`);
     }
   }
 }
@@ -140,11 +150,15 @@ function createAtomicityFixture() {
   fs.writeFileSync(path.join(cwd, contentPath), `${JSON.stringify({ contentVersion: "invalid-2" }, null, 2)}\n`);
   const invalid = commitAll("post-activation invalid content-only revision");
 
+  git(["checkout", "-b", "manifest-invalid", activation], { cwd });
+  fs.writeFileSync(path.join(cwd, manifestPath), `${JSON.stringify({ contentVersion: "invalid-manifest-2" }, null, 2)}\n`);
+  const manifestInvalid = commitAll("post-activation invalid manifest-only revision");
+
   git(["checkout", "-b", "valid", activation], { cwd });
   writeVersion("valid-2");
   const valid = commitAll("post-activation valid atomic revision");
 
-  return { cwd, root, legacyViolation, activation, invalid, valid };
+  return { cwd, root, legacyViolation, activation, invalid, manifestInvalid, valid };
 }
 
 test("CI-01 canonical QA remains a pull-request target", () => {
@@ -186,8 +200,23 @@ test("SSOT-01/02 contentVersion exists and Content/Asset Manifest identity stays
 
 test("SSOT-03 runtime and asset governance do not pin one historical content revision", () => {
   const historicalPin = /contentVersion\s*===?\s*["']20\d{2}-\d{2}-\d{2}-r[^"']+["']/;
-  assert.doesNotMatch(builder, historicalPin);
-  assert.doesNotMatch(assetGovernance, historicalPin);
+  for (const file of liveCurrentStateConsumers) {
+    assert.doesNotMatch(fs.readFileSync(file, "utf8"), historicalPin, `${file}: live current-state revision pin`);
+  }
+});
+
+test("SSOT-04 registry is the only live activation owner", () => {
+  assert.equal(registry.ssotGovernance.activationOwner, `${registryPath}#ssotGovernance.ssotAtomicityEnforcedFrom`);
+  const allowedHistoricalRecord = "docs/portfolio-skill/CHANGELOG.md";
+  const tracked = git(["ls-files"]).split("\n").filter(Boolean);
+  const duplicateOwners = [];
+  for (const file of tracked) {
+    if (file === registryPath || file === allowedHistoricalRecord) continue;
+    const bytes = fs.readFileSync(file);
+    if (bytes.includes(0)) continue;
+    if (bytes.toString("utf8").includes(ssotAtomicityEnforcedFrom)) duplicateOwners.push(file);
+  }
+  assert.deepEqual(duplicateOwners, [], `duplicate live activation owners: ${duplicateOwners.join(", ")}`);
 });
 
 test("active-asset ProjectCard QA derives expectations from current runtime asset state", () => {
@@ -228,7 +257,19 @@ test("SSOT atomicity boundary rejects a post-activation Content revision without
   try {
     assert.throws(
       () => validateAtomicCommit(fixture.invalid, fixture.cwd),
-      /Content revision change requires Asset Manifest in the same commit/,
+      /Content and Asset Manifest revision changes must be atomic/,
+    );
+  } finally {
+    fs.rmSync(fixture.cwd, { recursive: true, force: true });
+  }
+});
+
+test("SSOT atomicity boundary rejects a post-activation Manifest revision without Content alignment", () => {
+  const fixture = createAtomicityFixture();
+  try {
+    assert.throws(
+      () => validateAtomicCommit(fixture.manifestInvalid, fixture.cwd),
+      /Content and Asset Manifest revision changes must be atomic/,
     );
   } finally {
     fs.rmSync(fixture.cwd, { recursive: true, force: true });

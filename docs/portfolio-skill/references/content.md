@@ -111,3 +111,17 @@ Hard rules:
 - Engineering-only governance changes do not require a fake Content version bump.
 
 For later Payment implementation, approved public content and approved public assets must enter their canonical owners in the same implementation round whenever both change.
+
+## Permanent root-cause closure contract
+
+SSOT, generation, governance, presentation, and QA defects are closed only when the reusable failure class is prevented, not when one visible symptom is patched. Work must verify real state, prove root cause, identify the single canonical owner, remove conflicting owners, make all consumers derive from that owner, add prospective machine enforcement, search the repository for recurrence, run dependency-scoped regression, and record exact-state evidence.
+
+For Content/current-version defects specifically:
+- current identity is `Content.contentVersion === Manifest.contentVersion`
+- generated runtime is deterministic output of current canonical Content plus Manifest
+- live consumers must not pin a historical current revision
+- Content-only version mutation fails after activation
+- Manifest-only version mutation fails after activation
+- aligned Content+Manifest mutation passes
+- the activation SHA has one live owner: `registry.json:ssotGovernance.ssotAtomicityEnforcedFrom`
+- duplicate live activation/current-state owners, branch bypasses, skip flags, and revision exceptions fail governance
