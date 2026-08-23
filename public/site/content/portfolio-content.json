@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r166.2",
+  "contentVersion": "2026-08-23-r170",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -10791,7 +10791,7 @@
         ],
         "contentStatus": "approved"
       },
-      "type_zh": "交易系統",
+      "type_zh": "市集平台",
       "transformation_zh": "串連全球計程車預訂旅程",
       "transformation": "Connecting the global taxi-booking journey",
       "problem_types": [
@@ -12112,10 +12112,10 @@
       "company": "Taishin Bank",
       "period": "2016–2017",
       "status": "delivered-to-client-production-outcomes-unavailable",
-      "title": {
-        "en": "From third-party payment to a governed P2P marketplace",
-        "zh": "從第三方支付服務，到具交易治理的 P2P 拍賣平台"
-      },
+    "title": {
+      "en": "Trust and transaction governance for a P2P marketplace",
+      "zh": "P2P 市集的信任與交易治理"
+    },
       "problemTypes": {
         "en": [
           "Buyer–seller trust gap",
@@ -12128,10 +12128,10 @@
           "跨組織交接"
         ]
       },
-      "atAGlance": {
-        "en": "Co-led research and UX definition for Taishin Bank’s P2P marketplace, translating 30 interviews into 7 logic-flow sheets and 25 functional documents that aligned buyer, seller, payment, logistics and notification states across the bank and software vendor.",
-        "zh": "共同主導台新銀行 P2P 拍賣平台的研究與使用者體驗定義，將 30 場訪談轉化為 7 份邏輯流程表與 25 份功能文件，對齊銀行與軟體供應商之間的買方、賣方、付款、物流與通知狀態。"
-      },
+    "atAGlance": {
+      "en": "Co-led six months of research and UX definition for Taishin Bank’s P2P marketplace, turning 30 interviews into one governed buyer–seller transaction model, 7 shared logic flows and 25 implementation documents.",
+      "zh": "共同主導台新銀行 P2P 市集為期 6 個月的研究與使用者體驗定義，將 30 場訪談轉化為一套受治理的買賣交易模型、7 份共享邏輯流程與 25 份實作文件。"
+    },
       "infoGrid": {
         "type": {
           "value": "Marketplace Platform",
@@ -12147,21 +12147,15 @@
         },
         "audience": {
           "primary": {
-            "en": "P2P marketplace buyers and sellers",
-            "zh": "P2P 市集買家與賣家"
+            "en": "P2P marketplace buyers",
+            "zh": "P2P 市集買家"
           },
           "secondary": {
             "en": [
-              "Taishin Bank stakeholders",
-              "Client Operations",
-              "Software vendor",
-              "Front-end and Back-end teams"
+              "P2P marketplace sellers"
             ],
             "zh": [
-              "台新銀行利害關係人",
-              "客戶營運團隊",
-              "軟體供應商",
-              "前端與後端團隊"
+              "P2P 市集賣家"
             ]
           }
         },
@@ -12171,8 +12165,8 @@
             "zh": "6 個月"
           },
           "dateRange": {
-            "en": "",
-            "zh": ""
+            "en": "2016–2017",
+            "zh": "2016–2017"
           },
           "status": "source-confirmed"
         },
@@ -12423,17 +12417,21 @@
         "problemTags": {
           "en": [
             "buyer seller trust",
+            "buyer seller workflow",
             "third-party payment",
             "auction settlement",
             "transaction disputes",
-            "multi-party governance"
+            "multi-party governance",
+            "transaction exception handling"
           ],
           "zh": [
             "買賣信任",
+            "買賣流程",
             "第三方付款",
             "拍賣結算",
             "交易爭議",
-            "多方治理"
+            "多方治理",
+            "交易例外處理"
           ]
         },
         "capabilityTags": {
@@ -12442,14 +12440,16 @@
             "governance rules",
             "service blueprint",
             "research synthesis",
-            "functional specification"
+            "functional specification",
+            "vendor integration"
           ],
           "zh": [
             "交易設計",
             "治理規則",
             "Service blueprint",
             "研究統整",
-            "功能規格"
+            "功能規格",
+            "供應商整合"
           ]
         },
         "systemTags": {
@@ -12507,7 +12507,7 @@
           "domainIds",
           "outcomeTags"
         ],
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "source-remapped-r170"
       },
       "problemTypes_zh": [
         "市集交易",
@@ -12566,7 +12566,56 @@
           "Exact division with the other UX Designer",
           "Production launch ownership"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "A clear boundary between the transaction logic I owned, the marketplace direction co-defined with the consulting team and the client/vendor responsibilities outside my scope.",
+            "zh": "清楚區分我負責的交易邏輯、與顧問團隊共同定義的市集方向，以及不在我範圍內的客戶／供應商責任。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我對成果負責"
+            },
+            "title": {
+              "en": "Defined buyer-payment, seller-notification and service-state logic",
+              "zh": "定義買方付款、賣方通知與服務狀態邏輯"
+            },
+            "text": {
+              "en": "Owned the documented interaction flows, service-state organisation, high-fidelity UX specifications, implementation clarification and QA within the verified scope.",
+              "zh": "在已驗證範圍內，負責文件所載的互動流程、服務狀態整理、高擬真 UX 規格、實作澄清與品質檢查。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Co-defined marketplace framing and delivery priorities",
+              "zh": "共同定義市集定位與交付優先順序"
+            },
+            "text": {
+              "en": "Broader service strategy, marketplace scope and prioritisation were co-decided with the other designer, consulting team and client stakeholders.",
+              "zh": "更廣泛的服務策略、市集範圍與優先順序，由我與另一位設計師、顧問團隊及客戶利害關係人共同決定。"
+            }
+          },
+          "partnerOwned": {
+            "label": {
+              "en": "PARTNER-OWNED BOUNDARY",
+              "zh": "夥伴責任邊界"
+            },
+            "title": {
+              "en": "Client business rules, vendor implementation and production outcomes",
+              "zh": "客戶商業規則、供應商實作與正式環境成果"
+            },
+            "text": {
+              "en": "The other designer’s exact scope, final client business rules, Engineering/vendor implementation and production launch ownership remain partner-owned or unavailable.",
+              "zh": "另一位設計師的精確範圍、最終客戶商業規則、工程／供應商實作與正式上線責任，仍屬夥伴負責或無法取得。"
+            }
+          },
+          "contentStatus": "source-remapped-r170"
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -12605,9 +12654,9 @@
         ],
         "contentStatus": "source-registered-public-derivative-needed"
       },
-      "type_zh": "交易系統",
-      "transformation_zh": "從第三方支付服務，到具交易治理的 P2P 拍賣平台",
-      "transformation": "From third-party payment to a governed P2P marketplace",
+      "type_zh": "市集平台",
+      "transformation_zh": "P2P 市集的信任與交易治理",
+      "transformation": "Trust and transaction governance for a P2P marketplace",
       "problem_types": [
         "Buyer–seller trust gap",
         "Coupled transaction states",
@@ -12618,8 +12667,8 @@
         "交易狀態相互牽動",
         "跨組織交接"
       ],
-      "at_glance": "Co-led research and UX definition for Taishin Bank’s P2P marketplace, translating 30 interviews into 7 logic-flow sheets and 25 functional documents that aligned buyer, seller, payment, logistics and notification states across the bank and software vendor.",
-      "at_glance_zh": "共同主導台新銀行 P2P 拍賣平台的研究與使用者體驗定義，將 30 場訪談轉化為 7 份邏輯流程表與 25 份功能文件，對齊銀行與軟體供應商之間的買方、賣方、付款、物流與通知狀態。",
+      "at_glance": "Co-led six months of research and UX definition for Taishin Bank’s P2P marketplace, turning 30 interviews into one governed buyer–seller transaction model, 7 shared logic flows and 25 implementation documents.",
+      "at_glance_zh": "共同主導台新銀行 P2P 市集為期 6 個月的研究與使用者體驗定義，將 30 場訪談轉化為一套受治理的買賣交易模型、7 份共享邏輯流程與 25 份實作文件。",
       "why": "A payment feature alone could not govern buyer protection, seller operations, logistics, notifications, and implementation across multiple organisations.",
       "why_zh": "單一付款功能無法同時治理買家保障、賣家營運、物流、通知，以及跨組織實作。",
       "impact": "Established an end-to-end transaction regulation that became the shared delivery reference for the banking client and software vendor.",
@@ -12641,12 +12690,12 @@
           {
             "id": "taishin-decision-marketplace-framing",
             "title": {
-              "en": "From a payment service to a trusted P2P marketplace",
-              "zh": "從支付服務，到值得信任的 P2P 市集"
+              "en": "Make trust a platform responsibility, not a payment feature",
+              "zh": "讓信任成為平台責任，而非付款功能"
             },
             "whatIDecided": {
-              "en": "Expanded the initial third-party payment brief into a marketplace model that guided sellers stage by stage and protected buyers throughout the transaction.",
-              "zh": "將原本的第三方支付需求擴展為市集模型，分階段引導賣家，並在交易過程中保障買家。"
+              "en": "Expanded the initial third-party payment brief into a governed marketplace model that guided sellers and protected buyers across the transaction.",
+              "zh": "將原本的第三方支付需求擴展為受治理的市集模型，在整段交易中引導賣家並保障買家。"
             },
             "whyThisChoice": {
               "en": "Market research showed that Taishin Bank’s trust advantage could create more value through a governed end-to-end service than through an isolated payment function.",
@@ -12658,13 +12707,17 @@
                 "en": "We accepted a broader service-definition scope instead of a faster payment-only delivery to protect buyer–seller trust and transaction coherence.",
                 "zh": "我們接受較廣的服務定義範圍，而非更快交付單一付款功能，以保障買賣信任與交易一致性。"
               }
+            },
+            "outcome": {
+              "en": "A two-sided marketplace definition that treated trust, fulfilment and payment as one governed service.",
+              "zh": "一套將信任、履約與付款視為同一受治理服務的雙邊市集定義。"
             }
           },
           {
             "id": "taishin-decision-shared-transaction-regulation",
             "title": {
-              "en": "From screen rules to one end-to-end transaction regulation",
-              "zh": "從逐頁規則，到一套端到端交易規範"
+              "en": "Govern the transaction through shared states and responsibilities",
+              "zh": "以共享狀態與責任治理整段交易"
             },
             "whatIDecided": {
               "en": "Mapped payment, logistics, notifications, service states and response actions into one shared regulation across the bank and software vendor.",
@@ -12680,13 +12733,17 @@
                 "en": "This required shared transaction states and responsibility boundaries before interface specifications could remain consistent.",
                 "zh": "這需要先建立共用交易狀態與責任邊界，介面規格才能維持一致。"
               }
+            },
+            "outcome": {
+              "en": "One cross-organisation transaction regulation for payment, logistics, notifications and service recovery.",
+              "zh": "一套跨組織的交易規範，涵蓋付款、物流、通知與服務復原。"
             }
           },
           {
             "id": "taishin-decision-reusable-patterns",
             "title": {
-              "en": "From separate UX and UI production to reusable patterns",
-              "zh": "從分離的 UX／UI 製作，到可重用模式"
+              "en": "Scale specification through reusable interaction patterns",
+              "zh": "以可重用互動模式擴展規格交付"
             },
             "whatIDecided": {
               "en": "Applied UI-defined patterns inside high-fidelity UX specifications so the broader platform could be documented consistently despite limited UI capacity.",
@@ -12702,6 +12759,10 @@
                 "en": "We accepted heavier UX specification effort in exchange for reducing the UI bottleneck and preserving implementation consistency.",
                 "zh": "我們接受較高的 UX 規格投入，換取降低 UI 瓶頸並維持實作一致性。"
               }
+            },
+            "outcome": {
+              "en": "Consistent implementation guidance across a platform scope larger than the available UI-design capacity.",
+              "zh": "在平台範圍超過可用 UI 設計資源時，仍維持一致的實作指引。"
             }
           }
         ],
@@ -12709,7 +12770,7 @@
           "projects.taishin-p2p-marketplace-platform.designDecisions"
         ],
         "recoveryType": "consolidated-from-legacy-project-and-latest-user-correction",
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "source-remapped-r170"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -12741,14 +12802,37 @@
       ],
       "valueIBrought": {
         "headline": {
-          "en": "30 interviews, 7 logic-flow sheets and 25 functional documents became one shared transaction model for Taishin Bank and its software vendor.",
-          "zh": "30 場訪談、7 份邏輯流程表與 25 份功能文件，最終整合為台新銀行與軟體供應商共用的交易模型。"
+          "en": "I defined the buyer-payment, seller-notification and service-state logic inside one shared marketplace transaction model.",
+          "zh": "我在一套共享市集交易模型中，定義買方付款、賣方通知與服務狀態邏輯。"
         },
         "supportingStatement": {
-          "en": "The model aligned buyer payment, seller notification, logistics and transaction states across organisational boundaries.",
-          "zh": "這套模型跨越組織邊界，對齊買方付款、賣方通知、物流與交易狀態。"
+          "en": "I translated research into explicit roles, coupled transaction states and implementation references that the bank and software vendor could interpret consistently.",
+          "zh": "我將研究轉化為明確角色、相互連動的交易狀態與實作依據，讓銀行與軟體供應商能一致理解。"
         },
-        "contentStatus": "approved-from-verified-source-and-latest-user-correction"
+        "contentStatus": "source-remapped-r170"
+      },
+      "keyInterventionMap": {
+        "status": "verified-r170",
+        "sectionLabel": {
+          "en": "Where I changed the system",
+          "zh": "我改變系統的位置"
+        },
+        "before": {
+          "en": "An underdefined third-party payment brief",
+          "zh": "定義不足的第三方支付需求"
+        },
+        "intervention": {
+          "en": "A research-backed marketplace transaction and responsibility model",
+          "zh": "由研究支持的市集交易與責任模型"
+        },
+        "after": {
+          "en": "One governed definition for buyer, seller and delivery teams",
+          "zh": "供買方、賣方與交付團隊共用的受治理定義"
+        },
+        "supportingCopy": {
+          "en": "Within a two-designer engagement, I owned the documented buyer-payment and seller-notification flows, organised service states and carried the shared logic into implementation specifications and QA.",
+          "zh": "在兩位設計師共同參與的專案中，我負責文件所載的買方付款與賣方通知流程、整理服務狀態，並將共享邏輯帶入實作規格與品質檢查。"
+        }
       },
       "whatMadeThisHard": [
         {
@@ -12852,16 +12936,16 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "taishin-research-definition-model",
-        "key-design-decisions",
-        "research-and-specification-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "status-and-disclosure",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "legacyProjectIds": [
         "online-auction-payment-platform"
@@ -12920,8 +13004,171 @@
         ],
         "projectModelRef": "projects.taishin-p2p-marketplace-platform.projectModel",
         "primaryDecisionsRef": "projects.taishin-p2p-marketplace-platform.decisionNarrative.primaryDecisions",
-        "contentStatus": "approved-recovery-candidate",
-        "sectionOrderRef": "projects.taishin-p2p-marketplace-platform.sectionOrder"
+        "coreSystemInsight": {
+          "headline": {
+            "en": "A P2P marketplace could not be governed as a payment feature alone.",
+            "zh": "P2P 市集無法只以付款功能進行治理。"
+          },
+          "supportingCopy": {
+            "en": "Buyer protection, seller responsibilities, payment, logistics, notifications and recovery had to operate as one shared transaction model across the bank and software vendor.",
+            "zh": "買家保障、賣家責任、付款、物流、通知與復原，必須在銀行與軟體供應商之間以同一套共享交易模型運作。"
+          },
+          "contentStatus": "source-remapped-r170"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": "塑造設計決策的證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "metrics": [],
+          "structuredGroups": [
+            {
+              "heading": {
+                "en": "The payment brief did not cover marketplace trust",
+                "zh": "付款需求不足以涵蓋市集信任"
+              },
+              "summary": {
+                "en": "Competitive analysis, the existing payment-flow audit and market positioning work showed that payment alone could not govern protection, fulfilment and cross-party responsibility.",
+                "zh": "競品分析、既有付款流程檢視與市場定位工作顯示，單一付款能力無法治理保障、履約與跨角色責任。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 01",
+                "zh": "導向決策 01"
+              },
+              "sourceRef": "Third-party payment competitive analysis + existing-flow audit",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "30 interviews exposed coupled buyer and seller needs",
+                "zh": "30 場訪談揭露相互連動的買賣需求"
+              },
+              "summary": {
+                "en": "Buyer and seller interviews were synthesised into trust, fulfilment and transaction needs that could not be resolved through isolated screens.",
+                "zh": "買賣雙方訪談被統整為信任、履約與交易需求，這些需求無法以彼此分離的頁面解決。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISIONS 01 AND 02",
+                "zh": "支持決策 01 與 02"
+              },
+              "sourceRef": "Buyer and seller research · 30 interviews",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "7 shared logic flows connected the transaction states",
+                "zh": "7 份共享邏輯流程串接交易狀態"
+              },
+              "summary": {
+                "en": "The logic-flow set linked buyer payment, seller tasks, logistics, notifications, response actions and service recovery across organisational ownership.",
+                "zh": "邏輯流程串接買方付款、賣方任務、物流、通知、回應動作與服務復原，並跨越組織責任邊界。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 02",
+                "zh": "導向決策 02"
+              },
+              "sourceRef": "Shared transaction regulation · 7 logic-flow sheets",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "25 functional documents made the model implementable",
+                "zh": "25 份功能文件讓模型具備實作條件"
+              },
+              "summary": {
+                "en": "High-fidelity specifications reused UI-defined patterns and became a consistent clarification and QA reference for the broader platform scope.",
+                "zh": "高擬真規格重用 UI 已定義的模式，成為更廣平台範圍中一致的澄清與品質檢查依據。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISION 03",
+                "zh": "支持決策 03"
+              },
+              "sourceRef": "Functional handoff · 25 implementation documents",
+              "assetStatus": "deferred-human-source"
+            }
+          ],
+          "claimSafety": {
+            "verified": [
+              "30 interviews",
+              "7 logic-flow sheets",
+              "25 functional documents",
+              "delivered transaction-system handoff"
+            ],
+            "qualitative": [
+              "shared transaction model",
+              "cross-organisation implementation reference"
+            ],
+            "unavailable": [
+              "production launch",
+              "usage scale",
+              "commercial performance"
+            ],
+            "excluded": [
+              "GMV",
+              "revenue",
+              "conversion uplift",
+              "adoption",
+              "transaction growth",
+              "operational efficiency"
+            ]
+          },
+          "contentStatus": "source-remapped-r170"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "Established one governed marketplace definition across the bank and software vendor without overstating unavailable production results.",
+            "zh": "在銀行與軟體供應商之間建立一套受治理的市集定義，同時不誇大無法取得的正式環境成果。"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A shared transaction model",
+                "zh": "共享交易模型"
+              },
+              "copy": {
+                "en": "Connected buyer payment, seller notification, logistics, service states and recovery inside one marketplace definition.",
+                "zh": "在同一套市集定義中串接買方付款、賣方通知、物流、服務狀態與復原。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A cross-organisation delivery reference",
+                "zh": "跨組織交付依據"
+              },
+              "copy": {
+                "en": "Reduced interpretation gaps by giving the banking client and software vendor one transaction regulation for specification and clarification.",
+                "zh": "提供銀行客戶與軟體供應商同一套交易規範供規格與澄清使用，降低解讀落差。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Reusable implementation guidance",
+                "zh": "可重用的實作指引"
+              },
+              "copy": {
+                "en": "Carried UI-defined patterns into high-fidelity UX specifications so a broad platform scope could be documented consistently.",
+                "zh": "將 UI 已定義的模式帶入高擬真 UX 規格，使廣泛平台範圍能被一致記錄。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Production launch, usage, adoption and commercial outcomes are unavailable; this case claims verified system definition and delivery handoff only.",
+            "zh": "目前無法取得正式上線、使用、採用與商業成果；本案例僅主張已驗證的系統定義與交付成果。"
+          },
+          "claimBoundary": [
+            "Research and delivery counts remain Evidence, not Outcomes.",
+            "No GMV, revenue, conversion, adoption or operational-efficiency claim is made."
+          ],
+          "contentStatus": "source-remapped-r170"
+        },
+        "contentStatus": "recruiter-first-r170",
+        "sectionOrderRef": "projects.taishin-p2p-marketplace-platform.presentation.sectionOrder"
       },
       "domain": {
         "en": "P2P commerce",
@@ -12976,6 +13223,98 @@
         ],
         "recommendedHeadline": "Converted 30 interviews into a governed marketplace transaction model, 7 shared logic flows and 25 implementation documents.",
         "boundary": "No verified adoption/revenue uplift."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       }
     },
     "cathay-mortgage-assistant": {
@@ -23536,22 +23875,74 @@
         },
         "taishin-p2p-marketplace-platform": {
           "sections": {
-            "taishin-research-definition-model": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "projectModel"
+                "whatMadeThisHard"
               ],
-              "presentationType": "system-model",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "research-and-specification-evidence": {
+            "contribution": {
               "sourcePaths": [
-                "publicContent",
-                "projectClosure.deliveryAndMeasurement"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "definition-proof",
+              "presentationType": "shared-contribution",
+              "renderRequired": true
+            },
+            "core-system-insight": {
+              "sourcePaths": [
+                "publicContent.coreSystemInsight"
+              ],
+              "presentationType": "shared-core-system-insight",
+              "renderRequired": true
+            },
+            "design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": [
+                "publicContent.decisionEvidence"
+              ],
+              "presentationType": "shared-decision-support-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel"
+              ],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
-          }
+          },
+          "supporting": [
+            {
+              "sourcePath": "projectModel",
+              "parentSectionId": "evidence",
+              "presentationType": "research-definition-trace"
+            },
+            {
+              "sourcePath": "processEvidence",
+              "parentSectionId": "evidence",
+              "presentationType": "supporting-research"
+            },
+            {
+              "sourcePath": "projectClosure.statusAndDisclosure",
+              "parentSectionId": "my-accountability",
+              "presentationType": "delivery-boundary"
+            }
+          ]
         },
         "cathay-mortgage-assistant": {
           "sections": {

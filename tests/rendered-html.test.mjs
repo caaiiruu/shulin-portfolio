@@ -470,7 +470,7 @@ test("renders verified Key Intervention Maps from the canonical SSOT only", () =
       assert.ok(map.sectionLabel?.en && map.sectionLabel?.zh, `${id}.sectionLabel`);
     }
   }
-  for (const id of ["taishin-p2p-marketplace-platform", "cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
+  for (const id of ["cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
     assert.equal(ssot.projects[id].keyInterventionMap, undefined, id);
   }
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
@@ -1979,4 +1979,45 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.match(app,/if\(list\(visibleCopy\)\.some\(copy=>normalizedTooltipCopy\(copy\)===normalizedSource\)\)return null/);
   assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
+});
+
+test("R170 projects Taishin P2P through one recruiter-first owner without legacy or claim leakage",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["taishin-p2p-marketplace-platform"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNav=["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"];
+  const legacy=["critical-problem","taishin-research-definition-model","key-design-decisions","research-and-specification-evidence","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"];
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.equal(project.presentation.decisionOptions.showVisuals,false);
+  assert.equal(project.title.en,"Trust and transaction governance for a P2P marketplace");
+  assert.ok(!project.title.en.startsWith("From "));
+  assert.equal(project.infoGrid.type.value,"Marketplace Platform");
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.outcomes.cards.length,3);
+  assert.match(project.publicContent.outcomes.closing.en,/Production launch, usage, adoption and commercial outcomes are unavailable/);
+  assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"I OWNED THE OUTCOME");
+  assert.equal(project.ownershipModel.accountabilityPresentation.shared.label.en,"SHARED DECISIONS");
+  assert.ok(project.ownershipModel.accountabilityPresentation.partnerOwned);
+  assert.equal(project.searchIndexV2.canonicalId,"taishin-p2p-marketplace-platform");
+  assert.ok(project.searchIndexV2.problemTags.en.includes("transaction exception handling"));
+  assert.ok(legacy.every(key=>!project.presentation.sectionOrder.includes(key)));
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  const publicOutcomeCopy={
+    title:project.title,
+    atAGlance:project.atAGlance,
+    headline:project.publicContent.outcomes.headline,
+    cards:project.publicContent.outcomes.cards,
+  };
+  assert.doesNotMatch(JSON.stringify(publicOutcomeCopy),/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/i);
 });
