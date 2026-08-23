@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r166.2",
+  "contentVersion": "2026-08-23-r169",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -6260,10 +6260,156 @@
           "outcome": "Shipped a persistent homepage entry, claimable count, red/green hierarchy and Claim → View states.",
           "contentStatus": "approved-facts-copy-review-2026-08-05"
         },
-        "contentStatus": "approved",
-        "sectionOrderRef": "projects.voucher-center.sectionOrder",
+        "contentStatus": "recruiter-first-r169",
+        "sectionOrderRef": "projects.voucher-center.presentation.sectionOrder",
         "flashVoucherEvidenceRef": "projects.voucher-center.flashVoucherEvidence",
-        "systemFoundationRef": "projects.voucher-center.publicContent.systemFoundation"
+        "systemFoundationRef": "projects.voucher-center.publicContent.systemFoundation",
+        "coreSystemInsight": {
+          "headline": {
+            "en": "Voucher discovery could not scale while each programme depended on another campaign destination.",
+            "zh": "當每個計畫都依賴另一個活動目的地時，優惠券探索就無法擴展。"
+          },
+          "supportingCopy": {
+            "en": "The product needed a persistent discovery layer and explicit ownership states so customers could find claimable value, understand what claiming changed and return to it beyond one campaign.",
+            "zh": "產品需要常設探索層與明確擁有狀態，讓顧客能找到可領取價值、理解領取後的改變，並在單次活動之外再次返回。"
+          },
+          "contentStatus": "source-remapped-r169"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": "塑造設計決策的證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "metrics": [],
+          "structuredGroups": [
+            {
+              "heading": {
+                "en": "Flash Voucher proved selected behaviours could ship",
+                "zh": "Flash Voucher 證明部分行為能正式上線"
+              },
+              "summary": {
+                "en": "The campaign-scoped precursor established a focused Voucher journey, explicit availability states and direct shopping actions, while its proposal GMV and ROI remained modelled targets—not outcomes.",
+                "zh": "活動範圍的前導產品建立聚焦優惠券旅程、明確可用狀態與直接購物操作；提案中的 GMV 與 ROI 仍僅是模型化目標，而非成果。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 01",
+                "zh": "導向決策 01"
+              },
+              "sourceRef": "Flash Voucher product and release evidence",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "Research supported a stronger persistent entry and consolidated direction",
+                "zh": "研究支持更醒目的常設入口與整合方向"
+              },
+              "summary": {
+                "en": "In the 20-participant architecture study, 12 preferred the stronger Voucher Center entry and the consolidated navigation alternative led the split comparison 7 to 4.",
+                "zh": "在 20 位參與者的架構研究中，12 位偏好更醒目的 Voucher Center 入口；整合式導覽方案在分組比較中以 7 比 4 領先。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISIONS 01 AND 03",
+                "zh": "支持決策 01 與 03"
+              },
+              "sourceRef": "Voucher Center usability testing · Feb 2025",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "Action semantics changed the product state model",
+                "zh": "操作語意改變產品狀態模型"
+              },
+              "summary": {
+                "en": "18 / 20 participants misunderstood “Use now”, establishing the need to separate claiming, post-claim viewing and purchase-time application.",
+                "zh": "18／20 位參與者誤解「立即使用」，證明領取、領取後查看與購買時套用必須分開。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 02",
+                "zh": "導向決策 02"
+              },
+              "sourceRef": "Voucher Center usability testing · Feb 2025",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "Research preserved next-phase value without overstating launch scope",
+                "zh": "研究保留下一階段價值，同時不誇大上線範圍"
+              },
+              "summary": {
+                "en": "16 / 20 supported Claim all and four requested it without prompting, but Claim all and complete consolidated navigation did not ship in the first release.",
+                "zh": "16／20 位參與者支持全部領取，另有 4 位在未提示下主動提出；但全部領取與完整整合式導覽並未在第一階段上線。"
+              },
+              "decisionLink": {
+                "en": "DEFINED DECISION 03 BOUNDARY",
+                "zh": "界定決策 03 邊界"
+              },
+              "sourceRef": "Voucher Center usability testing + shipped-scope record",
+              "assetStatus": "deferred-human-source"
+            }
+          ],
+          "claimSafety": {
+            "excluded": [
+              "proposal-era GMV and ROI presented as achieved outcomes",
+              "Claim all presented as shipped",
+              "complete consolidated navigation presented as shipped",
+              "Voucher Wallet, Checkout or Wallet Search research projected into Voucher Center"
+            ]
+          },
+          "contentStatus": "source-remapped-r169"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "Established a shipped, persistent Voucher foundation without overstating the research-supported next phase.",
+            "zh": "建立已上線的常設優惠券基礎，同時不誇大研究支持的下一階段。"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "Persistent Voucher discovery shipped",
+                "zh": "常設優惠券探索已上線"
+              },
+              "copy": {
+                "en": "The first release introduced a homepage Voucher Center entry and a visible count of Vouchers available to claim.",
+                "zh": "第一階段上線首頁 Voucher Center 入口，以及可領取優惠券數量的可見提示。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Claim ownership became explicit",
+                "zh": "領取擁有狀態變得明確"
+              },
+              "copy": {
+                "en": "The shipped card model separated Claim from View, making pre-claim and post-claim states understandable without implying automatic application.",
+                "zh": "已上線卡片模型將領取與查看分開，使領取前後狀態清楚可懂，且不暗示自動套用。"
+              }
+            },
+            {
+              "heading": {
+                "en": "The state model became reusable capability",
+                "zh": "狀態模型成為可重用能力"
+              },
+              "copy": {
+                "en": "The feature-specific Voucher Card evolution was abstracted into a reusable Tangram component for cross-product use.",
+                "zh": "功能情境中的優惠券卡片演進被抽象為可跨產品使用的 Tangram 元件。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Claim all and complete consolidated navigation remained research-supported next directions; no conversion, adoption, GMV or ROI outcome is claimed.",
+            "zh": "全部領取與完整整合式導覽仍是研究支持的下一步；本案例不宣稱轉換、採用、GMV 或 ROI 成果。"
+          },
+          "claimBoundary": [
+            "Research counts remain Evidence, not Outcomes.",
+            "Proposal-era Flash Voucher GMV and ROI remain modelled targets, not achieved results."
+          ],
+          "contentStatus": "source-remapped-r169"
+        }
       },
       "research": {
         "competitiveVisualAudit2025": {
@@ -6757,33 +6903,38 @@
         "problemIntents": [
           "improve-voucher-discovery",
           "clarify-claim-states",
-          "support-campaign-operations"
+          "generalise-campaign-behaviour",
+          "support-voucher-operations"
         ],
-        "contentStatus": "approved-listing-detail-consistency",
         "problemTags": {
           "en": [
             "Voucher discovery",
+            "Voucher claiming",
             "Claim-state clarity",
-            "Campaign operations"
+            "Voucher applicability",
+            "Persistent Voucher experience"
           ],
           "zh": [
             "優惠券探索",
+            "優惠券領取",
             "領取狀態清晰度",
-            "活動營運"
+            "優惠券適用性",
+            "常設優惠券體驗"
           ]
         },
         "capabilityTags": {
           "en": [
             "Persistent entry",
-            "Explicit claiming",
-            "Post-claim states"
+            "Explicit Claim → View states",
+            "Reusable Voucher capability"
           ],
           "zh": [
             "常設入口",
-            "明確領取",
-            "領取後狀態"
+            "明確領取 → 查看狀態",
+            "可重用優惠券能力"
           ]
-        }
+        },
+        "contentStatus": "source-remapped-r169"
       },
       "confidentialityNote": {
         "en": "*Metrics are rounded or abstracted for confidentiality.*",
@@ -6845,7 +6996,56 @@
             "zh": "設計系統確認"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "A clear line between the persistent product model I defined and the release decisions made with Product, Engineering, Business and Design System partners.",
+            "zh": "清楚區分我定義的常設產品模型，以及與產品、工程、商務及設計系統夥伴共同做出的上線決策。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我對成果負責"
+            },
+            "title": {
+              "en": "Defined the persistent Voucher discovery and Claim → View product model",
+              "zh": "定義常設優惠券探索與領取 → 查看產品模型"
+            },
+            "text": {
+              "en": "Led product structure, entry concepts, prototype direction, usability-test synthesis, interaction states, visual-system direction and handoff.",
+              "zh": "主導產品架構、入口概念、原型方向、可用性測試統整、互動狀態、視覺系統方向與交付。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Turned research, commercial placement and delivery capacity into a staged launch direction",
+              "zh": "將研究、商業版位與交付資源轉化為分階段上線方向"
+            },
+            "text": {
+              "en": "Phase-one scope, Claim all deferral and the roadmap from Flash Voucher to Voucher Center were decided with Product, Engineering, Business and Design System partners.",
+              "zh": "第一階段範圍、延後全部領取，以及從 Flash Voucher 演進至 Voucher Center 的路線，皆與產品、工程、商務及設計系統夥伴共同決定。"
+            }
+          },
+          "partnerOwned": {
+            "label": {
+              "en": "PARTNER-OWNED BOUNDARY",
+              "zh": "夥伴責任邊界"
+            },
+            "title": {
+              "en": "Business prioritisation, technical feasibility and release planning",
+              "zh": "商業優先排序、技術可行性與上線規劃"
+            },
+            "text": {
+              "en": "PRD and business priorities, Engineering feasibility and release planning, and final Design System confirmation remained partner-owned.",
+              "zh": "產品需求與商業優先順序、工程可行性與上線規劃，以及最終設計系統確認仍由合作夥伴負責。"
+            }
+          },
+          "contentStatus": "source-remapped-r169"
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -6897,26 +7097,26 @@
       },
       "type_zh": "獎勵系統",
       "keyInterventionMap": {
-        "status": "verified",
+        "status": "verified-r169",
         "sectionLabel": {
           "en": "Where I changed the system",
           "zh": "我改變系統的位置"
         },
         "before": {
-          "en": "Vouchers scattered across journeys",
-          "zh": "票券分散在不同入口"
+          "en": "Campaign-specific Voucher destinations and passive deposits",
+          "zh": "活動專屬的優惠券目的地與被動存入"
         },
         "intervention": {
-          "en": "Centralised visibility and action",
-          "zh": "集中查看、判斷與操作"
+          "en": "A tested persistent entry and explicit Claim → View model",
+          "zh": "經驗證的常設入口與明確領取 → 查看模型"
         },
         "after": {
-          "en": "One place to understand and manage vouchers",
-          "zh": "使用者能在同一處理解並管理票券"
+          "en": "One reusable product model for discovery, claiming and post-claim access",
+          "zh": "一套支援探索、領取與領取後存取的可重用產品模型"
         },
         "supportingCopy": {
-          "en": "I brought voucher visibility, applicability, and key actions into one tested flow so users no longer had to piece together information across separate journeys.",
-          "zh": "我將票券資訊、適用狀態與關鍵操作整合進同一個經過測試的流程，讓使用者不必再從不同旅程拼湊資訊。"
+          "en": "I synthesised the research into a persistent entry, explicit action states and a staged launch boundary, then carried the proven state model into a reusable shared component.",
+          "zh": "我將研究統整為常設入口、明確操作狀態與分階段上線邊界，再把經驗證的狀態模型帶入可重用的共享元件。"
         }
       },
       "cardTitle": {
@@ -6927,12 +7127,12 @@
         "優惠券探索入口"
       ],
       "title": {
-        "en": "From fragmented campaign discovery to a persistent Voucher claim product",
-        "zh": "從分散的活動型探索，到常設優惠券領取產品"
+        "en": "Persistent Voucher discovery and access",
+        "zh": "常設優惠券探索與領取"
       },
       "atAGlance": {
-        "en": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
-        "zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。"
+        "en": "Led product structure and interaction design over 5 months, turning campaign-specific Voucher discovery into a persistent claim product; research with 20 participants shaped the shipped entry, claimable count and reusable Claim → View states.",
+        "zh": "在 5 個月內主導產品架構與互動設計，將活動專屬的優惠券探索轉化為常設領取產品；20 位參與者的研究塑造已上線入口、可領取數量與可重用的領取 → 查看狀態。"
       },
       "problemTypes": {
         "en": [
@@ -6974,12 +7174,10 @@
           },
           "secondary": {
             "en": [
-              "Campaign / Voucher Operations",
-              "Business / Sponsor stakeholders"
+              "Customers returning to view claimed Vouchers"
             ],
             "zh": [
-              "活動／優惠券營運",
-              "商務／贊助利害關係人"
+              "返回查看已領取優惠券的顧客"
             ]
           }
         },
@@ -7003,109 +7201,110 @@
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "valueIBrought": {
         "headline": {
-          "en": "Defined the reusable Claim → View state model and the launch boundary that separated shipped capability from research-supported next steps.",
-          "zh": "定義可重用的領取 → 查看狀態模型與上線邊界，清楚區分已上線能力和研究支持的下一步。"
+          "en": "I turned a campaign-scoped precursor into a tested, persistent Voucher discovery and claim model.",
+          "zh": "我將活動範圍的前導產品轉化為經驗證的常設優惠券探索與領取模型。"
         },
         "supportingStatement": {
-          "en": "Kept Flash Voucher as in-market precursor evidence while preserving ~S$1.5M GMV and ~15× ROI strictly as proposal-era modelled targets.",
-          "zh": "將 Flash Voucher 保持為市場前導證據，並嚴格把約 150 萬新幣 GMV 與約 15 倍 ROI 標示為提案階段的模型化目標。"
+          "en": "I synthesised the research into a persistent entry, explicit action states and a staged launch boundary, then carried the proven state model into a reusable shared component.",
+          "zh": "我將研究統整為常設入口、明確操作狀態與分階段上線邊界，再把經驗證的狀態模型帶入可重用的共享元件。"
         },
-        "contentStatus": "approved-distinct-contribution-proof"
+        "contentStatus": "source-remapped-r169"
       },
       "decisionNarrative": {
         "primaryDecisions": [
           {
             "id": "voucher-center-decision-01",
             "title": {
+              "en": "Generalise a shipped campaign precursor into a persistent product",
+              "zh": "將已上線的活動前導一般化為常設產品"
+            },
+            "whatIDecided": {
+              "en": "Used Flash Voucher as evidence for proven entry and state behaviours, then defined Voucher Center as a persistent destination rather than copying the campaign journey unchanged.",
+              "zh": "以 Flash Voucher 作為已驗證入口與狀態行為的證據，再將 Voucher Center 定義為常設目的地，而非原封不動複製活動旅程。"
+            },
+            "whyThisChoice": {
+              "en": "Campaign destinations could prove a focused journey, but repeated programmes still left discovery fragmented and claimable value easy to miss.",
+              "zh": "活動目的地可以驗證聚焦旅程，但重複推出計畫仍會使探索分散，並讓可領取價值容易被忽略。"
+            },
+            "whatThisRequired": {
+              "en": "The team had to separate campaign-specific mechanics from the entry, availability and card-state behaviours that could become reusable product rules.",
+              "zh": "團隊必須區分活動專屬機制，以及可轉化為可重用產品規則的入口、可用性與卡片狀態行為。"
+            },
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "type_zh": "必要基礎",
+              "content": {
+                "en": "The team had to separate campaign-specific mechanics from the entry, availability and card-state behaviours that could become reusable product rules.",
+                "zh": "團隊必須區分活動專屬機制，以及可轉化為可重用產品規則的入口、可用性與卡片狀態行為。"
+              }
+            },
+            "outcome": {
+              "en": "A persistent Voucher discovery and claim product with a source-traceable Flash Voucher evidence bridge.",
+              "zh": "一套常設優惠券探索與領取產品，並保留可追溯至 Flash Voucher 的證據橋接。"
+            },
+            "contentStatus": "source-remapped-r169"
+          },
+          {
+            "id": "voucher-center-decision-02",
+            "title": {
               "en": "Separate participation from application",
               "zh": "將參與領取與購買套用分開"
             },
-            "principle": {
-              "en": "Claiming creates ownership; application remains contextual to purchase.",
-              "zh": "領取建立擁有狀態；套用仍保留在購買情境中。"
-            },
             "whatIDecided": {
-              "en": "Defined Claim as the participation action and View as the post-claim state, creating a reusable Claim → View model while keeping Voucher application contextual to purchase.",
-              "zh": "將「領取」定義為參與操作，將「查看」定義為領取後狀態，形成可重用的領取 → 查看模型；優惠券套用仍留在購買情境中。"
+              "en": "Defined Claim as the participation action and View as the post-claim state, while keeping Voucher application contextual to purchase.",
+              "zh": "將「領取」定義為參與操作，將「查看」定義為領取後狀態，優惠券套用則保留在購買情境中。"
             },
             "whyThisChoice": {
               "en": "18 / 20 participants misunderstood “Use now” as an automatic later action, showing that one CTA could not truthfully represent both ownership and application.",
               "zh": "18／20 位參與者誤解「立即使用」會在之後自動執行，顯示單一操作無法如實代表擁有與套用兩種狀態。"
             },
-            "evidenceSummary": {
-              "en": "18 / 20 misunderstood “Use now”.",
-              "zh": "18／20 誤解「立即使用」。"
+            "outcome": {
+              "en": "A reusable Claim → View state model that made ownership explicit without misrepresenting purchase-time application.",
+              "zh": "一套可重用的領取 → 查看狀態模型，明確呈現擁有狀態而不誤導購買時的套用行為。"
             },
-            "resultingModel": {
-              "en": "Claim → View state model",
-              "zh": "領取 → 查看狀態模型"
-            },
-            "status": "research-informed-shipped-state-model",
-            "contentStatus": "approved",
-            "effectOrResult": {
-              "en": "Claim → View state model",
-              "zh": "領取 → 查看狀態模型"
-            }
+            "contentStatus": "source-remapped-r169"
           },
           {
-            "id": "voucher-center-decision-02",
+            "id": "voucher-center-decision-03",
             "title": {
               "en": "Preserve the target architecture without blocking launch",
               "zh": "不阻礙上線，同時保留目標架構"
             },
             "whatIDecided": {
-              "en": "Shipped the persistent entry, claimable count and Claim → View states within available launch capacity, while preserving consolidated navigation as the next product direction.",
-              "zh": "在可用上線資源內交付常設入口、可領取數量與領取 → 查看狀態，同時將整合式導覽保留為下一階段產品方向。"
+              "en": "Shipped the persistent entry, claimable count and Claim → View states within available launch capacity, while preserving consolidated navigation and Claim all as research-supported next directions.",
+              "zh": "在可用上線資源內交付常設入口、可領取數量與領取 → 查看狀態，同時將整合式導覽與全部領取保留為研究支持的下一步。"
             },
             "whyThisChoice": {
-              "en": "Paid retail-media homepage placement had already been committed as the first priority, while Engineering capacity could not support the complete target architecture for launch.",
-              "zh": "付費零售媒體首頁版位已承諾並需維持第一順位；工程資源無法在上線時支援完整目標架構。"
-            },
-            "constraintManaged": {
-              "en": "Commercial homepage placement had to remain first priority, and Engineering capacity limited the first-release architecture.",
-              "zh": "商業首頁版位必須維持第一順位，且工程資源限制第一階段可交付的架構。"
+              "en": "Paid retail-media homepage placement was already committed, while Engineering capacity could not support the complete research-preferred architecture for launch.",
+              "zh": "付費零售媒體首頁版位已承諾，而工程資源無法在上線時支援研究偏好的完整架構。"
             },
             "optionalBlock": {
               "type": "TRADE-OFF ACCEPTED",
               "type_zh": "接受的取捨",
               "content": {
-                "en": "We chose to ship within launch capacity, accepting lower entry prominence and some cross-page navigation to protect existing commercial commitments and avoid blocking launch on the complete architecture.",
-                "zh": "我們選擇在現實上線資源內交付，接受較低的入口醒目度與部分跨頁導覽，以保護既有商業承諾，並避免完整架構阻礙上線。"
+                "en": "We accepted lower entry prominence and some cross-page navigation to protect existing commercial commitments and ship the validated foundation without waiting for the complete architecture.",
+                "zh": "我們接受較低的入口醒目度與部分跨頁導覽，以保護既有商業承諾，並在不等待完整架構的情況下交付已驗證基礎。"
               }
             },
             "tradeOff": {
-              "chosen": "Ship within available launch capacity",
+              "chosen": "Ship the validated foundation within launch capacity",
               "notChosen": "Complete consolidated architecture at launch",
               "acceptedLoss": "Lower entry prominence and some cross-page navigation",
               "protectedValue": "Existing commercial commitments and an unblocked launch",
               "constraint": "Committed paid retail-media homepage placement and limited Engineering capacity"
             },
-            "preservedDirection": {
-              "en": "Consolidated navigation remained the target architecture for the next phase.",
-              "zh": "整合式導覽仍保留為下一階段目標架構。"
+            "outcome": {
+              "en": "A shipped first-release foundation with the research-supported target architecture preserved for the next phase.",
+              "zh": "一套已上線的第一階段基礎，並為下一階段保留研究支持的目標架構。"
             },
-            "shippedOutcome": [
-              "Homepage Voucher Center entry",
-              "Count of Vouchers available to claim",
-              "Red/green Voucher Center visual hierarchy",
-              "Claim → View Voucher Card state"
-            ],
-            "notShipped": [
-              "Claim all",
-              "Complete consolidated navigation"
-            ],
-            "status": "shipped-with-preserved-target-direction",
-            "contentStatus": "approved",
-            "effectOrResult": {
-              "en": "Consolidated navigation remained the target architecture for the next phase.",
-              "zh": "整合式導覽仍保留為下一階段目標架構。"
-            }
+            "contentStatus": "source-remapped-r169"
           }
         ],
         "sourcePaths": [
           "projects.voucher-center.publicContent.decisionNarrative.primaryDecisions"
         ],
-        "contentStatus": "canonical"
+        "contentStatus": "source-remapped-r169",
+        "maximumCards": 3
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -7230,13 +7429,16 @@
       },
       "sectionOrder": [
         "hero",
-        "phased-validation-path",
-        "research-changed-the-model",
-        "key-decisions",
-        "product-scope",
-        "reusable-system",
-        "ownership-and-evidence",
-        "continue-exploring"
+        "at-a-glance",
+        "info-grid",
+        "what-made-this-hard",
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "flashVoucherEvidence": {
         "id": "flash-voucher-poc-2024-r142",
@@ -7498,6 +7700,98 @@
         ],
         "recommendedHeadline": "Research directly changed the first release: stronger entry, explicit Claim states and a preserved consolidated architecture.",
         "boundary": "Research ratios are decision evidence, not business growth."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       }
     },
     "game-center": {
@@ -23332,63 +23626,71 @@
         },
         "voucher-center": {
           "sections": {
-            "phased-validation-path": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "publicContent.phasedValidationPath"
+                "whatMadeThisHard"
               ],
-              "presentationType": "product-evolution",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "research-changed-the-model": {
+            "contribution": {
               "sourcePaths": [
-                "publicContent.researchChangedTheModel"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "research-decision-evidence",
+              "presentationType": "shared-contribution",
               "renderRequired": true
             },
-            "key-decisions": {
+            "core-system-insight": {
               "sourcePaths": [
-                "publicContent.decisionNarrative.primaryDecisions"
+                "publicContent.coreSystemInsight"
               ],
-              "presentationType": "decision-sequence",
+              "presentationType": "shared-core-system-insight",
               "renderRequired": true
             },
-            "product-scope": {
+            "design-decisions": {
               "sourcePaths": [
-                "publicContent.productScope"
+                "decisionNarrative.primaryDecisions"
               ],
-              "presentationType": "shipped-next",
+              "presentationType": "shared-design-decisions",
               "renderRequired": true
             },
-            "reusable-system": {
+            "evidence": {
               "sourcePaths": [
-                "publicContent.systemFoundation"
+                "publicContent.decisionEvidence"
               ],
-              "presentationType": "system-foundation",
+              "presentationType": "shared-decision-support-evidence",
               "renderRequired": true
             },
-            "ownership-and-evidence": {
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
               "sourcePaths": [
                 "ownershipModel"
               ],
-              "presentationType": "ownership",
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           },
           "supporting": [
             {
               "sourcePath": "publicContent.decisionNarrative.supportingDecisions",
-              "parentSectionId": "key-decisions",
+              "parentSectionId": "evidence",
               "presentationType": "supporting-decision"
             },
             {
               "sourcePath": "productEvolution.flashVoucher2024",
-              "parentSectionId": "phased-validation-path",
+              "parentSectionId": "evidence",
               "presentationType": "precursor-evidence"
             },
             {
               "sourcePath": "research.competitiveVisualAudit2025",
-              "parentSectionId": "research-changed-the-model",
+              "parentSectionId": "evidence",
               "presentationType": "supporting-research"
             }
           ]

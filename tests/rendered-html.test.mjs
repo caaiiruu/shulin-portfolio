@@ -1980,3 +1980,36 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });
+
+test("R169 projects Voucher Center through one recruiter-first owner without legacy or claim leakage",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["voucher-center"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNav=["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"];
+  const legacy=["phased-validation-path","research-changed-the-model","key-decisions","product-scope","reusable-system","ownership-and-evidence","continue-exploring"];
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.equal(project.presentation.decisionOptions.showVisuals,false);
+  assert.equal(project.title.en,"Persistent Voucher discovery and access");
+  assert.ok(!project.title.en.startsWith("From "));
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),["voucher-center-decision-01","voucher-center-decision-02","voucher-center-decision-03"]);
+  assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.outcomes.cards.length,3);
+  assert.ok(project.publicContent.outcomes.closing.en.includes("no conversion, adoption, GMV or ROI outcome is claimed"));
+  assert.ok(project.ownershipModel.ledByMe.length&&project.ownershipModel.coDecided.length&&project.ownershipModel.partnerOwned.length);
+  assert.ok(project.searchIndexV2.problemTags.en.includes("Voucher applicability"));
+  assert.equal(project.searchIndexV2.canonicalProjectId,"voucher-center");
+  assert.ok(legacy.every(key=>!project.presentation.sectionOrder.includes(key)));
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  assert.match(JSON.stringify(project.publicContent.decisionEvidence),/Flash Voucher/);
+  assert.doesNotMatch(JSON.stringify({title:project.title,atAGlance:project.atAGlance,decisions:project.decisionNarrative.primaryDecisions,outcomes:project.publicContent.outcomes}),/Voucher Wallet|Wallet Search|Checkout research/i);
+  assert.doesNotMatch(JSON.stringify(project.publicContent.outcomes),/S\$1\.5M|15×|15x|conversion uplift|adoption uplift/i);
+});

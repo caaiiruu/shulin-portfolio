@@ -12,7 +12,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/voucher-center", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -52,6 +52,58 @@ for (const viewport of viewports) {
     if (metrics.horizontalOverflow) failures.push(`${viewport.name} ${route} horizontal overflow`);
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
+  }
+
+  await page.goto(`${baseUrl}/site/work/voucher-center`,{waitUntil:"networkidle"});
+  const voucherCenterPresentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll");
+    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    const headings=[...dialog.querySelectorAll("h2,h3")].filter(visible).map(node=>node.textContent.trim());
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      tags:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
+      legacy:["Phased Validation Path","Research Changed the Model","Product Scope","Reusable System","Ownership and Evidence","Continue Exploring"].filter(text=>headings.includes(text)),
+      text:dialog.innerText,
+      overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),
+      overflowX:scroll?getComputedStyle(scroll).overflowX:null
+    };
+  });
+  const expectedVoucherCenterSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
+  if(voucherCenterPresentation.title!=="Persistent Voucher discovery and access"||voucherCenterPresentation.title.startsWith("From "))failures.push(`${viewport.name} Voucher Center Hero mismatch: ${voucherCenterPresentation.title}`);
+  if(voucherCenterPresentation.tags.length||voucherCenterPresentation.classificationVisible)failures.push(`${viewport.name} Voucher Center Hero taxonomy leaked: ${JSON.stringify(voucherCenterPresentation.tags)}`);
+  if(JSON.stringify(voucherCenterPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Voucher Center navigator mismatch: ${JSON.stringify(voucherCenterPresentation.navigator)}`);
+  if(JSON.stringify(voucherCenterPresentation.sectionOrder)!==JSON.stringify(expectedVoucherCenterSections))failures.push(`${viewport.name} Voucher Center IA mismatch: ${JSON.stringify(voucherCenterPresentation.sectionOrder)}`);
+  if(voucherCenterPresentation.decisionCount!==3||voucherCenterPresentation.evidenceCount!==4||voucherCenterPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Voucher Center shared primitive mismatch: ${JSON.stringify(voucherCenterPresentation)}`);
+  if(voucherCenterPresentation.legacy.length)failures.push(`${viewport.name} Voucher Center legacy leakage: ${JSON.stringify(voucherCenterPresentation.legacy)}`);
+  if(/Voucher Wallet|Wallet Search|S\$1\.5M GMV|15× ROI/.test(voucherCenterPresentation.text))failures.push(`${viewport.name} Voucher Center forbidden scope/claim leaked`);
+  if(!["hidden","clip"].includes(voucherCenterPresentation.overflowX))failures.push(`${viewport.name} Voucher Center dialog horizontal containment failed: ${JSON.stringify(voucherCenterPresentation)}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r169-voucher-center",viewport.name);
+    fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[
+      ["01-overview","#projectOverviewSection"],
+      ["02-complexity","#systemCaseComplexitySection"],
+      ["03-decisions","#systemCaseDecisionsSection"],
+      ["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type"],
+      ["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type"],
+      ["06-outcomes","#systemCaseOutcomesSection"],
+      ["07-ownership","#systemCaseAccountabilitySection"]
+    ];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector] of checkpoints){
+      const target=page.locator(selector).first();
+      if(!await target.count()){failures.push(`${viewport.name} Voucher Center checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,target.offsetTop-96)},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
   }
 
   await page.goto(`${baseUrl}/site/work/cathay-sit-review-remediation-operations`,{waitUntil:"networkidle"});
