@@ -12,7 +12,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/taishin-p2p-marketplace-platform", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -52,6 +52,60 @@ for (const viewport of viewports) {
     if (metrics.horizontalOverflow) failures.push(`${viewport.name} ${route} horizontal overflow`);
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
+  }
+
+  await page.goto(`${baseUrl}/site/work/taishin-p2p-marketplace-platform`,{waitUntil:"networkidle"});
+  const taishinPresentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll");
+    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    const headings=[...dialog.querySelectorAll("h2,h3")].filter(visible).map(node=>node.textContent.trim());
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      tags:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
+      legacy:["Critical Problem","Business Impact","Taishin Research and Definition Model","Research and Specification Evidence","Ownership and Collaboration","Delivery and Measurement","Status and Disclosure","Continue Exploring"].filter(text=>headings.includes(text)),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.offsetTop,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.offsetTop,
+      text:dialog.innerText,
+      overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),
+      overflowX:scroll?getComputedStyle(scroll).overflowX:null
+    };
+  });
+  const expectedTaishinSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
+  if(taishinPresentation.title!=="Trust and transaction governance for a P2P marketplace"||taishinPresentation.title.startsWith("From "))failures.push(`${viewport.name} Taishin Hero mismatch: ${taishinPresentation.title}`);
+  if(taishinPresentation.tags.length||taishinPresentation.classificationVisible)failures.push(`${viewport.name} Taishin Hero taxonomy leaked: ${JSON.stringify(taishinPresentation.tags)}`);
+  if(JSON.stringify(taishinPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Taishin navigator mismatch: ${JSON.stringify(taishinPresentation.navigator)}`);
+  if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
+  if(taishinPresentation.decisionCount!==3||taishinPresentation.evidenceCount!==4||taishinPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Taishin shared primitive mismatch: ${JSON.stringify(taishinPresentation)}`);
+  if(taishinPresentation.legacy.length)failures.push(`${viewport.name} Taishin legacy leakage: ${JSON.stringify(taishinPresentation.legacy)}`);
+  if(/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/.test(taishinPresentation.text))failures.push(`${viewport.name} Taishin unsupported outcome claim leaked`);
+  if(!["hidden","clip"].includes(taishinPresentation.overflowX))failures.push(`${viewport.name} Taishin dialog horizontal containment failed: ${JSON.stringify(taishinPresentation)}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r170-taishin",viewport.name);
+    fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[
+      ["01-overview","#projectOverviewSection"],
+      ["02-complexity","#systemCaseComplexitySection"],
+      ["03-decisions","#systemCaseDecisionsSection"],
+      ["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type"],
+      ["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type"],
+      ["06-outcomes","#systemCaseOutcomesSection"],
+      ["07-ownership","#systemCaseAccountabilitySection"]
+    ];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector] of checkpoints){
+      const target=page.locator(selector).first();
+      if(!await target.count()){failures.push(`${viewport.name} Taishin checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,target.offsetTop-96)},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
   }
 
   await page.goto(`${baseUrl}/site/work/cathay-sit-review-remediation-operations`,{waitUntil:"networkidle"});
