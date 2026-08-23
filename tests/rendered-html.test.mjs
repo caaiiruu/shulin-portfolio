@@ -1995,7 +1995,7 @@ test("R169 projects Voucher Center through one recruiter-first owner without leg
   assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
   assert.equal(project.presentation.visibility.problemTypes,false);
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
-  assert.equal(project.title.en,"Persistent Voucher discovery and access");
+  assert.equal(project.title.en,"Campaign-based Voucher discovery to a persistent claim product");
   assert.ok(!project.title.en.startsWith("From "));
   assert.equal(project.whatMadeThisHard.length,3);
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);

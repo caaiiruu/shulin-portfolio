@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-23-r169",
+  "contentVersion": "2026-08-23-r169.1",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -5886,8 +5886,8 @@
     "voucher-center": {
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
-      "home_title": "Persistent Voucher discovery and access",
-      "home_title_zh": "常設優惠券探索與領取",
+      "home_title": "Campaign-based Voucher discovery to a persistent claim product",
+      "home_title_zh": "從活動型優惠券探索到常設領取產品",
       "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
       "transformation_zh": "從分散的活動型探索，到常設優惠券領取產品",
       "problem_types": [
@@ -5906,8 +5906,8 @@
       "role_zh": "資深產品設計師",
       "owned": "End-to-end Voucher Center discovery and claim model, research synthesis, interaction states and shipped-scope definition",
       "owned_zh": "端到端 Voucher Center 探索與領取模型、研究統整、互動狀態與上線範圍定義",
-      "at_glance": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
-      "at_glance_zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。",
+      "at_glance": "Led product structure and interaction design of a persistent Voucher claim experience, using 20-participant validation to turn campaign-specific discovery into reusable entry, claiming and ownership states over 5 months.",
+      "at_glance_zh": "在 5 個月內主導常設優惠券領取體驗的產品架構與互動設計，透過 20 位參與者驗證，將活動專屬探索轉化為可重用的入口、領取與擁有狀態。",
       "type": "Incentive System",
       "scope": "Persistent Voucher discovery and access, from homepage entry to category access and explicit Claim → View states.",
       "scope_zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。",
@@ -6365,38 +6365,38 @@
             "zh": "成果"
           },
           "headline": {
-            "en": "Established a shipped, persistent Voucher foundation without overstating the research-supported next phase.",
-            "zh": "建立已上線的常設優惠券基礎，同時不誇大研究支持的下一階段。"
+            "en": "Established a durable Voucher product model while preserving a clear boundary between shipped capability and the research-supported next phase.",
+            "zh": "建立耐久的優惠券產品模型，同時清楚區分已上線能力與研究支持的下一階段。"
           },
           "cards": [
             {
               "heading": {
-                "en": "Persistent Voucher discovery shipped",
-                "zh": "常設優惠券探索已上線"
+                "en": "A persistent Voucher product model",
+                "zh": "常設優惠券產品模型"
               },
               "copy": {
-                "en": "The first release introduced a homepage Voucher Center entry and a visible count of Vouchers available to claim.",
-                "zh": "第一階段上線首頁 Voucher Center 入口，以及可領取優惠券數量的可見提示。"
+                "en": "Turned campaign-specific discovery into a reusable entry, claiming and post-claim access model, shipped through the first Voucher Center release.",
+                "zh": "將活動專屬探索轉化為可重用的入口、領取與領取後存取模型，並透過第一階段 Voucher Center 上線。"
               }
             },
             {
               "heading": {
-                "en": "Claim ownership became explicit",
-                "zh": "領取擁有狀態變得明確"
+                "en": "Explicit ownership states",
+                "zh": "明確的擁有狀態"
               },
               "copy": {
-                "en": "The shipped card model separated Claim from View, making pre-claim and post-claim states understandable without implying automatic application.",
-                "zh": "已上線卡片模型將領取與查看分開，使領取前後狀態清楚可懂，且不暗示自動套用。"
+                "en": "Separated Claim from View so acquisition and later Voucher use no longer shared one ambiguous action.",
+                "zh": "將領取與查看分開，使取得優惠券與日後使用不再共用同一個模糊操作。"
               }
             },
             {
               "heading": {
-                "en": "The state model became reusable capability",
-                "zh": "狀態模型成為可重用能力"
+                "en": "Reusable system capability",
+                "zh": "可重用的系統能力"
               },
               "copy": {
-                "en": "The feature-specific Voucher Card evolution was abstracted into a reusable Tangram component for cross-product use.",
-                "zh": "功能情境中的優惠券卡片演進被抽象為可跨產品使用的 Tangram 元件。"
+                "en": "Extended Voucher-specific card behaviour into a reusable Tangram capability rather than another one-off campaign treatment.",
+                "zh": "將優惠券專屬卡片行為延伸為可重用的 Tangram 能力，而非另一個一次性的活動處理方式。"
               }
             }
           ],
@@ -6435,8 +6435,8 @@
       },
       "searchIndex": {
         "title": {
-          "en": "Persistent Voucher discovery and access",
-          "zh": "常設優惠券探索與領取"
+          "en": "Campaign-based Voucher discovery to a persistent claim product",
+          "zh": "從活動型優惠券探索到常設領取產品"
         },
         "keywords": [
           "Voucher Center",
@@ -7120,19 +7120,19 @@
         }
       },
       "cardTitle": {
-        "en": "Persistent Voucher discovery and access",
-        "zh": "常設優惠券探索與領取"
+        "en": "Campaign-based Voucher discovery to a persistent claim product",
+        "zh": "從活動型優惠券探索到常設領取產品"
       },
       "cardTitleProtectedPhrases_zh": [
         "優惠券探索入口"
       ],
       "title": {
-        "en": "Persistent Voucher discovery and access",
-        "zh": "常設優惠券探索與領取"
+        "en": "Campaign-based Voucher discovery to a persistent claim product",
+        "zh": "從活動型優惠券探索到常設領取產品"
       },
       "atAGlance": {
-        "en": "Led product structure and interaction design over 5 months, turning campaign-specific Voucher discovery into a persistent claim product; research with 20 participants shaped the shipped entry, claimable count and reusable Claim → View states.",
-        "zh": "在 5 個月內主導產品架構與互動設計，將活動專屬的優惠券探索轉化為常設領取產品；20 位參與者的研究塑造已上線入口、可領取數量與可重用的領取 → 查看狀態。"
+        "en": "Led product structure and interaction design of a persistent Voucher claim experience, using 20-participant validation to turn campaign-specific discovery into reusable entry, claiming and ownership states over 5 months.",
+        "zh": "在 5 個月內主導常設優惠券領取體驗的產品架構與互動設計，透過 20 位參與者驗證，將活動專屬探索轉化為可重用的入口、領取與擁有狀態。"
       },
       "problemTypes": {
         "en": [

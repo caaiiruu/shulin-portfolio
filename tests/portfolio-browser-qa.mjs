@@ -76,7 +76,7 @@ for (const viewport of viewports) {
     };
   });
   const expectedVoucherCenterSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
-  if(voucherCenterPresentation.title!=="Persistent Voucher discovery and access"||voucherCenterPresentation.title.startsWith("From "))failures.push(`${viewport.name} Voucher Center Hero mismatch: ${voucherCenterPresentation.title}`);
+  if(voucherCenterPresentation.title!=="Campaign-based Voucher discovery to a persistent claim product"||voucherCenterPresentation.title.startsWith("From "))failures.push(`${viewport.name} Voucher Center Hero mismatch: ${voucherCenterPresentation.title}`);
   if(voucherCenterPresentation.tags.length||voucherCenterPresentation.classificationVisible)failures.push(`${viewport.name} Voucher Center Hero taxonomy leaked: ${JSON.stringify(voucherCenterPresentation.tags)}`);
   if(JSON.stringify(voucherCenterPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Voucher Center navigator mismatch: ${JSON.stringify(voucherCenterPresentation.navigator)}`);
   if(JSON.stringify(voucherCenterPresentation.sectionOrder)!==JSON.stringify(expectedVoucherCenterSections))failures.push(`${viewport.name} Voucher Center IA mismatch: ${JSON.stringify(voucherCenterPresentation.sectionOrder)}`);
