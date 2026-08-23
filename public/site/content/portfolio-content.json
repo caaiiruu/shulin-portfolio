@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-23-r168",
+  "contentVersion": "2026-08-23-r168.1",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -7507,27 +7507,27 @@
       "company": "FairPrice Group",
       "year": 2025,
       "status": "shipped-with-future-phases",
-      "publicStatus": "principal-ready-zero-to-one-incentive-product",
-      "contentStatus": "approved",
+      "publicStatus": "principal-ready-zero-to-one-multi-game-product",
+      "contentStatus": "primary-source-corrected-r168.1",
       "title": {
-        "en": "From one-off reward tasks to a 0→1 effort-to-reward Game Center",
-        "zh": "從一次性獎勵任務，到 0→1 的投入與獎勵 Game Center"
+        "en": "One live game to a scalable multi-game Game Center",
+        "zh": "從單一上線遊戲，到可擴展的多遊戲 Game Center"
       },
       "problemTypes": {
         "en": [
-          "Unclear task progression",
-          "Effort–reward mismatch",
-          "Campaign engagement drop-off"
+          "Single-game discovery constraint",
+          "Concurrent campaign capacity",
+          "Game-state communication"
         ],
         "zh": [
-          "任務進程不清楚",
-          "投入與獎勵不匹配",
-          "活動互動中斷"
+          "單一遊戲探索限制",
+          "活動並行承載",
+          "遊戲狀態溝通"
         ]
       },
-      "atAGlance": {
-        "en": "Led 0→1 strategy and end-to-end design of Game Center, structuring three task types and matching reward value to customer effort; the launched experience achieved approximately 50% user completion.",
-        "zh": "主導 Game Center 的 0→1 策略與端到端設計，建立三類任務並依顧客投入匹配獎勵價值；上線體驗達到約 50% 使用者完成率。"
+  "atAGlance": {
+    "en": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
+    "zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。"
       },
       "infoGrid": {
         "type": {
@@ -7539,22 +7539,20 @@
           }
         },
         "scope": {
-          "en": "End-to-end task discovery, progress, completion, reward return and operational configuration.",
-          "zh": "涵蓋任務探索、進度、完成、獎勵回饋與營運設定的端到端體驗。"
+          "en": "Multi-game discovery, game-state communication and configurable campaign presentation.",
+          "zh": "涵蓋多遊戲探索、遊戲狀態溝通與可配置的活動呈現。"
         },
         "audience": {
           "primary": {
-            "en": "Customers completing reward tasks",
-            "zh": "完成獎勵任務的顧客"
+            "en": "Reward-savvy customers",
+            "zh": "熟悉獎勵機制的顧客"
           },
           "secondary": {
             "en": [
-              "Sponsors",
-              "Operations"
+              "Other app customers"
             ],
             "zh": [
-              "贊助單位",
-              "營運團隊"
+              "其他 App 顧客"
             ]
           }
         },
@@ -7572,12 +7570,12 @@
         "schemaVersion": "2026-08-06-r142"
       },
       "whyItMattered": {
-        "en": "A single live-game slot limited customer choice, forced sponsors into serial campaign scheduling, and made discovery dependent on push notifications and low-traffic entry points.",
-        "zh": "單一遊戲入口限制顧客選擇，也迫使贊助單位依序排程活動；遊戲探索同時高度依賴推播通知與低流量入口。"
+        "en": "A single live-game slot limited discovery, variety and the ability to run sponsor campaigns concurrently.",
+        "zh": "單一上線遊戲位置限制探索、內容多樣性，以及多個贊助活動並行的能力。"
       },
       "businessImpact": {
-        "en": "Established a reusable task-and-reward operating model that allowed future programmes to define effort, completion and reward value consistently.",
-        "zh": "建立可重用的任務與獎勵運作模型，讓後續計畫能一致定義投入、完成與獎勵價值。"
+        "en": "Established a centralized discovery and configuration layer for presenting multiple active games through one reusable Game Center model.",
+        "zh": "建立中央探索與配置層，以一套可重用的 Game Center 模型呈現多個進行中的遊戲。"
       },
       "confidentialityNote": {
         "en": "*Metrics are rounded or abstracted for confidentiality.*",
@@ -7612,9 +7610,9 @@
       },
       "strategy": {
         "vision": {
-          "en": "Create a central Game Center where customers discover multiple reward-earning experiences while sponsors can run campaigns in parallel.",
-          "zh": "建立中央 Game Center，讓顧客探索多個獎勵-earning experience，並讓贊助單位可平行執行活動。",
-          "contentStatus": "approved"
+          "en": "Create a central Game Center where customers can discover multiple reward-earning experiences and parallel campaigns can be presented through one shared model.",
+          "zh": "建立中央 Game Center，讓顧客探索多個獎勵體驗，並以一套共享模型呈現並行活動。",
+          "contentStatus": "source-verified-r168.1"
         },
         "measurementModel": {
           "primary": [
@@ -7847,42 +7845,17 @@
           "infoGridRef": "projects.game-center.infoGrid",
           "valueIBroughtRef": "projects.game-center.valueIBrought"
         },
-        "taskAndRewardModel": {
-          "title": {
-            "en": "One progression across three task types",
-            "zh": "橫跨三類任務的一套共同進程"
-          },
-          "principle": {
-            "en": "Make the required effort, completion condition and reward value understandable as one relationship.",
-            "zh": "讓所需投入、完成條件與獎勵價值成為一個可理解的關係。"
-          },
-          "taskTypeBoundary": {
-            "en": "The source confirms three task types; their internal labels are not published until exact terminology is verified.",
-            "zh": "來源確認共有三類任務；在精確名稱完成驗證前，不公開內部分類名稱。"
-          }
-        },
         "decisionNarrativeRef": "projects.game-center.decisionNarrative.primaryDecisions",
-        "completionEvidence": {
-          "publicValue": "~50%",
-          "label": {
-            "en": "user completion",
-            "zh": "使用者完成率"
-          },
-          "claimBoundary": {
-            "en": "Approximate public value; exact denominator and observation window remain private.",
-            "zh": "公開採約略值；精確分母與觀察期間不公開。"
-          }
-        },
         "coreSystemInsight": {
           "headline": {
-            "en": "Engagement could not scale as isolated reward tasks; effort, progress, completion and reward value had to work as one system.",
-            "zh": "互動無法靠分散的獎勵任務持續擴展；投入、進度、完成與獎勵價值必須成為同一套系統。"
+            "en": "Game discovery could not scale while each mini-game behaved like a standalone destination.",
+            "zh": "當每個小遊戲仍像獨立目的地運作時，遊戲探索就無法擴展。"
           },
           "supportingCopy": {
-            "en": "Three task types required different actions and time, but customers still needed one understandable progression while sponsors and Operations needed configurable programme mechanics behind it.",
-            "zh": "三類任務需要不同操作與時間，但顧客仍需要一套易懂進程；其背後則必須支援贊助單位與營運團隊配置計畫機制。"
+            "en": "The product needed a shared discovery and configuration layer so multiple games could coexist, communicate availability clearly and support parallel campaign operations without redesigning the experience each time.",
+            "zh": "產品需要共享的探索與配置層，讓多個遊戲得以共存、清楚傳達可玩狀態，並支援並行活動營運，而不必每次重新設計體驗。"
           },
-          "contentStatus": "approved-source-remap-r168"
+          "contentStatus": "primary-source-verified-r168.1"
         },
         "decisionEvidence": {
           "title": {
@@ -7895,48 +7868,81 @@
           "structuredGroups": [
             {
               "heading": {
-                "en": "Three task types still needed one understandable progression",
-                "zh": "三類任務仍需要一套易懂進程"
+                "en": "Before → after: one direct game became a multi-game listing",
+                "zh": "前後轉變：從單一直接遊戲到多遊戲列表"
               },
               "summary": {
-                "en": "The canonical task model confirmed different actions and time requirements, while entry, progress, completion and reward return still needed one consistent relationship.",
-                "zh": "既有任務模型確認各類任務具有不同操作與時間需求，但入口、進度、完成與獎勵回饋仍需要一致關係。"
+                "en": "The performance report documents the product change from one featured game to a listing where customers could discover several mini games through one destination.",
+                "zh": "績效報告記錄了產品從單一主打遊戲轉變為多遊戲列表，讓顧客可透過同一目的地探索多個小遊戲。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 01",
                 "zh": "導向決策 01"
-              }
+              },
+              "sourceRef": "Game_Listing_Page_Performance.pdf · page 1",
+              "assetStatus": "deferred-human-source"
             },
             {
               "heading": {
-                "en": "Effort and reward value could not be treated independently",
-                "zh": "投入與獎勵價值不能分開處理"
+                "en": "Discovery required explicit game categories and availability states",
+                "zh": "探索需要明確的遊戲分類與可玩狀態"
               },
               "summary": {
-                "en": "The approved programme principle required effort, completion conditions and reward value to be understandable as one relationship rather than generic campaign rewards.",
-                "zh": "核准的計畫原則要求將投入、完成條件與獎勵價值理解為同一關係，而非通用的活動獎勵。"
+                "en": "The PRD defines simultaneous games, limited-time and evergreen grouping, New and Ending Soon tags, once-per-day labels and next-available-play timing.",
+                "zh": "PRD 定義了多遊戲並行、限時與常駐分類、New 與 Ending Soon 標籤、每日一次提示，以及下次可玩時間。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 02",
                 "zh": "導向決策 02"
-              }
+              },
+              "sourceRef": "PRD_Omni-gamification_experience.pdf",
+              "assetStatus": "deferred-human-source"
             },
             {
               "heading": {
-                "en": "Sponsors needed completion evidence, not only visits or clicks",
-                "zh": "贊助單位需要完成證據，而不只是造訪或點擊"
+                "en": "Concurrent campaigns required configurable presentation",
+                "zh": "並行活動需要可配置的呈現方式"
               },
               "summary": {
-                "en": "The measurement model explicitly included task completion, and the delivered experience established progression and completion logic across task types. The exact completion denominator and observation window remain private.",
-                "zh": "衡量模型明確納入任務完成，且已交付體驗建立跨任務類型的進程與完成邏輯；精確完成率分母與觀察期間仍不公開。"
+                "en": "The PRD and concurrent-mini-games JIRA establish the need to host several games together and give Platform Operations control over listing order and campaign presentation.",
+                "zh": "PRD 與並行小遊戲 JIRA 證明，系統需要同時承載多個遊戲，並讓平台營運團隊控制列表順序與活動呈現。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
                 "zh": "導向決策 03"
-              }
+              },
+              "sourceRef": "PRD + JIRA_Unlocking_Concurrent_Mini-games_Capability.pages",
+              "assetStatus": "deferred-human-source"
+            },
+            {
+              "heading": {
+                "en": "The reported after period showed broader multi-game engagement",
+                "zh": "報告後期顯示更廣泛的多遊戲參與"
+              },
+              "summary": {
+                "en": "Across the reported after period, 70% of tracked mini-game players engaged with 2+ mini games and Gamification MAU / MAU was reported at 23%.",
+                "zh": "在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與 2 個以上的小遊戲，Gamification MAU / MAU 則為 23%。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED OUTCOMES",
+                "zh": "支持成果"
+              },
+              "sourceRef": "Game Listing Page Performance + GTM tracking",
+              "assetStatus": "text-data-only"
             }
           ],
-          "contentStatus": "approved-source-remap-r168"
+          "claimSafety": {
+            "publicMetrics": [
+              "70% users engaging with 2+ mini games",
+              "23% Gamification MAU / MAU"
+            ],
+        "excluded": [
+          "target values misrepresented as achieved outcomes",
+          "unreconciled printed percentage changes",
+          "unreconciled commercial uplift and causal attribution"
+            ]
+          },
+          "contentStatus": "primary-source-verified-r168.1"
         },
         "outcomes": {
           "title": {
@@ -7945,38 +7951,38 @@
           },
           "semanticHierarchy": {
             "measuredLabel": {
-              "en": "The launched 0→1 Game Center established a measurable effort-to-reward product model.",
-              "zh": "上線的 0→1 Game Center 建立了可衡量的投入與獎勵產品模型。"
+              "en": "The reported after period showed measurable multi-game engagement after the listing experience was introduced.",
+              "zh": "多遊戲列表體驗推出後，報告的後期觀察期間顯示可衡量的多遊戲參與。"
             },
             "measured": [
               {
-                "value": "~50%",
+                "value": "70%",
                 "label": {
-                  "en": "user completion",
-                  "zh": "使用者完成率"
+                  "en": "engaged with 2+ mini games",
+                  "zh": "參與 2 個以上小遊戲"
                 },
                 "supportingCopy": {
-                  "en": "approximate public value from the launched experience",
-                  "zh": "上線體驗的約略公開數值"
+                  "en": "tracked mini-game players in the reported after period",
+                  "zh": "報告後期觀察期間受追蹤的小遊戲玩家"
                 },
                 "evidenceNote": {
-                  "en": "The exact denominator and observation window remain private.",
-                  "zh": "精確分母與觀察期間不公開。"
+                  "en": "Reported after-period value; not a completion, conversion or retention rate.",
+                  "zh": "報告後期數值；不是完成率、轉換率或留存率。"
                 }
               },
               {
-                "value": "3",
+                "value": "23%",
                 "label": {
-                  "en": "task types",
-                  "zh": "類任務"
+                  "en": "Gamification MAU / MAU",
+                  "zh": "Gamification MAU / MAU"
                 },
                 "supportingCopy": {
-                  "en": "connected through one progression and reward model",
-                  "zh": "由同一套進程與獎勵模型串連"
+                  "en": "reported after-period ratio",
+                  "zh": "報告後期觀察期間比率"
                 },
                 "evidenceNote": {
-                  "en": "System coverage, not a performance metric.",
-                  "zh": "此為系統涵蓋範圍，非績效指標。"
+                  "en": "Shown as an after-period level without overstating change from the before period.",
+                  "zh": "僅呈現後期觀察期間水準，不誇大相較前期的變化。"
                 }
               }
             ],
@@ -7984,20 +7990,20 @@
               {
                 "emphasis": true,
                 "text": {
-                  "en": "The shipped foundation made concurrent game discovery possible while preserving existing gameplay and reward-result integrations.",
-                  "zh": "已上線的基礎支援多遊戲並行探索，同時保留既有遊玩與獎勵結果整合。"
+                  "en": "Concurrent multi-game discovery replaced the single-game entry constraint with one shared Game Center capable of presenting multiple active experiences.",
+                  "zh": "並行多遊戲探索以共享 Game Center 取代單一遊戲入口限制，支援呈現多個進行中的體驗。"
                 }
               },
               {
                 "text": {
-                  "en": "Phase 1.2 design, alignment and Engineering development were completed, but final production deployment is not confirmed.",
-                  "zh": "第 1.2 階段的設計、對齊與工程開發已完成，但最終正式環境部署尚未確認。"
+                  "en": "Phase 1.1 shipped; Phase 1.2 design, alignment and Engineering development were completed, but final production deployment is not confirmed.",
+                  "zh": "第 1.1 階段已上線；第 1.2 階段的設計、對齊與工程開發已完成，但最終正式環境部署尚未確認。"
                 }
               }
             ],
-            "metricLayout": "aligned"
+            "metricLayout": "featured-primary"
           },
-          "contentStatus": "approved-source-remap-r168"
+          "contentStatus": "primary-source-verified-r168.1"
         },
         "businessImpactRef": "projects.game-center.businessImpact",
         "contentStatus": "approved"
@@ -8017,11 +8023,11 @@
             "en": "What periods and denominators were used for the 4% and 19% baselines?"
           }
         },
-        {
-          "id": "performance-table-conflict",
-          "question": {
-            "zh": "Performance 表中的 +408.6%、+39.6%、+2.4% 各自如何計算？",
-            "en": "How were the printed +408.6%, +39.6% and +2.4% changes calculated?"
+    {
+      "id": "performance-table-conflict",
+      "question": {
+        "zh": "Performance 表中的印刷百分比變化應如何由顯示的前後數值計算？",
+        "en": "How should the printed percentage changes be reconciled with the displayed before and after values?"
           }
         },
         {
@@ -8108,7 +8114,7 @@
         "contentStatus": "approved"
       },
       "searchIndexV2": {
-        "version": "r78",
+        "version": "r168.1",
         "contentType": "project",
         "canonicalId": "game-center",
         "aliases": {
@@ -8135,74 +8141,82 @@
         ],
         "problemTags": {
           "en": [
-            "task progression",
-            "effort-to-reward logic",
-            "completion measurement"
+            "single-game discovery constraint",
+            "multi-game discovery",
+            "concurrent campaigns",
+            "game-state communication",
+            "campaign configuration"
           ],
           "zh": [
-            "任務進程",
-            "投入與獎勵邏輯",
-            "完成衡量"
+            "單一遊戲探索限制",
+            "多遊戲探索",
+            "並行活動",
+            "遊戲狀態溝通",
+            "活動配置"
           ]
         },
         "capabilityTags": {
           "en": [
             "0→1 product design",
-            "incentive mechanics",
-            "task-state modelling"
+            "multi-game information architecture",
+            "game-state modelling",
+            "operational configuration"
           ],
           "zh": [
             "0→1 產品設計",
-            "獎勵機制",
-            "任務狀態建模"
+            "多遊戲資訊架構",
+            "遊戲狀態建模",
+            "營運配置"
           ]
         },
         "systemTags": {
           "en": [
             "gamification platform",
-            "campaign system",
-            "reward system"
+            "game discovery system",
+            "campaign operations",
+            "reward engagement"
           ],
           "zh": [
             "遊戲化平台",
-            "活動系統",
-            "獎勵系統"
+            "遊戲探索系統",
+            "活動營運",
+            "獎勵互動"
           ]
         },
         "audienceTags": {
           "en": [
-            "reward-seeking shoppers",
-            "sponsors",
-            "campaign operations"
+            "reward-savvy customers",
+            "other app customers",
+            "platform operations"
           ],
           "zh": [
-            "獎勵導向消費者",
-            "Sponsors",
-            "Campaign operations"
+            "熟悉獎勵機制的顧客",
+            "其他 App 顧客",
+            "平台營運"
           ]
         },
         "outcomeTags": {
           "en": [
-            "~50% user completion",
-            "shipped Game Center",
-            "reusable task-and-reward model"
+            "70% engaged with 2+ mini games",
+            "23% Gamification MAU / MAU",
+            "concurrent multi-game discovery"
           ],
           "zh": [
-            "約 50% 使用者完成率",
-            "已上線 Game Center",
-            "可重用任務與獎勵模型"
+            "70% 參與 2 個以上小遊戲",
+            "23% Gamification MAU / MAU",
+            "並行多遊戲探索"
           ]
         },
         "queryExamples": {
           "en": [
-            "How do you launch a gamification platform?",
-            "How do you support multiple campaigns at once?",
-            "How do you design for repeat reward engagement?"
+            "How do you scale from one game to multi-game discovery?",
+            "How do you support concurrent campaigns?",
+            "How do you communicate game availability and replay states?"
           ],
           "zh": [
-            "如何建立 Gamification 平台？",
-            "如何同時支援多個活動？",
-            "如何設計持續的獎勵互動？"
+            "如何從單一遊戲擴展至多遊戲探索？",
+            "如何支援並行活動？",
+            "如何溝通遊戲可玩與再次遊玩狀態？"
           ]
         },
         "resultReasonFields": [
@@ -8212,7 +8226,7 @@
           "domainIds",
           "outcomeTags"
         ],
-        "contentStatus": "approved-r142"
+        "contentStatus": "primary-source-corrected-r168.1"
       },
       "problemTypes_zh": [
         "活動並行",
@@ -8226,8 +8240,8 @@
       },
       "ownershipModel": {
         "publicSummary": {
-          "en": "Owned product design as the primary designer from phased design planning through prototype, final UI and engineering handoff; problem framing and release scope were shared with the PM.",
-          "zh": "作為主要設計師，從分階段設計規劃、原型、最終 UI 到工程交接負責產品設計；問題定義與上線範圍則與產品經理共同完成。"
+          "en": "Owned product design as the primary designer across experience architecture, interaction design, prototype, final UI and Engineering handoff; problem framing, release scope and measurement priorities were partnered decisions.",
+          "zh": "作為主要設計師，我負責體驗架構、互動設計、原型、最終 UI 與工程交接；問題定義、上線範圍與衡量優先順序則由團隊共同決策。"
         },
         "ledByMe": [
           {
@@ -8277,38 +8291,38 @@
         ],
         "accountabilityPresentation": {
           "intro": {
-            "en": "I owned the product-design model and delivery while keeping shared product decisions and partner-owned implementation explicit.",
-            "zh": "我負責產品設計模型與交付，同時清楚區分共同產品決策與合作夥伴負責的實作。"
+            "en": "I owned the Game Center experience design while keeping partnered product decisions and partner-owned implementation explicit.",
+            "zh": "我負責 Game Center 體驗設計，同時清楚區分共同產品決策與合作夥伴負責的實作。"
           },
           "owned": {
             "label": {
-              "en": "I OWNED THE OUTCOME",
-              "zh": "我對成果負責"
+              "en": "I OWNED THE EXPERIENCE",
+              "zh": "我負責體驗設計"
             },
             "title": {
-              "en": "Defined and delivered the 0→1 Game Center experience model",
-              "zh": "定義並交付 0→1 Game Center 體驗模型"
+              "en": "Designed the 0→1 multi-game discovery model",
+              "zh": "設計 0→1 多遊戲探索模型"
             },
             "text": {
-              "en": "As the sole and primary product designer, I led design strategy, phase planning, the experience model, prototype, final UI, Back Office specifications, stakeholder alignment and Engineering handoff.",
-              "zh": "作為唯一且主要產品設計師，我主導設計策略、階段規劃、體驗模型、原型、最終 UI、後台規格、利害關係人對齊與工程交付。"
+              "en": "As the primary product designer, I owned experience architecture, interaction design, prototype and final UI, and supported stakeholder alignment and Engineering handoff.",
+              "zh": "作為主要產品設計師，我負責體驗架構、互動設計、原型與最終 UI，並支援利害關係人對齊與工程交接。"
             }
           },
           "shared": {
             "label": {
-              "en": "SHARED DECISIONS",
+              "en": "PARTNERED DECISIONS",
               "zh": "共同決策"
             },
             "title": {
-              "en": "Aligned problem framing, release scope and measurement priorities",
-              "zh": "對齊問題定義、上線範圍與衡量優先順序"
+              "en": "Aligned problem framing, phased scope and measurement priorities",
+              "zh": "對齊問題定義、分階段範圍與衡量優先順序"
             },
             "text": {
-              "en": "Problem framing and the final Phase 1.1 and 1.2 scope were co-decided with the Product Manager; PRD ownership, business rules and technical implementation remained partner-owned.",
-              "zh": "問題定義以及第 1.1、1.2 階段的最終範圍由我與產品經理共同決策；PRD、商業規則與技術實作則由合作夥伴負責。"
+              "en": "Problem framing and Phase 1.1 and 1.2 scope were partnered with Product, Tech and Platform Operations; PRD ownership, business rules and technical implementation remained partner-owned.",
+              "zh": "問題定義與第 1.1、1.2 階段範圍由我與產品、技術及平台營運團隊共同對齊；PRD、商業規則與技術實作仍由合作夥伴負責。"
             }
           },
-          "contentStatus": "approved-source-remap-r168"
+          "contentStatus": "primary-source-and-canonical-ownership-verified-r168.1"
         },
         "contentStatus": "approved"
       },
@@ -8324,47 +8338,47 @@
         "contentStatus": "approved"
       },
       "type_zh": "獎勵系統",
-      "transformation_zh": "從一次性獎勵任務，到 0→1 的投入與獎勵 Game Center",
+      "transformation_zh": "從單一上線遊戲，到可擴展的多遊戲 Game Center",
       "keyInterventionMap": {
-        "status": "verified",
+        "status": "verified-primary-sources-r168.1",
         "sectionLabel": {
           "en": "Where I changed the system",
           "zh": "我改變系統的位置"
         },
         "before": {
-          "en": "Disconnected games and tasks",
-          "zh": "分散的遊戲與任務"
+          "en": "One live game constrained choice and campaign capacity",
+          "zh": "單一上線遊戲限制選擇與活動承載"
         },
         "intervention": {
-          "en": "Unified progress and reward loop",
-          "zh": "統一任務進度與獎勵回饋"
+          "en": "Shared discovery, categorisation and game-state model",
+          "zh": "共享探索、分類與遊戲狀態模型"
         },
         "after": {
-          "en": "Clearer motivation to continue and complete",
-          "zh": "使用者更清楚下一步與完成價值"
+          "en": "A centralized hub for concurrent game experiences",
+          "zh": "支援並行遊戲體驗的中央中心"
         },
         "supportingCopy": {
-          "en": "I organised different task types around a consistent effort-to-reward model, making progress, recovery, and completion easier to understand.",
-          "zh": "我以一致的投入與回饋原則整理不同任務類型，讓進度、補救機會與完成價值更容易理解。"
+          "en": "I defined how multiple games could coexist while remaining understandable to customers and configurable for operations.",
+          "zh": "我定義了多個遊戲如何共存，同時維持顧客易懂與營運可配置。"
         }
       },
-      "transformation": "From one-off reward tasks to a 0→1 effort-to-reward Game Center",
+      "transformation": "From one live game to a scalable multi-game Game Center",
       "problem_types": [
-        "Unclear task progression",
-        "Effort–reward mismatch",
-        "Campaign engagement drop-off"
+        "Single-game discovery constraint",
+        "Concurrent campaign capacity",
+        "Game-state communication"
       ],
       "problem_types_zh": [
-        "任務進程不清楚",
-        "投入與獎勵不匹配",
-        "活動互動中斷"
+        "單一遊戲探索限制",
+        "活動並行承載",
+        "遊戲狀態溝通"
       ],
-      "at_glance": "Led 0→1 strategy and end-to-end design of Game Center, structuring three task types and matching reward value to customer effort; the launched experience achieved approximately 50% user completion.",
-      "at_glance_zh": "主導 Game Center 的 0→1 策略與端到端設計，建立三類任務並依顧客投入匹配獎勵價值；上線體驗達到約 50% 使用者完成率。",
-      "why": "A single live-game slot limited customer choice, forced sponsors into serial campaign scheduling, and made discovery dependent on push notifications and low-traffic entry points.",
-      "why_zh": "單一遊戲入口限制顧客選擇，也迫使贊助單位依序排程活動；遊戲探索同時高度依賴推播通知與低流量入口。",
-      "impact": "Established an operator-configurable foundation for concurrent games and repeat reward participation, reducing dependence on one campaign release at a time.",
-      "impact_zh": "建立可由營運團隊配置的多遊戲基礎，支援活動並行與持續獎勵參與，降低一次只能發布一個活動的限制。",
+  "at_glance": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
+  "at_glance_zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。",
+      "why": "A single live-game slot limited discovery, variety and the ability to run sponsor campaigns concurrently.",
+      "why_zh": "單一上線遊戲位置限制探索、內容多樣性，以及多個贊助活動並行的能力。",
+      "impact": "Established a centralized discovery and configuration layer for presenting multiple active games through one reusable Game Center model.",
+      "impact_zh": "建立中央探索與配置層，以一套可重用的 Game Center 模型呈現多個進行中的遊戲。",
       "cardTitle": {
         "en": "Game Center",
         "zh": "Game Center"
@@ -8374,73 +8388,106 @@
         "多遊戲平台"
       ],
       "criticalProblem": {
-        "en": "Reward activities were delivered as isolated campaign tasks, without one clear progression that helped customers understand the effort required, the reward available and what happened after completion.",
-        "zh": "獎勵活動以彼此分離的任務呈現，缺乏一套清楚進程，讓顧客理解需要投入多少、可獲得什麼，以及完成後會發生什麼。"
+        "en": "A single-game entry point constrained customer choice, game visibility and the ability to present concurrent campaigns.",
+        "zh": "單一遊戲入口限制顧客選擇、遊戲可見性與並行活動呈現能力。"
       },
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "valueIBrought": {
         "headline": {
-          "en": "I created a 0→1 Game Center that connected three task types to a shared effort-to-reward progression.",
-          "zh": "我從 0→1 建立 Game Center，將三類任務串成共享的投入與獎勵進程。"
+          "en": "I designed the 0→1 Game Center that moved discovery from one live game to a centralized multi-game model.",
+          "zh": "我設計了 0→1 Game Center，將探索方式從單一上線遊戲轉為中央多遊戲模型。"
         },
         "supportingStatement": {
-          "en": "The launched experience reached approximately 50% user completion, providing a measurable foundation for future sponsor-funded task programmes.",
-          "zh": "上線體驗達到約 50% 使用者完成率，為後續贊助任務計畫建立可衡量基礎。"
+          "en": "The shared listing, categorisation and state model let multiple games coexist while keeping discovery understandable for customers and presentation configurable for operations.",
+          "zh": "共享列表、分類與狀態模型讓多個遊戲得以共存，同時維持顧客易懂的探索方式與營運可配置的呈現。"
         },
         "metricBoundary": {
-          "en": "The source confirms an approximate completion rate; the exact denominator and observation window remain private.",
-          "zh": "來源確認約略完成率；精確分母與觀察期間不公開。"
+          "en": "Performance metrics are presented only in Outcomes and retain their reported-period labels.",
+          "zh": "績效數據僅於成果區呈現，並保留報告期間標示。"
         }
       },
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "game-center-three-task-model",
+            "id": "game-center-multi-game-discovery",
             "title": {
-              "en": "From isolated tasks to one three-type progression",
-              "zh": "從分散任務，到三類任務的共用進程"
+              "en": "From single-game entry to centralized multi-game discovery",
+              "zh": "從單一遊戲入口，到中央多遊戲探索"
             },
             "whatIDecided": {
-              "en": "Organised the experience around three task types with one shared model for entry, progress, completion and reward return.",
-              "zh": "以三類任務組織體驗，並使用同一套入口、進度、完成與獎勵回饋模型。"
+              "en": "Created one Game Center that surfaces multiple active reward-earning experiences.",
+              "zh": "建立一個 Game Center，呈現多個進行中的獎勵遊戲體驗。"
             },
             "whyThisChoice": {
-              "en": "Customers needed to understand what to do and what would happen next without learning a new interaction model for every campaign.",
-              "zh": "顧客需要在不必為每個活動重新學習互動的情況下，理解要做什麼與下一步結果。"
+              "en": "Single-game entry limited relevance, variety and the ability to support parallel campaigns.",
+              "zh": "單一遊戲入口限制相關性、內容多樣性與並行活動承載能力。"
+            },
+            "optionalThirdBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "Multiple simultaneous games, limited-time and evergreen grouping, logged-in and logged-out discovery, and login gating when a user enters or starts a game.",
+                "zh": "支援多遊戲同時呈現、限時與常駐分類、登入與未登入探索，以及進入或開始遊戲時的登入門檻。"
+              }
+            },
+            "outcome": {
+              "en": "A reusable multi-game discovery model.",
+              "zh": "一套可重用的多遊戲探索模型。"
             }
           },
           {
-            "id": "game-center-effort-reward",
+            "id": "game-center-game-state-communication",
             "title": {
-              "en": "From generic rewards to effort-matched value",
-              "zh": "從通用獎勵，到與投入匹配的價值"
+              "en": "From undifferentiated games to explicit availability and play states",
+              "zh": "從無差異的遊戲卡片，到明確的可玩與遊玩狀態"
             },
             "whatIDecided": {
-              "en": "Made task effort, completion conditions and reward value part of one explicit programme model.",
-              "zh": "將任務投入、完成條件與獎勵價值納入同一套明確的計畫模型。"
+              "en": "Exposed meaningful status and timing signals for each game.",
+              "zh": "為每個遊戲呈現具意義的狀態與時間訊號。"
             },
             "whyThisChoice": {
-              "en": "A reward felt credible only when customers could understand why a higher-effort task produced a different outcome.",
-              "zh": "只有當顧客能理解較高投入為何對應不同成果時，獎勵才具有可信度。"
+              "en": "Once multiple games coexist, customers need to understand what is new, urgent, available and replayable.",
+              "zh": "當多個遊戲共存時，顧客需要理解哪些是新推出、即將結束、目前可玩或可再次遊玩。"
+            },
+            "optionalThirdBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "New and Ending Soon tags, Play Once Per Day communication, next-available-play timing and availability periods where supported.",
+                "zh": "New 與 Ending Soon 標籤、每日一次遊玩提示、下次可玩時間，以及支援時顯示可玩期間。"
+              }
+            },
+            "outcome": {
+              "en": "A consistent game-state communication model.",
+              "zh": "一套一致的遊戲狀態溝通模型。"
             }
           },
           {
-            "id": "game-center-measurable-completion",
+            "id": "game-center-configurable-campaign-operations",
             "title": {
-              "en": "From campaign participation to measurable completion",
-              "zh": "從活動參與，到可衡量的完成"
+              "en": "From fixed game placement to configurable campaign operations",
+              "zh": "從固定遊戲位置，到可配置的活動營運"
             },
             "whatIDecided": {
-              "en": "Defined progression and completion states that could be measured consistently across task types.",
-              "zh": "建立可跨任務類型一致衡量的進程與完成狀態。"
+              "en": "Defined operational control over which games are shown and how they are ordered.",
+              "zh": "定義營運團隊控制顯示哪些遊戲及其排序的方式。"
             },
             "whyThisChoice": {
-              "en": "Sponsors and Operations needed evidence of completed behaviour, not only game visits or clicks.",
-              "zh": "贊助單位與營運團隊需要完成行為的證據，而不只是遊戲造訪或點擊。"
+              "en": "Multiple sponsors and longer-running campaigns required presentation flexibility without redesigning the customer experience for every campaign.",
+              "zh": "多個贊助單位與較長週期活動需要彈性呈現，而不必為每次活動重新設計顧客體驗。"
+            },
+            "optionalThirdBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "Backoffice-configurable display order, multiple concurrent games and support for different campaign timings and durations.",
+                "zh": "後台可配置顯示順序、多遊戲並行，以及支援不同活動時程與期間。"
+              }
+            },
+            "outcome": {
+              "en": "A scalable operational model for concurrent game presentation.",
+              "zh": "一套可擴展的並行遊戲呈現營運模型。"
             }
           }
         ],
-        "contentStatus": "approved-latest-user-confirmation"
+        "contentStatus": "primary-source-verified-r168.1"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -8467,32 +8514,32 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Three task types required one understandable model",
-            "zh": "三類任務需要共用且易懂的模型"
+            "en": "One live-game slot limited both discovery and campaign capacity",
+            "zh": "單一上線遊戲位置同時限制探索與活動承載"
           },
           "description": {
-            "en": "Different tasks required different actions and time, but customers still needed one consistent way to understand progress and completion.",
-            "zh": "不同任務需要不同操作與時間，但顧客仍需要一致方式理解進度與完成條件。"
+            "en": "The direct entry could feature only one active game, reducing relevance for different interests and preventing sponsor campaigns from running concurrently.",
+            "zh": "直接入口一次只能呈現一個進行中的遊戲，既降低不同興趣顧客的相關性，也阻止多個贊助活動並行。"
           }
         },
         {
           "title": {
-            "en": "Reward value had to feel proportional to effort",
-            "zh": "獎勵價值必須與投入相稱"
+            "en": "Multiple games introduced state, timing and relevance complexity",
+            "zh": "多遊戲帶來狀態、時間與相關性複雜度"
           },
           "description": {
-            "en": "A shared experience could not treat every task as equally difficult; effort, completion conditions and reward value needed an explicit relationship.",
-            "zh": "共享體驗不能把所有任務視為同等難度；投入、完成條件與獎勵價值必須建立明確關係。"
+            "en": "Customers needed to distinguish new, ending-soon, once-per-day and next-available-play states across limited-time and evergreen experiences.",
+            "zh": "顧客需要在限時與常駐體驗中辨識新推出、即將結束、每日一次與下次可玩等狀態。"
           }
         },
         {
           "title": {
-            "en": "Customer clarity and sponsor operations had to coexist",
-            "zh": "顧客清晰度與贊助營運必須並存"
+            "en": "Customer discovery and operator control had to work as one system",
+            "zh": "顧客探索與營運控制必須成為同一套系統"
           },
           "description": {
-            "en": "Sponsors and Operations needed configurable programme mechanics without exposing internal campaign complexity to customers.",
-            "zh": "贊助單位與營運團隊需要可配置的計畫機制，同時不能把內部活動複雜度轉嫁給顧客。"
+            "en": "Platform Operations needed configurable ordering and presentation while customers needed one clear way to discover several active games.",
+            "zh": "平台營運團隊需要可配置的排序與呈現，顧客則需要一套清楚方式探索多個進行中的遊戲。"
           }
         }
       ],
@@ -8619,39 +8666,39 @@
       },
       "keyProblems": {
         "en": [
-          "Unclear task progression",
-          "Effort–reward mismatch",
-          "Campaign engagement drop-off"
+          "Single-game discovery constraint",
+          "Concurrent campaign capacity",
+          "Game-state communication"
         ],
         "zh": [
-          "任務進程不清楚",
-          "投入與獎勵不匹配",
-          "活動互動中斷"
+          "單一遊戲探索限制",
+          "活動並行承載",
+          "遊戲狀態溝通"
         ]
       },
       "type": "0→1 Product",
       "legacyAliasStatus": "synchronised-non-canonical-r142",
       "whatThisProves": {
-        "en": "Structuring effort, progression and rewards across multiple incentive mechanics in a 0→1 product.",
-        "zh": "在 0→1 產品中，統整不同獎勵機制的投入、進度與回饋關係。",
-        "contentStatus": "approved-domain-copy-2026-08-07"
+        "en": "Designing a scalable discovery and operational model for multiple concurrent game experiences in a 0→1 product.",
+        "zh": "在 0→1 產品中，為多個並行遊戲體驗設計可擴展的探索與營運模型。",
+        "contentStatus": "primary-source-corrected-r168.1"
       },
       "impactEvidence": {
         "variant": "measured-outcome",
         "primaryMetrics": [
           {
-            "value": "~50%",
-            "label": "user completion"
+            "value": "70%",
+            "label": "engaged with 2+ mini games"
           }
         ],
         "supportingMetrics": [
           {
-            "value": "3",
-            "label": "task types"
+            "value": "23%",
+            "label": "Gamification MAU / MAU"
           }
         ],
-        "recommendedHeadline": "Launched a 0→1 reward product with ~50% user completion across a shared effort-to-reward model.",
-        "boundary": "Exact denominator and observation window remain private."
+        "recommendedHeadline": "The reported after period showed 70% of tracked mini-game players engaging with 2+ mini games.",
+        "boundary": "Reported-period association only; no completion, conversion, retention or causal GMV claim."
       }
     },
     "dbs": {

@@ -1555,7 +1555,7 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   }
 });
 
-test("R168 migrates Game Center through canonical recruiter-first owners without legacy or Search Mapping leakage", () => {
+test("R168.1 keeps Game Center source-grounded across canonical public consumers", () => {
   const ssot=JSON.parse(read("content/portfolio-content.json"));
   const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const project=ssot.projects["game-center"];
@@ -1569,17 +1569,44 @@ test("R168 migrates Game Center through canonical recruiter-first owners without
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
   assert.equal(project.presentation.visibility.problemTypes,false);
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
-  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,3);
-  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.decisionLink.en),["LED TO DECISION 01","LED TO DECISION 02","LED TO DECISION 03"]);
-  assert.equal(project.searchIndexV2.version,"r78");
-  assert.ok(project.searchIndexV2.problemTags.en.includes("effort-to-reward logic"));
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.decisionLink.en),["LED TO DECISION 01","LED TO DECISION 02","LED TO DECISION 03","SUPPORTED OUTCOMES"]);
+  assert.equal(project.searchIndexV2.version,"r168.1");
+  assert.ok(project.searchIndexV2.problemTags.en.includes("multi-game discovery"));
+  assert.ok(project.searchIndexV2.problemTags.en.includes("concurrent campaigns"));
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),[
+    "game-center-multi-game-discovery",
+    "game-center-game-state-communication",
+    "game-center-configurable-campaign-operations"
+  ]);
+  assert.deepEqual(project.publicContent.outcomes.semanticHierarchy.measured.map(item=>[item.value,item.label.en]),[
+    ["70%","engaged with 2+ mini games"],
+    ["23%","Gamification MAU / MAU"]
+  ]);
   for(const path of Object.values(project.presentation.contentRefs)){
     assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`unresolved Game Center contentRef: ${path}`);
   }
   const html=read("work/game-center.html");
   const summary=html.match(/<section class="page-shell direct-project-summary"[\s\S]*?<\/section>/)?.[0]||"";
-  assert.match(summary,/<h1>One-off reward tasks to a 0→1 effort-to-reward Game Center<\/h1>/);
+  assert.match(summary,/<h1>One live game to a scalable multi-game Game Center<\/h1>/);
   assert.doesNotMatch(summary,/Critical problem:|Business impact:|Unclear task progression|Effort–reward mismatch|Campaign engagement drop-off/);
+  const livePublic=JSON.stringify({
+    title:project.title,
+    atAGlance:project.atAGlance,
+    infoGrid:project.infoGrid,
+    valueIBrought:project.valueIBrought,
+    keyInterventionMap:project.keyInterventionMap,
+    whatMadeThisHard:project.whatMadeThisHard,
+    decisionNarrative:project.decisionNarrative,
+    publicContent:project.publicContent,
+    ownershipModel:project.ownershipModel,
+    searchIndexV2:project.searchIndexV2,
+    impactEvidence:project.impactEvidence
+  });
+  assert.doesNotMatch(livePublic,/50% user completion|approximately 50% user completion|effort-to-reward Game Center|three task types|three-type progression/i);
+  assert.doesNotMatch(livePublic,/\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV uplift/i);
+  assert.doesNotMatch(summary,/50% user completion|effort-to-reward|three task types|\+408\.6%|\+39\.6%|\$803K|\$9\.6M/i);
   for(const legacy of ["critical-problem","business-impact","task-and-reward-model","shipped-experience","completion-evidence","ownership-and-collaboration","delivery-and-measurement"]){
     assert.equal(project.presentation.sectionOrder.includes(legacy),false,`legacy Game Center section leaked: ${legacy}`);
   }
