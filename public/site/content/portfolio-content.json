@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-23-r170.1",
+  "contentVersion": "2026-08-23-r170.2",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -12130,7 +12130,7 @@
       },
       "atAGlance": {
         "en": "Co-led research and UX definition of a 0→1 P2P marketplace, translating 30 interviews into transaction logic, marketplace structure and 25 functional specifications aligned across the bank and software vendor over 6 months.",
-        "zh": "共同主導 0→1 P2P 市集的研究與 UX 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。"
+        "zh": "共同主導 0→1 P2P 市集的研究與 使用者體驗 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。"
       },
       "infoGrid": {
         "type": {
@@ -12262,7 +12262,7 @@
           },
           "whatIDecided": {
             "en": "Convert the UX model into detailed shared specifications.",
-            "zh": "Convert the UX model into detailed shared specifications."
+            "zh": "Convert the 使用者體驗 model into detailed shared specifications."
           },
           "whyThisChoice": {
             "en": "Cross-organization implementation required one operational/interface definition.",
@@ -12534,7 +12534,7 @@
       "ownershipModel": {
         "publicSummary": {
           "en": "Research and UX definition were co-led; technical implementation and production outcomes remained partner-owned or unverified.",
-          "zh": "研究與 UX 定義由共同主導；技術實作與正式環境成果屬夥伴負責或未經驗證。"
+          "zh": "研究與 使用者體驗 定義由共同主導；技術實作與正式環境成果屬夥伴負責或未經驗證。"
         },
         "ledByMe": [
           {
@@ -12582,7 +12582,7 @@
         "accountabilityPresentation": {
           "intro": {
             "en": "The verified boundary separates co-led UX definition from partner-owned implementation and unavailable production outcomes.",
-            "zh": "已驗證邊界區分共同主導的 UX 定義、夥伴負責的實作與無法取得的正式環境成果。"
+            "zh": "已驗證邊界區分共同主導的 使用者體驗 定義、夥伴負責的實作與無法取得的正式環境成果。"
           },
           "owned": {
             "label": {
@@ -12595,7 +12595,7 @@
             },
             "text": {
               "en": "Research and UX definition, transaction/state modeling, logic-flow development, functional specification, wireframe documentation, delivery clarification and QA participation.",
-              "zh": "研究與 UX 定義、交易／狀態建模、邏輯流程發展、功能規格、線框文件、交付澄清與參與 QA。"
+              "zh": "研究與 使用者體驗 定義、交易／狀態建模、邏輯流程發展、功能規格、線框文件、交付澄清與參與 QA。"
             }
           },
           "shared": {
@@ -12609,7 +12609,7 @@
             },
             "text": {
               "en": "Partnered with another UX designer, branding company, bank stakeholders, software vendor, UI designer, PM and developers.",
-              "zh": "與另一位 UX 設計師、品牌公司、銀行利害關係人、軟體供應商、UI 設計師、PM 與開發人員合作。"
+              "zh": "與另一位 使用者體驗 設計師、品牌公司、銀行利害關係人、軟體供應商、UI 設計師、PM 與開發人員合作。"
             }
           },
           "partnerOwned": {
@@ -12623,7 +12623,7 @@
             },
             "text": {
               "en": "The exact split with the other UX designer is not fully documented; technical implementation remained partner-owned; production launch and measured business impact are unverified.",
-              "zh": "與另一位 UX 設計師的精確分工未完整記錄；技術實作由合作夥伴負責；正式上線與衡量後的商業影響未經驗證。"
+              "zh": "與另一位 使用者體驗 設計師的精確分工未完整記錄；技術實作由合作夥伴負責；正式上線與衡量後的商業影響未經驗證。"
             }
           },
           "contentStatus": "source-remapped-r170.1"
@@ -12680,7 +12680,7 @@
         "跨組織交接"
       ],
       "at_glance": "Co-led research and UX definition of a 0→1 P2P marketplace, translating 30 interviews into transaction logic, marketplace structure and 25 functional specifications aligned across the bank and software vendor over 6 months.",
-      "at_glance_zh": "共同主導 0→1 P2P 市集的研究與 UX 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。",
+      "at_glance_zh": "共同主導 0→1 P2P 市集的研究與 使用者體驗 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。",
       "why": "A payment feature alone could not govern buyer protection, seller operations, logistics, notifications, and implementation across multiple organisations.",
       "why_zh": "單一付款功能無法同時治理買家保障、賣家營運、物流、通知，以及跨組織實作。",
       "impact": "Established an end-to-end transaction regulation that became the shared delivery reference for the banking client and software vendor.",
@@ -12759,7 +12759,7 @@
             },
             "whatIDecided": {
               "en": "Convert the UX model into detailed shared specifications.",
-              "zh": "Convert the UX model into detailed shared specifications."
+              "zh": "Convert the 使用者體驗 model into detailed shared specifications."
             },
             "whyThisChoice": {
               "en": "Cross-organization implementation required one operational/interface definition.",
