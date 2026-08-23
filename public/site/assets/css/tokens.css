@@ -273,6 +273,8 @@
   --project-detail-section-pad-inline: var(--case-page-gutter);
   --project-detail-mobile-section-gap: var(--case-gap-content);
   --project-detail-mobile-section-pad-block: var(--case-gap-subsection);
+  --project-hero-eyebrow-mobile-max-width: var(--case-page-max);
+  --project-hero-eyebrow-mobile-max-block-size: var(--dimension-48px);
 
   /* SelectedEvidence component tokens */
   --evidence-section-gap: var(--space-8);
