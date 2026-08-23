@@ -9,6 +9,18 @@ const outDir=path.join(root,"work");
 fs.mkdirSync(outDir,{recursive:true});
 const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const metaEscape=value=>escapeHtml(value).replace(/\n/g," ");
+function recruiterFirstDisplayTitle(project){
+  let title=String(project.title?.en||"");
+  const contract=content.implementationContracts?.recruiterFirstPresentation;
+  if(project.presentation?.composition!==contract?.appliesToComposition)return title;
+  for(const prefix of contract.hero?.forbiddenVisiblePrefixes||[]){
+    if(title.startsWith(prefix)){
+      title=title.slice(prefix.length);
+      return title?title.charAt(0).toUpperCase()+title.slice(1):title;
+    }
+  }
+  return title;
+}
 function resolveImage(project){
   const id=project.heroVisualBrief?.assetId;
   const record=manifest.items?.[id];
@@ -38,7 +50,7 @@ function replaceHead(html,project,id){
 function routeSummary(project,id){
   const recruiterFirst=project.presentation?.composition==="recruiter-first-system-case";
   const legacySummary=recruiterFirst?"":`<p><strong>Critical problem:</strong> ${escapeHtml(project.criticalProblem.en)}</p>`;
-  return `<section class="page-shell direct-project-summary" data-project-route-summary="${escapeHtml(id)}"><p>${escapeHtml(project.company)}</p><h1>${escapeHtml(project.title.en)}</h1><p>${escapeHtml(project.atAGlance.en)}</p>${legacySummary}</section>`;
+  return `<section class="page-shell direct-project-summary" data-project-route-summary="${escapeHtml(id)}"><p>${escapeHtml(project.company)}</p><h1>${escapeHtml(recruiterFirstDisplayTitle(project))}</h1><p>${escapeHtml(project.atAGlance.en)}</p>${legacySummary}</section>`;
 }
 for(const [id,project] of Object.entries(content.projects||{})){
   if(!project.title?.en||!project.atAGlance?.en||!project.criticalProblem?.en)throw new Error(`Incomplete direct-route content: ${id}`);

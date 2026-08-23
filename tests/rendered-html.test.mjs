@@ -1555,6 +1555,36 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   }
 });
 
+test("R168 migrates Game Center through canonical recruiter-first owners without legacy or Search Mapping leakage", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["game-center"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNavigation=["overview","complexity","decisions","evidence","outcomes","ownership"];
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),expectedNavigation);
+  assert.equal(project.presentation.decisionOptions.showVisuals,false);
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,3);
+  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.decisionLink.en),["LED TO DECISION 01","LED TO DECISION 02","LED TO DECISION 03"]);
+  assert.equal(project.searchIndexV2.version,"r78");
+  assert.ok(project.searchIndexV2.problemTags.en.includes("effort-to-reward logic"));
+  for(const path of Object.values(project.presentation.contentRefs)){
+    assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`unresolved Game Center contentRef: ${path}`);
+  }
+  const html=read("work/game-center.html");
+  const summary=html.match(/<section class="page-shell direct-project-summary"[\s\S]*?<\/section>/)?.[0]||"";
+  assert.match(summary,/<h1>One-off reward tasks to a 0→1 effort-to-reward Game Center<\/h1>/);
+  assert.doesNotMatch(summary,/Critical problem:|Business impact:|Unclear task progression|Effort–reward mismatch|Campaign engagement drop-off/);
+  for(const legacy of ["critical-problem","business-impact","task-and-reward-model","shipped-experience","completion-evidence","ownership-and-collaboration","delivery-and-measurement"]){
+    assert.equal(project.presentation.sectionOrder.includes(legacy),false,`legacy Game Center section leaked: ${legacy}`);
+  }
+});
+
 
 test("projects DBS through the shared recruiter-first system-case composition", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));

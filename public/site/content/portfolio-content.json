@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r166.2",
+  "contentVersion": "2026-08-23-r168",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -7873,6 +7873,132 @@
             "zh": "公開採約略值；精確分母與觀察期間不公開。"
           }
         },
+        "coreSystemInsight": {
+          "headline": {
+            "en": "Engagement could not scale as isolated reward tasks; effort, progress, completion and reward value had to work as one system.",
+            "zh": "互動無法靠分散的獎勵任務持續擴展；投入、進度、完成與獎勵價值必須成為同一套系統。"
+          },
+          "supportingCopy": {
+            "en": "Three task types required different actions and time, but customers still needed one understandable progression while sponsors and Operations needed configurable programme mechanics behind it.",
+            "zh": "三類任務需要不同操作與時間，但顧客仍需要一套易懂進程；其背後則必須支援贊助單位與營運團隊配置計畫機制。"
+          },
+          "contentStatus": "approved-source-remap-r168"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence that shaped the decisions",
+            "zh": "塑造設計決策的證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "metrics": [],
+          "structuredGroups": [
+            {
+              "heading": {
+                "en": "Three task types still needed one understandable progression",
+                "zh": "三類任務仍需要一套易懂進程"
+              },
+              "summary": {
+                "en": "The canonical task model confirmed different actions and time requirements, while entry, progress, completion and reward return still needed one consistent relationship.",
+                "zh": "既有任務模型確認各類任務具有不同操作與時間需求，但入口、進度、完成與獎勵回饋仍需要一致關係。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 01",
+                "zh": "導向決策 01"
+              }
+            },
+            {
+              "heading": {
+                "en": "Effort and reward value could not be treated independently",
+                "zh": "投入與獎勵價值不能分開處理"
+              },
+              "summary": {
+                "en": "The approved programme principle required effort, completion conditions and reward value to be understandable as one relationship rather than generic campaign rewards.",
+                "zh": "核准的計畫原則要求將投入、完成條件與獎勵價值理解為同一關係，而非通用的活動獎勵。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 02",
+                "zh": "導向決策 02"
+              }
+            },
+            {
+              "heading": {
+                "en": "Sponsors needed completion evidence, not only visits or clicks",
+                "zh": "贊助單位需要完成證據，而不只是造訪或點擊"
+              },
+              "summary": {
+                "en": "The measurement model explicitly included task completion, and the delivered experience established progression and completion logic across task types. The exact completion denominator and observation window remain private.",
+                "zh": "衡量模型明確納入任務完成，且已交付體驗建立跨任務類型的進程與完成邏輯；精確完成率分母與觀察期間仍不公開。"
+              },
+              "decisionLink": {
+                "en": "LED TO DECISION 03",
+                "zh": "導向決策 03"
+              }
+            }
+          ],
+          "contentStatus": "approved-source-remap-r168"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "semanticHierarchy": {
+            "measuredLabel": {
+              "en": "The launched 0→1 Game Center established a measurable effort-to-reward product model.",
+              "zh": "上線的 0→1 Game Center 建立了可衡量的投入與獎勵產品模型。"
+            },
+            "measured": [
+              {
+                "value": "~50%",
+                "label": {
+                  "en": "user completion",
+                  "zh": "使用者完成率"
+                },
+                "supportingCopy": {
+                  "en": "approximate public value from the launched experience",
+                  "zh": "上線體驗的約略公開數值"
+                },
+                "evidenceNote": {
+                  "en": "The exact denominator and observation window remain private.",
+                  "zh": "精確分母與觀察期間不公開。"
+                }
+              },
+              {
+                "value": "3",
+                "label": {
+                  "en": "task types",
+                  "zh": "類任務"
+                },
+                "supportingCopy": {
+                  "en": "connected through one progression and reward model",
+                  "zh": "由同一套進程與獎勵模型串連"
+                },
+                "evidenceNote": {
+                  "en": "System coverage, not a performance metric.",
+                  "zh": "此為系統涵蓋範圍，非績效指標。"
+                }
+              }
+            ],
+            "supportingStatements": [
+              {
+                "emphasis": true,
+                "text": {
+                  "en": "The shipped foundation made concurrent game discovery possible while preserving existing gameplay and reward-result integrations.",
+                  "zh": "已上線的基礎支援多遊戲並行探索，同時保留既有遊玩與獎勵結果整合。"
+                }
+              },
+              {
+                "text": {
+                  "en": "Phase 1.2 design, alignment and Engineering development were completed, but final production deployment is not confirmed.",
+                  "zh": "第 1.2 階段的設計、對齊與工程開發已完成，但最終正式環境部署尚未確認。"
+                }
+              }
+            ],
+            "metricLayout": "aligned"
+          },
+          "contentStatus": "approved-source-remap-r168"
+        },
         "businessImpactRef": "projects.game-center.businessImpact",
         "contentStatus": "approved"
       },
@@ -8149,6 +8275,41 @@
             "zh": "技術實作"
           }
         ],
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I owned the product-design model and delivery while keeping shared product decisions and partner-owned implementation explicit.",
+            "zh": "我負責產品設計模型與交付，同時清楚區分共同產品決策與合作夥伴負責的實作。"
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED THE OUTCOME",
+              "zh": "我對成果負責"
+            },
+            "title": {
+              "en": "Defined and delivered the 0→1 Game Center experience model",
+              "zh": "定義並交付 0→1 Game Center 體驗模型"
+            },
+            "text": {
+              "en": "As the sole and primary product designer, I led design strategy, phase planning, the experience model, prototype, final UI, Back Office specifications, stakeholder alignment and Engineering handoff.",
+              "zh": "作為唯一且主要產品設計師，我主導設計策略、階段規劃、體驗模型、原型、最終 UI、後台規格、利害關係人對齊與工程交付。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Aligned problem framing, release scope and measurement priorities",
+              "zh": "對齊問題定義、上線範圍與衡量優先順序"
+            },
+            "text": {
+              "en": "Problem framing and the final Phase 1.1 and 1.2 scope were co-decided with the Product Manager; PRD ownership, business rules and technical implementation remained partner-owned.",
+              "zh": "問題定義以及第 1.1、1.2 階段的最終範圍由我與產品經理共同決策；PRD、商業規則與技術實作則由合作夥伴負責。"
+            }
+          },
+          "contentStatus": "approved-source-remap-r168"
+        },
         "contentStatus": "approved"
       },
       "heroVisualBrief": {
@@ -8337,16 +8498,16 @@
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "task-and-reward-model",
-        "key-decisions",
-        "shipped-experience",
-        "completion-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "domain": {
         "en": "Retail gamification",
@@ -8363,6 +8524,98 @@
           "domain"
         ],
         "contentStatus": "approved"
+      },
+      "presentation": {
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "composition": "recruiter-first-system-case",
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first"
       },
       "keyProblems": {
         "en": [

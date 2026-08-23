@@ -12,7 +12,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/game-center", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -132,6 +132,44 @@ for (const viewport of viewports) {
   if(cathayOaPresentation.legacy.length)failures.push(`${viewport.name} Cathay OA legacy leakage: ${JSON.stringify(cathayOaPresentation.legacy)}`);
   if(!cathayOaPresentation.text.includes("Post-launch performance was not available")||/\bshipped\b|conversion uplift|completion-rate uplift/i.test(cathayOaPresentation.text))failures.push(`${viewport.name} Cathay OA delivery boundary missing or overstated`);
   if(cathayOaPresentation.overflow>0)failures.push(`${viewport.name} Cathay OA dialog horizontal overflow: ${cathayOaPresentation.overflow}`);
+
+  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
+  const gameCenterCertification=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog");
+    const scrollOwner=dialog.querySelector(".dialog-scroll");
+    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      tags:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
+      complexityCount:dialog.querySelectorAll("#systemCaseComplexitySection .recruiter-complexity-card").length,
+      contributionNodes:[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")].map(node=>node.innerText.trim()),
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
+      evidenceVariant:dialog.querySelector("#systemCaseEvidenceSection")?.dataset.evidenceVariant,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      evidenceImages:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(visible).map(image=>image.currentSrc),
+      outcomeValues:[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].filter(visible).map(node=>node.textContent.trim()),
+      accountability:dialog.querySelector("#systemCaseAccountabilitySection")?.innerText||"",
+      legacy:[...dialog.querySelectorAll("h2,h3")].filter(visible).map(node=>node.textContent.trim()).filter(text=>["Critical problem","Business impact","Task and Reward Model","Shipped Experience","Completion Evidence","Ownership and collaboration","Delivery and measurement"].includes(text)),
+      text:dialog.innerText,
+      scrollOwnerClass:scrollOwner?.className,
+      visibleHorizontalOverflow:[...scrollOwner.querySelectorAll("*")].filter(visible).map(node=>{const rect=node.getBoundingClientRect(),ownerRect=scrollOwner.getBoundingClientRect();return{node,overflow:rect.right-ownerRect.right,underflow:ownerRect.left-rect.left}}).filter(item=>item.overflow>1||item.underflow>1).map(item=>({tag:item.node.tagName,className:String(item.node.className||""),overflow:item.overflow,underflow:item.underflow}))
+    };
+  });
+  const expectedGameCenterSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
+  if(gameCenterCertification.title!=="One-off reward tasks to a 0→1 effort-to-reward Game Center"||gameCenterCertification.title.startsWith("From "))failures.push(`${viewport.name} Game Center Hero contract failed: ${gameCenterCertification.title}`);
+  if(gameCenterCertification.classificationVisible||gameCenterCertification.tags.length)failures.push(`${viewport.name} Game Center Hero taxonomy leaked: ${JSON.stringify(gameCenterCertification.tags)}`);
+  if(JSON.stringify(gameCenterCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Game Center navigator mismatch: ${JSON.stringify(gameCenterCertification.navigator)}`);
+  if(JSON.stringify(gameCenterCertification.sectionOrder)!==JSON.stringify(expectedGameCenterSections))failures.push(`${viewport.name} Game Center rendered IA mismatch: ${JSON.stringify(gameCenterCertification.sectionOrder)}`);
+  if(gameCenterCertification.complexityCount!==3||gameCenterCertification.contributionNodes.length!==3||gameCenterCertification.decisionCount!==3)failures.push(`${viewport.name} Game Center shared primitive count mismatch: ${JSON.stringify(gameCenterCertification)}`);
+  if(gameCenterCertification.evidenceVariant!=="decision-support"||gameCenterCertification.evidenceCount!==3||gameCenterCertification.evidenceImages.length)failures.push(`${viewport.name} Game Center truthful structured Evidence contract failed: ${JSON.stringify(gameCenterCertification)}`);
+  if(JSON.stringify(gameCenterCertification.outcomeValues)!==JSON.stringify(["~50%","3"])||!/exact denominator and observation window remain private/i.test(gameCenterCertification.text)||!/final production deployment is not confirmed/i.test(gameCenterCertification.text))failures.push(`${viewport.name} Game Center Outcome boundary failed: ${JSON.stringify(gameCenterCertification.outcomeValues)}`);
+  if(!gameCenterCertification.accountability.includes("Defined and delivered the 0→1 Game Center experience model")||!gameCenterCertification.accountability.includes("SHARED DECISIONS")||!gameCenterCertification.accountability.includes("PRD ownership"))failures.push(`${viewport.name} Game Center accountability boundary failed`);
+  if(gameCenterCertification.legacy.length)failures.push(`${viewport.name} Game Center legacy leakage: ${JSON.stringify(gameCenterCertification.legacy)}`);
+  if(!String(gameCenterCertification.scrollOwnerClass).includes("dialog-scroll")||gameCenterCertification.visibleHorizontalOverflow.length)failures.push(`${viewport.name} Game Center dialog-scroll ownership/overflow failed: ${JSON.stringify(gameCenterCertification)}`);
 
   await page.goto(`${baseUrl}/site/work/booking`,{waitUntil:"networkidle"});
   const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("img")].filter(image=>image.alt);await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));const required=["Connecting the global taxi-booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric")],outcomes=outcomeCards.map(card=>({value:card.querySelector(".outcome-metric__value")?.textContent.trim(),label:(()=>{const node=card.querySelector(".outcome-metric__label")?.cloneNode(true);node?.querySelectorAll(".info-tooltip").forEach(tip=>tip.remove());return node?.textContent.trim()})()})),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),publicText=dialog.innerText,decisionFields=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")].map(card=>[...card.querySelectorAll(".decision-field-label-v58,dt")].map(label=>({label:label.textContent.trim(),copy:((label.tagName==="DT"?label.parentElement?.querySelector("dd"):label.nextElementSibling)?.textContent||"").trim()}))),flow=dialog.querySelector(".contribution-block .voucher-r149-flow"),flowNodes=[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")],flowSupport=dialog.querySelector(".contribution-block>.voucher-r149-intro"),insight=dialog.querySelector(".core-system-insight-section"),insightTitle=dialog.querySelector(".core-system-insight-section h2"),insightVisual=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation"),insightCaption=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation__caption"),complexity=[...dialog.querySelectorAll(".recruiter-complexity-grid--featured-first>.recruiter-complexity-card")],outcomeGrid=dialog.querySelector("#systemCaseOutcomesSection .outcome-metric-grid"),quickView=dialog.querySelector(".quick-view-v51--project"),audienceNodes=[...dialog.querySelectorAll(".info-grid-v45__audience")],contributionSection=flow?.closest(".contribution-block");const rect=node=>{const r=node?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,center:r.left+r.width/2}:null},titleStyle=insightTitle?getComputedStyle(insightTitle):null;return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,publicText,decisionFields,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth,contribution:{count:visibleHeadings.filter(text=>text==="Contribution").length,flow:rect(flow),nodes:flowNodes.map(rect),support:rect(flowSupport)},insight:{section:rect(insight),title:rect(insightTitle),titleLines:insightTitle&&titleStyle?Math.round(insightTitle.getBoundingClientRect().height/parseFloat(titleStyle.lineHeight)):null,visual:rect(insightVisual),captionAlign:insightCaption?getComputedStyle(insightCaption).textAlign:null},complexity:complexity.map(rect),complexityColumns:dialog.querySelector(".recruiter-complexity-grid--featured-first")?getComputedStyle(dialog.querySelector(".recruiter-complexity-grid--featured-first")).gridTemplateColumns:null,outcomeRhythm:{rowGap:parseFloat(getComputedStyle(outcomeGrid).rowGap)||0,cards:outcomeCards.map(rect),innerGaps:outcomeCards.map(card=>{const value=card.querySelector(".outcome-metric__value")?.getBoundingClientRect(),label=card.querySelector(".outcome-metric__label")?.getBoundingClientRect();return value&&label?label.top-value.bottom:null})},audience:{total:audienceNodes.length,inInfoGrid:audienceNodes.filter(node=>node.closest("#projectSignals")).length,inProgramme:audienceNodes.filter(node=>node.closest("#programmeSurface")).length,quickHeight:getComputedStyle(quickView).height,quickOverflow:Math.max(0,quickView.scrollHeight-quickView.clientHeight),contributionHasAudience:/Primary:|Secondary:/.test(contributionSection?.innerText||"")}}});
@@ -426,10 +464,36 @@ for (const viewport of viewports) {
     panels:[...document.querySelectorAll('#detailDialog .info-tooltip__panel')].map(node=>node.textContent.trim())
   }));
   if(oaTooltipAudit.triggers||oaTooltipAudit.panels.some(text=>!text))failures.push(`${viewport.name} Cathay OA meaningless or empty tooltip remains: ${JSON.stringify(oaTooltipAudit)}`);
+  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
+  const gameCenterDialogScroll=page.locator("#detailDialog .dialog-scroll").first();
+  const captureGameCenterDialogCheckpoint=async(name,target)=>{
+    if(!(await target.count())||!(await target.isVisible())||!(await gameCenterDialogScroll.count())){
+      failures.push(`${viewport.name} Game Center dialog checkpoint missing: ${name}`);
+      return;
+    }
+    await scrollDialogTarget(target);
+    await gameCenterDialogScroll.screenshot({path:path.join(targetedDirectory,`${name}.png`)});
+  };
+  if(await gameCenterDialogScroll.count()){
+    await gameCenterDialogScroll.evaluate(node=>{node.scrollTop=0});
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    await gameCenterDialogScroll.screenshot({path:path.join(targetedDirectory,"game-center-01-hero-at-a-glance.png")});
+  }else failures.push(`${viewport.name} Game Center dialog scroll owner missing`);
+  for(const [name,selector] of [
+    ["game-center-02-complexity","#systemCaseComplexitySection"],
+    ["game-center-03-contribution",".contribution-block"],
+    ["game-center-04-core-system-insight","[data-canonical-section-id='core-system-insight']"],
+    ["game-center-05-decisions","#systemCaseDecisionsSection"],
+    ["game-center-06-evidence","#systemCaseEvidenceSection"],
+    ["game-center-07-outcomes","#systemCaseOutcomesSection"],
+    ["game-center-08-accountability","#systemCaseAccountabilitySection"],
+    ["game-center-09-related-work","[data-canonical-section-id='continue-exploring']"]
+  ])await captureGameCenterDialogCheckpoint(name,page.locator(selector).first());
   if(viewport.width===430){
     const eyebrowRoutes=[
       'cathay-sit-online-account-opening',
       'cathay-sit-review-remediation-operations',
+      'game-center',
       'payment',
       'dbs',
       'booking',
