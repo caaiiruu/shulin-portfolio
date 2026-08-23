@@ -90,21 +90,41 @@ for (const viewport of viewports) {
     const targetDir=path.join(outputRoot,"r170-taishin",viewport.name);
     fs.mkdirSync(targetDir,{recursive:true});
     const checkpoints=[
-      ["01-overview","#projectOverviewSection"],
-      ["02-complexity","#systemCaseComplexitySection"],
-      ["03-decisions","#systemCaseDecisionsSection"],
-      ["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type"],
-      ["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type"],
-      ["06-outcomes","#systemCaseOutcomesSection"],
-      ["07-ownership","#systemCaseAccountabilitySection"]
+      ["01-overview","#projectOverviewSection","#projectOverviewSection"],
+      ["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],
+      ["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],
+      ["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type","#systemCaseEvidenceSection"],
+      ["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type","#systemCaseEvidenceSection"],
+      ["06-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],
+      ["07-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]
     ];
     const scroll=page.locator("#detailDialog .dialog-scroll").first();
-    for(const [name,selector] of checkpoints){
+    for(const [name,selector,expectedHref] of checkpoints){
       const target=page.locator(selector).first();
       if(!await target.count()){failures.push(`${viewport.name} Taishin checkpoint missing: ${name}`);continue}
-      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,target.offsetTop-96)},selector);
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} Taishin navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
       await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+    const deltaPresentation=await page.evaluate(()=>({visibleDecisionMapping:[...document.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__decision-link")].filter(node=>node.getClientRects().length).map(node=>node.textContent.trim()),accountabilityLabels:[...document.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-eyebrow")].filter(node=>node.getClientRects().length).map(node=>node.textContent.trim()),boundaryCount:(document.querySelector("#detailDialog")?.innerText.match(/Production launch and measured business outcomes are not verified in the available source record/g)||[]).length,text:document.querySelector("#detailDialog")?.innerText||""}));
+    if(deltaPresentation.visibleDecisionMapping.length)failures.push(`${viewport.name} Taishin decision mapping metadata visible`);
+    if(JSON.stringify(deltaPresentation.accountabilityLabels)!==JSON.stringify(["WHAT I OWNED","SHARED DECISIONS","PARTNER-OWNED BOUNDARY"]))failures.push(`${viewport.name} Taishin accountability labels mismatch: ${JSON.stringify(deltaPresentation.accountabilityLabels)}`);
+    if(deltaPresentation.boundaryCount!==1)failures.push(`${viewport.name} Taishin claim boundary count mismatch: ${deltaPresentation.boundaryCount}`);
+    if(/Buyer–seller trust depended|Implementation-ready marketplace specifications|I OWNED THE OUTCOME/.test(deltaPresentation.text))failures.push(`${viewport.name} Taishin source-tightening regression`);
+    for(const projectId of ["payment","cathay-sit-review-remediation-operations","cathay-sit-online-account-opening","game-center","voucher-center"]){
+      await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:"networkidle"});
+      const root=page.locator("#detailDialog .dialog-scroll").first();
+      for(const expectedHref of ["#projectOverviewSection","#systemCaseComplexitySection","#systemCaseDecisionsSection","#systemCaseEvidenceSection","#systemCaseOutcomesSection","#systemCaseAccountabilitySection"]){
+        const target=page.locator(expectedHref).first();if(!await target.count())continue;
+        await root.evaluate((scrollRoot,query)=>{const target=scrollRoot.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,scrollRoot.clientHeight*.2));scrollRoot.scrollTop=Math.max(0,scrollRoot.scrollTop+target.getBoundingClientRect().top-scrollRoot.getBoundingClientRect().top-activation+2)}},expectedHref);
+        await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+        const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+        if(activeHref!==expectedHref)failures.push(`${viewport.name} ${projectId} navigator drift: expected ${expectedHref}, got ${activeHref}`);
+      }
+      const sharedLeak=await page.evaluate(()=>({decision:[...document.querySelectorAll(".structured-evidence-v223__decision-link")].some(node=>node.getClientRects().length),outcomeOwnership:(document.querySelector("#detailDialog")?.innerText||"").includes("I OWNED THE OUTCOME")}));
+      if(sharedLeak.decision||sharedLeak.outcomeOwnership)failures.push(`${viewport.name} ${projectId} shared presentation regression: ${JSON.stringify(sharedLeak)}`);
     }
   }
 

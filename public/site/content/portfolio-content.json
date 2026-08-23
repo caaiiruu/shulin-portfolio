@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-23-r170.2",
+  "contentVersion": "2026-08-23-r170.3A",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -12581,13 +12581,13 @@
         "contentStatus": "approved",
         "accountabilityPresentation": {
           "intro": {
-            "en": "The verified boundary separates co-led UX definition from partner-owned implementation and unavailable production outcomes.",
-            "zh": "已驗證邊界區分共同主導的 使用者體驗 定義、夥伴負責的實作與無法取得的正式環境成果。"
+            "en": "The verified boundary separates co-led UX definition from partner-owned implementation.",
+            "zh": "經驗證的責任邊界區分共同主導的 UX 定義與合作夥伴負責的技術實作。"
           },
           "owned": {
             "label": {
-              "en": "OWNED / CO-LED",
-              "zh": "負責／共同主導"
+              "en": "WHAT I OWNED",
+              "zh": "我負責的工作"
             },
             "title": {
               "en": "Research, transaction modeling and delivery specification",
@@ -12600,8 +12600,8 @@
           },
           "shared": {
             "label": {
-              "en": "PARTNERED",
-              "zh": "合作"
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
             },
             "title": {
               "en": "Design, bank and vendor delivery network",
@@ -12614,16 +12614,16 @@
           },
           "partnerOwned": {
             "label": {
-              "en": "BOUNDARY",
-              "zh": "邊界"
+              "en": "PARTNER-OWNED BOUNDARY",
+              "zh": "合作夥伴負責邊界"
             },
             "title": {
               "en": "Ownership split, implementation and production outcomes",
               "zh": "分工、實作與正式環境成果"
             },
             "text": {
-              "en": "The exact split with the other UX designer is not fully documented; technical implementation remained partner-owned; production launch and measured business impact are unverified.",
-              "zh": "與另一位 使用者體驗 設計師的精確分工未完整記錄；技術實作由合作夥伴負責；正式上線與衡量後的商業影響未經驗證。"
+              "en": "The exact split with the other UX designer is not fully documented; technical implementation remained partner-owned. Production launch and measured business outcomes are not verified in the available source record.",
+              "zh": "與另一位 UX 設計師的精確分工未有完整紀錄；技術實作仍由合作夥伴負責。現有來源紀錄未能驗證正式上線與可衡量的商業成果。"
             }
           },
           "contentStatus": "source-remapped-r170.1"
@@ -12850,8 +12850,8 @@
         {
           "id": "taishin-hard-shared-states",
           "title": {
-            "en": "Buyer–seller trust depended on shared transaction states.",
-            "zh": "買賣雙方的信任取決於共享的交易狀態。"
+            "en": "Buyer and seller journeys had to share one transaction-state model.",
+            "zh": "買方與賣方旅程必須共用同一套交易狀態模型。"
           },
           "description": {
             "en": "",
@@ -13215,8 +13215,8 @@
             },
             {
               "heading": {
-                "en": "Implementation-ready marketplace specifications",
-                "zh": "可供實作的市集規格"
+                "en": "Shared marketplace delivery specifications",
+                "zh": "共享的市場平台交付規格"
               },
               "copy": {
                 "en": "Marketplace structure and detailed wireframes created a shared delivery basis.",
@@ -13234,10 +13234,6 @@
               }
             }
           ],
-          "closing": {
-            "en": "Production launch and measured business impact remain unverified.",
-            "zh": "正式上線與衡量後的商業影響仍未驗證。"
-          },
           "claimBoundary": [
             "Delivery counts are scale proof, not business impact.",
             "No launch, adoption, conversion, GMV, revenue, growth or uplift claim."
