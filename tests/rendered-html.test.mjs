@@ -519,7 +519,7 @@ test("keeps domain selectors concise and card hover states inside their rails", 
   assert.doesNotMatch(tokens, /--work-card-hover-transform:[^;]*rotate/);
 });
 
-test("keeps project metadata on one line and global search in the active language", () => {
+test("keeps project metadata on one desktop line, allows a two-line mobile eyebrow, and keeps global search in the active language", () => {
   const foundation = read("assets/css/components/foundation.css");
   const overview = read("assets/css/components/project-detail-overview.css");
   const app = read("assets/js/app.js");
@@ -528,6 +528,7 @@ test("keeps project metadata on one line and global search in the active languag
   assert.doesNotMatch(foundation, /\.company-context-v132::before\{content:"·"/);
   assert.match(app, /element\('span','company-separator-v159','·'\)/);
   assert.match(overview, /\.modal-head-meta-v60\{[^}]*align-items:baseline;[^}]*flex-wrap:nowrap/);
+  assert.match(overview, /\.modal-head-meta-v60\{display:flex;flex-wrap:wrap;[^}]*max-block-size:var\(--project-hero-eyebrow-mobile-max-block-size\)/);
   assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-separator-v159,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
   for (const contract of [
     "safeText(title,ui(",
@@ -1537,7 +1538,11 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
   assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
   for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
-    assert.equal(project.title.en.startsWith("From "),false,`${id}: visible Hero title starts with From`);
+    const visibleTitle=contract.hero.forbiddenVisiblePrefixes.reduce(
+      (title,prefix)=>title.startsWith(prefix)?title.slice(prefix.length):title,
+      project.title.en
+    );
+    assert.equal(visibleTitle.startsWith("From "),false,`${id}: visible Hero title starts with From`);
     assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
     assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
     for(const ref of contract.requiredContentRefs){
@@ -1751,7 +1756,7 @@ test("shared Outcomes supports change, measured outcome, and scale semantics", (
   assert.match(app, /source\?\.change/);
   assert.match(app, /source\?\.measured/);
   assert.match(app, /source\?\.scale/);
-  assert.match(app, /if\(outcomesSource\?\.semanticHierarchy\)appendOutcomeSemanticHierarchy/);
+  assert.match(app, /if\(outcomesHierarchy\)appendOutcomeSemanticHierarchy\(outcomes,outcomesHierarchy/);
   assert.doesNotMatch(app, /booking.*semanticHierarchy|semanticHierarchy.*booking/i);
   assert.match(overview, /\.outcome-semantic-change\{/);
   assert.match(overview, /\.outcome-scale-grid\{/);
@@ -1932,4 +1937,46 @@ test("R165.1G binds public-safe Cathay Evidence while preserving internal Search
     assert.equal(asset.replacementRequired,false);
   }
   assert.equal(ssot.contentVersion,manifest.contentVersion);
+});
+
+test("R166.1 projects Cathay OA through the recruiter-first shared IA without placeholder evidence",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-sit-online-account-opening"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.equal(project.title.en,"From fragmented requirements to one end-to-end account-opening journey");
+  assert.deepEqual(project.searchIndexV2.problemTags.en,["account opening","identity verification","application recovery"]);
+  assert.equal(project.presentation.visibility.problemTypes,undefined);
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions,project.designDecisions);
+  assert.equal(project.decisionNarrative.primaryDecisions[1].optionalThirdBlock.type,"TRADE-OFF ACCEPTED");
+  assert.equal(project.decisionNarrative.primaryDecisions[2].optionalThirdBlock.type,"RISK MANAGED");
+  assert.equal(project.publicContent.accountOpeningEvidence.presentation,"structured-html");
+  assert.equal(project.publicContent.accountOpeningEvidence.items.length,0);
+  assert.deepEqual(project.publicContent.accountOpeningEvidence.structuredGroups.map(item=>item.id),["journey-synthesis","account-opening-architecture","recovery-exception-model","delivery-proof"]);
+  const outcomes=project.publicContent.outcomes.semanticHierarchy;
+  assert.deepEqual(outcomes.measured.map(item=>item.value),["1","6 stages","4 routes","3 contexts","1 month","Complete"]);
+  assert.equal(outcomes.change,undefined);
+  assert.equal(outcomes.metricLayout,"aligned");
+  assert.equal(outcomes.measuredLabel.en,"One aligned account-opening model and a development-ready specification set.");
+  assert.match(outcomes.supportingStatements[0].text.en,/Post-launch performance was not available/);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Exact project Timeline"),false);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Sole versus Primary Product Designer wording"),false);
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"placeholder-active");
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,null);
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.match(app,/if\(!evidenceItems\.length\)return null/);
+  assert.match(app,/\['aligned','aligned-five'\]\.includes\(source\.metricLayout\)/);
+  assert.match(app,/outcomesHierarchy&&!outcomesHierarchy\.change/);
+  assert.match(app,/measuredLabelInHeader=false/);
+  assert.match(app,/if\(!measuredLabelInHeader\)group\.append/);
+  assert.match(app,/createInfoTooltip\(translate\(item\.evidenceNote\)[^\n]*\[labelCopy,supportingCopy,fallbackCopy\]\)/);
+  assert.match(app,/if\(list\(visibleCopy\)\.some\(copy=>normalizedTooltipCopy\(copy\)===normalizedSource\)\)return null/);
+  assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
+  assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });
