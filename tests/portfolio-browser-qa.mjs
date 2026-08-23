@@ -78,7 +78,7 @@ for (const viewport of viewports) {
     };
   });
   const expectedTaishinSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
-  if(taishinPresentation.title!=="Trust and transaction governance for a P2P marketplace"||taishinPresentation.title.startsWith("From "))failures.push(`${viewport.name} Taishin Hero mismatch: ${taishinPresentation.title}`);
+  if(taishinPresentation.title!=="Third-party payment to a governed P2P marketplace"||taishinPresentation.title.startsWith("From "))failures.push(`${viewport.name} Taishin Hero mismatch: ${taishinPresentation.title}`);
   if(taishinPresentation.tags.length||taishinPresentation.classificationVisible)failures.push(`${viewport.name} Taishin Hero taxonomy leaked: ${JSON.stringify(taishinPresentation.tags)}`);
   if(JSON.stringify(taishinPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Taishin navigator mismatch: ${JSON.stringify(taishinPresentation.navigator)}`);
   if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
