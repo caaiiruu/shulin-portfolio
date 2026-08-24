@@ -21276,7 +21276,7 @@
         "contentStatus": "approved-recovery-candidate"
       },
       "heroVisualBrief": {
-        "assetId": null,
+        "assetId": "booking-taxi-pickup-overview-source-v1",
         "problemSignal": "Unvalidated taxi pre-booking expansion opportunity",
         "systemSignal": "Research and strategy model across customer, supplier, market and performance evidence",
         "outcomeSignal": "Delivered lower-risk Phase 1 recommendation",
