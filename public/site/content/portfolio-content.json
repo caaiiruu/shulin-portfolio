@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-23-r168.1",
-  "supersedes": "2026-08-17-r164.1",
+  "contentVersion": "2026-08-25-r174.2",
+  "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -7508,7 +7508,7 @@
       "year": 2025,
       "status": "shipped-with-future-phases",
       "publicStatus": "principal-ready-zero-to-one-multi-game-product",
-      "contentStatus": "primary-source-corrected-r168.1",
+      "contentStatus": "primary-source-assets-integrated-r174.2",
       "title": {
         "en": "One live game to a scalable multi-game Game Center",
         "zh": "從單一上線遊戲，到可擴展的多遊戲 Game Center"
@@ -7525,9 +7525,9 @@
           "遊戲狀態溝通"
         ]
       },
-  "atAGlance": {
-    "en": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
-    "zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。"
+      "atAGlance": {
+        "en": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
+        "zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。"
       },
       "infoGrid": {
         "type": {
@@ -7879,8 +7879,13 @@
                 "en": "LED TO DECISION 01",
                 "zh": "導向決策 01"
               },
-              "sourceRef": "Game_Listing_Page_Performance.pdf · page 1",
-              "assetStatus": "deferred-human-source"
+              "sourceRef": "Game Listing Page Performance.pdf · page 1 · From → To table",
+              "assetStatus": "real-active",
+              "assetId": "game-center-single-to-multi-game-discovery-public-v1",
+              "caption": {
+                "en": "Moving from a single featured game to a shared listing model made multiple concurrent experiences discoverable from one destination.",
+                "zh": "從單一主打遊戲轉向共享列表模型，讓多個並行體驗可在同一目的地被探索。"
+              }
             },
             {
               "heading": {
@@ -7888,15 +7893,20 @@
                 "zh": "探索需要明確的遊戲分類與可玩狀態"
               },
               "summary": {
-                "en": "The PRD defines simultaneous games, limited-time and evergreen grouping, New and Ending Soon tags, once-per-day labels and next-available-play timing.",
-                "zh": "PRD 定義了多遊戲並行、限時與常駐分類、New 與 Ending Soon 標籤、每日一次提示，以及下次可玩時間。"
+                "en": "The PRD acceptance criteria define simultaneous game hosting, one Game Center for active games, and distinct limited-time and evergreen placement.",
+                "zh": "PRD 驗收條件定義了多遊戲同時承載、以單一 Game Center 呈現進行中的遊戲，以及限時與常駐內容的分區配置。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 02",
                 "zh": "導向決策 02"
               },
-              "sourceRef": "PRD_Omni-gamification_experience.pdf",
-              "assetStatus": "deferred-human-source"
+              "sourceRef": "PRD _ Omni-gamification experience.pdf · page 6 · Multiple Game Hosting acceptance criteria",
+              "assetStatus": "real-active",
+              "assetId": "game-center-concurrent-game-platform-model-public-v1",
+              "caption": {
+                "en": "The Game Center model separated evergreen and limited-time experiences so multiple campaigns could coexist within one scalable discovery system.",
+                "zh": "Game Center 模型區分常駐與限時體驗，讓多個活動能在一套可擴展的探索系統中共存。"
+              }
             },
             {
               "heading": {
@@ -7904,15 +7914,20 @@
                 "zh": "並行活動需要可配置的呈現方式"
               },
               "summary": {
-                "en": "The PRD and concurrent-mini-games JIRA establish the need to host several games together and give Platform Operations control over listing order and campaign presentation.",
-                "zh": "PRD 與並行小遊戲 JIRA 證明，系統需要同時承載多個遊戲，並讓平台營運團隊控制列表順序與活動呈現。"
+                "en": "The PRD acceptance criteria define New and Ending Soon states, once-per-day and next-play communication, and Platform Operations control over display order.",
+                "zh": "PRD 驗收條件定義了 New 與 Ending Soon 狀態、每日一次與下次可玩時間的溝通，以及平台營運團隊對顯示順序的控制。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
                 "zh": "導向決策 03"
               },
-              "sourceRef": "PRD + JIRA_Unlocking_Concurrent_Mini-games_Capability.pages",
-              "assetStatus": "deferred-human-source"
+              "sourceRef": "PRD _ Omni-gamification experience.pdf · page 7 · Phase 1.2 acceptance criteria",
+              "assetStatus": "real-active",
+              "assetId": "game-center-status-operations-control-public-v1",
+              "caption": {
+                "en": "Status rules and operator-controlled ordering made changing game availability understandable to players while keeping presentation manageable for operations.",
+                "zh": "狀態規則與營運可控的排序，讓玩家理解遊戲可玩狀態的變化，也讓營運團隊能管理呈現方式。"
+              }
             },
             {
               "heading": {
@@ -7936,10 +7951,10 @@
               "70% users engaging with 2+ mini games",
               "23% Gamification MAU / MAU"
             ],
-        "excluded": [
-          "target values misrepresented as achieved outcomes",
-          "unreconciled printed percentage changes",
-          "unreconciled commercial uplift and causal attribution"
+            "excluded": [
+              "target values misrepresented as achieved outcomes",
+              "unreconciled printed percentage changes",
+              "unreconciled commercial uplift and causal attribution"
             ]
           },
           "contentStatus": "primary-source-verified-r168.1"
@@ -8023,11 +8038,11 @@
             "en": "What periods and denominators were used for the 4% and 19% baselines?"
           }
         },
-    {
-      "id": "performance-table-conflict",
-      "question": {
-        "zh": "Performance 表中的印刷百分比變化應如何由顯示的前後數值計算？",
-        "en": "How should the printed percentage changes be reconciled with the displayed before and after values?"
+        {
+          "id": "performance-table-conflict",
+          "question": {
+            "zh": "Performance 表中的印刷百分比變化應如何由顯示的前後數值計算？",
+            "en": "How should the printed percentage changes be reconciled with the displayed before and after values?"
           }
         },
         {
@@ -8327,7 +8342,7 @@
         "contentStatus": "approved"
       },
       "heroVisualBrief": {
-        "assetId": "gamecenter-hero-shipped-before-after-public-v1",
+        "assetId": "game-center-single-to-multi-game-discovery-public-v1",
         "problemSignal": "Campaign games lacked a reusable destination and lifecycle",
         "systemSignal": "Game listing, login, participation and reward entry",
         "outcomeSignal": "Phase 1.1 launched",
@@ -8373,8 +8388,8 @@
         "活動並行承載",
         "遊戲狀態溝通"
       ],
-  "at_glance": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
-  "at_glance_zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。",
+      "at_glance": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
+      "at_glance_zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。",
       "why": "A single live-game slot limited discovery, variety and the ability to run sponsor campaigns concurrently.",
       "why_zh": "單一上線遊戲位置限制探索、內容多樣性，以及多個贊助活動並行的能力。",
       "impact": "Established a centralized discovery and configuration layer for presenting multiple active games through one reusable Game Center model.",
@@ -12413,8 +12428,8 @@
       "period": "2016–2017",
       "status": "delivered-to-client-production-outcomes-unavailable",
       "title": {
-        "en": "From third-party payment to a governed P2P marketplace",
-        "zh": "從第三方支付服務，到具交易治理的 P2P 拍賣平台"
+        "en": "Third-party payment to a governed P2P marketplace",
+        "zh": "從第三方支付到受治理的 P2P 市集"
       },
       "problemTypes": {
         "en": [
@@ -12429,8 +12444,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Co-led research and UX definition for Taishin Bank’s P2P marketplace, translating 30 interviews into 7 logic-flow sheets and 25 functional documents that aligned buyer, seller, payment, logistics and notification states across the bank and software vendor.",
-        "zh": "共同主導台新銀行 P2P 拍賣平台的研究與使用者體驗定義，將 30 場訪談轉化為 7 份邏輯流程表與 25 份功能文件，對齊銀行與軟體供應商之間的買方、賣方、付款、物流與通知狀態。"
+        "en": "Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.",
+        "zh": "共同主導 P2P 市集使用者體驗定義，透過 30 場訪談，將分散流程整合為銀行與軟體供應商共用模型。"
       },
       "infoGrid": {
         "type": {
@@ -12442,26 +12457,20 @@
           }
         },
         "scope": {
-          "en": "End-to-end marketplace transaction model spanning buyer, seller, payment, logistics and notifications",
-          "zh": "涵蓋買方、賣方、付款、物流與通知的端到端市集交易模型"
+          "en": "End-to-end marketplace transaction, payment, logistics and notification model",
+          "zh": "端到端市集交易、付款、物流與通知模型"
         },
         "audience": {
           "primary": {
-            "en": "P2P marketplace buyers and sellers",
-            "zh": "P2P 市集買家與賣家"
+            "en": "Buyers, sellers",
+            "zh": "買家、賣家"
           },
           "secondary": {
             "en": [
-              "Taishin Bank stakeholders",
-              "Client Operations",
-              "Software vendor",
-              "Front-end and Back-end teams"
+              "Bank operations and marketplace stakeholders"
             ],
             "zh": [
-              "台新銀行利害關係人",
-              "客戶營運團隊",
-              "軟體供應商",
-              "前端與後端團隊"
+              "銀行營運與市集利害關係人"
             ]
           }
         },
@@ -12471,8 +12480,8 @@
             "zh": "6 個月"
           },
           "dateRange": {
-            "en": "",
-            "zh": ""
+            "en": "2016–2017",
+            "zh": "2016–2017"
           },
           "status": "source-confirmed"
         },
@@ -12509,69 +12518,81 @@
       },
       "designDecisions": [
         {
-          "id": "taishin-decision-marketplace-framing",
+          "id": "taishin-decision-transaction-model",
           "title": {
-            "en": "From a payment service to a trusted P2P marketplace",
-            "zh": "從支付服務，到值得信任的 P2P 市集"
+            "en": "From payment functionality to an end-to-end marketplace transaction model",
+            "zh": "從付款功能到端到端市集交易模型"
           },
           "whatIDecided": {
-            "en": "Expanded the initial third-party payment brief into a marketplace model that guided sellers stage by stage and protected buyers throughout the transaction.",
-            "zh": "將原本的第三方支付需求擴展為市集模型，分階段引導賣家，並在交易過程中保障買家。"
+            "en": "Integrate buyer, seller, payment, logistics and notification states.",
+            "zh": "整合買方、賣方、付款、物流與通知狀態。"
           },
           "whyThisChoice": {
-            "en": "Market research showed that Taishin Bank’s trust advantage could create more value through a governed end-to-end service than through an isolated payment function.",
-            "zh": "市場研究顯示，台新銀行的信任優勢透過受治理的端到端服務，能比單一付款功能創造更完整的價值。"
-          },
-          "optionalThirdBlock": {
-            "type": "TRADE-OFF ACCEPTED",
-            "content": {
-              "en": "We accepted a broader service-definition scope instead of a faster payment-only delivery to protect buyer–seller trust and transaction coherence.",
-              "zh": "我們接受較廣的服務定義範圍，而非更快交付單一付款功能，以保障買賣信任與交易一致性。"
-            }
-          }
-        },
-        {
-          "id": "taishin-decision-shared-transaction-regulation",
-          "title": {
-            "en": "From screen rules to one end-to-end transaction regulation",
-            "zh": "從逐頁規則，到一套端到端交易規範"
-          },
-          "whatIDecided": {
-            "en": "Mapped payment, logistics, notifications, service states and response actions into one shared regulation across the bank and software vendor.",
-            "zh": "將付款、物流、通知、服務狀態與回應動作整理為銀行與軟體供應商共用的一套規範。"
-          },
-          "whyThisChoice": {
-            "en": "Buyer and seller journeys crossed organisational responsibilities; inconsistent state logic would create operational and implementation risk.",
-            "zh": "買賣雙方旅程橫跨不同組織責任；狀態邏輯不一致會增加營運與實作風險。"
+            "en": "Trust and downstream operations depended on consistent state logic.",
+            "zh": "信任與後續營運仰賴一致的狀態邏輯。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
-              "en": "This required shared transaction states and responsibility boundaries before interface specifications could remain consistent.",
-              "zh": "這需要先建立共用交易狀態與責任邊界，介面規格才能維持一致。"
+              "en": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration.",
+              "zh": "付款／物流流程、通知文案、狀態／動作定義、例外情境，以及客戶／供應商反覆確認。"
             }
+          },
+          "outcome": {
+            "en": "Shared payment/logistics regulation and transaction logic.",
+            "zh": "共享的付款／物流規範與交易邏輯。"
           }
         },
         {
-          "id": "taishin-decision-reusable-patterns",
+          "id": "taishin-decision-marketplace-structure",
           "title": {
-            "en": "From separate UX and UI production to reusable patterns",
-            "zh": "從分離的 UX／UI 製作，到可重用模式"
+            "en": "From separate buyer and seller needs to one shared marketplace structure",
+            "zh": "從分離的買賣雙方需求到一套共享市集結構"
           },
           "whatIDecided": {
-            "en": "Applied UI-defined patterns inside high-fidelity UX specifications so the broader platform could be documented consistently despite limited UI capacity.",
-            "zh": "在高擬真 UX 規格中套用 UI 已定義的模式，使有限 UI 資源下仍能一致記錄更廣的平台範圍。"
+            "en": "Translate buyer/seller research into one coherent marketplace structure.",
+            "zh": "將買賣雙方研究轉化為一套連貫的市集結構。"
           },
           "whyThisChoice": {
-            "en": "The platform scope exceeded the available UI resource and needed a shared pattern model to protect delivery consistency.",
-            "zh": "平台範圍超過現有 UI 資源，需要共享模式來維持交付一致性。"
+            "en": "Different participants needed different actions without fragmenting the core transaction model.",
+            "zh": "不同參與者需要不同操作，同時不能割裂核心交易模型。"
           },
           "optionalThirdBlock": {
-            "type": "TRADE-OFF ACCEPTED",
+            "type": "WHAT THIS REQUIRED",
             "content": {
-              "en": "We accepted heavier UX specification effort in exchange for reducing the UI bottleneck and preserving implementation consistency.",
-              "zh": "我們接受較高的 UX 規格投入，換取降低 UI 瓶頸並維持實作一致性。"
+              "en": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse.",
+              "zh": "訪談、親和圖整理、人物誌／情境、網站結構、線框稿與模式重用。"
             }
+          },
+          "outcome": {
+            "en": "Shared marketplace structure and interaction definition.",
+            "zh": "共享的市集結構與互動定義。"
+          }
+        },
+        {
+          "id": "taishin-decision-delivery-specification",
+          "title": {
+            "en": "From design intent to a shared delivery specification",
+            "zh": "從設計意圖到共享交付規格"
+          },
+          "whatIDecided": {
+            "en": "Convert the UX model into detailed shared specifications.",
+            "zh": "將使用者體驗模型轉化為詳細的共享規格。"
+          },
+          "whyThisChoice": {
+            "en": "Cross-organization implementation required one operational/interface definition.",
+            "zh": "跨組織實作需要一套共同的營運／介面定義。"
+          },
+          "optionalThirdBlock": {
+            "type": "WHAT THIS REQUIRED",
+            "content": {
+              "en": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification.",
+              "zh": "25 份功能文件、線框規格、交付優先順序、Asana 追蹤、品質驗證，以及客戶／供應商澄清。"
+            }
+          },
+          "outcome": {
+            "en": "Implementation-ready specification basis.",
+            "zh": "可供實作的規格基礎。"
           }
         }
       ],
@@ -12662,7 +12683,7 @@
           "Exact ownership division with the other UX Designer"
         ]
       },
-      "contentStatus": "approved-recovery-candidate",
+      "contentStatus": "source-and-asset-integrated-r170.1",
       "evidenceScale": {
         "moderatedInterviews": 30,
         "logicFlowSheets": 7,
@@ -12723,17 +12744,21 @@
         "problemTags": {
           "en": [
             "buyer seller trust",
+            "buyer seller workflow",
             "third-party payment",
             "auction settlement",
             "transaction disputes",
-            "multi-party governance"
+            "multi-party governance",
+            "transaction exception handling"
           ],
           "zh": [
             "買賣信任",
+            "買賣流程",
             "第三方付款",
             "拍賣結算",
             "交易爭議",
-            "多方治理"
+            "多方治理",
+            "交易例外處理"
           ]
         },
         "capabilityTags": {
@@ -12742,14 +12767,16 @@
             "governance rules",
             "service blueprint",
             "research synthesis",
-            "functional specification"
+            "functional specification",
+            "vendor integration"
           ],
           "zh": [
             "交易設計",
             "治理規則",
-            "Service blueprint",
+            "服務藍圖",
             "研究統整",
-            "功能規格"
+            "功能規格",
+            "供應商整合"
           ]
         },
         "systemTags": {
@@ -12759,8 +12786,8 @@
             "auction platform"
           ],
           "zh": [
-            "Marketplace platform",
-            "Transaction system",
+            "市集平台",
+            "交易系統",
             "拍賣平台"
           ]
         },
@@ -12773,7 +12800,7 @@
           "zh": [
             "買家",
             "賣家",
-            "Payment operations"
+            "付款營運"
           ]
         },
         "outcomeTags": {
@@ -12784,7 +12811,7 @@
           ],
           "zh": [
             "受治理的交易模型",
-            "Payment integration",
+            "付款整合",
             "買賣雙方清晰度"
           ]
         },
@@ -12795,7 +12822,7 @@
             "How do you design an auction payment system?"
           ],
           "zh": [
-            "如何在 Marketplace transaction 中建立信任？",
+            "如何在市集交易中建立信任？",
             "如何處理多方付款規則？",
             "如何設計拍賣付款系統？"
           ]
@@ -12807,7 +12834,7 @@
           "domainIds",
           "outcomeTags"
         ],
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "source-remapped-r170"
       },
       "problemTypes_zh": [
         "市集交易",
@@ -12821,8 +12848,8 @@
       "localizationStatus": "complete-core-fields",
       "ownershipModel": {
         "publicSummary": {
-          "en": "Owned the documented buyer-payment and seller-notification flows within a two-designer engagement; the exact split of broader product strategy and final production ownership remains undisclosed.",
-          "zh": "在兩位設計師共同參與的專案中，負責已記錄的買家付款與賣家通知流程；更廣泛的產品策略與最終正式環境主導分工仍未有可靠資料。"
+          "en": "Research and UX definition were co-led; technical implementation and production outcomes remained partner-owned or unverified.",
+          "zh": "研究與使用者體驗定義由雙方共同主導；技術實作與正式上線成果由合作夥伴負責或尚未經驗證。"
         },
         "ledByMe": [
           {
@@ -12866,7 +12893,56 @@
           "Exact division with the other UX Designer",
           "Production launch ownership"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "The verified boundary separates co-led UX definition from partner-owned implementation.",
+            "zh": "經驗證的責任邊界，區分共同主導的使用者體驗定義與合作夥伴負責的技術實作。"
+          },
+          "owned": {
+            "label": {
+              "en": "WHAT I OWNED",
+              "zh": "我負責的工作"
+            },
+            "title": {
+              "en": "Research, transaction modeling and delivery specification",
+              "zh": "研究、交易建模與交付規格"
+            },
+            "text": {
+              "en": "Research and UX definition, transaction/state modeling, logic-flow development, functional specification, wireframe documentation, delivery clarification and QA participation.",
+              "zh": "研究與使用者體驗定義、交易／狀態建模、邏輯流程設計、功能規格、線框文件、交付澄清與品質驗證參與。"
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "SHARED DECISIONS",
+              "zh": "共同決策"
+            },
+            "title": {
+              "en": "Design, bank and vendor delivery network",
+              "zh": "設計、銀行與供應商交付網絡"
+            },
+            "text": {
+              "en": "Partnered with another UX designer, branding company, bank stakeholders, software vendor, UI designer, PM and developers.",
+              "zh": "與另一位使用者體驗設計師、品牌公司、銀行利害關係人、軟體供應商、介面設計師、產品經理與開發人員合作。"
+            }
+          },
+          "partnerOwned": {
+            "label": {
+              "en": "PARTNER-OWNED BOUNDARY",
+              "zh": "合作夥伴負責邊界"
+            },
+            "title": {
+              "en": "Ownership split, implementation and production outcomes",
+              "zh": "分工、實作與正式環境成果"
+            },
+            "text": {
+              "en": "The exact split with the other UX designer is not fully documented; technical implementation remained partner-owned. Production launch and measured business outcomes are not verified in the available source record.",
+              "zh": "與另一位使用者體驗設計師的精確分工未有完整紀錄；技術實作仍由合作夥伴負責。現有來源紀錄未能驗證正式上線與可衡量的商業成果。"
+            }
+          },
+          "contentStatus": "source-remapped-r170.1"
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -12895,7 +12971,7 @@
         }
       ],
       "heroVisualBrief": {
-        "assetId": "taishin-p2p-overview-source-v1",
+        "assetId": "taishin-marketplace-hero-inuse-v1",
         "problemSignal": "Third-party payment alone did not establish end-to-end marketplace trust",
         "systemSignal": "P2P marketplace transaction model across buyer, seller, payment and logistics",
         "outcomeSignal": "Delivered shared transaction definition and functional specifications",
@@ -12903,11 +12979,11 @@
           "taishin-p2p-overview-source-v1",
           "taishin-p2p-background-source-v1"
         ],
-        "contentStatus": "source-registered-public-derivative-needed"
+        "contentStatus": "public-safe-active-r170.1"
       },
-      "type_zh": "交易系統",
-      "transformation_zh": "從第三方支付服務，到具交易治理的 P2P 拍賣平台",
-      "transformation": "From third-party payment to a governed P2P marketplace",
+      "type_zh": "市集平台",
+      "transformation_zh": "從第三方支付到受治理的 P2P 市集",
+      "transformation": "Third-party payment to a governed P2P marketplace",
       "problem_types": [
         "Buyer–seller trust gap",
         "Coupled transaction states",
@@ -12918,8 +12994,8 @@
         "交易狀態相互牽動",
         "跨組織交接"
       ],
-      "at_glance": "Co-led research and UX definition for Taishin Bank’s P2P marketplace, translating 30 interviews into 7 logic-flow sheets and 25 functional documents that aligned buyer, seller, payment, logistics and notification states across the bank and software vendor.",
-      "at_glance_zh": "共同主導台新銀行 P2P 拍賣平台的研究與使用者體驗定義，將 30 場訪談轉化為 7 份邏輯流程表與 25 份功能文件，對齊銀行與軟體供應商之間的買方、賣方、付款、物流與通知狀態。",
+      "at_glance": "Co-led research and UX definition of a 0→1 P2P marketplace, translating 30 interviews into transaction logic, marketplace structure and 25 functional specifications aligned across the bank and software vendor over 6 months.",
+      "at_glance_zh": "共同主導 0→1 P2P 市集的研究與 使用者體驗 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。",
       "why": "A payment feature alone could not govern buyer protection, seller operations, logistics, notifications, and implementation across multiple organisations.",
       "why_zh": "單一付款功能無法同時治理買家保障、賣家營運、物流、通知，以及跨組織實作。",
       "impact": "Established an end-to-end transaction regulation that became the shared delivery reference for the banking client and software vendor.",
@@ -12939,69 +13015,81 @@
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "taishin-decision-marketplace-framing",
+            "id": "taishin-decision-transaction-model",
             "title": {
-              "en": "From a payment service to a trusted P2P marketplace",
-              "zh": "從支付服務，到值得信任的 P2P 市集"
+              "en": "From payment functionality to an end-to-end marketplace transaction model",
+              "zh": "從付款功能到端到端市集交易模型"
             },
             "whatIDecided": {
-              "en": "Expanded the initial third-party payment brief into a marketplace model that guided sellers stage by stage and protected buyers throughout the transaction.",
-              "zh": "將原本的第三方支付需求擴展為市集模型，分階段引導賣家，並在交易過程中保障買家。"
+              "en": "Integrate buyer, seller, payment, logistics and notification states.",
+              "zh": "整合買方、賣方、付款、物流與通知狀態。"
             },
             "whyThisChoice": {
-              "en": "Market research showed that Taishin Bank’s trust advantage could create more value through a governed end-to-end service than through an isolated payment function.",
-              "zh": "市場研究顯示，台新銀行的信任優勢透過受治理的端到端服務，能比單一付款功能創造更完整的價值。"
-            },
-            "optionalThirdBlock": {
-              "type": "TRADE-OFF ACCEPTED",
-              "content": {
-                "en": "We accepted a broader service-definition scope instead of a faster payment-only delivery to protect buyer–seller trust and transaction coherence.",
-                "zh": "我們接受較廣的服務定義範圍，而非更快交付單一付款功能，以保障買賣信任與交易一致性。"
-              }
-            }
-          },
-          {
-            "id": "taishin-decision-shared-transaction-regulation",
-            "title": {
-              "en": "From screen rules to one end-to-end transaction regulation",
-              "zh": "從逐頁規則，到一套端到端交易規範"
-            },
-            "whatIDecided": {
-              "en": "Mapped payment, logistics, notifications, service states and response actions into one shared regulation across the bank and software vendor.",
-              "zh": "將付款、物流、通知、服務狀態與回應動作整理為銀行與軟體供應商共用的一套規範。"
-            },
-            "whyThisChoice": {
-              "en": "Buyer and seller journeys crossed organisational responsibilities; inconsistent state logic would create operational and implementation risk.",
-              "zh": "買賣雙方旅程橫跨不同組織責任；狀態邏輯不一致會增加營運與實作風險。"
+              "en": "Trust and downstream operations depended on consistent state logic.",
+              "zh": "信任與後續營運仰賴一致的狀態邏輯。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "This required shared transaction states and responsibility boundaries before interface specifications could remain consistent.",
-                "zh": "這需要先建立共用交易狀態與責任邊界，介面規格才能維持一致。"
+                "en": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration.",
+                "zh": "付款／物流流程、通知文案、狀態／動作定義、例外情境，以及客戶／供應商反覆確認。"
               }
+            },
+            "outcome": {
+              "en": "Shared payment/logistics regulation and transaction logic.",
+              "zh": "共享的付款／物流規範與交易邏輯。"
             }
           },
           {
-            "id": "taishin-decision-reusable-patterns",
+            "id": "taishin-decision-marketplace-structure",
             "title": {
-              "en": "From separate UX and UI production to reusable patterns",
-              "zh": "從分離的 UX／UI 製作，到可重用模式"
+              "en": "From separate buyer and seller needs to one shared marketplace structure",
+              "zh": "從分離的買賣雙方需求到一套共享市集結構"
             },
             "whatIDecided": {
-              "en": "Applied UI-defined patterns inside high-fidelity UX specifications so the broader platform could be documented consistently despite limited UI capacity.",
-              "zh": "在高擬真 UX 規格中套用 UI 已定義的模式，使有限 UI 資源下仍能一致記錄更廣的平台範圍。"
+              "en": "Translate buyer/seller research into one coherent marketplace structure.",
+              "zh": "將買賣雙方研究轉化為一套連貫的市集結構。"
             },
             "whyThisChoice": {
-              "en": "The platform scope exceeded the available UI resource and needed a shared pattern model to protect delivery consistency.",
-              "zh": "平台範圍超過現有 UI 資源，需要共享模式來維持交付一致性。"
+              "en": "Different participants needed different actions without fragmenting the core transaction model.",
+              "zh": "不同參與者需要不同操作，同時不能割裂核心交易模型。"
             },
             "optionalThirdBlock": {
-              "type": "TRADE-OFF ACCEPTED",
+              "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "We accepted heavier UX specification effort in exchange for reducing the UI bottleneck and preserving implementation consistency.",
-                "zh": "我們接受較高的 UX 規格投入，換取降低 UI 瓶頸並維持實作一致性。"
+                "en": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse.",
+                "zh": "訪談、親和圖整理、人物誌／情境、網站結構、線框稿與模式重用。"
               }
+            },
+            "outcome": {
+              "en": "Shared marketplace structure and interaction definition.",
+              "zh": "共享的市集結構與互動定義。"
+            }
+          },
+          {
+            "id": "taishin-decision-delivery-specification",
+            "title": {
+              "en": "From design intent to a shared delivery specification",
+              "zh": "從設計意圖到共享交付規格"
+            },
+            "whatIDecided": {
+              "en": "Convert the UX model into detailed shared specifications.",
+              "zh": "將使用者體驗模型轉化為詳細的共享規格。"
+            },
+            "whyThisChoice": {
+              "en": "Cross-organization implementation required one operational/interface definition.",
+              "zh": "跨組織實作需要一套共同的營運／介面定義。"
+            },
+            "optionalThirdBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification.",
+                "zh": "25 份功能文件、線框規格、交付優先順序、Asana 追蹤、品質驗證，以及客戶／供應商澄清。"
+              }
+            },
+            "outcome": {
+              "en": "Implementation-ready specification basis.",
+              "zh": "可供實作的規格基礎。"
             }
           }
         ],
@@ -13009,7 +13097,7 @@
           "projects.taishin-p2p-marketplace-platform.designDecisions"
         ],
         "recoveryType": "consolidated-from-legacy-project-and-latest-user-correction",
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "source-remapped-r170"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -13041,47 +13129,70 @@
       ],
       "valueIBrought": {
         "headline": {
-          "en": "30 interviews, 7 logic-flow sheets and 25 functional documents became one shared transaction model for Taishin Bank and its software vendor.",
-          "zh": "30 場訪談、7 份邏輯流程表與 25 份功能文件，最終整合為台新銀行與軟體供應商共用的交易模型。"
+          "en": "Turned a payment concept into one governed marketplace definition.",
+          "zh": "將支付概念轉化為一套受治理的市集定義。"
         },
         "supportingStatement": {
-          "en": "The model aligned buyer payment, seller notification, logistics and transaction states across organisational boundaries.",
-          "zh": "這套模型跨越組織邊界，對齊買方付款、賣方通知、物流與交易狀態。"
+          "en": "",
+          "zh": ""
         },
-        "contentStatus": "approved-from-verified-source-and-latest-user-correction"
+        "contentStatus": "source-remapped-r170.1"
+      },
+      "keyInterventionMap": {
+        "status": "verified-r170.1",
+        "sectionLabel": {
+          "en": "Where I changed the system",
+          "zh": "我改變系統的位置"
+        },
+        "before": {
+          "en": "A third-party payment concept without one coherent marketplace service model.",
+          "zh": "一個缺少完整市集服務模型的第三方支付概念。"
+        },
+        "intervention": {
+          "en": "Co-led user research and system definition, translating buyer/seller behavior into marketplace structure, transaction logic, wireframes and functional specifications.",
+          "zh": "共同主導使用者研究與系統定義，將買賣雙方行為轉化為市集結構、交易邏輯、線框稿與功能規格。"
+        },
+        "after": {
+          "en": "A shared marketplace definition covering customer journeys, payment/logistics states and implementation guidance.",
+          "zh": "一套涵蓋顧客旅程、付款／物流狀態與實作指引的共享市集定義。"
+        },
+        "supportingCopy": {
+          "en": "Research, transaction-state modeling and specification work connected participant commitments, service transitions and cross-organisation delivery in one implementable definition.",
+          "zh": "研究、交易狀態建模與規格工作，將參與者承諾、服務轉換與跨組織交付整合成一套可實作定義。"
+        }
       },
       "whatMadeThisHard": [
         {
-          "id": "taishin-hard-payment-only-one-layer",
+          "id": "taishin-hard-shared-states",
           "title": {
-            "en": "Payment was only one layer of trust",
-            "zh": "付款只是信任機制的一層"
+            "en": "Buyer and seller journeys had to share one transaction-state model.",
+            "zh": "買方與賣方旅程必須共用同一套交易狀態模型。"
           },
           "description": {
-            "en": "A payment function could move money, but it could not by itself protect buyers, guide sellers or define what happened when fulfilment changed.",
-            "zh": "付款功能可以完成資金移轉，卻無法單獨保障買家、引導賣家，或定義履約狀態改變時的處理方式。"
+            "en": "",
+            "zh": ""
           }
         },
         {
-          "id": "taishin-hard-coupled-transaction-states",
+          "id": "taishin-hard-synchronised-service",
           "title": {
-            "en": "Every action changed multiple transaction states",
-            "zh": "每個操作都會改變多個交易狀態"
+            "en": "Payment, logistics and notifications had to remain synchronized.",
+            "zh": "付款、物流與通知必須維持同步。"
           },
           "description": {
-            "en": "Buyer actions affected seller tasks, payment status, logistics, notifications and service recovery, so screen-level rules were insufficient.",
-            "zh": "買方操作會連動賣方任務、付款狀態、物流、通知與服務復原，因此逐頁規則不足以支撐整體交易。"
+            "en": "",
+            "zh": ""
           }
         },
         {
-          "id": "taishin-hard-cross-org-handoff",
+          "id": "taishin-hard-shared-definition",
           "title": {
-            "en": "Two organisations needed one implementation reference",
-            "zh": "兩個組織需要同一套實作依據"
+            "en": "Bank, design team and software vendor needed one shared delivery definition.",
+            "zh": "銀行、設計團隊與軟體供應商需要一套共享的交付定義。"
           },
           "description": {
-            "en": "The bank and software vendor owned different decisions and delivery responsibilities, making a shared transaction regulation essential.",
-            "zh": "銀行與軟體供應商分別承擔不同決策與交付責任，因此必須建立共用的交易規範。"
+            "en": "",
+            "zh": ""
           }
         }
       ],
@@ -13152,16 +13263,16 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "taishin-research-definition-model",
-        "key-design-decisions",
-        "research-and-specification-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "status-and-disclosure",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "legacyProjectIds": [
         "online-auction-payment-platform"
@@ -13185,43 +13296,271 @@
         },
         "whatMadeThisHard": [
           {
-            "id": "taishin-hard-payment-only-one-layer",
+            "id": "taishin-hard-shared-states",
             "title": {
-              "en": "Payment was only one layer of trust",
-              "zh": "付款只是信任機制的一層"
+              "en": "Buyer–seller trust depended on shared transaction states.",
+              "zh": "買賣雙方的信任取決於共享的交易狀態。"
             },
             "description": {
-              "en": "A payment function could move money, but it could not by itself protect buyers, guide sellers or define what happened when fulfilment changed.",
-              "zh": "付款功能可以完成資金移轉，卻無法單獨保障買家、引導賣家，或定義履約狀態改變時的處理方式。"
+              "en": "",
+              "zh": ""
             }
           },
           {
-            "id": "taishin-hard-coupled-transaction-states",
+            "id": "taishin-hard-synchronised-service",
             "title": {
-              "en": "Every action changed multiple transaction states",
-              "zh": "每個操作都會改變多個交易狀態"
+              "en": "Payment, logistics and notifications had to remain synchronized.",
+              "zh": "付款、物流與通知必須維持同步。"
             },
             "description": {
-              "en": "Buyer actions affected seller tasks, payment status, logistics, notifications and service recovery, so screen-level rules were insufficient.",
-              "zh": "買方操作會連動賣方任務、付款狀態、物流、通知與服務復原，因此逐頁規則不足以支撐整體交易。"
+              "en": "",
+              "zh": ""
             }
           },
           {
-            "id": "taishin-hard-cross-org-handoff",
+            "id": "taishin-hard-shared-definition",
             "title": {
-              "en": "Two organisations needed one implementation reference",
-              "zh": "兩個組織需要同一套實作依據"
+              "en": "Bank, design team and software vendor needed one shared delivery definition.",
+              "zh": "銀行、設計團隊與軟體供應商需要一套共享的交付定義。"
             },
             "description": {
-              "en": "The bank and software vendor owned different decisions and delivery responsibilities, making a shared transaction regulation essential.",
-              "zh": "銀行與軟體供應商分別承擔不同決策與交付責任，因此必須建立共用的交易規範。"
+              "en": "",
+              "zh": ""
             }
           }
         ],
         "projectModelRef": "projects.taishin-p2p-marketplace-platform.projectModel",
         "primaryDecisionsRef": "projects.taishin-p2p-marketplace-platform.decisionNarrative.primaryDecisions",
-        "contentStatus": "approved-recovery-candidate",
-        "sectionOrderRef": "projects.taishin-p2p-marketplace-platform.sectionOrder"
+        "coreSystemInsight": {
+          "headline": {
+            "en": "The marketplace could not be designed as a payment feature alone; transaction, logistics, notification and participant states had to operate as one governed service model.",
+            "zh": "市集不能只被設計成付款功能；交易、物流、通知與參與者狀態必須作為同一套受治理的服務模型運作。"
+          },
+          "supportingCopy": {
+            "en": "The core model made commitment, transaction, notification and exception states explicit so buyer and seller actions could remain coherent across payment, fulfilment and organisational boundaries.",
+            "zh": "核心模型明確定義承諾、交易、通知與例外狀態，使買賣雙方操作能在付款、履約與組織邊界之間保持一致。"
+          },
+          "contentStatus": "source-remapped-r170.1"
+        },
+        "decisionEvidence": {
+          "title": {
+            "en": "Evidence",
+            "zh": "證據"
+          },
+          "presentation": "decision-support",
+          "items": [
+            {
+              "id": "taishin-evidence-research",
+              "publicAssetId": "taishin-marketplace-evidence-research-synthesis-v1",
+              "title": {
+                "en": "Research synthesis",
+                "zh": "研究統整"
+              },
+              "copy": {
+                "en": "Buyer and seller research synthesis translated participant needs into a shared marketplace model.",
+                "zh": "買賣雙方研究統整將參與者需求轉化為共享的市集模型。"
+              }
+            },
+            {
+              "id": "taishin-evidence-regulation",
+              "publicAssetId": "taishin-marketplace-evidence-transaction-regulation-v1",
+              "title": {
+                "en": "Transaction regulation",
+                "zh": "交易規範"
+              },
+              "copy": {
+                "en": "Payment, logistics and notification states were defined as one transaction regulation.",
+                "zh": "付款、物流與通知狀態被定義為一套交易規範。"
+              }
+            },
+            {
+              "id": "taishin-evidence-structure",
+              "publicAssetId": "taishin-marketplace-evidence-structure-v1",
+              "title": {
+                "en": "Marketplace structure",
+                "zh": "市集結構"
+              },
+              "copy": {
+                "en": "The architecture connected participant journeys with marketplace functions.",
+                "zh": "這套架構將參與者旅程與市集功能連結起來。"
+              }
+            },
+            {
+              "id": "taishin-evidence-wireframe",
+              "publicAssetId": "taishin-marketplace-evidence-wireframe-spec-v1",
+              "title": {
+                "en": "Wireframe specification",
+                "zh": "線框規格"
+              },
+              "copy": {
+                "en": "Detailed specifications converted the marketplace structure into implementation guidance.",
+                "zh": "詳細規格將市集結構轉化為實作指引。"
+              }
+            },
+            {
+              "id": "taishin-evidence-delivery",
+              "publicAssetId": "taishin-marketplace-evidence-delivery-alignment-v1",
+              "title": {
+                "en": "Delivery alignment",
+                "zh": "交付對齊"
+              },
+              "copy": {
+                "en": "Client and vendor clarification connected design intent to delivery decisions.",
+                "zh": "客戶與供應商之間的澄清，將設計意圖連結到交付決策。"
+              }
+            }
+          ],
+          "metrics": [],
+          "structuredGroups": [
+            {
+              "heading": {
+                "en": "Research synthesis",
+                "zh": "研究統整"
+              },
+              "summary": {
+                "en": "Buyer and seller research synthesis.",
+                "zh": "買賣雙方研究統整。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISION 02",
+                "zh": "支持決策 02"
+              },
+              "sourceRef": "30 moderated interviews",
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-research-synthesis-v1"
+            },
+            {
+              "heading": {
+                "en": "Transaction regulation",
+                "zh": "交易規範"
+              },
+              "summary": {
+                "en": "Payment, logistics and notification state definition.",
+                "zh": "付款、物流與通知狀態定義。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISION 01",
+                "zh": "支持決策 01"
+              },
+              "sourceRef": "7 logic-flow sheets",
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-transaction-regulation-v1"
+            },
+            {
+              "heading": {
+                "en": "Marketplace structure + specification",
+                "zh": "市集結構＋規格"
+              },
+              "summary": {
+                "en": "Marketplace architecture and implementation detail.",
+                "zh": "市集架構與實作細節。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISIONS 02 AND 03",
+                "zh": "支持決策 02 與 03"
+              },
+              "sourceRef": "Marketplace structure + wireframe specification",
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-structure-v1"
+            },
+            {
+              "heading": {
+                "en": "Delivery alignment",
+                "zh": "交付對齊"
+              },
+              "summary": {
+                "en": "Cross-organization client/vendor clarification and handoff.",
+                "zh": "跨組織客戶／供應商澄清與交付。"
+              },
+              "decisionLink": {
+                "en": "SUPPORTED DECISION 03",
+                "zh": "支持決策 03"
+              },
+              "sourceRef": "Delivery alignment",
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-delivery-alignment-v1"
+            }
+          ],
+          "claimSafety": {
+            "verified": [
+              "2016–2017",
+              "6 months",
+              "30 moderated interviews",
+              "7 logic-flow sheets",
+              "25 functional documents"
+            ],
+            "qualitative": [
+              "coherent marketplace transaction model",
+              "shared payment and logistics regulation",
+              "implementation-ready marketplace specifications"
+            ],
+            "unavailable": [
+              "production launch",
+              "adoption",
+              "conversion",
+              "revenue",
+              "GMV",
+              "transaction volume",
+              "measured efficiency",
+              "exact ownership split"
+            ],
+            "excluded": [
+              "launch success",
+              "commercial uplift",
+              "solo ownership"
+            ]
+          },
+          "contentStatus": "source-and-asset-integrated-r170.1"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A coherent marketplace transaction model",
+            "zh": "一套完整的市集交易模型"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "Shared payment and logistics regulation",
+                "zh": "共享的付款與物流規範"
+              },
+              "copy": {
+                "en": "One state definition connected payment, logistics and notifications.",
+                "zh": "一套狀態定義串接付款、物流與通知。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Shared marketplace delivery specifications",
+                "zh": "共享的市場平台交付規格"
+              },
+              "copy": {
+                "en": "Marketplace structure and detailed wireframes created a shared delivery basis.",
+                "zh": "市集結構與詳細線框稿建立共享交付基礎。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Delivery-depth proof",
+                "zh": "交付深度證據"
+              },
+              "copy": {
+                "en": "30 interviews · 7 logic-flow sheets · 25 functional documents",
+                "zh": "30 場訪談 · 7 份邏輯流程表 · 25 份功能文件"
+              }
+            }
+          ],
+          "claimBoundary": [
+            "Delivery counts are scale proof, not business impact.",
+            "No launch, adoption, conversion, GMV, revenue, growth or uplift claim."
+          ],
+          "contentStatus": "source-remapped-r170.1"
+        },
+        "contentStatus": "recruiter-first-r170.1",
+        "sectionOrderRef": "projects.taishin-p2p-marketplace-platform.presentation.sectionOrder"
       },
       "domain": {
         "en": "P2P commerce",
@@ -13276,11 +13615,104 @@
         ],
         "recommendedHeadline": "Converted 30 interviews into a governed marketplace transaction model, 7 shared logic flows and 25 implementation documents.",
         "boundary": "No verified adoption/revenue uplift."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "contributionIntervention": "keyInterventionMap",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.decisionEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "設計決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first",
+        "detailHeroVisual": true
       }
     },
     "cathay-mortgage-assistant": {
       "id": "cathay-mortgage-assistant",
-      "company": "Cathay United Bank",
+      "company": "Cathay Life Insurance",
       "period": "2016",
       "status": "launched",
       "relationship": {
@@ -13291,8 +13723,8 @@
         ]
       },
       "title": {
-        "en": "From a rigid tablet script to a flexible mortgage consultation flow",
-        "zh": "從僵化的平板腳本，到彈性的房貸諮詢流程"
+        "en": "Rigid tablet script to a flexible mortgage consultation system",
+        "zh": "從僵化的平板腳本，到彈性的房貸諮詢系統"
       },
       "problemTypes": {
         "en": [
@@ -13307,21 +13739,21 @@
         ]
       },
       "atAGlance": {
-        "en": "Led UX redesign of an internal tablet mortgage app, turning a rigid sales script into tested, scenario-based guidance across customer needs, loan estimation, and implementation handoff.",
-        "zh": "主導內部平板房貸工具的體驗改版，將僵化的銷售腳本轉化為經測試的情境式引導，涵蓋客戶需求、房貸估算與開發交接。"
+        "en": "Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.",
+        "zh": "主導內部房貸諮詢系統的使用者體驗改版，將固定平板腳本轉化為情境導向的需求評估與試算流程，透過四項核心任務驗證並交付至已上線的內部應用程式。"
       },
       "infoGrid": {
         "type": {
           "value": "Internal System",
           "visibility": "info-grid-only",
           "rationale": {
-            "en": "Coordinates internal roles, rules, approvals, exceptions or operational decisions.",
-            "zh": "協調內部角色、規則、核准、例外或營運決策。"
+            "en": "Coordinates internal roles, rules, information and operational decisions.",
+            "zh": "協調內部角色、規則、資訊與營運決策。"
           }
         },
         "scope": {
-          "en": "End-to-end tablet consultation across customer needs assessment, mortgage estimation, scenario guidance, validation and implementation handoff",
-          "zh": "涵蓋客戶需求評估、房貸估算、情境引導、驗證與實作交接的端到端平板諮詢流程"
+          "en": "Scenario-led mortgage consultation across needs assessment, estimation, guidance and implementation handoff",
+          "zh": "涵蓋需求評估、試算、引導與實作交接的情境式房貸諮詢"
         },
         "audience": {
           "primary": {
@@ -13331,28 +13763,26 @@
           "secondary": {
             "en": [
               "Prospective mortgage customers",
-              "Product and Engineering",
-              "Marketing and data-owning departments"
+              "Delivery stakeholders"
             ],
             "zh": [
               "潛在房貸客戶",
-              "產品與工程團隊",
-              "行銷與資料所屬部門"
+              "交付利害關係人"
             ]
           }
         },
         "timeline": {
           "duration": {
-            "en": "",
-            "zh": ""
+            "en": "4 months",
+            "zh": "4 個月"
           },
           "dateRange": {
             "en": "2016",
             "zh": "2016 年"
           },
-          "status": "source-year-confirmed-duration-unavailable",
-          "publicVisibility": "hidden",
-          "displayRule": "Hide Timeline until an exact duration is confirmed."
+          "status": "human-source-verified",
+          "publicVisibility": "visible",
+          "displayRule": "Render the verified duration through the shared Info Grid."
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -13833,7 +14263,43 @@
             "zh": "客戶商業規則與開發"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I owned the UX model and handoff, partnering on research, interface execution and client alignment while business rules, engineering implementation and post-launch measurement remained outside my sole ownership.",
+            "zh": "我負責 UX 模式與交接，並共同參與研究、介面執行與客戶對齊；商業規則、工程實作與上線後衡量不屬於我單獨負責的範圍。"
+          },
+          "owned": {
+            "title": {
+              "en": "Built the UX model and implementation handoff",
+              "zh": "建立 UX 模式與實作交接"
+            },
+            "text": {
+              "en": "Owned UX concept, scenarios, prototype, wireframes, function tree and UX handoff.",
+              "zh": "負責 UX 概念、情境、原型、線框稿、功能樹與 UX 交接。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Partnered across research, interface and alignment",
+              "zh": "共同推進研究、介面與對齊"
+            },
+            "text": {
+              "en": "Partnered with the Researcher on synthesis and validation planning, the UI Designer on interface execution and the client on concept alignment.",
+              "zh": "與研究員共同進行統整與驗證規劃、與 UI 設計師合作介面執行，並與客戶對齊概念。"
+            }
+          },
+          "partnerOwned": {
+            "title": {
+              "en": "Research operations, business rules and implementation",
+              "zh": "研究執行、商業規則與實作"
+            },
+            "text": {
+              "en": "Research recruitment and facilitation where assigned, business rules, engineering implementation and final business commitments remained partner-owned. Post-launch adoption and performance metrics are unavailable.",
+              "zh": "依來源分工的研究招募與執行、商業規則、工程實作及最終商業承諾由合作夥伴負責；上線後採用與績效數據未提供。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -13863,13 +14329,13 @@
       ],
       "heroVisualBrief": {
         "assetId": "cathay-mortgage-hero-consultation-public-v1",
-        "problemSignal": "A rigid internal tablet flow interrupted real client consultation",
-        "systemSignal": "Scenario-based consultation, mortgage estimate and customer context",
-        "outcomeSignal": "Redesigned internal app launched",
+        "problemSignal": "Rigid tablet consultation script",
+        "systemSignal": "Scenario-led consultation and cross-system information model",
+        "outcomeSignal": "System-aligned launched internal delivery",
         "sourceAssetIds": [
-          "cathay-mortgage-source-extract-r82-v1"
+          "cathay-mortgage-hero-consultation-public-v1"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-r172.2"
       },
       "type_zh": "內部系統",
       "transformation": "From a rigid tablet script to a flexible mortgage consultation flow",
@@ -13908,15 +14374,15 @@
             "id": "cathay-mortgage-decision-01-flexible-consultation",
             "title": {
               "en": "From a fixed tablet orientation to a flexible consultation flow",
-              "zh": "從固定的平板引導，到彈性的房貸諮詢流程"
+              "zh": "從固定的平板引導，到彈性的諮詢流程"
             },
             "whatIDecided": {
-              "en": "Reorganised the existing app around scenario-based conversations so sales staff could assess customer needs, explain mortgage estimates and move between relevant guidance without following one rigid script.",
-              "zh": "以情境式對話重新組織既有 App，讓銷售人員能評估客戶需求、說明房貸估算，並依實際對話切換相關引導，而不是被單一路徑限制。"
+              "en": "Reframed the internal tool around scenario-led consultation rather than one prescribed sequence.",
+              "zh": "將內部工具重新定義為情境式諮詢，而非單一規定流程。"
             },
             "whyThisChoice": {
-              "en": "The original orientation did not match how sales staff developed real customer conversations and created unnecessary cognitive workload during consultation.",
-              "zh": "原本的操作引導不符合銷售人員與客戶實際互動的方式，也在諮詢過程中增加不必要的認知負擔。"
+              "en": "Advisors needed to move between customer needs, estimates and guidance as the live conversation changed.",
+              "zh": "顧問需要隨即時對話變化，在客戶需求、試算與引導之間切換。"
             },
             "optionalThirdBlock": {
               "type": "CONSTRAINT MANAGED",
@@ -13943,32 +14409,24 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "Interview transcripts and empathy maps",
-                "Scenario-based concept report",
-                "Four-task usability test"
-              ],
-              "zh": [
-                "訪談逐字稿與 Empathy maps",
-                "情境式概念報告",
-                "四項任務的可用性測試"
-              ]
+            "outcome": {
+              "en": "A more flexible consultation model.",
+              "zh": "更彈性的諮詢模式。"
             }
           },
           {
             "id": "cathay-mortgage-decision-02-shared-consultation-structure",
             "title": {
-              "en": "From fragmented departmental inputs to one consultation structure",
-              "zh": "從分散的部門資訊，到一套共享的諮詢結構"
+              "en": "From fragmented cross-system inputs to one consultation structure",
+              "zh": "從分散的跨系統資訊，到一套諮詢結構"
             },
             "whatIDecided": {
-              "en": "Defined the app structure, function tree and information requirements that organised available customer, mortgage and marketing inputs into one consultation sequence, while documenting data dependencies for delivery.",
-              "zh": "定義 App 架構、功能樹與資訊需求，將可用的客戶、房貸與行銷資訊整理進同一套諮詢順序，並清楚記錄交付所需的資料依賴。"
+              "en": "Organised mortgage, customer and marketing information into a shared consultation structure with explicit system dependencies.",
+              "zh": "將房貸、客戶與行銷資訊整理成共享的諮詢結構，並明確標示系統依賴。"
             },
             "whyThisChoice": {
-              "en": "Relevant information was distributed across departmental databases, so the team needed one shared model before interface and development decisions could stay consistent.",
-              "zh": "相關資訊分散在不同部門資料庫，因此團隊需要先建立共同模型，才能讓介面與開發決策保持一致。"
+              "en": "Advisors otherwise had to reconcile fragmented inputs during the consultation.",
+              "zh": "否則顧問必須在諮詢過程中自行整合分散資訊。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
@@ -13995,32 +14453,24 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "App structure and sitemap",
-                "Function flows and function tree",
-                "Annotated wireframes for development"
-              ],
-              "zh": [
-                "App 架構與 Sitemap",
-                "功能流程與功能樹",
-                "供開發使用的註解式 Wireframe"
-              ]
+            "outcome": {
+              "en": "One clearer consultation structure.",
+              "zh": "一套更清楚的諮詢結構。"
             }
           },
           {
             "id": "cathay-mortgage-decision-03-validated-system-handoff",
             "title": {
-              "en": "From research handoff to a validated, system-aligned delivery",
-              "zh": "從研究交接，到經驗證且符合既有系統的設計交付"
+              "en": "From concept handoff to validated, system-aligned delivery",
+              "zh": "從概念交接，到經驗證且符合系統的交付"
             },
             "whatIDecided": {
-              "en": "Translated interview findings into user scenarios, a prototype and implementation-ready wireframes, then refined the direction through a four-task usability test before handoff.",
-              "zh": "將訪談發現轉化為使用情境、原型與可實作線框稿，並在交接前透過四項任務的可用性測試修正方向。"
+              "en": "Used prototype validation and implementation-ready flows and states to carry the interaction model through to delivery.",
+              "zh": "透過原型驗證與可實作的流程及狀態，將互動模式推進至交付。"
             },
             "whyThisChoice": {
-              "en": "The redesign had to work in real sales conversations, satisfy client expectations and remain compatible with Cathay’s established component system.",
-              "zh": "改版必須能用於真實銷售對話、符合客戶期待，並與國泰既有元件系統相容。"
+              "en": "The redesign had to remain usable while fitting established internal product and engineering constraints.",
+              "zh": "改版必須兼顧可用性，並符合既有內部產品與工程限制。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
@@ -14047,25 +14497,16 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "Client ideation and alignment workshops",
-                "Marvel prototype",
-                "Developer-ready state and flow descriptions"
-              ],
-              "zh": [
-                "客戶 Ideation 與 Alignment workshops",
-                "Marvel Prototype",
-                "可供開發使用的狀態與流程說明"
-              ]
+            "outcome": {
+              "en": "A validated delivery model reflected in the launched internal app.",
+              "zh": "一套經驗證並反映於已上線內部 App 的交付模式。"
             }
           }
         ],
         "sourcePaths": [
           "projects.cathay-mortgage-assistant.designDecisions"
         ],
-        "recoveryType": "structural-projection-from-existing-r108-content",
-        "contentStatus": "recovered-exact-no-rewrite"
+        "contentStatus": "approved-r172.2"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -14104,65 +14545,257 @@
         {
           "title": {
             "en": "Real consultations did not follow one fixed script",
-            "zh": "真實諮詢不會遵循單一固定腳本"
+            "zh": "真實諮詢不會依照單一固定腳本"
           },
           "description": {
-            "en": "Sales staff needed to move between customer needs, estimates and guidance according to the conversation rather than the original app order.",
-            "zh": "銷售人員需要依實際對話在顧客需求、估算與引導間切換，而不是遵循原 App 順序。"
+            "en": "The legacy tablet flow assumed a predefined orientation sequence, while advisors had to move between customer needs, estimates and guidance according to the live conversation.",
+            "zh": "舊有平板流程假設預先定義的引導順序，但顧問必須依即時對話，在客戶需求、試算與引導之間切換。"
           }
         },
         {
           "title": {
-            "en": "Required information was fragmented across departments",
-            "zh": "必要資訊分散在不同部門"
+            "en": "Required information was fragmented across systems and departments",
+            "zh": "必要資訊分散在不同系統與部門"
           },
           "description": {
-            "en": "Customer, mortgage, marketing and operational inputs had to become one consultation structure with visible data dependencies.",
-            "zh": "顧客、房貸、行銷與營運資訊必須形成一套諮詢結構，並清楚標示資料依賴。"
+            "en": "Mortgage, customer, marketing and operational inputs had to be brought into one coherent consultation structure.",
+            "zh": "房貸、客戶、行銷與營運資訊必須被整合成一套連貫的諮詢結構。"
           }
         },
         {
           "title": {
-            "en": "The redesign had to preserve employee orientation",
-            "zh": "改版必須保留員工操作引導"
+            "en": "The redesign had to extend an established internal design system",
+            "zh": "改版必須延伸既有內部設計系統"
           },
           "description": {
-            "en": "The experience needed greater flexibility without removing the support employees relied on to conduct a compliant mortgage conversation.",
-            "zh": "體驗需要更有彈性，同時不能移除員工進行合規房貸諮詢時依賴的操作支援。"
+            "en": "The new consultation model had to add flexibility and contextual guidance without discarding existing enterprise interaction patterns and delivery constraints.",
+            "zh": "新的諮詢模式必須在保留既有企業互動模式與交付限制的前提下，增加彈性與情境引導。"
           }
         }
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "consultation-model",
-        "key-decisions",
-        "validation-and-launch",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "publicContent": {
         "contentStatus": "recovered-from-approved-deep-content",
-        "sectionOrderRef": "projects.cathay-mortgage-assistant.sectionOrder"
+        "sectionOrderRef": "projects.cathay-mortgage-assistant.sectionOrder",
+        "contribution": {
+          "headline": {
+            "en": "Turned a prescribed tablet sequence into a navigable consultation model.",
+            "zh": "將規定式平板流程轉化為可彈性導覽的諮詢模式。"
+          },
+          "transformation": {
+            "before": {
+              "en": "A fixed tablet orientation flow that did not match how mortgage consultations actually unfolded.",
+              "zh": "固定的平板引導流程，無法符合房貸諮詢實際展開的方式。"
+            },
+            "intervention": {
+              "en": "Led UX concept development, scenario modelling, prototype, wireframes, function tree and implementation handoff, working with research, UI, client and engineering partners.",
+              "zh": "主導 UX 概念發展、情境建模、原型、線框稿、功能樹與實作交接，並與研究、UI、客戶及工程夥伴協作。"
+            },
+            "after": {
+              "en": "A launched scenario-led consultation model that organised needs assessment, mortgage estimation and guidance into a more flexible internal workflow.",
+              "zh": "已上線的情境式諮詢模式，將需求評估、房貸試算與引導整理成更彈性的內部工作流程。"
+            }
+          },
+          "contentStatus": "approved-r172.2"
+        },
+        "coreSystemInsight": {
+          "headline": {
+            "en": "A consultation tool could not prescribe the conversation; it had to provide a shared structure that advisors could navigate according to customer context.",
+            "zh": "諮詢工具不能規定對話；它必須提供一套共享結構，讓顧問依客戶情境靈活導覽。"
+          },
+          "supportingCopy": {
+            "en": "The system needed to support a non-linear, human-in-the-loop conversation while keeping mortgage information and guidance coherent.",
+            "zh": "系統必須支援非線性、人機協作的對話，同時維持房貸資訊與引導的一致性。"
+          },
+          "contentStatus": "approved-r172.2"
+        },
+        "mortgageEvidence": {
+          "title": {
+            "en": "Evidence",
+            "zh": "證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "structuredGroups": [
+            {
+              "id": "consultation-research",
+              "heading": {
+                "en": "Consultation behaviour and research synthesis",
+                "zh": "諮詢行為與研究統整"
+              },
+              "summary": {
+                "en": "Empathy-map and insight synthesis grounded the consultation model in advisor conversations and customer context.",
+                "zh": "同理心地圖與洞察統整，讓諮詢模式奠基於顧問對話與客戶情境。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 03",
+                "zh": "支持決策一與決策三"
+              },
+              "assetId": "cathay-mortgage-research-synthesis-public-v1",
+              "caption": {
+                "en": "Qualitative research synthesis of advisor and customer context; evidence of research grounding, not a quantified outcome.",
+                "zh": "顧問與客戶情境的質性研究統整；證明研究基礎，不代表量化成果。"
+              }
+            },
+            {
+              "id": "consultation-structure",
+              "heading": {
+                "en": "Consultation structure and system definition",
+                "zh": "諮詢結構與系統定義"
+              },
+              "summary": {
+                "en": "Multiple flows, states and interface definitions made the cross-system consultation model explicit for delivery.",
+                "zh": "多組流程、狀態與介面定義，將跨系統諮詢模式明確化以供交付。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 02 and 03",
+                "zh": "支持決策二與決策三"
+              },
+              "assetId": "cathay-mortgage-structure-specification-public-v1",
+              "caption": {
+                "en": "System and specification evidence showing flows, states and interface definitions; not evidence of measured dependency reduction.",
+                "zh": "呈現流程、狀態與介面定義的系統及規格證據；不代表已量測的依賴降低。"
+              }
+            },
+            {
+              "id": "prototype-validation",
+              "heading": {
+                "en": "Prototype validation",
+                "zh": "原型驗證"
+              },
+              "summary": {
+                "en": "Observed tablet usability testing refined the interaction model across four core tasks before delivery.",
+                "zh": "透過平板可用性測試觀察，在交付前依四項核心任務修正互動模式。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 03",
+                "zh": "支持決策一與決策三"
+              },
+              "assetId": "cathay-mortgage-prototype-validation-public-v1",
+              "caption": {
+                "en": "Observed usability-testing interaction; validation and refinement evidence only, with no quantified task-success claim.",
+                "zh": "可用性測試互動觀察；僅證明驗證與修正，不包含量化任務成功率主張。"
+              }
+            },
+            {
+              "id": "delivered-interface",
+              "heading": {
+                "en": "Final delivered interface",
+                "zh": "最終交付介面"
+              },
+              "summary": {
+                "en": "Final consultation surfaces combined mortgage guidance with contextual property-value discussion.",
+                "zh": "最終諮詢介面結合房貸引導與具情境的房產價值討論。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01, 02 and 03",
+                "zh": "支持決策一、二與三"
+              },
+              "assetId": "cathay-mortgage-final-interface-home-public-v1",
+              "caption": {
+                "en": "Final home surface from the launched internal app; historical interface evidence, not proof of adoption or performance.",
+                "zh": "已上線內部 App 的最終首頁；屬歷史介面證據，不代表採用或績效。"
+              }
+            },
+            {
+              "id": "delivered-interface-market-map",
+              "heading": {
+                "en": "Final delivered interface — contextual market map",
+                "zh": "最終交付介面—情境市場地圖"
+              },
+              "summary": {
+                "en": "A supporting consultation surface brought property-value context into the advisor conversation.",
+                "zh": "支援性的諮詢介面將房產價值情境帶入顧問對話。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 02",
+                "zh": "支持決策二"
+              },
+              "assetId": "cathay-mortgage-final-interface-market-map-public-v1",
+              "caption": {
+                "en": "Historical market-map interface with example property values; delivery context only, not current financial guidance or performance evidence.",
+                "zh": "含範例房產價值的歷史市場地圖介面；僅作交付情境證據，不代表現行金融建議或績效。"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r172.2"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A launched scenario-led mortgage consultation model",
+            "zh": "已上線的情境式房貸諮詢模式"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A simpler consultation orientation",
+                "zh": "更簡潔的諮詢引導"
+              },
+              "copy": {
+                "en": "Replaced one prescribed sequence with a structure advisors could navigate according to the live conversation.",
+                "zh": "以顧問可依即時對話導覽的結構，取代單一規定式順序。"
+              }
+            },
+            {
+              "heading": {
+                "en": "One internal information experience",
+                "zh": "一套內部資訊體驗"
+              },
+              "copy": {
+                "en": "Organised mortgage, customer and marketing inputs into one coherent consultation structure.",
+                "zh": "將房貸、客戶與行銷資訊整理成一套連貫的諮詢結構。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A validated interaction model",
+                "zh": "經驗證的互動模式"
+              },
+              "copy": {
+                "en": "Refined the scenario-led model through four core usability tasks before delivery.",
+                "zh": "在交付前，透過四項核心可用性任務修正情境式模式。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Post-launch adoption and performance metrics are not available in the verified source record.",
+            "zh": "經核實的來源紀錄未包含上線後採用與績效數據。"
+          },
+          "contentStatus": "approved-r172.2"
+        }
       },
       "domain": {
         "en": "Mortgage advisory",
         "zh": "房貸諮詢"
       },
       "heroMetadata": {
-        "company": "Cathay United Bank",
+        "company": "Cathay Life Insurance",
         "domain": {
-          "en": "Mortgage advisory",
-          "zh": "房貸諮詢"
+          "en": "Internal mortgage consultation",
+          "zh": "內部房貸諮詢"
         },
         "renderOrder": [
           "company",
           "domain"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-r172.2"
       },
       "keyProblems": {
         "en": [
@@ -14194,6 +14827,97 @@
         "shippedProof": "Internal tablet product launched; implementation-ready structure and wireframes delivered.",
         "recommendedHeadline": "Turned rigid consultation tooling into a launched tablet workflow validated across four usability tasks.",
         "boundary": "Employee adoption, consultation-efficiency improvement and mortgage-sales outcome remain unverified."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "publicContent.contribution",
+          "contributionIntervention": "publicContent.contribution.transformation",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.mortgageEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "variant": "featured",
+          "showVisuals": false,
+          "outcomeField": "outcome"
+        },
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "detailHeroVisual": true
       }
     },
     "payment": {
@@ -21075,8 +21799,8 @@
       "period": "Apr–Dec 2019",
       "status": "research-and-strategy-delivered-recommendation-only",
       "title": {
-        "en": "From uncertain expansion to a lower-risk taxi pickup experiment",
-        "zh": "從不確定的服務擴張，到低風險的計程車接送實驗"
+        "en": "Uncertain expansion to a lower-risk taxi pickup experiment",
+        "zh": "從不確定的服務擴張，到較低風險的計程車接送實驗"
       },
       "cardTitle": {
         "en": "Taxi Pickup Market Strategy",
@@ -21100,8 +21824,8 @@
         "實驗設計"
       ],
       "atAGlance": {
-        "en": "Led nine months of research and strategy for Booking.com’s taxi pre-booking expansion, combining customer, supplier, market and performance evidence to redefine the proposition and recommend a lower-cost Phase 1 experiment in selected target markets.",
-        "zh": "主導 Booking.com 計程車預約服務為期九個月的研究與策略，整合顧客、供應商、市場與產品表現證據，重新定義服務主張，並建議在選定目標市場進行低成本的第一階段實驗。"
+        "en": "Led nine months of taxi pickup research and strategy, combining traveller, supplier and market evidence to turn an uncertain expansion opportunity into a selected-market Phase 1 experiment recommendation.",
+        "zh": "主導九個月的計程車接送研究與策略，整合旅客、供應商與市場證據，將不確定的擴張機會轉化為選定市場的第一階段實驗建議。"
       },
       "infoGrid": {
         "type": {
@@ -21113,28 +21837,24 @@
           }
         },
         "scope": {
-          "en": "Research and strategy from opportunity framing through Phase 1 experiment recommendation",
-          "zh": "從機會定義到第一階段實驗建議的研究與策略"
+          "en": "Taxi pickup market-entry strategy across traveller demand, supplier readiness and local transport conditions",
+          "zh": "涵蓋旅客需求、供應商成熟度與在地交通條件的計程車接送市場進入策略"
         },
         "audience": {
           "primary": {
-            "en": "Travellers considering pre-booked taxi pickup",
-            "zh": "考慮預約計程車接送的旅客"
+            "en": "Travellers",
+            "zh": "旅客"
           },
           "secondary": {
             "en": [
-              "Product owner",
-              "Commercial team",
-              "Supplier team",
-              "Data analyst",
-              "Researcher"
+              "Product",
+              "Commercial",
+              "Suppliers"
             ],
             "zh": [
-              "產品負責人",
+              "產品團隊",
               "商務團隊",
-              "供應商團隊",
-              "資料分析師",
-              "研究員"
+              "供應商"
             ]
           }
         },
@@ -21173,36 +21893,36 @@
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "whatMadeThisHard": [
         {
-          "id": "booking-pickup-hard-two-sided-value",
+          "id": "booking-pickup-hard-local-demand",
           "title": {
-            "en": "Customer value had to work for suppliers too",
-            "zh": "顧客價值也必須對供應商可行"
+            "en": "Demand varied by local travel context",
+            "zh": "需求會因在地旅行情境而異"
           },
           "description": {
-            "en": "A stronger traveller proposition would fail if local suppliers could not support the expected pickup, pricing or service conditions.",
-            "zh": "即使旅客端主張更有吸引力，只要當地供應商無法支援接送、定價或服務條件，方案仍無法成立。"
+            "en": "Traveller airport behaviour, local transport alternatives and price expectations differed enough that broad demand could not be assumed.",
+            "zh": "旅客的機場行為、在地交通替代方案與價格期待差異顯著，因此不能假設存在一致的廣泛需求。"
           }
         },
         {
-          "id": "booking-pickup-hard-market-variation",
+          "id": "booking-pickup-hard-supplier-readiness",
           "title": {
-            "en": "Pickup behaviour varied by market",
-            "zh": "接送行為會因市場而異"
+            "en": "A viable customer proposition depended on supplier readiness",
+            "zh": "可行的顧客主張取決於供應商成熟度"
           },
           "description": {
-            "en": "Airport habits, local transport options, price expectations and supplier coverage changed which proposition could be credible.",
-            "zh": "機場使用習慣、在地交通選項、價格期待與供應商覆蓋度，會改變哪種服務主張可信。"
+            "en": "Customer value and operational viability depended on available supplier coverage and feasibility.",
+            "zh": "顧客價值與營運可行性取決於供應商覆蓋與供應可行性。"
           }
         },
         {
-          "id": "booking-pickup-hard-safe-test",
+          "id": "booking-pickup-hard-investment",
           "title": {
-            "en": "The opportunity needed a non-disruptive test",
-            "zh": "機會需要不干擾既有產品的驗證方式"
+            "en": "Expansion required evidence before large build commitment",
+            "zh": "擴張需要在大型開發投入前取得證據"
           },
           "description": {
-            "en": "The team needed evidence before broader investment, while avoiding a large product build or unsupported market commitment.",
-            "zh": "團隊需要在擴大投入前取得證據，同時避免大型產品開發或缺乏依據的市場承諾。"
+            "en": "A broad rollout would commit more investment before demand, supplier readiness and market conditions were sufficiently proven.",
+            "zh": "在需求、供應商成熟度與市場條件充分獲得證明前，廣泛推展會過早承諾更多投資。"
           }
         }
       ],
@@ -21273,69 +21993,81 @@
       },
       "designDecisions": [
         {
-          "id": "booking-pickup-decision-phased-experiment",
-          "title": {
-            "en": "From full expansion to a lower-risk market experiment",
-            "zh": "從全面擴張，到低風險市場實驗"
-          },
-          "whatIDecided": {
-            "en": "Recommended a selected-market Phase 1 experiment instead of committing immediately to broad product expansion.",
-            "zh": "建議先在選定市場執行第一階段實驗，而非立即承諾全面產品擴張。"
-          },
-          "whyThisChoice": {
-            "en": "Customer demand, supplier readiness and market conditions needed to be validated together before larger investment.",
-            "zh": "顧客需求、供應商成熟度與市場條件必須一起驗證，才能支持更大規模投入。"
-          },
-          "optionalThirdBlock": {
-            "type": "TRADE-OFF ACCEPTED",
-            "content": {
-              "en": "We accepted slower geographic expansion in exchange for reducing product, supplier and commercial risk.",
-              "zh": "我們接受較慢的地域擴張速度，換取降低產品、供應商與商業風險。"
-            }
-          }
-        },
-        {
-          "id": "booking-pickup-decision-price-anchor",
-          "title": {
-            "en": "From abstract convenience to a testable price anchor",
-            "zh": "從抽象便利性，到可驗證的價格錨點"
-          },
-          "whatIDecided": {
-            "en": "Recommended price anchoring as a Phase 1 proposition test rather than presenting it as a shipped pricing model.",
-            "zh": "建議將價格錨點作為第一階段服務主張測試，而非把它描述為已上線的定價模型。"
-          },
-          "whyThisChoice": {
-            "en": "Travellers needed a concrete basis for judging the value of pre-booking against familiar local alternatives.",
-            "zh": "旅客需要具體依據，才能比較預約接送與熟悉的在地替代方案是否值得。"
-          },
-          "optionalThirdBlock": {
-            "type": "CONSTRAINT MANAGED",
-            "content": {
-              "en": "The recommendation had to remain testable without implying final commercial pricing or launch approval.",
-              "zh": "此建議必須可被驗證，同時不得暗示最終商業定價或已核准上線。"
-            }
-          }
-        },
-        {
           "id": "booking-pickup-decision-market-readiness",
           "title": {
-            "en": "From one global premise to market-readiness criteria",
-            "zh": "從單一全球假設，到市場成熟度準則"
+            "en": "From broad expansion assumptions to explicit market-readiness criteria",
+            "zh": "從廣泛擴張假設，到明確的市場成熟度準則"
           },
           "whatIDecided": {
-            "en": "Combined customer demand, supplier coverage, local transport context and commercial feasibility into criteria for selecting target markets.",
-            "zh": "將顧客需求、供應商覆蓋、在地交通脈絡與商業可行性整合為目標市場選擇準則。"
+            "en": "Defined the conditions that made a market credible for taxi pickup rather than treating expansion as one generic opportunity.",
+            "zh": "定義使市場具備計程車接送可信度的條件，而非將擴張視為單一通用機會。"
           },
           "whyThisChoice": {
-            "en": "A proposition that worked in one market could fail elsewhere when airport behaviour, alternatives or supplier conditions changed.",
-            "zh": "當機場行為、替代方案或供應商條件改變時，在單一市場成立的服務主張可能無法直接複製。"
+            "en": "Traveller demand, local transport context and supplier feasibility varied by market.",
+            "zh": "旅客需求、在地交通脈絡與供應商可行性會因市場而異。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
-              "en": "This required customer, supplier, market and performance evidence to be evaluated in one decision model.",
-              "zh": "這需要將顧客、供應商、市場與產品表現證據放在同一套決策模型中評估。"
+              "en": "This required customer, supplier and market evidence to be evaluated together rather than relying on any single signal.",
+              "zh": "這需要共同評估顧客、供應商與市場證據，而非依賴單一訊號。"
             }
+          },
+          "outcome": {
+            "en": "A clearer market-entry evaluation model.",
+            "zh": "一套更清楚的市場進入評估模型。"
+          }
+        },
+        {
+          "id": "booking-pickup-decision-proposition",
+          "title": {
+            "en": "From a generic pickup proposition to a testable value anchor",
+            "zh": "從通用接送主張，到可驗證的價值錨點"
+          },
+          "whatIDecided": {
+            "en": "Shaped the proposition around source-supported traveller decision factors including airport behaviour, baggage context and price expectations.",
+            "zh": "依據來源支持的旅客決策因素塑造主張，包含機場行為、行李情境與價格期待。"
+          },
+          "whyThisChoice": {
+            "en": "The value of pre-booked pickup depended on how travellers compared it with existing local options.",
+            "zh": "預約接送的價值取決於旅客如何將其與既有在地選項比較。"
+          },
+          "optionalThirdBlock": {
+            "type": "CONSTRAINT MANAGED",
+            "content": {
+              "en": "Proposition language had to remain grounded in observed traveller needs and local alternatives without implying final pricing.",
+              "zh": "服務主張必須以已觀察的旅客需求與在地替代方案為依據，且不得暗示最終定價。"
+            }
+          },
+          "outcome": {
+            "en": "A proposition suitable for focused validation.",
+            "zh": "一套適合聚焦驗證的服務主張。"
+          }
+        },
+        {
+          "id": "booking-pickup-decision-phase-one",
+          "title": {
+            "en": "From immediate expansion to a selected-market Phase 1 experiment",
+            "zh": "從立即擴張，到選定市場的第一階段實驗"
+          },
+          "whatIDecided": {
+            "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
+            "zh": "建議在投入更大型開發與投資前，先進行規模較小的選定市場實驗。"
+          },
+          "whyThisChoice": {
+            "en": "Demand, supplier readiness and local market conditions remained uncertain.",
+            "zh": "需求、供應商成熟度與在地市場條件仍存在不確定性。"
+          },
+          "optionalThirdBlock": {
+            "type": "RISK MANAGED",
+            "content": {
+              "en": "The bounded experiment direction reduced expansion risk by using the readiness criteria to preserve a focused validation scope.",
+              "zh": "有限範圍的實驗方向以市場成熟度準則維持聚焦驗證範圍，降低擴張風險。"
+            }
+          },
+          "outcome": {
+            "en": "A lower-risk recommendation for validating the opportunity before broader investment.",
+            "zh": "一項在擴大投資前驗證機會、風險較低的建議。"
           }
         }
       ],
@@ -21386,7 +22118,43 @@
             "zh": "後續實作與上線決策"
           }
         ],
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "approved-recovery-candidate",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I led the research synthesis and strategy definition; commercial commitments, supplier commitments, implementation and experiment outcomes remained partner-owned or unverified.",
+            "zh": "我主導研究統整與策略定義；商業承諾、供應商承諾、實作與實驗成果仍由合作夥伴負責或未經驗證。"
+          },
+          "owned": {
+            "title": {
+              "en": "Defined the market-entry strategy and recommendation",
+              "zh": "定義市場進入策略與建議"
+            },
+            "text": {
+              "en": "Led research synthesis, opportunity framing, market-readiness criteria, proposition direction and the selected-market Phase 1 recommendation.",
+              "zh": "主導研究統整、機會定義、市場成熟度準則、服務主張方向與選定市場的第一階段建議。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Connected Product, Commercial and supplier evidence",
+              "zh": "串連產品、商務與供應商證據"
+            },
+            "text": {
+              "en": "Partnered with Product, Commercial, supplier-facing teams, Data and Research to evaluate feasibility and shape the recommendation.",
+              "zh": "與產品、商務、供應商協作團隊、資料與研究夥伴合作評估可行性並形成建議。"
+            }
+          },
+          "partnerOwned": {
+            "title": {
+              "en": "Commitments, implementation and measured results",
+              "zh": "承諾、實作與衡量結果"
+            },
+            "text": {
+              "en": "Commercial and supplier commitments remained partner-owned. Implementation, experiment launch and experiment results are not verified.",
+              "zh": "商業與供應商承諾仍由合作夥伴負責。實作、實驗上線與實驗結果未經驗證。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -21420,16 +22188,16 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "booking-pickup-research-strategy",
-        "key-design-decisions",
-        "recommendation-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "status-and-disclosure",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "searchIndexV2": {
         "version": "r141-recovery",
@@ -21459,42 +22227,50 @@
         ],
         "problemTags": {
           "en": [
-            "taxi pre-booking growth",
-            "market entry uncertainty",
-            "supplier feasibility",
-            "service proposition"
+            "taxi pickup",
+            "market-entry uncertainty",
+            "supplier readiness",
+            "local transport context",
+            "commercial feasibility"
           ],
           "zh": [
-            "計程車預約成長",
+            "計程車接送",
             "市場進入不確定性",
-            "供應商可行性",
-            "服務主張"
+            "供應商成熟度",
+            "在地交通脈絡",
+            "商業可行性"
           ]
         },
         "capabilityTags": {
           "en": [
-            "research strategy",
+            "traveller research",
             "market synthesis",
-            "proposition framing",
-            "experiment design"
+            "market-readiness framing",
+            "proposition strategy",
+            "experiment strategy",
+            "risk reduction"
           ],
           "zh": [
-            "研究策略",
+            "旅客研究",
             "市場統整",
-            "服務主張定義",
-            "實驗設計"
+            "市場成熟度定義",
+            "服務主張策略",
+            "實驗策略",
+            "風險降低"
           ]
         },
         "systemTags": {
           "en": [
             "market-entry strategy",
+            "0→1 mobility",
             "taxi pickup service",
-            "phase-one experiment"
+            "selected-market Phase 1 experiment"
           ],
           "zh": [
             "市場進入策略",
+            "0→1 移動服務",
             "計程車接送服務",
-            "第一階段實驗"
+            "選定市場第一階段實驗"
           ]
         },
         "audienceTags": {
@@ -21531,9 +22307,9 @@
         "sourceAssetIds": [
           "booking-taxi-pickup-overview-source-v1"
         ],
-        "contentStatus": "source-registered-public-derivative-needed"
+        "contentStatus": "deferred-public-derivative-needed"
       },
-      "contentStatus": "approved-recovery-candidate",
+      "contentStatus": "recruiter-first-r171",
       "localizationStatus": "complete-core-fields",
       "recoveryUnresolved": [
         {
@@ -21550,69 +22326,81 @@
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "booking-pickup-decision-phased-experiment",
-            "title": {
-              "en": "From full expansion to a lower-risk market experiment",
-              "zh": "從全面擴張，到低風險市場實驗"
-            },
-            "whatIDecided": {
-              "en": "Recommended a selected-market Phase 1 experiment instead of committing immediately to broad product expansion.",
-              "zh": "建議先在選定市場執行第一階段實驗，而非立即承諾全面產品擴張。"
-            },
-            "whyThisChoice": {
-              "en": "Customer demand, supplier readiness and market conditions needed to be validated together before larger investment.",
-              "zh": "顧客需求、供應商成熟度與市場條件必須一起驗證，才能支持更大規模投入。"
-            },
-            "optionalThirdBlock": {
-              "type": "TRADE-OFF ACCEPTED",
-              "content": {
-                "en": "We accepted slower geographic expansion in exchange for reducing product, supplier and commercial risk.",
-                "zh": "我們接受較慢的地域擴張速度，換取降低產品、供應商與商業風險。"
-              }
-            }
-          },
-          {
-            "id": "booking-pickup-decision-price-anchor",
-            "title": {
-              "en": "From abstract convenience to a testable price anchor",
-              "zh": "從抽象便利性，到可驗證的價格錨點"
-            },
-            "whatIDecided": {
-              "en": "Recommended price anchoring as a Phase 1 proposition test rather than presenting it as a shipped pricing model.",
-              "zh": "建議將價格錨點作為第一階段服務主張測試，而非把它描述為已上線的定價模型。"
-            },
-            "whyThisChoice": {
-              "en": "Travellers needed a concrete basis for judging the value of pre-booking against familiar local alternatives.",
-              "zh": "旅客需要具體依據，才能比較預約接送與熟悉的在地替代方案是否值得。"
-            },
-            "optionalThirdBlock": {
-              "type": "CONSTRAINT MANAGED",
-              "content": {
-                "en": "The recommendation had to remain testable without implying final commercial pricing or launch approval.",
-                "zh": "此建議必須可被驗證，同時不得暗示最終商業定價或已核准上線。"
-              }
-            }
-          },
-          {
             "id": "booking-pickup-decision-market-readiness",
             "title": {
-              "en": "From one global premise to market-readiness criteria",
-              "zh": "從單一全球假設，到市場成熟度準則"
+              "en": "From broad expansion assumptions to explicit market-readiness criteria",
+              "zh": "從廣泛擴張假設，到明確的市場成熟度準則"
             },
             "whatIDecided": {
-              "en": "Combined customer demand, supplier coverage, local transport context and commercial feasibility into criteria for selecting target markets.",
-              "zh": "將顧客需求、供應商覆蓋、在地交通脈絡與商業可行性整合為目標市場選擇準則。"
+              "en": "Defined the conditions that made a market credible for taxi pickup rather than treating expansion as one generic opportunity.",
+              "zh": "定義使市場具備計程車接送可信度的條件，而非將擴張視為單一通用機會。"
             },
             "whyThisChoice": {
-              "en": "A proposition that worked in one market could fail elsewhere when airport behaviour, alternatives or supplier conditions changed.",
-              "zh": "當機場行為、替代方案或供應商條件改變時，在單一市場成立的服務主張可能無法直接複製。"
+              "en": "Traveller demand, local transport context and supplier feasibility varied by market.",
+              "zh": "旅客需求、在地交通脈絡與供應商可行性會因市場而異。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "This required customer, supplier, market and performance evidence to be evaluated in one decision model.",
-                "zh": "這需要將顧客、供應商、市場與產品表現證據放在同一套決策模型中評估。"
+                "en": "This required customer, supplier and market evidence to be evaluated together rather than relying on any single signal.",
+                "zh": "這需要共同評估顧客、供應商與市場證據，而非依賴單一訊號。"
               }
+            },
+            "outcome": {
+              "en": "A clearer market-entry evaluation model.",
+              "zh": "一套更清楚的市場進入評估模型。"
+            }
+          },
+          {
+            "id": "booking-pickup-decision-proposition",
+            "title": {
+              "en": "From a generic pickup proposition to a testable value anchor",
+              "zh": "從通用接送主張，到可驗證的價值錨點"
+            },
+            "whatIDecided": {
+              "en": "Shaped the proposition around source-supported traveller decision factors including airport behaviour, baggage context and price expectations.",
+              "zh": "依據來源支持的旅客決策因素塑造主張，包含機場行為、行李情境與價格期待。"
+            },
+            "whyThisChoice": {
+              "en": "The value of pre-booked pickup depended on how travellers compared it with existing local options.",
+              "zh": "預約接送的價值取決於旅客如何將其與既有在地選項比較。"
+            },
+            "optionalThirdBlock": {
+              "type": "CONSTRAINT MANAGED",
+              "content": {
+                "en": "Proposition language had to remain grounded in observed traveller needs and local alternatives without implying final pricing.",
+                "zh": "服務主張必須以已觀察的旅客需求與在地替代方案為依據，且不得暗示最終定價。"
+              }
+            },
+            "outcome": {
+              "en": "A proposition suitable for focused validation.",
+              "zh": "一套適合聚焦驗證的服務主張。"
+            }
+          },
+          {
+            "id": "booking-pickup-decision-phase-one",
+            "title": {
+              "en": "From immediate expansion to a selected-market Phase 1 experiment",
+              "zh": "從立即擴張，到選定市場的第一階段實驗"
+            },
+            "whatIDecided": {
+              "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
+              "zh": "建議在投入更大型開發與投資前，先進行規模較小的選定市場實驗。"
+            },
+            "whyThisChoice": {
+              "en": "Demand, supplier readiness and local market conditions remained uncertain.",
+              "zh": "需求、供應商成熟度與在地市場條件仍存在不確定性。"
+            },
+            "optionalThirdBlock": {
+              "type": "RISK MANAGED",
+              "content": {
+                "en": "The bounded experiment direction reduced expansion risk by using the readiness criteria to preserve a focused validation scope.",
+                "zh": "有限範圍的實驗方向以市場成熟度準則維持聚焦驗證範圍，降低擴張風險。"
+              }
+            },
+            "outcome": {
+              "en": "A lower-risk recommendation for validating the opportunity before broader investment.",
+              "zh": "一項在擴大投資前驗證機會、風險較低的建議。"
             }
           }
         ],
@@ -21666,19 +22454,15 @@
         "contentStatus": "approved-recovery-candidate",
         "sectionOrderRef": "projects.booking-taxi-pickup-service-strategy.sectionOrder",
         "coreSystemInsight": {
-          "eyebrow": {
-            "en": "CORE SYSTEM INSIGHT",
-            "zh": "核心系統洞察"
+          "headline": {
+            "en": "Taxi pickup expansion could not be treated as one global product assumption; customer demand, supplier readiness and local transport context had to be validated together.",
+            "zh": "計程車接送擴張不能被視為單一全球產品假設；顧客需求、供應商成熟度與在地交通脈絡必須共同驗證。"
           },
-          "title": {
-            "en": "The airport transfer journey became easier to trust when itinerary context and airport-native language worked together.",
-            "zh": "當行程脈絡與機場熟悉語言一起被帶入流程時，機場接送服務才更值得信任。"
+          "supportingCopy": {
+            "en": "A viable market-entry decision depended on how traveller need, supplier feasibility, local alternatives and commercial conditions interacted in each market.",
+            "zh": "可行的市場進入決策取決於每個市場中旅客需求、供應商可行性、在地替代方案與商業條件如何交互作用。"
           },
-          "statement": {
-            "en": "Customers should not have to rebuild information the platform already knows. Reusing trip details and expressing options in familiar airport language—such as carry-on and checked baggage—helped reduce ambiguity, improved confidence in vehicle selection and made the service easier to act on from comparison through pickup.",
-            "zh": "使用者不該重新輸入平台已知的行程資訊。當產品能重用旅程脈絡，並以旅客熟悉的機場語言表達選項——例如隨身行李與托運行李——就能減少理解落差，提升對車型與服務選擇的信心，讓使用者更容易從比較、預訂一路走到接送。"
-          },
-          "contentStatus": "approved"
+          "contentStatus": "approved-r171"
         },
         "futureServiceOpportunities": {
           "title": {
@@ -21725,6 +22509,164 @@
             }
           ],
           "contentStatus": "approved"
+        },
+        "contribution": {
+          "headline": {
+            "en": "Turned expansion uncertainty into a governed market-entry decision.",
+            "zh": "將擴張不確定性轉化為有治理依據的市場進入決策。"
+          },
+          "transformation": {
+            "before": {
+              "en": "A taxi pickup expansion opportunity without sufficient evidence to justify broad market commitment.",
+              "zh": "一個尚無足夠證據支持廣泛市場承諾的計程車接送擴張機會。"
+            },
+            "intervention": {
+              "en": "Led research and strategy across traveller needs, airport behaviour, supplier readiness, local transport context and commercial feasibility, then translated the evidence into market-readiness criteria and a lower-risk experiment direction.",
+              "zh": "主導旅客需求、機場行為、供應商成熟度、在地交通脈絡與商業可行性的研究與策略，再將證據轉化為市場成熟度準則與較低風險的實驗方向。"
+            },
+            "after": {
+              "en": "A clearer basis for deciding where and how to test taxi pickup before larger expansion.",
+              "zh": "在擴大服務前，建立更清楚的依據以決定應在何處及如何驗證計程車接送。"
+            },
+            "supportingCopy": {
+              "en": "The work established decision direction; implementation and experiment results are not verified.",
+              "zh": "本工作建立決策方向；實作與實驗結果未經驗證。"
+            }
+          }
+        },
+        "strategyEvidence": {
+          "title": {
+            "en": "Evidence",
+            "zh": "證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "structuredGroups": [
+            {
+              "id": "traveller-context",
+              "heading": {
+                "en": "Traveller needs and airport context",
+                "zh": "旅客需求與機場情境"
+              },
+              "summary": {
+                "en": "Traveller behaviour, airport habits, baggage needs, price expectations and comparison with local transport alternatives shaped the demand conditions.",
+                "zh": "旅客行為、機場習慣、行李需求、價格期待及與在地交通替代方案的比較，共同形塑需求條件。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 02",
+                "zh": "支持決策一與決策二"
+              },
+              "assetId": "booking-taxi-strategy-traveller-context-public-v1",
+              "caption": {
+                "en": "Qualitative research synthesis mapping urgency, late arrivals, luggage, waiting, uncertainty, price and safety; context evidence, not quantified demand.",
+                "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
+              }
+            },
+            {
+              "id": "supplier-readiness",
+              "heading": {
+                "en": "Supplier and market readiness",
+                "zh": "供應商與市場成熟度"
+              },
+              "summary": {
+                "en": "Supplier feasibility, coverage and local-market constraints informed whether a market could credibly support the proposition.",
+                "zh": "供應商可行性、覆蓋與在地市場限制，決定市場是否能可信地支持該服務主張。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 01",
+                "zh": "支持決策一"
+              }
+            },
+            {
+              "id": "proposition-definition",
+              "heading": {
+                "en": "Proposition definition",
+                "zh": "服務主張定義"
+              },
+              "summary": {
+                "en": "Price expectations, itinerary context and airport-native baggage language informed a proposition suitable for focused validation.",
+                "zh": "價格期待、行程脈絡與機場熟悉的行李語言，共同支持適合聚焦驗證的服務主張。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 02",
+                "zh": "支持決策二"
+              },
+              "assetId": "booking-taxi-strategy-proposition-comparison-public-v1",
+              "caption": {
+                "en": "Working comparison of hailing and pre-booking across traveller scenarios and proposition attributes; proposition framing, not an experiment result, shipped pricing or business outcome.",
+                "zh": "依旅客情境與服務主張屬性比較路邊攔車與預約接送；屬主張定義，並非實驗結果、已上線定價或商業成果。"
+              }
+            },
+            {
+              "id": "phase-one-recommendation",
+              "heading": {
+                "en": "Phase 1 experiment recommendation",
+                "zh": "第一階段實驗建議"
+              },
+              "summary": {
+                "en": "The combined evidence supported a selected-market experiment before immediate broad expansion.",
+                "zh": "整合證據支持在立即廣泛擴張前，先進行選定市場實驗。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 03",
+                "zh": "支持決策三"
+              },
+              "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
+              "caption": {
+                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not an indication that an experiment ran or achieved a successful result.",
+                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表實驗已執行或取得成功結果。"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r171"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A lower-risk market-entry recommendation",
+            "zh": "一項較低風險的市場進入建議"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A selected-market Phase 1 direction",
+                "zh": "選定市場的第一階段方向"
+              },
+              "copy": {
+                "en": "Reframed broad expansion into an experiment that could validate demand, supplier readiness and local conditions before larger investment.",
+                "zh": "將廣泛擴張重構為可在擴大投資前驗證需求、供應商成熟度與在地條件的實驗方向。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Explicit market-readiness criteria",
+                "zh": "明確的市場成熟度準則"
+              },
+              "copy": {
+                "en": "Created a clearer basis for comparing markets using traveller, supplier and local transport evidence.",
+                "zh": "以旅客、供應商與在地交通證據，建立更清楚的市場比較依據。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A testable taxi pickup proposition",
+                "zh": "可驗證的計程車接送主張"
+              },
+              "copy": {
+                "en": "Translated customer and market evidence into a proposition suitable for focused validation.",
+                "zh": "將顧客與市場證據轉化為適合聚焦驗證的服務主張。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "These are recommendation outcomes; implementation, launch and experiment results are not verified.",
+            "zh": "以上為建議成果；實作、上線與實驗結果未經驗證。"
+          },
+          "contentStatus": "approved-r171"
         }
       },
       "projectClosure": {
@@ -21801,6 +22743,96 @@
         "primaryMetrics": [],
         "recommendedHeadline": "Converted pickup uncertainty across passenger, luggage and location constraints into a phased product strategy.",
         "boundary": "Strategy/research case; no launch or growth claim."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "publicContent.contribution",
+          "contributionIntervention": "publicContent.contribution.transformation",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.strategyEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "variant": "featured",
+          "showVisuals": false,
+          "outcomeField": "outcome"
+        },
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured"
       }
     }
   },
@@ -23836,22 +24868,74 @@
         },
         "taishin-p2p-marketplace-platform": {
           "sections": {
-            "taishin-research-definition-model": {
+            "what-made-this-hard": {
               "sourcePaths": [
-                "projectModel"
+                "whatMadeThisHard"
               ],
-              "presentationType": "system-model",
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "research-and-specification-evidence": {
+            "contribution": {
               "sourcePaths": [
-                "publicContent",
-                "projectClosure.deliveryAndMeasurement"
+                "valueIBrought",
+                "keyInterventionMap"
               ],
-              "presentationType": "definition-proof",
+              "presentationType": "shared-contribution",
+              "renderRequired": true
+            },
+            "core-system-insight": {
+              "sourcePaths": [
+                "publicContent.coreSystemInsight"
+              ],
+              "presentationType": "shared-core-system-insight",
+              "renderRequired": true
+            },
+            "design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": [
+                "publicContent.decisionEvidence"
+              ],
+              "presentationType": "shared-decision-support-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel"
+              ],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
-          }
+          },
+          "supporting": [
+            {
+              "sourcePath": "projectModel",
+              "parentSectionId": "evidence",
+              "presentationType": "research-definition-trace"
+            },
+            {
+              "sourcePath": "processEvidence",
+              "parentSectionId": "evidence",
+              "presentationType": "supporting-research"
+            },
+            {
+              "sourcePath": "projectClosure.statusAndDisclosure",
+              "parentSectionId": "my-accountability",
+              "presentationType": "delivery-boundary"
+            }
+          ]
         },
         "cathay-mortgage-assistant": {
           "sections": {
@@ -33282,7 +34366,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-21",
+  "lastUpdated": "2026-08-25",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",

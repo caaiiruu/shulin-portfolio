@@ -12,7 +12,7 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/game-center", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/taishin-p2p-marketplace-platform", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -52,6 +52,87 @@ for (const viewport of viewports) {
     if (metrics.horizontalOverflow) failures.push(`${viewport.name} ${route} horizontal overflow`);
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
+  }
+
+  await page.goto(`${baseUrl}/site/work/taishin-p2p-marketplace-platform`,{waitUntil:"networkidle"});
+  const taishinPresentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll");
+    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    const headings=[...dialog.querySelectorAll("h2,h3")].filter(visible).map(node=>node.textContent.trim());
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      tags:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      classificationVisible:visible(dialog.querySelector("#detailClassification")),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      evidenceMedia:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group .structured-evidence-v223__media img")].filter(visible).map(node=>({assetId:node.dataset.assetId,status:node.dataset.assetStatus,naturalWidth:node.naturalWidth})),
+      atAGlance:dialog.querySelector("#projectAtGlance")?.textContent.trim(),
+      atAGlanceLines:(()=>{const node=dialog.querySelector("#projectAtGlance"),style=getComputedStyle(node);return Math.round(node.getBoundingClientRect().height/parseFloat(style.lineHeight))})(),
+      accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
+      legacy:["Critical Problem","Business Impact","Taishin Research and Definition Model","Research and Specification Evidence","Ownership and Collaboration","Delivery and Measurement","Status and Disclosure","Continue Exploring"].filter(text=>headings.includes(text)),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.offsetTop,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.offsetTop,
+      text:dialog.innerText,
+      overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),
+      overflowX:scroll?getComputedStyle(scroll).overflowX:null
+    };
+  });
+  const expectedTaishinSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
+  if(taishinPresentation.title!=="Third-party payment to a governed P2P marketplace"||taishinPresentation.title.startsWith("From "))failures.push(`${viewport.name} Taishin Hero mismatch: ${taishinPresentation.title}`);
+  if(taishinPresentation.tags.length||taishinPresentation.classificationVisible)failures.push(`${viewport.name} Taishin Hero taxonomy leaked: ${JSON.stringify(taishinPresentation.tags)}`);
+  if(JSON.stringify(taishinPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Taishin navigator mismatch: ${JSON.stringify(taishinPresentation.navigator)}`);
+  if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
+  if(taishinPresentation.decisionCount!==3||taishinPresentation.evidenceCount!==4||taishinPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Taishin shared primitive mismatch: ${JSON.stringify(taishinPresentation)}`);
+  if(taishinPresentation.atAGlance!=="Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.")failures.push(`${viewport.name} Taishin At a Glance mismatch`);
+  if(viewport.width===1419&&taishinPresentation.atAGlanceLines>2)failures.push(`${viewport.name} Taishin At a Glance exceeds two lines: ${taishinPresentation.atAGlanceLines}`);
+  const expectedTaishinEvidence=["taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-delivery-alignment-v1"];
+  if(JSON.stringify(taishinPresentation.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(expectedTaishinEvidence)||taishinPresentation.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1))failures.push(`${viewport.name} Taishin asset-backed StructuredEvidence media mismatch: ${JSON.stringify(taishinPresentation.evidenceMedia)}`);
+  if(taishinPresentation.legacy.length)failures.push(`${viewport.name} Taishin legacy leakage: ${JSON.stringify(taishinPresentation.legacy)}`);
+  if(/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/.test(taishinPresentation.text))failures.push(`${viewport.name} Taishin unsupported outcome claim leaked`);
+  if(!["hidden","clip"].includes(taishinPresentation.overflowX))failures.push(`${viewport.name} Taishin dialog horizontal containment failed: ${JSON.stringify(taishinPresentation)}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r170-taishin",viewport.name);
+    fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[
+      ["01-overview","#projectOverviewSection","#projectOverviewSection"],
+      ["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],
+      ["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],
+      ["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type","#systemCaseEvidenceSection"],
+      ["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type","#systemCaseEvidenceSection"],
+      ["06-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],
+      ["07-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]
+    ];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();
+      if(!await target.count()){failures.push(`${viewport.name} Taishin checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} Taishin navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+    const deltaPresentation=await page.evaluate(()=>({visibleDecisionMapping:[...document.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__decision-link")].filter(node=>node.getClientRects().length).map(node=>node.textContent.trim()),accountabilityLabels:[...document.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-eyebrow")].filter(node=>node.getClientRects().length).map(node=>node.textContent.trim()),boundaryCount:(document.querySelector("#detailDialog")?.innerText.match(/Production launch and measured business outcomes are not verified in the available source record/g)||[]).length,text:document.querySelector("#detailDialog")?.innerText||""}));
+    if(deltaPresentation.visibleDecisionMapping.length)failures.push(`${viewport.name} Taishin decision mapping metadata visible`);
+    if(JSON.stringify(deltaPresentation.accountabilityLabels)!==JSON.stringify(["WHAT I OWNED","SHARED DECISIONS","PARTNER-OWNED BOUNDARY"]))failures.push(`${viewport.name} Taishin accountability labels mismatch: ${JSON.stringify(deltaPresentation.accountabilityLabels)}`);
+    if(deltaPresentation.boundaryCount!==1)failures.push(`${viewport.name} Taishin claim boundary count mismatch: ${deltaPresentation.boundaryCount}`);
+    if(/Buyer–seller trust depended|Implementation-ready marketplace specifications|I OWNED THE OUTCOME/.test(deltaPresentation.text))failures.push(`${viewport.name} Taishin source-tightening regression`);
+    for(const projectId of ["payment","cathay-sit-review-remediation-operations","cathay-sit-online-account-opening","game-center","voucher-center"]){
+      await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:"networkidle"});
+      const root=page.locator("#detailDialog .dialog-scroll").first();
+      for(const expectedHref of ["#projectOverviewSection","#systemCaseComplexitySection","#systemCaseDecisionsSection","#systemCaseEvidenceSection","#systemCaseOutcomesSection","#systemCaseAccountabilitySection"]){
+        const target=page.locator(expectedHref).first();if(!await target.count())continue;
+        await root.evaluate((scrollRoot,query)=>{const target=scrollRoot.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,scrollRoot.clientHeight*.2));scrollRoot.scrollTop=Math.max(0,scrollRoot.scrollTop+target.getBoundingClientRect().top-scrollRoot.getBoundingClientRect().top-activation+2)}},expectedHref);
+        await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+        const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+        if(activeHref!==expectedHref)failures.push(`${viewport.name} ${projectId} navigator drift: expected ${expectedHref}, got ${activeHref}`);
+      }
+      const sharedLeak=await page.evaluate(()=>({decision:[...document.querySelectorAll(".structured-evidence-v223__decision-link")].some(node=>node.getClientRects().length),outcomeOwnership:(document.querySelector("#detailDialog")?.innerText||"").includes("I OWNED THE OUTCOME")}));
+      if(sharedLeak.decision||sharedLeak.outcomeOwnership)failures.push(`${viewport.name} ${projectId} shared presentation regression: ${JSON.stringify(sharedLeak)}`);
+    }
   }
 
   await page.goto(`${baseUrl}/site/work/cathay-sit-review-remediation-operations`,{waitUntil:"networkidle"});
@@ -132,45 +213,6 @@ for (const viewport of viewports) {
   if(cathayOaPresentation.legacy.length)failures.push(`${viewport.name} Cathay OA legacy leakage: ${JSON.stringify(cathayOaPresentation.legacy)}`);
   if(!cathayOaPresentation.text.includes("Post-launch performance was not available")||/\bshipped\b|conversion uplift|completion-rate uplift/i.test(cathayOaPresentation.text))failures.push(`${viewport.name} Cathay OA delivery boundary missing or overstated`);
   if(cathayOaPresentation.overflow>0)failures.push(`${viewport.name} Cathay OA dialog horizontal overflow: ${cathayOaPresentation.overflow}`);
-
-  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
-  const gameCenterCertification=await page.evaluate(()=>{
-    const dialog=document.querySelector("#detailDialog");
-    const scrollOwner=dialog.querySelector(".dialog-scroll");
-    const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
-    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
-    return{
-      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
-      classificationVisible:visible(dialog.querySelector("#detailClassification")),
-      tags:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
-      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
-      sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
-      complexityCount:dialog.querySelectorAll("#systemCaseComplexitySection .recruiter-complexity-card").length,
-      contributionNodes:[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")].map(node=>node.innerText.trim()),
-      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
-      evidenceVariant:dialog.querySelector("#systemCaseEvidenceSection")?.dataset.evidenceVariant,
-      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
-      evidenceImages:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(visible).map(image=>image.currentSrc),
-      outcomeValues:[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].filter(visible).map(node=>node.textContent.trim()),
-      accountability:dialog.querySelector("#systemCaseAccountabilitySection")?.innerText||"",
-      legacy:[...dialog.querySelectorAll("h2,h3")].filter(visible).map(node=>node.textContent.trim()).filter(text=>["Critical problem","Business impact","Task and Reward Model","Shipped Experience","Completion Evidence","Ownership and collaboration","Delivery and measurement"].includes(text)),
-      text:dialog.innerText,
-      scrollOwnerClass:scrollOwner?.className,
-      dialogOverflow:(dialog?.scrollWidth||0)-(dialog?.clientWidth||0)
-    };
-  });
-  const expectedGameCenterSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
-  if(gameCenterCertification.title!=="One live game to a scalable multi-game Game Center"||gameCenterCertification.title.startsWith("From "))failures.push(`${viewport.name} Game Center Hero contract failed: ${gameCenterCertification.title}`);
-  if(gameCenterCertification.classificationVisible||gameCenterCertification.tags.length)failures.push(`${viewport.name} Game Center Hero taxonomy leaked: ${JSON.stringify(gameCenterCertification.tags)}`);
-  if(JSON.stringify(gameCenterCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Game Center navigator mismatch: ${JSON.stringify(gameCenterCertification.navigator)}`);
-  if(JSON.stringify(gameCenterCertification.sectionOrder)!==JSON.stringify(expectedGameCenterSections))failures.push(`${viewport.name} Game Center rendered IA mismatch: ${JSON.stringify(gameCenterCertification.sectionOrder)}`);
-  if(gameCenterCertification.complexityCount!==3||gameCenterCertification.contributionNodes.length!==3||gameCenterCertification.decisionCount!==3)failures.push(`${viewport.name} Game Center shared primitive count mismatch: ${JSON.stringify(gameCenterCertification)}`);
-  if(gameCenterCertification.evidenceVariant!=="decision-support"||gameCenterCertification.evidenceCount!==4||gameCenterCertification.evidenceImages.length)failures.push(`${viewport.name} Game Center truthful structured Evidence contract failed: ${JSON.stringify(gameCenterCertification)}`);
-  if(JSON.stringify(gameCenterCertification.outcomeValues)!==JSON.stringify(["70%","23%"])||!/engaged with 2\+ mini games/i.test(gameCenterCertification.text)||!/Gamification MAU \/ MAU/i.test(gameCenterCertification.text)||!/final production deployment is not confirmed/i.test(gameCenterCertification.text))failures.push(`${viewport.name} Game Center Outcome boundary failed: ${JSON.stringify(gameCenterCertification.outcomeValues)}`);
-  if(!gameCenterCertification.accountability.includes("Designed the 0→1 multi-game discovery model")||!gameCenterCertification.accountability.includes("SHARED DECISIONS")||!gameCenterCertification.accountability.includes("PRD ownership"))failures.push(`${viewport.name} Game Center accountability boundary failed`);
-  if(/50% user completion|approximately 50% user completion|effort-to-reward Game Center|three task types|three-type progression|\+408\.6%|\+39\.6%|\$803K|\$9\.6M/i.test(gameCenterCertification.text))failures.push(`${viewport.name} Game Center rejected or unreconciled claim leaked`);
-  if(gameCenterCertification.legacy.length)failures.push(`${viewport.name} Game Center legacy leakage: ${JSON.stringify(gameCenterCertification.legacy)}`);
-  if(!String(gameCenterCertification.scrollOwnerClass).includes("dialog-scroll")||gameCenterCertification.dialogOverflow>0)failures.push(`${viewport.name} Game Center dialog-scroll ownership/overflow failed: ${JSON.stringify(gameCenterCertification)}`);
 
   await page.goto(`${baseUrl}/site/work/booking`,{waitUntil:"networkidle"});
   const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("img")].filter(image=>image.alt);await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));const required=["Connecting the global taxi-booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric")],outcomes=outcomeCards.map(card=>({value:card.querySelector(".outcome-metric__value")?.textContent.trim(),label:(()=>{const node=card.querySelector(".outcome-metric__label")?.cloneNode(true);node?.querySelectorAll(".info-tooltip").forEach(tip=>tip.remove());return node?.textContent.trim()})()})),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),publicText=dialog.innerText,decisionFields=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")].map(card=>[...card.querySelectorAll(".decision-field-label-v58,dt")].map(label=>({label:label.textContent.trim(),copy:((label.tagName==="DT"?label.parentElement?.querySelector("dd"):label.nextElementSibling)?.textContent||"").trim()}))),flow=dialog.querySelector(".contribution-block .voucher-r149-flow"),flowNodes=[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")],flowSupport=dialog.querySelector(".contribution-block>.voucher-r149-intro"),insight=dialog.querySelector(".core-system-insight-section"),insightTitle=dialog.querySelector(".core-system-insight-section h2"),insightVisual=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation"),insightCaption=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation__caption"),complexity=[...dialog.querySelectorAll(".recruiter-complexity-grid--featured-first>.recruiter-complexity-card")],outcomeGrid=dialog.querySelector("#systemCaseOutcomesSection .outcome-metric-grid"),quickView=dialog.querySelector(".quick-view-v51--project"),audienceNodes=[...dialog.querySelectorAll(".info-grid-v45__audience")],contributionSection=flow?.closest(".contribution-block");const rect=node=>{const r=node?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,center:r.left+r.width/2}:null},titleStyle=insightTitle?getComputedStyle(insightTitle):null;return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,publicText,decisionFields,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth,contribution:{count:visibleHeadings.filter(text=>text==="Contribution").length,flow:rect(flow),nodes:flowNodes.map(rect),support:rect(flowSupport)},insight:{section:rect(insight),title:rect(insightTitle),titleLines:insightTitle&&titleStyle?Math.round(insightTitle.getBoundingClientRect().height/parseFloat(titleStyle.lineHeight)):null,visual:rect(insightVisual),captionAlign:insightCaption?getComputedStyle(insightCaption).textAlign:null},complexity:complexity.map(rect),complexityColumns:dialog.querySelector(".recruiter-complexity-grid--featured-first")?getComputedStyle(dialog.querySelector(".recruiter-complexity-grid--featured-first")).gridTemplateColumns:null,outcomeRhythm:{rowGap:parseFloat(getComputedStyle(outcomeGrid).rowGap)||0,cards:outcomeCards.map(rect),innerGaps:outcomeCards.map(card=>{const value=card.querySelector(".outcome-metric__value")?.getBoundingClientRect(),label=card.querySelector(".outcome-metric__label")?.getBoundingClientRect();return value&&label?label.top-value.bottom:null})},audience:{total:audienceNodes.length,inInfoGrid:audienceNodes.filter(node=>node.closest("#projectSignals")).length,inProgramme:audienceNodes.filter(node=>node.closest("#programmeSurface")).length,quickHeight:getComputedStyle(quickView).height,quickOverflow:Math.max(0,quickView.scrollHeight-quickView.clientHeight),contributionHasAudience:/Primary:|Secondary:/.test(contributionSection?.innerText||"")}}});
@@ -265,9 +307,9 @@ for (const viewport of viewports) {
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
   const expectedEvidence=[
-    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",link:"LED TO DECISION 01",legacyLabels:[]},
-    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",link:"LED TO DECISION 02",legacyLabels:[]},
-    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",link:"LED TO DECISION 03",legacyLabels:[]}
+    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",legacyLabels:[]},
+    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",legacyLabels:[]},
+    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",legacyLabels:[]}
   ];
   if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(expectedEvidence))failures.push(`${viewport.name} CTBC recruiter-compressed Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
   if(/OBSERVED|DESIGN IMPLICATION|SUPPORTS DECISION/.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC legacy Evidence layers remain`);
@@ -465,36 +507,10 @@ for (const viewport of viewports) {
     panels:[...document.querySelectorAll('#detailDialog .info-tooltip__panel')].map(node=>node.textContent.trim())
   }));
   if(oaTooltipAudit.triggers||oaTooltipAudit.panels.some(text=>!text))failures.push(`${viewport.name} Cathay OA meaningless or empty tooltip remains: ${JSON.stringify(oaTooltipAudit)}`);
-  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
-  const gameCenterDialogScroll=page.locator("#detailDialog .dialog-scroll").first();
-  const captureGameCenterDialogCheckpoint=async(name,target)=>{
-    if(!(await target.count())||!(await target.isVisible())||!(await gameCenterDialogScroll.count())){
-      failures.push(`${viewport.name} Game Center dialog checkpoint missing: ${name}`);
-      return;
-    }
-    await scrollDialogTarget(target);
-    await gameCenterDialogScroll.screenshot({path:path.join(targetedDirectory,`${name}.png`)});
-  };
-  if(await gameCenterDialogScroll.count()){
-    await gameCenterDialogScroll.evaluate(node=>{node.scrollTop=0});
-    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-    await gameCenterDialogScroll.screenshot({path:path.join(targetedDirectory,"game-center-01-hero-at-a-glance.png")});
-  }else failures.push(`${viewport.name} Game Center dialog scroll owner missing`);
-  for(const [name,selector] of [
-    ["game-center-02-complexity","#systemCaseComplexitySection"],
-    ["game-center-03-contribution",".contribution-block"],
-    ["game-center-04-core-system-insight","[data-canonical-section-id='core-system-insight']"],
-    ["game-center-05-decisions","#systemCaseDecisionsSection"],
-    ["game-center-06-evidence","#systemCaseEvidenceSection"],
-    ["game-center-07-outcomes","#systemCaseOutcomesSection"],
-    ["game-center-08-accountability","#systemCaseAccountabilitySection"],
-    ["game-center-09-related-work","[data-canonical-section-id='continue-exploring']"]
-  ])await captureGameCenterDialogCheckpoint(name,page.locator(selector).first());
   if(viewport.width===430){
     const eyebrowRoutes=[
       'cathay-sit-online-account-opening',
       'cathay-sit-review-remediation-operations',
-      'game-center',
       'payment',
       'dbs',
       'booking',
@@ -680,7 +696,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       }
     }
     for (const [name, route, text] of [
-      ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "The airport transfer journey became easier to trust"],
+      ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "Taxi pickup expansion could not be treated as one global product assumption"],
       ["cathay-oa-core-insight", "/site/work/cathay-sit-online-account-opening", "Self-service account opening only worked"],
       ["cathay-review-core-insight", "/site/work/cathay-sit-review-remediation-operations", "Review remediation needed a shared internal operating model"],
       ["dbs-regression", "/site/work/dbs", "Turning fragmented credit-exception handling"],
@@ -757,6 +773,154 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     r159Navigator: { contract: navigatorContract, interactions: navigatorInteractions },
     ctbcReadingEdges: ctbcCertification.geometry,
   };
+  await page.goto(`${baseUrl}/site/work/booking-taxi-pickup-service-strategy`,{waitUntil:"networkidle"});
+  const r171Presentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      taxonomy:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      order:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-stage-decision-group").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      decisionMetadataVisible:[...dialog.querySelectorAll(".structured-evidence-v223__decision-link")].some(node=>visible(node)),
+      text:dialog.innerText,
+      overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
+    };
+  });
+  const r171Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
+  if(r171Presentation.title!=="Uncertain expansion to a lower-risk taxi pickup experiment"||r171Presentation.taxonomy.length||JSON.stringify(r171Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r171Presentation.order.map(id=>id).filter(id=>r171Order.includes(id)))!==JSON.stringify(r171Order)||!(r171Presentation.decisionTop<r171Presentation.evidenceTop)||r171Presentation.decisionCount!==3||r171Presentation.evidenceCount!==4)failures.push(`${viewport.name} R171 composition mismatch: ${JSON.stringify(r171Presentation)}`);
+  if(r171Presentation.decisionMetadataVisible||/Critical Problem|Business Impact|Ownership and Collaboration|Delivery and Measurement|Status and Disclosure|Continue Exploring/.test(r171Presentation.text))failures.push(`${viewport.name} R171 legacy or metadata leak`);
+  if(/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i.test(r171Presentation.text))failures.push(`${viewport.name} R171 main Booking contamination`);
+  if(!["hidden","clip"].includes(r171Presentation.overflowX))failures.push(`${viewport.name} R171 horizontal containment failed`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r171-booking-taxi",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[["01-overview","#projectOverviewSection","#projectOverviewSection"],["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type","#systemCaseEvidenceSection"],["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type","#systemCaseEvidenceSection"],["06-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],["07-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R171 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} R171 navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
+  await page.goto(`${baseUrl}/site/work/cathay-mortgage-assistant`,{waitUntil:"networkidle"});
+  const r172Presentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      context:dialog.querySelector("#detailContext")?.textContent.trim(),
+      atAGlance:dialog.querySelector("#projectAtGlance")?.textContent.trim(),
+      atAGlanceLines:(()=>{const node=dialog.querySelector("#projectAtGlance"),style=getComputedStyle(node);return Math.round(node.getBoundingClientRect().height/parseFloat(style.lineHeight))})(),
+      taxonomy:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      order:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-stage-decision-group").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      realEvidence:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(node=>node.dataset.assetStatus==="real-active").length,
+      timelineVisible:[...dialog.querySelectorAll("#projectSignals *")].filter(visible).some(node=>node.textContent.trim()==="Timeline"),
+      timelineValue:[...dialog.querySelectorAll("#projectSignals > div")].find(node=>node.querySelector("small")?.textContent.trim()==="Timeline")?.querySelector("strong")?.textContent.trim(),
+      infoGridOwner:dialog.querySelector("#projectSignals")?.classList.contains("info-grid-v45"),
+      text:dialog.innerText,
+      overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
+    };
+  });
+  const r172Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
+  if(r172Presentation.title!=="Rigid tablet script to a flexible mortgage consultation system"||r172Presentation.taxonomy.length||JSON.stringify(r172Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r172Presentation.order.filter(id=>r172Order.includes(id)))!==JSON.stringify(r172Order)||!(r172Presentation.decisionTop<r172Presentation.evidenceTop)||r172Presentation.decisionCount!==3||r172Presentation.evidenceCount!==5||r172Presentation.realEvidence!==5)failures.push(`${viewport.name} R172.2 composition mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(!r172Presentation.timelineVisible||r172Presentation.timelineValue!=="4 months"||!r172Presentation.infoGridOwner)failures.push(`${viewport.name} R172.4 verified Timeline/shared Info Grid mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(/Timeline unresolved|duration unavailable|Timeline pending|year-only fallback|2016-only rendering rationale/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.4 stale Timeline blocker leak`);
+  if(/Critical Problem|Consultation Model|Business Impact|Ownership and Collaboration|Delivery and Measurement|Continue Exploring/.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 legacy metadata leak`);
+  if(/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 unsupported claim leak`);
+  if(!["hidden","clip"].includes(r172Presentation.overflowX))failures.push(`${viewport.name} R172.2 horizontal containment failed`);
+  if(!r172Presentation.context.startsWith("Cathay Life Insurance")||!r172Presentation.context.includes("Internal mortgage consultation"))failures.push(`${viewport.name} R172.3 company metadata mismatch: ${r172Presentation.context}`);
+  if(r172Presentation.atAGlance!=="Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.")failures.push(`${viewport.name} R172.3 At a Glance mismatch`);
+  const r172SharedContainment=await page.evaluate(()=>{
+    const nav=document.querySelector("#projectSectionNav"),rail=nav.querySelector(".floating-navigator__rail"),root=document.querySelector("#detailDialog .dialog-scroll");
+    const bodyWidth=Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),navRect=nav.getBoundingClientRect();
+    root.scrollTop=root.scrollHeight;
+    const finalNode=document.querySelector("#programmeSurface > :last-child"),finalRect=finalNode?.getBoundingClientRect(),rootRect=root.getBoundingClientRect();
+    return {bodyWidth,viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,railClientWidth:rail.clientWidth,railScrollWidth:rail.scrollWidth,railOverflow:getComputedStyle(rail).overflowX,finalBottom:finalRect?.bottom,navTop:navRect.top,rootBottom:rootRect.bottom};
+  });
+  if(r172SharedContainment.bodyWidth>r172SharedContainment.viewportWidth||r172SharedContainment.navLeft<0||r172SharedContainment.navRight>r172SharedContainment.viewportWidth)failures.push(`${viewport.name} R172.3 shared navigator viewport overflow: ${JSON.stringify(r172SharedContainment)}`);
+  if(viewport.width===430&&(r172SharedContainment.railOverflow!=="auto"||r172SharedContainment.railScrollWidth<=r172SharedContainment.railClientWidth))failures.push(`${viewport.name} R172.3 shared navigator is not internally scrollable`);
+  if(r172SharedContainment.finalBottom>r172SharedContainment.navTop)failures.push(`${viewport.name} R172.3 dialog bottom safe area is insufficient: ${JSON.stringify(r172SharedContainment)}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r1722-cathay-mortgage",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[["00-hero","#projectDetailHeroVisual","#projectOverviewSection"],["01-overview","#projectOverviewSection","#projectOverviewSection"],["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],["04-evidence-research","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(1)","#systemCaseEvidenceSection"],["05-evidence-structure","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(2)","#systemCaseEvidenceSection"],["06-evidence-validation","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(3)","#systemCaseEvidenceSection"],["07-evidence-delivery","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(4)","#systemCaseEvidenceSection"],["08-evidence-market-map","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(5)","#systemCaseEvidenceSection"],["09-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],["10-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R172.2 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} R172.2 navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
+  const r1723RegressionProjects=[
+    ["payment","/site/work/payment"],
+    ["booking-taxi-strategy","/site/work/booking-taxi-pickup-service-strategy"],
+    ["taishin","/site/work/taishin-p2p-marketplace-platform"],
+    ["cathay-oa","/site/work/cathay-sit-online-account-opening"],
+    ["cathay-review","/site/work/cathay-sit-review-remediation-operations"],
+    ["cathay-mortgage","/site/work/cathay-mortgage-assistant"]
+  ];
+  for(const [projectId,route] of r1723RegressionProjects){
+    await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});
+    const sharedGeometry=await page.evaluate(()=>{
+      const root=document.querySelector("#detailDialog .dialog-scroll"),nav=document.querySelector("#projectSectionNav"),rail=nav?.querySelector(".floating-navigator__rail");
+      if(!root||!nav||!rail)return null;
+      const verifyNode=node=>{root.scrollTop=Math.min(root.scrollHeight-root.clientHeight,root.scrollTop+node.getBoundingClientRect().bottom-nav.getBoundingClientRect().top+1);return node.getBoundingClientRect().bottom<=nav.getBoundingClientRect().top+1};
+      const captions=[...document.querySelectorAll("#detailDialog figcaption")];
+      const captionClearance=captions.map(verifyNode);
+      root.scrollTop=root.scrollHeight;
+      const finalNode=document.querySelector("#programmeSurface > :last-child"),navRect=nav.getBoundingClientRect();
+      const active=rail.querySelector('a[aria-current="location"]'),railRect=rail.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
+      return {bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+    });
+    if(!sharedGeometry)failures.push(`${viewport.name} R172.3 ${projectId} shared owners missing`);
+    else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
+  }
+
+  await page.goto(\`\${baseUrl}/site/work/game-center\`,{waitUntil:"networkidle"});
+  const r174GameCenter=await page.evaluate(async()=>{
+    const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const images=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__media img")].filter(visible);
+    await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));
+    const at=dialog.querySelector("#projectAtGlance"),style=at?getComputedStyle(at):null;
+    return {title:dialog.querySelector("#detailTitle")?.textContent.trim(),navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,evidenceMedia:images.map(image=>({assetId:image.dataset.assetId,status:image.dataset.assetStatus,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,alt:image.alt})),outcomeValues:[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].filter(visible).map(node=>node.textContent.trim()),visibleDecisionMetadata:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__decision-link")].filter(visible).length,atGlanceLines:at&&style?Math.round(at.getBoundingClientRect().height/parseFloat(style.lineHeight)):null,text:dialog.innerText,overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0))};
+  });
+  const r174ExpectedAssets=["game-center-single-to-multi-game-discovery-public-v1","game-center-concurrent-game-platform-model-public-v1","game-center-status-operations-control-public-v1"];
+  if(r174GameCenter.title!=="One live game to a scalable multi-game Game Center")failures.push(\`\${viewport.name} R174.2 Game Center title mismatch\`);
+  if(JSON.stringify(r174GameCenter.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(\`\${viewport.name} R174.2 navigator mismatch: \${JSON.stringify(r174GameCenter.navigator)}\`);
+  if(r174GameCenter.decisionCount!==3||r174GameCenter.evidenceCount!==4)failures.push(\`\${viewport.name} R174.2 shared primitive count mismatch: \${JSON.stringify(r174GameCenter)}\`);
+  if(JSON.stringify(r174GameCenter.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(r174ExpectedAssets)||r174GameCenter.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1||item.naturalHeight<1||!item.alt))failures.push(\`\${viewport.name} R174.2 Evidence media mismatch: \${JSON.stringify(r174GameCenter.evidenceMedia)}\`);
+  if(JSON.stringify(r174GameCenter.outcomeValues)!==JSON.stringify(["70%","23%"]))failures.push(\`\${viewport.name} R174.2 Outcome mismatch: \${JSON.stringify(r174GameCenter.outcomeValues)}\`);
+  if(r174GameCenter.visibleDecisionMetadata)failures.push(\`\${viewport.name} R174.2 internal decision metadata leaked\`);
+  if(/approximately 50% user completion|~50% completion|\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV causality/i.test(r174GameCenter.text))failures.push(\`\${viewport.name} R174.2 prohibited claim leaked\`);
+  if(viewport.width===1419&&r174GameCenter.atGlanceLines>2)failures.push(\`\${viewport.name} R174.2 At a Glance exceeds two lines: \${r174GameCenter.atGlanceLines}\`);
+  if(r174GameCenter.overflow>0)failures.push(\`\${viewport.name} R174.2 horizontal overflow: \${r174GameCenter.overflow}\`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r174-game-center",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector] of [["01-overview","#projectOverviewSection"],["02-decisions","#systemCaseDecisionsSection"],["03-evidence","#systemCaseEvidenceSection"],["04-outcomes","#systemCaseOutcomesSection"],["05-ownership","#systemCaseAccountabilitySection"]]){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(\`\${viewport.name} R174.2 checkpoint missing: \${name}\`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-120)},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await page.screenshot({path:path.join(targetDir,\`\${name}.png\`),fullPage:false});
+    }
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);

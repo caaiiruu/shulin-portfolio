@@ -748,8 +748,7 @@
       "usageScope": [
         "Voucher parent case",
         "Voucher stage solution details",
-        "DBS recruiter-first system case",
-        "Game Center recruiter-first system case"
+        "DBS recruiter-first system case"
       ],
       "variants": [
         "SystemInsight",
