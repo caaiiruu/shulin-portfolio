@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-24-r173.1",
+  "contentVersion": "2026-08-24-r173.2",
   "supersedes": "2026-08-24-r172.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -12129,8 +12129,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Co-led research and UX definition of a P2P marketplace, turning 30 interviews into a shared transaction model and 25 delivery specifications across the bank and software vendor.",
-        "zh": "共同主導 P2P 市集的研究與使用者體驗定義，將 30 場訪談轉化為銀行與軟體供應商共用的交易模型與 25 份交付規格。"
+        "en": "Co-led research and UX definition of a P2P marketplace, turning 30 interviews into a shared transaction model and delivery specifications across the bank and software vendor.",
+        "zh": "共同主導 P2P 市集研究與使用者體驗定義，將 30 場訪談轉化為銀行與軟體供應商共用的交易模型與交付規格。"
       },
       "infoGrid": {
         "type": {
