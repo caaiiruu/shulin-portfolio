@@ -892,7 +892,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
   }
 
-  await page.goto(\`\${baseUrl}/site/work/game-center\`,{waitUntil:"networkidle"});
+  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
   const r174GameCenter=await page.evaluate(async()=>{
     const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
     const images=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__media img")].filter(visible);
@@ -901,23 +901,23 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     return {title:dialog.querySelector("#detailTitle")?.textContent.trim(),navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,evidenceMedia:images.map(image=>({assetId:image.dataset.assetId,status:image.dataset.assetStatus,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,alt:image.alt})),outcomeValues:[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].filter(visible).map(node=>node.textContent.trim()),visibleDecisionMetadata:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__decision-link")].filter(visible).length,atGlanceLines:at&&style?Math.round(at.getBoundingClientRect().height/parseFloat(style.lineHeight)):null,text:dialog.innerText,overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0))};
   });
   const r174ExpectedAssets=["game-center-single-to-multi-game-discovery-public-v1","game-center-concurrent-game-platform-model-public-v1","game-center-status-operations-control-public-v1"];
-  if(r174GameCenter.title!=="One live game to a scalable multi-game Game Center")failures.push(\`\${viewport.name} R174.2 Game Center title mismatch\`);
-  if(JSON.stringify(r174GameCenter.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(\`\${viewport.name} R174.2 navigator mismatch: \${JSON.stringify(r174GameCenter.navigator)}\`);
-  if(r174GameCenter.decisionCount!==3||r174GameCenter.evidenceCount!==4)failures.push(\`\${viewport.name} R174.2 shared primitive count mismatch: \${JSON.stringify(r174GameCenter)}\`);
-  if(JSON.stringify(r174GameCenter.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(r174ExpectedAssets)||r174GameCenter.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1||item.naturalHeight<1||!item.alt))failures.push(\`\${viewport.name} R174.2 Evidence media mismatch: \${JSON.stringify(r174GameCenter.evidenceMedia)}\`);
-  if(JSON.stringify(r174GameCenter.outcomeValues)!==JSON.stringify(["70%","23%"]))failures.push(\`\${viewport.name} R174.2 Outcome mismatch: \${JSON.stringify(r174GameCenter.outcomeValues)}\`);
-  if(r174GameCenter.visibleDecisionMetadata)failures.push(\`\${viewport.name} R174.2 internal decision metadata leaked\`);
-  if(/approximately 50% user completion|~50% completion|\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV causality/i.test(r174GameCenter.text))failures.push(\`\${viewport.name} R174.2 prohibited claim leaked\`);
-  if(viewport.width===1419&&r174GameCenter.atGlanceLines>2)failures.push(\`\${viewport.name} R174.2 At a Glance exceeds two lines: \${r174GameCenter.atGlanceLines}\`);
-  if(r174GameCenter.overflow>0)failures.push(\`\${viewport.name} R174.2 horizontal overflow: \${r174GameCenter.overflow}\`);
+  if(r174GameCenter.title!=="One live game to a scalable multi-game Game Center")failures.push(`${viewport.name} R174.2 Game Center title mismatch`);
+  if(JSON.stringify(r174GameCenter.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} R174.2 navigator mismatch: ${JSON.stringify(r174GameCenter.navigator)}`);
+  if(r174GameCenter.decisionCount!==3||r174GameCenter.evidenceCount!==4)failures.push(`${viewport.name} R174.2 shared primitive count mismatch: ${JSON.stringify(r174GameCenter)}`);
+  if(JSON.stringify(r174GameCenter.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(r174ExpectedAssets)||r174GameCenter.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1||item.naturalHeight<1||!item.alt))failures.push(`${viewport.name} R174.2 Evidence media mismatch: ${JSON.stringify(r174GameCenter.evidenceMedia)}`);
+  if(JSON.stringify(r174GameCenter.outcomeValues)!==JSON.stringify(["70%","23%"]))failures.push(`${viewport.name} R174.2 Outcome mismatch: ${JSON.stringify(r174GameCenter.outcomeValues)}`);
+  if(r174GameCenter.visibleDecisionMetadata)failures.push(`${viewport.name} R174.2 internal decision metadata leaked`);
+  if(/approximately 50% user completion|~50% completion|\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV causality/i.test(r174GameCenter.text))failures.push(`${viewport.name} R174.2 prohibited claim leaked`);
+  if(viewport.width===1419&&r174GameCenter.atGlanceLines>2)failures.push(`${viewport.name} R174.2 At a Glance exceeds two lines: ${r174GameCenter.atGlanceLines}`);
+  if(r174GameCenter.overflow>0)failures.push(`${viewport.name} R174.2 horizontal overflow: ${r174GameCenter.overflow}`);
   if([1419,871,430].includes(viewport.width)){
     const targetDir=path.join(outputRoot,"r174-game-center",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
     const scroll=page.locator("#detailDialog .dialog-scroll").first();
     for(const [name,selector] of [["01-overview","#projectOverviewSection"],["02-decisions","#systemCaseDecisionsSection"],["03-evidence","#systemCaseEvidenceSection"],["04-outcomes","#systemCaseOutcomesSection"],["05-ownership","#systemCaseAccountabilitySection"]]){
-      const target=page.locator(selector).first();if(!await target.count()){failures.push(\`\${viewport.name} R174.2 checkpoint missing: \${name}\`);continue}
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R174.2 checkpoint missing: ${name}`);continue}
       await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-120)},selector);
       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-      await page.screenshot({path:path.join(targetDir,\`\${name}.png\`),fullPage:false});
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
     }
   }
 
