@@ -2102,6 +2102,7 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
   assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
   assert.ok(!project.title.en.startsWith("From "));
+  assert.equal(project.atAGlance.en,"Co-led research and UX definition of a P2P marketplace, turning 30 interviews into a shared transaction model and 25 delivery specifications across the bank and software vendor.");
   assert.equal(project.infoGrid.type.value,"Marketplace Platform");
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
   assert.equal(project.whatMadeThisHard.length,3);
@@ -2110,6 +2111,13 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
   assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
   assert.equal(project.publicContent.decisionEvidence.items.length,5);
+  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.assetId),[
+    "taishin-marketplace-evidence-research-synthesis-v1",
+    "taishin-marketplace-evidence-transaction-regulation-v1",
+    "taishin-marketplace-evidence-structure-v1",
+    "taishin-marketplace-evidence-delivery-alignment-v1"
+  ]);
+  assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>manifest.items[item.assetId]?.implementationStatus==="real-active"));
   assert.equal(project.presentation.detailHeroVisual,true);
   assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");
   for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
@@ -2123,6 +2131,15 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/Production launch and measured business outcomes are not verified in the available source record/);
   assert.equal((JSON.stringify(project.ownershipModel.accountabilityPresentation).match(/Production launch and measured business outcomes/g)||[]).length,1);
   assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  for(const decisions of [project.designDecisions,project.decisionNarrative.primaryDecisions]){
+    for(const decision of decisions){
+      for(const field of [decision.title,decision.whatIDecided,decision.whyThisChoice,decision.optionalThirdBlock.content,decision.outcome]){
+        assert.notEqual(field.zh,field.en,`${decision.id} Chinese localization must differ from English`);
+        assert.match(field.zh,/[㐀-鿿]/,`${decision.id} Chinese localization must contain Chinese text`);
+      }
+    }
+  }
+  assert.doesNotMatch(JSON.stringify({atAGlance:project.atAGlance.zh,accountability:project.ownershipModel.accountabilityPresentation,evidence:project.publicContent.decisionEvidence.items.map(item=>({title:item.title.zh,copy:item.copy.zh})),search:project.searchIndexV2}),/Convert the|From payment|From separate|From design|Research synthesis|Transaction regulation|Marketplace structure|Wireframe specification|Delivery alignment|Service blueprint|Marketplace platform|Transaction system|Payment operations|Payment integration|Marketplace transaction/);
   assert.ok(project.ownershipModel.accountabilityPresentation.partnerOwned);
   assert.equal(project.searchIndexV2.canonicalId,"taishin-p2p-marketplace-platform");
   assert.ok(project.searchIndexV2.problemTags.en.includes("transaction exception handling"));
