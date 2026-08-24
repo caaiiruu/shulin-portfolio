@@ -129,7 +129,7 @@ test("keeps every rendered project overview bilingual without English fallback i
     if (!timeline.duration?.en) unresolvedTimelineProjects.push(id);
     else assert.ok(timeline.duration.zh, `${id}: timeline.duration.zh is required`);
   }
-  assert.deepEqual(unresolvedTimelineProjects, ["cathay-mortgage-assistant"]);
+  assert.deepEqual(unresolvedTimelineProjects, []);
   const app = read("assets/js/app.js");
   assert.match(app, /value\.secondary\?\.zh/);
   assert.match(app, /value\.duration/);
@@ -2047,8 +2047,11 @@ test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with
   assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.");
   assert.doesNotMatch(project.title.en,/^From\s/);
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
-  assert.equal(project.infoGrid.timeline.duration.en,"");
-  assert.equal(project.infoGrid.timeline.publicVisibility,"hidden");
+  assert.equal(project.infoGrid.timeline.duration.en,"4 months");
+  assert.equal(project.infoGrid.timeline.duration.zh,"4 個月");
+  assert.equal(project.infoGrid.timeline.publicVisibility,"visible");
+  assert.equal(project.infoGrid.timeline.status,"human-source-verified");
+  assert.doesNotMatch(JSON.stringify(project.infoGrid.timeline),/unresolved|unavailable|pending|year-only|hide timeline/i);
   assert.equal(project.whatMadeThisHard.length,3);
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),project.designDecisions.map(item=>item.id));
