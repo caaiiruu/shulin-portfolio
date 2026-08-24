@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-24-r172.2",
+  "contentVersion": "2026-08-24-r172.3",
   "supersedes": "2026-08-24-r171.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -12980,7 +12980,7 @@
     },
     "cathay-mortgage-assistant": {
       "id": "cathay-mortgage-assistant",
-      "company": "Cathay United Bank",
+      "company": "Cathay Life Insurance",
       "period": "2016",
       "status": "launched",
       "relationship": {
@@ -13007,7 +13007,7 @@
         ]
       },
       "atAGlance": {
-        "en": "Led UX redesign of an internal mortgage consultation system, turning a fixed tablet script into scenario-led needs assessment and estimation flows, validated through four core tasks and delivered into the launched internal app.",
+        "en": "Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.",
         "zh": "主導內部房貸諮詢系統的使用者體驗改版，將固定平板腳本轉化為情境導向的需求評估與試算流程，透過四項核心任務驗證並交付至已上線的內部應用程式。"
       },
       "infoGrid": {
@@ -14054,7 +14054,7 @@
         "zh": "房貸諮詢"
       },
       "heroMetadata": {
-        "company": "Cathay United Bank",
+        "company": "Cathay Life Insurance",
         "domain": {
           "en": "Internal mortgage consultation",
           "zh": "內部房貸諮詢"

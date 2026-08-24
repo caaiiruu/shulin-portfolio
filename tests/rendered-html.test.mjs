@@ -2042,6 +2042,9 @@ test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with
   assert.ok(order.indexOf("design-decisions")<order.indexOf("evidence"));
   assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
   assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");
+  assert.equal(project.company,"Cathay Life Insurance");
+  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");
+  assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.");
   assert.doesNotMatch(project.title.en,/^From\s/);
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
   assert.equal(project.infoGrid.timeline.duration.en,"");
@@ -2065,4 +2068,17 @@ test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with
   assert.doesNotMatch(publicCopy,/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i);
   assert.match(project.publicContent.outcomes.closing.en,/metrics are not available/i);
   assert.doesNotMatch(app,/cathay-mortgage-assistant[^\n]*(?:StructuredEvidence|recruiter-first-system-case)/i);
+});
+
+test("R172.3 shared FloatingNavigator contains mobile rails and dialog content clears the floating control",()=>{
+  const navigatorCss=read("assets/css/components/domain-selector.css");
+  const popupCss=read("assets/css/components/popup-shell.css");
+  const app=read("assets/js/app.js");
+  assert.match(navigatorCss,/@media\(max-width:560px\)\{\s*\.floating-navigator\{width:calc\(var\(--dimension-100vw\) - var\(--dimension-24px\)\)\}\s*\.floating-navigator__rail\{width:100%;max-width:none;min-width:0\}/);
+  assert.match(popupCss,/--dialog-floating-navigator-clearance:calc\(var\(--control-height\)/);
+  assert.match(popupCss,/padding-bottom:calc\(var\(--dialog-floating-navigator-clearance\) \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(app,/linkRect\.left<leadingEdge/);
+  assert.match(app,/linkRect\.right>trailingEdge/);
+  assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
+  assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
 });
