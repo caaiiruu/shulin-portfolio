@@ -2021,3 +2021,48 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.match(app,/'WHAT I OWNED'/);
   assert.doesNotMatch(app,/'I OWNED THE OUTCOME'/);
 });
+
+test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with bounded launch claims",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-mortgage-assistant"];
+  const order=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const assetIds=[
+    "cathay-mortgage-hero-consultation-public-v1",
+    "cathay-mortgage-research-synthesis-public-v1",
+    "cathay-mortgage-structure-specification-public-v1",
+    "cathay-mortgage-prototype-validation-public-v1",
+    "cathay-mortgage-final-interface-home-public-v1",
+    "cathay-mortgage-final-interface-market-map-public-v1"
+  ];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.sectionOrder,order);
+  assert.deepEqual(project.presentation.sectionOrder,order);
+  assert.ok(order.indexOf("design-decisions")<order.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
+  assert.equal(project.infoGrid.timeline.duration.en,"");
+  assert.equal(project.infoGrid.timeline.publicVisibility,"hidden");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),project.designDecisions.map(item=>item.id));
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.deepEqual(project.publicContent.mortgageEvidence.structuredGroups.map(item=>item.assetId),assetIds.slice(1));
+  assert.ok(project.publicContent.mortgageEvidence.structuredGroups.every(item=>item.caption?.en&&item.decisionLink?.en));
+  for(const assetId of assetIds){
+    const asset=manifest.items[assetId];
+    assert.equal(asset.implementationStatus,"real-active");
+    assert.equal(asset.replacementRequired,false);
+    assert.match(asset.publicPath,/^\/site\/assets\/projects\/cathay-mortgage\//);
+  }
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","consultation-model","key-decisions","validation-and-launch","business-impact","ownership-and-collaboration","delivery-and-measurement","continue-exploring"])assert.ok(!order.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i);
+  assert.match(project.publicContent.outcomes.closing.en,/metrics are not available/i);
+  assert.doesNotMatch(app,/cathay-mortgage-assistant[^\n]*(?:StructuredEvidence|recruiter-first-system-case)/i);
+});
