@@ -2102,7 +2102,7 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
   assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
   assert.ok(!project.title.en.startsWith("From "));
-  assert.equal(project.atAGlance.en,"Co-led UX definition of fragmented P2P marketplace flows, turning 30 interviews into a shared bank–vendor delivery model.");
+  assert.equal(project.atAGlance.en,"Co-led UX definition of fragmented P2P marketplace flows, using 30 interviews to align bank and vendor on a shared delivery model.");
   assert.equal(project.infoGrid.type.value,"Marketplace Platform");
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
   assert.equal(project.whatMadeThisHard.length,3);
