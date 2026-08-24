@@ -470,7 +470,7 @@ test("renders verified Key Intervention Maps from the canonical SSOT only", () =
       assert.ok(map.sectionLabel?.en && map.sectionLabel?.zh, `${id}.sectionLabel`);
     }
   }
-  for (const id of ["taishin-p2p-marketplace-platform", "cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
+  for (const id of ["cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
     assert.equal(ssot.projects[id].keyInterventionMap, undefined, id);
   }
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
@@ -2084,4 +2084,72 @@ test("R172.3 shared FloatingNavigator contains mobile rails and dialog content c
   assert.match(app,/linkRect\.right>trailingEdge/);
   assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
   assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
+});
+
+test("R170 projects Taishin P2P through one recruiter-first owner without legacy or claim leakage",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["taishin-p2p-marketplace-platform"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNav=["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"];
+  const legacy=["critical-problem","taishin-research-definition-model","key-design-decisions","research-and-specification-evidence","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"];
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.equal(project.presentation.decisionOptions.showVisuals,false);
+  assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
+  assert.ok(!project.title.en.startsWith("From "));
+  assert.equal(project.atAGlance.en,"Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.");
+  assert.equal(project.infoGrid.type.value,"Marketplace Platform");
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.decisionEvidence.items.length,5);
+  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.assetId),[
+    "taishin-marketplace-evidence-research-synthesis-v1",
+    "taishin-marketplace-evidence-transaction-regulation-v1",
+    "taishin-marketplace-evidence-structure-v1",
+    "taishin-marketplace-evidence-delivery-alignment-v1"
+  ]);
+  assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>manifest.items[item.assetId]?.implementationStatus==="real-active"));
+  assert.equal(project.presentation.detailHeroVisual,true);
+  assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");
+  for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
+  assert.equal(project.publicContent.outcomes.cards.length,3);
+  assert.equal(project.publicContent.outcomes.closing,undefined);
+  assert.equal(project.whatMadeThisHard[0].title.en,"Buyer and seller journeys had to share one transaction-state model.");
+  assert.equal(project.publicContent.outcomes.cards[1].heading.en,"Shared marketplace delivery specifications");
+  assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"WHAT I OWNED");
+  assert.equal(project.ownershipModel.accountabilityPresentation.shared.label.en,"SHARED DECISIONS");
+  assert.equal(project.ownershipModel.accountabilityPresentation.partnerOwned.label.en,"PARTNER-OWNED BOUNDARY");
+  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/Production launch and measured business outcomes are not verified in the available source record/);
+  assert.equal((JSON.stringify(project.ownershipModel.accountabilityPresentation).match(/Production launch and measured business outcomes/g)||[]).length,1);
+  assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  for(const decisions of [project.designDecisions,project.decisionNarrative.primaryDecisions]){
+    for(const decision of decisions){
+      for(const field of [decision.title,decision.whatIDecided,decision.whyThisChoice,decision.optionalThirdBlock.content,decision.outcome]){
+        assert.notEqual(field.zh,field.en,`${decision.id} Chinese localization must differ from English`);
+        assert.match(field.zh,/[㐀-鿿]/,`${decision.id} Chinese localization must contain Chinese text`);
+      }
+    }
+  }
+  assert.doesNotMatch(JSON.stringify({atAGlance:project.atAGlance.zh,accountability:project.ownershipModel.accountabilityPresentation,evidence:project.publicContent.decisionEvidence.items.map(item=>({title:item.title.zh,copy:item.copy.zh})),search:project.searchIndexV2}),/Convert the|From payment|From separate|From design|Research synthesis|Transaction regulation|Marketplace structure|Wireframe specification|Delivery alignment|Service blueprint|Marketplace platform|Transaction system|Payment operations|Payment integration|Marketplace transaction/);
+  assert.ok(project.ownershipModel.accountabilityPresentation.partnerOwned);
+  assert.equal(project.searchIndexV2.canonicalId,"taishin-p2p-marketplace-platform");
+  assert.ok(project.searchIndexV2.problemTags.en.includes("transaction exception handling"));
+  assert.ok(legacy.every(key=>!project.presentation.sectionOrder.includes(key)));
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  const publicOutcomeCopy={
+    title:project.title,
+    atAGlance:project.atAGlance,
+    headline:project.publicContent.outcomes.headline,
+    cards:project.publicContent.outcomes.cards,
+  };
+  assert.doesNotMatch(JSON.stringify(publicOutcomeCopy),/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/i);
 });
