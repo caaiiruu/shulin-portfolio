@@ -68,6 +68,9 @@ for (const viewport of viewports) {
       sectionOrder:surface.map(node=>node.dataset.canonicalSectionId),
       decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
       evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      evidenceMedia:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group .structured-evidence-v223__media img")].filter(visible).map(node=>({assetId:node.dataset.assetId,status:node.dataset.assetStatus,naturalWidth:node.naturalWidth})),
+      atAGlance:dialog.querySelector("#projectAtGlance")?.textContent.trim(),
+      atAGlanceLines:(()=>{const node=dialog.querySelector("#projectAtGlance"),style=getComputedStyle(node);return Math.round(node.getBoundingClientRect().height/parseFloat(style.lineHeight))})(),
       accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
       legacy:["Critical Problem","Business Impact","Taishin Research and Definition Model","Research and Specification Evidence","Ownership and Collaboration","Delivery and Measurement","Status and Disclosure","Continue Exploring"].filter(text=>headings.includes(text)),
       decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.offsetTop,
@@ -83,6 +86,10 @@ for (const viewport of viewports) {
   if(JSON.stringify(taishinPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Taishin navigator mismatch: ${JSON.stringify(taishinPresentation.navigator)}`);
   if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
   if(taishinPresentation.decisionCount!==3||taishinPresentation.evidenceCount!==4||taishinPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Taishin shared primitive mismatch: ${JSON.stringify(taishinPresentation)}`);
+  if(taishinPresentation.atAGlance!=="Co-led research and UX definition of a P2P marketplace, turning 30 interviews into a shared transaction model and 25 delivery specifications across the bank and software vendor.")failures.push(`${viewport.name} Taishin At a Glance mismatch`);
+  if(viewport.width===1419&&taishinPresentation.atAGlanceLines>2)failures.push(`${viewport.name} Taishin At a Glance exceeds two lines: ${taishinPresentation.atAGlanceLines}`);
+  const expectedTaishinEvidence=["taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-delivery-alignment-v1"];
+  if(JSON.stringify(taishinPresentation.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(expectedTaishinEvidence)||taishinPresentation.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1))failures.push(`${viewport.name} Taishin asset-backed StructuredEvidence media mismatch: ${JSON.stringify(taishinPresentation.evidenceMedia)}`);
   if(taishinPresentation.legacy.length)failures.push(`${viewport.name} Taishin legacy leakage: ${JSON.stringify(taishinPresentation.legacy)}`);
   if(/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/.test(taishinPresentation.text))failures.push(`${viewport.name} Taishin unsupported outcome claim leaked`);
   if(!["hidden","clip"].includes(taishinPresentation.overflowX))failures.push(`${viewport.name} Taishin dialog horizontal containment failed: ${JSON.stringify(taishinPresentation)}`);

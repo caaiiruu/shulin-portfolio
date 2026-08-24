@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-24-r173",
+  "contentVersion": "2026-08-24-r173.1",
   "supersedes": "2026-08-24-r172.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -12129,8 +12129,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Co-led research and UX definition of a 0→1 P2P marketplace, translating 30 interviews into transaction logic, marketplace structure and 25 functional specifications aligned across the bank and software vendor over 6 months.",
-        "zh": "共同主導 0→1 P2P 市集的研究與 使用者體驗 定義，將 30 場訪談轉化為交易邏輯、市集結構與 25 份功能規格，並在 6 個月內對齊銀行與軟體供應商。"
+        "en": "Co-led research and UX definition of a P2P marketplace, turning 30 interviews into a shared transaction model and 25 delivery specifications across the bank and software vendor.",
+        "zh": "共同主導 P2P 市集的研究與使用者體驗定義，將 30 場訪談轉化為銀行與軟體供應商共用的交易模型與 25 份交付規格。"
       },
       "infoGrid": {
         "type": {
@@ -12206,78 +12206,78 @@
           "id": "taishin-decision-transaction-model",
           "title": {
             "en": "From payment functionality to an end-to-end marketplace transaction model",
-            "zh": "From payment functionality to an end-to-end marketplace transaction model"
+            "zh": "從付款功能到端到端市集交易模型"
           },
           "whatIDecided": {
             "en": "Integrate buyer, seller, payment, logistics and notification states.",
-            "zh": "Integrate buyer, seller, payment, logistics and notification states."
+            "zh": "整合買方、賣方、付款、物流與通知狀態。"
           },
           "whyThisChoice": {
             "en": "Trust and downstream operations depended on consistent state logic.",
-            "zh": "Trust and downstream operations depended on consistent state logic."
+            "zh": "信任與後續營運仰賴一致的狀態邏輯。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
               "en": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration.",
-              "zh": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration."
+              "zh": "付款／物流流程、通知文案、狀態／動作定義、例外情境，以及客戶／供應商反覆確認。"
             }
           },
           "outcome": {
             "en": "Shared payment/logistics regulation and transaction logic.",
-            "zh": "Shared payment/logistics regulation and transaction logic."
+            "zh": "共享的付款／物流規範與交易邏輯。"
           }
         },
         {
           "id": "taishin-decision-marketplace-structure",
           "title": {
             "en": "From separate buyer and seller needs to one shared marketplace structure",
-            "zh": "From separate buyer and seller needs to one shared marketplace structure"
+            "zh": "從分離的買賣雙方需求到一套共享市集結構"
           },
           "whatIDecided": {
             "en": "Translate buyer/seller research into one coherent marketplace structure.",
-            "zh": "Translate buyer/seller research into one coherent marketplace structure."
+            "zh": "將買賣雙方研究轉化為一套連貫的市集結構。"
           },
           "whyThisChoice": {
             "en": "Different participants needed different actions without fragmenting the core transaction model.",
-            "zh": "Different participants needed different actions without fragmenting the core transaction model."
+            "zh": "不同參與者需要不同操作，同時不能割裂核心交易模型。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
               "en": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse.",
-              "zh": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse."
+              "zh": "訪談、親和圖整理、人物誌／情境、網站結構、線框稿與模式重用。"
             }
           },
           "outcome": {
             "en": "Shared marketplace structure and interaction definition.",
-            "zh": "Shared marketplace structure and interaction definition."
+            "zh": "共享的市集結構與互動定義。"
           }
         },
         {
           "id": "taishin-decision-delivery-specification",
           "title": {
             "en": "From design intent to a shared delivery specification",
-            "zh": "From design intent to a shared delivery specification"
+            "zh": "從設計意圖到共享交付規格"
           },
           "whatIDecided": {
             "en": "Convert the UX model into detailed shared specifications.",
-            "zh": "Convert the 使用者體驗 model into detailed shared specifications."
+            "zh": "將使用者體驗模型轉化為詳細的共享規格。"
           },
           "whyThisChoice": {
             "en": "Cross-organization implementation required one operational/interface definition.",
-            "zh": "Cross-organization implementation required one operational/interface definition."
+            "zh": "跨組織實作需要一套共同的營運／介面定義。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
               "en": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification.",
-              "zh": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification."
+              "zh": "25 份功能文件、線框規格、交付優先順序、Asana 追蹤、品質驗證，以及客戶／供應商澄清。"
             }
           },
           "outcome": {
             "en": "Implementation-ready specification basis.",
-            "zh": "Implementation-ready specification basis."
+            "zh": "可供實作的規格基礎。"
           }
         }
       ],
@@ -12458,7 +12458,7 @@
           "zh": [
             "交易設計",
             "治理規則",
-            "Service blueprint",
+            "服務藍圖",
             "研究統整",
             "功能規格",
             "供應商整合"
@@ -12471,8 +12471,8 @@
             "auction platform"
           ],
           "zh": [
-            "Marketplace platform",
-            "Transaction system",
+            "市集平台",
+            "交易系統",
             "拍賣平台"
           ]
         },
@@ -12485,7 +12485,7 @@
           "zh": [
             "買家",
             "賣家",
-            "Payment operations"
+            "付款營運"
           ]
         },
         "outcomeTags": {
@@ -12496,7 +12496,7 @@
           ],
           "zh": [
             "受治理的交易模型",
-            "Payment integration",
+            "付款整合",
             "買賣雙方清晰度"
           ]
         },
@@ -12507,7 +12507,7 @@
             "How do you design an auction payment system?"
           ],
           "zh": [
-            "如何在 Marketplace transaction 中建立信任？",
+            "如何在市集交易中建立信任？",
             "如何處理多方付款規則？",
             "如何設計拍賣付款系統？"
           ]
@@ -12534,7 +12534,7 @@
       "ownershipModel": {
         "publicSummary": {
           "en": "Research and UX definition were co-led; technical implementation and production outcomes remained partner-owned or unverified.",
-          "zh": "研究與 使用者體驗 定義由共同主導；技術實作與正式環境成果屬夥伴負責或未經驗證。"
+          "zh": "研究與使用者體驗定義由雙方共同主導；技術實作與正式上線成果由合作夥伴負責或尚未經驗證。"
         },
         "ledByMe": [
           {
@@ -12582,7 +12582,7 @@
         "accountabilityPresentation": {
           "intro": {
             "en": "The verified boundary separates co-led UX definition from partner-owned implementation.",
-            "zh": "經驗證的責任邊界區分共同主導的 UX 定義與合作夥伴負責的技術實作。"
+            "zh": "經驗證的責任邊界，區分共同主導的使用者體驗定義與合作夥伴負責的技術實作。"
           },
           "owned": {
             "label": {
@@ -12595,7 +12595,7 @@
             },
             "text": {
               "en": "Research and UX definition, transaction/state modeling, logic-flow development, functional specification, wireframe documentation, delivery clarification and QA participation.",
-              "zh": "研究與 使用者體驗 定義、交易／狀態建模、邏輯流程發展、功能規格、線框文件、交付澄清與參與 QA。"
+              "zh": "研究與使用者體驗定義、交易／狀態建模、邏輯流程設計、功能規格、線框文件、交付澄清與品質驗證參與。"
             }
           },
           "shared": {
@@ -12609,7 +12609,7 @@
             },
             "text": {
               "en": "Partnered with another UX designer, branding company, bank stakeholders, software vendor, UI designer, PM and developers.",
-              "zh": "與另一位 使用者體驗 設計師、品牌公司、銀行利害關係人、軟體供應商、UI 設計師、PM 與開發人員合作。"
+              "zh": "與另一位使用者體驗設計師、品牌公司、銀行利害關係人、軟體供應商、介面設計師、產品經理與開發人員合作。"
             }
           },
           "partnerOwned": {
@@ -12623,7 +12623,7 @@
             },
             "text": {
               "en": "The exact split with the other UX designer is not fully documented; technical implementation remained partner-owned. Production launch and measured business outcomes are not verified in the available source record.",
-              "zh": "與另一位 UX 設計師的精確分工未有完整紀錄；技術實作仍由合作夥伴負責。現有來源紀錄未能驗證正式上線與可衡量的商業成果。"
+              "zh": "與另一位使用者體驗設計師的精確分工未有完整紀錄；技術實作仍由合作夥伴負責。現有來源紀錄未能驗證正式上線與可衡量的商業成果。"
             }
           },
           "contentStatus": "source-remapped-r170.1"
@@ -12703,78 +12703,78 @@
             "id": "taishin-decision-transaction-model",
             "title": {
               "en": "From payment functionality to an end-to-end marketplace transaction model",
-              "zh": "From payment functionality to an end-to-end marketplace transaction model"
+              "zh": "從付款功能到端到端市集交易模型"
             },
             "whatIDecided": {
               "en": "Integrate buyer, seller, payment, logistics and notification states.",
-              "zh": "Integrate buyer, seller, payment, logistics and notification states."
+              "zh": "整合買方、賣方、付款、物流與通知狀態。"
             },
             "whyThisChoice": {
               "en": "Trust and downstream operations depended on consistent state logic.",
-              "zh": "Trust and downstream operations depended on consistent state logic."
+              "zh": "信任與後續營運仰賴一致的狀態邏輯。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
                 "en": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration.",
-                "zh": "Payment/logistics flow, notification wording, state/action definitions, edge cases and client/vendor iteration."
+                "zh": "付款／物流流程、通知文案、狀態／動作定義、例外情境，以及客戶／供應商反覆確認。"
               }
             },
             "outcome": {
               "en": "Shared payment/logistics regulation and transaction logic.",
-              "zh": "Shared payment/logistics regulation and transaction logic."
+              "zh": "共享的付款／物流規範與交易邏輯。"
             }
           },
           {
             "id": "taishin-decision-marketplace-structure",
             "title": {
               "en": "From separate buyer and seller needs to one shared marketplace structure",
-              "zh": "From separate buyer and seller needs to one shared marketplace structure"
+              "zh": "從分離的買賣雙方需求到一套共享市集結構"
             },
             "whatIDecided": {
               "en": "Translate buyer/seller research into one coherent marketplace structure.",
-              "zh": "Translate buyer/seller research into one coherent marketplace structure."
+              "zh": "將買賣雙方研究轉化為一套連貫的市集結構。"
             },
             "whyThisChoice": {
               "en": "Different participants needed different actions without fragmenting the core transaction model.",
-              "zh": "Different participants needed different actions without fragmenting the core transaction model."
+              "zh": "不同參與者需要不同操作，同時不能割裂核心交易模型。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
                 "en": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse.",
-                "zh": "Interviews, affinity mapping, personas/scenarios, site structure, wireframes and pattern reuse."
+                "zh": "訪談、親和圖整理、人物誌／情境、網站結構、線框稿與模式重用。"
               }
             },
             "outcome": {
               "en": "Shared marketplace structure and interaction definition.",
-              "zh": "Shared marketplace structure and interaction definition."
+              "zh": "共享的市集結構與互動定義。"
             }
           },
           {
             "id": "taishin-decision-delivery-specification",
             "title": {
               "en": "From design intent to a shared delivery specification",
-              "zh": "From design intent to a shared delivery specification"
+              "zh": "從設計意圖到共享交付規格"
             },
             "whatIDecided": {
               "en": "Convert the UX model into detailed shared specifications.",
-              "zh": "Convert the 使用者體驗 model into detailed shared specifications."
+              "zh": "將使用者體驗模型轉化為詳細的共享規格。"
             },
             "whyThisChoice": {
               "en": "Cross-organization implementation required one operational/interface definition.",
-              "zh": "Cross-organization implementation required one operational/interface definition."
+              "zh": "跨組織實作需要一套共同的營運／介面定義。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
                 "en": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification.",
-                "zh": "25 functional documents, wireframe specifications, delivery prioritization, Asana tracking, QA and client/vendor clarification."
+                "zh": "25 份功能文件、線框規格、交付優先順序、Asana 追蹤、品質驗證，以及客戶／供應商澄清。"
               }
             },
             "outcome": {
               "en": "Implementation-ready specification basis.",
-              "zh": "Implementation-ready specification basis."
+              "zh": "可供實作的規格基礎。"
             }
           }
         ],
@@ -13039,11 +13039,11 @@
               "publicAssetId": "taishin-marketplace-evidence-research-synthesis-v1",
               "title": {
                 "en": "Research synthesis",
-                "zh": "Research synthesis"
+                "zh": "研究統整"
               },
               "copy": {
                 "en": "Buyer and seller research synthesis translated participant needs into a shared marketplace model.",
-                "zh": "Buyer and seller research synthesis translated participant needs into a shared marketplace model."
+                "zh": "買賣雙方研究統整將參與者需求轉化為共享的市集模型。"
               }
             },
             {
@@ -13051,11 +13051,11 @@
               "publicAssetId": "taishin-marketplace-evidence-transaction-regulation-v1",
               "title": {
                 "en": "Transaction regulation",
-                "zh": "Transaction regulation"
+                "zh": "交易規範"
               },
               "copy": {
                 "en": "Payment, logistics and notification states were defined as one transaction regulation.",
-                "zh": "Payment, logistics and notification states were defined as one transaction regulation."
+                "zh": "付款、物流與通知狀態被定義為一套交易規範。"
               }
             },
             {
@@ -13063,11 +13063,11 @@
               "publicAssetId": "taishin-marketplace-evidence-structure-v1",
               "title": {
                 "en": "Marketplace structure",
-                "zh": "Marketplace structure"
+                "zh": "市集結構"
               },
               "copy": {
                 "en": "The architecture connected participant journeys with marketplace functions.",
-                "zh": "The architecture connected participant journeys with marketplace functions."
+                "zh": "這套架構將參與者旅程與市集功能連結起來。"
               }
             },
             {
@@ -13075,11 +13075,11 @@
               "publicAssetId": "taishin-marketplace-evidence-wireframe-spec-v1",
               "title": {
                 "en": "Wireframe specification",
-                "zh": "Wireframe specification"
+                "zh": "線框規格"
               },
               "copy": {
                 "en": "Detailed specifications converted the marketplace structure into implementation guidance.",
-                "zh": "Detailed specifications converted the marketplace structure into implementation guidance."
+                "zh": "詳細規格將市集結構轉化為實作指引。"
               }
             },
             {
@@ -13087,11 +13087,11 @@
               "publicAssetId": "taishin-marketplace-evidence-delivery-alignment-v1",
               "title": {
                 "en": "Delivery alignment",
-                "zh": "Delivery alignment"
+                "zh": "交付對齊"
               },
               "copy": {
                 "en": "Client and vendor clarification connected design intent to delivery decisions.",
-                "zh": "Client and vendor clarification connected design intent to delivery decisions."
+                "zh": "客戶與供應商之間的澄清，將設計意圖連結到交付決策。"
               }
             }
           ],
@@ -13111,7 +13111,8 @@
                 "zh": "支持決策 02"
               },
               "sourceRef": "30 moderated interviews",
-              "assetStatus": "public-safe-active"
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-research-synthesis-v1"
             },
             {
               "heading": {
@@ -13127,7 +13128,8 @@
                 "zh": "支持決策 01"
               },
               "sourceRef": "7 logic-flow sheets",
-              "assetStatus": "public-safe-active"
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-transaction-regulation-v1"
             },
             {
               "heading": {
@@ -13143,7 +13145,8 @@
                 "zh": "支持決策 02 與 03"
               },
               "sourceRef": "Marketplace structure + wireframe specification",
-              "assetStatus": "public-safe-active"
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-structure-v1"
             },
             {
               "heading": {
@@ -13159,7 +13162,8 @@
                 "zh": "支持決策 03"
               },
               "sourceRef": "Delivery alignment",
-              "assetStatus": "public-safe-active"
+              "assetStatus": "public-safe-active",
+              "assetId": "taishin-marketplace-evidence-delivery-alignment-v1"
             }
           ],
           "claimSafety": {
