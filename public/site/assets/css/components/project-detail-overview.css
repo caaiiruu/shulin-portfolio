@@ -544,7 +544,7 @@
 .structured-evidence-v223__groups--with-media{grid-template-columns:1fr;gap:var(--space-8)}
 .structured-evidence-v223__groups--with-media .structured-evidence-v223__group{gap:var(--space-4)}
 .structured-evidence-v223__media{display:grid;gap:var(--space-3);min-width:0;margin:0}
-.structured-evidence-v223__media img{display:block;width:100%;height:auto;max-height:min(72vh,var(--dimension-900px));object-fit:contain;object-position:center;background:var(--color-surface)}
+.structured-evidence-v223__media img{display:block;width:100%;height:auto;object-fit:contain;object-position:center;background:var(--color-surface)}
 .structured-evidence-v223__media figcaption{max-width:var(--dimension-68ch);color:var(--color-text-muted);font-size:var(--text-xs);line-height:1.5}
 .structured-evidence-v223__decision-link{color:var(--color-text-muted)}
 .structured-evidence-v223__boundary{max-width:var(--dimension-68ch);margin:0;padding-left:var(--space-4);border-left:var(--dimension-2px) solid var(--color-border-strong);color:var(--color-text-muted);font-size:var(--text-xs);line-height:1.5}
