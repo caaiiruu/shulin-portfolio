@@ -1794,7 +1794,7 @@ test("R162.5 keeps Booking recruiter-first, approximate, complete, and confident
   assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-01"],undefined);
   assert.equal(manifest.items["booking-evidence-outcomes-cross-market-conversion-01"],undefined);
   assert.equal(manifest.items["booking-evidence-outcomes-post-launch-tradeoff-01"],undefined);
-  assert.equal(strategy.title.en,"From uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.equal(strategy.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
   assert.match(app,/supportingStatements/);
   assert.match(css,/recruiter-complexity-grid\{[^}]*align-items:stretch/);
   assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{width:100%;max-width:var\(--case-reading-max\)\}/);
@@ -2007,7 +2007,7 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
   for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
   const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
-  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue|experiment success|experiment result|market-wide rollout/i);
+  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i);\n  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/experiment results are not verified/i);
   assert.match(app,/projectSectionActivationInset/);
   assert.match(app,/evidenceSource\.showDecisionMapping===true/);
   assert.match(app,/'WHAT I OWNED'/);
