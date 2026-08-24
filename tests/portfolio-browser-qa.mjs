@@ -747,13 +747,17 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
       realEvidence:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(node=>node.dataset.assetStatus==="real-active").length,
       timelineVisible:[...dialog.querySelectorAll("#projectSignals *")].filter(visible).some(node=>node.textContent.trim()==="Timeline"),
+      timelineValue:[...dialog.querySelectorAll("#projectSignals > div")].find(node=>node.querySelector("small")?.textContent.trim()==="Timeline")?.querySelector("strong")?.textContent.trim(),
+      infoGridOwner:dialog.querySelector("#projectSignals")?.classList.contains("info-grid-v45"),
       text:dialog.innerText,
       overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
     };
   });
   const r172Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
   if(r172Presentation.title!=="Rigid tablet script to a flexible mortgage consultation system"||r172Presentation.taxonomy.length||JSON.stringify(r172Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r172Presentation.order.filter(id=>r172Order.includes(id)))!==JSON.stringify(r172Order)||!(r172Presentation.decisionTop<r172Presentation.evidenceTop)||r172Presentation.decisionCount!==3||r172Presentation.evidenceCount!==5||r172Presentation.realEvidence!==5)failures.push(`${viewport.name} R172.2 composition mismatch: ${JSON.stringify(r172Presentation)}`);
-  if(r172Presentation.timelineVisible||/Critical Problem|Consultation Model|Business Impact|Ownership and Collaboration|Delivery and Measurement|Continue Exploring/.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 Timeline, legacy or metadata leak`);
+  if(!r172Presentation.timelineVisible||r172Presentation.timelineValue!=="4 months"||!r172Presentation.infoGridOwner)failures.push(`${viewport.name} R172.4 verified Timeline/shared Info Grid mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(/Timeline unresolved|duration unavailable|Timeline pending|year-only fallback|2016-only rendering rationale/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.4 stale Timeline blocker leak`);
+  if(/Critical Problem|Consultation Model|Business Impact|Ownership and Collaboration|Delivery and Measurement|Continue Exploring/.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 legacy metadata leak`);
   if(/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 unsupported claim leak`);
   if(!["hidden","clip"].includes(r172Presentation.overflowX))failures.push(`${viewport.name} R172.2 horizontal containment failed`);
   if(!r172Presentation.context.startsWith("Cathay Life Insurance")||!r172Presentation.context.includes("Internal mortgage consultation"))failures.push(`${viewport.name} R172.3 company metadata mismatch: ${r172Presentation.context}`);

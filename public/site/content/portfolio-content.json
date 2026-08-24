@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-24-r172.3",
+  "contentVersion": "2026-08-24-r172.4",
   "supersedes": "2026-08-24-r171.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -13041,16 +13041,16 @@
         },
         "timeline": {
           "duration": {
-            "en": "",
-            "zh": ""
+            "en": "4 months",
+            "zh": "4 個月"
           },
           "dateRange": {
             "en": "2016",
             "zh": "2016 年"
           },
-          "status": "source-year-confirmed-duration-unavailable",
-          "publicVisibility": "hidden",
-          "displayRule": "Hide Timeline until an exact duration is confirmed."
+          "status": "human-source-verified",
+          "publicVisibility": "visible",
+          "displayRule": "Render the verified duration through the shared Info Grid."
         },
         "schemaVersion": "2026-08-06-r142"
       },
