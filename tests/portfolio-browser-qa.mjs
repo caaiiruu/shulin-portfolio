@@ -729,6 +729,88 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     }
   }
 
+  await page.goto(`${baseUrl}/site/work/cathay-mortgage-assistant`,{waitUntil:"networkidle"});
+  const r172Presentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      context:dialog.querySelector("#detailContext")?.textContent.trim(),
+      atAGlance:dialog.querySelector("#projectAtGlance")?.textContent.trim(),
+      atAGlanceLines:(()=>{const node=dialog.querySelector("#projectAtGlance"),style=getComputedStyle(node);return Math.round(node.getBoundingClientRect().height/parseFloat(style.lineHeight))})(),
+      taxonomy:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      order:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-stage-decision-group").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      realEvidence:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(node=>node.dataset.assetStatus==="real-active").length,
+      timelineVisible:[...dialog.querySelectorAll("#projectSignals *")].filter(visible).some(node=>node.textContent.trim()==="Timeline"),
+      timelineValue:[...dialog.querySelectorAll("#projectSignals > div")].find(node=>node.querySelector("small")?.textContent.trim()==="Timeline")?.querySelector("strong")?.textContent.trim(),
+      infoGridOwner:dialog.querySelector("#projectSignals")?.classList.contains("info-grid-v45"),
+      text:dialog.innerText,
+      overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
+    };
+  });
+  const r172Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
+  if(r172Presentation.title!=="Rigid tablet script to a flexible mortgage consultation system"||r172Presentation.taxonomy.length||JSON.stringify(r172Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r172Presentation.order.filter(id=>r172Order.includes(id)))!==JSON.stringify(r172Order)||!(r172Presentation.decisionTop<r172Presentation.evidenceTop)||r172Presentation.decisionCount!==3||r172Presentation.evidenceCount!==5||r172Presentation.realEvidence!==5)failures.push(`${viewport.name} R172.2 composition mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(!r172Presentation.timelineVisible||r172Presentation.timelineValue!=="4 months"||!r172Presentation.infoGridOwner)failures.push(`${viewport.name} R172.4 verified Timeline/shared Info Grid mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(/Timeline unresolved|duration unavailable|Timeline pending|year-only fallback|2016-only rendering rationale/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.4 stale Timeline blocker leak`);
+  if(/Critical Problem|Consultation Model|Business Impact|Ownership and Collaboration|Delivery and Measurement|Continue Exploring/.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 legacy metadata leak`);
+  if(/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 unsupported claim leak`);
+  if(!["hidden","clip"].includes(r172Presentation.overflowX))failures.push(`${viewport.name} R172.2 horizontal containment failed`);
+  if(!r172Presentation.context.startsWith("Cathay Life Insurance")||!r172Presentation.context.includes("Internal mortgage consultation"))failures.push(`${viewport.name} R172.3 company metadata mismatch: ${r172Presentation.context}`);
+  if(r172Presentation.atAGlance!=="Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.")failures.push(`${viewport.name} R172.3 At a Glance mismatch`);
+  const r172SharedContainment=await page.evaluate(()=>{
+    const nav=document.querySelector("#projectSectionNav"),rail=nav.querySelector(".floating-navigator__rail"),root=document.querySelector("#detailDialog .dialog-scroll");
+    const bodyWidth=Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),navRect=nav.getBoundingClientRect();
+    root.scrollTop=root.scrollHeight;
+    const finalNode=document.querySelector("#programmeSurface > :last-child"),finalRect=finalNode?.getBoundingClientRect(),rootRect=root.getBoundingClientRect();
+    return {bodyWidth,viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,railClientWidth:rail.clientWidth,railScrollWidth:rail.scrollWidth,railOverflow:getComputedStyle(rail).overflowX,finalBottom:finalRect?.bottom,navTop:navRect.top,rootBottom:rootRect.bottom};
+  });
+  if(r172SharedContainment.bodyWidth>r172SharedContainment.viewportWidth||r172SharedContainment.navLeft<0||r172SharedContainment.navRight>r172SharedContainment.viewportWidth)failures.push(`${viewport.name} R172.3 shared navigator viewport overflow: ${JSON.stringify(r172SharedContainment)}`);
+  if(viewport.width===430&&(r172SharedContainment.railOverflow!=="auto"||r172SharedContainment.railScrollWidth<=r172SharedContainment.railClientWidth))failures.push(`${viewport.name} R172.3 shared navigator is not internally scrollable`);
+  if(r172SharedContainment.finalBottom>r172SharedContainment.navTop)failures.push(`${viewport.name} R172.3 dialog bottom safe area is insufficient: ${JSON.stringify(r172SharedContainment)}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r1722-cathay-mortgage",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[["00-hero","#projectDetailHeroVisual","#projectOverviewSection"],["01-overview","#projectOverviewSection","#projectOverviewSection"],["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],["04-evidence-research","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(1)","#systemCaseEvidenceSection"],["05-evidence-structure","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(2)","#systemCaseEvidenceSection"],["06-evidence-validation","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(3)","#systemCaseEvidenceSection"],["07-evidence-delivery","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(4)","#systemCaseEvidenceSection"],["08-evidence-market-map","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(5)","#systemCaseEvidenceSection"],["09-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],["10-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R172.2 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} R172.2 navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
+  const r1723RegressionProjects=[
+    ["payment","/site/work/payment"],
+    ["booking-taxi-strategy","/site/work/booking-taxi-pickup-service-strategy"],
+    ["taishin","/site/work/taishin-p2p-marketplace-platform"],
+    ["cathay-oa","/site/work/cathay-sit-online-account-opening"],
+    ["cathay-review","/site/work/cathay-sit-review-remediation-operations"],
+    ["cathay-mortgage","/site/work/cathay-mortgage-assistant"]
+  ];
+  for(const [projectId,route] of r1723RegressionProjects){
+    await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});
+    const sharedGeometry=await page.evaluate(()=>{
+      const root=document.querySelector("#detailDialog .dialog-scroll"),nav=document.querySelector("#projectSectionNav"),rail=nav?.querySelector(".floating-navigator__rail");
+      if(!root||!nav||!rail)return null;
+      const verifyNode=node=>{root.scrollTop=Math.min(root.scrollHeight-root.clientHeight,root.scrollTop+node.getBoundingClientRect().bottom-nav.getBoundingClientRect().top+1);return node.getBoundingClientRect().bottom<=nav.getBoundingClientRect().top+1};
+      const captions=[...document.querySelectorAll("#detailDialog figcaption")];
+      const captionClearance=captions.map(verifyNode);
+      root.scrollTop=root.scrollHeight;
+      const finalNode=document.querySelector("#programmeSurface > :last-child"),navRect=nav.getBoundingClientRect();
+      const active=rail.querySelector('a[aria-current="location"]'),railRect=rail.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
+      return {bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+    });
+    if(!sharedGeometry)failures.push(`${viewport.name} R172.3 ${projectId} shared owners missing`);
+    else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);

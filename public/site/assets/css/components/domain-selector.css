@@ -72,6 +72,8 @@
 }
 @media(min-width:901px){#domainFloatingNav{display:none}}
 @media(max-width:560px){
+  .floating-navigator{width:calc(var(--dimension-100vw) - var(--dimension-24px))}
+  .floating-navigator__rail{width:100%;max-width:none;min-width:0}
   .domain-statement{font-size:clamp(var(--dimension-2-5rem),var(--dimension-11vw),var(--dimension-3-5rem))}
   .domain-name{font-size:clamp(var(--dimension-2rem),var(--dimension-9vw),var(--dimension-2-65rem))}
 }
