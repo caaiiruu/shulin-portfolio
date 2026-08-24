@@ -71,6 +71,15 @@ for (const viewport of viewports) {
       evidenceMedia:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group .structured-evidence-v223__media img")].filter(visible).map(node=>({assetId:node.dataset.assetId,status:node.dataset.assetStatus,naturalWidth:node.naturalWidth})),
       atAGlance:dialog.querySelector("#projectAtGlance")?.textContent.trim(),
       atAGlanceLines:(()=>{const node=dialog.querySelector("#projectAtGlance"),style=getComputedStyle(node);return Math.round(node.getBoundingClientRect().height/parseFloat(style.lineHeight))})(),
+      atAGlanceGeometry:(()=>{
+        const node=dialog.querySelector("#projectAtGlance"),textNode=node?.firstChild,style=getComputedStyle(node),text=node?.textContent.trim()||"";
+        if(!node||!textNode)return null;
+        const words=text.split(/\s+/),lines=[];let offset=0;
+        for(const word of words){const start=text.indexOf(word,offset),range=document.createRange();range.setStart(textNode,start);range.setEnd(textNode,start+word.length);const rect=range.getBoundingClientRect();let line=lines.find(item=>Math.abs(item.top-rect.top)<1);if(!line){line={top:rect.top,words:[],left:rect.left,right:rect.right};lines.push(line)}line.words.push(word);line.left=Math.min(line.left,rect.left);line.right=Math.max(line.right,rect.right);offset=start+word.length}
+        const canvas=document.createElement("canvas"),context=canvas.getContext("2d"),letterSpacing=parseFloat(style.letterSpacing)||0;
+        context.font=`${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        return{availableWidth:node.clientWidth,fontFamily:style.fontFamily,fontSize:style.fontSize,fontWeight:style.fontWeight,lineHeight:style.lineHeight,letterSpacing:style.letterSpacing,renderedWidth:context.measureText(text).width+Math.max(0,text.length-1)*letterSpacing,twoLineMaximum:node.clientWidth*2,lines:lines.map(item=>({text:item.words.join(" "),width:item.right-item.left}))};
+      })(),
       accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
       legacy:["Critical Problem","Business Impact","Taishin Research and Definition Model","Research and Specification Evidence","Ownership and Collaboration","Delivery and Measurement","Status and Disclosure","Continue Exploring"].filter(text=>headings.includes(text)),
       decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.offsetTop,
@@ -87,6 +96,7 @@ for (const viewport of viewports) {
   if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
   if(taishinPresentation.decisionCount!==3||taishinPresentation.evidenceCount!==4||taishinPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Taishin shared primitive mismatch: ${JSON.stringify(taishinPresentation)}`);
   if(taishinPresentation.atAGlance!=="Co-led P2P marketplace research and UX definition, turning 30 interviews and fragmented transaction states into one shared bank–vendor delivery model.")failures.push(`${viewport.name} Taishin At a Glance mismatch`);
+  if(viewport.width===1419)console.log(`R173.4 measured geometry ${JSON.stringify(taishinPresentation.atAGlanceGeometry)}`);
   if(viewport.width===1419&&taishinPresentation.atAGlanceLines>2)failures.push(`${viewport.name} Taishin At a Glance exceeds two lines: ${taishinPresentation.atAGlanceLines}`);
   const expectedTaishinEvidence=["taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-delivery-alignment-v1"];
   if(JSON.stringify(taishinPresentation.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(expectedTaishinEvidence)||taishinPresentation.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1))failures.push(`${viewport.name} Taishin asset-backed StructuredEvidence media mismatch: ${JSON.stringify(taishinPresentation.evidenceMedia)}`);
