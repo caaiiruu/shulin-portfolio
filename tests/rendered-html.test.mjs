@@ -1999,6 +1999,10 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
   assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
+  assert.deepEqual(project.publicContent.strategyEvidence.structuredGroups.map(item=>item.assetId||null),["booking-taxi-strategy-traveller-context-public-v1",null,"booking-taxi-strategy-proposition-comparison-public-v1","booking-taxi-strategy-experiment-risk-framing-public-v1"]);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.filter(item=>item.assetId).every(item=>item.caption?.en&&manifest.items[item.assetId]?.implementationStatus==="real-active"));
+  assert.match(app,/structured-evidence-v223__media/);
+  assert.doesNotMatch(app,/projectId.*booking-taxi-strategy|booking-taxi-pickup-service-strategy.*structured-evidence-v223__media/);
   assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
   assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
   assert.equal(project.heroVisualBrief.assetId,"booking-taxi-pickup-overview-source-v1");

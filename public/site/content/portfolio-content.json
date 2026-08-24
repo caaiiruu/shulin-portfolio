@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-24-r171",
+  "contentVersion": "2026-08-24-r171.1",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -21531,6 +21531,11 @@
               "decisionLink": {
                 "en": "Supports Decisions 01 and 02",
                 "zh": "支持決策一與決策二"
+              },
+              "assetId": "booking-taxi-strategy-traveller-context-public-v1",
+              "caption": {
+                "en": "Qualitative research synthesis mapping urgency, late arrivals, luggage, waiting, uncertainty, price and safety; context evidence, not quantified demand.",
+                "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
               }
             },
             {
@@ -21561,6 +21566,11 @@
               "decisionLink": {
                 "en": "Supports Decision 02",
                 "zh": "支持決策二"
+              },
+              "assetId": "booking-taxi-strategy-proposition-comparison-public-v1",
+              "caption": {
+                "en": "Working comparison of hailing and pre-booking across traveller scenarios and proposition attributes; proposition framing, not an experiment result, shipped pricing or business outcome.",
+                "zh": "依旅客情境與服務主張屬性比較路邊攔車與預約接送；屬主張定義，並非實驗結果、已上線定價或商業成果。"
               }
             },
             {
@@ -21576,6 +21586,11 @@
               "decisionLink": {
                 "en": "Supports Decision 03",
                 "zh": "支持決策三"
+              },
+              "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
+              "caption": {
+                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not final market selection, launch or experiment success.",
+                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表最終市場選擇、上線或實驗成功。"
               }
             }
           ],
