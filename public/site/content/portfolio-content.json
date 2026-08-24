@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-21-r166.2",
+  "contentVersion": "2026-08-24-r171.1",
   "supersedes": "2026-08-17-r164.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -20775,8 +20775,8 @@
       "period": "Apr–Dec 2019",
       "status": "research-and-strategy-delivered-recommendation-only",
       "title": {
-        "en": "From uncertain expansion to a lower-risk taxi pickup experiment",
-        "zh": "從不確定的服務擴張，到低風險的計程車接送實驗"
+        "en": "Uncertain expansion to a lower-risk taxi pickup experiment",
+        "zh": "從不確定的服務擴張，到較低風險的計程車接送實驗"
       },
       "cardTitle": {
         "en": "Taxi Pickup Market Strategy",
@@ -20800,8 +20800,8 @@
         "實驗設計"
       ],
       "atAGlance": {
-        "en": "Led nine months of research and strategy for Booking.com’s taxi pre-booking expansion, combining customer, supplier, market and performance evidence to redefine the proposition and recommend a lower-cost Phase 1 experiment in selected target markets.",
-        "zh": "主導 Booking.com 計程車預約服務為期九個月的研究與策略，整合顧客、供應商、市場與產品表現證據，重新定義服務主張，並建議在選定目標市場進行低成本的第一階段實驗。"
+        "en": "Led nine months of taxi pickup research and strategy, combining traveller, supplier and market evidence to turn an uncertain expansion opportunity into a selected-market Phase 1 experiment recommendation.",
+        "zh": "主導九個月的計程車接送研究與策略，整合旅客、供應商與市場證據，將不確定的擴張機會轉化為選定市場的第一階段實驗建議。"
       },
       "infoGrid": {
         "type": {
@@ -20813,28 +20813,24 @@
           }
         },
         "scope": {
-          "en": "Research and strategy from opportunity framing through Phase 1 experiment recommendation",
-          "zh": "從機會定義到第一階段實驗建議的研究與策略"
+          "en": "Taxi pickup market-entry strategy across traveller demand, supplier readiness and local transport conditions",
+          "zh": "涵蓋旅客需求、供應商成熟度與在地交通條件的計程車接送市場進入策略"
         },
         "audience": {
           "primary": {
-            "en": "Travellers considering pre-booked taxi pickup",
-            "zh": "考慮預約計程車接送的旅客"
+            "en": "Travellers",
+            "zh": "旅客"
           },
           "secondary": {
             "en": [
-              "Product owner",
-              "Commercial team",
-              "Supplier team",
-              "Data analyst",
-              "Researcher"
+              "Product",
+              "Commercial",
+              "Suppliers"
             ],
             "zh": [
-              "產品負責人",
+              "產品團隊",
               "商務團隊",
-              "供應商團隊",
-              "資料分析師",
-              "研究員"
+              "供應商"
             ]
           }
         },
@@ -20873,36 +20869,36 @@
       "whyItMatteredStatus": "deprecated-non-rendered-migration-source",
       "whatMadeThisHard": [
         {
-          "id": "booking-pickup-hard-two-sided-value",
+          "id": "booking-pickup-hard-local-demand",
           "title": {
-            "en": "Customer value had to work for suppliers too",
-            "zh": "顧客價值也必須對供應商可行"
+            "en": "Demand varied by local travel context",
+            "zh": "需求會因在地旅行情境而異"
           },
           "description": {
-            "en": "A stronger traveller proposition would fail if local suppliers could not support the expected pickup, pricing or service conditions.",
-            "zh": "即使旅客端主張更有吸引力，只要當地供應商無法支援接送、定價或服務條件，方案仍無法成立。"
+            "en": "Traveller airport behaviour, local transport alternatives and price expectations differed enough that broad demand could not be assumed.",
+            "zh": "旅客的機場行為、在地交通替代方案與價格期待差異顯著，因此不能假設存在一致的廣泛需求。"
           }
         },
         {
-          "id": "booking-pickup-hard-market-variation",
+          "id": "booking-pickup-hard-supplier-readiness",
           "title": {
-            "en": "Pickup behaviour varied by market",
-            "zh": "接送行為會因市場而異"
+            "en": "A viable customer proposition depended on supplier readiness",
+            "zh": "可行的顧客主張取決於供應商成熟度"
           },
           "description": {
-            "en": "Airport habits, local transport options, price expectations and supplier coverage changed which proposition could be credible.",
-            "zh": "機場使用習慣、在地交通選項、價格期待與供應商覆蓋度，會改變哪種服務主張可信。"
+            "en": "Customer value and operational viability depended on available supplier coverage and feasibility.",
+            "zh": "顧客價值與營運可行性取決於供應商覆蓋與供應可行性。"
           }
         },
         {
-          "id": "booking-pickup-hard-safe-test",
+          "id": "booking-pickup-hard-investment",
           "title": {
-            "en": "The opportunity needed a non-disruptive test",
-            "zh": "機會需要不干擾既有產品的驗證方式"
+            "en": "Expansion required evidence before large build commitment",
+            "zh": "擴張需要在大型開發投入前取得證據"
           },
           "description": {
-            "en": "The team needed evidence before broader investment, while avoiding a large product build or unsupported market commitment.",
-            "zh": "團隊需要在擴大投入前取得證據，同時避免大型產品開發或缺乏依據的市場承諾。"
+            "en": "A broad rollout would commit more investment before demand, supplier readiness and market conditions were sufficiently proven.",
+            "zh": "在需求、供應商成熟度與市場條件充分獲得證明前，廣泛推展會過早承諾更多投資。"
           }
         }
       ],
@@ -20973,69 +20969,81 @@
       },
       "designDecisions": [
         {
-          "id": "booking-pickup-decision-phased-experiment",
-          "title": {
-            "en": "From full expansion to a lower-risk market experiment",
-            "zh": "從全面擴張，到低風險市場實驗"
-          },
-          "whatIDecided": {
-            "en": "Recommended a selected-market Phase 1 experiment instead of committing immediately to broad product expansion.",
-            "zh": "建議先在選定市場執行第一階段實驗，而非立即承諾全面產品擴張。"
-          },
-          "whyThisChoice": {
-            "en": "Customer demand, supplier readiness and market conditions needed to be validated together before larger investment.",
-            "zh": "顧客需求、供應商成熟度與市場條件必須一起驗證，才能支持更大規模投入。"
-          },
-          "optionalThirdBlock": {
-            "type": "TRADE-OFF ACCEPTED",
-            "content": {
-              "en": "We accepted slower geographic expansion in exchange for reducing product, supplier and commercial risk.",
-              "zh": "我們接受較慢的地域擴張速度，換取降低產品、供應商與商業風險。"
-            }
-          }
-        },
-        {
-          "id": "booking-pickup-decision-price-anchor",
-          "title": {
-            "en": "From abstract convenience to a testable price anchor",
-            "zh": "從抽象便利性，到可驗證的價格錨點"
-          },
-          "whatIDecided": {
-            "en": "Recommended price anchoring as a Phase 1 proposition test rather than presenting it as a shipped pricing model.",
-            "zh": "建議將價格錨點作為第一階段服務主張測試，而非把它描述為已上線的定價模型。"
-          },
-          "whyThisChoice": {
-            "en": "Travellers needed a concrete basis for judging the value of pre-booking against familiar local alternatives.",
-            "zh": "旅客需要具體依據，才能比較預約接送與熟悉的在地替代方案是否值得。"
-          },
-          "optionalThirdBlock": {
-            "type": "CONSTRAINT MANAGED",
-            "content": {
-              "en": "The recommendation had to remain testable without implying final commercial pricing or launch approval.",
-              "zh": "此建議必須可被驗證，同時不得暗示最終商業定價或已核准上線。"
-            }
-          }
-        },
-        {
           "id": "booking-pickup-decision-market-readiness",
           "title": {
-            "en": "From one global premise to market-readiness criteria",
-            "zh": "從單一全球假設，到市場成熟度準則"
+            "en": "From broad expansion assumptions to explicit market-readiness criteria",
+            "zh": "從廣泛擴張假設，到明確的市場成熟度準則"
           },
           "whatIDecided": {
-            "en": "Combined customer demand, supplier coverage, local transport context and commercial feasibility into criteria for selecting target markets.",
-            "zh": "將顧客需求、供應商覆蓋、在地交通脈絡與商業可行性整合為目標市場選擇準則。"
+            "en": "Defined the conditions that made a market credible for taxi pickup rather than treating expansion as one generic opportunity.",
+            "zh": "定義使市場具備計程車接送可信度的條件，而非將擴張視為單一通用機會。"
           },
           "whyThisChoice": {
-            "en": "A proposition that worked in one market could fail elsewhere when airport behaviour, alternatives or supplier conditions changed.",
-            "zh": "當機場行為、替代方案或供應商條件改變時，在單一市場成立的服務主張可能無法直接複製。"
+            "en": "Traveller demand, local transport context and supplier feasibility varied by market.",
+            "zh": "旅客需求、在地交通脈絡與供應商可行性會因市場而異。"
           },
           "optionalThirdBlock": {
             "type": "WHAT THIS REQUIRED",
             "content": {
-              "en": "This required customer, supplier, market and performance evidence to be evaluated in one decision model.",
-              "zh": "這需要將顧客、供應商、市場與產品表現證據放在同一套決策模型中評估。"
+              "en": "This required customer, supplier and market evidence to be evaluated together rather than relying on any single signal.",
+              "zh": "這需要共同評估顧客、供應商與市場證據，而非依賴單一訊號。"
             }
+          },
+          "outcome": {
+            "en": "A clearer market-entry evaluation model.",
+            "zh": "一套更清楚的市場進入評估模型。"
+          }
+        },
+        {
+          "id": "booking-pickup-decision-proposition",
+          "title": {
+            "en": "From a generic pickup proposition to a testable value anchor",
+            "zh": "從通用接送主張，到可驗證的價值錨點"
+          },
+          "whatIDecided": {
+            "en": "Shaped the proposition around source-supported traveller decision factors including airport behaviour, baggage context and price expectations.",
+            "zh": "依據來源支持的旅客決策因素塑造主張，包含機場行為、行李情境與價格期待。"
+          },
+          "whyThisChoice": {
+            "en": "The value of pre-booked pickup depended on how travellers compared it with existing local options.",
+            "zh": "預約接送的價值取決於旅客如何將其與既有在地選項比較。"
+          },
+          "optionalThirdBlock": {
+            "type": "CONSTRAINT MANAGED",
+            "content": {
+              "en": "Proposition language had to remain grounded in observed traveller needs and local alternatives without implying final pricing.",
+              "zh": "服務主張必須以已觀察的旅客需求與在地替代方案為依據，且不得暗示最終定價。"
+            }
+          },
+          "outcome": {
+            "en": "A proposition suitable for focused validation.",
+            "zh": "一套適合聚焦驗證的服務主張。"
+          }
+        },
+        {
+          "id": "booking-pickup-decision-phase-one",
+          "title": {
+            "en": "From immediate expansion to a selected-market Phase 1 experiment",
+            "zh": "從立即擴張，到選定市場的第一階段實驗"
+          },
+          "whatIDecided": {
+            "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
+            "zh": "建議在投入更大型開發與投資前，先進行規模較小的選定市場實驗。"
+          },
+          "whyThisChoice": {
+            "en": "Demand, supplier readiness and local market conditions remained uncertain.",
+            "zh": "需求、供應商成熟度與在地市場條件仍存在不確定性。"
+          },
+          "optionalThirdBlock": {
+            "type": "RISK MANAGED",
+            "content": {
+              "en": "The bounded experiment direction reduced expansion risk by using the readiness criteria to preserve a focused validation scope.",
+              "zh": "有限範圍的實驗方向以市場成熟度準則維持聚焦驗證範圍，降低擴張風險。"
+            }
+          },
+          "outcome": {
+            "en": "A lower-risk recommendation for validating the opportunity before broader investment.",
+            "zh": "一項在擴大投資前驗證機會、風險較低的建議。"
           }
         }
       ],
@@ -21086,7 +21094,43 @@
             "zh": "後續實作與上線決策"
           }
         ],
-        "contentStatus": "approved-recovery-candidate"
+        "contentStatus": "approved-recovery-candidate",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I led the research synthesis and strategy definition; commercial commitments, supplier commitments, implementation and experiment outcomes remained partner-owned or unverified.",
+            "zh": "我主導研究統整與策略定義；商業承諾、供應商承諾、實作與實驗成果仍由合作夥伴負責或未經驗證。"
+          },
+          "owned": {
+            "title": {
+              "en": "Defined the market-entry strategy and recommendation",
+              "zh": "定義市場進入策略與建議"
+            },
+            "text": {
+              "en": "Led research synthesis, opportunity framing, market-readiness criteria, proposition direction and the selected-market Phase 1 recommendation.",
+              "zh": "主導研究統整、機會定義、市場成熟度準則、服務主張方向與選定市場的第一階段建議。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Connected Product, Commercial and supplier evidence",
+              "zh": "串連產品、商務與供應商證據"
+            },
+            "text": {
+              "en": "Partnered with Product, Commercial, supplier-facing teams, Data and Research to evaluate feasibility and shape the recommendation.",
+              "zh": "與產品、商務、供應商協作團隊、資料與研究夥伴合作評估可行性並形成建議。"
+            }
+          },
+          "partnerOwned": {
+            "title": {
+              "en": "Commitments, implementation and measured results",
+              "zh": "承諾、實作與衡量結果"
+            },
+            "text": {
+              "en": "Commercial and supplier commitments remained partner-owned. Implementation, experiment launch and experiment results are not verified.",
+              "zh": "商業與供應商承諾仍由合作夥伴負責。實作、實驗上線與實驗結果未經驗證。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -21120,16 +21164,16 @@
       },
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "booking-pickup-research-strategy",
-        "key-design-decisions",
-        "recommendation-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "status-and-disclosure",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "searchIndexV2": {
         "version": "r141-recovery",
@@ -21159,42 +21203,50 @@
         ],
         "problemTags": {
           "en": [
-            "taxi pre-booking growth",
-            "market entry uncertainty",
-            "supplier feasibility",
-            "service proposition"
+            "taxi pickup",
+            "market-entry uncertainty",
+            "supplier readiness",
+            "local transport context",
+            "commercial feasibility"
           ],
           "zh": [
-            "計程車預約成長",
+            "計程車接送",
             "市場進入不確定性",
-            "供應商可行性",
-            "服務主張"
+            "供應商成熟度",
+            "在地交通脈絡",
+            "商業可行性"
           ]
         },
         "capabilityTags": {
           "en": [
-            "research strategy",
+            "traveller research",
             "market synthesis",
-            "proposition framing",
-            "experiment design"
+            "market-readiness framing",
+            "proposition strategy",
+            "experiment strategy",
+            "risk reduction"
           ],
           "zh": [
-            "研究策略",
+            "旅客研究",
             "市場統整",
-            "服務主張定義",
-            "實驗設計"
+            "市場成熟度定義",
+            "服務主張策略",
+            "實驗策略",
+            "風險降低"
           ]
         },
         "systemTags": {
           "en": [
             "market-entry strategy",
+            "0→1 mobility",
             "taxi pickup service",
-            "phase-one experiment"
+            "selected-market Phase 1 experiment"
           ],
           "zh": [
             "市場進入策略",
+            "0→1 移動服務",
             "計程車接送服務",
-            "第一階段實驗"
+            "選定市場第一階段實驗"
           ]
         },
         "audienceTags": {
@@ -21231,9 +21283,9 @@
         "sourceAssetIds": [
           "booking-taxi-pickup-overview-source-v1"
         ],
-        "contentStatus": "source-registered-public-derivative-needed"
+        "contentStatus": "deferred-public-derivative-needed"
       },
-      "contentStatus": "approved-recovery-candidate",
+      "contentStatus": "recruiter-first-r171",
       "localizationStatus": "complete-core-fields",
       "recoveryUnresolved": [
         {
@@ -21250,69 +21302,81 @@
       "decisionNarrative": {
         "primaryDecisions": [
           {
-            "id": "booking-pickup-decision-phased-experiment",
-            "title": {
-              "en": "From full expansion to a lower-risk market experiment",
-              "zh": "從全面擴張，到低風險市場實驗"
-            },
-            "whatIDecided": {
-              "en": "Recommended a selected-market Phase 1 experiment instead of committing immediately to broad product expansion.",
-              "zh": "建議先在選定市場執行第一階段實驗，而非立即承諾全面產品擴張。"
-            },
-            "whyThisChoice": {
-              "en": "Customer demand, supplier readiness and market conditions needed to be validated together before larger investment.",
-              "zh": "顧客需求、供應商成熟度與市場條件必須一起驗證，才能支持更大規模投入。"
-            },
-            "optionalThirdBlock": {
-              "type": "TRADE-OFF ACCEPTED",
-              "content": {
-                "en": "We accepted slower geographic expansion in exchange for reducing product, supplier and commercial risk.",
-                "zh": "我們接受較慢的地域擴張速度，換取降低產品、供應商與商業風險。"
-              }
-            }
-          },
-          {
-            "id": "booking-pickup-decision-price-anchor",
-            "title": {
-              "en": "From abstract convenience to a testable price anchor",
-              "zh": "從抽象便利性，到可驗證的價格錨點"
-            },
-            "whatIDecided": {
-              "en": "Recommended price anchoring as a Phase 1 proposition test rather than presenting it as a shipped pricing model.",
-              "zh": "建議將價格錨點作為第一階段服務主張測試，而非把它描述為已上線的定價模型。"
-            },
-            "whyThisChoice": {
-              "en": "Travellers needed a concrete basis for judging the value of pre-booking against familiar local alternatives.",
-              "zh": "旅客需要具體依據，才能比較預約接送與熟悉的在地替代方案是否值得。"
-            },
-            "optionalThirdBlock": {
-              "type": "CONSTRAINT MANAGED",
-              "content": {
-                "en": "The recommendation had to remain testable without implying final commercial pricing or launch approval.",
-                "zh": "此建議必須可被驗證，同時不得暗示最終商業定價或已核准上線。"
-              }
-            }
-          },
-          {
             "id": "booking-pickup-decision-market-readiness",
             "title": {
-              "en": "From one global premise to market-readiness criteria",
-              "zh": "從單一全球假設，到市場成熟度準則"
+              "en": "From broad expansion assumptions to explicit market-readiness criteria",
+              "zh": "從廣泛擴張假設，到明確的市場成熟度準則"
             },
             "whatIDecided": {
-              "en": "Combined customer demand, supplier coverage, local transport context and commercial feasibility into criteria for selecting target markets.",
-              "zh": "將顧客需求、供應商覆蓋、在地交通脈絡與商業可行性整合為目標市場選擇準則。"
+              "en": "Defined the conditions that made a market credible for taxi pickup rather than treating expansion as one generic opportunity.",
+              "zh": "定義使市場具備計程車接送可信度的條件，而非將擴張視為單一通用機會。"
             },
             "whyThisChoice": {
-              "en": "A proposition that worked in one market could fail elsewhere when airport behaviour, alternatives or supplier conditions changed.",
-              "zh": "當機場行為、替代方案或供應商條件改變時，在單一市場成立的服務主張可能無法直接複製。"
+              "en": "Traveller demand, local transport context and supplier feasibility varied by market.",
+              "zh": "旅客需求、在地交通脈絡與供應商可行性會因市場而異。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "This required customer, supplier, market and performance evidence to be evaluated in one decision model.",
-                "zh": "這需要將顧客、供應商、市場與產品表現證據放在同一套決策模型中評估。"
+                "en": "This required customer, supplier and market evidence to be evaluated together rather than relying on any single signal.",
+                "zh": "這需要共同評估顧客、供應商與市場證據，而非依賴單一訊號。"
               }
+            },
+            "outcome": {
+              "en": "A clearer market-entry evaluation model.",
+              "zh": "一套更清楚的市場進入評估模型。"
+            }
+          },
+          {
+            "id": "booking-pickup-decision-proposition",
+            "title": {
+              "en": "From a generic pickup proposition to a testable value anchor",
+              "zh": "從通用接送主張，到可驗證的價值錨點"
+            },
+            "whatIDecided": {
+              "en": "Shaped the proposition around source-supported traveller decision factors including airport behaviour, baggage context and price expectations.",
+              "zh": "依據來源支持的旅客決策因素塑造主張，包含機場行為、行李情境與價格期待。"
+            },
+            "whyThisChoice": {
+              "en": "The value of pre-booked pickup depended on how travellers compared it with existing local options.",
+              "zh": "預約接送的價值取決於旅客如何將其與既有在地選項比較。"
+            },
+            "optionalThirdBlock": {
+              "type": "CONSTRAINT MANAGED",
+              "content": {
+                "en": "Proposition language had to remain grounded in observed traveller needs and local alternatives without implying final pricing.",
+                "zh": "服務主張必須以已觀察的旅客需求與在地替代方案為依據，且不得暗示最終定價。"
+              }
+            },
+            "outcome": {
+              "en": "A proposition suitable for focused validation.",
+              "zh": "一套適合聚焦驗證的服務主張。"
+            }
+          },
+          {
+            "id": "booking-pickup-decision-phase-one",
+            "title": {
+              "en": "From immediate expansion to a selected-market Phase 1 experiment",
+              "zh": "從立即擴張，到選定市場的第一階段實驗"
+            },
+            "whatIDecided": {
+              "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
+              "zh": "建議在投入更大型開發與投資前，先進行規模較小的選定市場實驗。"
+            },
+            "whyThisChoice": {
+              "en": "Demand, supplier readiness and local market conditions remained uncertain.",
+              "zh": "需求、供應商成熟度與在地市場條件仍存在不確定性。"
+            },
+            "optionalThirdBlock": {
+              "type": "RISK MANAGED",
+              "content": {
+                "en": "The bounded experiment direction reduced expansion risk by using the readiness criteria to preserve a focused validation scope.",
+                "zh": "有限範圍的實驗方向以市場成熟度準則維持聚焦驗證範圍，降低擴張風險。"
+              }
+            },
+            "outcome": {
+              "en": "A lower-risk recommendation for validating the opportunity before broader investment.",
+              "zh": "一項在擴大投資前驗證機會、風險較低的建議。"
             }
           }
         ],
@@ -21366,19 +21430,15 @@
         "contentStatus": "approved-recovery-candidate",
         "sectionOrderRef": "projects.booking-taxi-pickup-service-strategy.sectionOrder",
         "coreSystemInsight": {
-          "eyebrow": {
-            "en": "CORE SYSTEM INSIGHT",
-            "zh": "核心系統洞察"
+          "headline": {
+            "en": "Taxi pickup expansion could not be treated as one global product assumption; customer demand, supplier readiness and local transport context had to be validated together.",
+            "zh": "計程車接送擴張不能被視為單一全球產品假設；顧客需求、供應商成熟度與在地交通脈絡必須共同驗證。"
           },
-          "title": {
-            "en": "The airport transfer journey became easier to trust when itinerary context and airport-native language worked together.",
-            "zh": "當行程脈絡與機場熟悉語言一起被帶入流程時，機場接送服務才更值得信任。"
+          "supportingCopy": {
+            "en": "A viable market-entry decision depended on how traveller need, supplier feasibility, local alternatives and commercial conditions interacted in each market.",
+            "zh": "可行的市場進入決策取決於每個市場中旅客需求、供應商可行性、在地替代方案與商業條件如何交互作用。"
           },
-          "statement": {
-            "en": "Customers should not have to rebuild information the platform already knows. Reusing trip details and expressing options in familiar airport language—such as carry-on and checked baggage—helped reduce ambiguity, improved confidence in vehicle selection and made the service easier to act on from comparison through pickup.",
-            "zh": "使用者不該重新輸入平台已知的行程資訊。當產品能重用旅程脈絡，並以旅客熟悉的機場語言表達選項——例如隨身行李與托運行李——就能減少理解落差，提升對車型與服務選擇的信心，讓使用者更容易從比較、預訂一路走到接送。"
-          },
-          "contentStatus": "approved"
+          "contentStatus": "approved-r171"
         },
         "futureServiceOpportunities": {
           "title": {
@@ -21425,6 +21485,164 @@
             }
           ],
           "contentStatus": "approved"
+        },
+        "contribution": {
+          "headline": {
+            "en": "Turned expansion uncertainty into a governed market-entry decision.",
+            "zh": "將擴張不確定性轉化為有治理依據的市場進入決策。"
+          },
+          "transformation": {
+            "before": {
+              "en": "A taxi pickup expansion opportunity without sufficient evidence to justify broad market commitment.",
+              "zh": "一個尚無足夠證據支持廣泛市場承諾的計程車接送擴張機會。"
+            },
+            "intervention": {
+              "en": "Led research and strategy across traveller needs, airport behaviour, supplier readiness, local transport context and commercial feasibility, then translated the evidence into market-readiness criteria and a lower-risk experiment direction.",
+              "zh": "主導旅客需求、機場行為、供應商成熟度、在地交通脈絡與商業可行性的研究與策略，再將證據轉化為市場成熟度準則與較低風險的實驗方向。"
+            },
+            "after": {
+              "en": "A clearer basis for deciding where and how to test taxi pickup before larger expansion.",
+              "zh": "在擴大服務前，建立更清楚的依據以決定應在何處及如何驗證計程車接送。"
+            },
+            "supportingCopy": {
+              "en": "The work established decision direction; implementation and experiment results are not verified.",
+              "zh": "本工作建立決策方向；實作與實驗結果未經驗證。"
+            }
+          }
+        },
+        "strategyEvidence": {
+          "title": {
+            "en": "Evidence",
+            "zh": "證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "structuredGroups": [
+            {
+              "id": "traveller-context",
+              "heading": {
+                "en": "Traveller needs and airport context",
+                "zh": "旅客需求與機場情境"
+              },
+              "summary": {
+                "en": "Traveller behaviour, airport habits, baggage needs, price expectations and comparison with local transport alternatives shaped the demand conditions.",
+                "zh": "旅客行為、機場習慣、行李需求、價格期待及與在地交通替代方案的比較，共同形塑需求條件。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 02",
+                "zh": "支持決策一與決策二"
+              },
+              "assetId": "booking-taxi-strategy-traveller-context-public-v1",
+              "caption": {
+                "en": "Qualitative research synthesis mapping urgency, late arrivals, luggage, waiting, uncertainty, price and safety; context evidence, not quantified demand.",
+                "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
+              }
+            },
+            {
+              "id": "supplier-readiness",
+              "heading": {
+                "en": "Supplier and market readiness",
+                "zh": "供應商與市場成熟度"
+              },
+              "summary": {
+                "en": "Supplier feasibility, coverage and local-market constraints informed whether a market could credibly support the proposition.",
+                "zh": "供應商可行性、覆蓋與在地市場限制，決定市場是否能可信地支持該服務主張。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 01",
+                "zh": "支持決策一"
+              }
+            },
+            {
+              "id": "proposition-definition",
+              "heading": {
+                "en": "Proposition definition",
+                "zh": "服務主張定義"
+              },
+              "summary": {
+                "en": "Price expectations, itinerary context and airport-native baggage language informed a proposition suitable for focused validation.",
+                "zh": "價格期待、行程脈絡與機場熟悉的行李語言，共同支持適合聚焦驗證的服務主張。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 02",
+                "zh": "支持決策二"
+              },
+              "assetId": "booking-taxi-strategy-proposition-comparison-public-v1",
+              "caption": {
+                "en": "Working comparison of hailing and pre-booking across traveller scenarios and proposition attributes; proposition framing, not an experiment result, shipped pricing or business outcome.",
+                "zh": "依旅客情境與服務主張屬性比較路邊攔車與預約接送；屬主張定義，並非實驗結果、已上線定價或商業成果。"
+              }
+            },
+            {
+              "id": "phase-one-recommendation",
+              "heading": {
+                "en": "Phase 1 experiment recommendation",
+                "zh": "第一階段實驗建議"
+              },
+              "summary": {
+                "en": "The combined evidence supported a selected-market experiment before immediate broad expansion.",
+                "zh": "整合證據支持在立即廣泛擴張前，先進行選定市場實驗。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 03",
+                "zh": "支持決策三"
+              },
+              "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
+              "caption": {
+                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not an indication that an experiment ran or achieved a successful result.",
+                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表實驗已執行或取得成功結果。"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r171"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A lower-risk market-entry recommendation",
+            "zh": "一項較低風險的市場進入建議"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A selected-market Phase 1 direction",
+                "zh": "選定市場的第一階段方向"
+              },
+              "copy": {
+                "en": "Reframed broad expansion into an experiment that could validate demand, supplier readiness and local conditions before larger investment.",
+                "zh": "將廣泛擴張重構為可在擴大投資前驗證需求、供應商成熟度與在地條件的實驗方向。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Explicit market-readiness criteria",
+                "zh": "明確的市場成熟度準則"
+              },
+              "copy": {
+                "en": "Created a clearer basis for comparing markets using traveller, supplier and local transport evidence.",
+                "zh": "以旅客、供應商與在地交通證據，建立更清楚的市場比較依據。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A testable taxi pickup proposition",
+                "zh": "可驗證的計程車接送主張"
+              },
+              "copy": {
+                "en": "Translated customer and market evidence into a proposition suitable for focused validation.",
+                "zh": "將顧客與市場證據轉化為適合聚焦驗證的服務主張。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "These are recommendation outcomes; implementation, launch and experiment results are not verified.",
+            "zh": "以上為建議成果；實作、上線與實驗結果未經驗證。"
+          },
+          "contentStatus": "approved-r171"
         }
       },
       "projectClosure": {
@@ -21501,6 +21719,96 @@
         "primaryMetrics": [],
         "recommendedHeadline": "Converted pickup uncertainty across passenger, luggage and location constraints into a phased product strategy.",
         "boundary": "Strategy/research case; no launch or growth claim."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "publicContent.contribution",
+          "contributionIntervention": "publicContent.contribution.transformation",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.strategyEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "variant": "featured",
+          "showVisuals": false,
+          "outcomeField": "outcome"
+        },
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured"
       }
     }
   },
