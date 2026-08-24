@@ -129,7 +129,7 @@ test("keeps every rendered project overview bilingual without English fallback i
     if (!timeline.duration?.en) unresolvedTimelineProjects.push(id);
     else assert.ok(timeline.duration.zh, `${id}: timeline.duration.zh is required`);
   }
-  assert.deepEqual(unresolvedTimelineProjects, ["cathay-mortgage-assistant"]);
+  assert.deepEqual(unresolvedTimelineProjects, []);
   const app = read("assets/js/app.js");
   assert.match(app, /value\.secondary\?\.zh/);
   assert.match(app, /value\.duration/);
@@ -1794,7 +1794,7 @@ test("R162.5 keeps Booking recruiter-first, approximate, complete, and confident
   assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-01"],undefined);
   assert.equal(manifest.items["booking-evidence-outcomes-cross-market-conversion-01"],undefined);
   assert.equal(manifest.items["booking-evidence-outcomes-post-launch-tradeoff-01"],undefined);
-  assert.equal(strategy.title.en,"From uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.equal(strategy.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
   assert.match(app,/supportingStatements/);
   assert.match(css,/recruiter-complexity-grid\{[^}]*align-items:stretch/);
   assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{width:100%;max-width:var\(--case-reading-max\)\}/);
@@ -1903,10 +1903,7 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   assert.equal(evidence.structuredGroups.length,3);
   assert.ok(evidence.structuredGroups.every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
   assert.match(app,/evidenceSource\.presentation==='decision-support'/);
-  assert.match(app,/evidenceSource\.showDecisionMapping===true/);
-  assert.doesNotMatch(app,/if\(t\(item\.decisionLink\)\)group\.append/);
-  assert.match(app,/'WHAT I OWNED'/);
-  assert.doesNotMatch(app,/'I OWNED THE OUTCOME'/);
+  assert.match(app,/structured-evidence-v223__decision-link voucher-r149-eyebrow/);
   assert.doesNotMatch(app,/ctbc[^\n]*decision-support/i);
   assert.match(css,/\.structured-evidence-v223__groups--decision-support\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
@@ -1982,6 +1979,111 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.match(app,/if\(list\(visibleCopy\)\.some\(copy=>normalizedTooltipCopy\(copy\)===normalizedSource\)\)return null/);
   assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
+});
+
+test("R171 migrates Booking Taxi Pickup Strategy without main Booking contamination",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["booking-taxi-pickup-service-strategy"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]);
+  assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.problemTypes.length,undefined);
+  assert.equal(project.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.type.value,"0→1 Product");
+  assert.equal(project.infoGrid.timeline.duration.en,"9 months");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
+  assert.deepEqual(project.publicContent.strategyEvidence.structuredGroups.map(item=>item.assetId||null),["booking-taxi-strategy-traveller-context-public-v1",null,"booking-taxi-strategy-proposition-comparison-public-v1","booking-taxi-strategy-experiment-risk-framing-public-v1"]);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.filter(item=>item.assetId).every(item=>item.caption?.en&&manifest.items[item.assetId]?.implementationStatus==="real-active"));
+  assert.match(app,/structured-evidence-v223__media/);
+  const sharedEvidenceStart=app.indexOf("if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length)");
+  const sharedEvidenceEnd=app.indexOf("const metrics=",sharedEvidenceStart);
+  assert.ok(sharedEvidenceStart>0&&sharedEvidenceEnd>sharedEvidenceStart);
+  assert.doesNotMatch(app.slice(sharedEvidenceStart,sharedEvidenceEnd),/booking-taxi-strategy|booking-taxi-pickup-service-strategy/);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
+  assert.equal(project.heroVisualBrief.assetId,"booking-taxi-pickup-overview-source-v1");
+  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"placeholder-active");
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i);
+  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/experiment results are not verified/i);
+  assert.match(app,/projectSectionActivationInset/);
+  assert.match(app,/evidenceSource\.showDecisionMapping===true/);
+  assert.match(app,/'WHAT I OWNED'/);
+  assert.doesNotMatch(app,/'I OWNED THE OUTCOME'/);
+});
+
+test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with bounded launch claims",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-mortgage-assistant"];
+  const order=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const assetIds=[
+    "cathay-mortgage-hero-consultation-public-v1",
+    "cathay-mortgage-research-synthesis-public-v1",
+    "cathay-mortgage-structure-specification-public-v1",
+    "cathay-mortgage-prototype-validation-public-v1",
+    "cathay-mortgage-final-interface-home-public-v1",
+    "cathay-mortgage-final-interface-market-map-public-v1"
+  ];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.sectionOrder,order);
+  assert.deepEqual(project.presentation.sectionOrder,order);
+  assert.ok(order.indexOf("design-decisions")<order.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");
+  assert.equal(project.company,"Cathay Life Insurance");
+  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");
+  assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
+  assert.equal(project.infoGrid.timeline.duration.en,"4 months");
+  assert.equal(project.infoGrid.timeline.duration.zh,"4 個月");
+  assert.equal(project.infoGrid.timeline.publicVisibility,"visible");
+  assert.equal(project.infoGrid.timeline.status,"human-source-verified");
+  assert.doesNotMatch(JSON.stringify(project.infoGrid.timeline),/unresolved|unavailable|pending|year-only|hide timeline/i);
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),project.designDecisions.map(item=>item.id));
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.deepEqual(project.publicContent.mortgageEvidence.structuredGroups.map(item=>item.assetId),assetIds.slice(1));
+  assert.ok(project.publicContent.mortgageEvidence.structuredGroups.every(item=>item.caption?.en&&item.decisionLink?.en));
+  for(const assetId of assetIds){
+    const asset=manifest.items[assetId];
+    assert.equal(asset.implementationStatus,"real-active");
+    assert.equal(asset.replacementRequired,false);
+    assert.match(asset.publicPath,/^\/site\/assets\/projects\/cathay-mortgage\//);
+  }
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","consultation-model","key-decisions","validation-and-launch","business-impact","ownership-and-collaboration","delivery-and-measurement","continue-exploring"])assert.ok(!order.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i);
+  assert.match(project.publicContent.outcomes.closing.en,/metrics are not available/i);
+  assert.doesNotMatch(app,/cathay-mortgage-assistant[^\n]*(?:StructuredEvidence|recruiter-first-system-case)/i);
+});
+
+test("R172.3 shared FloatingNavigator contains mobile rails and dialog content clears the floating control",()=>{
+  const navigatorCss=read("assets/css/components/domain-selector.css");
+  const popupCss=read("assets/css/components/popup-shell.css");
+  const app=read("assets/js/app.js");
+  assert.match(navigatorCss,/@media\(max-width:560px\)\{\s*\.floating-navigator\{width:calc\(var\(--dimension-100vw\) - var\(--dimension-24px\)\)\}\s*\.floating-navigator__rail\{width:100%;max-width:none;min-width:0\}/);
+  assert.match(popupCss,/--dialog-floating-navigator-clearance:calc\(var\(--control-height\)/);
+  assert.match(popupCss,/padding-bottom:calc\(var\(--dialog-floating-navigator-clearance\) \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(app,/linkRect\.left<leadingEdge/);
+  assert.match(app,/linkRect\.right>trailingEdge/);
+  assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
+  assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
 });
 
 test("R170 projects Taishin P2P through one recruiter-first owner without legacy or claim leakage",()=>{

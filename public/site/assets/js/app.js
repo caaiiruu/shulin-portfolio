@@ -1214,7 +1214,15 @@
     const links=[...rail.querySelectorAll('a')];
     const maximumScroll=Math.max(0,rail.scrollWidth-rail.clientWidth);
     const index=links.indexOf(link);
-    const target=index===0?0:index===links.length-1?maximumScroll:Math.min(maximumScroll,Math.max(0,link.offsetLeft+(link.offsetWidth/2)-(rail.clientWidth/2)));
+    const railRect=rail.getBoundingClientRect(),linkRect=link.getBoundingClientRect();
+    const safeInset=parseFloat(getComputedStyle(rail).scrollPaddingInlineStart)||0;
+    const leadingEdge=railRect.left+safeInset,trailingEdge=railRect.right-safeInset;
+    let target=rail.scrollLeft;
+    if(index===0)target=0;
+    else if(index===links.length-1)target=maximumScroll;
+    else if(linkRect.left<leadingEdge)target-=leadingEdge-linkRect.left;
+    else if(linkRect.right>trailingEdge)target+=linkRect.right-trailingEdge;
+    target=Math.min(maximumScroll,Math.max(0,target));
     rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
   }
   function setActiveProjectSection(id){
@@ -2919,6 +2927,7 @@
         const decisionSupport=evidenceSource.presentation==='decision-support';
         const groups=element('div',`structured-evidence-v223 structured-evidence-v223__groups${decisionSupport?' structured-evidence-v223__groups--decision-support':''}`);
         groups.dataset.componentOwner='StructuredEvidence';
+        if(list(evidenceSource.structuredGroups).some(item=>item.assetId))groups.classList.add('structured-evidence-v223__groups--with-media');
         list(evidenceSource.structuredGroups).forEach(item=>{
           const group=element('article','structured-evidence-v223__group');
           if(t(item.supportingLabel))group.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
@@ -2928,6 +2937,17 @@
             const bullets=element('ul','structured-evidence-v223__list');
             list(item.bullets).forEach(entry=>bullets.append(element('li','',t(entry))));
             group.append(bullets);
+          }
+          if(item.assetId){
+            const asset=resolveProjectAsset(item.assetId);
+            const figure=element('figure','structured-evidence-v223__media');
+            const image=doc.createElement('img');
+            image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
+            image.dataset.assetId=asset.assetId;image.dataset.assetStatus=asset.isPlaceholder?'placeholder-active':'real-active';
+            if(asset.width&&asset.height){image.width=asset.width;image.height=asset.height}
+            figure.append(image);
+            if(t(item.caption))figure.append(element('figcaption','',t(item.caption)));
+            group.append(figure);
           }
           // decisionLink remains SSOT/test metadata; recruiter-first evidence renders only the evidence role.
           if(evidenceSource.showDecisionMapping===true&&t(item.decisionLink))group.append(element('span','structured-evidence-v223__decision-link voucher-r149-eyebrow',t(item.decisionLink)));
