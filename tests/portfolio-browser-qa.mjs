@@ -226,9 +226,9 @@ for (const viewport of viewports) {
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
   const expectedEvidence=[
-    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",link:"LED TO DECISION 01",legacyLabels:[]},
-    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",link:"LED TO DECISION 02",legacyLabels:[]},
-    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",link:"LED TO DECISION 03",legacyLabels:[]}
+    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",legacyLabels:[]},
+    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",legacyLabels:[]},
+    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",legacyLabels:[]}
   ];
   if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(expectedEvidence))failures.push(`${viewport.name} CTBC recruiter-compressed Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
   if(/OBSERVED|DESIGN IMPLICATION|SUPPORTS DECISION/.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC legacy Evidence layers remain`);
@@ -615,7 +615,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       }
     }
     for (const [name, route, text] of [
-      ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "The airport transfer journey became easier to trust"],
+      ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "Taxi pickup expansion could not be treated as one global product assumption"],
       ["cathay-oa-core-insight", "/site/work/cathay-sit-online-account-opening", "Self-service account opening only worked"],
       ["cathay-review-core-insight", "/site/work/cathay-sit-review-remediation-operations", "Review remediation needed a shared internal operating model"],
       ["dbs-regression", "/site/work/dbs", "Turning fragmented credit-exception handling"],
@@ -703,14 +703,14 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       order:surface.map(node=>node.dataset.canonicalSectionId),
       decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
       evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
-      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-r149-decision-group").length,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-stage-decision-group").length,
       evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
       decisionMetadataVisible:[...dialog.querySelectorAll(".structured-evidence-v223__decision-link")].some(node=>visible(node)),
       text:dialog.innerText,
       overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
     };
   });
-  const r171Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence","outcomes","my-accountability"];
+  const r171Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
   if(r171Presentation.title!=="Uncertain expansion to a lower-risk taxi pickup experiment"||r171Presentation.taxonomy.length||JSON.stringify(r171Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r171Presentation.order.map(id=>id).filter(id=>r171Order.includes(id)))!==JSON.stringify(r171Order)||!(r171Presentation.decisionTop<r171Presentation.evidenceTop)||r171Presentation.decisionCount!==3||r171Presentation.evidenceCount!==4)failures.push(`${viewport.name} R171 composition mismatch: ${JSON.stringify(r171Presentation)}`);
   if(r171Presentation.decisionMetadataVisible||/Critical Problem|Business Impact|Ownership and Collaboration|Delivery and Measurement|Status and Disclosure|Continue Exploring/.test(r171Presentation.text))failures.push(`${viewport.name} R171 legacy or metadata leak`);
   if(/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i.test(r171Presentation.text))failures.push(`${viewport.name} R171 main Booking contamination`);
