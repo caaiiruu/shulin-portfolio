@@ -2001,7 +2001,7 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
   assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
   assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
-  assert.equal(project.heroVisualBrief.assetId,null);
+  assert.equal(project.heroVisualBrief.assetId,"booking-taxi-pickup-overview-source-v1");
   assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"placeholder-active");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
