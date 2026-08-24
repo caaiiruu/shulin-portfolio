@@ -692,6 +692,43 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     r159Navigator: { contract: navigatorContract, interactions: navigatorInteractions },
     ctbcReadingEdges: ctbcCertification.geometry,
   };
+  await page.goto(`${baseUrl}/site/work/booking-taxi-pickup-service-strategy`,{waitUntil:"networkidle"});
+  const r171Presentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      taxonomy:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      order:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-r149-decision-group").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      decisionMetadataVisible:[...dialog.querySelectorAll(".structured-evidence-v223__decision-link")].some(node=>visible(node)),
+      text:dialog.innerText,
+      overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
+    };
+  });
+  const r171Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence","outcomes","my-accountability"];
+  if(r171Presentation.title!=="Uncertain expansion to a lower-risk taxi pickup experiment"||r171Presentation.taxonomy.length||JSON.stringify(r171Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r171Presentation.order.map(id=>id).filter(id=>r171Order.includes(id)))!==JSON.stringify(r171Order)||!(r171Presentation.decisionTop<r171Presentation.evidenceTop)||r171Presentation.decisionCount!==3||r171Presentation.evidenceCount!==4)failures.push(`${viewport.name} R171 composition mismatch: ${JSON.stringify(r171Presentation)}`);
+  if(r171Presentation.decisionMetadataVisible||/Critical Problem|Business Impact|Ownership and Collaboration|Delivery and Measurement|Status and Disclosure|Continue Exploring/.test(r171Presentation.text))failures.push(`${viewport.name} R171 legacy or metadata leak`);
+  if(/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue|experiment success|experiment result|market-wide rollout/i.test(r171Presentation.text))failures.push(`${viewport.name} R171 main Booking contamination`);
+  if(!["hidden","clip"].includes(r171Presentation.overflowX))failures.push(`${viewport.name} R171 horizontal containment failed`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r171-booking-taxi",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[["01-overview","#projectOverviewSection","#projectOverviewSection"],["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],["04-evidence-a","#systemCaseEvidenceSection .structured-evidence-v223__group:first-of-type","#systemCaseEvidenceSection"],["05-evidence-b","#systemCaseEvidenceSection .structured-evidence-v223__group:last-of-type","#systemCaseEvidenceSection"],["06-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],["07-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R171 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} R171 navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);
