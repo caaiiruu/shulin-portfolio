@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-24-r171.1",
-  "supersedes": "2026-08-17-r164.1",
+  "contentVersion": "2026-08-24-r172.2",
+  "supersedes": "2026-08-24-r171.1",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -12991,8 +12991,8 @@
         ]
       },
       "title": {
-        "en": "From a rigid tablet script to a flexible mortgage consultation flow",
-        "zh": "從僵化的平板腳本，到彈性的房貸諮詢流程"
+        "en": "Rigid tablet script to a flexible mortgage consultation system",
+        "zh": "從僵化的平板腳本，到彈性的房貸諮詢系統"
       },
       "problemTypes": {
         "en": [
@@ -13007,21 +13007,21 @@
         ]
       },
       "atAGlance": {
-        "en": "Led UX redesign of an internal tablet mortgage app, turning a rigid sales script into tested, scenario-based guidance across customer needs, loan estimation, and implementation handoff.",
-        "zh": "主導內部平板房貸工具的體驗改版，將僵化的銷售腳本轉化為經測試的情境式引導，涵蓋客戶需求、房貸估算與開發交接。"
+        "en": "Led UX redesign of an internal mortgage consultation system, turning a fixed tablet script into scenario-led needs assessment and estimation flows, validated through four core tasks and delivered into the launched internal app.",
+        "zh": "主導內部房貸諮詢系統的使用者體驗改版，將固定平板腳本轉化為情境導向的需求評估與試算流程，透過四項核心任務驗證並交付至已上線的內部應用程式。"
       },
       "infoGrid": {
         "type": {
           "value": "Internal System",
           "visibility": "info-grid-only",
           "rationale": {
-            "en": "Coordinates internal roles, rules, approvals, exceptions or operational decisions.",
-            "zh": "協調內部角色、規則、核准、例外或營運決策。"
+            "en": "Coordinates internal roles, rules, information and operational decisions.",
+            "zh": "協調內部角色、規則、資訊與營運決策。"
           }
         },
         "scope": {
-          "en": "End-to-end tablet consultation across customer needs assessment, mortgage estimation, scenario guidance, validation and implementation handoff",
-          "zh": "涵蓋客戶需求評估、房貸估算、情境引導、驗證與實作交接的端到端平板諮詢流程"
+          "en": "Scenario-led mortgage consultation across needs assessment, estimation, guidance and implementation handoff",
+          "zh": "涵蓋需求評估、試算、引導與實作交接的情境式房貸諮詢"
         },
         "audience": {
           "primary": {
@@ -13031,13 +13031,11 @@
           "secondary": {
             "en": [
               "Prospective mortgage customers",
-              "Product and Engineering",
-              "Marketing and data-owning departments"
+              "Delivery stakeholders"
             ],
             "zh": [
               "潛在房貸客戶",
-              "產品與工程團隊",
-              "行銷與資料所屬部門"
+              "交付利害關係人"
             ]
           }
         },
@@ -13533,7 +13531,43 @@
             "zh": "客戶商業規則與開發"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "I owned the UX model and handoff, partnering on research, interface execution and client alignment while business rules, engineering implementation and post-launch measurement remained outside my sole ownership.",
+            "zh": "我負責 UX 模式與交接，並共同參與研究、介面執行與客戶對齊；商業規則、工程實作與上線後衡量不屬於我單獨負責的範圍。"
+          },
+          "owned": {
+            "title": {
+              "en": "Built the UX model and implementation handoff",
+              "zh": "建立 UX 模式與實作交接"
+            },
+            "text": {
+              "en": "Owned UX concept, scenarios, prototype, wireframes, function tree and UX handoff.",
+              "zh": "負責 UX 概念、情境、原型、線框稿、功能樹與 UX 交接。"
+            }
+          },
+          "shared": {
+            "title": {
+              "en": "Partnered across research, interface and alignment",
+              "zh": "共同推進研究、介面與對齊"
+            },
+            "text": {
+              "en": "Partnered with the Researcher on synthesis and validation planning, the UI Designer on interface execution and the client on concept alignment.",
+              "zh": "與研究員共同進行統整與驗證規劃、與 UI 設計師合作介面執行，並與客戶對齊概念。"
+            }
+          },
+          "partnerOwned": {
+            "title": {
+              "en": "Research operations, business rules and implementation",
+              "zh": "研究執行、商業規則與實作"
+            },
+            "text": {
+              "en": "Research recruitment and facilitation where assigned, business rules, engineering implementation and final business commitments remained partner-owned. Post-launch adoption and performance metrics are unavailable.",
+              "zh": "依來源分工的研究招募與執行、商業規則、工程實作及最終商業承諾由合作夥伴負責；上線後採用與績效數據未提供。"
+            }
+          }
+        }
       },
       "outcomeEvidenceModel": [
         {
@@ -13563,13 +13597,13 @@
       ],
       "heroVisualBrief": {
         "assetId": "cathay-mortgage-hero-consultation-public-v1",
-        "problemSignal": "A rigid internal tablet flow interrupted real client consultation",
-        "systemSignal": "Scenario-based consultation, mortgage estimate and customer context",
-        "outcomeSignal": "Redesigned internal app launched",
+        "problemSignal": "Rigid tablet consultation script",
+        "systemSignal": "Scenario-led consultation and cross-system information model",
+        "outcomeSignal": "System-aligned launched internal delivery",
         "sourceAssetIds": [
-          "cathay-mortgage-source-extract-r82-v1"
+          "cathay-mortgage-hero-consultation-public-v1"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-r172.2"
       },
       "type_zh": "內部系統",
       "transformation": "From a rigid tablet script to a flexible mortgage consultation flow",
@@ -13608,15 +13642,15 @@
             "id": "cathay-mortgage-decision-01-flexible-consultation",
             "title": {
               "en": "From a fixed tablet orientation to a flexible consultation flow",
-              "zh": "從固定的平板引導，到彈性的房貸諮詢流程"
+              "zh": "從固定的平板引導，到彈性的諮詢流程"
             },
             "whatIDecided": {
-              "en": "Reorganised the existing app around scenario-based conversations so sales staff could assess customer needs, explain mortgage estimates and move between relevant guidance without following one rigid script.",
-              "zh": "以情境式對話重新組織既有 App，讓銷售人員能評估客戶需求、說明房貸估算，並依實際對話切換相關引導，而不是被單一路徑限制。"
+              "en": "Reframed the internal tool around scenario-led consultation rather than one prescribed sequence.",
+              "zh": "將內部工具重新定義為情境式諮詢，而非單一規定流程。"
             },
             "whyThisChoice": {
-              "en": "The original orientation did not match how sales staff developed real customer conversations and created unnecessary cognitive workload during consultation.",
-              "zh": "原本的操作引導不符合銷售人員與客戶實際互動的方式，也在諮詢過程中增加不必要的認知負擔。"
+              "en": "Advisors needed to move between customer needs, estimates and guidance as the live conversation changed.",
+              "zh": "顧問需要隨即時對話變化，在客戶需求、試算與引導之間切換。"
             },
             "optionalThirdBlock": {
               "type": "CONSTRAINT MANAGED",
@@ -13643,32 +13677,24 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "Interview transcripts and empathy maps",
-                "Scenario-based concept report",
-                "Four-task usability test"
-              ],
-              "zh": [
-                "訪談逐字稿與 Empathy maps",
-                "情境式概念報告",
-                "四項任務的可用性測試"
-              ]
+            "outcome": {
+              "en": "A more flexible consultation model.",
+              "zh": "更彈性的諮詢模式。"
             }
           },
           {
             "id": "cathay-mortgage-decision-02-shared-consultation-structure",
             "title": {
-              "en": "From fragmented departmental inputs to one consultation structure",
-              "zh": "從分散的部門資訊，到一套共享的諮詢結構"
+              "en": "From fragmented cross-system inputs to one consultation structure",
+              "zh": "從分散的跨系統資訊，到一套諮詢結構"
             },
             "whatIDecided": {
-              "en": "Defined the app structure, function tree and information requirements that organised available customer, mortgage and marketing inputs into one consultation sequence, while documenting data dependencies for delivery.",
-              "zh": "定義 App 架構、功能樹與資訊需求，將可用的客戶、房貸與行銷資訊整理進同一套諮詢順序，並清楚記錄交付所需的資料依賴。"
+              "en": "Organised mortgage, customer and marketing information into a shared consultation structure with explicit system dependencies.",
+              "zh": "將房貸、客戶與行銷資訊整理成共享的諮詢結構，並明確標示系統依賴。"
             },
             "whyThisChoice": {
-              "en": "Relevant information was distributed across departmental databases, so the team needed one shared model before interface and development decisions could stay consistent.",
-              "zh": "相關資訊分散在不同部門資料庫，因此團隊需要先建立共同模型，才能讓介面與開發決策保持一致。"
+              "en": "Advisors otherwise had to reconcile fragmented inputs during the consultation.",
+              "zh": "否則顧問必須在諮詢過程中自行整合分散資訊。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
@@ -13695,32 +13721,24 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "App structure and sitemap",
-                "Function flows and function tree",
-                "Annotated wireframes for development"
-              ],
-              "zh": [
-                "App 架構與 Sitemap",
-                "功能流程與功能樹",
-                "供開發使用的註解式 Wireframe"
-              ]
+            "outcome": {
+              "en": "One clearer consultation structure.",
+              "zh": "一套更清楚的諮詢結構。"
             }
           },
           {
             "id": "cathay-mortgage-decision-03-validated-system-handoff",
             "title": {
-              "en": "From research handoff to a validated, system-aligned delivery",
-              "zh": "從研究交接，到經驗證且符合既有系統的設計交付"
+              "en": "From concept handoff to validated, system-aligned delivery",
+              "zh": "從概念交接，到經驗證且符合系統的交付"
             },
             "whatIDecided": {
-              "en": "Translated interview findings into user scenarios, a prototype and implementation-ready wireframes, then refined the direction through a four-task usability test before handoff.",
-              "zh": "將訪談發現轉化為使用情境、原型與可實作線框稿，並在交接前透過四項任務的可用性測試修正方向。"
+              "en": "Used prototype validation and implementation-ready flows and states to carry the interaction model through to delivery.",
+              "zh": "透過原型驗證與可實作的流程及狀態，將互動模式推進至交付。"
             },
             "whyThisChoice": {
-              "en": "The redesign had to work in real sales conversations, satisfy client expectations and remain compatible with Cathay’s established component system.",
-              "zh": "改版必須能用於真實銷售對話、符合客戶期待，並與國泰既有元件系統相容。"
+              "en": "The redesign had to remain usable while fitting established internal product and engineering constraints.",
+              "zh": "改版必須兼顧可用性，並符合既有內部產品與工程限制。"
             },
             "optionalThirdBlock": {
               "type": "WHAT THIS REQUIRED",
@@ -13747,25 +13765,16 @@
             },
             "status": "launched",
             "contentStatus": "approved",
-            "effectOrResult": {
-              "en": [
-                "Client ideation and alignment workshops",
-                "Marvel prototype",
-                "Developer-ready state and flow descriptions"
-              ],
-              "zh": [
-                "客戶 Ideation 與 Alignment workshops",
-                "Marvel Prototype",
-                "可供開發使用的狀態與流程說明"
-              ]
+            "outcome": {
+              "en": "A validated delivery model reflected in the launched internal app.",
+              "zh": "一套經驗證並反映於已上線內部 App 的交付模式。"
             }
           }
         ],
         "sourcePaths": [
           "projects.cathay-mortgage-assistant.designDecisions"
         ],
-        "recoveryType": "structural-projection-from-existing-r108-content",
-        "contentStatus": "recovered-exact-no-rewrite"
+        "contentStatus": "approved-r172.2"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -13804,49 +13813,241 @@
         {
           "title": {
             "en": "Real consultations did not follow one fixed script",
-            "zh": "真實諮詢不會遵循單一固定腳本"
+            "zh": "真實諮詢不會依照單一固定腳本"
           },
           "description": {
-            "en": "Sales staff needed to move between customer needs, estimates and guidance according to the conversation rather than the original app order.",
-            "zh": "銷售人員需要依實際對話在顧客需求、估算與引導間切換，而不是遵循原 App 順序。"
+            "en": "The legacy tablet flow assumed a predefined orientation sequence, while advisors had to move between customer needs, estimates and guidance according to the live conversation.",
+            "zh": "舊有平板流程假設預先定義的引導順序，但顧問必須依即時對話，在客戶需求、試算與引導之間切換。"
           }
         },
         {
           "title": {
-            "en": "Required information was fragmented across departments",
-            "zh": "必要資訊分散在不同部門"
+            "en": "Required information was fragmented across systems and departments",
+            "zh": "必要資訊分散在不同系統與部門"
           },
           "description": {
-            "en": "Customer, mortgage, marketing and operational inputs had to become one consultation structure with visible data dependencies.",
-            "zh": "顧客、房貸、行銷與營運資訊必須形成一套諮詢結構，並清楚標示資料依賴。"
+            "en": "Mortgage, customer, marketing and operational inputs had to be brought into one coherent consultation structure.",
+            "zh": "房貸、客戶、行銷與營運資訊必須被整合成一套連貫的諮詢結構。"
           }
         },
         {
           "title": {
-            "en": "The redesign had to preserve employee orientation",
-            "zh": "改版必須保留員工操作引導"
+            "en": "The redesign had to extend an established internal design system",
+            "zh": "改版必須延伸既有內部設計系統"
           },
           "description": {
-            "en": "The experience needed greater flexibility without removing the support employees relied on to conduct a compliant mortgage conversation.",
-            "zh": "體驗需要更有彈性，同時不能移除員工進行合規房貸諮詢時依賴的操作支援。"
+            "en": "The new consultation model had to add flexibility and contextual guidance without discarding existing enterprise interaction patterns and delivery constraints.",
+            "zh": "新的諮詢模式必須在保留既有企業互動模式與交付限制的前提下，增加彈性與情境引導。"
           }
         }
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "consultation-model",
-        "key-decisions",
-        "validation-and-launch",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "contribution",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "publicContent": {
         "contentStatus": "recovered-from-approved-deep-content",
-        "sectionOrderRef": "projects.cathay-mortgage-assistant.sectionOrder"
+        "sectionOrderRef": "projects.cathay-mortgage-assistant.sectionOrder",
+        "contribution": {
+          "headline": {
+            "en": "Turned a prescribed tablet sequence into a navigable consultation model.",
+            "zh": "將規定式平板流程轉化為可彈性導覽的諮詢模式。"
+          },
+          "transformation": {
+            "before": {
+              "en": "A fixed tablet orientation flow that did not match how mortgage consultations actually unfolded.",
+              "zh": "固定的平板引導流程，無法符合房貸諮詢實際展開的方式。"
+            },
+            "intervention": {
+              "en": "Led UX concept development, scenario modelling, prototype, wireframes, function tree and implementation handoff, working with research, UI, client and engineering partners.",
+              "zh": "主導 UX 概念發展、情境建模、原型、線框稿、功能樹與實作交接，並與研究、UI、客戶及工程夥伴協作。"
+            },
+            "after": {
+              "en": "A launched scenario-led consultation model that organised needs assessment, mortgage estimation and guidance into a more flexible internal workflow.",
+              "zh": "已上線的情境式諮詢模式，將需求評估、房貸試算與引導整理成更彈性的內部工作流程。"
+            }
+          },
+          "contentStatus": "approved-r172.2"
+        },
+        "coreSystemInsight": {
+          "headline": {
+            "en": "A consultation tool could not prescribe the conversation; it had to provide a shared structure that advisors could navigate according to customer context.",
+            "zh": "諮詢工具不能規定對話；它必須提供一套共享結構，讓顧問依客戶情境靈活導覽。"
+          },
+          "supportingCopy": {
+            "en": "The system needed to support a non-linear, human-in-the-loop conversation while keeping mortgage information and guidance coherent.",
+            "zh": "系統必須支援非線性、人機協作的對話，同時維持房貸資訊與引導的一致性。"
+          },
+          "contentStatus": "approved-r172.2"
+        },
+        "mortgageEvidence": {
+          "title": {
+            "en": "Evidence",
+            "zh": "證據"
+          },
+          "presentation": "decision-support",
+          "items": [],
+          "structuredGroups": [
+            {
+              "id": "consultation-research",
+              "heading": {
+                "en": "Consultation behaviour and research synthesis",
+                "zh": "諮詢行為與研究統整"
+              },
+              "summary": {
+                "en": "Empathy-map and insight synthesis grounded the consultation model in advisor conversations and customer context.",
+                "zh": "同理心地圖與洞察統整，讓諮詢模式奠基於顧問對話與客戶情境。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 03",
+                "zh": "支持決策一與決策三"
+              },
+              "assetId": "cathay-mortgage-research-synthesis-public-v1",
+              "caption": {
+                "en": "Qualitative research synthesis of advisor and customer context; evidence of research grounding, not a quantified outcome.",
+                "zh": "顧問與客戶情境的質性研究統整；證明研究基礎，不代表量化成果。"
+              }
+            },
+            {
+              "id": "consultation-structure",
+              "heading": {
+                "en": "Consultation structure and system definition",
+                "zh": "諮詢結構與系統定義"
+              },
+              "summary": {
+                "en": "Multiple flows, states and interface definitions made the cross-system consultation model explicit for delivery.",
+                "zh": "多組流程、狀態與介面定義，將跨系統諮詢模式明確化以供交付。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 02 and 03",
+                "zh": "支持決策二與決策三"
+              },
+              "assetId": "cathay-mortgage-structure-specification-public-v1",
+              "caption": {
+                "en": "System and specification evidence showing flows, states and interface definitions; not evidence of measured dependency reduction.",
+                "zh": "呈現流程、狀態與介面定義的系統及規格證據；不代表已量測的依賴降低。"
+              }
+            },
+            {
+              "id": "prototype-validation",
+              "heading": {
+                "en": "Prototype validation",
+                "zh": "原型驗證"
+              },
+              "summary": {
+                "en": "Observed tablet usability testing refined the interaction model across four core tasks before delivery.",
+                "zh": "透過平板可用性測試觀察，在交付前依四項核心任務修正互動模式。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01 and 03",
+                "zh": "支持決策一與決策三"
+              },
+              "assetId": "cathay-mortgage-prototype-validation-public-v1",
+              "caption": {
+                "en": "Observed usability-testing interaction; validation and refinement evidence only, with no quantified task-success claim.",
+                "zh": "可用性測試互動觀察；僅證明驗證與修正，不包含量化任務成功率主張。"
+              }
+            },
+            {
+              "id": "delivered-interface",
+              "heading": {
+                "en": "Final delivered interface",
+                "zh": "最終交付介面"
+              },
+              "summary": {
+                "en": "Final consultation surfaces combined mortgage guidance with contextual property-value discussion.",
+                "zh": "最終諮詢介面結合房貸引導與具情境的房產價值討論。"
+              },
+              "decisionLink": {
+                "en": "Supports Decisions 01, 02 and 03",
+                "zh": "支持決策一、二與三"
+              },
+              "assetId": "cathay-mortgage-final-interface-home-public-v1",
+              "caption": {
+                "en": "Final home surface from the launched internal app; historical interface evidence, not proof of adoption or performance.",
+                "zh": "已上線內部 App 的最終首頁；屬歷史介面證據，不代表採用或績效。"
+              }
+            },
+            {
+              "id": "delivered-interface-market-map",
+              "heading": {
+                "en": "Final delivered interface — contextual market map",
+                "zh": "最終交付介面—情境市場地圖"
+              },
+              "summary": {
+                "en": "A supporting consultation surface brought property-value context into the advisor conversation.",
+                "zh": "支援性的諮詢介面將房產價值情境帶入顧問對話。"
+              },
+              "decisionLink": {
+                "en": "Supports Decision 02",
+                "zh": "支持決策二"
+              },
+              "assetId": "cathay-mortgage-final-interface-market-map-public-v1",
+              "caption": {
+                "en": "Historical market-map interface with example property values; delivery context only, not current financial guidance or performance evidence.",
+                "zh": "含範例房產價值的歷史市場地圖介面；僅作交付情境證據，不代表現行金融建議或績效。"
+              }
+            }
+          ],
+          "metrics": [],
+          "contentStatus": "approved-r172.2"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A launched scenario-led mortgage consultation model",
+            "zh": "已上線的情境式房貸諮詢模式"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "A simpler consultation orientation",
+                "zh": "更簡潔的諮詢引導"
+              },
+              "copy": {
+                "en": "Replaced one prescribed sequence with a structure advisors could navigate according to the live conversation.",
+                "zh": "以顧問可依即時對話導覽的結構，取代單一規定式順序。"
+              }
+            },
+            {
+              "heading": {
+                "en": "One internal information experience",
+                "zh": "一套內部資訊體驗"
+              },
+              "copy": {
+                "en": "Organised mortgage, customer and marketing inputs into one coherent consultation structure.",
+                "zh": "將房貸、客戶與行銷資訊整理成一套連貫的諮詢結構。"
+              }
+            },
+            {
+              "heading": {
+                "en": "A validated interaction model",
+                "zh": "經驗證的互動模式"
+              },
+              "copy": {
+                "en": "Refined the scenario-led model through four core usability tasks before delivery.",
+                "zh": "在交付前，透過四項核心可用性任務修正情境式模式。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Post-launch adoption and performance metrics are not available in the verified source record.",
+            "zh": "經核實的來源紀錄未包含上線後採用與績效數據。"
+          },
+          "contentStatus": "approved-r172.2"
+        }
       },
       "domain": {
         "en": "Mortgage advisory",
@@ -13855,14 +14056,14 @@
       "heroMetadata": {
         "company": "Cathay United Bank",
         "domain": {
-          "en": "Mortgage advisory",
-          "zh": "房貸諮詢"
+          "en": "Internal mortgage consultation",
+          "zh": "內部房貸諮詢"
         },
         "renderOrder": [
           "company",
           "domain"
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved-r172.2"
       },
       "keyProblems": {
         "en": [
@@ -13894,6 +14095,97 @@
         "shippedProof": "Internal tablet product launched; implementation-ready structure and wireframes delivered.",
         "recommendedHeadline": "Turned rigid consultation tooling into a launched tablet workflow validated across four usability tasks.",
         "boundary": "Employee adoption, consultation-efficiency improvement and mortgage-sales outcome remain unverified."
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": [
+          "hero",
+          "at-a-glance",
+          "info-grid",
+          "what-made-this-hard",
+          "contribution",
+          "core-system-insight",
+          "design-decisions",
+          "evidence",
+          "outcomes",
+          "my-accountability",
+          "related-work"
+        ],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "publicContent.contribution",
+          "contributionIntervention": "publicContent.contribution.transformation",
+          "coreSystemInsight": "publicContent.coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "publicContent.mortgageEvidence",
+          "outcomes": "publicContent.outcomes",
+          "accountability": "ownershipModel"
+        },
+        "visibility": {
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "navigation": [
+          {
+            "key": "overview",
+            "target": "projectOverviewSection",
+            "label": {
+              "en": "Overview",
+              "zh": "概覽"
+            }
+          },
+          {
+            "key": "complexity",
+            "target": "systemCaseComplexitySection",
+            "label": {
+              "en": "Complexity",
+              "zh": "複雜度"
+            }
+          },
+          {
+            "key": "decisions",
+            "target": "systemCaseDecisionsSection",
+            "label": {
+              "en": "Decisions",
+              "zh": "決策"
+            }
+          },
+          {
+            "key": "evidence",
+            "target": "systemCaseEvidenceSection",
+            "label": {
+              "en": "Evidence",
+              "zh": "證據"
+            }
+          },
+          {
+            "key": "outcomes",
+            "target": "systemCaseOutcomesSection",
+            "label": {
+              "en": "Outcomes",
+              "zh": "成果"
+            }
+          },
+          {
+            "key": "ownership",
+            "target": "systemCaseAccountabilitySection",
+            "label": {
+              "en": "Ownership",
+              "zh": "責任範圍"
+            }
+          }
+        ],
+        "decisionOptions": {
+          "variant": "featured",
+          "showVisuals": false,
+          "outcomeField": "outcome"
+        },
+        "heroMetadata": [
+          "company",
+          "heroMetadata.domain"
+        ],
+        "accountabilityMode": "structured",
+        "detailHeroVisual": true
       }
     },
     "payment": {
