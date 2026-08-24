@@ -78,7 +78,15 @@ for (const viewport of viewports) {
         for(const word of words){const start=text.indexOf(word,offset),range=document.createRange();range.setStart(textNode,start);range.setEnd(textNode,start+word.length);const rect=range.getBoundingClientRect();let line=lines.find(item=>Math.abs(item.top-rect.top)<1);if(!line){line={top:rect.top,words:[],left:rect.left,right:rect.right};lines.push(line)}line.words.push(word);line.left=Math.min(line.left,rect.left);line.right=Math.max(line.right,rect.right);offset=start+word.length}
         const canvas=document.createElement("canvas"),context=canvas.getContext("2d"),letterSpacing=parseFloat(style.letterSpacing)||0;
         context.font=`${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-        return{availableWidth:node.clientWidth,fontFamily:style.fontFamily,fontSize:style.fontSize,fontWeight:style.fontWeight,lineHeight:style.lineHeight,letterSpacing:style.letterSpacing,renderedWidth:context.measureText(text).width+Math.max(0,text.length-1)*letterSpacing,twoLineMaximum:node.clientWidth*2,lines:lines.map(item=>({text:item.words.join(" "),width:item.right-item.left}))};
+        const candidates=[
+          "Co-led research and UX definition for a P2P marketplace, turning 30 interviews into one shared bank–vendor transaction model.",
+          "Co-led research and UX definition for fragmented P2P marketplace transactions, turning 30 interviews into one shared bank–vendor model.",
+          "Co-led P2P marketplace research and UX definition, turning 30 interviews and fragmented states into one shared bank–vendor model.",
+          "Co-led UX research and system definition for fragmented P2P marketplace transactions, turning 30 interviews into one bank–vendor model.",
+          "Co-led P2P marketplace research and system definition, turning 30 interviews and fragmented states into one shared bank–vendor model."
+        ];
+        const candidateGeometry=candidates.map(candidate=>{node.textContent=candidate;const range=document.createRange();range.selectNodeContents(node);const rects=[...range.getClientRects()].filter(rect=>rect.width>0);return{text:candidate,lineCount:new Set(rects.map(rect=>Math.round(rect.top))).size,renderedWidth:context.measureText(candidate).width+Math.max(0,candidate.length-1)*letterSpacing,lineWidths:rects.map(rect=>rect.width)}});node.textContent=text;
+        return{availableWidth:node.clientWidth,fontFamily:style.fontFamily,fontSize:style.fontSize,fontWeight:style.fontWeight,lineHeight:style.lineHeight,letterSpacing:style.letterSpacing,renderedWidth:context.measureText(text).width+Math.max(0,text.length-1)*letterSpacing,twoLineMaximum:node.clientWidth*2,lines:lines.map(item=>({text:item.words.join(" "),width:item.right-item.left})),candidateGeometry};
       })(),
       accountabilityGroups:dialog.querySelectorAll("#systemCaseAccountabilitySection .voucher-r149-accountability__primary").length,
       legacy:["Critical Problem","Business Impact","Taishin Research and Definition Model","Research and Specification Evidence","Ownership and Collaboration","Delivery and Measurement","Status and Disclosure","Continue Exploring"].filter(text=>headings.includes(text)),
