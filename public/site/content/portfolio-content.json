@@ -21589,8 +21589,8 @@
               },
               "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
               "caption": {
-                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not final market selection, launch or experiment success.",
-                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表最終市場選擇、上線或實驗成功。"
+                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not an indication that an experiment ran or achieved a successful result.",
+                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表實驗已執行或取得成功結果。"
               }
             }
           ],
