@@ -31,7 +31,8 @@
   border-radius: inherit;
   background: var(--color-surface);
 }
-.detail-dialog-v45 .dialog-scroll{padding-bottom:calc(var(--control-height) + var(--space-8) + env(safe-area-inset-bottom))}
+.detail-dialog-v45{--dialog-floating-navigator-clearance:calc(var(--control-height) + (2 * var(--space-1)) + (2 * var(--dimension-1px)) + var(--space-3) + var(--space-5))}
+.detail-dialog-v45 .dialog-scroll{padding-bottom:calc(var(--dialog-floating-navigator-clearance) + env(safe-area-inset-bottom))}
 .detail-dialog-v45[open] .floating-navigator{bottom:calc(max(var(--space-3),((100dvh - min(var(--dimension-960px),calc(100dvh - var(--dimension-28px)))) / 2) + var(--space-3)) + env(safe-area-inset-bottom))}
 
 .dialog-controls-v67 {
