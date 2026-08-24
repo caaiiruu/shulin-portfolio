@@ -1197,6 +1197,10 @@
     const controlsBottom=dialogControls?.getBoundingClientRect().bottom||rootTop;
     return Math.max(0,controlsBottom-rootTop)+24;
   }
+  function projectSectionActivationInset(){
+    if(!dialogScrollRoot)return 0;
+    return Math.max(projectSectionInset(),Math.min(160,dialogScrollRoot.clientHeight*.2));
+  }
   function alignProjectSectionTarget(target){
     if(!target||!dialogScrollRoot)return;
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
@@ -1238,7 +1242,7 @@
     const visible=[...projectSectionNavLinks.querySelectorAll('a')]
       .map(link=>doc.querySelector(link.getAttribute('href')))
       .filter(node=>node&&!node.hidden&&node.getClientRects().length);
-    const offset=dialogScrollRoot.getBoundingClientRect().top+projectSectionInset();
+    const offset=dialogScrollRoot.getBoundingClientRect().top+projectSectionActivationInset();
     let current=visible[0];
     visible.forEach(node=>{if(node.getBoundingClientRect().top<=offset+2)current=node});
     const atScrollEnd=dialogScrollRoot.scrollTop+dialogScrollRoot.clientHeight>=dialogScrollRoot.scrollHeight-2;
@@ -2838,7 +2842,7 @@
   }
   function appendSharedAccountability(section,source,{translate=localize}={}){
     const primary=[
-      {item:source?.owned,role:lang==='zh'?'我對成果負責':'I OWNED THE OUTCOME',sourceRole:'I LED'},
+      {item:source?.owned,role:lang==='zh'?'我負責的工作':'WHAT I OWNED',sourceRole:'I LED'},
       {item:source?.shared,role:lang==='zh'?'共同決策':'SHARED DECISIONS',sourceRole:'I CO-DECIDED'}
     ].filter(group=>group.item);
     const grid=element('div','voucher-r149-accountability');
@@ -2925,7 +2929,8 @@
             list(item.bullets).forEach(entry=>bullets.append(element('li','',t(entry))));
             group.append(bullets);
           }
-          if(t(item.decisionLink))group.append(element('span','structured-evidence-v223__decision-link voucher-r149-eyebrow',t(item.decisionLink)));
+          // decisionLink remains SSOT/test metadata; recruiter-first evidence renders only the evidence role.
+          if(evidenceSource.showDecisionMapping===true&&t(item.decisionLink))group.append(element('span','structured-evidence-v223__decision-link voucher-r149-eyebrow',t(item.decisionLink)));
           groups.append(group);
         });
         evidence.append(groups);

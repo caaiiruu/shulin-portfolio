@@ -1980,3 +1980,36 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
   assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
 });
+
+test("R171 migrates Booking Taxi Pickup Strategy without main Booking contamination",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["booking-taxi-pickup-service-strategy"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]);
+  assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.problemTypes.length,undefined);
+  assert.equal(project.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.type.value,"0→1 Product");
+  assert.equal(project.infoGrid.timeline.duration.en,"9 months");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
+  assert.equal(project.heroVisualBrief.assetId,null);
+  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"placeholder-active");
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue|experiment success|experiment result|market-wide rollout/i);
+  assert.match(app,/projectSectionActivationInset/);
+  assert.match(app,/evidenceSource\.showDecisionMapping===true/);
+  assert.match(app,/'WHAT I OWNED'/);
+  assert.doesNotMatch(app,/'I OWNED THE OUTCOME'/);
+});
