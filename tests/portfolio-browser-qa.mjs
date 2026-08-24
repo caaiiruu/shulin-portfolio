@@ -729,6 +729,44 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     }
   }
 
+  await page.goto(`${baseUrl}/site/work/cathay-mortgage-assistant`,{waitUntil:"networkidle"});
+  const r172Presentation=await page.evaluate(()=>{
+    const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
+    return{
+      title:dialog.querySelector("#detailTitle")?.textContent.trim(),
+      taxonomy:[...dialog.querySelectorAll("#detailTags > *")].filter(visible).map(node=>node.textContent.trim()),
+      navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),
+      order:surface.map(node=>node.dataset.canonicalSectionId),
+      decisionTop:dialog.querySelector("#systemCaseDecisionsSection")?.getBoundingClientRect().top,
+      evidenceTop:dialog.querySelector("#systemCaseEvidenceSection")?.getBoundingClientRect().top,
+      decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .voucher-stage-decision-group").length,
+      evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__group").length,
+      realEvidence:[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(node=>node.dataset.assetStatus==="real-active").length,
+      timelineVisible:[...dialog.querySelectorAll("#projectSignals *")].filter(visible).some(node=>node.textContent.trim()==="Timeline"),
+      text:dialog.innerText,
+      overflowX:getComputedStyle(dialog.querySelector(".dialog-scroll")).overflowX
+    };
+  });
+  const r172Order=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability"];
+  if(r172Presentation.title!=="Rigid tablet script to a flexible mortgage consultation system"||r172Presentation.taxonomy.length||JSON.stringify(r172Presentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])||JSON.stringify(r172Presentation.order.filter(id=>r172Order.includes(id)))!==JSON.stringify(r172Order)||!(r172Presentation.decisionTop<r172Presentation.evidenceTop)||r172Presentation.decisionCount!==3||r172Presentation.evidenceCount!==5||r172Presentation.realEvidence!==5)failures.push(`${viewport.name} R172.2 composition mismatch: ${JSON.stringify(r172Presentation)}`);
+  if(r172Presentation.timelineVisible||/Critical Problem|Consultation Model|Business Impact|Ownership and Collaboration|Delivery and Measurement|Continue Exploring/.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 Timeline, legacy or metadata leak`);
+  if(/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i.test(r172Presentation.text))failures.push(`${viewport.name} R172.2 unsupported claim leak`);
+  if(!["hidden","clip"].includes(r172Presentation.overflowX))failures.push(`${viewport.name} R172.2 horizontal containment failed`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r1722-cathay-mortgage",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const checkpoints=[["01-overview","#projectOverviewSection","#projectOverviewSection"],["02-complexity","#systemCaseComplexitySection","#systemCaseComplexitySection"],["03-decisions","#systemCaseDecisionsSection","#systemCaseDecisionsSection"],["04-evidence-research","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(1)","#systemCaseEvidenceSection"],["05-evidence-structure","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(2)","#systemCaseEvidenceSection"],["06-evidence-validation","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(3)","#systemCaseEvidenceSection"],["07-evidence-delivery","#systemCaseEvidenceSection .structured-evidence-v223__group:nth-of-type(4)","#systemCaseEvidenceSection"],["08-outcomes","#systemCaseOutcomesSection","#systemCaseOutcomesSection"],["09-ownership","#systemCaseAccountabilitySection","#systemCaseAccountabilitySection"]];
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector,expectedHref] of checkpoints){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R172.2 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target){const activation=Math.max(96,Math.min(160,root.clientHeight*.2));root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-activation+2)}},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const activeHref=await page.locator("#projectSectionNav a[aria-current='location']").getAttribute("href");
+      if(activeHref!==expectedHref)failures.push(`${viewport.name} R172.2 navigator drift at ${name}: expected ${expectedHref}, got ${activeHref}`);
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);
