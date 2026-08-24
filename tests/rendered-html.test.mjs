@@ -2007,7 +2007,8 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
   for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
   const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
-  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i);\n  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/experiment results are not verified/i);
+  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i);
+  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/experiment results are not verified/i);
   assert.match(app,/projectSectionActivationInset/);
   assert.match(app,/evidenceSource\.showDecisionMapping===true/);
   assert.match(app,/'WHAT I OWNED'/);
