@@ -219,9 +219,10 @@ test("SSOT-04 registry is the only live activation owner", () => {
   assert.deepEqual(duplicateOwners, [], `duplicate live activation owners: ${duplicateOwners.join(", ")}`);
 });
 
-test("active-asset ProjectCard QA derives expectations from current runtime asset state", () => {
+test("active-asset ProjectCard QA enforces the shared 16:9 frame", () => {
   assert.match(browserQa, /assetStatus:frame\?\.dataset\.assetStatus/);
-  assert.match(browserQa, /x\.assetStatus==="real-active"&&x\.naturalRatio/);
+  assert.match(browserQa, /Math\.abs\(x\.frameRatio-16\/9\)/);
+  assert.match(browserQa, /x\.objectFit==="contain"/);
   assert.doesNotMatch(browserQa, /Placeholder ProjectCard semantic ratio failed/);
 });
 

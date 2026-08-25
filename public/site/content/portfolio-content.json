@@ -28034,6 +28034,7 @@
   "sideProjects": {
     "capture-ideas": {
       "id": "capture-ideas",
+      "scale": "Physical + digital creativity system",
       "period": "2015",
       "organisation": "Brunel University",
       "type": "0→1 Product",
@@ -28241,6 +28242,8 @@
     },
     "aha-creative-toolbox": {
       "id": "aha-creative-toolbox",
+      "scale": "Physical + digital collaborative creativity toolkit",
+      "audience": "Distributed collaborators generating and evaluating ideas",
       "period": "2015",
       "organisation": "Brunel University",
       "type": "0→1 Product",
@@ -28471,6 +28474,8 @@
     },
     "hello-sabau": {
       "id": "hello-sabau",
+      "scale": "Cultural product + participation experience",
+      "audience": "People engaging with Rukai hunting culture beyond the community",
       "period": "2018",
       "type": "0→1 Product",
       "explorationType": "Cultural product",
@@ -28946,6 +28951,8 @@
   "experiments": {
     "freelance-project-operations-tool": {
       "id": "freelance-project-operations-tool",
+      "scale": "Independent freelance operations tool used across real projects",
+      "audience": "Independent freelance project operations",
       "category": {
         "en": "AI-assisted Operational Product · Independent",
         "zh": "AI-assisted Operational Product · Independent"
@@ -29099,6 +29106,8 @@
     },
     "weekly-design-session": {
       "id": "weekly-design-session",
+      "scale": "Recurring cross-functional team practice",
+      "audience": "Product and engineering teammates at Booking.com",
       "organisation": "Booking.com Transport",
       "period": "Apr–Dec 2019",
       "timeline": {
@@ -29361,6 +29370,8 @@
     },
     "food-testing-workshop": {
       "id": "food-testing-workshop",
+      "scale": "Group usability research format",
+      "audience": "Participants in a facilitated group usability session",
       "organisation": "AJA Creative",
       "status": "completed-internal-experiment",
       "title": {
@@ -29607,6 +29618,8 @@
     },
     "aja-creative-workshop": {
       "id": "aja-creative-workshop",
+      "scale": "External workshop experiment",
+      "audience": "External workshop participants learning through a design challenge",
       "organisation": "AJA Creative",
       "status": "completed-external-workshop",
       "title": {

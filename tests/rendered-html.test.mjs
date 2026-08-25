@@ -870,13 +870,19 @@ test("keeps Experiment as one responsive, recruiter-scannable owner", () => {
   assert.equal((html.match(/class="experiment-card-action"/g) ?? []).length, 4);
   assert.equal((html.match(/class="experiment-index-card-v38__learning"><small/g) ?? []).length, 3);
   assert.equal((home.match(/class="poster-action"/g) ?? []).length, 3);
-  for (const contract of [".experiment-feature-card-v32{display:grid", ".experiment-index-card-v36{display:flex", ".quick-view-v51--experiment{grid-template-columns:1fr;gap:var(--space-4)", ".quick-view-v51--experiment>.info-grid-v45{grid-column:auto;grid-template-columns:repeat(2,minmax(0,1fr))", ".experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}", ".experiment-sequence-v45{display:grid", "@media(max-width:560px)", "prefers-reduced-motion:reduce"]) assert.ok(experiment.includes(contract), contract);
+  for (const contract of [".experiment-feature-card-v32{display:grid", ".experiment-index-card-v36{display:grid", ".quick-view-v51--experiment{grid-template-columns:1fr;gap:var(--space-4)", ".quick-view-v51--experiment>.info-grid-v45{grid-column:auto;grid-template-columns:repeat(2,minmax(0,1fr))", ".experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}", ".experiment-sequence-v45{display:grid", "@media(max-width:560px)", "prefers-reduced-motion:reduce"]) assert.ok(experiment.includes(contract), contract);
   assert.match(app, /localize\(e\.role\)/);
-  assert.match(app, /localize\(e\.format\)/);
+  assert.match(app, /localize\(e\.scale\|\|e\.format\)/);
+  assert.match(app, /localize\(e\.audience\)/);
+  assert.match(app, /'Scale'/);
+  assert.match(app, /'Timeline'/);
+  assert.doesNotMatch(app, /\?'期間':'Period'/);
+  assert.doesNotMatch(app, /\?'形式':'Format'/);
   assert.match(app, /if\(classification\)classification\.hidden=true/);
   for (const contract of [".detail-experiment-card-v101{", ".detail-experiment-card-v101__question", ".detail-experiment-card-v101__learning", ".detail-experiment-card-v101:is(:hover,:focus-visible) .experiment-card-action", "--experiment-card-cta-hover-inverse"]) assert.ok(experiment.includes(contract), contract);
   assert.match(experiment, /\.motion-ready \[data-motion-reveal\]\.is-inview\.poster:nth-child\(odd\)[\s\S]*?transform:var\(--experiment-card-rest-odd\)/);
   assert.match(experiment, /\.motion-ready \[data-motion-reveal\]\.is-inview:is\(\.poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101\):is\(:hover,:focus-visible\)\{transform:var\(--experiment-card-hover-transform\)\}/);
+  assert.doesNotMatch(experiment, /is-inview\.experiment-index-card-v36:nth-child/);
   assert.doesNotMatch(experiment, /\.detail-experiment-card-v101:hover\{[^}]*var\(--work-card-hover-transform\)/);
   assert.match(app, /type==='experiment'\?'detail-related-card-v45 detail-experiment-card-v101':'detail-related-card-v45'/);
   assert.match(app, /element\('p','detail-experiment-card-v101__question',localize\(item\.question\)\)/);
@@ -1341,7 +1347,7 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(app, /stage-focus-v148__statement/);
   assert.match(home, /image\.dataset\.assetStatus=asset\.isPlaceholder\?'placeholder-active':'real-active'/);
   assert.match(home, /window\.resolveProjectAsset\?\.\(assetId\)/);
-  assert.match(home, /window\.projectAssetRatio\?\.\(asset\)/);
+  assert.match(home, /visual\.dataset\.mediaAspect='16 \/ 9'/);
   assert.doesNotMatch(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
   assert.equal(real.filter(item=>item.projectId==='voucher').length,13);
@@ -1465,7 +1471,7 @@ test("Step 6A image frame system keeps canonical roles, intrinsic evidence and p
   assert.match(css,/\.before-after-evidence-v147__item\{[^}]*gap:var\(--case-gap-caption\)/);
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
   const projectCard=read("assets/css/components/project-card.css");
-  assert.match(projectCard,/related-project-card__visual-v45\{[^}]*aspect-ratio:var\(--project-card-media-ratio,16\/10\)/);
+  assert.match(projectCard,/related-project-card__visual-v45\{[^}]*aspect-ratio:var\(--project-card-media-ratio,16\/9\)/);
   assert.match(projectCard,/related-project-card__image-v148\{[^}]*object-fit:contain/);
   assert.doesNotMatch(domain,/related-project-card__visual-v45\{/);
   assert.match(app,/media\.dataset\.frameRole='primary-evidence'/);
@@ -1679,7 +1685,7 @@ test("uses the approved structured SharedAccountability projection for DBS", () 
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
 
-test("R161.1 owns panoramic mobile readability and metadata hierarchy in shared ProjectCard",()=>{
+test("R182.1 owns one 16:9 media frame and metadata hierarchy in shared ProjectCard",()=>{
   const app=read("assets/js/app.js");
   const home=read("assets/js/home.js");
   const css=read("assets/css/components/project-card.css");
@@ -1687,10 +1693,11 @@ test("R161.1 owns panoramic mobile readability and metadata hierarchy in shared 
   assert.match(app,/ratio>=2\?'panoramic':'standard'/);
   assert.match(app,/projectCardFocalPosition/);
   assert.match(home,/window\.projectAssetPresentation\?\.\(asset\)/);
-  assert.match(css,/--project-card-mobile-panoramic-media-ratio:5\/3/);
+  assert.match(css,/--project-card-media-ratio:16\/9/);
   assert.match(css,/--project-card-company-color:var\(--color-text-secondary\)/);
   assert.match(css,/--project-card-company-title-gap:var\(--space-5\)/);
-  assert.match(css,/@media\(max-width:560px\)[\s\S]*data-media-format="panoramic"[^}]*var\(--project-card-mobile-panoramic-media-ratio\)/);
+  assert.doesNotMatch(css,/project-card-mobile-panoramic-media-ratio/);
+  assert.doesNotMatch(css,/data-media-format="panoramic"/);
   assert.doesNotMatch(css,/dbs|voucher/i);
   assert.equal(manifest.items["dbs-project-card-primary-01"].projectCardFocalPosition,"center center");
 });

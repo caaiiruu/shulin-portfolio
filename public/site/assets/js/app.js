@@ -971,8 +971,7 @@
       image.alt=localize(coverAsset.alt);image.dataset.assetId=coverAsset.assetId;
       image.dataset.assetStatus=coverAsset.isPlaceholder?'placeholder-active':'real-active';
       if(coverAsset.width&&coverAsset.height){image.width=coverAsset.width;image.height=coverAsset.height}
-      const mediaRatio=projectAssetRatio(coverAsset);
-      if(mediaRatio){visual.style.setProperty('--project-card-media-ratio',mediaRatio);visual.dataset.mediaAspect=mediaRatio}
+      visual.dataset.mediaAspect='16 / 9';
       const mediaPresentation=projectAssetPresentation(coverAsset);
       visual.dataset.mediaFormat=mediaPresentation.format;
       visual.style.setProperty('--project-card-media-focal-position',mediaPresentation.focalPosition);
@@ -3134,7 +3133,7 @@
     if(valueSection)valueSection.hidden=true;
     safeText(doc.getElementById('gallerySectionTitle'),lang==='zh'?'實驗':'The Experiment');
     safeText(doc.getElementById('detailContext'),localize(e.category));
-    safeText(doc.getElementById('detailPeriod'),localize(e.timeline));
+    safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(e.title));
     const fullStatus=localize(e.status);const stage=String(fullStatus).split(' · ')[0];
 
@@ -3147,8 +3146,9 @@
     safeText(doc.querySelector('.experiment-overview-v45__question>span'),lang==='zh'?'實驗問題':'The Question');
     renderInfoGrid('detailInfoExperiment',[
       [lang==='zh'?'角色':'Role',localize(e.role)],
-      [lang==='zh'?'期間':'Period',localize(e.timeline)],
-      [lang==='zh'?'形式':'Format',localize(e.format)]
+      [lang==='zh'?'規模':'Scale',localize(e.scale||e.format)],
+      [lang==='zh'?'對象':'Audience',localize(e.audience)],
+      [lang==='zh'?'時間':'Timeline',localize(e.timeline)]
     ]);
     safeText(doc.getElementById('experimentPrototype'),prototypeText);safeText(doc.getElementById('experimentLearning'),learningText);safeText(doc.getElementById('experimentNext'),nextText);
     safeText(doc.querySelector('#experimentEvidence article:first-child h3'),lang==='zh'?'這證明了什麼':'What This Proved');
@@ -3157,6 +3157,8 @@
     doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build')?.toggleAttribute('hidden',true);
     doc.getElementById('experimentLearning')?.closest('article')?.toggleAttribute('hidden',!learningText);
     doc.getElementById('experimentNext')?.closest('article')?.toggleAttribute('hidden',!nextText);
+    doc.getElementById('experimentLearning')?.closest('article')?.classList.add('outcome-metric','outcome-metric--qualitative');
+    doc.getElementById('experimentNext')?.closest('article')?.classList.add('outcome-metric','outcome-metric--qualitative');
   }
   const RELATED_PROJECTS={
     voucher:['voucher-center','game-center','dbs'],

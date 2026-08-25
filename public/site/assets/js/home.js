@@ -72,8 +72,7 @@ function createProjectVisual(key){
   image.dataset.frameRole='project-cover';image.src=asset.src;image.loading='lazy';image.decoding='async';
   image.alt=localize(asset.alt);image.dataset.assetId=asset.assetId;image.dataset.assetStatus=asset.isPlaceholder?'placeholder-active':'real-active';
   if(asset.width&&asset.height){image.width=asset.width;image.height=asset.height}
-  const ratio=window.projectAssetRatio?.(asset);
-  if(ratio){visual.style.setProperty('--project-card-media-ratio',ratio);visual.dataset.mediaAspect=ratio}
+  visual.dataset.mediaAspect='16 / 9';
   const presentation=window.projectAssetPresentation?.(asset);
   if(presentation){visual.dataset.mediaFormat=presentation.format;visual.style.setProperty('--project-card-media-focal-position',presentation.focalPosition)}
   visual.dataset.assetStatus=image.dataset.assetStatus;visual.append(image);return visual;
