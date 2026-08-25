@@ -393,7 +393,8 @@ for (const viewport of viewports) {
     const link=navigator.getByRole("link",{name:label,exact:true});
     const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    await page.waitForFunction(href=>{const root=document.querySelector(".dialog-scroll"),active=document.querySelector(`a[href="${href}"][aria-current="location"]`);if(!root||!active)return false;const state=window.__navigatorSettle||={top:root.scrollTop,stable:0};if(Math.abs(root.scrollTop-state.top)<=.5)state.stable+=1;else{state.top=root.scrollTop;state.stable=0}return state.stable>=6},await link.getAttribute("href"));
+    await page.evaluate(()=>{delete window.__navigatorSettle});
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
       return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
