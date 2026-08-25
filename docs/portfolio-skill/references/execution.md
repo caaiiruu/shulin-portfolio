@@ -55,3 +55,15 @@ For large SSOT work, use the smallest deterministic mutation supported by the ac
 
 No rollback / force push.
 No direct Production mutation.
+
+## Machine-readable Chat ↔ Work handoff
+
+Use `docs/portfolio-automation/verified-project-truth.json` for governed source/fact/claim state and `docs/portfolio-automation/execution-ledger.json` for approved deltas, Work Orders, runs, reports, Human gates, and certifications.
+
+Before implementation:
+1. validate the control plane with `npm run validate:automation`
+2. validate the named Work Order against the observed exact HEAD
+3. stop at `HEAD_MOVED` on mismatch
+4. reject unapproved deltas and forbidden paths
+
+After implementation, append the run and implementation outcome to the Execution Ledger. Never rewrite prior run identity/history, claim a delta absent from the Work Order, or use the ledger to bypass Content SSOT / Asset Manifest ownership. Chat reads the resulting report directly; Human copy/paste of long Work reports is not required.

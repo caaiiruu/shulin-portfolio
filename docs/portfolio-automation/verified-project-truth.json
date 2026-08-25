@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "truthVersion": "2026-08-25-r176-pilot",
+  "status": "PILOT",
+  "lifecycleVocabulary": [
+    "UNVERIFIED_CANDIDATE",
+    "APPROVED",
+    "SUPERSEDED",
+    "REJECTED",
+    "HUMAN_REQUIRED"
+  ],
+  "deliveryBoundaries": [
+    "SHIPPED",
+    "VALIDATED",
+    "RECOMMENDED",
+    "CONCEPTUAL",
+    "UNKNOWN"
+  ],
+  "projects": [
+    {
+      "projectId": "ctbc-mortgage-self-service-app",
+      "status": "APPROVED",
+      "pilotOnly": true
+    }
+  ],
+  "sources": [
+    {
+      "sourceId": "SRC-R176-CTBC-CANONICAL-CONTENT",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.ctbc-mortgage-self-service-app",
+      "contentHash": "git:2b64e35f5dfcd1c2328e067cc4546d246c9bce52",
+      "authority": "CANONICAL_PRODUCTION_CONTENT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    }
+  ],
+  "facts": [
+    {
+      "factId": "FACT-R176-CTBC-PROJECT-IDENTITY",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "projectId",
+      "value": "ctbc-mortgage-self-service-app",
+      "sourceIds": [
+        "SRC-R176-CTBC-CANONICAL-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED",
+        "precedence": 2,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    }
+  ],
+  "claims": [
+    {
+      "claimId": "CLAIM-R176-PILOT-IDENTITY",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "factIds": [
+        "FACT-R176-CTBC-PROJECT-IDENTITY"
+      ],
+      "text": "Pilot orchestration record targets the existing CTBC mortgage project identity only.",
+      "lifecycle": "APPROVED",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN"
+    }
+  ],
+  "humanCorrections": [],
+  "conflicts": [],
+  "lifecycleHistory": [
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R176-CTBC-PROJECT-IDENTITY",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Settled pilot identity copied from canonical content without changing public copy."
+    }
+  ]
+}
