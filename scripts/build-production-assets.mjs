@@ -156,8 +156,8 @@ for (const [projectId, project] of Object.entries(content.projects)) {
 }
 const publicExplorations = [...Object.values(content.sideProjects || {}), ...Object.values(content.experiments || {})]
   .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review"));
-if (publicExplorations.length !== 6) {
-  throw new Error("The active Content SSOT must contain 6 Explorations");
+if (publicExplorations.length !== 7) {
+  throw new Error("The active Content SSOT must contain 7 Experiments & Practice records");
 }
 if (assetManifest.packageVersion !== "r45") {
   throw new Error("The active Asset Manifest must use the canonical r45 package contract");

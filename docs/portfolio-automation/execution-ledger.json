@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "ledgerVersion": "2026-08-25-r180.1-approved-checkpoint",
+  "ledgerVersion": "2026-08-25-r181-experiments-shared-ia",
   "repository": "caaiiruu/shulin-portfolio",
   "canonicalQaBranch": "qa/r146-r43-preview-2026-08-06",
   "stateVocabulary": [
@@ -516,6 +516,40 @@
         "FUTURE_APPROVED_WORK_ORDER"
       ],
       "mutationAuthorized": false
+    },
+    {
+      "deltaId": "DELTA-R181-SEVEN-EXPERIMENT-INTEGRATION",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-25",
+      "targetType": "CONTENT_AND_SHARED_EXPERIMENT_VARIANT",
+      "implementationStatus": "APPLIED_ON_R181_BRANCH",
+      "truthReferences": [
+        "FACT-R181-FREELANCE-PROJECT-OPERATIONS-TOOL-CONTENT-BOUNDARY",
+        "FACT-R181-WEEKLY-DESIGN-SESSION-CONTENT-BOUNDARY",
+        "FACT-R181-FOOD-TESTING-WORKSHOP-CONTENT-BOUNDARY",
+        "FACT-R181-AJA-CREATIVE-WORKSHOP-CONTENT-BOUNDARY",
+        "FACT-R181-CAPTURE-IDEAS-CONTENT-BOUNDARY",
+        "FACT-R181-AHA-CREATIVE-TOOLBOX-CONTENT-BOUNDARY",
+        "FACT-R181-HELLO-SABAU-CONTENT-BOUNDARY"
+      ],
+      "contentTruthReferences": [],
+      "assetTruthReferences": [],
+      "operations": [
+        {
+          "operation": "REGISTER_SEVEN_COMPACT_EXPERIMENTS",
+          "path": "public/site/content/portfolio-content.json"
+        },
+        {
+          "operation": "EXTEND_SHARED_EXPERIMENT_OWNER",
+          "path": "public/site/assets/js/app.js"
+        },
+        {
+          "operation": "EXTEND_SHARED_EXPERIMENT_STYLES",
+          "path": "public/site/assets/css/components/experiment-card.css"
+        }
+      ],
+      "mutationAuthorized": true
     }
   ],
   "workOrders": [
@@ -540,6 +574,42 @@
       ],
       "qaRoutes": [
         "AUTOMATION_VALIDATOR"
+      ],
+      "productionAuthorized": false,
+      "approvedBy": "HUMAN"
+    },
+    {
+      "workOrderId": "WO-R181-SEVEN-EXPERIMENT-INTEGRATION",
+      "status": "APPROVED",
+      "state": "IMPLEMENTATION",
+      "repository": "caaiiruu/shulin-portfolio",
+      "baseBranch": "qa/r146-r43-preview-2026-08-06",
+      "expectedHead": "b44f96bb6ce85ba4f48ecefb9fccf70143aaa948",
+      "approvedDeltaIds": [
+        "DELTA-R181-SEVEN-EXPERIMENT-INTEGRATION"
+      ],
+      "allowedPaths": [
+        "public/site/content/portfolio-content.json",
+        "public/site/content/portfolio-asset-manifest.json",
+        "public/site/assets/js/app.js",
+        "public/site/assets/css/components/experiment-card.css",
+        "public/site/docs/design-system/registry.json",
+        "scripts/**",
+        "tests/**",
+        "docs/portfolio-automation/**",
+        "site-source/templates/**"
+      ],
+      "forbiddenPaths": [
+        "public/site/assets/projects/**",
+        ".github/workflows/**"
+      ],
+      "qaRoutes": [
+        "AUTOMATION_VALIDATOR",
+        "SSOT_VALIDATION",
+        "DESIGN_SYSTEM_LINT",
+        "RENDERED_HTML",
+        "BROWSER_RESPONSIVE",
+        "ACCESSIBILITY_REGRESSION"
       ],
       "productionAuthorized": false,
       "approvedBy": "HUMAN"

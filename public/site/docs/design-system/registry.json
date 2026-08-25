@@ -563,13 +563,15 @@
         "Experiment index",
         "Experiment detail",
         "Related experiment",
-        "Awarded exploration"
+        "Awarded exploration",
+        "Compact recruiter-first experiment detail"
       ],
       "usageScope": [
         "Homepage",
         "Experiment page",
         "Profile",
-        "Detail popup"
+        "Detail popup",
+        "Seven governed Experiments & Practice records"
       ],
       "interactionContract": [
         "three intentionally varied resting angles and offsets",
@@ -577,7 +579,34 @@
         "surface-aware CTA emphasis without Work-card hover",
         "reduced-motion removes resting tilt"
       ],
-      "exclusiveOwner": true
+      "exclusiveOwner": true,
+      "layoutContract": [
+        "Experiments & Practice remains visually and semantically subordinate to the 13 Primary Cases.",
+        "Compact detail order is Hero, The Question, maximum-three-part Experiment, visual Evidence, What This Proved, and Related / Next Experiment.",
+        "Problem Type metadata is search-only and renders no chip rail or reserved spacing.",
+        "The compact variant does not use the Primary Case floating section navigator.",
+        "Evidence uses the shared governed abstract treatment until a public-safe source asset exists.",
+        "Cards show title, concise descriptor, period and one visual treatment without role/tool/deliverable overload."
+      ],
+      "allowedModifications": [
+        "Extend structured compact-detail fields",
+        "Add governed experiments through the Content SSOT",
+        "Extend shared responsive behavior through experiment-card.css"
+      ],
+      "forbiddenModifications": [
+        "Project-specific renderer",
+        "Project-specific CSS hiding",
+        "Visible Problem Type chips",
+        "globals.css override",
+        "Automatic legacy gallery migration",
+        "Unsupported impact projection"
+      ],
+      "responsiveContract": [
+        "1419px desktop: readable compact linear flow",
+        "871px tablet: cards and evidence preserve hierarchy",
+        "430px mobile: single-column evidence, wrapped titles, no horizontal overflow",
+        "Reduced motion removes tilt and non-essential transitions"
+      ]
     },
     {
       "component": "ProfileExperience",
