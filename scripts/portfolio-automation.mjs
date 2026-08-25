@@ -11,6 +11,8 @@ const contentPath = "public/site/content/portfolio-content.json";
 const manifestPath = "public/site/content/portfolio-asset-manifest.json";
 const lifecycle = new Set(["UNVERIFIED_CANDIDATE", "APPROVED", "SUPERSEDED", "REJECTED", "HUMAN_REQUIRED"]);
 const boundaries = new Set(["SHIPPED", "VALIDATED", "RECOMMENDED", "CONCEPTUAL", "UNKNOWN"]);
+const differences = new Set(["MATCH", "NORMALIZATION_REQUIRED", "PUBLIC_COPY_REVIEW", "SOURCE_CONFLICT", "MISSING_EVIDENCE"]);
+const safetyStates = new Set(["PUBLIC_SAFE", "RESTRICTED", "PROHIBITED_RAW_EVIDENCE", "HUMAN_REVIEW_REQUIRED"]);
 const lifecycleTransitions = new Set([
   "UNVERIFIED_CANDIDATE>APPROVED", "UNVERIFIED_CANDIDATE>REJECTED", "UNVERIFIED_CANDIDATE>HUMAN_REQUIRED",
   "APPROVED>SUPERSEDED", "APPROVED>HUMAN_REQUIRED", "HUMAN_REQUIRED>APPROVED", "HUMAN_REQUIRED>REJECTED",
@@ -42,6 +44,8 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
   const projectIds = unique(truth.projects || [], "projectId", "project", errors);
   const sourceIds = unique(truth.sources || [], "sourceId", "source", errors);
   const factIds = unique(truth.facts || [], "factId", "fact", errors);
+  unique(truth.projectSourcePacks || [], "projectId", "project source pack", errors);
+  unique(truth.assetRequests || [], "requestId", "asset request", errors);
   const deltaIds = unique(ledger.approvedDeltas || [], "deltaId", "delta", errors);
   const workOrderIds = unique(ledger.workOrders || [], "workOrderId", "work order", errors);
   const runIds = unique(ledger.executionRuns || [], "runId", "run", errors);
@@ -50,11 +54,13 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
   for (const source of truth.sources || []) {
     if (!projectIds.has(source.projectId)) errors.push(`${source.sourceId}: invalid project reference`);
     if (!lifecycle.has(source.lifecycle)) errors.push(`${source.sourceId}: invalid lifecycle`);
+    if (!safetyStates.has(source.publicSafety)) errors.push(`${source.sourceId}: invalid public-safety state`);
   }
   for (const fact of truth.facts || []) {
     if (!projectIds.has(fact.projectId)) errors.push(`${fact.factId}: invalid project reference`);
     if (!lifecycle.has(fact.lifecycle)) errors.push(`${fact.factId}: invalid lifecycle`);
     if (!boundaries.has(fact.deliveryBoundary)) errors.push(`${fact.factId}: invalid delivery boundary`);
+    if (!safetyStates.has(fact.publicSafety)) errors.push(`${fact.factId}: invalid public-safety state`);
     for (const id of fact.sourceIds || []) if (!sourceIds.has(id)) errors.push(`${fact.factId}: invalid source ${id}`);
     if (fact.lifecycle === "APPROVED" && fact.provenance?.producer === "MODEL_INFERENCE") errors.push(`${fact.factId}: model inference cannot become APPROVED`);
     for (const oldId of fact.supersedes || []) {
@@ -79,6 +85,35 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
       if (conflict.resolutionState !== "HUMAN_REQUIRED" || facts.some((fact) => fact.lifecycle !== "HUMAN_REQUIRED")) errors.push(`${conflict.conflictId}: conflicting approved/high-confidence facts must become HUMAN_REQUIRED`);
     }
   }
+  for (const pack of truth.projectSourcePacks || []) {
+    if (!projectIds.has(pack.projectId) || !content.projects?.[pack.projectId]) errors.push(`${pack.projectId}: project source pack has invalid project reference`);
+    if (!differences.has(pack.difference)) errors.push(`${pack.projectId}: invalid source-pack difference`);
+    for (const id of pack.factIds || []) {
+      const fact = truth.facts.find((candidate) => candidate.factId === id);
+      if (!factIds.has(id) || fact?.projectId !== pack.projectId) errors.push(`${pack.projectId}: invalid source-pack fact ${id}`);
+    }
+    for (const id of pack.sourceIds || []) {
+      const source = truth.sources.find((candidate) => candidate.sourceId === id);
+      if (!sourceIds.has(id) || source?.projectId !== pack.projectId) errors.push(`${pack.projectId}: invalid source-pack source ${id}`);
+    }
+    for (const ref of pack.existingPublicClaims || []) {
+      if (!ref.startsWith(`projects.${pack.projectId}.`) || !hasPath(content, ref)) errors.push(`${pack.projectId}: invalid public claim reference ${ref}`);
+    }
+  }
+  for (const request of truth.assetRequests || []) {
+    if (!projectIds.has(request.projectId)) errors.push(`${request.requestId}: invalid project reference`);
+    if (!new Set(["REQUIRED", "OPTIONAL"]).has(request.requirement)) errors.push(`${request.requestId}: invalid requirement`);
+    if (!Array.isArray(request.assetIds) || !request.assetIds.length) errors.push(`${request.requestId}: asset IDs are required`);
+    for (const id of request.assetIds || []) if (!manifest.items?.[id]) errors.push(`${request.requestId}: invalid asset manifest reference ${id}`);
+    if (request.requirement === "REQUIRED" && request.humanUploadRequired !== true) errors.push(`${request.requestId}: required unresolved asset must require Human upload`);
+  }
+  for (const reuse of truth.assetReuse || []) {
+    if (!projectIds.has(reuse.projectId)) errors.push(`${reuse.requestId}: invalid reuse project`);
+    if (!manifest.items?.[reuse.manifestAssetId]) errors.push(`${reuse.requestId}: invalid reused manifest asset`);
+    if (!sourceIds.has(reuse.reuseSourceId)) errors.push(`${reuse.requestId}: invalid reuse source`);
+  }
+  const canonicalProjectIds = Object.keys(content.projects || {});
+  if (canonicalProjectIds.length !== projectIds.size || canonicalProjectIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover every canonical Content SSOT project exactly once");
   for (const item of truth.lifecycleHistory || []) {
     if (!lifecycleTransitions.has(`${item.from}>${item.to}`)) errors.push(`${item.recordId}: invalid lifecycle transition ${item.from}>${item.to}`);
     if (item.to === "APPROVED" && item.actor !== "HUMAN") errors.push(`${item.recordId}: only Human can approve truth`);
