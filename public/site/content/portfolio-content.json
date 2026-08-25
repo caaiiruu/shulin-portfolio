@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-25-r174.2",
-  "supersedes": "2026-08-24-r173.4",
+  "contentVersion": "2026-08-25-r174.3",
+  "supersedes": "2026-08-25-r174.2",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -7868,82 +7868,47 @@
           "structuredGroups": [
             {
               "heading": {
-                "en": "Before → after: one direct game became a multi-game listing",
-                "zh": "前後轉變：從單一直接遊戲到多遊戲列表"
+                "en": "Structuring discovery around game availability",
+                "zh": "依遊戲可玩狀態組織探索"
               },
               "summary": {
-                "en": "The performance report documents the product change from one featured game to a listing where customers could discover several mini games through one destination.",
-                "zh": "績效報告記錄了產品從單一主打遊戲轉變為多遊戲列表，讓顧客可透過同一目的地探索多個小遊戲。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 01",
-                "zh": "導向決策 01"
-              },
-              "sourceRef": "Game Listing Page Performance.pdf · page 1 · From → To table",
-              "assetStatus": "real-active",
-              "assetId": "game-center-single-to-multi-game-discovery-public-v1",
-              "caption": {
-                "en": "Moving from a single featured game to a shared listing model made multiple concurrent experiences discoverable from one destination.",
-                "zh": "從單一主打遊戲轉向共享列表模型，讓多個並行體驗可在同一目的地被探索。"
-              }
-            },
-            {
-              "heading": {
-                "en": "Discovery required explicit game categories and availability states",
-                "zh": "探索需要明確的遊戲分類與可玩狀態"
-              },
-              "summary": {
-                "en": "The PRD acceptance criteria define simultaneous game hosting, one Game Center for active games, and distinct limited-time and evergreen placement.",
-                "zh": "PRD 驗收條件定義了多遊戲同時承載、以單一 Game Center 呈現進行中的遊戲，以及限時與常駐內容的分區配置。"
+                "en": "Separated limited-time and evergreen games so urgency, availability and persistent experiences could coexist in one discovery model.",
+                "zh": "區分限時與常駐遊戲，讓急迫性、可玩狀態與持續存在的體驗能在同一探索模型中共存。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 02",
                 "zh": "導向決策 02"
               },
               "sourceRef": "PRD _ Omni-gamification experience.pdf · page 6 · Multiple Game Hosting acceptance criteria",
-              "assetStatus": "real-active",
-              "assetId": "game-center-concurrent-game-platform-model-public-v1",
-              "caption": {
-                "en": "The Game Center model separated evergreen and limited-time experiences so multiple campaigns could coexist within one scalable discovery system.",
-                "zh": "Game Center 模型區分常駐與限時體驗，讓多個活動能在一套可擴展的探索系統中共存。"
-              }
+              "assetStatus": "text-data-only",
+              "bullets": [
+                {
+                  "en": "Multiple simultaneous games · limited-time priority · evergreen availability",
+                  "zh": "多遊戲同時承載 · 限時遊戲優先 · 常駐遊戲持續可用"
+                }
+              ]
             },
             {
               "heading": {
-                "en": "Concurrent campaigns required configurable presentation",
-                "zh": "並行活動需要可配置的呈現方式"
+                "en": "Making changing game states operational",
+                "zh": "讓變動中的遊戲狀態可被營運管理"
               },
               "summary": {
-                "en": "The PRD acceptance criteria define New and Ending Soon states, once-per-day and next-play communication, and Platform Operations control over display order.",
-                "zh": "PRD 驗收條件定義了 New 與 Ending Soon 狀態、每日一次與下次可玩時間的溝通，以及平台營運團隊對顯示順序的控制。"
+                "en": "Defined clear availability states and configurable ordering so players could understand what was playable while operations retained control over presentation.",
+                "zh": "定義清楚的可玩狀態與可配置排序，讓玩家理解哪些遊戲可玩，同時讓營運保有呈現控制權。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
                 "zh": "導向決策 03"
               },
               "sourceRef": "PRD _ Omni-gamification experience.pdf · page 7 · Phase 1.2 acceptance criteria",
-              "assetStatus": "real-active",
-              "assetId": "game-center-status-operations-control-public-v1",
-              "caption": {
-                "en": "Status rules and operator-controlled ordering made changing game availability understandable to players while keeping presentation manageable for operations.",
-                "zh": "狀態規則與營運可控的排序，讓玩家理解遊戲可玩狀態的變化，也讓營運團隊能管理呈現方式。"
-              }
-            },
-            {
-              "heading": {
-                "en": "The reported after period showed broader multi-game engagement",
-                "zh": "報告後期顯示更廣泛的多遊戲參與"
-              },
-              "summary": {
-                "en": "Across the reported after period, 70% of tracked mini-game players engaged with 2+ mini games and Gamification MAU / MAU was reported at 23%.",
-                "zh": "在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與 2 個以上的小遊戲，Gamification MAU / MAU 則為 23%。"
-              },
-              "decisionLink": {
-                "en": "SUPPORTED OUTCOMES",
-                "zh": "支持成果"
-              },
-              "sourceRef": "Game Listing Page Performance + GTM tracking",
-              "assetStatus": "text-data-only"
+              "assetStatus": "text-data-only",
+              "bullets": [
+                {
+                  "en": "New · Ending Soon · Play Once Per Day · configurable order",
+                  "zh": "New · Ending Soon · 每日一次 · 可配置排序"
+                }
+              ]
             }
           ],
           "claimSafety": {
@@ -7955,6 +7920,27 @@
               "target values misrepresented as achieved outcomes",
               "unreconciled printed percentage changes",
               "unreconciled commercial uplift and causal attribution"
+            ]
+          },
+          "validationLayer": {
+            "presentation": "image-text",
+            "assetId": "game-center-single-to-multi-game-discovery-public-v1",
+            "title": {
+              "en": "From a single game to shared discovery",
+              "zh": "從單一遊戲走向共享探索"
+            },
+            "intro": {
+              "en": "Replaced a single-game destination with one Game Center where multiple active experiences could be discovered together.",
+              "zh": "以單一 Game Center 取代單一遊戲目的地，讓多個進行中的遊戲體驗可被一同探索。"
+            },
+            "metrics": [
+              {
+                "value": "Before → After",
+                "label": {
+                  "en": "single destination · shared multi-game listing",
+                  "zh": "單一目的地 · 共享多遊戲列表"
+                }
+              }
             ]
           },
           "contentStatus": "primary-source-verified-r168.1"

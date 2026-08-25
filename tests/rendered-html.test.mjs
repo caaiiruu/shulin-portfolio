@@ -2155,36 +2155,39 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
 });
 
 
-test("R174.2 keeps Game Center evidence source-backed, atomic and claim-safe", () => {
+test("R174.3 keeps Game Center evidence curated, atomic and claim-safe", () => {
   const ssot=JSON.parse(read("content/portfolio-content.json"));
   const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const project=ssot.projects["game-center"];
   const groups=project.publicContent.decisionEvidence.structuredGroups;
-  const expectedAssets=["game-center-single-to-multi-game-discovery-public-v1","game-center-concurrent-game-platform-model-public-v1","game-center-status-operations-control-public-v1"];
-  assert.equal(ssot.contentVersion,"2026-08-25-r174.2");
+  const expectedAsset="game-center-single-to-multi-game-discovery-public-v1";
+  assert.equal(ssot.contentVersion,"2026-08-25-r174.3");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.equal(project.presentation.composition,"recruiter-first-system-case");
   assert.deepEqual(project.presentation.sectionOrder,["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]);
   assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
-  assert.equal(groups.length,4);
-  assert.deepEqual(groups.slice(0,3).map(item=>item.assetId),expectedAssets);
-  assert.ok(groups.slice(0,3).every(item=>item.assetStatus==="real-active"&&item.caption?.en&&item.caption?.zh));
-  assert.equal(groups[3].assetStatus,"text-data-only");
-  assert.equal(project.heroVisualBrief.assetId,expectedAssets[0]);
-  for(const id of expectedAssets){
-    const asset=manifest.items[id];
-    assert.equal(asset.implementationStatus,"real-active",id);
-    assert.equal(asset.projectId,"game-center",id);
-    assert.equal(asset.publicSafeStatus,"approved-public-derivative",id);
-    assert.ok(asset.sourceFile&&asset.sourcePage&&asset.sourceRegion&&asset.evidenceRole&&asset.sourceBoundary,id);
-    assert.equal(fs.existsSync(new URL(asset.publicPath.replace(/^\/site\//,""),site)),true,id);
-  }
+  assert.equal(project.publicContent.decisionEvidence.items.length,0);
+  assert.equal(project.publicContent.decisionEvidence.validationLayer.presentation,"image-text");
+  assert.equal(project.publicContent.decisionEvidence.validationLayer.assetId,expectedAsset);
+  assert.equal(groups.length,2);
+  assert.ok(groups.every(item=>item.assetStatus==="text-data-only"&&!item.assetId));
+  assert.equal(project.heroVisualBrief.assetId,expectedAsset);
+  const asset=manifest.items[expectedAsset];
+  assert.equal(asset.implementationStatus,"real-active");
+  assert.equal(asset.projectId,"game-center");
+  assert.equal(asset.publicSafeStatus,"approved-public-derivative");
+  assert.ok(asset.sourceFile&&asset.sourcePage&&asset.sourceRegion&&asset.evidenceRole&&asset.sourceBoundary);
+  assert.match(asset.sourceRegion,/product UI states extracted/);
+  assert.equal(fs.existsSync(new URL(asset.publicPath.replace(/^\/site\//,""),site)),true);
+  assert.equal(manifest.items["game-center-concurrent-game-platform-model-public-v1"],undefined);
+  assert.equal(manifest.items["game-center-status-operations-control-public-v1"],undefined);
   assert.equal(manifest.items["gamecenter-hero-shipped-before-after-public-v1"],undefined);
   const publicCopy=JSON.stringify({title:project.title,publicContent:project.publicContent,atAGlance:project.atAGlance,impactEvidence:project.impactEvidence});
   assert.doesNotMatch(publicCopy,/approximately 50% user completion|~50% completion|\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV causality/i);
   assert.deepEqual(project.publicContent.outcomes.semanticHierarchy.measured.map(item=>item.value),["70%","23%"]);
-  assert.match(groups[1].sourceRef,/page 6/);
-  assert.match(groups[2].sourceRef,/page 7/);
-  assert.doesNotMatch(groups[2].sourceRef,/JIRA/);
+  assert.match(groups[0].sourceRef,/page 6/);
+  assert.match(groups[1].sourceRef,/page 7/);
+  assert.doesNotMatch(groups[1].sourceRef,/JIRA/);
+  assert.doesNotMatch(JSON.stringify(project.publicContent.decisionEvidence.validationLayer),/Acceptance Criteria|PRD|JIRA/i);
 });
