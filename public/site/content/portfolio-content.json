@@ -7526,8 +7526,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the 0→1 Game Center, replacing single-game discovery with a scalable multi-game system supporting concurrent campaigns.",
-        "zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。"
+        "en": "Led product design from one live game to scalable, shared multi-game discovery and concurrent campaigns.",
+        "zh": "主導產品設計，將單一上線遊戲轉化為可擴展的共享多遊戲探索系統，支援並行活動。"
       },
       "infoGrid": {
         "type": {
@@ -8388,8 +8388,8 @@
         "活動並行承載",
         "遊戲狀態溝通"
       ],
-      "at_glance": "As primary product designer, I replaced a single live-game slot with a 0→1 Game Center for concurrent multi-game discovery; 70% of tracked mini-game players engaged with 2+ games in the reported after period.",
-      "at_glance_zh": "作為主要產品設計師，我以支援並行多遊戲探索的 0→1 Game Center 取代單一上線遊戲位置；在報告的後期觀察期間，70% 受追蹤的小遊戲玩家參與了 2 個以上的遊戲。",
+      "at_glance": "Led product design from one live game to scalable, shared multi-game discovery and concurrent campaigns.",
+      "at_glance_zh": "主導產品設計，將單一上線遊戲轉化為可擴展的共享多遊戲探索系統，支援並行活動。",
       "why": "A single live-game slot limited discovery, variety and the ability to run sponsor campaigns concurrently.",
       "why_zh": "單一上線遊戲位置限制探索、內容多樣性，以及多個贊助活動並行的能力。",
       "impact": "Established a centralized discovery and configuration layer for presenting multiple active games through one reusable Game Center model.",
