@@ -511,6 +511,9 @@
 }
 
 .footer-meta-v42 a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--control-height);
   color: var(--chrome-footer-text);
   text-decoration: none;
 }

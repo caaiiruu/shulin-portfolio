@@ -8,6 +8,7 @@ on:
     branches:
       - qa/r146-r43-preview-2026-08-06
       - recovery/r146-runtime-2026-08-06
+      - migration/r181-experiments-shared-ia
   workflow_dispatch:
     inputs:
       ref:
@@ -105,6 +106,15 @@ jobs:
           npm run validate:design 2>&1 | tee "$EVIDENCE_DIR/design-validation-result.txt"
           npm test 2>&1 | tee "$EVIDENCE_DIR/tests-result.txt"
           node --test tests/project-detail-routes.test.mjs 2>&1 | tee "$EVIDENCE_DIR/route-contract-result.txt"
+
+      - name: Zero-cost accessibility performance and security certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run validate:certification 2>&1 | tee "$EVIDENCE_DIR/r182-certification-result.txt"
+          npm audit --omit=dev --audit-level=high --json > "$EVIDENCE_DIR/npm-audit.json"
+          npm sbom --sbom-format cyclonedx > "$EVIDENCE_DIR/portfolio-sbom.cdx.json"
+          node -e 'const fs=require("node:fs");const audit=JSON.parse(fs.readFileSync(process.argv[1]));const v=audit.metadata.vulnerabilities;if(v.high||v.critical)process.exit(1)' "$EVIDENCE_DIR/npm-audit.json"
 
       - name: Canonical verified production build
         shell: bash

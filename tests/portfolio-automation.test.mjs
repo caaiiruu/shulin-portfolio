@@ -29,12 +29,12 @@ test("Voucher Center and Bandzo timeline candidates are closed by Human correcti
   }
 });
 
-test("R180.1 content package remains approved but unapplied", () => {
+test("R180.1 content package is applied only through the Human-approved R182 Work Order", () => {
   const delta = ledger.approvedDeltas.find((item) => item.deltaId === "DELTA-R1801-APPROVED-CONTENT-PACKAGE");
   assert.equal(delta.status, "APPROVED");
   assert.equal(delta.approvedBy, "HUMAN");
-  assert.equal(delta.implementationStatus, "NOT_APPLIED");
-  assert.equal(delta.mutationAuthorized, false);
+  assert.equal(delta.implementationStatus, "APPLIED_ON_R182_BRANCH");
+  assert.equal(delta.mutationAuthorized, true);
   assert.equal(delta.fieldDeltas.length, 8);
 });
 
