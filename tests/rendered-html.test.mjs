@@ -2085,6 +2085,7 @@ test("R172.3 shared FloatingNavigator contains mobile rails and dialog content c
   assert.match(app,/else if\(index===links\.length-1\)target=maximumScroll/);
   assert.match(app,/target=Math\.min\(maximumScroll,Math\.max\(0,target\)\)/);
   assert.match(app,/rail\.scrollTo\(\{left:target,behavior:'auto'\}\)/);
+  assert.match(app,/if\(link\.matches\(':focus-visible'\)\)positionActiveProjectNavItem\(link\)/);
   assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
   assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
 });

@@ -932,13 +932,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       for(const index of checkpoints){
         const expected=links.nth(index);
         const expectedHref=await expected.getAttribute("href");
-        const root=page.locator("#detailDialog .dialog-scroll").first();
-        await root.evaluate((scrollRoot,{href,index,count})=>{
-          const target=document.querySelector(href);
-          if(index===0)scrollRoot.scrollTop=0;
-          else if(index===count-1)scrollRoot.scrollTop=scrollRoot.scrollHeight-scrollRoot.clientHeight;
-          else if(target){const activation=Math.max(96,Math.min(160,scrollRoot.clientHeight*.2));scrollRoot.scrollTop=Math.max(0,scrollRoot.scrollTop+target.getBoundingClientRect().top-scrollRoot.getBoundingClientRect().top-activation+2)}
-        },{href:expectedHref,index,count});
+        await expected.click();
         await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
         const geometry=await page.evaluate(expectedHref=>{
           const rail=document.querySelector("#projectSectionNavLinks"),active=rail?.querySelector('a[aria-current="location"]'),railRect=rail?.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();

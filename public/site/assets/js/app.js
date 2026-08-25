@@ -1277,7 +1277,9 @@
       const target=projectNavTarget(key,id);
       const link=element('a','pd-section-nav__link floating-navigator__item',lang==='zh'?zh:en);
       link.href=`#${target.id||id}`;
-      link.addEventListener('focus',()=>positionActiveProjectNavItem(link));
+      link.addEventListener('focus',()=>{
+        if(link.matches(':focus-visible'))positionActiveProjectNavItem(link);
+      });
       const activate=event=>{
         event.preventDefault();
         scrollToProjectSection(target);
