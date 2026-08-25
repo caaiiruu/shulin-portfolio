@@ -1,6 +1,6 @@
 {
-  "contentVersion": "2026-08-24-r173.4",
-  "supersedes": "2026-08-24-r172.4",
+  "contentVersion": "2026-08-25-r181-experiments-shared-ia",
+  "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
       "id": "voucher-center-discovery-ut-2024",
@@ -28021,23 +28021,26 @@
       "explorationType": "Awarded concept",
       "status": "concept",
       "title": {
-        "en": "From fleeting ideas to a three-stage capture system",
-        "zh": "從稍縱即逝的想法，到三階段靈感捕捉系統"
+        "en": "From scattered ideas to a connected capture-and-filter system",
+        "zh": "From scattered ideas to a connected capture-and-filter system"
       },
       "summary": {
-        "en": "A physical-digital system combining an Egg recording device, wireless charger and filtering programme across Stimulate, Note and Filter stages.",
-        "zh": "結合蛋形錄音裝置、無線充電與篩選計畫，建立涵蓋刺激、記錄與篩選三階段的實體數位系統。"
+        "en": "Designed a physical–digital creativity system connecting idea stimulation, capture and filtering through an Egg device, wireless dock and supporting desktop experience.",
+        "zh": "Designed a physical–digital creativity system connecting idea stimulation, capture and filtering through an Egg device, wireless dock and supporting desktop experience."
       },
       "audience": "Workers who need idea stimulation and expert consultation across meetings, leisure and individual work.",
       "award": "RSA Student Design Awards - Final 7 shortlist",
-      "role": "Product design",
+      "role": {
+        "en": "Product Designer",
+        "zh": "Product Designer"
+      },
       "deliverables": [
         "Strategy report",
         "UX",
         "Physical product"
       ],
-      "publicPlacement": "explorations",
-      "contentStatus": "approved",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
       "domainTags": {
         "primaryDomainId": null,
         "supportingDomainIds": [],
@@ -28046,7 +28049,7 @@
         "contentStatus": "approved"
       },
       "searchIndexV2": {
-        "version": "r78",
+        "version": "r181",
         "contentType": "exploration",
         "canonicalId": "capture-ideas",
         "aliases": {
@@ -28065,14 +28068,14 @@
         ],
         "problemTags": {
           "en": [
-            "fleeting ideas",
-            "idea capture",
-            "creative productivity"
+            "creativity tools",
+            "physical-digital systems",
+            "collaborative ideation"
           ],
           "zh": [
-            "稍縱即逝的想法",
-            "Idea capture",
-            "創意生產力"
+            "creativity tools",
+            "physical-digital systems",
+            "collaborative ideation"
           ]
         },
         "capabilityTags": {
@@ -28126,14 +28129,96 @@
           ]
         },
         "resultReasonFields": [
-          "intentIds",
           "problemTags",
           "capabilityTags",
-          "domainIds",
           "outcomeTags"
         ],
         "contentStatus": "approved"
-      }
+      },
+      "category": {
+        "en": "Experimental Product · 2015",
+        "zh": "Experimental Product · 2015"
+      },
+      "eyebrow": {
+        "en": "Experimental Product · 2015",
+        "zh": "Experimental Product · 2015"
+      },
+      "timeline": {
+        "en": "2015",
+        "zh": "2015"
+      },
+      "format": {
+        "en": "Physical + Digital Product",
+        "zh": "Physical + Digital Product"
+      },
+      "question": {
+        "en": "How could idea generation become a continuous system instead of a disconnected set of activities?",
+        "zh": "How could idea generation become a continuous system instead of a disconnected set of activities?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Connect the creativity journey",
+            "zh": "Connect the creativity journey"
+          },
+          "body": {
+            "en": "Structured the concept around Stimulate Ideas, Note Ideas and Filter Ideas.",
+            "zh": "Structured the concept around Stimulate Ideas, Note Ideas and Filter Ideas."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Bridge physical and digital interaction",
+            "zh": "Bridge physical and digital interaction"
+          },
+          "body": {
+            "en": "Explored an Egg-shaped capture device, wireless charger and desktop filtering experience as one system.",
+            "zh": "Explored an Egg-shaped capture device, wireless charger and desktop filtering experience as one system."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Test the system as a product proposition",
+            "zh": "Test the system as a product proposition"
+          },
+          "body": {
+            "en": "Developed the concept far enough to communicate physical-product and interaction behaviour as one integrated proposition.",
+            "zh": "Developed the concept far enough to communicate physical-product and interaction behaviour as one integrated proposition."
+          }
+        }
+      ],
+      "learning": {
+        "en": "RSA Student Design Awards — Final 7 Shortlist",
+        "zh": "RSA Student Design Awards — Final 7 Shortlist"
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "creativity tools",
+          "physical-digital systems",
+          "collaborative ideation"
+        ],
+        "zh": [
+          "creativity tools",
+          "physical-digital systems",
+          "collaborative ideation"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "Recognition is preserved exactly; no efficiency or engagement improvement is claimed.",
+        "zh": "Recognition is preserved exactly; no efficiency or engagement improvement is claimed."
+      },
+      "deliveryBoundary": "CONCEPTUAL",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
     },
     "aha-creative-toolbox": {
       "id": "aha-creative-toolbox",
@@ -28143,12 +28228,12 @@
       "explorationType": "Product concept",
       "status": "concept",
       "title": {
-        "en": "From intimidating ideation to a playful business creativity system",
-        "zh": "從令人卻步的發想，到具趣味性的商業創意系統"
+        "en": "From open-ended brainstorming to a structured creative workflow",
+        "zh": "From open-ended brainstorming to a structured creative workflow"
       },
       "summary": {
-        "en": "A physical and online design-thinking toolbox helping non-designers generate, converge and validate ideas across meetings, offices, homes and remote collaboration.",
-        "zh": "結合實體與線上的設計思考工具箱，協助非設計背景使用者在會議、辦公、居家與遠端協作中產生、收斂並驗證想法。"
+        "en": "Designed a collaborative creativity toolkit combining divergent idea generation with convergent evaluation across physical and digital interactions.",
+        "zh": "Designed a collaborative creativity toolkit combining divergent idea generation with convergent evaluation across physical and digital interactions."
       },
       "coreValues": [
         "Speed",
@@ -28156,15 +28241,18 @@
         "Human-centred",
         "Playfulness"
       ],
-      "role": "Research, App and Product design",
+      "role": {
+        "en": "Research · App & Product Design",
+        "zh": "Research · App & Product Design"
+      },
       "deliverables": [
         "Strategy report",
         "UX",
         "Product design",
         "Physical product"
       ],
-      "publicPlacement": "explorations",
-      "contentStatus": "approved",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
       "domainTags": {
         "primaryDomainId": null,
         "supportingDomainIds": [
@@ -28182,7 +28270,7 @@
         "contentStatus": "approved"
       },
       "searchIndexV2": {
-        "version": "r78",
+        "version": "r181",
         "contentType": "exploration",
         "canonicalId": "aha-creative-toolbox",
         "aliases": {
@@ -28204,14 +28292,14 @@
         ],
         "problemTags": {
           "en": [
-            "intimidating ideation",
-            "non-designer creativity",
-            "remote collaboration"
+            "creativity tools",
+            "design thinking",
+            "collaborative workflows"
           ],
           "zh": [
-            "令人卻步的 Ideation",
-            "非設計師創意",
-            "遠端協作"
+            "creativity tools",
+            "design thinking",
+            "collaborative workflows"
           ]
         },
         "capabilityTags": {
@@ -28271,30 +28359,115 @@
           ]
         },
         "resultReasonFields": [
-          "intentIds",
           "problemTags",
           "capabilityTags",
-          "domainIds",
           "outcomeTags"
         ],
         "contentStatus": "approved"
-      }
+      },
+      "category": {
+        "en": "Creative Tool Experiment · 2015",
+        "zh": "Creative Tool Experiment · 2015"
+      },
+      "eyebrow": {
+        "en": "Creative Tool Experiment · 2015",
+        "zh": "Creative Tool Experiment · 2015"
+      },
+      "timeline": {
+        "en": "2015",
+        "zh": "2015"
+      },
+      "format": {
+        "en": "Creative Toolkit",
+        "zh": "Creative Toolkit"
+      },
+      "question": {
+        "en": "Could a creativity tool support both generating possibilities and converging on useful directions?",
+        "zh": "Could a creativity tool support both generating possibilities and converging on useful directions?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Treat creativity as a workflow",
+            "zh": "Treat creativity as a workflow"
+          },
+          "body": {
+            "en": "Designed for divergent and convergent thinking rather than idea generation alone.",
+            "zh": "Designed for divergent and convergent thinking rather than idea generation alone."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Make participation more approachable",
+            "zh": "Make participation more approachable"
+          },
+          "body": {
+            "en": "Used playful interaction to lower participation barriers.",
+            "zh": "Used playful interaction to lower participation barriers."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Explore distributed collaboration",
+            "zh": "Explore distributed collaboration"
+          },
+          "body": {
+            "en": "Extended the concept through an online application so participation was not restricted to one physical location.",
+            "zh": "Extended the concept through an online application so participation was not restricted to one physical location."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Developed a complete physical–digital creative-tool concept around one coherent design-thinking workflow.",
+        "zh": "Developed a complete physical–digital creative-tool concept around one coherent design-thinking workflow."
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "creativity tools",
+          "design thinking",
+          "collaborative workflows"
+        ],
+        "zh": [
+          "creativity tools",
+          "design thinking",
+          "collaborative workflows"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "No measured creativity or productivity improvement is claimed.",
+        "zh": "No measured creativity or productivity improvement is claimed."
+      },
+      "deliveryBoundary": "CONCEPTUAL",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
     },
     "hello-sabau": {
       "id": "hello-sabau",
-      "period": "2016",
+      "period": "2018",
       "type": "0→1 Product",
       "explorationType": "Cultural product",
       "status": "launched",
       "title": {
-        "en": "From cultural distance to a playable Rukai learning experience",
-        "zh": "從文化距離，到可遊玩的魯凱學習體驗"
+        "en": "From cultural storytelling to a participatory Rukai experience",
+        "zh": "From cultural storytelling to a participatory Rukai experience"
       },
       "summary": {
-        "en": "A locally launched edutainment system combining Rukai hunting-culture games, branding, products and tailored activities to support cultural learning and tourism.",
-        "zh": "已在當地上線的寓教於樂系統，結合魯凱狩獵文化遊戲、品牌、產品與活動，支持文化學習與觀光。"
+        "en": "Designed a cultural experience spanning play, physical products and local activities to make Rukai hunting culture more approachable beyond the community itself.",
+        "zh": "Designed a cultural experience spanning play, physical products and local activities to make Rukai hunting culture more approachable beyond the community itself."
       },
-      "role": "Product design",
+      "role": {
+        "en": "Product Designer",
+        "zh": "Product Designer"
+      },
       "deliverables": [
         "Strategy report",
         "Product design",
@@ -28312,8 +28485,8 @@
         }
       ],
       "awardStatus": "Confirmed Red Dot Award Game Design Winner, Nov 2016, Germany.",
-      "publicPlacement": "explorations",
-      "contentStatus": "approved",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
       "domainTags": {
         "primaryDomainId": null,
         "supportingDomainIds": [
@@ -28331,7 +28504,7 @@
         "contentStatus": "approved"
       },
       "searchIndexV2": {
-        "version": "r103",
+        "version": "r181",
         "contentType": "exploration",
         "canonicalId": "hello-sabau",
         "aliases": {
@@ -28363,16 +28536,14 @@
         ],
         "problemTags": {
           "en": [
-            "cultural distance",
-            "local learning",
-            "tourism engagement",
-            "heritage education"
+            "cultural experience",
+            "participatory design",
+            "service concepts"
           ],
           "zh": [
-            "文化距離",
-            "在地學習",
-            "觀光互動",
-            "文化教育"
+            "cultural experience",
+            "participatory design",
+            "service concepts"
           ]
         },
         "capabilityTags": {
@@ -28436,10 +28607,8 @@
           ]
         },
         "resultReasonFields": [
-          "intentIds",
           "problemTags",
           "capabilityTags",
-          "domainIds",
           "outcomeTags"
         ],
         "contentStatus": "approved",
@@ -28529,7 +28698,91 @@
         "dateRelationship": "The project year and Red Dot award year are both 2016.",
         "sourceStatus": "confirmed by user on 2026-08-03",
         "contentStatus": "approved"
-      }
+      },
+      "category": {
+        "en": "Cultural Experiment · 2018",
+        "zh": "Cultural Experiment · 2018"
+      },
+      "eyebrow": {
+        "en": "Cultural Experiment · 2018",
+        "zh": "Cultural Experiment · 2018"
+      },
+      "timeline": {
+        "en": "2018",
+        "zh": "2018"
+      },
+      "format": {
+        "en": "Cultural Experience + Physical Product",
+        "zh": "Cultural Experience + Physical Product"
+      },
+      "question": {
+        "en": "How could cultural knowledge become something people actively experience rather than passively observe?",
+        "zh": "How could cultural knowledge become something people actively experience rather than passively observe?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Translate culture into interaction",
+            "zh": "Translate culture into interaction"
+          },
+          "body": {
+            "en": "Used play as an entry point for experiencing elements of Rukai hunting culture.",
+            "zh": "Used play as an entry point for experiencing elements of Rukai hunting culture."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Extend beyond a single artefact",
+            "zh": "Extend beyond a single artefact"
+          },
+          "body": {
+            "en": "Connected visual identity, commercial products and tailored local activities.",
+            "zh": "Connected visual identity, commercial products and tailored local activities."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Explore culture as an experience system",
+            "zh": "Explore culture as an experience system"
+          },
+          "body": {
+            "en": "Explored how cultural participation, public engagement and local activity could reinforce one another.",
+            "zh": "Explored how cultural participation, public engagement and local activity could reinforce one another."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Red Dot Award — Game Design Winner. Existing governed recognition confirms the work and attribution.",
+        "zh": "Red Dot Award — Game Design Winner. Existing governed recognition confirms the work and attribution."
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "cultural experience",
+          "participatory design",
+          "service concepts"
+        ],
+        "zh": [
+          "cultural experience",
+          "participatory design",
+          "service concepts"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "No tourism, economic-growth, quality-of-life or talent-return causality is claimed.",
+        "zh": "No tourism, economic-growth, quality-of-life or talent-return causality is claimed."
+      },
+      "deliveryBoundary": "SHIPPED",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
     },
     "matsu-temple-packaging": {
       "id": "matsu-temple-packaging",
@@ -28672,357 +28925,154 @@
     }
   },
   "experiments": {
-    "food-testing-workshop": {
-      "id": "food-testing-workshop",
-      "organisation": "AJA Creative",
-      "status": "completed-internal-experiment",
+    "freelance-project-operations-tool": {
+      "id": "freelance-project-operations-tool",
+      "category": {
+        "en": "AI-assisted Operational Product · Independent",
+        "zh": "AI-assisted Operational Product · Independent"
+      },
+      "eyebrow": {
+        "en": "AI-assisted Operational Product · Independent",
+        "zh": "AI-assisted Operational Product · Independent"
+      },
       "title": {
-        "en": "From individual usability testing to a reusable group-testing template",
-        "zh": "從個別可用性測試，到可重用的團體測試方法"
+        "en": "From scattered freelance records to a working project-operations system",
+        "zh": "From scattered freelance records to a working project-operations system"
       },
       "summary": {
-        "en": "Designed and facilitated a group test combining focus-group discussion, behavioural tasks and before-and-after emotion scoring, using a collaborative Japanese cooking toy as the test object.",
-        "zh": "設計並主持結合焦點團體討論、行為任務與前後情緒評分的團體測試，並以多人協作的日本料理玩具作為測試物件。"
+        "en": "Designed and built a personal freelance operations tool in two days, then iterated it through real project use to connect effort, revisions, deliverables and project closure into one working system.",
+        "zh": "Designed and built a personal freelance operations tool in two days, then iterated it through real project use to connect effort, revisions, deliverables and project closure into one working system."
       },
-      "outcomes": [
-        "Created a reusable AJA group-testing template",
-        "Ran an internal team-building activity",
-        "Tested a combined focus-group and usability-testing method"
-      ],
-      "phases": [
-        {
-          "name": "First impression",
-          "questions": [
-            "Have you heard of this product?",
-            "What is it?",
-            "What do you think it can do?",
-            "What information do you expect from it?",
-            "Who is it designed for and why?"
-          ]
-        },
-        {
-          "name": "Preparation",
-          "questions": [
-            "What is the first thing you want to do?"
-          ]
-        },
-        {
-          "name": "Behaviour",
-          "tasks": [
-            "Choose and complete the first through sixth dishes",
-            "Decide what to do after all dishes are completed"
-          ]
-        },
-        {
-          "name": "Ending",
-          "questions": [
-            "What did you like most?",
-            "What did you like least?",
-            "What should improve?",
-            "How would you introduce it to others?",
-            "What would you recommend?"
-          ]
-        }
-      ],
-      "measurement": "Emotion scoring before and after use.",
-      "publicPlacement": "explorations",
-      "contentStatus": "approved",
-      "explorationType": "Method experiment",
-      "period": "2017",
-      "roleDetail": "Research, plan and facilitate",
-      "methodOutcome": "Created a reusable group-testing template combining first-impression assessment, group warm-up, behavioural tasks and before/after emotion scoring.",
-      "domainTags": {
-        "primaryDomainId": null,
-        "supportingDomainIds": [],
-        "searchOnlyDomainIds": [],
-        "matches": [],
-        "contentStatus": "approved"
+      "role": {
+        "en": "Designer & Builder",
+        "zh": "Designer & Builder"
       },
-      "searchIndexV2": {
-        "version": "r78",
-        "contentType": "exploration",
-        "canonicalId": "food-testing-workshop",
-        "aliases": {
-          "en": [
-            "Food Testing Workshop",
-            "Group testing template"
-          ],
-          "zh": [
-            "Food Testing Workshop",
-            "Group testing template"
-          ]
-        },
-        "domainIds": [],
-        "intentIds": [],
-        "problemTags": {
-          "en": [
-            "individual testing limits",
-            "group usability research",
-            "emotion measurement"
-          ],
-          "zh": [
-            "個人測試限制",
-            "群體易用性研究",
-            "情緒衡量"
-          ]
-        },
-        "capabilityTags": {
-          "en": [
-            "research method design",
-            "behavioural tasks",
-            "emotion scoring",
-            "focus-group facilitation"
-          ],
-          "zh": [
-            "研究方法設計",
-            "行為任務",
-            "情緒評分",
-            "Focus group facilitation"
-          ]
-        },
-        "systemTags": {
-          "en": [
-            "method experiment",
-            "research template"
-          ],
-          "zh": [
-            "方法實驗",
-            "研究模板"
-          ]
-        },
-        "audienceTags": {
-          "en": [
-            "research participants",
-            "product teams"
-          ],
-          "zh": [
-            "研究參與者",
-            "產品團隊"
-          ]
-        },
-        "outcomeTags": {
-          "en": [
-            "reusable group-testing template"
-          ],
-          "zh": [
-            "可重用群體測試模板"
-          ]
-        },
-        "queryExamples": {
-          "en": [
-            "How do you design a group usability test?",
-            "How do you combine behaviour and emotion evidence?"
-          ],
-          "zh": [
-            "如何設計群體易用性測試？",
-            "如何結合行為與情緒證據？"
-          ]
-        },
-        "resultReasonFields": [
-          "intentIds",
-          "problemTags",
-          "capabilityTags",
-          "domainIds",
-          "outcomeTags"
-        ],
-        "contentStatus": "approved"
-      }
-    },
-    "aja-creative-workshop": {
-      "id": "aja-creative-workshop",
-      "organisation": "AJA Creative",
-      "status": "completed-external-workshop",
-      "title": {
-        "en": "From methodology talk to a live insight-to-design simulation",
-        "zh": "從方法分享，到現場洞察與設計模擬"
+      "period": "In active use",
+      "timeline": {
+        "en": "In active use",
+        "zh": "In active use"
       },
-      "summary": {
-        "en": "Co-created AJA Creative’s first external practical workshop and served as the first methodology speaker, teaching how to transform user insights into design outcomes while observing how group personality affected collaboration.",
-        "zh": "共同建立 AJA Creative 首場對外實作工作坊，並擔任首位方法分享講者，說明如何將使用者洞察轉化為設計成果，同時觀察團體個性對協作的影響。"
+      "format": {
+        "en": "Independent 0→1 Product",
+        "zh": "Independent 0→1 Product"
       },
-      "role": [
-        "First design-methodology speaker",
-        "Workshop co-planner",
-        "Scenario author",
-        "Facilitator",
-        "Rehearsal and content modifier"
-      ],
-      "topic": "How can we transfer user insights into design outcomes?",
-      "outcomes": [
-        "Shared AJA design methodology externally",
-        "Delivered a practical design-iteration process",
-        "Observed personality and teamwork patterns",
-        "Strengthened company brand awareness"
-      ],
-      "agenda": [
-        {
-          "stage": "Kickoff",
-          "duration": "2 minutes",
-          "activity": "Introduce an e-commerce company brief and allow three help requests."
-        },
-        {
-          "stage": "User interview",
-          "duration": "12 minutes",
-          "activity": "Listen to buyer and seller statements and capture research evidence."
-        },
-        {
-          "stage": "Team review",
-          "duration": "10 minutes",
-          "activity": "Organise evidence and orient the market using a matrix."
-        },
-        {
-          "stage": "Define problems",
-          "duration": "20 minutes",
-          "activity": "Build affinity diagrams around behaviour, needs and pain points."
-        },
-        {
-          "stage": "Ideation",
-          "duration": "30 minutes",
-          "activity": "Generate and categorise ideas beside the supporting evidence."
-        },
-        {
-          "stage": "Convergence",
-          "duration": "5 minutes",
-          "activity": "Evaluate ideas using creativity, accessibility and profitability."
-        },
-        {
-          "stage": "Implementation",
-          "duration": "20 minutes",
-          "activity": "Translate the selected idea into a before-and-after scenario."
-        },
-        {
-          "stage": "Presentation",
-          "duration": "30 minutes",
-          "activity": "Present outcomes and evaluate accessibility, creativity, profitability, persuasion and insight accuracy."
-        }
-      ],
-      "publicPlacement": "explorations",
-      "contentStatus": "approved",
-      "explorationType": "Design enablement",
-      "period": "2017",
-      "roleDetail": "Plan, facilitate and present",
-      "participantStructure": "Six groups organised using pre-event personality profiles; one observer recorded each group’s behaviour.",
-      "evaluationCriteria": [
-        "Accessibility",
-        "Creativity",
-        "Profitability",
-        "Persuasion",
-        "Insight accuracy"
-      ],
-      "testimonial": {
-        "quote": "It’s really precious that we could come up with solutions in such a minimum of time. Full of content and joy.",
-        "source": "Workshop attendee"
+      "question": {
+        "en": "How could fragmented freelance records become evidence I could actually use for planning and pricing?",
+        "zh": "How could fragmented freelance records become evidence I could actually use for planning and pricing?"
       },
-      "domainTags": {
-        "primaryDomainId": null,
-        "supportingDomainIds": [],
-        "searchOnlyDomainIds": [
-          "learning-platforms"
-        ],
-        "matches": [
-          {
-            "domainId": "learning-platforms",
-            "role": "context",
-            "score": 50,
-            "visibility": "search-only"
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Turn project activity into structured evidence",
+            "zh": "Turn project activity into structured evidence"
+          },
+          "body": {
+            "en": "Connected project hours, revisions, deliverables and phases to understand what created effort—not only total hours.",
+            "zh": "Connected project hours, revisions, deliverables and phases to understand what created effort—not only total hours."
           }
-        ],
-        "contentStatus": "approved"
-      },
-      "searchIndexV2": {
-        "version": "r78",
-        "contentType": "exploration",
-        "canonicalId": "aja-creative-workshop",
-        "aliases": {
-          "en": [
-            "AJA Creative Workshop",
-            "Insight to design workshop"
-          ],
-          "zh": [
-            "AJA Creative Workshop",
-            "Insight-to-design Workshop"
-          ]
         },
-        "domainIds": [
-          "learning-platforms"
+        {
+          "id": "02",
+          "title": {
+            "en": "Build the smallest system and use it immediately",
+            "zh": "Build the smallest system and use it immediately"
+          },
+          "body": {
+            "en": "Built the first usable version in two days, put it into real freelance use and iterated it from actual workflow behaviour.",
+            "zh": "Built the first usable version in two days, put it into real freelance use and iterated it from actual workflow behaviour."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Close the loop between delivery and future planning",
+            "zh": "Close the loop between delivery and future planning"
+          },
+          "body": {
+            "en": "Added a repeatable estimated-versus-actual review so historical work could inform workload planning, pricing and estimation.",
+            "zh": "Added a repeatable estimated-versus-actual review so historical work could inform workload planning, pricing and estimation."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Built a working operational tool and used real project data to improve how future work is estimated. Across three projects, it surfaced approximately 18% of work that had been underestimated.",
+        "zh": "Built a working operational tool and used real project data to improve how future work is estimated. Across three projects, it surfaced approximately 18% of work that had been underestimated."
+      },
+      "next": {
+        "en": "Used AI-assisted prototyping and development to move quickly from problem framing to a working tool, while retaining ownership of workflow, product decisions and iteration.",
+        "zh": "Used AI-assisted prototyping and development to move quickly from problem framing to a working tool, while retaining ownership of workflow, product decisions and iteration."
+      },
+      "problemTypes": {
+        "en": [
+          "AI-assisted development",
+          "freelance operations",
+          "project estimation",
+          "workload planning",
+          "internal tools",
+          "0→1 product"
         ],
-        "intentIds": [
-          "align-stakeholders-and-operations",
-          "structure-learning-progression"
-        ],
+        "zh": [
+          "AI-assisted development",
+          "freelance operations",
+          "project estimation",
+          "workload planning",
+          "internal tools",
+          "0→1 product"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "AI assisted construction; AI is not claimed as a core runtime capability. The ~18% figure is an estimation-gap signal, not productivity, revenue or profitability impact.",
+        "zh": "AI assisted construction; AI is not claimed as a core runtime capability. The ~18% figure is an estimation-gap signal, not productivity, revenue or profitability impact."
+      },
+      "deliveryBoundary": "SHIPPED",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
+      "assetStatus": "HUMAN_ASSET_REQUIRED",
+      "searchIndexV2": {
+        "version": "r181",
+        "contentType": "exploration",
+        "canonicalId": "freelance-project-operations-tool",
         "problemTags": {
           "en": [
-            "methodology without practice",
-            "creative facilitation",
-            "non-designer ideation"
+            "AI-assisted development",
+            "freelance operations",
+            "project estimation",
+            "workload planning",
+            "internal tools",
+            "0→1 product"
           ],
           "zh": [
-            "只有方法沒有實作",
-            "創意引導",
-            "非設計師 Ideation"
+            "AI-assisted development",
+            "freelance operations",
+            "project estimation",
+            "workload planning",
+            "internal tools",
+            "0→1 product"
           ]
         },
         "capabilityTags": {
           "en": [
-            "workshop facilitation",
-            "design enablement",
-            "affinity mapping",
-            "concept evaluation"
+            "AI-assisted development",
+            "freelance operations",
+            "project estimation",
+            "workload planning",
+            "internal tools",
+            "0→1 product"
           ],
           "zh": [
-            "Workshop facilitation",
-            "Design enablement",
-            "Affinity mapping",
-            "Concept evaluation"
-          ]
-        },
-        "systemTags": {
-          "en": [
-            "design enablement",
-            "learning workshop"
-          ],
-          "zh": [
-            "Design enablement",
-            "學習 Workshop"
-          ]
-        },
-        "audienceTags": {
-          "en": [
-            "non-designers",
-            "workshop participants",
-            "client teams"
-          ],
-          "zh": [
-            "非設計背景使用者",
-            "Workshop participants",
-            "Client teams"
-          ]
-        },
-        "outcomeTags": {
-          "en": [
-            "live insight-to-design simulation",
-            "completed external workshop"
-          ],
-          "zh": [
-            "Live insight-to-design simulation",
-            "已完成外部 Workshop"
-          ]
-        },
-        "queryExamples": {
-          "en": [
-            "How do you teach design thinking through practice?",
-            "How do you facilitate rapid concept creation?"
-          ],
-          "zh": [
-            "如何透過實作教 Design thinking？",
-            "如何引導快速概念產出？"
+            "AI-assisted development",
+            "freelance operations",
+            "project estimation",
+            "workload planning",
+            "internal tools",
+            "0→1 product"
           ]
         },
         "resultReasonFields": [
-          "intentIds",
           "problemTags",
           "capabilityTags",
-          "domainIds",
           "outcomeTags"
         ],
         "contentStatus": "approved"
@@ -29031,19 +29081,25 @@
     "weekly-design-session": {
       "id": "weekly-design-session",
       "organisation": "Booking.com Transport",
-      "period": "2019 Apr-Dec",
-      "timeline": "9 months",
+      "period": "Apr–Dec 2019",
+      "timeline": {
+        "en": "Apr–Dec 2019",
+        "zh": "Apr–Dec 2019"
+      },
       "explorationType": "Team practice",
       "status": "implemented",
       "title": {
-        "en": "From isolated design knowledge to a weekly cross-functional decision practice",
-        "zh": "從設計知識各自分散，到每週跨職能決策實踐"
+        "en": "From isolated design knowledge to a recurring team learning loop",
+        "zh": "From isolated design knowledge to a recurring team learning loop"
       },
       "summary": {
-        "en": "Initiated and facilitated weekly sessions that connected research, analytics, empathy work and early design critique with Engineering, Product and stakeholders.",
-        "zh": "我主動建立並主持每週設計評議，將使用者研究、數據分析、同理心練習與早期設計討論，串接到工程、產品與利害關係人。"
+        "en": "Initiated and facilitated weekly design sessions at Booking.com to make research, behavioral data and design rationale more visible across product and engineering.",
+        "zh": "Initiated and facilitated weekly design sessions at Booking.com to make research, behavioral data and design rationale more visible across product and engineering."
       },
-      "role": "Plan and facilitate",
+      "role": {
+        "en": "Initiator & Facilitator",
+        "zh": "Initiator & Facilitator"
+      },
       "sessionTypes": [
         {
           "type": "Insights sharing",
@@ -29067,11 +29123,8 @@
         "quote": "It’s a great session and effort you make. I can see the team enjoy seeing all these insights, and engage better.",
         "source": "Engineering Manager, Booking.com Transport"
       },
-      "publicPlacement": [
-        "explorations",
-        "profile-design-leadership"
-      ],
-      "contentStatus": "approved",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
       "domainTags": {
         "primaryDomainId": null,
         "supportingDomainIds": [],
@@ -29089,7 +29142,7 @@
         "contentStatus": "approved"
       },
       "searchIndexV2": {
-        "version": "r78",
+        "version": "r181",
         "contentType": "exploration",
         "canonicalId": "weekly-design-session",
         "aliases": {
@@ -29110,14 +29163,16 @@
         ],
         "problemTags": {
           "en": [
-            "isolated design knowledge",
-            "late feedback",
-            "low research visibility"
+            "design leadership",
+            "knowledge sharing",
+            "facilitation",
+            "cross-functional practice"
           ],
           "zh": [
-            "設計知識孤立",
-            "回饋太晚",
-            "研究可視性不足"
+            "design leadership",
+            "knowledge sharing",
+            "facilitation",
+            "cross-functional practice"
           ]
         },
         "capabilityTags": {
@@ -29179,10 +29234,8 @@
           ]
         },
         "resultReasonFields": [
-          "intentIds",
           "problemTags",
           "capabilityTags",
-          "domainIds",
           "outcomeTags"
         ],
         "contentStatus": "approved"
@@ -29203,7 +29256,618 @@
           "type": "早期設計評議",
           "evidence": "在正式迭代前先取得可行性與限制回饋"
         }
-      ]
+      ],
+      "category": {
+        "en": "Design Practice Experiment · Booking.com · 2019",
+        "zh": "Design Practice Experiment · Booking.com · 2019"
+      },
+      "eyebrow": {
+        "en": "Design Practice Experiment · Booking.com · 2019",
+        "zh": "Design Practice Experiment · Booking.com · 2019"
+      },
+      "format": {
+        "en": "Recurring Team Practice",
+        "zh": "Recurring Team Practice"
+      },
+      "question": {
+        "en": "Could recurring design sessions make UX evidence part of the wider product team’s working knowledge?",
+        "zh": "Could recurring design sessions make UX evidence part of the wider product team’s working knowledge?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Share evidence, not presentations",
+            "zh": "Share evidence, not presentations"
+          },
+          "body": {
+            "en": "Sessions incorporated research, analytics, behavioural and conversion tracking, and Hotjar evidence.",
+            "zh": "Sessions incorporated research, analytics, behavioural and conversion tracking, and Hotjar evidence."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Turn insight into participation",
+            "zh": "Turn insight into participation"
+          },
+          "body": {
+            "en": "Used empathy ideation and collaborative exercises.",
+            "zh": "Used empathy ideation and collaborative exercises."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Move critique earlier",
+            "zh": "Move critique earlier"
+          },
+          "body": {
+            "en": "Used design-breakdown sessions to expose engineering, PO and stakeholder constraints earlier.",
+            "zh": "Used design-breakdown sessions to expose engineering, PO and stakeholder constraints earlier."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Engineering Manager feedback documents that the team engaged with the shared insights.",
+        "zh": "Engineering Manager feedback documents that the team engaged with the shared insights."
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "design leadership",
+          "knowledge sharing",
+          "facilitation",
+          "cross-functional practice"
+        ],
+        "zh": [
+          "design leadership",
+          "knowledge sharing",
+          "facilitation",
+          "cross-functional practice"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "Qualitative feedback only; no measured efficiency, cohesion or organisational-performance improvement is claimed.",
+        "zh": "Qualitative feedback only; no measured efficiency, cohesion or organisational-performance improvement is claimed."
+      },
+      "deliveryBoundary": "SHIPPED",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
+    },
+    "food-testing-workshop": {
+      "id": "food-testing-workshop",
+      "organisation": "AJA Creative",
+      "status": "completed-internal-experiment",
+      "title": {
+        "en": "From individual usability testing to a group-research format",
+        "zh": "From individual usability testing to a group-research format"
+      },
+      "summary": {
+        "en": "Designed and facilitated a group usability experiment combining structured observation, task behavior and before/after reflection into a reusable testing format.",
+        "zh": "Designed and facilitated a group usability experiment combining structured observation, task behavior and before/after reflection into a reusable testing format."
+      },
+      "outcomes": [
+        "Created a reusable AJA group-testing template",
+        "Ran an internal team-building activity",
+        "Tested a combined focus-group and usability-testing method"
+      ],
+      "phases": [
+        {
+          "name": "First impression",
+          "questions": [
+            "Have you heard of this product?",
+            "What is it?",
+            "What do you think it can do?",
+            "What information do you expect from it?",
+            "Who is it designed for and why?"
+          ]
+        },
+        {
+          "name": "Preparation",
+          "questions": [
+            "What is the first thing you want to do?"
+          ]
+        },
+        {
+          "name": "Behaviour",
+          "tasks": [
+            "Choose and complete the first through sixth dishes",
+            "Decide what to do after all dishes are completed"
+          ]
+        },
+        {
+          "name": "Ending",
+          "questions": [
+            "What did you like most?",
+            "What did you like least?",
+            "What should improve?",
+            "How would you introduce it to others?",
+            "What would you recommend?"
+          ]
+        }
+      ],
+      "measurement": "Emotion scoring before and after use.",
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
+      "explorationType": "Method experiment",
+      "period": "2017",
+      "roleDetail": "Research, plan and facilitate",
+      "methodOutcome": "Created a reusable group-testing template combining first-impression assessment, group warm-up, behavioural tasks and before/after emotion scoring.",
+      "domainTags": {
+        "primaryDomainId": null,
+        "supportingDomainIds": [],
+        "searchOnlyDomainIds": [],
+        "matches": [],
+        "contentStatus": "approved"
+      },
+      "searchIndexV2": {
+        "version": "r181",
+        "contentType": "exploration",
+        "canonicalId": "food-testing-workshop",
+        "aliases": {
+          "en": [
+            "Food Testing Workshop",
+            "Group testing template"
+          ],
+          "zh": [
+            "Food Testing Workshop",
+            "Group testing template"
+          ]
+        },
+        "domainIds": [],
+        "intentIds": [],
+        "problemTags": {
+          "en": [
+            "research methods",
+            "group usability",
+            "usability testing",
+            "experiment design"
+          ],
+          "zh": [
+            "research methods",
+            "group usability",
+            "usability testing",
+            "experiment design"
+          ]
+        },
+        "capabilityTags": {
+          "en": [
+            "research method design",
+            "behavioural tasks",
+            "emotion scoring",
+            "focus-group facilitation"
+          ],
+          "zh": [
+            "研究方法設計",
+            "行為任務",
+            "情緒評分",
+            "Focus group facilitation"
+          ]
+        },
+        "systemTags": {
+          "en": [
+            "method experiment",
+            "research template"
+          ],
+          "zh": [
+            "方法實驗",
+            "研究模板"
+          ]
+        },
+        "audienceTags": {
+          "en": [
+            "research participants",
+            "product teams"
+          ],
+          "zh": [
+            "研究參與者",
+            "產品團隊"
+          ]
+        },
+        "outcomeTags": {
+          "en": [
+            "reusable group-testing template"
+          ],
+          "zh": [
+            "可重用群體測試模板"
+          ]
+        },
+        "queryExamples": {
+          "en": [
+            "How do you design a group usability test?",
+            "How do you combine behaviour and emotion evidence?"
+          ],
+          "zh": [
+            "如何設計群體易用性測試？",
+            "如何結合行為與情緒證據？"
+          ]
+        },
+        "resultReasonFields": [
+          "problemTags",
+          "capabilityTags",
+          "outcomeTags"
+        ],
+        "contentStatus": "approved"
+      },
+      "category": {
+        "en": "Research Experiment · AJA Creative · 2017",
+        "zh": "Research Experiment · AJA Creative · 2017"
+      },
+      "eyebrow": {
+        "en": "Research Experiment · AJA Creative · 2017",
+        "zh": "Research Experiment · AJA Creative · 2017"
+      },
+      "role": {
+        "en": "Researcher · Planner · Facilitator",
+        "zh": "Researcher · Planner · Facilitator"
+      },
+      "timeline": {
+        "en": "2017",
+        "zh": "2017"
+      },
+      "format": {
+        "en": "Research Method Experiment",
+        "zh": "Research Method Experiment"
+      },
+      "question": {
+        "en": "Could usability-testing structure be adapted to capture group behavior without losing individual observations?",
+        "zh": "Could usability-testing structure be adapted to capture group behavior without losing individual observations?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Establish a baseline",
+            "zh": "Establish a baseline"
+          },
+          "body": {
+            "en": "Captured participants’ first impressions and expectations before interaction.",
+            "zh": "Captured participants’ first impressions and expectations before interaction."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Observe behavior through a shared task",
+            "zh": "Observe behavior through a shared task"
+          },
+          "body": {
+            "en": "Structured the activity into defined tasks while recording group and individual behavior.",
+            "zh": "Structured the activity into defined tasks while recording group and individual behavior."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Compare experience after use",
+            "zh": "Compare experience after use"
+          },
+          "body": {
+            "en": "Closed with retrospective questions and before/after emotion scoring.",
+            "zh": "Closed with retrospective questions and before/after emotion scoring."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Created a reusable template for group-testing sessions.",
+        "zh": "Created a reusable template for group-testing sessions."
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "research methods",
+          "group usability",
+          "usability testing",
+          "experiment design"
+        ],
+        "zh": [
+          "research methods",
+          "group usability",
+          "usability testing",
+          "experiment design"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "Team-building is secondary context; no performance effect is claimed.",
+        "zh": "Team-building is secondary context; no performance effect is claimed."
+      },
+      "deliveryBoundary": "SHIPPED",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
+    },
+    "aja-creative-workshop": {
+      "id": "aja-creative-workshop",
+      "organisation": "AJA Creative",
+      "status": "completed-external-workshop",
+      "title": {
+        "en": "From design methodology to a hands-on learning experiment",
+        "zh": "From design methodology to a hands-on learning experiment"
+      },
+      "summary": {
+        "en": "Planned, presented and facilitated an external workshop that translated user-insight methodology into a rapid hands-on design exercise.",
+        "zh": "Planned, presented and facilitated an external workshop that translated user-insight methodology into a rapid hands-on design exercise."
+      },
+      "role": {
+        "en": "Planner · Facilitator · Presenter",
+        "zh": "Planner · Facilitator · Presenter"
+      },
+      "topic": "How can we transfer user insights into design outcomes?",
+      "outcomes": [
+        "Shared AJA design methodology externally",
+        "Delivered a practical design-iteration process",
+        "Observed personality and teamwork patterns",
+        "Strengthened company brand awareness"
+      ],
+      "agenda": [
+        {
+          "stage": "Kickoff",
+          "duration": "2 minutes",
+          "activity": "Introduce an e-commerce company brief and allow three help requests."
+        },
+        {
+          "stage": "User interview",
+          "duration": "12 minutes",
+          "activity": "Listen to buyer and seller statements and capture research evidence."
+        },
+        {
+          "stage": "Team review",
+          "duration": "10 minutes",
+          "activity": "Organise evidence and orient the market using a matrix."
+        },
+        {
+          "stage": "Define problems",
+          "duration": "20 minutes",
+          "activity": "Build affinity diagrams around behaviour, needs and pain points."
+        },
+        {
+          "stage": "Ideation",
+          "duration": "30 minutes",
+          "activity": "Generate and categorise ideas beside the supporting evidence."
+        },
+        {
+          "stage": "Convergence",
+          "duration": "5 minutes",
+          "activity": "Evaluate ideas using creativity, accessibility and profitability."
+        },
+        {
+          "stage": "Implementation",
+          "duration": "20 minutes",
+          "activity": "Translate the selected idea into a before-and-after scenario."
+        },
+        {
+          "stage": "Presentation",
+          "duration": "30 minutes",
+          "activity": "Present outcomes and evaluate accessibility, creativity, profitability, persuasion and insight accuracy."
+        }
+      ],
+      "publicPlacement": "experiments-and-practice",
+      "contentStatus": "approved-r181",
+      "explorationType": "Design enablement",
+      "period": "2017",
+      "roleDetail": "Plan, facilitate and present",
+      "participantStructure": "Six groups organised using pre-event personality profiles; one observer recorded each group’s behaviour.",
+      "evaluationCriteria": [
+        "Accessibility",
+        "Creativity",
+        "Profitability",
+        "Persuasion",
+        "Insight accuracy"
+      ],
+      "testimonial": {
+        "quote": "It’s really precious that we could come up with solutions in such a minimum of time. Full of content and joy.",
+        "source": "Workshop attendee"
+      },
+      "domainTags": {
+        "primaryDomainId": null,
+        "supportingDomainIds": [],
+        "searchOnlyDomainIds": [
+          "learning-platforms"
+        ],
+        "matches": [
+          {
+            "domainId": "learning-platforms",
+            "role": "context",
+            "score": 50,
+            "visibility": "search-only"
+          }
+        ],
+        "contentStatus": "approved"
+      },
+      "searchIndexV2": {
+        "version": "r181",
+        "contentType": "exploration",
+        "canonicalId": "aja-creative-workshop",
+        "aliases": {
+          "en": [
+            "AJA Creative Workshop",
+            "Insight to design workshop"
+          ],
+          "zh": [
+            "AJA Creative Workshop",
+            "Insight-to-design Workshop"
+          ]
+        },
+        "domainIds": [
+          "learning-platforms"
+        ],
+        "intentIds": [
+          "align-stakeholders-and-operations",
+          "structure-learning-progression"
+        ],
+        "problemTags": {
+          "en": [
+            "workshop facilitation",
+            "methodology transfer",
+            "collaborative ideation",
+            "group behavior"
+          ],
+          "zh": [
+            "workshop facilitation",
+            "methodology transfer",
+            "collaborative ideation",
+            "group behavior"
+          ]
+        },
+        "capabilityTags": {
+          "en": [
+            "workshop facilitation",
+            "design enablement",
+            "affinity mapping",
+            "concept evaluation"
+          ],
+          "zh": [
+            "Workshop facilitation",
+            "Design enablement",
+            "Affinity mapping",
+            "Concept evaluation"
+          ]
+        },
+        "systemTags": {
+          "en": [
+            "design enablement",
+            "learning workshop"
+          ],
+          "zh": [
+            "Design enablement",
+            "學習 Workshop"
+          ]
+        },
+        "audienceTags": {
+          "en": [
+            "non-designers",
+            "workshop participants",
+            "client teams"
+          ],
+          "zh": [
+            "非設計背景使用者",
+            "Workshop participants",
+            "Client teams"
+          ]
+        },
+        "outcomeTags": {
+          "en": [
+            "live insight-to-design simulation",
+            "completed external workshop"
+          ],
+          "zh": [
+            "Live insight-to-design simulation",
+            "已完成外部 Workshop"
+          ]
+        },
+        "queryExamples": {
+          "en": [
+            "How do you teach design thinking through practice?",
+            "How do you facilitate rapid concept creation?"
+          ],
+          "zh": [
+            "如何透過實作教 Design thinking？",
+            "如何引導快速概念產出？"
+          ]
+        },
+        "resultReasonFields": [
+          "problemTags",
+          "capabilityTags",
+          "outcomeTags"
+        ],
+        "contentStatus": "approved"
+      },
+      "category": {
+        "en": "Facilitation Experiment · AJA Creative · 2017",
+        "zh": "Facilitation Experiment · AJA Creative · 2017"
+      },
+      "eyebrow": {
+        "en": "Facilitation Experiment · AJA Creative · 2017",
+        "zh": "Facilitation Experiment · AJA Creative · 2017"
+      },
+      "timeline": {
+        "en": "2017",
+        "zh": "2017"
+      },
+      "format": {
+        "en": "Workshop Experiment",
+        "zh": "Workshop Experiment"
+      },
+      "question": {
+        "en": "How could design methodology become understandable through practice instead of presentation alone?",
+        "zh": "How could design methodology become understandable through practice instead of presentation alone?"
+      },
+      "experimentBlocks": [
+        {
+          "id": "01",
+          "title": {
+            "en": "Teach through a real design problem",
+            "zh": "Teach through a real design problem"
+          },
+          "body": {
+            "en": "Combined methodology sharing with an e-commerce service challenge.",
+            "zh": "Combined methodology sharing with an e-commerce service challenge."
+          }
+        },
+        {
+          "id": "02",
+          "title": {
+            "en": "Move participants through a complete cycle",
+            "zh": "Move participants through a complete cycle"
+          },
+          "body": {
+            "en": "Compressed interview, synthesis, problem definition, ideation, evaluation, scenario/solution and presentation into one guided journey.",
+            "zh": "Compressed interview, synthesis, problem definition, ideation, evaluation, scenario/solution and presentation into one guided journey."
+          }
+        },
+        {
+          "id": "03",
+          "title": {
+            "en": "Observe collaboration behavior",
+            "zh": "Observe collaboration behavior"
+          },
+          "body": {
+            "en": "Observers recorded collaboration behaviour across differently composed groups.",
+            "zh": "Observers recorded collaboration behaviour across differently composed groups."
+          }
+        }
+      ],
+      "learning": {
+        "en": "Participant feedback provides qualitative evidence that the compressed hands-on format was useful and engaging.",
+        "zh": "Participant feedback provides qualitative evidence that the compressed hands-on format was useful and engaging."
+      },
+      "next": {
+        "en": "",
+        "zh": ""
+      },
+      "problemTypes": {
+        "en": [
+          "workshop facilitation",
+          "methodology transfer",
+          "collaborative ideation",
+          "group behavior"
+        ],
+        "zh": [
+          "workshop facilitation",
+          "methodology transfer",
+          "collaborative ideation",
+          "group behavior"
+        ]
+      },
+      "problemTypeVisibility": "SEARCH_ONLY",
+      "claimBoundary": {
+        "en": "No personality-performance causality or measured brand-awareness improvement is claimed.",
+        "zh": "No personality-performance causality or measured brand-awareness improvement is claimed."
+      },
+      "deliveryBoundary": "SHIPPED",
+      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
+      "abstractEvidenceFallback": "ACTIVE"
     }
   },
   "siteContentAudit": {
@@ -34051,7 +34715,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-21",
+  "lastUpdated": "2026-08-25",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",
@@ -34308,5 +34972,32 @@
     ],
     "projectCountChanged": false,
     "projectNarrativeRewritten": false
+  },
+  "experimentArchitecture": {
+    "version": "r181",
+    "sectionLabel": "Experiments & Practice",
+    "primaryCaseCount": 13,
+    "experimentCount": 7,
+    "displayOrder": [
+      "freelance-project-operations-tool",
+      "weekly-design-session",
+      "food-testing-workshop",
+      "aja-creative-workshop",
+      "capture-ideas",
+      "aha-creative-toolbox",
+      "hello-sabau"
+    ],
+    "problemTypeVisibility": "SEARCH_ONLY",
+    "detailVariant": "compact-linear",
+    "navigation": "NO_FLOATING_NAVIGATOR",
+    "sections": [
+      "Hero",
+      "The Question",
+      "The Experiment",
+      "Evidence",
+      "What This Proved",
+      "Related / Next Experiment"
+    ],
+    "assetPolicy": "REUSE_FIRST_NO_AUTOMATIC_LEGACY_GALLERY_MIGRATION"
   }
 }

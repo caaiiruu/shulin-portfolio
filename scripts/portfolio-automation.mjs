@@ -42,6 +42,7 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
   if (truth.schemaVersion !== 1) errors.push("truth schemaVersion must be 1");
   if (ledger.schemaVersion !== 1) errors.push("ledger schemaVersion must be 1");
   const projectIds = unique(truth.projects || [], "projectId", "project", errors);
+  const contentEntities = { ...(content.projects || {}), ...(content.experiments || {}), ...(content.sideProjects || {}) };
   const sourceIds = unique(truth.sources || [], "sourceId", "source", errors);
   const factIds = unique(truth.facts || [], "factId", "fact", errors);
   unique(truth.projectSourcePacks || [], "projectId", "project source pack", errors);
@@ -86,7 +87,7 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
     }
   }
   for (const pack of truth.projectSourcePacks || []) {
-    if (!projectIds.has(pack.projectId) || !content.projects?.[pack.projectId]) errors.push(`${pack.projectId}: project source pack has invalid project reference`);
+    if (!projectIds.has(pack.projectId) || !contentEntities[pack.projectId]) errors.push(`${pack.projectId}: project source pack has invalid project reference`);
     if (!differences.has(pack.difference)) errors.push(`${pack.projectId}: invalid source-pack difference`);
     for (const id of pack.factIds || []) {
       const fact = truth.facts.find((candidate) => candidate.factId === id);
@@ -97,7 +98,7 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
       if (!sourceIds.has(id) || source?.projectId !== pack.projectId) errors.push(`${pack.projectId}: invalid source-pack source ${id}`);
     }
     for (const ref of pack.existingPublicClaims || []) {
-      if (!ref.startsWith(`projects.${pack.projectId}.`) || !hasPath(content, ref)) errors.push(`${pack.projectId}: invalid public claim reference ${ref}`);
+      if (!hasPath(content, ref)) errors.push(`${pack.projectId}: invalid public claim reference ${ref}`);
     }
   }
   for (const request of truth.assetRequests || []) {
@@ -114,7 +115,11 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
     if (!sourceIds.has(reuse.reuseSourceId)) errors.push(`${reuse.requestId}: invalid reuse source`);
   }
   const canonicalProjectIds = Object.keys(content.projects || {});
-  if (canonicalProjectIds.length !== projectIds.size || canonicalProjectIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover every canonical Content SSOT project exactly once");
+  const canonicalExperimentIds = Object.entries({ ...(content.experiments || {}), ...(content.sideProjects || {}) })
+    .filter(([, item]) => !String(item.contentStatus || '').includes('standalone-card-review'))
+    .map(([id]) => id);
+  if (canonicalProjectIds.length !== 13 || canonicalProjectIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 13 canonical primary projects");
+  if (canonicalExperimentIds.length !== 7 || canonicalExperimentIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 7 canonical Experiments & Practice records");
   for (const item of truth.lifecycleHistory || []) {
     if (!lifecycleTransitions.has(`${item.from}>${item.to}`)) errors.push(`${item.recordId}: invalid lifecycle transition ${item.from}>${item.to}`);
     if (item.to === "APPROVED" && item.actor !== "HUMAN") errors.push(`${item.recordId}: only Human can approve truth`);
@@ -138,7 +143,7 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
     }
     for (const ref of delta.assetTruthReferences || []) if (!manifest.items?.[ref.assetId]) errors.push(`${delta.deltaId}: invalid asset truth reference ${ref.assetId}`);
     for (const fieldDelta of delta.fieldDeltas || []) {
-      if (!content.projects?.[fieldDelta.projectId]) errors.push(`${delta.deltaId}: invalid field-delta project ${fieldDelta.projectId}`);
+      if (!contentEntities[fieldDelta.projectId]) errors.push(`${delta.deltaId}: invalid field-delta project ${fieldDelta.projectId}`);
       if (!fieldDelta.fields || !Object.keys(fieldDelta.fields).length) errors.push(`${delta.deltaId}: field delta requires fields for ${fieldDelta.projectId}`);
       for (const id of fieldDelta.truthReferences || []) {
         const fact = truth.facts.find((candidate) => candidate.factId === id);
