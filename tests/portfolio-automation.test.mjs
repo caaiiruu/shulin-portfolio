@@ -17,7 +17,40 @@ const errorsFor = (nextTruth = truth, nextLedger = ledger, options = {}) => vali
 });
 const expectError = (errors, pattern) => assert.ok(errors.some((error) => pattern.test(error)), errors.join("\n"));
 
-test("R176 pilot control plane is valid", () => assert.deepEqual(errorsFor(), []));
+test("R179 all-project truth bootstrap is valid", () => assert.deepEqual(errorsFor(), []));
+
+test("all canonical projects have exactly one source pack", () => {
+  assert.equal(truth.projects.length, 13);
+  assert.equal(truth.projectSourcePacks.length, 13);
+  assert.deepEqual(new Set(truth.projectSourcePacks.map((pack) => pack.projectId)), new Set(Object.keys(content.projects)));
+});
+
+test("source packs reject invalid fact and source references", () => {
+  const next = clone(truth);
+  next.projectSourcePacks[0].factIds.push("FACT-UNKNOWN");
+  next.projectSourcePacks[0].sourceIds.push("SRC-UNKNOWN");
+  const errors = errorsFor(next);
+  expectError(errors, /invalid source-pack fact/);
+  expectError(errors, /invalid source-pack source/);
+});
+
+test("source packs reject unresolved Content SSOT paths", () => {
+  const next = clone(truth);
+  next.projectSourcePacks[0].existingPublicClaims.push(`projects.${next.projectSourcePacks[0].projectId}.notARealField`);
+  expectError(errorsFor(next), /invalid public claim reference/);
+});
+
+test("asset requests resolve only canonical manifest IDs", () => {
+  const next = clone(truth);
+  next.assetRequests[0].assetIds.push("asset-not-in-manifest");
+  expectError(errorsFor(next), /invalid asset manifest reference/);
+});
+
+test("required asset requests cannot silently avoid Human intake", () => {
+  const next = clone(truth);
+  next.assetRequests.find((request) => request.requirement === "REQUIRED").humanUploadRequired = false;
+  expectError(errorsFor(next), /must require Human upload/);
+});
 
 test("model inference cannot become APPROVED", () => {
   const next = clone(truth);
@@ -27,7 +60,8 @@ test("model inference cannot become APPROVED", () => {
 
 test("lower-precedence evidence cannot replace Human-approved truth", () => {
   const next = clone(truth);
-  next.facts.push({ ...clone(next.facts[0]), factId: "FACT-LOWER", provenance: { producer: "GOVERNED_SOURCE", precedence: 5 }, supersedes: [next.facts[0].factId] });
+  const protectedFact = next.facts.find((fact) => fact.provenance?.producer === "HUMAN_APPROVED");
+  next.facts.push({ ...clone(protectedFact), factId: "FACT-LOWER", provenance: { producer: "GOVERNED_SOURCE", precedence: 5 }, supersedes: [protectedFact.factId] });
   expectError(errorsFor(next), /lower-precedence evidence cannot replace Human-approved truth/);
 });
 
@@ -41,7 +75,7 @@ test("conflicting approved high-confidence facts require HUMAN_REQUIRED", () => 
 test("invalid lifecycle transition fails", () => {
   const next = clone(truth);
   next.lifecycleHistory[0].from = "REJECTED";
-  expectError(errorsFor(next), /invalid lifecycle transition REJECTED>APPROVED/);
+  expectError(errorsFor(next), /invalid lifecycle transition REJECTED>SUPERSEDED/);
 });
 
 test("unapproved delta cannot enter IMPLEMENTATION", () => {
