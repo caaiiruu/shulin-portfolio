@@ -14,7 +14,7 @@ const boundaries = new Set(["SHIPPED", "VALIDATED", "RECOMMENDED", "CONCEPTUAL",
 const differences = new Set(["MATCH", "NORMALIZATION_REQUIRED", "PUBLIC_COPY_REVIEW", "SOURCE_CONFLICT", "MISSING_EVIDENCE"]);
 const safetyStates = new Set(["PUBLIC_SAFE", "RESTRICTED", "PROHIBITED_RAW_EVIDENCE", "HUMAN_REVIEW_REQUIRED"]);
 const lifecycleTransitions = new Set([
-  "UNVERIFIED_CANDIDATE>APPROVED", "UNVERIFIED_CANDIDATE>REJECTED", "UNVERIFIED_CANDIDATE>HUMAN_REQUIRED",
+  "UNVERIFIED_CANDIDATE>APPROVED", "UNVERIFIED_CANDIDATE>SUPERSEDED", "UNVERIFIED_CANDIDATE>REJECTED", "UNVERIFIED_CANDIDATE>HUMAN_REQUIRED",
   "APPROVED>SUPERSEDED", "APPROVED>HUMAN_REQUIRED", "HUMAN_REQUIRED>APPROVED", "HUMAN_REQUIRED>REJECTED",
 ]);
 
@@ -102,10 +102,11 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
   }
   for (const request of truth.assetRequests || []) {
     if (!projectIds.has(request.projectId)) errors.push(`${request.requestId}: invalid project reference`);
-    if (!new Set(["REQUIRED", "OPTIONAL"]).has(request.requirement)) errors.push(`${request.requestId}: invalid requirement`);
+    if (!new Set(["REQUIRED", "REQUIRED_CANDIDATE_PACK", "OPTIONAL"]).has(request.requirement)) errors.push(`${request.requestId}: invalid requirement`);
     if (!Array.isArray(request.assetIds) || !request.assetIds.length) errors.push(`${request.requestId}: asset IDs are required`);
     for (const id of request.assetIds || []) if (!manifest.items?.[id]) errors.push(`${request.requestId}: invalid asset manifest reference ${id}`);
-    if (request.requirement === "REQUIRED" && request.humanUploadRequired !== true) errors.push(`${request.requestId}: required unresolved asset must require Human upload`);
+    if (["REQUIRED", "REQUIRED_CANDIDATE_PACK"].includes(request.requirement) && request.humanUploadRequired !== true) errors.push(`${request.requestId}: required unresolved asset must require Human upload`);
+    if (request.requirement === "REQUIRED_CANDIDATE_PACK" && (!request.candidateSourceVisualRange || request.candidateSourceVisualRange.minimum < 1 || request.candidateSourceVisualRange.maximum < request.candidateSourceVisualRange.minimum)) errors.push(`${request.requestId}: invalid candidate source visual range`);
   }
   for (const reuse of truth.assetReuse || []) {
     if (!projectIds.has(reuse.projectId)) errors.push(`${reuse.requestId}: invalid reuse project`);
@@ -127,11 +128,23 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
 
   for (const delta of ledger.approvedDeltas || []) {
     if (delta.status !== "APPROVED" || delta.approvedBy !== "HUMAN") errors.push(`${delta.deltaId}: delta is not Human-approved`);
-    for (const id of delta.truthReferences || []) if (!factIds.has(id)) errors.push(`${delta.deltaId}: invalid truth reference ${id}`);
+    for (const id of delta.truthReferences || []) {
+      const fact = truth.facts.find((candidate) => candidate.factId === id);
+      if (!factIds.has(id)) errors.push(`${delta.deltaId}: invalid truth reference ${id}`);
+      else if (delta.status === "APPROVED" && fact?.lifecycle !== "APPROVED") errors.push(`${delta.deltaId}: approved delta references non-approved truth ${id}`);
+    }
     for (const ref of delta.contentTruthReferences || []) {
       if (!content.projects?.[ref.projectId] || !hasPath(content.projects[ref.projectId], ref.fieldPath)) errors.push(`${delta.deltaId}: invalid content truth reference ${ref.projectId}.${ref.fieldPath}`);
     }
     for (const ref of delta.assetTruthReferences || []) if (!manifest.items?.[ref.assetId]) errors.push(`${delta.deltaId}: invalid asset truth reference ${ref.assetId}`);
+    for (const fieldDelta of delta.fieldDeltas || []) {
+      if (!content.projects?.[fieldDelta.projectId]) errors.push(`${delta.deltaId}: invalid field-delta project ${fieldDelta.projectId}`);
+      if (!fieldDelta.fields || !Object.keys(fieldDelta.fields).length) errors.push(`${delta.deltaId}: field delta requires fields for ${fieldDelta.projectId}`);
+      for (const id of fieldDelta.truthReferences || []) {
+        const fact = truth.facts.find((candidate) => candidate.factId === id);
+        if (!fact || fact.projectId !== fieldDelta.projectId || fact.lifecycle !== "APPROVED") errors.push(`${delta.deltaId}: invalid approved field-delta truth ${id}`);
+      }
+    }
   }
   for (const order of ledger.workOrders || []) {
     if (order.status !== "APPROVED" || order.approvedBy !== "HUMAN") errors.push(`${order.workOrderId}: Work may consume only approved Work Orders`);
