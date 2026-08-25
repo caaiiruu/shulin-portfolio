@@ -1,3 +1,10 @@
+## 2026-08-25-v2.8
+
+- Added the minimum Chat ↔ Work automation control plane with one Verified Project Truth owner and one Execution Ledger owner.
+- Registered approved-truth, Human-conflict, exact-head, path-boundary, approved-delta-only, append-only history, and implementation-report contracts.
+- Added a blocking validator, non-mutating inspection/Work-Order/report CLI, CI pre-implementation validation, and one non-content pilot.
+- Preserved Content SSOT, Asset Manifest, generated runtime, public presentation, Design System behavior, existing project PRs, and Production.
+
 ## 2026-08-23-v2.7
 
 - Activated the permanent root-cause closure contract: symptom disappearance is not PASS without failure-class classification, one canonical owner, conflicting-owner removal, consumer alignment, repo-wide recurrence search, machine-enforced regression, dependency-scoped QA, and exact-state evidence.

@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-23-v2.7
+version: 2026-08-25-v2.8
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -760,7 +760,20 @@ A current symptom disappearing is not sufficient closure. Every defect must comp
 
 PASS means the same failure class cannot silently recur. Do not close through a branch bypass, skip flag, fixed current revision, scattered SHA exception, project-specific suppression, or a second parallel registry/owner. Historical release identifiers may remain only in clearly historical fixtures, migration records, or documentation; live current-state consumers must derive the current Content/Manifest identity from the canonical owners.
 
-# 26. Superseded rules
+# 26. Chat ↔ Work automation control plane
+
+Canonical owners:
+- verified truth: `docs/portfolio-automation/verified-project-truth.json`
+- execution exchange: `docs/portfolio-automation/execution-ledger.json`
+- validation and CLI: `scripts/portfolio-automation.mjs`
+
+Chat may consume only `APPROVED` truth and may produce only Human-approved deltas / Work Orders. Model inference remains `UNVERIFIED_CANDIDATE` and cannot authorize truth. Conflicting high-confidence facts must become `HUMAN_REQUIRED`.
+
+Work may consume only approved Work Orders, must verify the exact expected HEAD before mutation, must apply only listed approved deltas within allowed paths, and must stop on forbidden paths. Approved content is verbatim input: Work may not paraphrase, shorten, reorder, or substitute it. Work records applied deltas, changed paths, QA/Preview evidence, and remaining Human gates in the ledger.
+
+Human resolves source/truth/content conflicts, approves truth and content when required, reviews final visuals, and explicitly authorizes merge and Production. CI and ledger states cannot imply those approvals.
+
+# 27. Superseded rules
 
 The following are retired unless explicitly reopened:
 - public Problem Type chips
