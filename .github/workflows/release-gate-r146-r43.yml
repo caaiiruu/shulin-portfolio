@@ -70,6 +70,12 @@ jobs:
           set -o pipefail
           npm run install:ci 2>&1 | tee "$EVIDENCE_DIR/install-result.txt"
 
+      - name: Validate automation control plane before implementation advancement
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run validate:automation 2>&1 | tee "$EVIDENCE_DIR/automation-control-plane-result.txt"
+
       - name: Regenerate canonical production runtime
         shell: bash
         run: |

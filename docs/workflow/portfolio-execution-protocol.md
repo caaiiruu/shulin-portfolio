@@ -37,3 +37,41 @@ Required state progression:
 `IMPLEMENTED → ENGINEERING QA PASS → READY FOR HUMAN VISUAL REVIEW → HUMAN VISUAL QA PASS / FREEZE`
 
 Production promotion is never implied by an engineering or visual QA result.
+
+## Chat ↔ Work automation control plane
+
+The canonical exchange artifacts are:
+
+- `docs/portfolio-automation/verified-project-truth.json`
+- `docs/portfolio-automation/execution-ledger.json`
+
+They supplement, but never replace, the Content SSOT or Asset Manifest. Raw or confidential evidence must not be copied into the public runtime.
+
+### Chat responsibilities
+
+- Consume only truth records whose lifecycle is `APPROVED`.
+- Treat model inference as `UNVERIFIED_CANDIDATE`; inference can never authorize an approved fact.
+- Produce field-level, Human-approved deltas and Work Orders in the Execution Ledger.
+- Reference canonical Content and Asset owners instead of reconstructing their values from chat history.
+- Route high-confidence source conflicts to `HUMAN_REQUIRED` and stop automation advancement.
+
+### Work responsibilities
+
+- Consume only Human-approved Work Orders and their listed approved deltas.
+- Verify repository, branch and the Work Order's exact expected HEAD before any mutation.
+- Enter `HEAD_MOVED` and stop if the observed HEAD differs.
+- Modify only allowed paths and reject every forbidden path.
+- Apply approved content verbatim. Work may not paraphrase, shorten, reorder or substitute approved content or assets.
+- Record applied deltas, changed paths, QA evidence, Preview evidence and remaining Human gates in the Execution Ledger.
+- Never claim an applied delta that is absent from the Work Order.
+
+### Human responsibilities
+
+- Resolve truth and content conflicts.
+- Approve truth, content deltas and Work Orders where required.
+- Review the final rendered visual result independently of Engineering QA.
+- Authorize merge and Production explicitly. Neither approval is implied by a ledger state or CI result.
+
+### Blocking validation
+
+`npm run validate:automation` is a blocking pre-implementation gate. Invalid schemas, invalid lifecycle/state transitions, unapproved deltas, exact-head mismatches, forbidden paths, invalid truth references or inconsistent execution reports prevent automation advancement. Editorial recruiter-quality scoring is not an engineering blocking gate.

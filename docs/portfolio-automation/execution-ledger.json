@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "ledgerVersion": "2026-08-25-r176-pilot",
+  "repository": "caaiiruu/shulin-portfolio",
+  "canonicalQaBranch": "qa/r146-r43-preview-2026-08-06",
+  "stateVocabulary": [
+    "SOURCE_AUDIT",
+    "TRUTH_VERIFICATION",
+    "CONTENT_AUDIT",
+    "HUMAN_CONTENT_REVIEW",
+    "ASSET_INTAKE",
+    "APPROVED_FOR_WORK",
+    "IMPLEMENTATION",
+    "ENGINEERING_QA",
+    "VISUAL_QA",
+    "FINAL_HUMAN_REVIEW",
+    "MERGE_READY",
+    "HEAD_MOVED",
+    "SOURCE_CONFLICT",
+    "CONTENT_CONFLICT",
+    "ASSET_REQUIRED",
+    "QA_FAILED",
+    "SECURITY_BLOCKER"
+  ],
+  "stateMachine": {
+    "allowedTransitions": {
+      "SOURCE_AUDIT": ["TRUTH_VERIFICATION", "SOURCE_CONFLICT"],
+      "TRUTH_VERIFICATION": ["CONTENT_AUDIT", "SOURCE_CONFLICT"],
+      "CONTENT_AUDIT": ["HUMAN_CONTENT_REVIEW", "CONTENT_CONFLICT", "ASSET_REQUIRED"],
+      "HUMAN_CONTENT_REVIEW": ["ASSET_INTAKE", "CONTENT_CONFLICT"],
+      "ASSET_INTAKE": ["APPROVED_FOR_WORK", "ASSET_REQUIRED"],
+      "APPROVED_FOR_WORK": ["IMPLEMENTATION", "HEAD_MOVED", "SECURITY_BLOCKER"],
+      "IMPLEMENTATION": ["ENGINEERING_QA", "HEAD_MOVED", "CONTENT_CONFLICT", "QA_FAILED", "SECURITY_BLOCKER"],
+      "ENGINEERING_QA": ["VISUAL_QA", "QA_FAILED", "HEAD_MOVED", "SECURITY_BLOCKER"],
+      "VISUAL_QA": ["FINAL_HUMAN_REVIEW", "QA_FAILED", "HEAD_MOVED", "SECURITY_BLOCKER"],
+      "FINAL_HUMAN_REVIEW": ["MERGE_READY", "CONTENT_CONFLICT", "ASSET_REQUIRED", "QA_FAILED", "SECURITY_BLOCKER"],
+      "MERGE_READY": [],
+      "HEAD_MOVED": ["APPROVED_FOR_WORK"],
+      "SOURCE_CONFLICT": ["TRUTH_VERIFICATION"],
+      "CONTENT_CONFLICT": ["HUMAN_CONTENT_REVIEW"],
+      "ASSET_REQUIRED": ["ASSET_INTAKE"],
+      "QA_FAILED": ["IMPLEMENTATION"],
+      "SECURITY_BLOCKER": ["ENGINEERING_QA"]
+    },
+    "forbiddenTransitions": [
+      ["SOURCE_AUDIT", "APPROVED_FOR_WORK"],
+      ["IMPLEMENTATION", "MERGE_READY"],
+      ["ENGINEERING_QA", "MERGE_READY"],
+      ["VISUAL_QA", "MERGE_READY"],
+      ["HEAD_MOVED", "IMPLEMENTATION"],
+      ["SOURCE_CONFLICT", "IMPLEMENTATION"],
+      ["CONTENT_CONFLICT", "IMPLEMENTATION"],
+      ["ASSET_REQUIRED", "IMPLEMENTATION"],
+      ["QA_FAILED", "MERGE_READY"],
+      ["SECURITY_BLOCKER", "MERGE_READY"]
+    ]
+  },
+  "approvedDeltas": [
+    {
+      "deltaId": "DELTA-R176-PILOT-ORCHESTRATION",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "truthReferences": ["FACT-R176-CTBC-PROJECT-IDENTITY"],
+      "targetType": "GOVERNANCE",
+      "contentTruthReferences": [
+        {
+          "projectId": "ctbc-mortgage-self-service-app",
+          "fieldPath": "id"
+        }
+      ],
+      "assetTruthReferences": [],
+      "operations": [
+        {
+          "operation": "SIMULATE",
+          "path": "docs/portfolio-automation/execution-ledger.json",
+          "description": "Record a non-content orchestration pilot."
+        }
+      ]
+    }
+  ],
+  "workOrders": [
+    {
+      "workOrderId": "WO-R176-PILOT",
+      "status": "APPROVED",
+      "state": "ENGINEERING_QA",
+      "repository": "caaiiruu/shulin-portfolio",
+      "baseBranch": "qa/r146-r43-preview-2026-08-06",
+      "expectedHead": "2b64e35f5dfcd1c2328e067cc4546d246c9bce52",
+      "approvedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
+      "allowedPaths": ["docs/portfolio-automation/**"],
+      "forbiddenPaths": [
+        "public/site/content/**",
+        "public/site/assets/**",
+        "public/site/assets/css/**",
+        "site-source/templates/**"
+      ],
+      "qaRoutes": ["AUTOMATION_VALIDATOR"],
+      "productionAuthorized": false,
+      "approvedBy": "HUMAN"
+    }
+  ],
+  "executionRuns": [
+    {
+      "runId": "RUN-R176-PILOT-001",
+      "workOrderId": "WO-R176-PILOT",
+      "sequence": 1,
+      "mode": "SIMULATED_NON_CONTENT",
+      "expectedHead": "2b64e35f5dfcd1c2328e067cc4546d246c9bce52",
+      "observedHead": "2b64e35f5dfcd1c2328e067cc4546d246c9bce52",
+      "stateHistory": [
+        "SOURCE_AUDIT",
+        "TRUTH_VERIFICATION",
+        "CONTENT_AUDIT",
+        "HUMAN_CONTENT_REVIEW",
+        "ASSET_INTAKE",
+        "APPROVED_FOR_WORK",
+        "IMPLEMENTATION",
+        "ENGINEERING_QA"
+      ],
+      "appliedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
+      "changedPaths": ["docs/portfolio-automation/execution-ledger.json"],
+      "qaEvidence": [
+        {
+          "route": "AUTOMATION_VALIDATOR",
+          "status": "PASS",
+          "evidence": "npm run validate:automation"
+        }
+      ],
+      "previewEvidence": null,
+      "appendOnlyKey": "RUN-R176-PILOT-001:1"
+    }
+  ],
+  "implementationReports": [
+    {
+      "reportId": "REPORT-R176-PILOT-001",
+      "runId": "RUN-R176-PILOT-001",
+      "workOrderId": "WO-R176-PILOT",
+      "result": "SIMULATED_PASS",
+      "appliedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
+      "notAppliedDeltaIds": [],
+      "contentChanged": false,
+      "assetsChanged": false,
+      "uiChanged": false,
+      "productionChanged": false,
+      "humanRequired": ["Final review of the R176 control-plane PR"]
+    }
+  ],
+  "humanGates": [
+    {
+      "gateId": "GATE-R176-CONTROL-PLANE-REVIEW",
+      "type": "FINAL_HUMAN_REVIEW",
+      "status": "PENDING",
+      "workOrderId": "WO-R176-PILOT",
+      "exactHead": null
+    }
+  ],
+  "certifications": []
+}

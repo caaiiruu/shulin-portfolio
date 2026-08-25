@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-23-v2.7",
-  "skillVersion": "2026-08-23-v2.7",
+  "version": "2026-08-25-v2.8",
+  "skillVersion": "2026-08-25-v2.8",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
@@ -34,6 +34,22 @@
   ],
   "preferredExecution": "capability-preflight-then-github-native-when-available",
   "humanPassRequired": true,
+  "automationControlPlane": {
+    "verifiedProjectTruthOwner": "docs/portfolio-automation/verified-project-truth.json",
+    "executionLedgerOwner": "docs/portfolio-automation/execution-ledger.json",
+    "validator": "scripts/portfolio-automation.mjs",
+    "executionProtocol": "docs/workflow/portfolio-execution-protocol.md",
+    "stateMachineOwner": "docs/portfolio-automation/execution-ledger.json#stateMachine",
+    "modificationBoundaries": {
+      "truthRegistryMayContainPublicRuntimeContent": false,
+      "ledgerMayMutatePortfolioContent": false,
+      "modelInferenceMayApproveTruth": false,
+      "workConsumesApprovedOrdersOnly": true,
+      "exactHeadRequiredBeforeMutation": true,
+      "humanResolvesTruthConflicts": true,
+      "humanAuthorizesMergeAndProduction": true
+    }
+  },
   "controlPlaneGovernance": {
     "validator": "tests/portfolio-control-plane-governance.test.mjs",
     "workflow": ".github/workflows/release-gate-r146-r43.yml",
