@@ -68,3 +68,12 @@ Normal work branches from the actual canonical QA HEAD and opens an isolated PR 
 ## 25. Permanent root-cause closure
 
 A defect is closed only after Work verifies the real state, classifies the failure layer/class, proves the root cause, identifies one canonical owner, removes conflicting owners, updates every consumer, adds prospective machine-enforced regression coverage, searches the repository for recurrence, runs dependency-scoped regression, and records exact-SHA evidence. Symptom disappearance alone is not PASS. Branch bypasses, skip flags, revision pins, scattered SHA exceptions, and project-specific suppression are forbidden closure mechanisms.
+
+## 26. Chat ↔ Work automation control plane
+
+- Verified truth owner: `docs/portfolio-automation/verified-project-truth.json`.
+- Execution owner: `docs/portfolio-automation/execution-ledger.json`.
+- Chat consumes only `APPROVED` truth and produces Human-approved deltas / Work Orders.
+- Model inference cannot approve truth; high-confidence conflicts stop at `HUMAN_REQUIRED`.
+- Work consumes only approved Work Orders, verifies exact HEAD, stays within path boundaries, preserves approved content verbatim, and records results in the ledger.
+- Human resolves conflicts, approves final visuals, and alone authorizes merge or Production.
