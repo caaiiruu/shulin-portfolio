@@ -145,7 +145,7 @@
       "status": "APPROVED",
       "approvedBy": "HUMAN",
       "truthReferences": [
-        "FACT-R176-CTBC-PROJECT-IDENTITY"
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-IDENTITY"
       ],
       "targetType": "GOVERNANCE",
       "contentTruthReferences": [
