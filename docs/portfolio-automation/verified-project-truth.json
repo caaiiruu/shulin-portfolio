@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "truthVersion": "2026-08-25-r179-bootstrap",
-  "status": "BOOTSTRAPPED",
+  "truthVersion": "2026-08-25-r180.1-approved-checkpoint",
+  "status": "HUMAN_APPROVED_CONTENT_CHECKPOINT",
   "lifecycleVocabulary": [
     "UNVERIFIED_CANDIDATE",
     "APPROVED",
@@ -46,7 +46,7 @@
     },
     {
       "projectId": "voucher-center",
-      "status": "UNVERIFIED_CANDIDATE"
+      "status": "APPROVED"
     },
     {
       "projectId": "game-center",
@@ -62,7 +62,7 @@
     },
     {
       "projectId": "bandzo",
-      "status": "UNVERIFIED_CANDIDATE"
+      "status": "APPROVED"
     },
     {
       "projectId": "taishin-p2p-marketplace-platform",
@@ -269,6 +269,72 @@
       "confidence": "MEDIUM",
       "publicSafety": "PUBLIC_SAFE",
       "lifecycle": "UNVERIFIED_CANDIDATE"
+    },
+    {
+      "sourceId": "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION",
+      "projectId": "voucher-center",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#voucher-center",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-BANDZO-HUMAN-CORRECTION",
+      "projectId": "bandzo",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#bandzo",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-BOOKING-HUMAN-CORRECTION",
+      "projectId": "booking",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#booking",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION",
+      "projectId": "cathay-sit-online-account-opening",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#cathay-sit-online-account-opening",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#ctbc-mortgage-self-service-app",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#taishin-p2p-marketplace-platform",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
     }
   ],
   "facts": [
@@ -406,7 +472,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "UNVERIFIED_CANDIDATE",
+      "lifecycle": "SUPERSEDED",
       "confidence": "MEDIUM",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "UNKNOWN",
@@ -701,7 +767,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "APPROVED",
+      "lifecycle": "SUPERSEDED",
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "UNKNOWN",
@@ -774,7 +840,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "UNVERIFIED_CANDIDATE",
+      "lifecycle": "SUPERSEDED",
       "confidence": "MEDIUM",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "UNKNOWN",
@@ -908,7 +974,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "APPROVED",
+      "lifecycle": "SUPERSEDED",
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "VALIDATED",
@@ -1187,7 +1253,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "APPROVED",
+      "lifecycle": "SUPERSEDED",
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "VALIDATED",
@@ -1376,7 +1442,7 @@
         "precedence": 3,
         "verifiedAt": "2026-08-25"
       },
-      "lifecycle": "APPROVED",
+      "lifecycle": "SUPERSEDED",
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "VALIDATED",
@@ -1490,6 +1556,160 @@
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "UNKNOWN",
       "supersedes": []
+    },
+    {
+      "factId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "projectId": "voucher-center",
+      "field": "timeline",
+      "value": {
+        "start": "2024-11",
+        "end": "2025-04",
+        "period": "Nov 2024–Apr 2025",
+        "duration": "5 months"
+      },
+      "sourceIds": [
+        "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-VOUCHER-CENTER-TIMELINE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-BANDZO-TIMELINE",
+      "projectId": "bandzo",
+      "field": "timeline",
+      "value": {
+        "start": "2016-09",
+        "end": "2017-01",
+        "period": "Sep 2016–Jan 2017",
+        "duration": "5 months"
+      },
+      "sourceIds": [
+        "SRC-R1801-BANDZO-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-BANDZO-TIMELINE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "projectId": "booking",
+      "field": "roleOwnership",
+      "value": {
+        "formalRole": "UX Designer",
+        "ownershipBoundary": "Sole designer on the team",
+        "seniorityRule": "Do not inflate title seniority."
+      },
+      "sourceIds": [
+        "SRC-R1801-BOOKING-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-BOOKING-ROLE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Led product design and target-flow definition; final implementation and development remained client-owned.",
+        "deliveryState": "VALIDATED",
+        "productionLaunchClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Led product design and validated architecture; production shipment is not claimed.",
+        "deliveryState": "VALIDATED",
+        "productionShipmentClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Design ownership may be claimed for the product and marketplace model; launch, adoption and revenue are not claimed.",
+        "deliveryState": "VALIDATED",
+        "launchClaimed": false,
+        "adoptionClaimed": false,
+        "revenueClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY"
+      ]
     }
   ],
   "claims": [],
@@ -1521,6 +1741,48 @@
       "actor": "HUMAN",
       "precedence": 1,
       "summary": "Apr–Jun 2026, three months."
+    },
+    {
+      "correctionId": "CORR-R1801-VOUCHER-CENTER-TIMELINE",
+      "factId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "correctionId": "CORR-R1801-BANDZO-TIMELINE",
+      "factId": "FACT-R1801-BANDZO-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "correctionId": "CORR-R1801-BOOKING-ROLE-OWNERSHIP",
+      "factId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "correctionId": "CORR-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "correctionId": "CORR-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "correctionId": "CORR-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved design ownership while excluding launch and commercial claims."
     }
   ],
   "conflicts": [],
@@ -1555,13 +1817,14 @@
       "projectId": "voucher-center",
       "factIds": [
         "FACT-R179-VOUCHER-CENTER-IDENTITY",
-        "FACT-R179-VOUCHER-CENTER-TIMELINE",
         "FACT-R179-VOUCHER-CENTER-ROLE",
-        "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY"
+        "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R1801-VOUCHER-CENTER-TIMELINE"
       ],
       "sourceIds": [
         "SRC-R179-VOUCHER-CENTER-CONTENT",
-        "SRC-R179-VOUCHER-CENTER-PR17"
+        "SRC-R179-VOUCHER-CENTER-PR17",
+        "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.voucher-center.transformation",
@@ -1569,10 +1832,9 @@
         "projects.voucher-center.heroMetadata",
         "projects.voucher-center.publicContent"
       ],
-      "difference": "MISSING_EVIDENCE",
+      "difference": "PUBLIC_COPY_REVIEW",
       "chatOptimizationTargets": [
         "transformation",
-        "calendar period",
         "Flash Voucher relationship",
         "modeled-target labels"
       ]
@@ -1632,11 +1894,12 @@
       "factIds": [
         "FACT-R179-BOOKING-IDENTITY",
         "FACT-R179-BOOKING-TIMELINE",
-        "FACT-R179-BOOKING-ROLE",
-        "FACT-R179-BOOKING-EVIDENCE-BOUNDARY"
+        "FACT-R179-BOOKING-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BOOKING-ROLE-OWNERSHIP"
       ],
       "sourceIds": [
-        "SRC-R179-BOOKING-CONTENT"
+        "SRC-R179-BOOKING-CONTENT",
+        "SRC-R1801-BOOKING-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.booking.transformation",
@@ -1656,12 +1919,13 @@
       "projectId": "bandzo",
       "factIds": [
         "FACT-R179-BANDZO-IDENTITY",
-        "FACT-R179-BANDZO-TIMELINE",
         "FACT-R179-BANDZO-ROLE",
-        "FACT-R179-BANDZO-EVIDENCE-BOUNDARY"
+        "FACT-R179-BANDZO-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BANDZO-TIMELINE"
       ],
       "sourceIds": [
-        "SRC-R179-BANDZO-CONTENT"
+        "SRC-R179-BANDZO-CONTENT",
+        "SRC-R1801-BANDZO-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.bandzo.transformation",
@@ -1669,11 +1933,9 @@
         "projects.bandzo.heroMetadata",
         "projects.bandzo.publicContent"
       ],
-      "difference": "MISSING_EVIDENCE",
+      "difference": "PUBLIC_COPY_REVIEW",
       "chatOptimizationTargets": [
         "transformation",
-        "calendar period",
-        "role boundary",
         "measured-vs-intended outcome"
       ]
     },
@@ -1683,10 +1945,11 @@
         "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-IDENTITY",
         "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-TIMELINE",
         "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-ROLE",
-        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY"
+        "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP"
       ],
       "sourceIds": [
-        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT"
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT",
+        "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.taishin-p2p-marketplace-platform.transformation",
@@ -1753,10 +2016,11 @@
         "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-IDENTITY",
         "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-TIMELINE",
         "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-ROLE",
-        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY"
+        "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP"
       ],
       "sourceIds": [
-        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT"
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT",
+        "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.cathay-sit-online-account-opening.transformation",
@@ -1800,11 +2064,12 @@
         "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-IDENTITY",
         "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-TIMELINE",
         "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-ROLE",
-        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY",
-        "FACT-R176-CTBC-PROJECT-IDENTITY"
+        "FACT-R176-CTBC-PROJECT-IDENTITY",
+        "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP"
       ],
       "sourceIds": [
-        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT",
+        "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION"
       ],
       "existingPublicClaims": [
         "projects.ctbc-mortgage-self-service-app.transformation",
@@ -1859,7 +2124,7 @@
         "voucher-evidence-operations-reuse-public-v1",
         "voucher-stage-review-post-use-public-v1"
       ],
-      "requirement": "REQUIRED",
+      "requirement": "REQUIRED_CANDIDATE_PACK",
       "section": "Evidence / reusable system",
       "evidenceRole": "Shipped journey and reusable-system proof",
       "mustProve": "Shipped state changes and reusable operating/component model",
@@ -1868,7 +2133,21 @@
       "confidentialityRisk": "HIGH",
       "publicSafetyRequirement": "Redact internal identifiers and unpublished data",
       "aspectGuidance": "wide",
-      "humanUploadRequired": true
+      "humanUploadRequired": true,
+      "candidateSourceVisualRange": {
+        "minimum": 4,
+        "maximum": 8
+      },
+      "slotModel": "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT",
+      "coverageTargets": [
+        "discovery",
+        "qualification",
+        "redemption",
+        "error / recovery",
+        "reusable card / component system",
+        "operational / configuration model"
+      ],
+      "reuseRule": "One approved source visual may satisfy multiple evidence slots when truthfully supported."
     },
     {
       "requestId": "AR-R179-VOUCHER-CENTER-HERO",
@@ -2074,19 +2353,27 @@
       "AR-R179-CATHAY-OA-HERO",
       "AR-R179-CTBC-HERO"
     ],
-    "requiredUploadSlotCount": 17,
     "optionalAssetRequestIds": [
       "AR-R179-PAYMENT-ORDER-HISTORY",
       "AR-R179-PAYMENT-VIDEO",
       "AR-R179-BOOKING-TAXI-OVERVIEW"
     ],
-    "disclosureReview": [
-      "Booking historical formal role label",
-      "Cathay OA stakeholder/development boundary",
-      "CTBC team and production-shipment boundary",
-      "Taishin design-division and launch boundary"
-    ],
-    "instruction": "Chat may propose deltas from APPROVED facts only; candidates remain questions."
+    "disclosureReview": [],
+    "instruction": "Chat may propose deltas from APPROVED facts only; candidates remain questions.",
+    "explicitHeroUploadCount": 5,
+    "voucherCandidateVisualRange": {
+      "minimum": 4,
+      "maximum": 8,
+      "coverage": [
+        "discovery",
+        "qualification",
+        "redemption",
+        "error / recovery",
+        "reusable card / component system",
+        "operational / configuration model"
+      ],
+      "reuseRule": "One approved source visual may satisfy multiple manifest evidence slots when truthfully supported."
+    }
   },
   "lifecycleHistory": [
     {
@@ -2097,6 +2384,138 @@
       "actor": "HUMAN",
       "at": "2026-08-25",
       "reason": "R179 expands the pilot into the all-project bootstrap without public-copy mutation."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-VOUCHER-CENTER-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-BANDZO-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-BANDZO-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-BOOKING-ROLE",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved design ownership while excluding launch and commercial claims."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved design ownership while excluding launch and commercial claims."
     }
-  ]
+  ],
+  "assetPhaseStatus": {
+    "phase": "HUMAN_ASSET_INTAKE_NEXT",
+    "integrated": false,
+    "explicitHeroUploadsRequired": [
+      "voucher-center",
+      "booking",
+      "bandzo",
+      "cathay-sit-online-account-opening",
+      "ctbc-mortgage-self-service-app"
+    ],
+    "voucherCandidateSourceVisuals": {
+      "minimum": 4,
+      "maximum": 8
+    },
+    "noUploadCurrentlyRequired": [
+      "game-center",
+      "dbs",
+      "taishin-p2p-marketplace-platform",
+      "cathay-mortgage-assistant",
+      "cathay-sit-review-remediation-operations",
+      "booking-taxi-pickup-service-strategy"
+    ],
+    "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+  }
 }
