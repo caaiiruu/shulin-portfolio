@@ -1174,6 +1174,9 @@
   let suppressHistorySync=false;
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
+  let projectSectionNavigationToken=0;
+  let projectSectionNavigation=null;
+  let projectSectionScrollSettleTimer=0;
   const PROJECT_NAV_ITEMS=[
     ['overview','projectOverviewSection','Overview','概覽'],
     ['complexity','projectComplexitySection','Complexity','複雜度'],
@@ -1201,13 +1204,6 @@
     if(!dialogScrollRoot)return 0;
     return Math.max(projectSectionInset(),Math.min(160,dialogScrollRoot.clientHeight*.2));
   }
-  function alignProjectSectionTarget(target){
-    if(!target||!dialogScrollRoot)return;
-    const rootTop=dialogScrollRoot.getBoundingClientRect().top;
-    const targetTop=target.getBoundingClientRect().top;
-    const correction=targetTop-rootTop-projectSectionInset();
-    if(Math.abs(correction)>2)dialogScrollRoot.scrollTop=Math.max(0,dialogScrollRoot.scrollTop+correction);
-  }
   function positionActiveProjectNavItem(link){
     const rail=projectSectionNavLinks;
     if(!rail||!link)return;
@@ -1229,16 +1225,28 @@
     });
     if(activeLink)window.requestAnimationFrame(()=>positionActiveProjectNavItem(activeLink));
   }
+  function completeProjectSectionNavigation(token){
+    if(!projectSectionNavigation||projectSectionNavigation.token!==token)return;
+    projectSectionNavigation=null;
+    window.clearTimeout(projectSectionScrollSettleTimer);
+    updateProjectSectionLocation();
+  }
+  function scheduleProjectSectionNavigationCompletion(token){
+    window.clearTimeout(projectSectionScrollSettleTimer);
+    projectSectionScrollSettleTimer=window.setTimeout(()=>completeProjectSectionNavigation(token),prefersReduced.matches?0:120);
+  }
   function scrollToProjectSection(target){
     if(!target||!dialogScrollRoot)return;
     closeProjectSectionMenu();
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
     const targetTop=target.getBoundingClientRect().top;
     const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
-    alignProjectSectionTarget(target);
+    const token=++projectSectionNavigationToken;
+    projectSectionNavigation={token,target};
     visibleProjectSectionId=target.id;
     setActiveProjectSection(target.id);
+    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:prefersReduced.matches?'auto':'smooth'});
+    scheduleProjectSectionNavigationCompletion(token);
   }
   function updateProjectSectionLocation(){
     if(!projectSectionNav||projectSectionNav.hidden||!dialogScrollRoot)return;
@@ -1297,6 +1305,7 @@
   });
   dialogScrollRoot?.addEventListener('scroll',()=>{
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
+    if(projectSectionNavigation){scheduleProjectSectionNavigationCompletion(projectSectionNavigation.token);return}
     updateProjectSectionLocation();
   },{passive:true});
 
@@ -2918,7 +2927,7 @@
       const orderedVisualProofs=evidenceSource.presentation==='ordered-visual-proofs';
       const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
-      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
+      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);if(list(source.metrics).length){const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
       if(!orderedVisualProofs&&t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length){
         const decisionSupport=evidenceSource.presentation==='decision-support';

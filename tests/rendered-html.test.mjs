@@ -1609,7 +1609,7 @@ test("uses frozen recruiter-first research, validation and accountability primit
   const app = read("assets/js/app.js");
   const research = ssot.projects.dbs.publicContent.decisionEvidence;
   assert.deepEqual(research.metrics.map(item => typeof item.value === "object" ? item.value.en : String(item.value)), ["50+", "4", "2", "3"]);
-  assert.ok(research.metrics.find(item => String(item.value) === "3").note);
+  assert.equal(research.metrics.find(item => String(item.value) === "3").note,null);
   assert.equal("claimBoundary" in research, false);
   assert.match(app, /research-evidence-metrics recruiter-system-case__metrics/);
   assert.match(app, /createInfoTooltip\(t\(item\.note\)/);
@@ -2086,6 +2086,9 @@ test("R172.3 shared FloatingNavigator contains mobile rails and dialog content c
   assert.match(app,/target=Math\.min\(maximumScroll,Math\.max\(0,target\)\)/);
   assert.match(app,/rail\.scrollTo\(\{left:target,behavior:'auto'\}\)/);
   assert.match(app,/if\(link\.matches\(':focus-visible'\)\)positionActiveProjectNavItem\(link\)/);
+  assert.match(app,/behavior:prefersReduced\.matches\?'auto':'smooth'/);
+  assert.match(app,/if\(projectSectionNavigation\)\{scheduleProjectSectionNavigationCompletion/);
+  assert.doesNotMatch(app,/function alignProjectSectionTarget/);
   assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
   assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
 });
@@ -2165,7 +2168,7 @@ test("R174.3 keeps Game Center evidence curated, atomic and claim-safe", () => {
   const project=ssot.projects["game-center"];
   const groups=project.publicContent.decisionEvidence.structuredGroups;
   const expectedAsset="game-center-single-to-multi-game-discovery-public-v1";
-  assert.equal(ssot.contentVersion,"2026-08-25-r174.3");
+  assert.equal(ssot.contentVersion,"2026-08-25-r174.5");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.equal(project.presentation.composition,"recruiter-first-system-case");
   assert.deepEqual(project.presentation.sectionOrder,["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]);
@@ -2194,4 +2197,33 @@ test("R174.3 keeps Game Center evidence curated, atomic and claim-safe", () => {
   assert.match(groups[1].sourceRef,/page 7/);
   assert.doesNotMatch(groups[1].sourceRef,/JIRA/);
   assert.doesNotMatch(JSON.stringify(project.publicContent.decisionEvidence.validationLayer),/Acceptance Criteria|PRD|JIRA/i);
+  assert.equal(project.publicContent.decisionEvidence.validationLayer.title.en,"The single-game entry could not support concurrent experiences");
+  assert.match(project.publicContent.decisionEvidence.validationLayer.intro.en,/existing destination exposed one campaign at a time/);
+  assert.deepEqual(project.publicContent.decisionEvidence.validationLayer.metrics,[]);
+  assert.ok(groups.every(item=>item.bullets.length===0));
+  assert.match(groups[0].heading.en,/needed different availability models/);
+  assert.match(groups[1].heading.en,/had to remain clear and operable/);
+  assert.doesNotMatch(JSON.stringify(project.publicContent),/New · Ending Soon · Play Once Per Day|Phase 1\.1 shipped|Phase 1\.2 design/);
+  assert.equal(project.publicContent.outcomes.semanticHierarchy.measured[0].supportingCopy,null);
+  assert.equal(project.publicContent.outcomes.semanticHierarchy.measured[1].label.en,"monthly active users engaging with gamification");
+  assert.equal(project.publicContent.outcomes.semanticHierarchy.measured[1].supportingCopy.en,"+0.3pp from the 22.68% before period");
+  assert.equal(project.publicContent.outcomes.semanticHierarchy.measured[1].evidenceNote,null);
+  assert.match(project.publicContent.outcomes.semanticHierarchy.supportingStatements[0].text.en,/final production deployment after handoff is not confirmed/);
+  assert.doesNotMatch(project.ownershipModel.accountabilityPresentation.shared.text.en,/Phase 1|PRD|\bTech\b/);
+});
+
+test("R174.5 removes redundant metric tooltips and internal public nomenclature only where verified",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const payment=ssot.projects.payment,dbs=ssot.projects.dbs,taxi=ssot.projects["booking-taxi-pickup-service-strategy"];
+  assert.ok(payment.publicContent.decisionEvidence.validationLayer.metrics.slice(0,5).every(item=>item.evidenceNote===null));
+  assert.ok(payment.publicContent.outcomes.semanticHierarchy.measured.every(item=>item.evidenceNote===null));
+  assert.equal(dbs.publicContent.decisionEvidence.metrics[3].note,null);
+  assert.doesNotMatch(JSON.stringify({audience:dbs.infoGrid.audience,hard:dbs.whatMadeThisHard,decisions:dbs.decisionNarrative.primaryDecisions,insight:dbs.publicContent.coreSystemInsight,outcomes:dbs.publicContent.outcomes}),/\b(?:CCU|RM|CRM)\b/);
+  const taxiPublic={atAGlance:taxi.atAGlance,decisions:taxi.decisionNarrative.primaryDecisions,evidence:taxi.publicContent.strategyEvidence,outcomes:taxi.publicContent.outcomes,accountability:taxi.ownershipModel};
+  assert.doesNotMatch(JSON.stringify(taxiPublic),/Phase 1|第一階段/);
+  const css=read("assets/css/components/project-detail-overview.css");
+  assert.match(css,/\.info-tooltip\{[^}]*display:inline-grid;place-items:center/);
+  assert.doesNotMatch(css,/\.info-tooltip\{[^}]*flex:0 0/);
+  assert.match(app,/if\(list\(source\.metrics\)\.length\)\{const facts=/);
 });

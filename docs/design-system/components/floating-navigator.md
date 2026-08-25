@@ -22,10 +22,12 @@ Shared ownership:
 - Shell owns fixed bottom positioning, safe-area inset, surface, border, radius, elevation, backdrop, visibility motion, reduced motion, and forced-colors behavior.
 - Rail owns horizontal scrolling, scroll padding, and scrollbar suppression.
 - Item owns chip size, neutral/active states, focus-visible behavior, and touch target.
+- Project-section activation owns one smooth anchor motion, canonical control offset, settled active-state synchronization, and reduced-motion fallback.
 
 Consumer ownership:
 - Domain supplies domain labels, selection state, and domain scrolling.
 - Project supplies Overview, Complexity, Decisions, Impact labels, target logic, and aria-current.
+- Project consumers must use the shared anchor activation path; no project may add a local offset, motion value, or competing scroll listener.
 
 Forbidden:
 - A Project-only floating shell.

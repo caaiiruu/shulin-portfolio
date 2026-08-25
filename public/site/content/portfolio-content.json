@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-25-r174.3",
+  "contentVersion": "2026-08-25-r174.5",
   "supersedes": "2026-08-25-r174.2",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -7868,12 +7868,12 @@
           "structuredGroups": [
             {
               "heading": {
-                "en": "Structuring discovery around game availability",
-                "zh": "依遊戲可玩狀態組織探索"
+                "en": "Concurrent games needed different availability models",
+                "zh": "並行遊戲需要不同的可玩模式"
               },
               "summary": {
-                "en": "Separated limited-time and evergreen games so urgency, availability and persistent experiences could coexist in one discovery model.",
-                "zh": "區分限時與常駐遊戲，讓急迫性、可玩狀態與持續存在的體驗能在同一探索模型中共存。"
+                "en": "Limited-time and evergreen experiences had to remain discoverable together without urgency hiding persistent games.",
+                "zh": "限時與常駐體驗必須能同時被探索，又不能讓急迫性掩蓋持續存在的遊戲。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 02",
@@ -7881,34 +7881,24 @@
               },
               "sourceRef": "PRD _ Omni-gamification experience.pdf · page 6 · Multiple Game Hosting acceptance criteria",
               "assetStatus": "text-data-only",
-              "bullets": [
-                {
-                  "en": "Multiple simultaneous games · limited-time priority · evergreen availability",
-                  "zh": "多遊戲同時承載 · 限時遊戲優先 · 常駐遊戲持續可用"
-                }
-              ]
+              "bullets": []
             },
             {
               "heading": {
-                "en": "Making changing game states operational",
-                "zh": "讓變動中的遊戲狀態可被營運管理"
+                "en": "Changing availability had to remain clear and operable",
+                "zh": "變動中的可玩狀態必須清楚且可營運"
               },
               "summary": {
-                "en": "Defined clear availability states and configurable ordering so players could understand what was playable while operations retained control over presentation.",
-                "zh": "定義清楚的可玩狀態與可配置排序，讓玩家理解哪些遊戲可玩，同時讓營運保有呈現控制權。"
+                "en": "Availability changed with timing and play limits, while operations needed ordering control without making the listing unpredictable for players.",
+                "zh": "可玩狀態會隨時間與遊玩限制改變，而營運需要控制排序，同時不能讓玩家難以預期列表內容。"
               },
               "decisionLink": {
                 "en": "LED TO DECISION 03",
                 "zh": "導向決策 03"
               },
-              "sourceRef": "PRD _ Omni-gamification experience.pdf · page 7 · Phase 1.2 acceptance criteria",
+              "sourceRef": "PRD _ Omni-gamification experience.pdf · page 7 · availability-state acceptance criteria",
               "assetStatus": "text-data-only",
-              "bullets": [
-                {
-                  "en": "New · Ending Soon · Play Once Per Day · configurable order",
-                  "zh": "New · Ending Soon · 每日一次 · 可配置排序"
-                }
-              ]
+              "bullets": []
             }
           ],
           "claimSafety": {
@@ -7926,22 +7916,14 @@
             "presentation": "image-text",
             "assetId": "game-center-single-to-multi-game-discovery-public-v1",
             "title": {
-              "en": "From a single game to shared discovery",
-              "zh": "從單一遊戲走向共享探索"
+              "en": "The single-game entry could not support concurrent experiences",
+              "zh": "單一遊戲入口無法支援並行體驗"
             },
             "intro": {
-              "en": "Replaced a single-game destination with one Game Center where multiple active experiences could be discovered together.",
-              "zh": "以單一 Game Center 取代單一遊戲目的地，讓多個進行中的遊戲體驗可被一同探索。"
+              "en": "The existing destination exposed one campaign at a time, while multiple active experiences needed to remain discoverable together.",
+              "zh": "既有目的地一次只能呈現一個活動，但多個進行中的體驗需要能同時被探索。"
             },
-            "metrics": [
-              {
-                "value": "Before → After",
-                "label": {
-                  "en": "single destination · shared multi-game listing",
-                  "zh": "單一目的地 · 共享多遊戲列表"
-                }
-              }
-            ]
+            "metrics": []
           },
           "contentStatus": "primary-source-verified-r168.1"
         },
@@ -7952,8 +7934,8 @@
           },
           "semanticHierarchy": {
             "measuredLabel": {
-              "en": "The reported after period showed measurable multi-game engagement after the listing experience was introduced.",
-              "zh": "多遊戲列表體驗推出後，報告的後期觀察期間顯示可衡量的多遊戲參與。"
+              "en": "Reported usage after launch",
+              "zh": "上線後回報的使用情況"
             },
             "measured": [
               {
@@ -7962,10 +7944,7 @@
                   "en": "engaged with 2+ mini games",
                   "zh": "參與 2 個以上小遊戲"
                 },
-                "supportingCopy": {
-                  "en": "tracked mini-game players in the reported after period",
-                  "zh": "報告後期觀察期間受追蹤的小遊戲玩家"
-                },
+                "supportingCopy": null,
                 "evidenceNote": {
                   "en": "Reported after-period value; not a completion, conversion or retention rate.",
                   "zh": "報告後期數值；不是完成率、轉換率或留存率。"
@@ -7974,31 +7953,21 @@
               {
                 "value": "23%",
                 "label": {
-                  "en": "Gamification MAU / MAU",
-                  "zh": "Gamification MAU / MAU"
+                  "en": "monthly active users engaging with gamification",
+                  "zh": "參與遊戲化體驗的月活躍使用者占比"
                 },
                 "supportingCopy": {
-                  "en": "reported after-period ratio",
-                  "zh": "報告後期觀察期間比率"
+                  "en": "+0.3pp from the 22.68% before period",
+                  "zh": "較前期 22.68% 增加 0.3 個百分點"
                 },
-                "evidenceNote": {
-                  "en": "Shown as an after-period level without overstating change from the before period.",
-                  "zh": "僅呈現後期觀察期間水準，不誇大相較前期的變化。"
-                }
+                "evidenceNote": null
               }
             ],
             "supportingStatements": [
               {
-                "emphasis": true,
                 "text": {
-                  "en": "Concurrent multi-game discovery replaced the single-game entry constraint with one shared Game Center capable of presenting multiple active experiences.",
-                  "zh": "並行多遊戲探索以共享 Game Center 取代單一遊戲入口限制，支援呈現多個進行中的體驗。"
-                }
-              },
-              {
-                "text": {
-                  "en": "Phase 1.1 shipped; Phase 1.2 design, alignment and Engineering development were completed, but final production deployment is not confirmed.",
-                  "zh": "第 1.1 階段已上線；第 1.2 階段的設計、對齊與工程開發已完成，但最終正式環境部署尚未確認。"
+                  "en": "The broader game-state and operational-control model was designed and developed; its final production deployment after handoff is not confirmed.",
+                  "zh": "更完整的遊戲狀態與營運控制模型已完成設計與開發；交接後是否最終部署至正式環境仍未確認。"
                 }
               }
             ],
@@ -8315,12 +8284,12 @@
               "zh": "共同決策"
             },
             "title": {
-              "en": "Aligned problem framing, phased scope and measurement priorities",
-              "zh": "對齊問題定義、分階段範圍與衡量優先順序"
+              "en": "Aligned problem framing, release scope and measurement priorities",
+              "zh": "對齊問題定義、發布範圍與衡量優先順序"
             },
             "text": {
-              "en": "Problem framing and Phase 1.1 and 1.2 scope were partnered with Product, Tech and Platform Operations; PRD ownership, business rules and technical implementation remained partner-owned.",
-              "zh": "問題定義與第 1.1、1.2 階段範圍由我與產品、技術及平台營運團隊共同對齊；PRD、商業規則與技術實作仍由合作夥伴負責。"
+              "en": "Problem framing, release scope and measurement priorities were partnered with Product, Engineering and Platform Operations; product requirements, business rules and technical implementation remained partner-owned.",
+              "zh": "問題定義、發布範圍與衡量優先順序由我與產品、工程及平台營運團隊共同對齊；產品需求、商業規則與技術實作仍由合作夥伴負責。"
             }
           },
           "contentStatus": "primary-source-and-canonical-ownership-verified-r168.1"
@@ -8765,8 +8734,8 @@
         },
         "audience": {
           "primary": {
-            "en": "CCU, RM, CRM",
-            "zh": "CCU、RM、CRM"
+          "en": "Credit Control Unit, Relationship Managers, Credit Risk Managers",
+          "zh": "信用管控單位、客戶關係經理、信用風險經理"
           },
           "secondary": {
             "en": [
@@ -9212,7 +9181,7 @@
             "zh": ""
           },
           "supportingCopy": {
-            "en": "RM, CRM, CCU and Operations needed the same case context, explicit handoffs and visible decision rights so exception handling could remain traceable across roles and markets.",
+            "en": "Relationship Managers, Credit Risk Managers, the Credit Control Unit and Operations needed the same case context, explicit handoffs and visible decision rights so exception handling could remain traceable across roles and markets.",
             "zh": ""
           },
           "contentStatus": "user-approved-public-copy"
@@ -9287,10 +9256,7 @@
                 "en": "Co-creation workshops, followed by further validation",
                 "zh": ""
               },
-              "note": {
-                "en": "The figure refers specifically to co-creation workshops, followed by additional validation.",
-                "zh": ""
-              }
+              "note": null
             }
           ]
         },
@@ -9316,7 +9282,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "CRM and CCU workflows brought case context, supporting evidence, actions, notifications and decision history into the work itself.",
+                "en": "Credit Risk Manager and Credit Control Unit workflows brought case context, supporting evidence, actions, notifications and decision history into the work itself.",
                 "zh": ""
               }
             },
@@ -9698,7 +9664,7 @@
           },
           "description": {
             "en": "End-of-day monitoring and real-time exceptions had different triggers, urgency, evidence needs and response expectations, so they could not be treated as one workflow.",
-            "zh": "CCU、RM、CRM 與營運團隊在同一流程中需要不同脈絡、責任、核准與下一步。"
+          "zh": "信用管控單位、客戶關係經理、信用風險經理與營運團隊在同一流程中需要不同脈絡、責任、核准與下一步。"
           }
         },
         {
@@ -9717,7 +9683,7 @@
             "zh": "可追溯但不能拖慢"
           },
           "description": {
-            "en": "RM, CRM, CCU and Operations each owned different parts of the case, while decisions still needed clear authority routing, traceability and consistency across six regulated markets.",
+          "en": "Relationship Managers, Credit Risk Managers, the Credit Control Unit and Operations each owned different parts of the case, while decisions still needed clear authority routing, traceability and consistency across six regulated markets.",
             "zh": "受監管的內部營運必須保留決策稽核性，同時不能增加日常案件處理阻力。"
           }
         }
@@ -9796,7 +9762,7 @@
               "zh": ""
             },
             "whatIDecided": {
-              "en": "Structured CRM and CCU workbenches around prioritised case queues, borrower and facility context, supporting documents, delegated authority, actions and decision history.",
+              "en": "Structured Credit Risk Manager and Credit Control Unit workbenches around prioritised case queues, borrower and facility context, supporting documents, delegated authority, actions and decision history.",
               "zh": ""
             },
             "whyThisChoice": {
@@ -9820,7 +9786,7 @@
               "zh": ""
             },
             "whatIDecided": {
-              "en": "Mapped one cross-role workflow connecting exception triggers, RM, CRM, CCU and Operations through review, delegated approval, refer-back, rejection and closure.",
+              "en": "Mapped one cross-role workflow connecting exception triggers, Relationship Managers, Credit Risk Managers, the Credit Control Unit and Operations through review, delegated approval, refer-back, rejection and closure.",
               "zh": ""
             },
             "whyThisChoice": {
@@ -16071,10 +16037,7 @@
                   "en": "cashier and self-checkout observation",
                   "zh": "人工收銀與自助結帳觀察"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led fieldwork across cashier and self-checkout contexts.",
-                  "zh": "設計師主導的人工收銀與自助結帳實地研究。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "8",
@@ -16086,10 +16049,7 @@
                   "en": "during live-store checkout research",
                   "zh": "於門市結帳實地研究中"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led live-store observation and interviews.",
-                  "zh": "設計師主導的門市觀察與訪談。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "6 + 7",
@@ -16101,10 +16061,7 @@
                   "en": "across structured and guerrilla testing",
                   "zh": "涵蓋結構化與游擊測試"
                 },
-                "evidenceNote": {
-                  "en": "Six structured and seven guerrilla participants tested self-checkout entry.",
-                  "zh": "6 位結構化測試與 7 位游擊測試參與者驗證自助結帳入口。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "12",
@@ -16116,10 +16073,7 @@
                   "en": "validating benefit visibility and cashier guidance",
                   "zh": "驗證權益可見性與收銀指示"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led loyalty and cashier-instruction validation.",
-                  "zh": "設計師主導的會員權益與收銀指示驗證。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "14",
@@ -16131,10 +16085,7 @@
                   "en": "testing Order History concepts and terminology",
                   "zh": "測試訂單紀錄概念與用語"
                 },
-                "evidenceNote": {
-                  "en": "Designer-led Order History concept and terminology testing.",
-                  "zh": "設計師主導的訂單紀錄概念與用語測試。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "87.5%",
@@ -16224,10 +16175,7 @@
                   "en": "rollout coverage across FairPrice retail locations",
                   "zh": "覆蓋 FairPrice 零售據點的推展範圍"
                 },
-                "evidenceNote": {
-                  "en": "Product and team rollout coverage measured across the launched service.",
-                  "zh": "已上線服務的產品與團隊推展範圍。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "~57K",
@@ -16239,10 +16187,7 @@
                   "en": "using the in-store payment system by September 2021",
                   "zh": "截至 2021 年 9 月使用門市付款系統"
                 },
-                "evidenceNote": {
-                  "en": "Live service usage reported for September 2021.",
-                  "zh": "2021 年 9 月的實際服務使用量。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "~228K",
@@ -16254,10 +16199,7 @@
                   "en": "completed by September 2021",
                   "zh": "截至 2021 年 9 月完成"
                 },
-                "evidenceNote": {
-                  "en": "Live transaction volume reported for September 2021.",
-                  "zh": "2021 年 9 月的實際交易量。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "98.5%",
@@ -16269,10 +16211,7 @@
                   "en": "across the launched in-store payment experience",
                   "zh": "涵蓋已上線的門市付款體驗"
                 },
-                "evidenceNote": {
-                  "en": "Live service reliability metric from the launched Payment experience.",
-                  "zh": "已上線付款體驗的實際服務可靠性指標。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "70.2",
@@ -16284,10 +16223,7 @@
                   "en": "from 1,798 responses",
                   "zh": "來自 1,798 份回覆"
                 },
-                "evidenceNote": {
-                  "en": "Customer experience signal measured after launch.",
-                  "zh": "上線後衡量的顧客體驗訊號。"
-                }
+                "evidenceNote": null
               },
               {
                 "value": "12.49s",
@@ -16299,10 +16235,7 @@
                   "en": "reduced from 19.78s to 7.29s",
                   "zh": "由 19.78 秒降至 7.29 秒"
                 },
-                "evidenceNote": {
-                  "en": "Measured checkout timing from the launched 0→1 Payment experience.",
-                  "zh": "0→1 付款體驗上線後的結帳時間量測。"
-                }
+                "evidenceNote": null
               }
             ],
             "supportingStatements": [
@@ -21810,8 +21743,8 @@
         "實驗設計"
       ],
       "atAGlance": {
-        "en": "Led nine months of taxi pickup research and strategy, combining traveller, supplier and market evidence to turn an uncertain expansion opportunity into a selected-market Phase 1 experiment recommendation.",
-        "zh": "主導九個月的計程車接送研究與策略，整合旅客、供應商與市場證據，將不確定的擴張機會轉化為選定市場的第一階段實驗建議。"
+        "en": "Led nine months of taxi pickup research and strategy, combining traveller, supplier and market evidence to turn an uncertain expansion opportunity into a focused selected-market experiment recommendation.",
+        "zh": "主導九個月的計程車接送研究與策略，整合旅客、供應商與市場證據，將不確定的擴張機會轉化為聚焦選定市場的實驗建議。"
       },
       "infoGrid": {
         "type": {
@@ -22033,8 +21966,8 @@
         {
           "id": "booking-pickup-decision-phase-one",
           "title": {
-            "en": "From immediate expansion to a selected-market Phase 1 experiment",
-            "zh": "從立即擴張，到選定市場的第一階段實驗"
+            "en": "From immediate expansion to a focused selected-market experiment",
+            "zh": "從立即擴張，到聚焦選定市場的實驗"
           },
           "whatIDecided": {
             "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
@@ -22063,8 +21996,8 @@
       },
       "ownershipModel": {
         "publicSummary": {
-          "en": "Led the research synthesis, opportunity framing, proposition hypotheses and Phase 1 recommendation, working with Data, Research, Product, Commercial and Supplier teams.",
-          "zh": "主導研究統整、機會定義、服務主張假設與第一階段建議，並與資料、研究、產品、商務及供應商團隊協作。"
+          "en": "Led the research synthesis, opportunity framing, proposition hypotheses and focused experiment recommendation, working with Data, Research, Product, Commercial and Supplier teams.",
+          "zh": "主導研究統整、機會定義、服務主張假設與聚焦的實驗建議，並與資料、研究、產品、商務及供應商團隊協作。"
         },
         "ledByMe": [
           {
@@ -22080,8 +22013,8 @@
             "zh": "市場成熟度準則"
           },
           {
-            "en": "Phase 1 experiment recommendation",
-            "zh": "第一階段實驗建議"
+            "en": "Focused experiment recommendation",
+            "zh": "聚焦的實驗建議"
           }
         ],
         "coDecided": [
@@ -22116,8 +22049,8 @@
               "zh": "定義市場進入策略與建議"
             },
             "text": {
-              "en": "Led research synthesis, opportunity framing, market-readiness criteria, proposition direction and the selected-market Phase 1 recommendation.",
-              "zh": "主導研究統整、機會定義、市場成熟度準則、服務主張方向與選定市場的第一階段建議。"
+              "en": "Led research synthesis, opportunity framing, market-readiness criteria, proposition direction and the selected-market experiment recommendation.",
+              "zh": "主導研究統整、機會定義、市場成熟度準則、服務主張方向與選定市場的實驗建議。"
             }
           },
           "shared": {
@@ -22366,8 +22299,8 @@
           {
             "id": "booking-pickup-decision-phase-one",
             "title": {
-              "en": "From immediate expansion to a selected-market Phase 1 experiment",
-              "zh": "從立即擴張，到選定市場的第一階段實驗"
+              "en": "From immediate expansion to a focused selected-market experiment",
+              "zh": "從立即擴張，到聚焦選定市場的實驗"
             },
             "whatIDecided": {
               "en": "Recommended a smaller selected-market experiment before larger build and investment commitment.",
@@ -22586,8 +22519,8 @@
             {
               "id": "phase-one-recommendation",
               "heading": {
-                "en": "Phase 1 experiment recommendation",
-                "zh": "第一階段實驗建議"
+                "en": "Experiment recommendation and risk framing",
+                "zh": "實驗建議與風險定義"
               },
               "summary": {
                 "en": "The combined evidence supported a selected-market experiment before immediate broad expansion.",
@@ -22619,8 +22552,8 @@
           "cards": [
             {
               "heading": {
-                "en": "A selected-market Phase 1 direction",
-                "zh": "選定市場的第一階段方向"
+                "en": "A focused selected-market experiment direction",
+                "zh": "聚焦選定市場的實驗方向"
               },
               "copy": {
                 "en": "Reframed broad expansion into an experiment that could validate demand, supplier readiness and local conditions before larger investment.",
@@ -31383,8 +31316,8 @@
         "zh": "從全面擴張，到低風險市場實驗"
       },
       "whatIDecided": {
-        "en": "Recommended a selected-market Phase 1 experiment instead of committing immediately to broad product expansion.",
-        "zh": "建議先在選定市場執行第一階段實驗，而非立即承諾全面產品擴張。"
+        "en": "Recommended a focused selected-market experiment instead of committing immediately to broad product expansion.",
+        "zh": "建議先在選定市場執行聚焦實驗，而非立即承諾全面產品擴張。"
       },
       "whyThisChoice": {
         "en": "Customer demand, supplier readiness and market conditions needed to be validated together before larger investment.",

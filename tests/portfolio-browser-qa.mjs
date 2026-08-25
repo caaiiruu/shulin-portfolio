@@ -926,26 +926,51 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     const sharedNavigatorProjects=["payment","booking","dbs","ctbc-mortgage-self-service-app","cathay-sit-review-remediation-operations","cathay-sit-online-account-opening","booking-taxi-pickup-service-strategy","cathay-mortgage-assistant","taishin-p2p-marketplace-platform","game-center"];
     for(const projectId of sharedNavigatorProjects){
       await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:"networkidle"});
+      const semanticHygiene=await page.evaluate(()=>{const dialog=document.querySelector("#detailDialog"),normalize=value=>String(value||"").trim().replace(/\s+/g," ").replace(/[.!?。！？]+$/u,"").toLocaleLowerCase(),tooltips=[...dialog.querySelectorAll(".info-tooltip")].map(root=>{const trigger=root.querySelector(".info-tooltip__trigger"),panel=root.querySelector(".info-tooltip__panel"),tail=root.closest(".inline-tooltip-tail"),label=root.closest(".outcome-metric__label,.research-evidence-metric__label,.structured-evidence-v223__validation-label"),clone=label?.cloneNode(true);clone?.querySelectorAll(".info-tooltip").forEach(node=>node.remove());const visibleCopy=clone?.textContent.trim()||"",range=document.createRange();if(tail?.firstChild)range.selectNodeContents(tail.firstChild);const textRects=[...range.getClientRects()],textRect=textRects.at(-1),triggerRect=trigger?.getBoundingClientRect();return{content:panel?.textContent.trim(),visibleCopy,inlineTail:Boolean(tail&&tail.lastElementChild===root),gap:textRect&&triggerRect?triggerRect.left-textRect.right:null,verticalDelta:textRect&&triggerRect?Math.abs((triggerRect.top+triggerRect.height/2)-(textRect.top+textRect.height/2)):null,redundant:normalize(panel?.textContent)===normalize(visibleCopy)}});return{text:dialog?.innerText||"",tooltips}});
+      if(/Phase 1\.1|Phase 1\.2|New · Ending Soon · Play Once Per Day|\bPRD ownership\b/i.test(semanticHygiene.text))failures.push(`${viewport.name} R174.5 ${projectId} internal or unsynthesized public copy leaked`);
+      if(semanticHygiene.tooltips.some(item=>!item.content||item.redundant||!item.inlineTail||item.gap===null||item.gap<0||item.gap>8||item.verticalDelta>6))failures.push(`${viewport.name} R174.5 ${projectId} tooltip semantic/inline contract: ${JSON.stringify(semanticHygiene.tooltips)}`);
       const links=page.locator("#projectSectionNavLinks a");
       const count=await links.count();
       const checkpoints=[0,Math.floor((count-1)/2),count-1];
+      const beginTrace=()=>page.evaluate(()=>{const root=document.querySelector("#detailDialog .dialog-scroll");window.__r1745NavTrace=[root?.scrollTop||0];window.__r1745NavTraceHandler=()=>window.__r1745NavTrace.push(root.scrollTop);root?.addEventListener("scroll",window.__r1745NavTraceHandler,{passive:true})});
+      const settle=async expectedHref=>{
+        await page.waitForTimeout(80);
+        await page.waitForFunction(href=>{const root=document.querySelector("#detailDialog .dialog-scroll"),active=document.querySelector('#projectSectionNavLinks a[aria-current="location"]');if(!root||active?.getAttribute("href")!==href)return false;const state=window.__r1745NavSettle||={top:root.scrollTop,stable:0};if(Math.abs(root.scrollTop-state.top)<=.5)state.stable+=1;else{state.top=root.scrollTop;state.stable=0}return state.stable>=6},expectedHref);
+        await page.evaluate(()=>{delete window.__r1745NavSettle});
+      };
+      const measure=expectedHref=>page.evaluate(expectedHref=>{
+        const rail=document.querySelector("#projectSectionNavLinks"),active=rail?.querySelector('a[aria-current="location"]'),railRect=rail?.getBoundingClientRect(),activeRect=active?.getBoundingClientRect(),root=document.querySelector("#detailDialog .dialog-scroll"),target=document.querySelector(expectedHref),controls=document.querySelector("#detailDialog .dialog-controls-v67"),rootRect=root?.getBoundingClientRect(),targetRect=target?.getBoundingClientRect(),controlsRect=controls?.getBoundingClientRect(),inset=Math.max(0,(controlsRect?.bottom||rootRect?.top||0)-(rootRect?.top||0))+24,atEnd=root?root.scrollTop+root.clientHeight>=root.scrollHeight-2:false,trace=window.__r1745NavTrace||[];
+        if(root&&window.__r1745NavTraceHandler)root.removeEventListener("scroll",window.__r1745NavTraceHandler);delete window.__r1745NavTraceHandler;delete window.__r1745NavTrace;
+        return {expectedHref,activeHref:active?.getAttribute("href"),label:active?.textContent.trim(),railLeft:railRect?.left,railRight:railRect?.right,activeLeft:activeRect?.left,activeRight:activeRect?.right,scrollLeft:rail?.scrollLeft,maxScroll:rail?rail.scrollWidth-rail.clientWidth:null,scrollTop:root?.scrollTop,targetOffset:targetRect&&rootRect?targetRect.top-rootRect.top:null,inset,atEnd,trace,animated:new Set(trace.map(value=>Math.round(value))).size>=3,activeFullyVisible:Boolean(railRect&&activeRect&&activeRect.left>=railRect.left-.5&&activeRect.right<=railRect.right+.5),activeTextVisible:Boolean(active&&active.scrollWidth<=active.clientWidth+1&&active.scrollHeight<=active.clientHeight+1),pageOverflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth};
+      },expectedHref);
       for(const index of checkpoints){
         const expected=links.nth(index);
         const expectedHref=await expected.getAttribute("href");
+        await beginTrace();
         await expected.click();
-        await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-        const geometry=await page.evaluate(expectedHref=>{
-          const rail=document.querySelector("#projectSectionNavLinks"),active=rail?.querySelector('a[aria-current="location"]'),railRect=rail?.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
-          return {expectedHref,activeHref:active?.getAttribute("href"),label:active?.textContent.trim(),railLeft:railRect?.left,railRight:railRect?.right,activeLeft:activeRect?.left,activeRight:activeRect?.right,scrollLeft:rail?.scrollLeft,maxScroll:rail?rail.scrollWidth-rail.clientWidth:null,activeFullyVisible:Boolean(railRect&&activeRect&&activeRect.left>=railRect.left-.5&&activeRect.right<=railRect.right+.5),activeTextVisible:Boolean(active&&active.scrollWidth<=active.clientWidth+1&&active.scrollHeight<=active.clientHeight+1),pageOverflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth};
-        },expectedHref);
-        if(geometry.activeHref!==expectedHref||!geometry.activeFullyVisible||!geometry.activeTextVisible||geometry.pageOverflow>0)failures.push(`${viewport.name} R174.4 ${projectId} shared active-item visibility: ${JSON.stringify(geometry)}`);
+        await settle(expectedHref);
+        const geometry=await measure(expectedHref),settledTop=geometry.scrollTop;
+        await page.waitForTimeout(180);
+        const drift=Math.abs((await page.locator("#detailDialog .dialog-scroll").first().evaluate(root=>root.scrollTop))-settledTop);
+        const landingValid=index===count-1?geometry.atEnd||Math.abs(geometry.targetOffset-geometry.inset)<=4:Math.abs(geometry.targetOffset-geometry.inset)<=4;
+        if(geometry.activeHref!==expectedHref||!geometry.activeFullyVisible||!geometry.activeTextVisible||geometry.pageOverflow>0||!landingValid||drift>2||(index>0&&!geometry.animated))failures.push(`${viewport.name} R174.5 ${projectId} shared smooth-anchor certification: ${JSON.stringify({...geometry,drift,landingValid})}`);
         if(projectId==="game-center"){
           const targetDir=path.join(outputRoot,"r174-game-center","mobile-430");fs.mkdirSync(targetDir,{recursive:true});
           const label=index===0?"06-nav-first":index===count-1?"08-nav-final":"07-nav-middle";
           await page.screenshot({path:path.join(targetDir,`${label}.png`),fullPage:false});
         }
       }
+      const first=links.first(),firstHref=await first.getAttribute("href"),beforeReverse=await page.locator("#detailDialog .dialog-scroll").first().evaluate(root=>root.scrollTop);
+      await beginTrace();await first.click();await settle(firstHref);const reverse=await measure(firstHref);
+      if(reverse.activeHref!==firstHref||reverse.scrollTop>=beforeReverse||Math.abs(reverse.targetOffset-reverse.inset)>4||!reverse.activeFullyVisible||!reverse.animated)failures.push(`${viewport.name} R174.5 ${projectId} reverse anchor failed: ${JSON.stringify({beforeReverse,...reverse})}`);
     }
+    await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
+    await page.emulateMedia({reducedMotion:"reduce"});
+    const reducedLink=page.locator("#projectSectionNavLinks a").nth(2),reducedHref=await reducedLink.getAttribute("href");
+    await reducedLink.focus();await reducedLink.press("Space");await page.waitForTimeout(80);
+    const reduced=await page.evaluate(href=>{const root=document.querySelector("#detailDialog .dialog-scroll"),target=document.querySelector(href),active=document.querySelector('#projectSectionNavLinks a[aria-current="location"]');return{activeHref:active?.getAttribute("href"),targetVisible:Boolean(target&&target.getBoundingClientRect().bottom>root.getBoundingClientRect().top&&target.getBoundingClientRect().top<root.getBoundingClientRect().bottom),scrollTop:root.scrollTop}},reducedHref);
+    if(reduced.activeHref!==reducedHref||!reduced.targetVisible||reduced.scrollTop<=2)failures.push(`${viewport.name} R174.5 reduced-motion keyboard anchor failed: ${JSON.stringify(reduced)}`);
+    await page.emulateMedia({reducedMotion:"no-preference"});
   }
 
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
