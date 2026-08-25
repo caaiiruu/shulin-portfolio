@@ -2080,8 +2080,11 @@ test("R172.3 shared FloatingNavigator contains mobile rails and dialog content c
   assert.match(navigatorCss,/@media\(max-width:560px\)\{\s*\.floating-navigator\{width:calc\(var\(--dimension-100vw\) - var\(--dimension-24px\)\)\}\s*\.floating-navigator__rail\{width:100%;max-width:none;min-width:0\}/);
   assert.match(popupCss,/--dialog-floating-navigator-clearance:calc\(var\(--control-height\)/);
   assert.match(popupCss,/padding-bottom:calc\(var\(--dialog-floating-navigator-clearance\) \+ env\(safe-area-inset-bottom\)\)/);
-  assert.match(app,/linkRect\.left<leadingEdge/);
-  assert.match(app,/linkRect\.right>trailingEdge/);
+  assert.match(app,/let target=link\.offsetLeft\+\(link\.offsetWidth\/2\)-\(rail\.clientWidth\/2\)/);
+  assert.match(app,/if\(index===0\)target=0/);
+  assert.match(app,/else if\(index===links\.length-1\)target=maximumScroll/);
+  assert.match(app,/target=Math\.min\(maximumScroll,Math\.max\(0,target\)\)/);
+  assert.match(app,/rail\.scrollTo\(\{left:target,behavior:'auto'\}\)/);
   assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
   assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
 });

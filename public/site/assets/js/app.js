@@ -1214,16 +1214,11 @@
     const links=[...rail.querySelectorAll('a')];
     const maximumScroll=Math.max(0,rail.scrollWidth-rail.clientWidth);
     const index=links.indexOf(link);
-    const railRect=rail.getBoundingClientRect(),linkRect=link.getBoundingClientRect();
-    const safeInset=parseFloat(getComputedStyle(rail).scrollPaddingInlineStart)||0;
-    const leadingEdge=railRect.left+safeInset,trailingEdge=railRect.right-safeInset;
-    let target=rail.scrollLeft;
+    let target=link.offsetLeft+(link.offsetWidth/2)-(rail.clientWidth/2);
     if(index===0)target=0;
     else if(index===links.length-1)target=maximumScroll;
-    else if(linkRect.left<leadingEdge)target-=leadingEdge-linkRect.left;
-    else if(linkRect.right>trailingEdge)target+=linkRect.right-trailingEdge;
     target=Math.min(maximumScroll,Math.max(0,target));
-    rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
+    rail.scrollTo({left:target,behavior:'auto'});
   }
   function setActiveProjectSection(id){
     activeProjectSectionId=id||'';

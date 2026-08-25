@@ -922,6 +922,38 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     }
   }
 
+  if(viewport.width===430){
+    const sharedNavigatorProjects=["payment","booking","dbs","ctbc-mortgage-self-service-app","cathay-sit-review-remediation-operations","cathay-sit-online-account-opening","booking-taxi-pickup-service-strategy","cathay-mortgage-assistant","taishin-p2p-marketplace-platform","game-center"];
+    for(const projectId of sharedNavigatorProjects){
+      await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:"networkidle"});
+      const links=page.locator("#projectSectionNavLinks a");
+      const count=await links.count();
+      const checkpoints=[0,Math.floor((count-1)/2),count-1];
+      for(const index of checkpoints){
+        const expected=links.nth(index);
+        const expectedHref=await expected.getAttribute("href");
+        const root=page.locator("#detailDialog .dialog-scroll").first();
+        await root.evaluate((scrollRoot,{href,index,count})=>{
+          const target=document.querySelector(href);
+          if(index===0)scrollRoot.scrollTop=0;
+          else if(index===count-1)scrollRoot.scrollTop=scrollRoot.scrollHeight-scrollRoot.clientHeight;
+          else if(target){const activation=Math.max(96,Math.min(160,scrollRoot.clientHeight*.2));scrollRoot.scrollTop=Math.max(0,scrollRoot.scrollTop+target.getBoundingClientRect().top-scrollRoot.getBoundingClientRect().top-activation+2)}
+        },{href:expectedHref,index,count});
+        await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+        const geometry=await page.evaluate(expectedHref=>{
+          const rail=document.querySelector("#projectSectionNavLinks"),active=rail?.querySelector('a[aria-current="location"]'),railRect=rail?.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
+          return {expectedHref,activeHref:active?.getAttribute("href"),label:active?.textContent.trim(),railLeft:railRect?.left,railRight:railRect?.right,activeLeft:activeRect?.left,activeRight:activeRect?.right,scrollLeft:rail?.scrollLeft,maxScroll:rail?rail.scrollWidth-rail.clientWidth:null,activeFullyVisible:Boolean(railRect&&activeRect&&activeRect.left>=railRect.left-.5&&activeRect.right<=railRect.right+.5),activeTextVisible:Boolean(active&&active.scrollWidth<=active.clientWidth+1&&active.scrollHeight<=active.clientHeight+1),pageOverflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth};
+        },expectedHref);
+        if(geometry.activeHref!==expectedHref||!geometry.activeFullyVisible||!geometry.activeTextVisible||geometry.pageOverflow>0)failures.push(`${viewport.name} R174.4 ${projectId} shared active-item visibility: ${JSON.stringify(geometry)}`);
+        if(projectId==="game-center"){
+          const targetDir=path.join(outputRoot,"r174-game-center","mobile-430");fs.mkdirSync(targetDir,{recursive:true});
+          const label=index===0?"06-nav-first":index===count-1?"08-nav-final":"07-nav-middle";
+          await page.screenshot({path:path.join(targetDir,`${label}.png`),fullPage:false});
+        }
+      }
+    }
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);
