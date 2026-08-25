@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-25-r181-experiments-shared-ia",
+  "contentVersion": "2026-08-25-r182-non-asset-complete",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -77,17 +77,17 @@
       },
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
-      "transformation": "From fragmented campaign logic to a reusable incentive system",
-      "transformation_zh": "從分散的活動規則，到可重用的獎勵系統",
+      "transformation": "Fragmented voucher journeys to a reusable incentive ecosystem",
+      "transformation_zh": "從分散的優惠券旅程到可重用的獎勵生態系",
       "problem_types": [
-        "Fragmented voucher rules",
-        "Eligibility ambiguity",
-        "Cross-channel redemption"
+        "Incentive systems",
+        "Voucher lifecycle",
+        "Commerce operations"
       ],
       "problem_types_zh": [
-        "優惠券規則分散",
-        "資格判斷模糊",
-        "跨通路兌換斷裂"
+        "獎勵系統",
+        "優惠券生命週期",
+        "商務營運"
       ],
       "summary": "A multi-year programme turned fragmented customer, commercial and operational evidence into shared cross-channel incentive rules and shipped capabilities.",
       "summary_zh": "一項多年期計畫，將分散的顧客、商業與營運證據轉化為共享的跨通路獎勵規則與正式上線能力。",
@@ -95,14 +95,14 @@
       "role_zh": "資深產品設計師",
       "owned": "Evidence synthesis · Cross-channel system framing · Journey strategy · Initiative design · Workshop co-facilitation · Shared taxonomy and state modelling",
       "owned_zh": "證據統整・跨通路系統定義・旅程策略・產品計畫設計・工作坊共同主持・共享分類與狀態模型",
-      "at_glance": "Led the three-year evolution of FairPrice’s incentive experience, turning fragmented Voucher logic into reusable rules across product, checkout, Wallet and in-store journeys.",
-      "at_glance_zh": "主導 FairPrice 三年期獎勵體驗演進，將分散的 Voucher 邏輯轉化為橫跨商品、結帳、Wallet 與門市旅程的可重用規則。",
+      "at_glance": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025.",
+      "at_glance_zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力。",
       "type": "Incentive System",
       "scope": "End-to-end incentive journey",
       "scope_zh": "端到端獎勵旅程",
       "audience": "Primary: Customers\nSecondary: Operations, Marketing, Product, Engineering",
       "audience_zh": "主要：顧客\n次要：營運、行銷、產品、工程",
-      "timeline": "3 years",
+      "timeline": "2022–2025",
       "timeline_zh": "3 年",
       "period": "2022–2025",
       "why": "Voucher rules had evolved separately by campaign and channel, leaving discovery, eligibility, redemption, and internal setup inconsistent across the retail ecosystem.",
@@ -4736,23 +4736,23 @@
         "跨通路獎勵系統"
       ],
       "title": {
-        "en": "From fragmented campaign logic to a reusable incentive system",
-        "zh": "從分散的活動規則，到可重用的獎勵系統"
+        "en": "Fragmented voucher journeys to a reusable incentive ecosystem",
+        "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
       },
       "atAGlance": {
-        "en": "Led the three-year evolution of FairPrice’s incentive experience, turning campaign-specific Voucher logic into reusable product rules and capabilities across product, cart, checkout, Wallet and in-store journeys.",
-        "zh": "主導 FairPrice 三年獎勵體驗演進，將各活動獨立的 Voucher 邏輯轉化為可重用的產品規則與能力，涵蓋商品、購物車、結帳、優惠券錢包 與門市旅程。"
+        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025.",
+        "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力。"
       },
       "problemTypes": {
         "en": [
-          "Fragmented voucher rules",
-          "Eligibility ambiguity",
-          "Cross-channel redemption"
+          "Incentive systems",
+          "Voucher lifecycle",
+          "Commerce operations"
         ],
         "zh": [
-          "優惠券規則分散",
-          "資格判斷模糊",
-          "跨通路兌換斷裂"
+          "獎勵系統",
+          "優惠券生命週期",
+          "商務營運"
         ]
       },
       "whyItMattered": {
@@ -4800,14 +4800,14 @@
         },
         "timeline": {
           "duration": {
-            "en": "3 years",
-            "zh": "3 年"
+            "en": "2022–2025",
+            "zh": "2022–2025 年"
           },
           "dateRange": {
-            "en": "",
-            "zh": ""
+            "en": "2022–2025",
+            "zh": "2022–2025 年"
           },
-          "status": "source-preserved"
+          "status": "human-approved-r182"
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -5881,24 +5881,25 @@
           "aggregateParticipantCount": null,
           "contentStatus": "approved"
         }
-      }
+      },
+      "contentStatus": "approved-r182-non-asset"
     },
     "voucher-center": {
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
       "home_title": "Persistent Voucher discovery and access",
       "home_title_zh": "常設優惠券探索與領取",
-      "transformation": "From fragmented campaign discovery to a persistent Voucher claim product",
-      "transformation_zh": "從分散的活動型探索，到常設優惠券領取產品",
+      "transformation": "Campaign-based voucher discovery to a persistent claim product",
+      "transformation_zh": "從活動型優惠券探索到常設領取產品",
       "problem_types": [
         "Voucher discovery",
-        "Claim-state clarity",
-        "Campaign operations"
+        "Incentive systems",
+        "Claim-state workflows"
       ],
       "problem_types_zh": [
         "優惠券探索",
-        "領取狀態清晰度",
-        "活動營運"
+        "獎勵系統",
+        "領取狀態流程"
       ],
       "summary": "A persistent Voucher Center made discovery, claiming and post-claim states explicit beyond campaign-specific destinations.",
       "summary_zh": "常設 Voucher Center 讓探索、領取與領取後狀態清楚可見，不再只仰賴活動專屬目的地。",
@@ -5906,14 +5907,14 @@
       "role_zh": "資深產品設計師",
       "owned": "End-to-end Voucher Center discovery and claim model, research synthesis, interaction states and shipped-scope definition",
       "owned_zh": "端到端 Voucher Center 探索與領取模型、研究統整、互動狀態與上線範圍定義",
-      "at_glance": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
-      "at_glance_zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。",
+      "at_glance": "Led product structure and interaction design for a persistent voucher claim experience, using 20-participant validation to turn campaign-specific discovery into reusable entry, claim and ownership states.",
+      "at_glance_zh": "主導常設優惠券領取體驗的產品架構與互動設計，透過 20 位參與者驗證，將活動專屬探索轉化為可重用的入口、領取與擁有狀態。",
       "type": "Incentive System",
       "scope": "Persistent Voucher discovery and access, from homepage entry to category access and explicit Claim → View states.",
       "scope_zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。",
       "audience": "Primary: Customers discovering and claiming Vouchers\nSecondary: Campaign / Voucher Operations, Business / Sponsor stakeholders",
       "audience_zh": "主要：探索並領取優惠券的顧客\n次要：活動／優惠券營運、商務／贊助利害關係人",
-      "timeline": "5 months",
+      "timeline": "Nov 2024–Apr 2025",
       "timeline_zh": "5 個月",
       "timelineStatus": "user-confirmed",
       "why": "Voucher discovery depended on campaign destinations and passive deposits, making claimable value easy to miss before shopping and forcing new programmes to rely on another campaign-specific entry point.",
@@ -6326,7 +6327,7 @@
           "senior-product-design"
         ]
       },
-      "contentStatus": "approved",
+      "contentStatus": "approved-r182-non-asset",
       "productEvolution": {
         "flashVoucher2024": {
           "id": "flash-voucher-2024",
@@ -6927,23 +6928,23 @@
         "優惠券探索入口"
       ],
       "title": {
-        "en": "From fragmented campaign discovery to a persistent Voucher claim product",
-        "zh": "從分散的活動型探索，到常設優惠券領取產品"
+        "en": "Campaign-based voucher discovery to a persistent claim product",
+        "zh": "從活動型優惠券探索到常設領取產品"
       },
       "atAGlance": {
-        "en": "Led product structure and interaction design for a 5-month Voucher Center, turning fragmented campaign discovery into a persistent claim surface. A 20-participant study shaped the first release and reusable Claim → View states.",
-        "zh": "主導為期 5 個月的 Voucher Center 產品架構與互動設計，將分散的活動型探索轉化為常設領取入口；20 位參與者研究塑造第一階段上線範圍與可重用的領取 → 查看狀態。"
+        "en": "Led product structure and interaction design for a persistent voucher claim experience, using 20-participant validation to turn campaign-specific discovery into reusable entry, claim and ownership states.",
+        "zh": "主導常設優惠券領取體驗的產品架構與互動設計，透過 20 位參與者驗證，將活動專屬探索轉化為可重用的入口、領取與擁有狀態。"
       },
       "problemTypes": {
         "en": [
           "Voucher discovery",
-          "Claim-state clarity",
-          "Campaign operations"
+          "Incentive systems",
+          "Claim-state workflows"
         ],
         "zh": [
           "優惠券探索",
-          "領取狀態清晰度",
-          "活動營運"
+          "獎勵系統",
+          "領取狀態流程"
         ]
       },
       "whyItMattered": {
@@ -6989,10 +6990,10 @@
             "zh": "5 個月"
           },
           "dateRange": {
-            "en": "",
-            "zh": ""
+            "en": "Nov 2024–Apr 2025",
+            "zh": "2024 年 11 月–2025 年 4 月"
           },
-          "status": "source-preserved"
+          "status": "human-approved-r182"
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -7508,26 +7509,26 @@
       "year": 2025,
       "status": "shipped-with-future-phases",
       "publicStatus": "principal-ready-zero-to-one-incentive-product",
-      "contentStatus": "approved",
+      "contentStatus": "approved-r182-non-asset",
       "title": {
-        "en": "From one-off reward tasks to a 0→1 effort-to-reward Game Center",
-        "zh": "從一次性獎勵任務，到 0→1 的投入與獎勵 Game Center"
+        "en": "Single-game entry to scalable multi-game discovery",
+        "zh": "從單一遊戲入口到可擴展的多遊戲探索"
       },
       "problemTypes": {
         "en": [
-          "Unclear task progression",
-          "Effort–reward mismatch",
-          "Campaign engagement drop-off"
+          "Engagement systems",
+          "Content discovery",
+          "Availability management"
         ],
         "zh": [
-          "任務進程不清楚",
-          "投入與獎勵不匹配",
-          "活動互動中斷"
+          "互動參與系統",
+          "內容探索",
+          "供應狀態管理"
         ]
       },
       "atAGlance": {
-        "en": "Led 0→1 strategy and end-to-end design of Game Center, structuring three task types and matching reward value to customer effort; the launched experience achieved approximately 50% user completion.",
-        "zh": "主導 Game Center 的 0→1 策略與端到端設計，建立三類任務並依顧客投入匹配獎勵價值；上線體驗達到約 50% 使用者完成率。"
+        "en": "Led the product model and interaction design for a multi-game discovery system, replacing a single-campaign destination with a scalable structure for concurrent and changing game availability.",
+        "zh": "主導多遊戲探索系統的產品模型與互動設計，將單一活動目的地轉化為可支援多個同時進行、持續變動遊戲狀態的可擴展架構。"
       },
       "infoGrid": {
         "type": {
@@ -8163,7 +8164,7 @@
         "contentStatus": "approved"
       },
       "type_zh": "獎勵系統",
-      "transformation_zh": "從一次性獎勵任務，到 0→1 的投入與獎勵 Game Center",
+      "transformation_zh": "從單一遊戲入口到可擴展的多遊戲探索",
       "keyInterventionMap": {
         "status": "verified",
         "sectionLabel": {
@@ -8187,19 +8188,19 @@
           "zh": "我以一致的投入與回饋原則整理不同任務類型，讓進度、補救機會與完成價值更容易理解。"
         }
       },
-      "transformation": "From one-off reward tasks to a 0→1 effort-to-reward Game Center",
+      "transformation": "Single-game entry to scalable multi-game discovery",
       "problem_types": [
-        "Unclear task progression",
-        "Effort–reward mismatch",
-        "Campaign engagement drop-off"
+        "Engagement systems",
+        "Content discovery",
+        "Availability management"
       ],
       "problem_types_zh": [
-        "任務進程不清楚",
-        "投入與獎勵不匹配",
-        "活動互動中斷"
+        "互動參與系統",
+        "內容探索",
+        "供應狀態管理"
       ],
-      "at_glance": "Led 0→1 strategy and end-to-end design of Game Center, structuring three task types and matching reward value to customer effort; the launched experience achieved approximately 50% user completion.",
-      "at_glance_zh": "主導 Game Center 的 0→1 策略與端到端設計，建立三類任務並依顧客投入匹配獎勵價值；上線體驗達到約 50% 使用者完成率。",
+      "at_glance": "Led the product model and interaction design for a multi-game discovery system, replacing a single-campaign destination with a scalable structure for concurrent and changing game availability.",
+      "at_glance_zh": "主導多遊戲探索系統的產品模型與互動設計，將單一活動目的地轉化為可支援多個同時進行、持續變動遊戲狀態的可擴展架構。",
       "why": "A single live-game slot limited customer choice, forced sponsors into serial campaign scheduling, and made discovery dependent on push notifications and low-traffic entry points.",
       "why_zh": "單一遊戲入口限制顧客選擇，也迫使贊助單位依序排程活動；遊戲探索同時高度依賴推播通知與低流量入口。",
       "impact": "Established an operator-configurable foundation for concurrent games and repeat reward participation, reducing dependence on one campaign release at a time.",
@@ -8430,24 +8431,24 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "Turning fragmented credit-exception handling into a shared six-market decision system",
-        "zh": "從分散的例外處理，到六個市場共用的授信決策系統"
+        "en": "Fragmented excess handling to a shared cross-market risk workflow",
+        "zh": "從分散的超額處理到跨市場共用風險流程"
       },
       "problemTypes": {
         "en": [
-          "Fragmented exception cases",
-          "Unclear decision ownership",
-          "Cross-market inconsistency"
+          "Risk operations",
+          "Exception handling",
+          "Cross-market workflows"
         ],
         "zh": [
-          "例外案件分散",
-          "決策責任不清",
-          "跨市場處理不一致"
+          "風險營運",
+          "例外處理",
+          "跨市場流程"
         ]
       },
       "atAGlance": {
-        "en": "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.",
-        "zh": "主導授信例外案件管理系統的問題定義與端到端設計，將不完整報表與人工協調轉化為可直接決策的案件，並為六個市場、四種角色建立明確權責。"
+        "en": "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.",
+        "zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經六個市場驗證的共用決策模型。"
       },
       "infoGrid": {
         "type": {
@@ -8478,14 +8479,14 @@
         },
         "timeline": {
           "duration": {
-            "en": "6 months",
-            "zh": "6 個月"
+            "en": "Jan–Jun 2022",
+            "zh": "2022 年 1–6 月"
           },
           "dateRange": {
             "en": "Jan–Jun 2022",
-            "zh": "2022 年 1 月至 6 月"
+            "zh": "2022 年 1–6 月"
           },
-          "status": "user-confirmed",
+          "status": "human-approved-r182",
           "launchNote": "All six markets launched after the design programme; exact market launch dates are not required for the public Timeline."
         },
         "schemaVersion": "2026-08-06-r142"
@@ -9034,6 +9035,10 @@
             "No efficiency, turnaround, error-reduction, ROI, adoption or time-saving KPI is claimed."
           ],
           "contentStatus": "user-approved-public-copy"
+        },
+        "primaryPositioning": {
+          "en": "Cross-market system standardisation under risk and operational constraints.",
+          "zh": "在風險與營運限制下建立跨市場系統標準。"
         }
       },
       "imagePlan": {
@@ -9363,26 +9368,26 @@
         "contentStatus": "approved"
       },
       "type_zh": "內部系統",
-      "transformation_zh": "從分散的例外處理，到六個市場共用的授信決策系統",
-      "transformation": "From fragmented exception handling to a shared six-market decision system",
+      "transformation_zh": "從分散的超額處理到跨市場共用風險流程",
+      "transformation": "Fragmented excess handling to a shared cross-market risk workflow",
       "problem_types": [
-        "Fragmented exception cases",
-        "Unclear decision ownership",
-        "Cross-market inconsistency"
+        "Risk operations",
+        "Exception handling",
+        "Cross-market workflows"
       ],
       "problem_types_zh": [
-        "例外案件分散",
-        "決策責任不清",
-        "跨市場處理不一致"
+        "風險營運",
+        "例外處理",
+        "跨市場流程"
       ],
-      "at_glance": "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.",
-      "at_glance_zh": "主導授信例外案件管理系統的問題定義與端到端設計，將不完整報表與人工協調轉化為可直接決策的案件，並為六個市場、四種角色建立明確權責。",
+      "at_glance": "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.",
+      "at_glance_zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經六個市場驗證的共用決策模型。",
       "type": "Internal System",
       "scope": "End-to-end exception handling across monitoring, review, delegated approval and case closure",
       "scope_zh": "端到端例外分流、案件審查、決策脈絡、責任、核准與下一步行動",
       "audience": "Primary: CCU, RM, CRM\nSecondary: Operations",
       "audience_zh": "主要：CCU、RM、CRM\n次要：營運團隊",
-      "timeline": "6 months",
+      "timeline": "Jan–Jun 2022",
       "timeline_zh": "6 個月",
       "period": "Jan–Jun 2022",
       "why": "Daily credit exceptions depended on incomplete reports, email histories, manual authority checks, and local workarounds, making decisions slow, inconsistent, and difficult to trace.",
@@ -9657,7 +9662,8 @@
             "zh": ""
           }
         }
-      }
+      },
+      "contentStatus": "approved-r182-non-asset"
     },
     "booking": {
       "valueIBrought": {
@@ -9712,24 +9718,24 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "Connecting the global taxi-booking journey",
-        "zh": "串連全球計程車預訂旅程"
+        "en": "Fragmented booking touchpoints to a connected trip timeline",
+        "zh": "從分散的預訂接觸點到連續的旅程時間軸"
       },
       "problemTypes": {
         "en": [
-          "Booking conversion",
-          "Fragmented trip context",
-          "Cross-market pickup"
+          "Travel journeys",
+          "Cross-product continuity",
+          "Booking lifecycle"
         ],
         "zh": [
-          "預訂轉換",
-          "旅程脈絡分散",
-          "跨市場接送"
+          "旅遊旅程",
+          "跨產品連續性",
+          "預訂生命週期"
         ]
       },
       "atAGlance": {
-        "en": "Led research, system framing and iterative design for Booking.com’s connected taxi journey, reusing trip context and simplifying decisions across 40+ countries to increase conversion and add about 150 rides per day.",
-        "zh": "主導 Booking.com 串連計程車旅程的研究、系統定義與迭代設計，重用旅程脈絡並簡化決策，於 40 多個國家提升轉換，平均每天增加約 150 趟行程。"
+        "en": "As the team’s sole UX Designer, designed a connected trip timeline across Booking.com touchpoints, reducing fragmentation across the booking journey for a product operating in 40+ countries.",
+        "zh": "作為團隊唯一的 UX Designer，設計串聯 Booking.com 多個接觸點的旅程時間軸，減少預訂旅程中的斷裂，服務涵蓋 40 多個國家的產品。"
       },
       "infoGrid": {
         "type": {
@@ -9760,17 +9766,22 @@
         },
         "timeline": {
           "duration": {
-            "en": "6 months",
-            "zh": "6 個月"
+            "en": "Apr–Oct 2019",
+            "zh": "2019 年 4–10 月"
           },
           "dateRange": {
             "en": "Apr–Oct 2019",
-            "zh": "2019 年 4 月至 10 月"
+            "zh": "2019 年 4–10 月"
           },
           "measurementPeriod": {
             "en": "Conversion measured within two weeks of launch",
             "zh": "轉換成效於上線後兩週內衡量"
-          }
+          },
+          "status": "human-approved-r182"
+        },
+        "role": {
+          "en": "UX Designer",
+          "zh": "UX Designer · 團隊唯一設計師"
         }
       },
       "whyItMattered": {
@@ -10552,8 +10563,8 @@
       },
       "ownershipModel": {
         "publicSummary": {
-          "en": "Led the UX workstream for research planning, evidence synthesis, one-page interaction design, rapid validation and post-launch measurement; roadmap, experiment selection and release decisions were shared with product, engineering, research and data partners.",
-          "zh": "主導使用者體驗工作，包括研究規劃、證據統整、單頁互動設計、快速驗證與上線後衡量；產品路線圖、實驗選擇與上線決策則與產品、工程、研究及數據夥伴共同決定。"
+          "en": "Sole designer on the team; owned the UX design workstream while product, engineering, research and data partners retained their respective decisions.",
+          "zh": "團隊唯一設計師；負責 UX 設計工作，產品、工程、研究與數據夥伴仍各自負責其專業決策。"
         },
         "ledByMe": [
           {
@@ -10792,26 +10803,26 @@
         "contentStatus": "approved"
       },
       "type_zh": "交易系統",
-      "transformation_zh": "串連全球計程車預訂旅程",
-      "transformation": "Connecting the global taxi-booking journey",
+      "transformation_zh": "從分散的預訂接觸點到連續的旅程時間軸",
+      "transformation": "Fragmented booking touchpoints to a connected trip timeline",
       "problem_types": [
-        "Booking conversion",
-        "Fragmented trip context",
-        "Cross-market pickup"
+        "Travel journeys",
+        "Cross-product continuity",
+        "Booking lifecycle"
       ],
       "problem_types_zh": [
-        "預訂轉換",
-        "旅程脈絡分散",
-        "跨市場接送"
+        "旅遊旅程",
+        "跨產品連續性",
+        "預訂生命週期"
       ],
-      "at_glance": "Led research, system framing and iterative design for Booking.com’s connected taxi journey, reusing trip context and simplifying decisions across 40+ countries to increase conversion and add about 150 rides per day.",
-      "at_glance_zh": "主導 Booking.com 串連計程車旅程的研究、系統定義與迭代設計，重用旅程脈絡並簡化決策，於 40 多個國家提升轉換，平均每天增加約 150 趟行程。",
+      "at_glance": "As the team’s sole UX Designer, designed a connected trip timeline across Booking.com touchpoints, reducing fragmentation across the booking journey for a product operating in 40+ countries.",
+      "at_glance_zh": "作為團隊唯一的 UX Designer，設計串聯 Booking.com 多個接觸點的旅程時間軸，減少預訂旅程中的斷裂，服務涵蓋 40 多個國家的產品。",
       "type": "Transaction System",
       "scope": "Cross-market readiness across language, content, colour, interaction, and governed exceptions",
       "scope_zh": "跨市場的語言、內容、色彩、互動與受治理例外準備度",
       "audience": "Primary: Travellers\nSecondary: Localisation, product, engineering, and market teams",
       "audience_zh": "主要：旅客\n次要：在地化、產品、工程與市場團隊",
-      "timeline": "6 months",
+      "timeline": "Apr–Oct 2019",
       "timeline_zh": "6 個月",
       "why": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details, and interpret market-specific pickup rules without enough context.",
       "why_zh": "計程車預訂與住宿、航班旅程彼此分離，使旅客必須比較不清楚的選項、重複輸入已知行程資料，並在脈絡不足下理解各市場的接送規則。",
@@ -11195,7 +11206,10 @@
         ],
         "accountabilityMode": "structured",
         "complexityLayout": "featured-first"
-      }
+      },
+      "role": "UX Designer",
+      "role_zh": "UX Designer · 團隊唯一設計師",
+      "contentStatus": "approved-r182-non-asset"
     },
     "bandzo": {
       "valueIBrought": {
@@ -11213,24 +11227,24 @@
       "period": "2016–2018",
       "status": "shipped-with-concept-scope",
       "title": {
-        "en": "From fragmented learning content to a connected cross-device learning product",
-        "zh": "從零散學習內容，到串連的跨裝置學習產品"
+        "en": "Fragmented practice to a guided cross-device experience",
+        "zh": "從分散練習到具引導性的跨裝置體驗"
       },
       "problemTypes": {
         "en": [
-          "Unclear learning level",
-          "Disconnected content access",
-          "Fragmented practice flow"
+          "Guided practice",
+          "Cross-device experience",
+          "Learning workflows"
         ],
         "zh": [
-          "學習程度不清",
-          "內容存取斷裂",
-          "練習流程分散"
+          "引導式練習",
+          "跨裝置體驗",
+          "學習流程"
         ]
       },
       "atAGlance": {
-        "en": "Independently defined the UX for mobile and tablet piano-learning products, translating eight interviews and tests into specifications for 12 core functions and shipping content discovery, sheet-music practice, and level-based learning journeys.",
-        "zh": "獨立定義手機與平板鋼琴學習產品的使用體驗，將 8 場訪談與測試轉化為 12 項核心功能規格，並上線內容探索、樂譜練習與分級學習旅程。"
+        "en": "Designed the product structure for a guided cross-device practice experience, organizing fragmented activities into a clearer progression across the shipped product.",
+        "zh": "設計具引導性的跨裝置練習產品架構，將分散的活動整理成更清楚的使用進程並落實於已交付產品。"
       },
       "infoGrid": {
         "type": {
@@ -11261,14 +11275,14 @@
         },
         "timeline": {
           "duration": {
-            "en": "5 months",
-            "zh": "5 個月"
+            "en": "Sep 2016–Jan 2017 · 5 months",
+            "zh": "2016 年 9 月–2017 年 1 月 · 5 個月"
           },
           "dateRange": {
-            "en": "",
-            "zh": "2016 年"
+            "en": "Sep 2016–Jan 2017",
+            "zh": "2016 年 9 月–2017 年 1 月"
           },
-          "status": "source-confirmed"
+          "status": "human-approved-r182"
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -11334,7 +11348,7 @@
           "Long-term product evolution after the consulting engagement"
         ]
       },
-      "contentStatus": "approved",
+      "contentStatus": "approved-r182-non-asset",
       "archiveIntegration": {
         "sourceArchiveId": "overall-project-archive-2020-v1",
         "historicalProjectName": "Piano Learning App",
@@ -11778,26 +11792,26 @@
         "contentStatus": "approved"
       },
       "type_zh": "0→1 產品",
-      "transformation": "From fragmented learning content to a connected cross-device learning product",
-      "transformation_zh": "從零散學習內容，到串連的跨裝置學習產品",
+      "transformation": "Fragmented practice to a guided cross-device experience",
+      "transformation_zh": "從分散練習到具引導性的跨裝置體驗",
       "problem_types": [
-        "Unclear learning level",
-        "Disconnected content access",
-        "Fragmented practice flow"
+        "Guided practice",
+        "Cross-device experience",
+        "Learning workflows"
       ],
       "problem_types_zh": [
-        "學習程度不清",
-        "內容存取斷裂",
-        "練習流程分散"
+        "引導式練習",
+        "跨裝置體驗",
+        "學習流程"
       ],
-      "at_glance": "Independently defined the UX for mobile and tablet piano-learning products, translating eight interviews and tests into specifications for 12 core functions and shipping content discovery, sheet-music practice, and level-based learning journeys.",
-      "at_glance_zh": "獨立定義手機與平板鋼琴學習產品的使用體驗，將 8 場訪談與測試轉化為 12 項核心功能規格，並上線內容探索、樂譜練習與分級學習旅程。",
+      "at_glance": "Designed the product structure for a guided cross-device practice experience, organizing fragmented activities into a clearer progression across the shipped product.",
+      "at_glance_zh": "設計具引導性的跨裝置練習產品架構，將分散的活動整理成更清楚的使用進程並落實於已交付產品。",
       "type": "Transaction System",
       "scope": "End-to-end onboarding, licensed-content discovery, purchase and access, personal libraries, social invitations, and sheet-music practice",
       "scope_zh": "端到端入門引導、授權內容探索、購買與存取、個人譜庫、好友邀請及樂譜練習",
       "audience": "Primary: Piano learners\nSecondary: Teachers and parents",
       "audience_zh": "主要：鋼琴學習者\n次要：教師與家長",
-      "timeline": "5 months",
+      "timeline": "Sep 2016–Jan 2017",
       "timeline_zh": "5 個月",
       "why": "Learners lacked a reliable way to judge their level and choose suitable content, while discovery, purchase, access, and practice were split across disconnected flows.",
       "why_zh": "學習者缺乏可靠方式判斷程度與選擇合適內容，探索、購買、存取與練習也分散在彼此脫節的流程中。",
@@ -14629,19 +14643,19 @@
       },
       "problemTypes": {
         "en": [
-          "Fragmented checkout channels",
-          "Voucher and loyalty ambiguity",
-          "Payment recovery gaps"
+          "Payment systems",
+          "Checkout continuity",
+          "Transaction recovery"
         ],
         "zh": [
-          "結帳通路分散",
-          "優惠券與會員權益不清",
-          "付款復原缺口"
+          "支付系統",
+          "結帳連續性",
+          "交易復原"
         ]
       },
       "atAGlance": {
-        "en": "Led the 0→1 product design of FairPrice’s in-store payment system, connecting App payment entry with cashier and self-checkout execution, benefit visibility and transaction recovery across ~190 stores.",
-        "zh": "主導 FairPrice 門市付款系統的 0→1 產品設計，串接 App 付款入口、人工收銀與自助結帳執行、權益顯示及交易復原，推展至約 190 間門市。"
+        "en": "Led end-to-end payment experience design across app and self-checkout, connecting payment, value visibility, recovery and transaction traceability into one continuous system.",
+        "zh": "主導 App 與自助結帳的端到端支付體驗設計，將付款、價值顯示、失敗復原與交易追蹤串連為一套連續系統。"
       },
       "infoGrid": {
         "type": {
@@ -14675,13 +14689,13 @@
         "timeline": {
           "duration": {
             "en": "Dec 2020–Nov 2021",
-            "zh": "2020 年 12 月至 2021 年 11 月"
+            "zh": "2020 年 12 月–2021 年 11 月"
           },
           "dateRange": {
             "en": "Dec 2020–Nov 2021",
-            "zh": "2020 年 12 月至 2021 年 11 月"
+            "zh": "2020 年 12 月–2021 年 11 月"
           },
-          "status": "source-screenshot-confirmed-2026-08-06",
+          "status": "human-approved-r182",
           "presentation": "short-form-actual-project-period"
         },
         "schemaVersion": "2026-08-06-r142"
@@ -14832,7 +14846,7 @@
         "ownershipCorrection": "All Payment-related design, including customer recovery, refunds, internal systems, the transaction portal and email flows, was independently completed by the user.",
         "visualEvidenceAssessment": "Complete for publication. Additional static images are not required; only unique interaction clips or explicit production-status evidence add material value."
       },
-      "contentStatus": "approved-r164.2",
+      "contentStatus": "approved-r182-non-asset",
       "scaleAndOutcome": {
         "operationalScale": "100+ stores",
         "flowReduction": {
@@ -16567,7 +16581,7 @@
         "contentStatus": "approved"
       },
       "type_zh": "交易系統",
-      "transformation_zh": "從分散的門市結帳，到單一全通路付款系統",
+      "transformation_zh": "串連 App 與門市結帳的交易連續性",
       "keyInterventionMap": {
         "status": "verified-r164.1",
         "sectionLabel": {
@@ -16591,19 +16605,19 @@
           "zh": "我串接顧客行為、POS 執行、權益邏輯與復原狀態，讓團隊能依據同一套結構，決定體驗在 App、人工收銀與自助結帳之間應如何運作。"
         }
       },
-      "transformation": "From fragmented in-store checkout to one omni payment system",
+      "transformation": "Transaction continuity across App and in-store checkout",
       "problem_types": [
-        "Fragmented checkout channels",
-        "Voucher and loyalty ambiguity",
-        "Payment recovery gaps"
+        "Payment systems",
+        "Checkout continuity",
+        "Transaction recovery"
       ],
       "problem_types_zh": [
-        "結帳通路分散",
-        "優惠券與會員權益不清",
-        "付款復原缺口"
+        "支付系統",
+        "結帳連續性",
+        "交易復原"
       ],
-      "at_glance": "Led 0→1 research and end-to-end design of FairPrice’s in-store payment system, connecting App, cashier and self-checkout while integrating LinkPoints, vouchers and recovery flows across 100+ stores.",
-      "at_glance_zh": "主導 FairPrice 門市付款系統的 0→1 研究與端到端設計，串接 App、人工收銀與自助結帳，並整合 LinkPoints、優惠券與失敗復原流程，推展至 100 多家門市。",
+      "at_glance": "Led end-to-end payment experience design across app and self-checkout, connecting payment, value visibility, recovery and transaction traceability into one continuous system.",
+      "at_glance_zh": "主導 App 與自助結帳的端到端支付體驗設計，將付款、價值顯示、失敗復原與交易追蹤串連為一套連續系統。",
       "why": "Customers moved between queue, App, cashier and self-checkout as separate experiences, while voucher and loyalty availability varied by channel and payment failures or refunds lacked one clear recovery path.",
       "why_zh": "顧客在排隊、App、人工收銀與自助結帳之間面對彼此分離的體驗；優惠券與會員權益依通路而異，付款失敗與退款也缺乏一條清楚的復原路徑。",
       "impact": "Established a reusable payment standard and shared guidelines across App, POS, self-checkout and other FairPrice verticals, connecting customer checkout with frontline and internal transaction operations.",
@@ -17043,7 +17057,8 @@
             "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
           }
         }
-      }
+      },
+      "timeline": "Dec 2020–Nov 2021"
     },
     "cathay-sit-online-account-opening": {
       "id": "cathay-sit-online-account-opening",
@@ -17060,24 +17075,24 @@
         ]
       },
       "title": {
-        "en": "From fragmented requirements to one end-to-end account-opening journey",
-        "zh": "從分散的申請要求，到完整的線上開戶旅程"
+        "en": "Fragmented account-opening steps to a validated end-to-end flow",
+        "zh": "從分散的開戶步驟到經驗證的端到端流程"
       },
       "problemTypes": {
         "en": [
-          "Account opening",
-          "Identity verification",
-          "Application recovery"
+          "Account-opening workflows",
+          "Financial onboarding",
+          "Delivery constraints"
         ],
         "zh": [
-          "線上開戶",
-          "身分驗證",
-          "申請續辦"
+          "開戶流程",
+          "金融服務啟用",
+          "交付限制"
         ]
       },
       "atAGlance": {
-        "en": "Led a two-month redesign of the end-to-end online account-opening journey, aligning fragmented requirements into one flow and delivering complete UI specifications for implementation.",
-        "zh": "主導為期兩個月的端到端線上開戶改版，將分散的申請要求整合為一套流程，並交付可供實作的完整介面規格。"
+        "en": "Led product design and target-flow definition for a validated end-to-end account-opening experience, aligning customer progression with stakeholder and implementation constraints.",
+        "zh": "主導端到端開戶目標流程的產品設計與定義，在顧客進程、利害關係人需求與實作限制之間建立一致的經驗證方案。"
       },
       "infoGrid": {
         "type": {
@@ -17642,6 +17657,10 @@
             ]
           },
           "contentStatus": "approved-r166.2"
+        },
+        "approvedDeliveryBoundary": {
+          "en": "Validated target flow — final implementation and development remained client-owned.",
+          "zh": "經驗證的目標流程；最終實作與開發由客戶端負責。"
         }
       },
       "imagePlan": {
@@ -17709,7 +17728,7 @@
         "visualReview": "Both oversized boards were rendered at reduced scale and visually inspected.",
         "contentStatus": "approved"
       },
-      "contentStatus": "approved-r166.1-recruiter-first-migration",
+      "contentStatus": "approved-r182-non-asset",
       "sourceEvidence": {
         "canonicalSources": [
           {
@@ -18220,20 +18239,20 @@
           "zh": "我將分散的申請要求對齊成一條端到端流程，並轉化為可交付的完整介面規格。"
         }
       },
-      "transformation": "From fragmented requirements to one end-to-end account-opening journey",
-      "transformation_zh": "從分散的申請要求，到完整的線上開戶旅程",
+      "transformation": "Fragmented account-opening steps to a validated end-to-end flow",
+      "transformation_zh": "從分散的開戶步驟到經驗證的端到端流程",
       "problem_types": [
-        "Account opening",
-        "Identity verification",
-        "Application recovery"
+        "Account-opening workflows",
+        "Financial onboarding",
+        "Delivery constraints"
       ],
       "problem_types_zh": [
-        "線上開戶",
-        "身分驗證",
-        "申請續辦"
+        "開戶流程",
+        "金融服務啟用",
+        "交付限制"
       ],
-      "at_glance": "Led a two-month redesign of the end-to-end online account-opening journey, aligning fragmented requirements into one flow and delivering complete UI specifications for implementation.",
-      "at_glance_zh": "主導為期兩個月的端到端線上開戶改版，將分散的申請要求整合為一套流程，並交付可供實作的完整介面規格。",
+      "at_glance": "Led product design and target-flow definition for a validated end-to-end account-opening experience, aligning customer progression with stakeholder and implementation constraints.",
+      "at_glance_zh": "主導端到端開戶目標流程的產品設計與定義，在顧客進程、利害關係人需求與實作限制之間建立一致的經驗證方案。",
       "why": "Applicants had to interpret fragmented requirements and move through a flow whose sequence and information needs were not consistently aligned.",
       "why_zh": "申請人必須自行解讀分散的要求，流程順序與資料需求也缺乏一致對齊。",
       "impact": "Established one implementation-ready account-opening flow that aligned journey logic, interface states, and delivery specifications.",

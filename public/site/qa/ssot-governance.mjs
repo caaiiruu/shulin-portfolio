@@ -98,6 +98,7 @@ if (structuredContentFiles.some((name) => /(?:v\d+|new|final|latest|fixed)/i.tes
 const approvedZhCardTerms = [
   "NTUC FairPrice",
   "Booking.com",
+  "UX Designer",
   "Voucher Center",
   "Voucher",
   "Game Center",

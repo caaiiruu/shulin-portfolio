@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "truthVersion": "2026-08-25-r181-experiments-shared-ia",
-  "status": "R181_APPROVED_EXPERIMENT_IMPLEMENTATION",
+  "truthVersion": "2026-08-25-r182-non-asset-complete",
+  "status": "R182_NON_ASSET_COMPLETE",
   "lifecycleVocabulary": [
     "UNVERIFIED_CANDIDATE",
     "APPROVED",
@@ -2058,6 +2058,35 @@
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R182-STALE-PR-RECONCILIATION",
+      "projectId": "game-center",
+      "field": "stalePrReconciliation",
+      "value": {
+        "prs": [
+          12,
+          16,
+          17
+        ],
+        "status": "SUPERSEDED_CANDIDATE_AFTER_R182",
+        "assetWorkDeferred": true
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-PR12",
+        "SRC-R179-GAME-CENTER-PR16",
+        "SRC-R179-VOUCHER-CENTER-PR17"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_RECONCILIATION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
       "supersedes": []
     }
   ],

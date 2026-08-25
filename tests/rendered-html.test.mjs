@@ -98,7 +98,7 @@ test("keeps Voucher Center evidence and listing boundaries canonical", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const voucher = ssot.projects["voucher-center"];
   const serialized = JSON.stringify({ research: voucher.publicContent.researchChangedTheModel, decisions: voucher.publicContent.decisionNarrative.primaryDecisions, scope: voucher.publicContent.productScope });
-  assert.deepEqual(voucher.problemTypes.en, ["Voucher discovery", "Claim-state clarity", "Campaign operations"]);
+  assert.deepEqual(voucher.problemTypes.en, ["Voucher discovery", "Incentive systems", "Claim-state workflows"]);
   assert.deepEqual(voucher.heroVisualBrief.problemSignal, { en: "Voucher discovery", zh: "優惠券探索" });
   assert.match(voucher.publicContent.phasedValidationPath.stages[0].boundary.en, /proposal-era modelled targets—not actual results/);
   assert.equal(voucher.flashVoucherEvidence.businessCase.status, "modelled-proposal-targets-not-achieved-outcomes");
@@ -1623,8 +1623,8 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
-  assert.equal(dbs.title.en, "Turning fragmented credit-exception handling into a shared six-market decision system");
-  assert.equal(dbs.atAGlance.en, "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.");
+  assert.equal(dbs.title.en, "Fragmented excess handling to a shared cross-market risk workflow");
+  assert.equal(dbs.atAGlance.en, "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.");
   assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
     "Two fundamentally different operating modes",
     "Fragmented operational context",
@@ -1950,7 +1950,7 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.equal(project.presentation.composition,"recruiter-first-system-case");
   assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
   assert.deepEqual(project.sectionOrder,expectedOrder);
-  assert.equal(project.title.en,"From fragmented requirements to one end-to-end account-opening journey");
+  assert.equal(project.title.en,"Fragmented account-opening steps to a validated end-to-end flow");
   assert.deepEqual(project.searchIndexV2.problemTags.en,["account opening","identity verification","application recovery"]);
   assert.equal(project.presentation.visibility.problemTypes,undefined);
   assert.equal(project.whatMadeThisHard.length,3);

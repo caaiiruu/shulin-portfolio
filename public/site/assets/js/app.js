@@ -1114,6 +1114,7 @@
   evidenceLightboxClose.setAttribute('aria-label',localize(DATA?.implementationContracts?.expandableImageLabels?.close)||'Close');
   const evidenceLightboxImage=doc.createElement('img');
   evidenceLightboxImage.className='evidence-lightbox-v147__image';
+  evidenceLightboxImage.alt='';
   const evidenceLightboxCaption=element('p','evidence-lightbox-v147__caption');
   evidenceLightbox.append(evidenceLightboxClose,evidenceLightboxImage);
   body.append(evidenceLightbox);
@@ -1137,11 +1138,11 @@
     rootNode.querySelectorAll('.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img').forEach(image=>{
       if(image.dataset.assetStatus==='placeholder-active')return;
       const invoker=image.closest('[data-expandable-evidence]')||image;
+      if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
       if(!matchMedia('(max-width: 600px)').matches){invoker.removeAttribute('tabindex');invoker.removeAttribute('role');invoker.removeAttribute('aria-haspopup');return}
       invoker.tabIndex=0;
       invoker.setAttribute('role','button');
       invoker.setAttribute('aria-haspopup','dialog');
-      if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
     });
   }
   evidenceLightboxClose.addEventListener('click',closeEvidenceLightbox);
@@ -2292,7 +2293,7 @@
     const title=localize([decision.title,decision.title_zh]);
     const changed=localize([decision.result||decision.whatIDecided,decision.result_zh]);
     const rationale=localize([decision.evidence||decision.why||decision.whyThisChoice,decision.evidence_zh||decision.why_zh]);
-    body.append(element('h4','',title));
+    body.append(element('h3','',title));
     if(decision.fixedStageFields){
       const grid=element('div','voucher-stage-decision__grid');
       const featuredOptional=decision.optionalBlock||{};
@@ -3211,14 +3212,14 @@
     if(type==='experiment'){
       const learning=element('div','detail-experiment-card-v101__learning');
       learning.append(element('small','',ui("current-learning-112d6ab4")),element('strong','',localize(item.learning)));
-      card.append(element('span','detail-related-card-v45__context',context),element('h4','',title),element('p','detail-experiment-card-v101__question',localize(item.question)),learning,element('span','experiment-card-action',ui("view-experiment-8788e030")));
+      card.append(element('span','detail-related-card-v45__context',context),element('h3','',title),element('p','detail-experiment-card-v101__question',localize(item.question)),learning,element('span','experiment-card-action',ui("view-experiment-8788e030")));
       return card;
     }
     const action=element('span','detail-related-action-v46');
     action.append(element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right'));
     card.append(
       element('span','detail-related-card-v45__context',context),
-      element('h4','',title),
+      element('h3','',title),
       action
     );
     return card;
@@ -3304,10 +3305,11 @@
     else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key]);else if(isRecruiterSystemCase)renderSystemCaseParent(DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
     if(isStage&&sharedRelated)sharedRelated.hidden=true;else if(isInitiative&&sharedRelated){sharedRelated.hidden=false;sharedProgrammeSurface.append(sharedRelated)}
-    enableExpandableEvidence(projectView);
     renderProjectSectionNav();
     if(currentDetail.type==='experiment')renderGallery();
     renderRelated();
+    enableExpandableEvidence(dialog);
+    dialog.querySelectorAll('h4').forEach(heading=>{heading.setAttribute('role','heading');heading.setAttribute('aria-level','3')});
     if(dialogScrollRoot){dialogScrollRoot.scrollLeft=0;}
   }
   function openDetail(type,key,invoker,parentKey){
