@@ -11,20 +11,17 @@
 
 .experiment-feature-v32{padding-bottom:var(--section-space-compact)}
 .poster,.experiment-feature-card-v32,.experiment-index-card-v36{position:relative;min-width:0;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);text-align:left;box-shadow:none;transition:transform var(--motion-fast) var(--ease-standard),box-shadow var(--motion-base) var(--ease-standard),border-color var(--motion-fast) var(--ease-standard),border-radius var(--motion-base) var(--ease-standard),background-color var(--motion-fast) var(--ease-standard)}
-.poster:nth-child(odd),.experiment-index-card-v36:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
-.poster:nth-child(even),.experiment-index-card-v36:nth-child(even),.detail-experiment-card-v101:nth-child(even),.experiment-feature-card-v32{transform:var(--experiment-card-rest-even)}
-.poster:nth-child(3n),.experiment-index-card-v36:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
+.poster:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
+.poster:nth-child(even),.detail-experiment-card-v101:nth-child(even),.experiment-feature-card-v32{transform:var(--experiment-card-rest-even)}
+.poster:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
 /* Reveal owns the entrance only. Once visible, the experiment composition owns
    the resting angle so the global reveal reset cannot flatten every rail. */
 .motion-ready [data-motion-reveal].is-inview.poster:nth-child(odd),
-.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(odd),
 .motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
 .motion-ready [data-motion-reveal].is-inview.poster:nth-child(even),
-.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(even),
 .motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(even),
 .motion-ready [data-motion-reveal].is-inview.experiment-feature-card-v32{transform:var(--experiment-card-rest-even)}
 .motion-ready [data-motion-reveal].is-inview.poster:nth-child(3n),
-.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36:nth-child(3n),
 .motion-ready [data-motion-reveal].is-inview.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
 .poster:is(:hover,:focus-visible),.experiment-feature-card-v32:is(:hover,:focus-visible),.experiment-index-card-v36:is(:hover,:focus-visible),.detail-experiment-card-v101:is(:hover,:focus-visible){transform:var(--experiment-card-hover-transform);border-color:var(--color-border-strong);border-radius:var(--interactive-organic-radius);box-shadow:var(--experiment-card-hover-shadow)}
 .motion-ready [data-motion-reveal].is-inview:is(.poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101):is(:hover,:focus-visible){transform:var(--experiment-card-hover-transform)}
@@ -50,18 +47,15 @@
 .experiment-index-v36__head{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-7);align-items:end;margin-bottom:var(--space-5)}
 .experiment-index-v36__head h2{font-size:var(--text-h2)}
 .experiment-index-v36__head>p{max-width:var(--dimension-44ch)}
-.experiment-index-card-v36{display:flex;flex-direction:column;min-height:var(--experiment-card-min-block);padding:var(--card-padding);overflow:visible;background:var(--color-surface)}
-.experiment-index-card-v36--cyan{background:var(--brand-700);color:var(--color-text-inverse)}
-.experiment-index-card-v36--cream{background:var(--color-surface-soft)}
-.experiment-index-card-v36--dark{background:var(--ink-950);color:var(--color-text-inverse)}
+.experiment-index-card-v36{display:grid;grid-template-rows:auto minmax(0,1fr) auto;align-content:start;min-height:var(--experiment-card-min-block);padding:var(--card-padding);overflow:visible;background:var(--color-surface-raised);color:var(--color-text-primary)}
+.experiment-index-card-v36--cyan,.experiment-index-card-v36--cream,.experiment-index-card-v36--dark{background:var(--color-surface-raised);color:var(--color-text-primary)}
 .experiment-index-card-v36__top{display:flex;justify-content:space-between;gap:var(--space-3);font-size:var(--text-xs);letter-spacing:var(--dimension-0-08em);text-transform:uppercase}
 .experiment-index-card-v36 .kicker{margin-top:var(--space-6)}
 .experiment-index-card-v36 h3{max-width:var(--dimension-13ch);margin-top:var(--space-3);font-size:var(--experiment-card-title);line-height:1.08;overflow-wrap:normal;word-break:normal;text-wrap:balance}
 .experiment-index-card-v36 h3+p{max-width:var(--dimension-44ch);margin-top:var(--space-3);line-height:1.5}
 .experiment-index-card-v38__learning{display:grid;gap:var(--space-2);margin-top:var(--space-5);padding-top:var(--space-4);border-top:var(--dimension-1px) solid currentColor}
 .experiment-index-card-v38__learning strong{max-width:var(--dimension-44ch);font-size:var(--text-sm);line-height:1.45}
-.experiment-index-card-v36--cyan :is(p,.experiment-index-card-v38__learning small),.experiment-index-card-v36--dark :is(p,.experiment-index-card-v38__learning small){color:var(--color-text-inverse-secondary);opacity:1}
-.experiment-index-card-v36--cream :is(p,.experiment-index-card-v38__learning small){color:var(--color-text-secondary);opacity:1}
+.experiment-index-card-v36 :is(p,.experiment-index-card-v38__learning small){color:var(--color-text-secondary);opacity:1}
 .experiment-index-card-v36__shapes{position:absolute;inset:auto var(--space-5) var(--space-5) auto;display:flex;align-items:center;gap:var(--space-2);opacity:.22;pointer-events:none}
 .experiment-index-card-v36__shapes :is(i,b,em),.poster-shapes :is(span){display:block;border:var(--dimension-2px) solid currentColor}
 .experiment-index-card-v36__shapes i{width:var(--dimension-26px);height:var(--dimension-26px);border-radius:50%}
@@ -104,10 +98,10 @@
 .detail-dialog.is-experiment .gallery-art>.window-top{width:100%}
 .detail-dialog.is-experiment .gallery-art>.flow{width:100%;margin-top:var(--space-6)}
 .detail-dialog.is-experiment .gallery-thumbs-v45[hidden],.detail-dialog.is-experiment .gallery-count-v45[hidden]{display:none}
-.info-grid-v45--experiment{grid-template-columns:repeat(2,minmax(0,1fr));padding:0;border:0;border-radius:0;background:transparent}
+.info-grid-v45--experiment{grid-template-columns:repeat(2,minmax(0,1fr))}
 .experiment-sequence-v45{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5);min-width:0;margin-top:var(--space-7)}
-.experiment-sequence-v45 article{min-width:0;padding:var(--space-6);border-radius:var(--radius-lg);background:var(--color-surface-subtle)}
-.experiment-sequence-v45 article+article{padding-left:var(--space-6)}
+.experiment-sequence-v45 article{min-width:0;padding:var(--space-5) 0 0;border-top:var(--dimension-1px) solid var(--color-border);border-radius:0;background:transparent}
+.experiment-sequence-v45 article+article{padding-left:0}
 .experiment-sequence-v45 h3{margin-top:var(--space-2);font-size:var(--text-h3);line-height:1.08}
 .experiment-sequence-v45 h3+p{margin-top:var(--space-3);line-height:1.55}
 
@@ -129,9 +123,9 @@
   .experiment-index-card-v36 h3{max-width:var(--dimension-12ch);font-size:clamp(var(--dimension-1-75rem),var(--dimension-9vw),var(--dimension-2-15rem))}
   .experiment-index-card-v38__learning{margin-top:var(--space-4)}
   .poster{min-height:var(--dimension-286px);padding:var(--space-5)}
-  .poster:nth-child(odd),.experiment-index-card-v36:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
-  .poster:nth-child(even),.experiment-index-card-v36:nth-child(even),.detail-experiment-card-v101:nth-child(even){transform:var(--experiment-card-rest-even)}
-  .poster:nth-child(3n),.experiment-index-card-v36:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
+  .poster:nth-child(odd),.detail-experiment-card-v101:nth-child(odd){transform:var(--experiment-card-rest-odd)}
+  .poster:nth-child(even),.detail-experiment-card-v101:nth-child(even){transform:var(--experiment-card-rest-even)}
+  .poster:nth-child(3n),.detail-experiment-card-v101:nth-child(3n){transform:var(--experiment-card-rest-third)}
   .experiment-feature-card-v32{transform:none}
   .detail-experiment-card-v101{min-height:var(--experiment-card-min-block-mobile);padding:var(--space-5)}
   .experiment-sequence-v45{grid-template-columns:1fr;margin-top:var(--space-6)}
@@ -143,3 +137,8 @@
 @media(prefers-reduced-motion:reduce){
   .poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101,.poster-shapes,.experiment-feature-card-v32__visual{transition:none;transform:none}
 }
+
+/* Shared-card parity: Experiments retain lighter information density while
+   using the canonical shell, rhythm, CTA and resting geometry. */
+.experiment-index-card-v36,.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36{transform:none}
+.experiment-index-card-v36 .experiment-card-action{align-self:end;color:var(--color-text-primary)}

@@ -490,15 +490,15 @@
         "shared Work hover contract across routes",
         "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop.",
         "Compact company metadata and title use the shared project-card-company-title-gap token.",
-        "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
-        "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain.",
-        "Assets with a numeric source ratio of 2:1 or wider are classified generically as panoramic: desktop/tablet preserve the canonical source ratio; compact viewports use the shared 5:3 readability frame with cover and manifest-owned focal position.",
+        "Every listing-card cover uses one canonical 16:9 visible frame; Asset Manifest source dimensions never set card height.",
+        "Work, Homepage, Results, Search, Related Work and Experiment card consumers preserve composition with the shared contain and centered safe-area contract.",
+        "Recommended future card source size is 1920 × 1080; minimum acceptable source size is 1600 × 900. Tall or narrow sources remain contained inside the shared frame without project-specific wrappers.",
         "Company metadata uses the neutral project-card-company-color token; Work and Domain variants each project company and title through a non-expanding heading stack whose sole gap is project-card-company-title-gap = space-4 (16px)."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
         "contentOwner": "content/portfolio-asset-manifest.json",
-        "runtimeOwner": "assets/js/app.js#resolveProjectAsset + projectAssetRatio",
+        "runtimeOwner": "assets/js/app.js#resolveProjectAsset",
         "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card-v45--media-stack",
         "focalPositionOwner": "content/portfolio-asset-manifest.json#projectCardFocalPosition"
       },
@@ -582,7 +582,10 @@
       "exclusiveOwner": true,
       "layoutContract": [
         "Experiments & Practice remains visually and semantically subordinate to the 13 Primary Cases.",
+        "Experiment listing cards reuse the canonical ProjectCard shell, spacing, border/radius, title, CTA and 16:9 media language while retaining lighter information density.",
         "Compact detail order is Hero, The Question, maximum-three-part Experiment, visual Evidence, What This Proved, and Related / Next Experiment.",
+        "Experiment overview uses the canonical InfoGrid with Role, Scale, Audience and Timeline; Format and a separate top metadata trio are forbidden.",
+        "What This Proved, recognition and qualitative proof reuse the canonical qualitative OutcomeMetric presentation rather than an experiment-only banner.",
         "Problem Type metadata is search-only and renders no chip rail or reserved spacing.",
         "The compact variant does not use the Primary Case floating section navigator.",
         "Evidence uses the shared governed abstract treatment until a public-safe source asset exists.",
