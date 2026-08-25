@@ -17,7 +17,40 @@ const errorsFor = (nextTruth = truth, nextLedger = ledger, options = {}) => vali
 });
 const expectError = (errors, pattern) => assert.ok(errors.some((error) => pattern.test(error)), errors.join("\n"));
 
-test("R179 all-project truth bootstrap is valid", () => assert.deepEqual(errorsFor(), []));
+test("R180.1 Human-approved truth and content checkpoint is valid", () => assert.deepEqual(errorsFor(), []));
+
+test("Voucher Center and Bandzo timeline candidates are closed by Human corrections", () => {
+  for (const projectId of ["voucher-center", "bandzo"]) {
+    const current = truth.facts.find((fact) => fact.projectId === projectId && fact.field === "timeline" && fact.lifecycle === "APPROVED");
+    const historical = truth.facts.find((fact) => fact.projectId === projectId && fact.field === "timeline" && fact.lifecycle === "SUPERSEDED");
+    assert.equal(current?.provenance.producer, "HUMAN_CORRECTION");
+    assert.ok(current?.value.period);
+    assert.ok(historical);
+  }
+});
+
+test("R180.1 content package remains approved but unapplied", () => {
+  const delta = ledger.approvedDeltas.find((item) => item.deltaId === "DELTA-R1801-APPROVED-CONTENT-PACKAGE");
+  assert.equal(delta.status, "APPROVED");
+  assert.equal(delta.approvedBy, "HUMAN");
+  assert.equal(delta.implementationStatus, "NOT_APPLIED");
+  assert.equal(delta.mutationAuthorized, false);
+  assert.equal(delta.fieldDeltas.length, 8);
+});
+
+test("approved content packages reject superseded truth", () => {
+  const next = clone(ledger);
+  const delta = next.approvedDeltas.find((item) => item.deltaId === "DELTA-R1801-APPROVED-CONTENT-PACKAGE");
+  delta.truthReferences.push("FACT-R179-VOUCHER-CENTER-TIMELINE");
+  expectError(errorsFor(truth, next), /approved delta references non-approved truth/);
+});
+
+test("Voucher asset intake is one candidate pack rather than twelve required uploads", () => {
+  const request = truth.assetRequests.find((item) => item.requestId === "AR-R179-VOUCHER-EVIDENCE-PACK");
+  assert.equal(request.requirement, "REQUIRED_CANDIDATE_PACK");
+  assert.deepEqual(request.candidateSourceVisualRange, { minimum: 4, maximum: 8 });
+  assert.equal(request.slotModel, "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT");
+});
 
 test("all canonical projects have exactly one source pack", () => {
   assert.equal(truth.projects.length, 13);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "ledgerVersion": "2026-08-25-r176-pilot",
+  "ledgerVersion": "2026-08-25-r180.1-approved-checkpoint",
   "repository": "caaiiruu/shulin-portfolio",
   "canonicalQaBranch": "qa/r146-r43-preview-2026-08-06",
   "stateVocabulary": [
@@ -24,35 +24,119 @@
   ],
   "stateMachine": {
     "allowedTransitions": {
-      "SOURCE_AUDIT": ["TRUTH_VERIFICATION", "SOURCE_CONFLICT"],
-      "TRUTH_VERIFICATION": ["CONTENT_AUDIT", "SOURCE_CONFLICT"],
-      "CONTENT_AUDIT": ["HUMAN_CONTENT_REVIEW", "CONTENT_CONFLICT", "ASSET_REQUIRED"],
-      "HUMAN_CONTENT_REVIEW": ["ASSET_INTAKE", "CONTENT_CONFLICT"],
-      "ASSET_INTAKE": ["APPROVED_FOR_WORK", "ASSET_REQUIRED"],
-      "APPROVED_FOR_WORK": ["IMPLEMENTATION", "HEAD_MOVED", "SECURITY_BLOCKER"],
-      "IMPLEMENTATION": ["ENGINEERING_QA", "HEAD_MOVED", "CONTENT_CONFLICT", "QA_FAILED", "SECURITY_BLOCKER"],
-      "ENGINEERING_QA": ["VISUAL_QA", "QA_FAILED", "HEAD_MOVED", "SECURITY_BLOCKER"],
-      "VISUAL_QA": ["FINAL_HUMAN_REVIEW", "QA_FAILED", "HEAD_MOVED", "SECURITY_BLOCKER"],
-      "FINAL_HUMAN_REVIEW": ["MERGE_READY", "CONTENT_CONFLICT", "ASSET_REQUIRED", "QA_FAILED", "SECURITY_BLOCKER"],
+      "SOURCE_AUDIT": [
+        "TRUTH_VERIFICATION",
+        "SOURCE_CONFLICT"
+      ],
+      "TRUTH_VERIFICATION": [
+        "CONTENT_AUDIT",
+        "SOURCE_CONFLICT"
+      ],
+      "CONTENT_AUDIT": [
+        "HUMAN_CONTENT_REVIEW",
+        "CONTENT_CONFLICT",
+        "ASSET_REQUIRED"
+      ],
+      "HUMAN_CONTENT_REVIEW": [
+        "ASSET_INTAKE",
+        "CONTENT_CONFLICT"
+      ],
+      "ASSET_INTAKE": [
+        "APPROVED_FOR_WORK",
+        "ASSET_REQUIRED"
+      ],
+      "APPROVED_FOR_WORK": [
+        "IMPLEMENTATION",
+        "HEAD_MOVED",
+        "SECURITY_BLOCKER"
+      ],
+      "IMPLEMENTATION": [
+        "ENGINEERING_QA",
+        "HEAD_MOVED",
+        "CONTENT_CONFLICT",
+        "QA_FAILED",
+        "SECURITY_BLOCKER"
+      ],
+      "ENGINEERING_QA": [
+        "VISUAL_QA",
+        "QA_FAILED",
+        "HEAD_MOVED",
+        "SECURITY_BLOCKER"
+      ],
+      "VISUAL_QA": [
+        "FINAL_HUMAN_REVIEW",
+        "QA_FAILED",
+        "HEAD_MOVED",
+        "SECURITY_BLOCKER"
+      ],
+      "FINAL_HUMAN_REVIEW": [
+        "MERGE_READY",
+        "CONTENT_CONFLICT",
+        "ASSET_REQUIRED",
+        "QA_FAILED",
+        "SECURITY_BLOCKER"
+      ],
       "MERGE_READY": [],
-      "HEAD_MOVED": ["APPROVED_FOR_WORK"],
-      "SOURCE_CONFLICT": ["TRUTH_VERIFICATION"],
-      "CONTENT_CONFLICT": ["HUMAN_CONTENT_REVIEW"],
-      "ASSET_REQUIRED": ["ASSET_INTAKE"],
-      "QA_FAILED": ["IMPLEMENTATION"],
-      "SECURITY_BLOCKER": ["ENGINEERING_QA"]
+      "HEAD_MOVED": [
+        "APPROVED_FOR_WORK"
+      ],
+      "SOURCE_CONFLICT": [
+        "TRUTH_VERIFICATION"
+      ],
+      "CONTENT_CONFLICT": [
+        "HUMAN_CONTENT_REVIEW"
+      ],
+      "ASSET_REQUIRED": [
+        "ASSET_INTAKE"
+      ],
+      "QA_FAILED": [
+        "IMPLEMENTATION"
+      ],
+      "SECURITY_BLOCKER": [
+        "ENGINEERING_QA"
+      ]
     },
     "forbiddenTransitions": [
-      ["SOURCE_AUDIT", "APPROVED_FOR_WORK"],
-      ["IMPLEMENTATION", "MERGE_READY"],
-      ["ENGINEERING_QA", "MERGE_READY"],
-      ["VISUAL_QA", "MERGE_READY"],
-      ["HEAD_MOVED", "IMPLEMENTATION"],
-      ["SOURCE_CONFLICT", "IMPLEMENTATION"],
-      ["CONTENT_CONFLICT", "IMPLEMENTATION"],
-      ["ASSET_REQUIRED", "IMPLEMENTATION"],
-      ["QA_FAILED", "MERGE_READY"],
-      ["SECURITY_BLOCKER", "MERGE_READY"]
+      [
+        "SOURCE_AUDIT",
+        "APPROVED_FOR_WORK"
+      ],
+      [
+        "IMPLEMENTATION",
+        "MERGE_READY"
+      ],
+      [
+        "ENGINEERING_QA",
+        "MERGE_READY"
+      ],
+      [
+        "VISUAL_QA",
+        "MERGE_READY"
+      ],
+      [
+        "HEAD_MOVED",
+        "IMPLEMENTATION"
+      ],
+      [
+        "SOURCE_CONFLICT",
+        "IMPLEMENTATION"
+      ],
+      [
+        "CONTENT_CONFLICT",
+        "IMPLEMENTATION"
+      ],
+      [
+        "ASSET_REQUIRED",
+        "IMPLEMENTATION"
+      ],
+      [
+        "QA_FAILED",
+        "MERGE_READY"
+      ],
+      [
+        "SECURITY_BLOCKER",
+        "MERGE_READY"
+      ]
     ]
   },
   "approvedDeltas": [
@@ -60,7 +144,9 @@
       "deltaId": "DELTA-R176-PILOT-ORCHESTRATION",
       "status": "APPROVED",
       "approvedBy": "HUMAN",
-      "truthReferences": ["FACT-R176-CTBC-PROJECT-IDENTITY"],
+      "truthReferences": [
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-IDENTITY"
+      ],
       "targetType": "GOVERNANCE",
       "contentTruthReferences": [
         {
@@ -76,6 +162,360 @@
           "description": "Record a non-content orchestration pilot."
         }
       ]
+    },
+    {
+      "deltaId": "DELTA-R1801-APPROVED-CONTENT-PACKAGE",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-25",
+      "targetType": "CONTENT_PACKAGE",
+      "implementationStatus": "NOT_APPLIED",
+      "truthReferences": [
+        "FACT-R179-VOUCHER-TIMELINE",
+        "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY",
+        "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+        "FACT-R179-VOUCHER-CENTER-ROLE",
+        "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R179-GAME-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R179-DBS-TIMELINE",
+        "FACT-R179-DBS-ROLE",
+        "FACT-R179-DBS-EVIDENCE-BOUNDARY",
+        "FACT-R179-BOOKING-TIMELINE",
+        "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+        "FACT-R179-BOOKING-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BANDZO-TIMELINE",
+        "FACT-R179-BANDZO-EVIDENCE-BOUNDARY",
+        "FACT-R179-PAYMENT-TIMELINE",
+        "FACT-R179-PAYMENT-ROLE",
+        "FACT-R179-PAYMENT-EVIDENCE-BOUNDARY",
+        "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP"
+      ],
+      "contentTruthReferences": [
+        {
+          "projectId": "voucher",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "voucher-center",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "game-center",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "dbs",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "booking",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "bandzo",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "payment",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "cathay-sit-online-account-opening",
+          "fieldPath": "transformation"
+        }
+      ],
+      "assetTruthReferences": [],
+      "fieldDeltas": [
+        {
+          "projectId": "voucher",
+          "status": "APPROVED_PENDING_ASSETS_AND_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Fragmented voucher journeys to a reusable incentive ecosystem",
+            "problemTypes": [
+              "Incentive systems",
+              "Voucher lifecycle",
+              "Commerce operations"
+            ],
+            "at_glance": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025.",
+            "contentStrategy": [
+              "Reduce primary recruiter narrative density",
+              "Retain verified measurable outcomes",
+              "Separate shipped programme evolution from conceptual Omni Incentive Platform direction",
+              "Move redundant initiative history, supporting research and future vision out of initial recruiter scan"
+            ]
+          },
+          "truthReferences": [
+            "FACT-R179-VOUCHER-TIMELINE",
+            "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "voucher-center",
+          "status": "APPROVED_PENDING_HERO_ASSET_AND_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Campaign-based voucher discovery to a persistent claim product",
+            "problemTypes": [
+              "Voucher discovery",
+              "Incentive systems",
+              "Claim-state workflows"
+            ],
+            "at_glance": "Led product structure and interaction design for a persistent voucher claim experience, using 20-participant validation to turn campaign-specific discovery into reusable entry, claim and ownership states.",
+            "timeline": "Nov 2024–Apr 2025",
+            "preserve": [
+              "12 / 20 stronger-entry preference",
+              "7 vs 4 consolidated-navigation comparison",
+              "18 / 20 “Use now” misunderstanding",
+              "16 / 20 Claim all support",
+              "Claim all / complete consolidated navigation explicitly not shipped"
+            ]
+          },
+          "truthReferences": [
+            "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+            "FACT-R179-VOUCHER-CENTER-ROLE",
+            "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "game-center",
+          "status": "CONTENT_LOCKED_PENDING_PR_RECONCILIATION",
+          "fields": {
+            "transformation": "Single-game entry to scalable multi-game discovery",
+            "problemTypes": [
+              "Engagement systems",
+              "Content discovery",
+              "Availability management"
+            ],
+            "at_glance": "Led the product model and interaction design for a multi-game discovery system, replacing a single-campaign destination with a scalable structure for concurrent and changing game availability.",
+            "preserve": [
+              "Evidence 01–03 roles",
+              "Current delivery boundary",
+              "Approximate ~50% qualifier",
+              "Existing PR #16 replacement asset"
+            ]
+          },
+          "truthReferences": [
+            "FACT-R179-GAME-CENTER-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "dbs",
+          "status": "APPROVED_PENDING_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Fragmented excess handling to a shared cross-market risk workflow",
+            "problemTypes": [
+              "Risk operations",
+              "Exception handling",
+              "Cross-market workflows"
+            ],
+            "at_glance": "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.",
+            "timeline": "Jan–Jun 2022",
+            "positioning": "Cross-market system standardisation under risk / operational constraints; do not collapse into generic stakeholder-alignment language."
+          },
+          "truthReferences": [
+            "FACT-R179-DBS-TIMELINE",
+            "FACT-R179-DBS-ROLE",
+            "FACT-R179-DBS-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "booking",
+          "status": "APPROVED_PENDING_HERO_ASSET_AND_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Fragmented booking touchpoints to a connected trip timeline",
+            "problemTypes": [
+              "Travel journeys",
+              "Cross-product continuity",
+              "Booking lifecycle"
+            ],
+            "at_glance": "As the team’s sole UX Designer, designed a connected trip timeline across Booking.com touchpoints, reducing fragmentation across the booking journey for a product operating in 40+ countries.",
+            "timeline": "Apr–Oct 2019",
+            "role": "UX Designer",
+            "ownership": "Sole designer on the team",
+            "decisionRule": "Retain only decisions that materially changed product or journey behavior; ordinary UI treatment is not a Design Decision."
+          },
+          "truthReferences": [
+            "FACT-R179-BOOKING-TIMELINE",
+            "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+            "FACT-R179-BOOKING-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "bandzo",
+          "status": "APPROVED_PENDING_HERO_ASSET_AND_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Fragmented practice to a guided cross-device experience",
+            "problemTypes": [
+              "Guided practice",
+              "Cross-device experience",
+              "Learning workflows"
+            ],
+            "at_glance": "Designed the product structure for a guided cross-device practice experience, organizing fragmented activities into a clearer progression across the shipped product.",
+            "timeline": "Sep 2016–Jan 2017 · 5 months",
+            "claimBoundary": "Do not claim measured learning improvement, achievement or educational performance without evidence."
+          },
+          "truthReferences": [
+            "FACT-R1801-BANDZO-TIMELINE",
+            "FACT-R179-BANDZO-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "payment",
+          "status": "CONTENT_LOCKED_PENDING_PR_RECONCILIATION",
+          "fields": {
+            "transformation": "Transaction continuity across App and in-store checkout",
+            "problemTypes": [
+              "Payment systems",
+              "Checkout continuity",
+              "Transaction recovery"
+            ],
+            "at_glance": "Led end-to-end payment experience design across app and self-checkout, connecting payment, value visibility, recovery and transaction traceability into one continuous system.",
+            "timeline": "Dec 2020–Nov 2021",
+            "outcomeHierarchy": {
+              "primary": [
+                "NPS 70.2 · 1,798 responses",
+                "98.5% transaction success",
+                "~228K monthly transactions",
+                "~57K users",
+                "~190 stores"
+              ],
+              "secondary": [
+                "SCO 9 → 6",
+                "19.78 sec → 7.29 sec",
+                "12.49 sec faster"
+              ]
+            },
+            "pr12": "Reconciliation evidence only; unverified uplift figures remain rejected."
+          },
+          "truthReferences": [
+            "FACT-R179-PAYMENT-TIMELINE",
+            "FACT-R179-PAYMENT-ROLE",
+            "FACT-R179-PAYMENT-EVIDENCE-BOUNDARY"
+          ]
+        },
+        {
+          "projectId": "cathay-sit-online-account-opening",
+          "status": "APPROVED_PENDING_HERO_ASSET_AND_IMPLEMENTATION",
+          "fields": {
+            "transformation": "Fragmented account-opening steps to a validated end-to-end flow",
+            "problemTypes": [
+              "Account-opening workflows",
+              "Financial onboarding",
+              "Delivery constraints"
+            ],
+            "at_glance": "Led product design and target-flow definition for a validated end-to-end account-opening experience, aligning customer progression with stakeholder and implementation constraints.",
+            "boundary": "Validated target flow — final implementation and development remained client-owned.",
+            "productionLaunchClaimed": false
+          },
+          "truthReferences": [
+            "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP"
+          ]
+        }
+      ],
+      "operations": [
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "voucher",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "contentStrategy"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "voucher-center",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "timeline",
+            "preserve"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "game-center",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "preserve"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "dbs",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "timeline",
+            "positioning"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "booking",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "timeline",
+            "role",
+            "ownership",
+            "decisionRule"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "bandzo",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "timeline",
+            "claimBoundary"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "payment",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "timeline",
+            "outcomeHierarchy",
+            "pr12"
+          ]
+        },
+        {
+          "operation": "SET_APPROVED_FIELDS_LATER",
+          "path": "public/site/content/portfolio-content.json",
+          "projectId": "cathay-sit-online-account-opening",
+          "fieldPaths": [
+            "transformation",
+            "problemTypes",
+            "at_glance",
+            "boundary",
+            "productionLaunchClaimed"
+          ]
+        }
+      ],
+      "dependencies": [
+        "HUMAN_ASSET_INTAKE",
+        "PR_RECONCILIATION_WHERE_LISTED",
+        "FUTURE_APPROVED_WORK_ORDER"
+      ],
+      "mutationAuthorized": false
     }
   ],
   "workOrders": [
@@ -86,15 +526,21 @@
       "repository": "caaiiruu/shulin-portfolio",
       "baseBranch": "qa/r146-r43-preview-2026-08-06",
       "expectedHead": "2b64e35f5dfcd1c2328e067cc4546d246c9bce52",
-      "approvedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
-      "allowedPaths": ["docs/portfolio-automation/**"],
+      "approvedDeltaIds": [
+        "DELTA-R176-PILOT-ORCHESTRATION"
+      ],
+      "allowedPaths": [
+        "docs/portfolio-automation/**"
+      ],
       "forbiddenPaths": [
         "public/site/content/**",
         "public/site/assets/**",
         "public/site/assets/css/**",
         "site-source/templates/**"
       ],
-      "qaRoutes": ["AUTOMATION_VALIDATOR"],
+      "qaRoutes": [
+        "AUTOMATION_VALIDATOR"
+      ],
       "productionAuthorized": false,
       "approvedBy": "HUMAN"
     }
@@ -117,8 +563,12 @@
         "IMPLEMENTATION",
         "ENGINEERING_QA"
       ],
-      "appliedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
-      "changedPaths": ["docs/portfolio-automation/execution-ledger.json"],
+      "appliedDeltaIds": [
+        "DELTA-R176-PILOT-ORCHESTRATION"
+      ],
+      "changedPaths": [
+        "docs/portfolio-automation/execution-ledger.json"
+      ],
       "qaEvidence": [
         {
           "route": "AUTOMATION_VALIDATOR",
@@ -136,13 +586,17 @@
       "runId": "RUN-R176-PILOT-001",
       "workOrderId": "WO-R176-PILOT",
       "result": "SIMULATED_PASS",
-      "appliedDeltaIds": ["DELTA-R176-PILOT-ORCHESTRATION"],
+      "appliedDeltaIds": [
+        "DELTA-R176-PILOT-ORCHESTRATION"
+      ],
       "notAppliedDeltaIds": [],
       "contentChanged": false,
       "assetsChanged": false,
       "uiChanged": false,
       "productionChanged": false,
-      "humanRequired": ["Final review of the R176 control-plane PR"]
+      "humanRequired": [
+        "Final review of the R176 control-plane PR"
+      ]
     }
   ],
   "humanGates": [
@@ -154,5 +608,85 @@
       "exactHead": null
     }
   ],
-  "certifications": []
+  "certifications": [],
+  "lockedProjectBoundaries": [
+    {
+      "projectId": "taishin-p2p-marketplace-platform",
+      "content": "LOCKED",
+      "truthReferences": [
+        "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP"
+      ]
+    },
+    {
+      "projectId": "cathay-mortgage-assistant",
+      "content": "LOCKED",
+      "truthReferences": [
+        "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "projectId": "cathay-sit-review-remediation-operations",
+      "content": "LOCKED",
+      "truthReferences": [
+        "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "projectId": "ctbc-mortgage-self-service-app",
+      "content": "LOCKED",
+      "assetStatus": "HERO_REQUIRED_LATER",
+      "truthReferences": [
+        "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP"
+      ]
+    },
+    {
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "content": "LOCKED",
+      "assetStatus": "THREE_APPROVED_EVIDENCE_ASSETS_SUFFICIENT; OVERVIEW_OPTIONAL",
+      "truthReferences": [
+        "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-EVIDENCE-BOUNDARY"
+      ]
+    }
+  ],
+  "assetPhaseStatus": {
+    "phase": "HUMAN_ASSET_INTAKE_NEXT",
+    "integrated": false,
+    "explicitHeroUploadsRequired": [
+      "voucher-center",
+      "booking",
+      "bandzo",
+      "cathay-sit-online-account-opening",
+      "ctbc-mortgage-self-service-app"
+    ],
+    "voucherCandidateSourceVisuals": {
+      "minimum": 4,
+      "maximum": 8
+    },
+    "noUploadCurrentlyRequired": [
+      "game-center",
+      "dbs",
+      "taishin-p2p-marketplace-platform",
+      "cathay-mortgage-assistant",
+      "cathay-sit-review-remediation-operations",
+      "booking-taxi-pickup-service-strategy"
+    ],
+    "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+  },
+  "projectPrDependencies": [
+    {
+      "pr": 12,
+      "head": "10821d25833af40bcd6d1db37f5d07bc03d9a1a8",
+      "status": "UNCHANGED_RECONCILIATION_LATER"
+    },
+    {
+      "pr": 16,
+      "head": "36e5ab0363ba19a330dc62f2e2cb9dd4af90ef5f",
+      "status": "UNCHANGED_RECONCILIATION_LATER"
+    },
+    {
+      "pr": 17,
+      "head": "3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
+      "status": "UNCHANGED_RECONCILIATION_LATER"
+    }
+  ]
 }
