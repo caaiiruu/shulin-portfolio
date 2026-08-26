@@ -11,7 +11,7 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
     "build": "bash scripts/build-verified.sh",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run validate:design && npm run build && node --test --test-concurrency=1 tests/rendered-html.test.mjs tests/portfolio-control-plane-governance.test.mjs tests/portfolio-automation.test.mjs tests/portfolio-r181-experiments.test.mjs tests/portfolio-r182-certification.test.mjs",
+    "test": "npm run validate:design && npm run build && node --test --test-concurrency=1 tests/rendered-html.test.mjs tests/design-system-governance.test.mjs tests/portfolio-control-plane-governance.test.mjs tests/portfolio-automation.test.mjs tests/portfolio-r181-experiments.test.mjs tests/portfolio-r182-certification.test.mjs",
     "test:routes": "npm run build && node --test tests/project-detail-routes.test.mjs",
     "validate:ssot": "node public/site/qa/ssot-governance.mjs && node scripts/content-completeness-audit.mjs",
     "validate:content-completeness": "node scripts/content-completeness-audit.mjs",
@@ -21,7 +21,8 @@
     "automation:inspect": "node scripts/portfolio-automation.mjs inspect",
     "automation:validate-work-order": "node scripts/portfolio-automation.mjs validate-work-order",
     "automation:render-report": "node scripts/portfolio-automation.mjs render-report",
-    "validate:design": "npm run validate:ssot && node public/site/qa/design-system-lint.mjs && node public/site/qa/token-governance.mjs",
+    "validate:design": "npm run validate:ssot && node public/site/qa/design-system-lint.mjs && node public/site/qa/token-governance.mjs && node public/site/qa/design-system-impact.mjs",
+    "validate:design-impact": "node public/site/qa/design-system-impact.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"

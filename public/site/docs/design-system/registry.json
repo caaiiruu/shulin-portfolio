@@ -22,6 +22,123 @@
     "interactiveContrastContract": "Every default, hover, active, selected and focus state must pair its foreground and background tokens. Inverse text may not remain on a light hover surface.",
     "stageCaseCardContract": "Use one canonical stage identity and one View related work action; keep multi-item count separate, suppress duplicate evidence, and render only populated evidence columns."
   },
+  "governanceGraph": {
+    "schemaVersion": 1,
+    "consumerDiscoveryOwner": "qa/design-system-impact.mjs",
+    "structuralOverridePolicy": {
+      "projectIdentityMayOwnGeometry": false,
+      "allowedLocalControls": [
+        "asset focal position",
+        "asset object position",
+        "content-dependent visibility",
+        "registered component variant"
+      ],
+      "forbiddenLocalControls": [
+        "spacing",
+        "dimensions",
+        "alignment",
+        "typography hierarchy",
+        "grid structure",
+        "navigator structure"
+      ]
+    },
+    "consumerGroups": {
+      "homepageCards": {
+        "surface": "Homepage project cards",
+        "discoveryMarkers": ["work-card-v32"]
+      },
+      "workCards": {
+        "surface": "Work listing cards",
+        "discoveryMarkers": ["work-gallery-v32"]
+      },
+      "experimentCards": {
+        "surface": "Experiment listing cards",
+        "discoveryMarkers": ["experiment-index-card-v36"]
+      },
+      "searchCards": {
+        "surface": "Search and Results cards",
+        "discoveryMarkers": ["global-search-v114__projects"]
+      },
+      "relatedCards": {
+        "surface": "Related Work cards",
+        "discoveryMarkers": ["related-project-card-v45"]
+      },
+      "primaryDetails": {
+        "surface": "Primary project details",
+        "discoveryMarkers": ["renderSystemCaseParent"]
+      },
+      "experimentDetails": {
+        "surface": "Experiment detail pages",
+        "discoveryMarkers": ["experiment-overview-v45"]
+      },
+      "domainNavigation": {
+        "surface": "Homepage domain navigation",
+        "discoveryMarkers": ["updateDomainFloatingNav"]
+      }
+    },
+    "componentContracts": {
+      "ProjectCard": {
+        "registryComponent": "ProjectCard",
+        "cssOwner": "assets/css/components/project-card.css",
+        "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
+        "tokenDependencies": ["project-card-media-ratio", "project-card-content-padding", "project-card-body-gap", "project-card-cta-gap", "project-card-company-title-gap"],
+        "variants": ["Primary", "Experiment", "Related", "Search"],
+        "consumerGroups": ["homepageCards", "workCards", "experimentCards", "searchCards", "relatedCards"],
+        "discoveryMarkers": ["work-card-v32", "experiment-index-card-v36", "related-project-card-v45"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "InfoGrid": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["info-grid-cell-gap", "info-card-label-value-gap", "info-card-padding"],
+        "variants": ["Primary", "Experiment compact"],
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["info-grid-v45", "info-grid-v45--experiment"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "Decision": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["decision-card-gap", "decision-card-padding-block", "decision-field-gap"],
+        "variants": ["Canonical", "Featured", "Optional third block"],
+        "consumerGroups": ["primaryDetails"],
+        "discoveryMarkers": ["decision-card-v46", "createFeaturedDecisionGroup"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "OutcomeMetric": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["cmp-popup-outcome-metric-size", "outcome-metric-gap", "outcome-metric-support-gap"],
+        "variants": ["Quantitative", "Qualitative", "Featured"],
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["outcome-metric", "outcome-metric--qualitative"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "FloatingNavigator": {
+        "registryComponent": "FloatingNavigator",
+        "cssOwner": "assets/css/components/domain-selector.css",
+        "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
+        "tokenDependencies": ["floating-nav-shell-inset", "floating-nav-rail-gap", "control-height", "radius-pill", "motion-base"],
+        "variants": ["Domain", "Project detail"],
+        "consumerGroups": ["domainNavigation", "primaryDetails"],
+        "discoveryMarkers": ["floating-navigator", "canonicalProjectNavItems"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      }
+    },
+    "goldenConsumers": {
+      "viewports": [1419, 871, 430],
+      "primaryProjectDetail": {"projectId": "payment", "covers": ["InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]},
+      "experimentProjectDetail": {"projectId": "freelance-project-operations-tool", "covers": ["InfoGrid", "OutcomeMetric"]},
+      "projectCards": [
+        {"variant": "Primary", "surface": "Work"},
+        {"variant": "Experiment", "surface": "Experiments"},
+        {"variant": "Related", "surface": "Related Work"}
+      ]
+    }
+  },
   "components": [
     {
       "component": "Foundation",
