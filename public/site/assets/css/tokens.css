@@ -112,6 +112,20 @@
   --project-card-related-media-block: 160px;
   --project-card-related-media-block-mobile: 144px;
   --project-card-related-title: clamp(1.25rem, 1.15rem + .45vw, 1.6rem);
+  /* Stable component-intent relationships. These aliases preserve approved
+     primitive values while making cross-component impact explicit. */
+  --project-card-body-gap: var(--space-4);
+  --project-card-cta-gap: var(--space-5);
+  --project-card-cta-gap-mobile: var(--space-4);
+  --info-grid-cell-gap: var(--space-4);
+  --decision-card-gap: var(--space-5);
+  --decision-card-padding-block: var(--space-6);
+  --decision-card-padding-block-mobile: var(--space-5);
+  --decision-field-gap: var(--space-3);
+  --outcome-metric-gap: var(--space-3);
+  --outcome-metric-support-gap: var(--space-2);
+  --floating-nav-shell-inset: var(--space-3);
+  --floating-nav-rail-gap: var(--space-2);
   --experiment-card-min-block: clamp(380px, 31vw, 420px);
   --experiment-card-min-block-mobile: 360px;
   --profile-card-min-block: 248px;
