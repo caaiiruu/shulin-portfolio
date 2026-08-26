@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-26-r1822-shared-primary-parity",
+  "contentVersion": "2026-08-26-r1826-payment-restoration-voucher-freeze",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -491,7 +491,7 @@
             "status": "shipped-and-used",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+                "assetId": "voucher-offer-reusable-system-shared-rules-01",
                 "evidenceRole": "system-rule",
                 "layoutVariant": "system-visual",
                 "aspectRatio": "wide",
@@ -569,7 +569,7 @@
             "status": "partially-realised",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-mechanism-transition-public-v1",
+                "assetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
                 "evidenceRole": "flow",
                 "layoutVariant": "flow-strip",
                 "aspectRatio": "wide",
@@ -647,7 +647,7 @@
             "status": "shipped-and-used",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-error-recovery-public-v1",
+                "assetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
                 "evidenceRole": "flow",
                 "layoutVariant": "flow-strip",
                 "aspectRatio": "wide",
@@ -725,7 +725,7 @@
             "status": "partially-realised-and-future-state",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-stage-review-post-use-public-v1",
+                "assetId": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
                 "evidenceRole": "shipped-state",
                 "layoutVariant": "single-screen",
                 "aspectRatio": "wide",
@@ -4500,7 +4500,7 @@
             "en": "Led the campaign-flow and state design; the preloaded-wallet release direction was aligned with PM, business and engineering.",
             "zh": "主導活動流程與狀態設計；Preloaded-wallet 上線方向則與產品經理、商務及工程共同對齊。"
           },
-          "publicAssetId": "voucher-proof-sec-transformation-public-v1",
+          "publicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
           "sourceAssetIds": [
             "voucher-source-sec-user-journey-2023-v1",
             "voucher-source-save-every-day-2024-v1"
@@ -4512,7 +4512,7 @@
             "en": "Co-led the phased recovery model with the PM and owned the interaction, state and message design.",
             "zh": "與產品經理共同主導分階段復原模型，並負責互動、狀態與 Message 設計。"
           },
-          "publicAssetId": "voucher-framework-error-recovery-public-v1",
+          "publicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-programme-recommendations-v1"
           ]
@@ -4523,7 +4523,7 @@
             "en": "Led the hypothesis, prototype and product-page experience; business problem definition and rollout were aligned with business, PM and research.",
             "zh": "主導 Hypothesis、原型與產品團隊-頁面 experience；商業問題與推行則與商務團隊、產品經理及研究團隊對齊。"
           },
-          "publicAssetId": "voucher-framework-pdp-contextual-discovery-public-v1",
+          "publicAssetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-pdp-voucher-ut-learnings-2024-v1",
             "voucher-source-pdp-learning1-design-2024-v1"
@@ -4535,7 +4535,7 @@
             "en": "Owned the interaction structure and shipped-state specification.",
             "zh": "負責互動結構與已上線-狀態規格。"
           },
-          "publicAssetId": "voucher-framework-voucher-details-evolution-public-v1",
+          "publicAssetId": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-voucher-details-atc-product-review-2024-v1",
             "voucher-source-voucher-details-master-screens-v1"
@@ -4547,7 +4547,7 @@
             "en": "Led the condition and channel action model; feasibility and business rules were jointly resolved with PM and engineering.",
             "zh": "主導 Condition／通路操作模型；Feasibility 與商業規則則與產品經理及工程團隊共同解決。"
           },
-          "publicAssetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-rules-01",
           "sourceAssetIds": [
             "voucher-source-voucher-details-visibility-2025-v1",
             "voucher-source-voucher-details-master-screens-v1"
@@ -4559,7 +4559,7 @@
             "en": "Prepared the evidence, mechanism comparison and transition model; the long-term mechanism and phasing were programme decisions shared with product, business, operations and engineering.",
             "zh": "整理證據、機制 comparison 與轉型模型；長期機制及 Phasing 則由產品、商務、營運及工程共同決定。"
           },
-          "publicAssetId": "voucher-framework-mechanism-transition-public-v1",
+          "publicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
           "sourceAssetIds": [
             "voucher-source-omni-incentive-vision-2024-v1"
           ]
@@ -4570,7 +4570,7 @@
             "en": "Led channel-constraint and customer-friction analysis; the final mechanism direction required shared business and engineering approval.",
             "zh": "主導通路 constraint 與顧客-friction 分析；最終機制方向需由商務與工程共同核准。"
           },
-          "publicAssetId": "voucher-framework-channel-redemption-public-v1",
+          "publicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-omni-incentive-vision-2024-v1"
           ]
@@ -4581,7 +4581,7 @@
             "en": "Co-led early card exploration and translated cross-team feedback into responsive variants; formal component adoption was completed with the Design System team.",
             "zh": "共同主導早期卡片 exploration，將跨團隊回饋轉化為響應式版本；正式元件採用則與設計系統 team 共同完成。"
           },
-          "publicAssetId": "voucher-framework-voucher-card-system-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-component-foundation-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-ut-2024-v1",
             "voucher-source-voucher-card-component-spec-2025-v1"
@@ -4593,7 +4593,7 @@
             "en": "Led evidence synthesis and information-priority recommendations; final visual semantics were aligned with the Design System team.",
             "zh": "主導證據統整與資訊priority recommendations；最終 Visual 語意與設計系統 team 對齊。"
           },
-          "publicAssetId": "voucher-framework-voucher-card-research-evidence-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-reusable-patterns-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-ut-2024-v1"
           ]
@@ -4604,7 +4604,7 @@
             "en": "Defined the cross-journey property and state requirements; component API and governance were resolved with Design System and engineering.",
             "zh": "定義跨旅程 Property 與狀態需求；元件 API 與治理則與設計系統及工程團隊共同解決。"
           },
-          "publicAssetId": "voucher-evidence-component-properties-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-states-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-component-spec-2025-v1"
           ]
@@ -4615,7 +4615,7 @@
             "en": "Mapped operational rules and reusable states; final configuration ownership and governance were shared with operations, product, engineering and Design System.",
             "zh": "整理營運規則與 Reusable 狀態；最終 Configuration ownership 與治理則由營運團隊、產品團隊、工程團隊及設計系統共同承擔。"
           },
-          "publicAssetId": "voucher-evidence-operations-reuse-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-rules-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-component-spec-2025-v1"
           ]
@@ -14621,19 +14621,19 @@
       },
       "problemTypes": {
         "en": [
-          "Payment systems",
-          "Checkout continuity",
-          "Transaction recovery"
+          "Fragmented checkout channels",
+          "Voucher and loyalty ambiguity",
+          "Payment recovery gaps"
         ],
         "zh": [
-          "支付系統",
-          "結帳連續性",
-          "交易復原"
+          "結帳通路分散",
+          "優惠券與會員權益不清",
+          "付款復原缺口"
         ]
       },
       "atAGlance": {
-        "en": "Led end-to-end payment experience design across app and self-checkout, connecting payment, value visibility, recovery and transaction traceability into one continuous system.",
-        "zh": "主導 App 與自助結帳的端到端支付體驗設計，將付款、價值顯示、失敗復原與交易追蹤串連為一套連續系統。"
+        "en": "Led the 0→1 product design of FairPrice’s in-store payment system, connecting App payment entry with cashier and self-checkout execution, benefit visibility and transaction recovery across ~190 stores.",
+        "zh": "主導 FairPrice 門市付款系統的 0→1 產品設計，串接 App 付款入口、人工收銀與自助結帳執行、權益顯示及交易復原，推展至約 190 間門市。"
       },
       "infoGrid": {
         "type": {
@@ -14667,13 +14667,13 @@
         "timeline": {
           "duration": {
             "en": "Dec 2020–Nov 2021",
-            "zh": "2020 年 12 月–2021 年 11 月"
+            "zh": "2020 年 12 月至 2021 年 11 月"
           },
           "dateRange": {
             "en": "Dec 2020–Nov 2021",
-            "zh": "2020 年 12 月–2021 年 11 月"
+            "zh": "2020 年 12 月至 2021 年 11 月"
           },
-          "status": "human-approved-r182",
+          "status": "source-screenshot-confirmed-2026-08-06",
           "presentation": "short-form-actual-project-period"
         },
         "schemaVersion": "2026-08-06-r142"
@@ -14824,7 +14824,7 @@
         "ownershipCorrection": "All Payment-related design, including customer recovery, refunds, internal systems, the transaction portal and email flows, was independently completed by the user.",
         "visualEvidenceAssessment": "Complete for publication. Additional static images are not required; only unique interaction clips or explicit production-status evidence add material value."
       },
-      "contentStatus": "approved-r182-non-asset",
+      "contentStatus": "approved-r164.2",
       "scaleAndOutcome": {
         "operationalScale": "100+ stores",
         "flowReduction": {
@@ -15167,9 +15167,9 @@
           },
           {
             "order": 2,
-            "assetId": "payment-evidence-field-research-synthesis-public-v1",
+            "assetId": "payment-evidence-live-checkout-image-only-r1649d",
             "role": "research",
-            "purpose": "Combine anonymised fieldwork photography with behavioural findings.",
+            "purpose": "Show the two strongest live cashier and self-checkout research photographs without embedded editorial copy.",
             "loading": "lazy"
           },
           {
@@ -15589,24 +15589,10 @@
           },
           "contentStatus": "approved"
         },
-        "optionalGallery": [
-          {
-            "assetId": "payment-evidence-order-history-public-v1",
-            "purpose": "Supporting IA evidence for transaction-history categorisation.",
-            "loading": "on-demand"
-          }
-        ],
+        "optionalGallery": [],
         "mediaStrategy": {
           "initialStaticBlocks": 5,
           "videoRule": "Video is never required for first paint and does not replace the static hero.",
-          "primaryVideo": {
-            "sourceAssetId": "payment-source-video-overall-app-pos-r77-v1",
-            "publicAssetId": "payment-video-core-app-pos-public-v1",
-            "use": "On-demand end-to-end app and POS interaction",
-            "derivative": "Trim to 8-12 seconds, 24-30fps, WebM plus MP4 fallback",
-            "loading": "Mount only after click or when near the viewport",
-            "preload": "none"
-          },
           "optionalVideos": [
             {
               "sourceAssetId": "payment-source-video-order-details-r77-v1",
@@ -15632,267 +15618,138 @@
         "crossFunctionalDeliveryRef": "projects.payment.crossFunctionalDelivery",
         "recognitionRef": "projects.payment.recognition",
         "coreSystemInsight": {
-          "headline": {
-            "en": "The transaction—not the screen or channel—had to remain coherent from entry through confirmation and recovery.",
-            "zh": "必須保持連續的是整筆交易，而不是單一畫面或通路；這份連續性要從進入付款延伸至確認與復原。"
+          "insight": {
+            "en": "Payment trust broke across the seams between loyalty, checkout and post-payment recovery.",
+            "zh": "付款信任在會員權益、結帳與付款後復原之間的接縫處中斷。"
           },
-          "supportingCopy": {
-            "en": "Customers could begin in the App and complete payment at a cashier or self-checkout, while benefits, failures and records crossed other systems. Trust depended on preserving transaction continuity across those boundaries.",
-            "zh": "顧客可從 App 開始，並在人工收銀或自助結帳完成付款；權益、失敗與紀錄則跨越其他系統。信任取決於能否在這些邊界之間維持交易連續性。"
+          "whatThisChanged": {
+            "en": "I reframed these moments as one shared transaction model across App, cashier and self-checkout — keeping value visible, reducing checkout friction and preserving recovery after payment.",
+            "zh": "我將這些時刻重新定義為橫跨 App、人工收銀與自助結帳的一套共享交易模型——讓價值保持可見、降低結帳摩擦，並保留付款後的復原能力。"
           },
-          "contentStatus": "approved-r164.1",
+          "contentStatus": "human-approved-r164.9d",
           "evidence": [
             {
-              "assetId": "payment-system-transaction-map-public-v1",
-              "title": {
-                "en": "Transaction continuity across systems",
-                "zh": "跨系統的交易連續性"
-              },
-              "copy": {
-                "en": "A simplified public-safe map of the customer, App, payment and loyalty logic, POS/SCO execution, completion and exception loop.",
-                "zh": "經簡化且適合公開的系統圖，呈現顧客、App、付款與會員邏輯、POS／SCO 執行、完成與例外循環。"
-              }
+              "assetId": "payment-core-checkout-compression-approved-v3",
+              "presentation": "raw",
+              "showCaption": false
             }
-          ]
+          ],
+          "showInsightLabel": false,
+          "showVisualProofLabel": false
         },
         "decisionEvidence": {
           "title": {
             "en": "Evidence that shaped the decisions",
-            "zh": "影響設計決策的證據"
+            "zh": "形塑設計決策的證據"
           },
           "presentation": "decision-support",
           "items": [
             {
-              "assetId": "payment-evidence-field-research-synthesis-public-v1",
+              "assetId": "payment-evidence-live-checkout-image-only-r1649d",
               "title": {
-                "en": "Live checkout fieldwork",
-                "zh": "門市結帳實地研究"
+                "en": "Live checkout behaviour",
+                "zh": "真實結帳行為"
               },
               "copy": {
-                "en": "Three days with eight shoppers exposed the pressure, assurance and timing needs at cashier and self-checkout.",
-                "zh": "三天、八位購物者的實地研究，揭示人工收銀與自助結帳中的壓力、安心感與時間需求。"
+                "en": "3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.",
+                "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
+              },
+              "presentation": "raw"
+            },
+            {
+              "assetId": "payment-evidence-journey-synthesis-r1649c",
+              "title": {
+                "en": "Journey synthesis across the transaction",
+                "zh": "橫跨交易流程的旅程綜整"
+              },
+              "copy": {
+                "en": "Mapped queue, preparation, checkout and post-checkout as one journey, exposing where speed, loyalty clarity, payment assurance and recovery broke across the transaction.",
+                "zh": "將排隊、準備、結帳與結帳後映射成一段旅程，揭示速度、會員價值清晰度、付款安心感與復原在交易中的斷點。"
+              },
+              "presentation": "raw"
+            },
+            {
+              "assetId": "payment-evidence-sco-entry-public-v2",
+              "title": {
+                "en": "SCO entry recognition validation",
+                "zh": "SCO 入口辨識驗證"
+              },
+              "copy": {
+                "en": "6 structured + 7 guerrilla SCO participants. Validated clearer entry recognition and QR action language.",
+                "zh": "6 位結構化＋7 位游擊 SCO 參與者。驗證更清楚的入口辨識與 QR 行動語言。"
+              },
+              "presentation": "raw"
+            },
+            {
+              "assetId": "payment-return-recovery-human-r1649d",
+              "title": {
+                "en": "Return recovery in the shipped flow",
+                "zh": "已上線流程中的退貨復原"
+              },
+              "copy": {
+                "en": "Returns moved from a separate support path into the payment record, giving shoppers a direct starting point for recovery after payment.",
+                "zh": "退貨由分離的支援路徑移入付款紀錄，讓購物者能在付款後直接開始復原。"
+              },
+              "presentation": "raw"
+            }
+          ],
+          "quotes": [
+            {
+              "quote": {
+                "en": "“I have to fish out 2 cards — MyNTUC and a credit card. Here, it’s only one app.”",
+                "zh": "「我原本要拿出兩張卡——MyNTUC 和信用卡。這裡只需要一個 App。」"
+              },
+              "role": {
+                "en": "SHOPPER VOICE",
+                "zh": "購物者心聲"
               }
             },
             {
-              "assetId": "payment-validation-sco-entry-public-v2",
-              "title": {
-                "en": "Repeated self-checkout entry validation",
-                "zh": "多輪自助結帳入口驗證"
+              "quote": {
+                "en": "“It’s express payment. It cuts down the steps of swiping cards, and it’s cashless.”",
+                "zh": "「這是快速付款。它減少刷卡步驟，而且是無現金的。」"
               },
-              "copy": {
-                "en": "Structured and guerrilla testing clarified entry recognition, QR guidance and the handoff into payment.",
-                "zh": "結構化與游擊測試釐清入口辨識、QR 指示及進入付款的交接方式。"
-              }
-            },
-            {
-              "assetId": "payment-validation-value-history-public-v2",
-              "title": {
-                "en": "Value and transaction-history validation",
-                "zh": "價值與交易紀錄驗證"
-              },
-              "copy": {
-                "en": "Copy and concept tests made benefits, confirmation and post-transaction records easier to interpret.",
-                "zh": "文案與概念測試讓權益、確認及交易後紀錄更容易理解。"
+              "role": {
+                "en": "SHOPPER VOICE",
+                "zh": "購物者心聲"
               }
             }
           ],
-          "structuredGroups": [
-            {
-              "heading": {
-                "en": "Queue pressure made the App-to-checkout handoff trust-critical",
-                "zh": "排隊壓力使 App 至結帳交接成為信任關鍵"
-              },
-              "summary": {
-                "en": "Live cashier and self-checkout validation showed that unclear instructions and delayed recognition created hesitation at a time-sensitive checkout moment.",
-                "zh": "人工收銀與自助結帳驗證顯示，不清楚的指示與延遲辨識會在時間敏感的結帳時刻造成猶豫。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 01",
-                "zh": "導向決策 01"
-              }
-            },
-            {
-              "heading": {
-                "en": "Customers could not assume benefits carried across payment contexts",
-                "zh": "顧客無法確定權益會跨付款情境延續"
-              },
-              "summary": {
-                "en": "Fieldwork and loyalty validation showed that customers were unsure when LinkPoints, vouchers and discounts had actually carried into payment.",
-                "zh": "實地研究與會員權益驗證顯示，顧客不確定 LinkPoints、優惠券與折扣何時真正帶入付款。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 02",
-                "zh": "導向決策 02"
-              }
-            },
-            {
-              "heading": {
-                "en": "Payment exceptions continued beyond the failure screen",
-                "zh": "付款例外會延續至失敗畫面之後"
-              },
-              "summary": {
-                "en": "Failure-path mapping, refund design and transaction-record testing showed that recovery needed clear next actions and traceable records.",
-                "zh": "失敗路徑梳理、退款設計與交易紀錄測試顯示，復原需要清楚的下一步與可追溯紀錄。"
-              },
-              "decisionLink": {
-                "en": "LED TO DECISION 03",
-                "zh": "導向決策 03"
-              }
-            }
-          ],
-          "metrics": [],
-          "contentStatus": "approved-r164.1e",
           "validationLayer": {
             "title": {
-              "en": "Research and validation",
-              "zh": "研究與驗證"
+              "en": "Focused validation",
+              "zh": "聚焦驗證"
             },
             "intro": {
-              "en": "I led field research and repeated validation across live checkout, loyalty, self-checkout entry and transaction history.",
-              "zh": "我主導實體結帳、會員權益、自助結帳入口與交易紀錄的實地研究及多輪驗證。"
+              "en": "Two distinct validation signals clarified checkout assurance and transaction-history retrieval.",
+              "zh": "兩個不同驗證訊號釐清結帳安心感與交易紀錄查找。"
             },
             "metrics": [
               {
-                "value": "3 days",
-                "label": {
-                  "en": "live-store fieldwork",
-                  "zh": "門市實地研究"
-                },
-                "supportingCopy": {
-                  "en": "cashier and self-checkout observation",
-                  "zh": "人工收銀與自助結帳觀察"
-                },
-                "evidenceNote": {
-                  "en": "Designer-led fieldwork across cashier and self-checkout contexts.",
-                  "zh": "設計師主導的人工收銀與自助結帳實地研究。"
-                }
-              },
-              {
-                "value": "8",
-                "label": {
-                  "en": "shoppers observed and interviewed",
-                  "zh": "位受觀察與訪談的購物者"
-                },
-                "supportingCopy": {
-                  "en": "during live-store checkout research",
-                  "zh": "於門市結帳實地研究中"
-                },
-                "evidenceNote": {
-                  "en": "Designer-led live-store observation and interviews.",
-                  "zh": "設計師主導的門市觀察與訪談。"
-                }
-              },
-              {
-                "value": "6 + 7",
-                "label": {
-                  "en": "self-checkout entry participants",
-                  "zh": "位自助結帳入口測試參與者"
-                },
-                "supportingCopy": {
-                  "en": "across structured and guerrilla testing",
-                  "zh": "涵蓋結構化與游擊測試"
-                },
-                "evidenceNote": {
-                  "en": "Six structured and seven guerrilla participants tested self-checkout entry.",
-                  "zh": "6 位結構化測試與 7 位游擊測試參與者驗證自助結帳入口。"
-                }
-              },
-              {
-                "value": "12",
-                "label": {
-                  "en": "loyalty and instruction participants",
-                  "zh": "位會員權益與指示測試參與者"
-                },
-                "supportingCopy": {
-                  "en": "validating benefit visibility and cashier guidance",
-                  "zh": "驗證權益可見性與收銀指示"
-                },
-                "evidenceNote": {
-                  "en": "Designer-led loyalty and cashier-instruction validation.",
-                  "zh": "設計師主導的會員權益與收銀指示驗證。"
-                }
-              },
-              {
-                "value": "14",
-                "label": {
-                  "en": "transaction-history participants",
-                  "zh": "位交易紀錄測試參與者"
-                },
-                "supportingCopy": {
-                  "en": "testing Order History concepts and terminology",
-                  "zh": "測試訂單紀錄概念與用語"
-                },
-                "evidenceNote": {
-                  "en": "Designer-led Order History concept and terminology testing.",
-                  "zh": "設計師主導的訂單紀錄概念與用語測試。"
-                }
-              },
-              {
                 "value": "87.5%",
                 "label": {
-                  "en": "assurance signal",
-                  "zh": "安心感訊號"
+                  "en": "showed assurance, social-pressure or time-sensitivity needs during digital checkout",
+                  "zh": "在數位結帳中呈現安心感、社交壓力或時間敏感需求"
                 },
                 "supportingCopy": {
-                  "en": "customers needed transparency and visible alternatives",
-                  "zh": "顧客需要透明度與可見替代方案"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants surfaced assurance as a payment need.",
-                  "zh": "8 位門市研究參與者中有 7 位顯示安心感是付款需求。"
-                }
-              },
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "social-pressure signal",
-                  "zh": "社交壓力訊號"
-                },
-                "supportingCopy": {
-                  "en": "hesitation increased when others were waiting",
-                  "zh": "他人等待時，猶豫感會增加"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants described social pressure at checkout.",
-                  "zh": "8 位門市研究參與者中有 7 位描述結帳時的社交壓力。"
-                }
-              },
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "time-sensitivity signal",
-                  "zh": "時間敏感訊號"
-                },
-                "supportingCopy": {
-                  "en": "shorter, clearer checkout paths mattered",
-                  "zh": "更短且更清楚的結帳路徑很重要"
-                },
-                "evidenceNote": {
-                  "en": "Seven of eight live-store participants treated checkout time as a key concern.",
-                  "zh": "8 位門市研究參與者中有 7 位將結帳時間視為關鍵考量。"
+                  "en": "Supported a shorter checkout handoff with clearer recovery options.",
+                  "zh": "支持更短的結帳交接與更清楚的復原選項。"
                 }
               },
               {
                 "value": "85.7%",
                 "label": {
-                  "en": "preferred clearer transaction history",
-                  "zh": "偏好更清楚的交易紀錄"
+                  "en": "preferred a clearly separated transaction-history structure",
+                  "zh": "偏好清楚分隔的交易紀錄結構"
                 },
                 "supportingCopy": {
-                  "en": "a separated, clearly labelled history structure",
-                  "zh": "分開且標示清楚的紀錄結構"
-                },
-                "evidenceNote": {
-                  "en": "Twelve of fourteen Order History participants preferred the clearer separated structure.",
-                  "zh": "14 位訂單紀錄測試參與者中有 12 位偏好更清楚的分開結構。"
+                  "en": "Supported separating payment records from other activity for faster retrieval.",
+                  "zh": "支持將付款紀錄與其他活動分開，以便更快查找。"
                 }
               }
             ]
           },
-          "mappingTitle": {
-            "en": "What the validation changed",
-            "zh": "驗證如何改變決策"
-          }
+          "contentStatus": "approved-r164.9d"
         },
         "outcomes": {
           "title": {
@@ -15901,82 +15758,12 @@
           },
           "semanticHierarchy": {
             "measuredLabel": {
-              "en": "The payment system launched at retail scale and proved reliable in live use.",
-              "zh": "付款系統已推展至零售規模，並在實際使用中展現可靠性。"
+              "en": "NPS was the primary customer-experience outcome; scale, reliability and speed support the shipped-system story.",
+              "zh": "NPS 是主要顧客體驗成果；規模、可靠性與速度作為已上線系統的支援證據。"
             },
             "measured": [
               {
-                "value": "~190",
-                "tier": "primary",
-                "priority": 5,
-                "label": {
-                  "en": "stores",
-                  "zh": "間門市"
-                },
-                "supportingCopy": {
-                  "en": "rollout coverage across FairPrice retail locations",
-                  "zh": "覆蓋 FairPrice 零售據點的推展範圍"
-                },
-                "evidenceNote": {
-                  "en": "Product and team rollout coverage measured across the launched service.",
-                  "zh": "已上線服務的產品與團隊推展範圍。"
-                }
-              },
-              {
-                "value": "~57K",
-                "tier": "primary",
-                "priority": 4,
-                "label": {
-                  "en": "users",
-                  "zh": "名使用者"
-                },
-                "supportingCopy": {
-                  "en": "using the in-store payment system by September 2021",
-                  "zh": "截至 2021 年 9 月使用門市付款系統"
-                },
-                "evidenceNote": {
-                  "en": "Live service usage reported for September 2021.",
-                  "zh": "2021 年 9 月的實際服務使用量。"
-                }
-              },
-              {
-                "value": "~228K",
-                "tier": "primary",
-                "priority": 3,
-                "label": {
-                  "en": "monthly transactions",
-                  "zh": "每月交易筆數"
-                },
-                "supportingCopy": {
-                  "en": "completed by September 2021",
-                  "zh": "截至 2021 年 9 月完成"
-                },
-                "evidenceNote": {
-                  "en": "Live transaction volume reported for September 2021.",
-                  "zh": "2021 年 9 月的實際交易量。"
-                }
-              },
-              {
-                "value": "98.5%",
-                "tier": "primary",
-                "priority": 2,
-                "label": {
-                  "en": "transaction success rate",
-                  "zh": "交易成功率"
-                },
-                "supportingCopy": {
-                  "en": "across the launched in-store payment experience",
-                  "zh": "涵蓋已上線的門市付款體驗"
-                },
-                "evidenceNote": {
-                  "en": "Live service reliability metric from the launched Payment experience.",
-                  "zh": "已上線付款體驗的實際服務可靠性指標。"
-                }
-              },
-              {
                 "value": "70.2",
-                "tier": "primary",
-                "priority": 1,
                 "label": {
                   "en": "NPS",
                   "zh": "NPS"
@@ -15985,35 +15772,61 @@
                   "en": "from 1,798 responses",
                   "zh": "來自 1,798 份回覆"
                 },
-                "evidenceNote": {
-                  "en": "Customer experience signal measured after launch.",
-                  "zh": "上線後衡量的顧客體驗訊號。"
+                "featured": true
+              },
+              {
+                "value": "~190",
+                "label": {
+                  "en": "stores",
+                  "zh": "間門市"
+                },
+                "supportingCopy": {
+                  "en": "retail rollout coverage",
+                  "zh": "零售推展範圍"
                 }
               },
               {
-                "value": "12.49s",
-                "tier": "supporting",
-                "priority": 6,
+                "value": "~57K",
+                "label": {
+                  "en": "users",
+                  "zh": "名使用者"
+                },
+                "supportingCopy": {
+                  "en": "by Sep 2021",
+                  "zh": "截至 2021 年 9 月"
+                }
+              },
+              {
+                "value": "~228K",
+                "label": {
+                  "en": "monthly transactions",
+                  "zh": "每月交易筆數"
+                },
+                "supportingCopy": {
+                  "en": "by Sep 2021",
+                  "zh": "截至 2021 年 9 月"
+                }
+              },
+              {
+                "value": "98.5%",
+                "label": {
+                  "en": "transaction success rate",
+                  "zh": "交易成功率"
+                },
+                "supportingCopy": {
+                  "en": "live service reliability",
+                  "zh": "實際服務可靠性"
+                }
+              },
+              {
+                "value": "12.49 sec",
                 "label": {
                   "en": "faster checkout",
                   "zh": "結帳加快"
                 },
                 "supportingCopy": {
-                  "en": "reduced from 19.78s to 7.29s",
-                  "zh": "由 19.78 秒降至 7.29 秒"
-                },
-                "evidenceNote": {
-                  "en": "Measured checkout timing from the launched 0→1 Payment experience.",
-                  "zh": "0→1 付款體驗上線後的結帳時間量測。"
-                }
-              }
-            ],
-            "supportingStatements": [
-              {
-                "emphasis": true,
-                "text": {
-                  "en": "The work also established reusable payment standards and interaction guidelines across related FairPrice product contexts.",
-                  "zh": "這項工作也為 FairPrice 相關產品情境建立了可重用的付款標準與互動規範。"
+                  "en": "19.78 sec → 7.29 sec",
+                  "zh": "19.78 秒 → 7.29 秒"
                 }
               }
             ],
@@ -16031,32 +15844,20 @@
                 "en": "Asian Experience Awards 2021",
                 "zh": "Asian Experience Awards 2021"
               },
-              "attribution": {
-                "en": "Team recognition—not an individual award.",
-                "zh": "此為團隊肯定，並非個人獎項。"
-              },
               "assetId": "payment-evidence-outcomes-award-public-v2",
-              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout"
+              "href": "https://asianbusinessreview.com/co-written-partner-retail/event-news-more-news/ntuc-fairprice-awarded-innovative-in-store-digital-checkout",
+              "presentation": "direct",
+              "ctaLabel": {
+                "en": "View award announcement ↗",
+                "zh": "查看獎項公告 ↗"
+              }
             }
           },
           "attributionBoundary": {
-            "en": "Transaction volume, success rate, NPS, speed and rollout scale are reported as product and team outcomes measured in live use.",
-            "zh": "交易量、成功率、NPS、速度與推展規模皆以實際使用中量測的產品與團隊成果呈現。"
+            "en": "Product and team outcomes measured in live use.",
+            "zh": "實際使用中量測的產品與團隊成果。"
           },
-          "contentStatus": "approved-r164.1e",
-          "evidence": [
-            {
-              "assetId": "payment-outcome-checkout-speed-public-v2",
-              "title": {
-                "en": "Checkout completed 12.49 seconds faster",
-                "zh": "結帳加快 12.49 秒"
-              },
-              "copy": {
-                "en": "Measured timing fell from 19.78 seconds to 7.29 seconds in the launched 0→1 Payment experience.",
-                "zh": "已上線的 0→1 付款體驗將量測時間由 19.78 秒降至 7.29 秒。"
-              }
-            }
-          ]
+          "contentStatus": "approved-r164.9d"
         }
       },
       "zeroToOneMandate": {
@@ -16571,7 +16372,7 @@
         "contentStatus": "approved"
       },
       "type_zh": "交易系統",
-      "transformation_zh": "串連 App 與門市結帳的交易連續性",
+      "transformation_zh": "從分散的門市結帳，到單一全通路付款系統",
       "keyInterventionMap": {
         "status": "verified-r164.1",
         "sectionLabel": {
@@ -16595,19 +16396,19 @@
           "zh": "我串接顧客行為、POS 執行、權益邏輯與復原狀態，讓團隊能依據同一套結構，決定體驗在 App、人工收銀與自助結帳之間應如何運作。"
         }
       },
-      "transformation": "Transaction continuity across App and in-store checkout",
+      "transformation": "From fragmented in-store checkout to one omni payment system",
       "problem_types": [
-        "Payment systems",
-        "Checkout continuity",
-        "Transaction recovery"
+        "Fragmented checkout channels",
+        "Voucher and loyalty ambiguity",
+        "Payment recovery gaps"
       ],
       "problem_types_zh": [
-        "支付系統",
-        "結帳連續性",
-        "交易復原"
+        "結帳通路分散",
+        "優惠券與會員權益不清",
+        "付款復原缺口"
       ],
-      "at_glance": "Led end-to-end payment experience design across app and self-checkout, connecting payment, value visibility, recovery and transaction traceability into one continuous system.",
-      "at_glance_zh": "主導 App 與自助結帳的端到端支付體驗設計，將付款、價值顯示、失敗復原與交易追蹤串連為一套連續系統。",
+      "at_glance": "Led 0→1 research and end-to-end design of FairPrice’s in-store payment system, connecting App, cashier and self-checkout while integrating LinkPoints, vouchers and recovery flows across 100+ stores.",
+      "at_glance_zh": "主導 FairPrice 門市付款系統的 0→1 研究與端到端設計，串接 App、人工收銀與自助結帳，並整合 LinkPoints、優惠券與失敗復原流程，推展至 100 多家門市。",
       "why": "Customers moved between queue, App, cashier and self-checkout as separate experiences, while voucher and loyalty availability varied by channel and payment failures or refunds lacked one clear recovery path.",
       "why_zh": "顧客在排隊、App、人工收銀與自助結帳之間面對彼此分離的體驗；優惠券與會員權益依通路而異，付款失敗與退款也缺乏一條清楚的復原路徑。",
       "impact": "Established a reusable payment standard and shared guidelines across App, POS, self-checkout and other FairPrice verticals, connecting customer checkout with frontline and internal transaction operations.",
@@ -16631,87 +16432,114 @@
           {
             "id": "payment-r1641-decision-01",
             "title": {
-              "en": "Structure one coherent transaction across App and checkout",
-              "zh": "建構一條貫穿 App 與結帳的完整交易"
+              "en": "Orchestrate one shared transaction across App, cashier and self-checkout",
+              "zh": "協調橫跨 App、人工收銀與自助結帳的一套共享交易"
             },
             "whatIDecided": {
-              "en": "Define one clear sequence for generating, presenting and completing payment from the App at cashier or self-checkout.",
-              "zh": "定義一條清楚順序，讓顧客在 App 產生付款資訊、於人工收銀或自助結帳出示並完成付款。"
+              "en": "Defined one transaction model spanning App entry, QR payment handoff, cashier, SCO, loyalty, payment and completion — so the service behaved as one system rather than a sequence of disconnected screens.",
+              "zh": "定義一套涵蓋 App 入口、QR 付款交接、人工收銀、SCO、會員權益、付款與完成狀態的交易模型，讓服務以一套系統運作，而非彼此斷裂的畫面。"
             },
             "whyThisChoice": {
-              "en": "Queue pressure and unclear QR instructions created hesitation at the most time-sensitive moment in the journey.",
-              "zh": "排隊壓力與不清楚的 QR 操作指示，會在旅程中時間最敏感的時刻造成猶豫。"
+              "en": "Queue pressure, physical checkout constraints and unclear handoffs made speed and assurance dependent on coordinated behaviour across customer devices and store systems.",
+              "zh": "排隊壓力、實體結帳限制與不清楚的交接，使速度與安心感取決於顧客裝置與門市系統之間的協同行為。"
             },
             "optionalBlock": {
-              "type": "CONSTRAINT MANAGED",
+              "type": "WHAT THIS REQUIRED",
               "content": {
-                "en": "The handoff crossed the customer’s device, POS/SCO state and frontline behaviour.",
-                "zh": "這段交接跨越顧客裝置、POS／SCO 狀態與第一線人員行為。"
+                "en": "A shared sequence and state model across App, POS/SCO and frontline execution.",
+                "zh": "在 App、POS／SCO 與第一線執行之間建立共享順序與狀態模型。"
               }
             },
             "outcome": {
-              "en": "A validated and shipped handoff that made the transition between App and physical checkout understandable.",
-              "zh": "經驗證並上線的交接模式，讓 App 與實體結帳之間的轉換更容易理解。"
+              "en": "A validated and shipped App-to-checkout handoff, with the visible SCO journey reduced from 9 to 6 steps.",
+              "zh": "經驗證並上線的 App-to-checkout 交接，SCO 可見旅程由 9 步縮減為 6 步。"
             },
             "status": "validated-and-shipped"
           },
           {
             "id": "payment-r1641-decision-02",
             "title": {
-              "en": "Keep payment value visible inside the transaction",
-              "zh": "讓付款價值在交易中保持可見"
+              "en": "Keep loyalty value legible and trustworthy at the moment of payment",
+              "zh": "讓會員價值在付款承諾時保持清楚且可信"
             },
             "whatIDecided": {
-              "en": "Surface LinkPoints, vouchers, applied discounts and payable value within payment and confirmation states.",
-              "zh": "在付款與確認狀態中呈現 LinkPoints、優惠券、已套用折扣與應付金額。"
+              "en": "Structured loyalty value, discounts, benefit application, payable amount, confirmation and history as one legible information sequence at the moment customers committed to payment.",
+              "zh": "將會員價值、折扣、權益套用、應付金額、確認與歷史紀錄，建構成顧客承諾付款時的一條清楚資訊序列。"
             },
             "whyThisChoice": {
-              "en": "Customers needed confidence that the benefits they expected had actually carried into the transaction.",
-              "zh": "顧客需要確信原本預期的權益確實已帶入交易。"
+              "en": "Customers needed to verify that expected benefits had carried into the transaction before committing, not discover missing value after payment.",
+              "zh": "顧客需要在承諾付款前確認預期權益已帶入交易，而不是付款後才發現價值遺失。"
             },
             "optionalBlock": {
               "type": "CONSTRAINT MANAGED",
               "content": {
-                "en": "Membership, voucher, payment and POS logic were distributed across different systems and teams.",
-                "zh": "會員、優惠券、付款與 POS 邏輯分布在不同系統與團隊。"
+                "en": "Membership, voucher, payment and POS logic were distributed across different systems and ownership boundaries.",
+                "zh": "會員、優惠券、付款與 POS 邏輯分布在不同系統及責任邊界。"
               }
             },
             "outcome": {
-              "en": "A shipped integration that made benefits and final payable value legible at checkout.",
-              "zh": "已上線的整合方案，讓顧客能在結帳時理解權益與最終應付金額。"
+              "en": "A shipped value and confirmation model that kept LinkPoints, discounts and payable value understandable through completion and history.",
+              "zh": "已上線的價值與確認模型，讓 LinkPoints、折扣與應付金額一路至完成與紀錄都保持可理解。"
             },
             "status": "shipped-cross-team-integration"
           },
           {
             "id": "payment-r1641-decision-03",
             "title": {
-              "en": "Treat recovery and traceability as part of payment",
-              "zh": "將復原與可追溯性納入付款本身"
+              "en": "Design recovery and traceability as part of the transaction",
+              "zh": "將復原與可追溯性設計為交易的一部分"
             },
             "whatIDecided": {
-              "en": "Connect failure alternatives, transaction records and recovery paths to the same transaction model.",
-              "zh": "將失敗替代方案、交易紀錄與復原路徑連接至同一套交易模型。"
+              "en": "Connected return entry from the payment record, Return QR, refund processing and completion, refund amount and method, payment-reference lookup and recovery alternatives to one transaction model — preserving customer and operational traceability after payment.",
+              "zh": "將付款紀錄中的退貨入口、Return QR、退款處理與完成、退款金額與方式、付款參照查詢及復原替代方案連接至同一套交易模型，保留付款後的顧客與營運可追溯性。"
             },
             "whyThisChoice": {
-              "en": "A payment problem could continue after the customer-facing error state, requiring both customers and staff to understand what happened and what came next.",
-              "zh": "付款問題可能在顧客端錯誤狀態之後持續發生，因此顧客與員工都需要理解發生了什麼及下一步。"
+              "en": "A payment problem continued beyond the error screen; customers and internal teams needed a traceable record of what happened, what could be recovered and what action came next.",
+              "zh": "付款問題會延續至錯誤畫面之後；顧客與內部團隊都需要可追溯的紀錄，以理解發生了什麼、可如何復原及下一步行動。"
             },
             "optionalBlock": {
-              "type": "CONSTRAINT MANAGED",
+              "type": "RISK MANAGED",
               "content": {
-                "en": "Recovery crossed customer experience, cashier support, customer service and financial operations.",
-                "zh": "復原流程跨越顧客體驗、收銀支援、客服與財務營運。"
+                "en": "Explicit recovery states reduced the risk of customer uncertainty and operational dead ends while preserving a common transaction reference.",
+                "zh": "明確的復原狀態降低顧客不確定性與營運死角，同時保留共同的交易參照。"
               }
             },
             "outcome": {
-              "en": "The shipped Payment service covered customer-facing failure alternatives, recovery and refund flows, transaction records, internal transaction lookup and supporting operational workflows.",
-              "zh": "已上線的付款服務涵蓋顧客端失敗替代方案、復原與退款流程、交易紀錄、內部交易查詢及支援營運流程。"
+              "en": "Shipped customer and internal flows connected return entry from the payment record, refund handling, completion states and operational lookup.",
+              "zh": "已上線的顧客端與內部流程串連付款紀錄中的退貨入口、退款處理、完成狀態與營運查詢。"
             },
             "status": "shipped-complete-service-scope"
+          },
+          {
+            "id": "payment-r1641-decision-04",
+            "title": {
+              "en": "Extend the payment model into operations, POS and cross-functional delivery",
+              "zh": "將付款模型延伸至營運、POS 與跨職能交付"
+            },
+            "whatIDecided": {
+              "en": "A payment service could not scale through App UI alone. I worked across Payments Engineering, POS, Finance, Security, Customer Service, NCR and store-operation stakeholders to align how payment behaved across customer, checkout and internal-support systems.",
+              "zh": "付款服務無法只靠 App UI 擴展。我橫跨 Payments Engineering、POS、財務、資安、客服、NCR 與門市營運利害關係人，對齊付款在顧客、結帳與內部支援系統中的行為。"
+            },
+            "whyThisChoice": {
+              "en": "I also designed internal operational interfaces for transaction review and refund handling, aligned POS/SCO flows for new payment services, and established reusable Payment design guidance for related teams.",
+              "zh": "我也設計交易審查與退款處理的內部營運介面，對齊新付款服務的 POS／SCO 流程，並為相關團隊建立可重用的 Payment 設計規範。"
+            },
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "Payments Engineering, Engineering leadership, POS technology, NCR/SCO, Finance, Security/Infrastructure, Customer Service, store managers, cashiers and SCO staff aligned around one operating model, with frontline training readiness and relevant payment collateral reviewed before scale.",
+                "zh": "Payments Engineering、工程主管、POS 技術、NCR／SCO、財務、資安／基礎設施、客服、門市主管、收銀員與 SCO 人員需圍繞同一營運模型對齊，並在擴展前完成第一線培訓準備及相關付款素材檢視。"
+              }
+            },
+            "outcome": {
+              "en": "Reusable Payment standards and operational interfaces made the service extensible beyond a single customer-facing flow.",
+              "zh": "可重用的 Payment 標準與營運介面，讓服務得以延伸至單一顧客流程之外。"
+            },
+            "status": "shipped-and-operationalised"
           }
         ],
         "sourcePackage": "r143 user-provided Payment screenshots",
-        "contentStatus": "approved-r164.1"
+        "contentStatus": "approved-r164.9d"
       },
       "projectClosure": {
         "ownershipAndCollaboration": {
@@ -16781,9 +16609,9 @@
         "related-work"
       ],
       "latestConfirmedCorrection": {
-        "round": "R164.1",
-        "date": "2026-08-17",
-        "summary": "Migrated Payment into the canonical shared Project Detail IA with a transaction-continuity decision spine.",
+        "round": "R164.9",
+        "date": "2026-08-20",
+        "summary": "Integrated Human-approved transaction-compression proof, focused validation, verified real recovery UI, outcome hierarchy and team recognition from stabilized QA.",
         "productionMutable": false
       },
       "domain": {
@@ -16950,12 +16778,12 @@
         "contentRefs": {
           "whatMadeThisHard": "whatMadeThisHard",
           "contribution": "valueIBrought",
-          "contributionIntervention": "keyInterventionMap",
           "coreSystemInsight": "publicContent.coreSystemInsight",
           "decisions": "decisionNarrative.primaryDecisions",
           "evidence": "publicContent.decisionEvidence",
           "outcomes": "publicContent.outcomes",
-          "accountability": "ownershipModel"
+          "accountability": "ownershipModel",
+          "contributionIntervention": "keyInterventionMap"
         },
         "navigation": [
           {
@@ -17029,22 +16857,22 @@
         "payment-r1641-decision-01": {
           "publicAssetId": "payment-evidence-sco-entry-public-v2",
           "caption": {
-            "en": "Field context, tested entry model and shipped QR handoff across App and physical checkout.",
-            "zh": "Field context, tested entry model and shipped QR handoff across App and physical checkout."
+            "en": "Validated App-to-checkout entry recognition and QR handoff.",
+            "zh": "經驗證的 App-to-checkout 入口辨識與 QR 交接。"
           }
         },
         "payment-r1641-decision-02": {
           "publicAssetId": "payment-evidence-value-visibility-public-v1",
           "caption": {
-            "en": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction.",
-            "zh": "LinkPoints, discounts, payable value and confirmation remained visible inside the transaction."
+            "en": "LinkPoints, discounts and payable value stayed visible inside payment.",
+            "zh": "LinkPoints、折扣與應付金額在付款中保持可見。"
           }
         },
         "payment-r1641-decision-03": {
-          "publicAssetId": "payment-evidence-operational-recovery-public-v2",
+          "publicAssetId": "payment-return-recovery-human-r1649d",
           "caption": {
-            "en": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model.",
-            "zh": "Exceptions, recovery, refunds, transaction records and operational traceability formed one service model."
+            "en": "Returns moved from a separate support path into the payment record.",
+            "zh": "退貨由分離的支援路徑移入付款紀錄。"
           }
         }
       },
@@ -31131,7 +30959,7 @@
         "en": "Led the campaign-flow and state design; the preloaded-wallet release direction was aligned with PM, business and engineering.",
         "zh": "主導活動流程與狀態設計；Preloaded-wallet 上線方向則與產品經理、商務及工程共同對齊。"
       },
-      "relatedPublicAssetId": "voucher-proof-sec-transformation-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
       "sourceAssetIds": [
         "voucher-source-sec-user-journey-2023-v1",
         "voucher-source-save-every-day-2024-v1"
@@ -31151,7 +30979,7 @@
         "en": "Co-led the phased recovery model with the PM and owned the interaction, state and message design.",
         "zh": "與產品經理共同主導分階段復原模型，並負責互動、狀態與 Message 設計。"
       },
-      "relatedPublicAssetId": "voucher-framework-error-recovery-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
       "sourceAssetIds": [
         "voucher-source-programme-recommendations-v1"
       ]
@@ -31170,7 +30998,7 @@
         "en": "Led the hypothesis, prototype and product-page experience; business problem definition and rollout were aligned with business, PM and research.",
         "zh": "主導 Hypothesis、原型與產品團隊-頁面 experience；商業問題與推行則與商務團隊、產品經理及研究團隊對齊。"
       },
-      "relatedPublicAssetId": "voucher-framework-pdp-contextual-discovery-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
       "sourceAssetIds": [
         "voucher-source-pdp-voucher-ut-learnings-2024-v1",
         "voucher-source-pdp-learning1-design-2024-v1"
@@ -31190,7 +31018,7 @@
         "en": "Owned the interaction structure and shipped-state specification.",
         "zh": "負責互動結構與已上線-狀態規格。"
       },
-      "relatedPublicAssetId": "voucher-framework-voucher-details-evolution-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
       "sourceAssetIds": [
         "voucher-source-voucher-details-atc-product-review-2024-v1",
         "voucher-source-voucher-details-master-screens-v1"
@@ -31210,7 +31038,7 @@
         "en": "Led the condition and channel action model; feasibility and business rules were jointly resolved with PM and engineering.",
         "zh": "主導 Condition／通路操作模型；Feasibility 與商業規則則與產品經理及工程團隊共同解決。"
       },
-      "relatedPublicAssetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+      "relatedPublicAssetId": "voucher-offer-reusable-system-shared-rules-01",
       "sourceAssetIds": [
         "voucher-source-voucher-details-visibility-2025-v1",
         "voucher-source-voucher-details-master-screens-v1"
@@ -31230,7 +31058,7 @@
         "en": "Prepared the evidence, mechanism comparison and transition model; the long-term mechanism and phasing were programme decisions shared with product, business, operations and engineering.",
         "zh": "整理證據、機制 comparison 與轉型模型；長期機制及 Phasing 則由產品、商務、營運及工程共同決定。"
       },
-      "relatedPublicAssetId": "voucher-framework-mechanism-transition-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
       "sourceAssetIds": [
         "voucher-source-omni-incentive-vision-2024-v1"
       ]
@@ -31249,7 +31077,7 @@
         "en": "Led channel-constraint and customer-friction analysis; the final mechanism direction required shared business and engineering approval.",
         "zh": "主導通路 constraint 與顧客-friction 分析；最終機制方向需由商務與工程共同核准。"
       },
-      "relatedPublicAssetId": "voucher-framework-channel-redemption-public-v1",
+      "relatedPublicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
       "sourceAssetIds": [
         "voucher-source-omni-incentive-vision-2024-v1"
       ]
@@ -31268,7 +31096,7 @@
         "en": "Co-led early card exploration and translated cross-team feedback into responsive variants; formal component adoption was completed with the Design System team.",
         "zh": "共同主導早期卡片 exploration，將跨團隊回饋轉化為響應式版本；正式元件採用則與設計系統 team 共同完成。"
       },
-      "relatedPublicAssetId": "voucher-framework-voucher-card-system-public-v1",
+      "relatedPublicAssetId": "voucher-offer-reusable-system-component-foundation-01",
       "sourceAssetIds": [
         "voucher-source-voucher-card-ut-2024-v1",
         "voucher-source-voucher-card-component-spec-2025-v1"
@@ -31288,7 +31116,7 @@
         "en": "Led evidence synthesis and information-priority recommendations; final visual semantics were aligned with the Design System team.",
         "zh": "主導證據統整與資訊priority recommendations；最終 Visual 語意與設計系統 team 對齊。"
       },
-      "relatedPublicAssetId": "voucher-framework-voucher-card-research-evidence-public-v1",
+      "relatedPublicAssetId": "voucher-offer-reusable-system-reusable-patterns-01",
       "sourceAssetIds": [
         "voucher-source-voucher-card-ut-2024-v1"
       ]
@@ -31307,7 +31135,7 @@
         "en": "Defined the cross-journey property and state requirements; component API and governance were resolved with Design System and engineering.",
         "zh": "定義跨旅程 Property 與狀態需求；元件 API 與治理則與設計系統及工程團隊共同解決。"
       },
-      "relatedPublicAssetId": "voucher-evidence-component-properties-public-v1",
+      "relatedPublicAssetId": "voucher-offer-reusable-system-shared-states-01",
       "sourceAssetIds": [
         "voucher-source-voucher-card-component-spec-2025-v1"
       ]
@@ -31326,7 +31154,7 @@
         "en": "Mapped operational rules and reusable states; final configuration ownership and governance were shared with operations, product, engineering and Design System.",
         "zh": "整理營運規則與 Reusable 狀態；最終 Configuration ownership 與治理則由營運團隊、產品團隊、工程團隊及設計系統共同承擔。"
       },
-      "relatedPublicAssetId": "voucher-evidence-operations-reuse-public-v1",
+      "relatedPublicAssetId": "voucher-offer-reusable-system-shared-rules-01",
       "sourceAssetIds": [
         "voucher-source-voucher-card-component-spec-2025-v1"
       ]

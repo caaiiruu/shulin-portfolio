@@ -10,7 +10,7 @@ const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-proje
 const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
-  assert.match(content.contentVersion,/r182(?:2|-non-asset-complete)/);
+  assert.match(content.contentVersion,/r182(?:2|6|-non-asset-complete)/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
   assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
@@ -77,4 +77,70 @@ test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detai
     assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),sha256);
   }
   assert.notEqual(manifest.items[expected.booking[0]].publicPath,manifest.items[expected['booking-taxi-pickup-service-strategy'][0]].publicPath);
+});
+
+test('R182.6 restores final Payment semantics and retires stale Payment and Voucher requests',()=>{
+  const payment=content.projects.payment;
+  const decisions=payment.decisionNarrative.primaryDecisions;
+  assert.equal(decisions.length,4);
+  assert.deepEqual(decisions.map(item=>item.title.en),[
+    'Orchestrate one shared transaction across App, cashier and self-checkout',
+    'Keep loyalty value legible and trustworthy at the moment of payment',
+    'Design recovery and traceability as part of the transaction',
+    'Extend the payment model into operations, POS and cross-functional delivery'
+  ]);
+  assert.equal(payment.publicContent.coreSystemInsight.insight.en,'Payment trust broke across the seams between loyalty, checkout and post-payment recovery.');
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].assetId,'payment-core-checkout-compression-approved-v3');
+  assert.equal(payment.publicContent.coreSystemInsight.showInsightLabel,false);
+  assert.equal(payment.publicContent.coreSystemInsight.showVisualProofLabel,false);
+  assert.deepEqual(payment.publicContent.decisionEvidence.items.map(item=>item.assetId),[
+    'payment-evidence-live-checkout-image-only-r1649d',
+    'payment-evidence-journey-synthesis-r1649c',
+    'payment-evidence-sco-entry-public-v2',
+    'payment-return-recovery-human-r1649d'
+  ]);
+  assert.equal(payment.publicContent.decisionEvidence.quotes.length,2);
+  assert.deepEqual(payment.publicContent.decisionEvidence.validationLayer.metrics.map(item=>item.value),['87.5%','85.7%']);
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured[0].value,'70.2');
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).value,'12.49 sec');
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.ctaLabel.en,'View award announcement ↗');
+  assert.doesNotMatch(JSON.stringify(payment),/Key in Payment ref\./);
+
+  const restoredAssets=[
+    'payment-core-checkout-compression-approved-v3',
+    'payment-evidence-journey-synthesis-r1649c',
+    'payment-evidence-live-checkout-image-only-r1649d',
+    'payment-return-recovery-human-r1649d'
+  ];
+  for(const id of restoredAssets){
+    const asset=manifest.items[id];
+    assert.equal(asset.assetStatus,'production');
+    assert.equal(asset.implementationStatus,'real-active');
+    assert.equal(asset.replacementRequired,false);
+    assert.ok(fs.existsSync(`public${asset.publicPath}`));
+    assert.equal(crypto.createHash('sha256').update(fs.readFileSync(`public${asset.publicPath}`)).digest('hex'),asset.sha256);
+  }
+
+  const retiredIds=[
+    'payment-evidence-order-history-public-v1',
+    'payment-video-core-app-pos-public-v1',
+    'voucher-proof-sec-transformation-public-v1',
+    'voucher-framework-error-recovery-public-v1',
+    'voucher-framework-pdp-contextual-discovery-public-v1',
+    'voucher-framework-voucher-details-evolution-public-v1',
+    'voucher-framework-voucher-condition-action-matrix-public-v1',
+    'voucher-framework-mechanism-transition-public-v1',
+    'voucher-framework-channel-redemption-public-v1',
+    'voucher-framework-voucher-card-system-public-v1',
+    'voucher-framework-voucher-card-research-evidence-public-v1',
+    'voucher-evidence-component-properties-public-v1',
+    'voucher-evidence-operations-reuse-public-v1',
+    'voucher-stage-review-post-use-public-v1'
+  ];
+  for(const id of retiredIds){
+    assert.equal(manifest.items[id],undefined);
+    assert.doesNotMatch(JSON.stringify(content),new RegExp(id));
+    assert.doesNotMatch(JSON.stringify(truth),new RegExp(id));
+  }
+  assert.equal(Object.values(manifest.items).filter(asset=>['payment','voucher'].includes(asset.projectId)&&asset.implementationStatus==='placeholder-active').length,0);
 });
