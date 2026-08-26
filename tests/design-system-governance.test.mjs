@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 const registry = JSON.parse(fs.readFileSync("public/site/docs/design-system/registry.json", "utf8"));
@@ -11,12 +14,70 @@ const navigator = fs.readFileSync("public/site/assets/css/components/domain-sele
 test("registry maps canonical components through variants to discoverable consumers and regressions", () => {
   const graph = registry.governanceGraph;
   assert.equal(graph.consumerDiscoveryOwner, "qa/design-system-impact.mjs");
-  for (const name of ["ProjectCard", "InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]) {
+  for (const name of ["ProjectCard", "ProjectDetailOverview", "InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]) {
     const contract = graph.componentContracts[name];
     assert.ok(contract.cssOwner);
     assert.ok(contract.variants.length);
+    assert.deepEqual(Object.keys(contract.variantConsumers).sort(), [...contract.variants].sort());
     assert.ok(contract.consumerGroups.length);
+    assert.ok(contract.regressionProfiles.length);
     assert.ok(contract.regressionContracts.length);
+  }
+});
+
+test("component-intent tokens have one registered owner and a primitive trace", () => {
+  const graph = registry.governanceGraph;
+  const ownership = new Map();
+  for (const [name, contract] of Object.entries(graph.componentContracts)) {
+    for (const token of contract.componentIntentTokens) {
+      assert.equal(ownership.has(token), false, `${token} has duplicate ownership`);
+      ownership.set(token, name);
+      assert.equal(graph.tokenContracts[token].owner, name);
+      assert.match(tokens, new RegExp(`--${token}: var\\(--${graph.tokenContracts[token].primitive}\\)`));
+    }
+  }
+});
+
+test("consumer, regression, and golden references resolve to registered contracts", () => {
+  const graph = registry.governanceGraph;
+  for (const contract of Object.values(graph.componentContracts)) {
+    contract.consumerGroups.forEach((name) => assert.ok(graph.consumerGroups[name], `unknown consumer ${name}`));
+    Object.values(contract.variantConsumers).flat().forEach((name) => assert.ok(graph.consumerGroups[name], `unknown variant consumer ${name}`));
+    contract.regressionProfiles.forEach((name) => assert.ok(graph.regressionProfiles[name], `unknown regression ${name}`));
+    contract.regressionContracts.forEach((file) => assert.equal(fs.existsSync(file), true, `missing regression ${file}`));
+  }
+  graph.goldenConsumers.projectCards.forEach(({variant}) => assert.ok(graph.componentContracts.ProjectCard.variants.includes(variant)));
+  assert.deepEqual(graph.componentContracts.Decision.optionalContentBlocks, ["CONSTRAINT MANAGED", "TRADE-OFF ACCEPTED", "WHAT THIS REQUIRED"]);
+});
+
+test("impact validation rejects broken graph references and duplicate intent ownership", () => {
+  const cases = [
+    ["unknown consumer group", graph => { graph.componentContracts.ProjectCard.variantConsumers.Primary = ["missingSurface"]; }],
+    ["unknown regression profile", graph => { graph.componentContracts.ProjectCard.regressionProfiles = ["missingProfile"]; }],
+    ["missing regression contract", graph => { graph.componentContracts.ProjectCard.regressionContracts = ["tests/missing-regression.mjs"]; }],
+    ["duplicate component-intent ownership", graph => {
+      graph.componentContracts.InfoGrid.componentIntentTokens.push("project-card-body-gap");
+      graph.componentContracts.InfoGrid.tokenDependencies.push("project-card-body-gap");
+      graph.tokenContracts["project-card-body-gap"].owner = "InfoGrid";
+    }],
+    ["unknown ProjectCard variant", graph => { graph.goldenConsumers.projectCards[0].variant = "Project slug"; }]
+  ];
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "design-system-impact-"));
+  try {
+    for (const [label, mutate] of cases) {
+      const copy = structuredClone(registry);
+      mutate(copy.governanceGraph);
+      const registryPath = path.join(directory, `${label.replaceAll(" ", "-")}.json`);
+      fs.writeFileSync(registryPath, JSON.stringify(copy));
+      const result = spawnSync(process.execPath, ["public/site/qa/design-system-impact.mjs"], {
+        cwd: process.cwd(),
+        env: {...process.env, DESIGN_SYSTEM_REGISTRY_PATH: registryPath},
+        encoding: "utf8"
+      });
+      assert.notEqual(result.status, 0, `${label} should fail governance validation`);
+    }
+  } finally {
+    fs.rmSync(directory, {recursive: true, force: true});
   }
 });
 

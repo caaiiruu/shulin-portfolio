@@ -42,6 +42,20 @@
         "navigator structure"
       ]
     },
+    "tokenContracts": {
+      "project-card-body-gap": {"primitive": "space-4", "intent": "ProjectCard title-to-body rhythm", "owner": "ProjectCard"},
+      "project-card-cta-gap": {"primitive": "space-5", "intent": "ProjectCard desktop content-to-CTA separation", "owner": "ProjectCard"},
+      "project-card-cta-gap-mobile": {"primitive": "space-4", "intent": "ProjectCard compact content-to-CTA separation", "owner": "ProjectCard"},
+      "info-grid-cell-gap": {"primitive": "space-4", "intent": "InfoGrid cell rhythm", "owner": "InfoGrid"},
+      "decision-card-gap": {"primitive": "space-5", "intent": "Decision internal block rhythm", "owner": "Decision"},
+      "decision-card-padding-block": {"primitive": "space-6", "intent": "Decision desktop vertical boundary", "owner": "Decision"},
+      "decision-card-padding-block-mobile": {"primitive": "space-5", "intent": "Decision compact vertical boundary", "owner": "Decision"},
+      "decision-field-gap": {"primitive": "space-3", "intent": "Decision field-group rhythm", "owner": "Decision"},
+      "outcome-metric-gap": {"primitive": "space-3", "intent": "OutcomeMetric value-to-label hierarchy", "owner": "OutcomeMetric"},
+      "outcome-metric-support-gap": {"primitive": "space-2", "intent": "OutcomeMetric qualitative support hierarchy", "owner": "OutcomeMetric"},
+      "floating-nav-shell-inset": {"primitive": "space-3", "intent": "FloatingNavigator viewport and safe-area inset", "owner": "FloatingNavigator"},
+      "floating-nav-rail-gap": {"primitive": "space-2", "intent": "FloatingNavigator item rhythm", "owner": "FloatingNavigator"}
+    },
     "consumerGroups": {
       "homepageCards": {
         "surface": "Homepage project cards",
@@ -76,35 +90,72 @@
         "discoveryMarkers": ["updateDomainFloatingNav"]
       }
     },
+    "regressionProfiles": {
+      "listingCards": {
+        "viewports": [1419, 871, 430],
+        "checks": ["Primary card", "Experiment card", "Related Work card", "CTA bottom alignment", "canonical media", "visible focus", "no horizontal overflow"]
+      },
+      "projectDetailStructure": {
+        "viewports": [1419, 871, 430],
+        "checks": ["exhaustive structural assertions", "Primary golden detail", "Experiment golden detail", "EN/ZH parity", "visible focus", "no horizontal overflow"]
+      },
+      "floatingNavigatorInteraction": {
+        "viewports": [1419, 871, 430],
+        "checks": ["Domain navigation", "Project Detail navigation", "smooth forward navigation", "smooth reverse navigation", "deep links", "reduced motion", "wheel interruption", "touch interruption", "active state"]
+      }
+    },
     "componentContracts": {
       "ProjectCard": {
         "registryComponent": "ProjectCard",
         "cssOwner": "assets/css/components/project-card.css",
         "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
-        "tokenDependencies": ["project-card-media-ratio", "project-card-content-padding", "project-card-body-gap", "project-card-cta-gap", "project-card-company-title-gap"],
+        "tokenDependencies": ["project-card-media-ratio", "project-card-content-padding", "project-card-body-gap", "project-card-cta-gap", "project-card-cta-gap-mobile", "project-card-company-title-gap"],
+        "componentIntentTokens": ["project-card-body-gap", "project-card-cta-gap", "project-card-cta-gap-mobile"],
         "variants": ["Primary", "Experiment", "Related", "Search"],
+        "variantConsumers": {"Primary": ["homepageCards", "workCards"], "Experiment": ["experimentCards"], "Related": ["relatedCards"], "Search": ["searchCards"]},
         "consumerGroups": ["homepageCards", "workCards", "experimentCards", "searchCards", "relatedCards"],
         "discoveryMarkers": ["work-card-v32", "experiment-index-card-v36", "related-project-card-v45"],
+        "regressionProfiles": ["listingCards"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "ProjectDetailOverview": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["panel-padding", "section-heading-content-gap"],
+        "componentIntentTokens": [],
+        "variants": ["Recruiter-first Primary", "Experiment detail"],
+        "variantConsumers": {"Recruiter-first Primary": ["primaryDetails"], "Experiment detail": ["experimentDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["renderSystemCaseParent", "renderExperiment"],
+        "regressionProfiles": ["projectDetailStructure", "floatingNavigatorInteraction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
       },
       "InfoGrid": {
         "registryComponent": "ProjectDetailOverview",
         "cssOwner": "assets/css/components/project-detail-overview.css",
         "renderOwners": ["assets/js/app.js"],
         "tokenDependencies": ["info-grid-cell-gap", "info-card-label-value-gap", "info-card-padding"],
+        "componentIntentTokens": ["info-grid-cell-gap"],
         "variants": ["Primary", "Experiment compact"],
+        "variantConsumers": {"Primary": ["primaryDetails"], "Experiment compact": ["experimentDetails"]},
         "consumerGroups": ["primaryDetails", "experimentDetails"],
         "discoveryMarkers": ["info-grid-v45", "info-grid-v45--experiment"],
+        "regressionProfiles": ["projectDetailStructure"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
       },
       "Decision": {
         "registryComponent": "ProjectDetailOverview",
         "cssOwner": "assets/css/components/project-detail-overview.css",
         "renderOwners": ["assets/js/app.js"],
-        "tokenDependencies": ["decision-card-gap", "decision-card-padding-block", "decision-field-gap"],
-        "variants": ["Canonical", "Featured", "Optional third block"],
+        "tokenDependencies": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
+        "componentIntentTokens": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
+        "variants": ["Canonical", "Featured"],
+        "variantConsumers": {"Canonical": ["primaryDetails"], "Featured": ["primaryDetails"]},
+        "optionalContentBlocks": ["CONSTRAINT MANAGED", "TRADE-OFF ACCEPTED", "WHAT THIS REQUIRED"],
         "consumerGroups": ["primaryDetails"],
         "discoveryMarkers": ["decision-card-v46", "createFeaturedDecisionGroup"],
+        "regressionProfiles": ["projectDetailStructure"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
       },
       "OutcomeMetric": {
@@ -112,9 +163,12 @@
         "cssOwner": "assets/css/components/project-detail-overview.css",
         "renderOwners": ["assets/js/app.js"],
         "tokenDependencies": ["cmp-popup-outcome-metric-size", "outcome-metric-gap", "outcome-metric-support-gap"],
+        "componentIntentTokens": ["outcome-metric-gap", "outcome-metric-support-gap"],
         "variants": ["Quantitative", "Qualitative", "Featured"],
+        "variantConsumers": {"Quantitative": ["primaryDetails"], "Qualitative": ["primaryDetails", "experimentDetails"], "Featured": ["primaryDetails"]},
         "consumerGroups": ["primaryDetails", "experimentDetails"],
         "discoveryMarkers": ["outcome-metric", "outcome-metric--qualitative"],
+        "regressionProfiles": ["projectDetailStructure"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
       },
       "FloatingNavigator": {
@@ -122,9 +176,12 @@
         "cssOwner": "assets/css/components/domain-selector.css",
         "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
         "tokenDependencies": ["floating-nav-shell-inset", "floating-nav-rail-gap", "control-height", "radius-pill", "motion-base"],
+        "componentIntentTokens": ["floating-nav-shell-inset", "floating-nav-rail-gap"],
         "variants": ["Domain", "Project detail"],
+        "variantConsumers": {"Domain": ["domainNavigation"], "Project detail": ["primaryDetails"]},
         "consumerGroups": ["domainNavigation", "primaryDetails"],
         "discoveryMarkers": ["floating-navigator", "canonicalProjectNavItems"],
+        "regressionProfiles": ["floatingNavigatorInteraction"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
       }
     },
