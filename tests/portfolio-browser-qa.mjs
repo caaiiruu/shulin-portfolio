@@ -14,6 +14,9 @@ const viewports = [
 ];
 const primaryIds=['voucher','voucher-center','game-center','dbs','booking','bandzo','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy'];
 const recruiterFirstPrimaryIds=new Set(['dbs','booking','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy']);
+const portfolioContent=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
+const portfolioManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
+const recruiterFirstRealLeadIds=new Set([...recruiterFirstPrimaryIds].filter(projectId=>{const project=portfolioContent.projects[projectId],assetId=project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId,asset=portfolioManifest.items[assetId];return asset?.assetStatus==='production'&&asset?.implementationStatus==='real-active'}));
 const routes = ["/site/", "/site/work", "/site/experiments", ...primaryIds.map(id=>`/site/work/${id}`)];
 const failures = [];
 const report = { baseUrl, viewports: {} };
@@ -80,13 +83,17 @@ for (const viewport of viewports) {
     const projectId=route.match(/^\/site\/work\/([^/]+)$/)?.[1];
     if(projectId&&recruiterFirstPrimaryIds.has(projectId)){
       const opening=metrics.opening;
-      if(!opening?.summary||!opening.signals||!opening.lead||!opening.complexity)failures.push(`${viewport.name} ${projectId} recruiter-first opening owner missing: ${JSON.stringify(opening)}`);
+      const expectsRealLead=recruiterFirstRealLeadIds.has(projectId);
+      if(!opening?.summary||!opening.signals||!opening.complexity)failures.push(`${viewport.name} ${projectId} recruiter-first opening owner missing: ${JSON.stringify(opening)}`);
+      else if(expectsRealLead&&!opening.lead)failures.push(`${viewport.name} ${projectId} approved real Lead Project Visual missing: ${JSON.stringify(opening)}`);
+      else if(!expectsRealLead&&opening.lead)failures.push(`${viewport.name} ${projectId} pending placeholder rendered recruiter-facing: ${JSON.stringify(opening)}`);
       else{
-        if(opening.lead.top<Math.max(opening.summary.bottom,opening.signals.bottom)-1||opening.complexity.top<opening.lead.bottom-1)failures.push(`${viewport.name} ${projectId} opening order mismatch: ${JSON.stringify(opening)}`);
-        if(Math.abs(opening.ratio-16/9)>.02||opening.fit!=='contain'||opening.owner!=='ProjectDetailOverview'||opening.variant!=='Lead Project Visual')failures.push(`${viewport.name} ${projectId} Lead Project Visual contract mismatch: ${JSON.stringify(opening)}`);
+        const overviewBottom=Math.max(opening.summary.bottom,opening.signals.bottom),openingTail=opening.lead?.bottom||overviewBottom;
+        if((opening.lead&&opening.lead.top<overviewBottom-1)||opening.complexity.top<openingTail-1)failures.push(`${viewport.name} ${projectId} opening order mismatch: ${JSON.stringify(opening)}`);
+        if(opening.lead&&(Math.abs(opening.ratio-16/9)>.02||opening.fit!=='contain'||opening.assetStatus!=='real-active'||opening.owner!=='ProjectDetailOverview'||opening.variant!=='Lead Project Visual'))failures.push(`${viewport.name} ${projectId} Lead Project Visual contract mismatch: ${JSON.stringify(opening)}`);
         const stacked=Math.abs(opening.summary.left-opening.signals.left)<2&&opening.signals.top>=opening.summary.bottom-1;
-        if(viewport.width===430&&!stacked)failures.push(`${viewport.name} ${projectId} mobile Overview order mismatch: ${JSON.stringify(opening)}`);
-        if(viewport.width>=871&&stacked)failures.push(`${viewport.name} ${projectId} wide Overview unexpectedly stacked: ${JSON.stringify(opening)}`);
+        if(viewport.width<=871&&!stacked)failures.push(`${viewport.name} ${projectId} tablet/mobile Overview order mismatch: ${JSON.stringify(opening)}`);
+        if(viewport.width===1419&&stacked)failures.push(`${viewport.name} ${projectId} desktop Overview unexpectedly stacked: ${JSON.stringify(opening)}`);
       }
     }
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });

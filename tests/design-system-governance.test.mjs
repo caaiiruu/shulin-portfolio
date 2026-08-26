@@ -10,6 +10,7 @@ const tokens = fs.readFileSync("public/site/assets/css/tokens.css", "utf8");
 const projectCard = fs.readFileSync("public/site/assets/css/components/project-card.css", "utf8");
 const overview = fs.readFileSync("public/site/assets/css/components/project-detail-overview.css", "utf8");
 const navigator = fs.readFileSync("public/site/assets/css/components/domain-selector.css", "utf8");
+const app = fs.readFileSync("public/site/assets/js/app.js", "utf8");
 
 test("registry maps canonical components through variants to discoverable consumers and regressions", () => {
   const graph = registry.governanceGraph;
@@ -104,14 +105,18 @@ test("golden consumers cover every registered structural variant at approved vie
 
 test("recruiter-first overview governs decision-filter order and lead visual media", () => {
   const contract = registry.governanceGraph.componentContracts.ProjectDetailOverview;
-  assert.deepEqual(contract.compositionOrder, ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual", "Complexity / remaining case content"]);
+  assert.deepEqual(contract.compositionOrder, ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content"]);
   assert.deepEqual(contract.mediaVariants["Lead Project Visual"], {
     aspectRatio: "16:9",
     fit: "contain",
-    placeholderPolicy: "governed non-evidentiary placeholder",
+    placeholderPolicy: "pending or placeholder media does not render in recruiter-facing Primary details",
     consumerGroups: ["primaryDetails"]
   });
   assert.match(overview, /quick-view-v51--project\{grid-template-columns:minmax\(0,7fr\) minmax\(var\(--dimension-280px\),5fr\)/);
   assert.match(overview, /project-detail-hero-visual\{[^}]*aspect-ratio:16\/9/);
+  assert.match(overview, /project-detail-hero-visual\{[^}]*margin:0 auto/);
   assert.match(overview, /project-detail-hero-visual img\{[^}]*object-fit:contain/);
+  assert.match(overview, /@media\(max-width:900px\)\{\.quick-view-v51--project\{grid-template-columns:1fr\}/);
+  assert.match(overview, /@media\(max-width:600px\)\{\.modal-content-v45[\s\S]*?\.detail-commerce-v45\{[^}]*margin-bottom:var\(--space-5\)/);
+  assert.match(app, /if\(heroAsset&&!heroAsset\.isPlaceholder\)/);
 });
