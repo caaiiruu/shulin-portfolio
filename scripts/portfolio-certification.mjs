@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 
 const root=process.cwd();
 const readJson=(p)=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
@@ -68,10 +69,36 @@ if(envFiles.length)fail(`Tracked environment secret files: ${envFiles.join(', ')
 const publicAssetFiles=tracked.filter(p=>p.startsWith('public/site/assets/')&&/\.(?:png|jpe?g|webp|avif|gif)$/i.test(p));
 const metadataFindings=[];
 for(const file of publicAssetFiles){
+  if(!fs.existsSync(file))continue;
   const bytes=fs.readFileSync(file);const ascii=bytes.toString('latin1');
   if(/GPSLatitude|GPSLongitude|Exif\.GPSInfo|OwnerName|SerialNumber/i.test(ascii))metadataFindings.push(file);
 }
 if(metadataFindings.length)fail(`Sensitive image metadata: ${metadataFindings.join(', ')}`);
+
+const primaryLeadAssets=[];
+for(const [projectId,project] of Object.entries(content.projects)){
+  const assetId=project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId;
+  const asset=manifest.items[assetId];
+  if(!asset)fail(`${projectId}: missing Primary Lead Visual manifest record`);
+  else primaryLeadAssets.push({projectId,assetId,...asset});
+}
+if(primaryLeadAssets.length!==13)fail('Primary Lead Visual count must be 13');
+const leadPaths=new Set(),leadHashes=new Set();let leadAssetBytes=0;
+for(const asset of primaryLeadAssets){
+  if(asset.projectId!==manifest.items[asset.assetId]?.projectId||asset.type!=='image/jpeg'||asset.width!==2048||asset.height!==1152||asset.aspectRatio!=='16:9'||asset.assetStatus!=='production'||asset.implementationStatus!=='real-active'||asset.placeholderFallbackAssetId!==null||asset.replacementRequired!==false||asset.publicBuild!==true)fail(`${asset.projectId}: invalid approved Primary Lead Visual contract`);
+  if(!asset.publicPath?.startsWith('/site/assets/projects/')){fail(`${asset.projectId}: invalid Lead Visual public path`);continue}
+  const localPath=path.join(root,'public',asset.publicPath);
+  if(!fs.existsSync(localPath)){fail(`${asset.projectId}: Lead Visual file is missing`);continue}
+  const bytes=fs.readFileSync(localPath);leadAssetBytes+=bytes.length;
+  if(bytes.length>512*1024)fail(`${asset.projectId}: Lead Visual exceeds 512 KiB`);
+  if(!(bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff))fail(`${asset.projectId}: Lead Visual is not a valid JPEG`);
+  const digest=createHash('sha256').update(bytes).digest('hex');
+  if(digest!==asset.sha256)fail(`${asset.projectId}: Lead Visual SHA-256 mismatch`);
+  if(leadPaths.has(asset.publicPath)||leadHashes.has(digest))fail(`${asset.projectId}: duplicate Primary Lead Visual payload`);
+  leadPaths.add(asset.publicPath);leadHashes.add(digest);
+  const ascii=bytes.toString('latin1');if(/GPSLatitude|GPSLongitude|Exif\.GPSInfo|OwnerName|SerialNumber/i.test(ascii))fail(`${asset.projectId}: sensitive Lead Visual metadata`);
+}
+if(leadAssetBytes>5*1024*1024)fail('Primary Lead Visual package exceeds 5 MiB');
 
 const thirdParty=new Set();
 for(const file of tracked.filter(p=>(p.startsWith('public/site/')||p.startsWith('worker/')||p.startsWith('app/')||p.startsWith('site-source/')||['next.config.ts','vercel.json'].includes(p))&&/\.(?:html|js|mjs|ts|tsx|json)$/.test(p))){
@@ -93,8 +120,9 @@ const result={
   accessibility:'AUTOMATED_A11Y_STATIC_PASS',
   manualAccessibility:'MANUAL_SCREEN_READER_REVIEW_PENDING',
   performance:'PERFORMANCE_INFRASTRUCTURE_PASS',
-  performanceFinal:'FINAL_ASSET_DEPENDENT_PERFORMANCE_RECERTIFICATION',
-  assetSecurity:'FINAL_ASSET_SECURITY_RECHECK_REQUIRED',
+  performanceFinal:failures.length?'ASSET_PERFORMANCE_BLOCKER':'ASSET_DEPENDENT_PERFORMANCE_PASS',
+  assetSecurity:failures.length?'ASSET_SECURITY_BLOCKER':'ASSET_SECURITY_RECHECK_PASS',
+  primaryLeadVisuals:{count:primaryLeadAssets.length,totalBytes:leadAssetBytes,maximumBytes:Math.max(...primaryLeadAssets.map(asset=>{const localPath=asset.publicPath&&path.join(root,'public',asset.publicPath);return localPath&&fs.existsSync(localPath)?fs.statSync(localPath).size:0}))},
   counts:{primary:13,experiments:7,truthProjects:truth.projects.length,publicAssets:publicAssetFiles.length},
   thirdPartyDomains:[...thirdParty].sort(),warnings,failures
 };

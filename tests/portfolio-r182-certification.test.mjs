@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 
 const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
@@ -45,4 +46,35 @@ test('Production and asset mutation remain unauthorized',()=>{
   const workOrder=ledger.workOrders.find(x=>x.workOrderId==='WO-R182-NON-ASSET-CLOSURE');
   assert.equal(workOrder.productionAuthorized,false);
   assert.ok(workOrder.forbiddenPaths.includes('public/site/assets/projects/**'));
+});
+
+test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detail slot',()=>{
+  const expected={
+    voucher:['voucher-hero-incentive-journey-public-v1','voucher-lead-visual-incentive-ecosystem-public-v1.jpg','4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8'],
+    'voucher-center':['voucher-center-hero-centralised-discovery-public-v1','voucher-center-lead-visual-claim-journey-public-v1.jpg','0baae930d225c7fa67222e112afbdab562bb8b7511ad1c270bd6bfd92f8f1ec2'],
+    'game-center':['gamecenter-hero-shipped-before-after-public-v1','game-center-lead-visual-multi-game-discovery-public-v1.jpg','063b8259d3505d9cb4dfdb9bd2a5995391cf342f1d0f54bb124b010f417ced17'],
+    dbs:['dbs-project-card-primary-01','dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg','79f35586b956d33143655de49f28cce77c2fc8b14c79f76823f50b8d8dc95039'],
+    booking:['booking-hero-connected-booking-public-v1','booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg','83a1e6bba227db1c7609d217deae346dcdc3ea419148424986160fb465a71ed6'],
+    bandzo:['bandzo-hero-guided-practice-public-v1','bandzo-lead-visual-guided-practice-system-public-v1.jpg','a3262643f2ea3f6447f7a3cd15c786ed2a95388d77fff6a6e9ef6c10c6f5e7af'],
+    payment:['payment-hero-unified-checkout-public-v1','payment-lead-visual-app-and-sco-checkout-public-v1.jpg','f68d23dd247f0e85ca1468ca23d01a09951c6d55cd847bd0af6225071dff285f'],
+    'cathay-sit-online-account-opening':['cathay-sit-hero-final-flow-public-v1','cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg','2eb8b6ef4b799dd925fbcea786d6d11641e9c51185a26011e99de33062b6dfd6'],
+    'taishin-p2p-marketplace-platform':['taishin-marketplace-hero-inuse-v1','taishin-p2p-marketplace-lead-visual-marketplace-platform-public-v1.jpg','b9480b52854ef5d3fffb2b92379cad755d57a3d92c7860f34a2c346ef9776734'],
+    'cathay-mortgage-assistant':['cathay-mortgage-hero-consultation-public-v1','cathay-mortgage-assistant-lead-visual-consultation-system-public-v1.jpg','db141b4eff5cdcc8f1a07205d07ee2dd9a808f47f417ed6cc1601645881457d7'],
+    'cathay-sit-review-remediation-operations':['cathay-review-research-operating-baseline-public-v1','cathay-review-remediation-lead-visual-remediation-operating-model-public-v1.jpg','cd2e47a58b64e4b0fd8b6cb264ef996959eb9f80216c79542a9bd2e94e7e6146'],
+    'ctbc-mortgage-self-service-app':['ctbc-mortgage-hero-final-flow-public-v1','ctbc-mortgage-self-service-lead-visual-service-architecture-public-v1.jpg','032c45ffacf1549e6bec04c3fe156883870a1a3e1ebd771ce657f671d452cb5c'],
+    'booking-taxi-pickup-service-strategy':['booking-taxi-pickup-overview-source-v1','booking-taxi-strategy-lead-visual-taxi-insights-public-v1.jpg','fd3d1c90a36a63dee42586eff4d5f2cad0d738f62f63094eb0c1c6c3c9c360f2']
+  };
+  assert.equal(Object.keys(expected).length,13);
+  for(const [projectId,[assetId,filename,sha256]] of Object.entries(expected)){
+    const project=content.projects[projectId];
+    assert.equal(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId,assetId);
+    const asset=manifest.items[assetId];
+    assert.deepEqual({projectId:asset.projectId,type:asset.type,aspectRatio:asset.aspectRatio,assetStatus:asset.assetStatus,implementationStatus:asset.implementationStatus,placeholderFallbackAssetId:asset.placeholderFallbackAssetId,replacementRequired:asset.replacementRequired,publicBuild:asset.publicBuild,width:asset.width,height:asset.height},{projectId,type:'image/jpeg',aspectRatio:'16:9',assetStatus:'production',implementationStatus:'real-active',placeholderFallbackAssetId:null,replacementRequired:false,publicBuild:true,width:2048,height:1152});
+    assert.ok(asset.publicPath.endsWith(`/${filename}`));
+    assert.equal(asset.sha256,sha256);
+    assert.ok(asset.alt&&asset.alt_zh);
+    const bytes=fs.readFileSync(`public${asset.publicPath}`);
+    assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),sha256);
+  }
+  assert.notEqual(manifest.items[expected.booking[0]].publicPath,manifest.items[expected['booking-taxi-pickup-service-strategy'][0]].publicPath);
 });
