@@ -1128,7 +1128,11 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
     assert.doesNotMatch(html, /class="project-section-nav/);
     assert.doesNotMatch(html, /projectSectionNav[^>]*role="tablist"/);
   }
-  assert.match(app, /const PROJECT_NAV_ITEMS=/);
+  assert.match(app, /function canonicalProjectNavItems\(\)/);
+  assert.match(app, /implementationContracts\?\.recruiterFirstPresentation/);
+  assert.doesNotMatch(app, /const PROJECT_NAV_ITEMS=/);
+  assert.match(app, /function animateProjectSectionNavigation\(token\)/);
+  assert.match(app, /addEventListener\('wheel',cancelProjectSectionNavigation/);
   assert.match(app, /setAttribute\('aria-current','location'\)/);
   assert.match(app, /appendEvidenceValue\(card,value\)/);
   assert.doesNotMatch(overview, /\.pd-section-nav:not\(\.floating-navigator\)/);
@@ -1543,7 +1547,9 @@ test("executes the Human-approved recruiter-first presentation contract prospect
   assert.deepEqual(contract.hero.forbiddenVisiblePrefixes,["From "]);
   assert.equal(contract.heroTaxonomy.publicOwner,"none");
   assert.match(app,/recruiterFirstDisplayTitle\(p\)/);
-  assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
+  assert.match(app,/function canonicalProjectNavItems\(\)/);
+  assert.match(app,/DATA\.implementationContracts\?\.recruiterFirstPresentation/);
+  assert.doesNotMatch(app,/PROJECT_NAV_ITEMS/);
   assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
   for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
     const visibleTitle=contract.hero.forbiddenVisiblePrefixes.reduce(
@@ -1570,10 +1576,10 @@ test("projects DBS through the shared recruiter-first system-case composition", 
   const overview = read("assets/css/components/project-detail-overview.css");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.composition, "recruiter-first-system-case");
-  assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes"]);
+  assert.deepEqual(ssot.implementationContracts.recruiterFirstPresentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes", "ownership"]);
   assert.match(app, /function renderSystemCaseParent\(p\)/);
   assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
-  assert.match(app, /const configured=list\(recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation\)/);
+  assert.match(app, /const items=canonicalProjectNavItems\(\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
   assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
 });
