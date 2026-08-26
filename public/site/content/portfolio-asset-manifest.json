@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-26-r1822-shared-primary-parity",
+  "contentVersion": "2026-08-26-r1826-payment-restoration-voucher-freeze",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -28,18 +28,6 @@
       "alt": "Voucher incentive ecosystem shown across three mobile product screens.",
       "alt_zh": "Voucher 獎勵生態系統在三個手機產品畫面中的呈現。",
       "projectCardFocalPosition": "center center"
-    },
-    "voucher-proof-sec-transformation-public-v1": {
-      "id": "voucher-proof-sec-transformation-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
     },
     "cathay-review-research-operating-baseline-public-v1": {
       "id": "cathay-review-research-operating-baseline-public-v1",
@@ -118,126 +106,6 @@
       "derivativeStatus": "approved-blurred-minimized",
       "alt": "Public-safe phased-direction artifact showing a proposed operating model.",
       "alt_zh": "公開安全的分階段方向圖，呈現建議營運模型。"
-    },
-    "voucher-framework-error-recovery-public-v1": {
-      "id": "voucher-framework-error-recovery-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-pdp-contextual-discovery-public-v1": {
-      "id": "voucher-framework-pdp-contextual-discovery-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-voucher-details-evolution-public-v1": {
-      "id": "voucher-framework-voucher-details-evolution-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-voucher-condition-action-matrix-public-v1": {
-      "id": "voucher-framework-voucher-condition-action-matrix-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-mechanism-transition-public-v1": {
-      "id": "voucher-framework-mechanism-transition-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-channel-redemption-public-v1": {
-      "id": "voucher-framework-channel-redemption-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-voucher-card-system-public-v1": {
-      "id": "voucher-framework-voucher-card-system-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-framework-voucher-card-research-evidence-public-v1": {
-      "id": "voucher-framework-voucher-card-research-evidence-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-evidence-component-properties-public-v1": {
-      "id": "voucher-evidence-component-properties-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "voucher-evidence-operations-reuse-public-v1": {
-      "id": "voucher-evidence-operations-reuse-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
     },
     "voucher-center-hero-centralised-discovery-public-v1": {
       "id": "voucher-center-hero-centralised-discovery-public-v1",
@@ -365,23 +233,6 @@
       "alt_zh": "FairPrice App 與自助結帳付款體驗的手機與機台畫面。",
       "projectCardFocalPosition": "center center"
     },
-    "payment-evidence-field-research-synthesis-public-v1": {
-      "id": "payment-evidence-field-research-synthesis-public-v1",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1600,
-      "height": 920,
-      "sha256": "6c4b8e4470d8ca1dc5f8f4bf2d87fa48ed8108751616a85fedc4ecd6d37f4ce3",
-      "alt": "Privacy-cropped live-store checkout fieldwork showing cashier and self-checkout context.",
-      "alt_zh": "經隱私裁切的門市結帳研究，呈現人工收銀與自助結帳情境。"
-    },
     "payment-evidence-sco-entry-public-v2": {
       "id": "payment-evidence-sco-entry-public-v2",
       "projectId": "payment",
@@ -432,30 +283,6 @@
       "sha256": "511bff790853fd0cb127af1a33dc5f2aedcea0d92d90cf4501484df07ff1bf6d",
       "alt": "Official Asian Business Review evidence supporting the Payment team's 2021 Singapore User Experience Award of the Year, Retail.",
       "alt_zh": "Official Asian Business Review evidence supporting the Payment team's 2021 Singapore User Experience Award of the Year, Retail."
-    },
-    "payment-evidence-order-history-public-v1": {
-      "id": "payment-evidence-order-history-public-v1",
-      "projectId": "payment",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "payment-video-core-app-pos-public-v1": {
-      "id": "payment-video-core-app-pos-public-v1",
-      "projectId": "payment",
-      "type": "video",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-video-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
     },
     "cathay-sit-hero-final-flow-public-v1": {
       "id": "cathay-sit-hero-final-flow-public-v1",
@@ -557,18 +384,6 @@
       "implementationStatus": "placeholder-active",
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
-      "publicBuild": true
-    },
-    "voucher-stage-review-post-use-public-v1": {
-      "id": "voucher-stage-review-post-use-public-v1",
-      "projectId": "voucher",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
       "publicBuild": true
     },
     "voucher-offer-stage-discover-pdp-before-01": {
@@ -1026,23 +841,6 @@
       "semanticSlotStable": true,
       "confidentialityTreatment": "Rounded public groups; granular vehicle categories and precise percentages removed."
     },
-    "payment-system-transaction-map-public-v1": {
-      "id": "payment-system-transaction-map-public-v1",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-system-transaction-map-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1800,
-      "height": 980,
-      "sha256": "a0d3b7e29e7608a0df9222f5edeb759618c347415b313f109c9fe24d77b045c6",
-      "alt": "Simplified transaction-system map connecting customer, FairPrice App, payment and loyalty logic, POS or self-checkout, completion and recovery.",
-      "alt_zh": "Simplified transaction-system map connecting customer, FairPrice App, payment and loyalty logic, POS or self-checkout, completion and recovery."
-    },
     "payment-evidence-value-visibility-public-v1": {
       "id": "payment-evidence-value-visibility-public-v1",
       "projectId": "payment",
@@ -1059,57 +857,6 @@
       "sha256": "54ca2aa5097ca7353be01be404c705c41721427dd366a61829a16e1220f26fa2",
       "alt": "LinkPoints, loyalty discounts, payable value and payment confirmation shown across the checkout transaction.",
       "alt_zh": "LinkPoints, loyalty discounts, payable value and payment confirmation shown across the checkout transaction."
-    },
-    "payment-validation-sco-entry-public-v2": {
-      "id": "payment-validation-sco-entry-public-v2",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-sco-entry-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1600,
-      "height": 920,
-      "sha256": "f5834282a218c2b43539e37cc082ed701d6e1715b1920e1a352e54669f8642ed",
-      "alt": "Self-checkout entry validation showing tested recognition, QR guidance and payment selection.",
-      "alt_zh": "自助結帳入口驗證，呈現辨識、QR 指示與付款選擇測試。"
-    },
-    "payment-validation-value-history-public-v2": {
-      "id": "payment-validation-value-history-public-v2",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-value-history-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1600,
-      "height": 920,
-      "sha256": "33e72ae4b771cabf075c9a074869bbc7de4f9bd3564462bbfbe56d952d51d2c7",
-      "alt": "Payment value, copy and transaction-history validation frames.",
-      "alt_zh": "付款價值、文案與交易紀錄驗證畫面。"
-    },
-    "payment-outcome-checkout-speed-public-v2": {
-      "id": "payment-outcome-checkout-speed-public-v2",
-      "projectId": "payment",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-outcome-checkout-speed-v2.jpg",
-      "aspectRatio": "wide",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 1600,
-      "height": 900,
-      "sha256": "2cfd59160d5b74085bde812e0ddaea434e0a25fa6c0592116bac6885ab7132ce",
-      "alt": "Checkout timing result showing a reduction from 19.78 seconds to 7.29 seconds, 12.49 seconds faster.",
-      "alt_zh": "結帳時間由 19.78 秒降至 7.29 秒，快 12.49 秒。"
     },
     "booking-taxi-strategy-traveller-context-public-v1": {
       "id": "booking-taxi-strategy-traveller-context-public-v1",
@@ -1373,6 +1120,107 @@
       "height": 1108,
       "alt": "Cross-organization delivery alignment session reviewing marketplace screens.",
       "alt_zh": "跨組織檢視市集畫面的交付對齊會議。"
+    },
+    "payment-core-checkout-compression-approved-v3": {
+      "id": "payment-core-checkout-compression-approved-v3",
+      "projectId": "payment",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/payment/payment-core-checkout-compression-approved-v3.png",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "f98ad24f34e28df84e6edd8f23946370d8c8a20898c61ba5df46b050d295ba72",
+      "blobSha": "77f9c60eec2ca3839bbd7c6773eff7b4cbf42353",
+      "width": 2400,
+      "height": 1500,
+      "alt": "Before-and-shipped checkout comparison showing separate loyalty and payment steps compressed into one QR transaction, reducing measured time from 19.78 to 7.29 seconds.",
+      "alt_zh": "結帳前後比較：將分離的會員與付款步驟整合成一次 QR 交易，量測時間由 19.78 秒降至 7.29 秒。",
+      "sourcePackage": "payment_visual_evidence_package_v3.zip",
+      "sourceFiles": [
+        "00_human_approved/checkout_flow_speed_comparison_2400x1500.png"
+      ],
+      "privacyTreatment": "Human-approved public visual; exact source composition preserved.",
+      "sectionUsage": "core-system-insight",
+      "contentSsotReference": "projects.payment.publicContent.coreSystemInsight"
+    },
+    "payment-evidence-journey-synthesis-r1649c": {
+      "id": "payment-evidence-journey-synthesis-r1649c",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-journey-synthesis-r1649c.webp",
+      "aspectRatio": "wide",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "sha256": "2d7a7f241b58cfcb2b1406f4444bdb77c3b89c411946c3f2d0aabb2fd8ba1b38",
+      "blobSha": "dbf19a90797f662481b1328830fad76656adecd2",
+      "width": 2048,
+      "height": 1153,
+      "alt": "Simplified journey synthesis across queue, preparation, checkout and post-checkout, mapping speed pressure, value uncertainty, assurance and transaction history.",
+      "alt_zh": "涵蓋排隊、準備、結帳與結帳後的簡化旅程綜整，對應速度壓力、價值不確定、安心感與交易紀錄。",
+      "sourcePackage": "payment_r1649c_supplemental_assets.zip",
+      "sourceFiles": [
+        "payment-simplified-journey-map-source.jpg"
+      ],
+      "privacyTreatment": "Public-safe simplified synthesis; no participant PII.",
+      "sectionUsage": "evidence-research-synthesis",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
+    },
+    "payment-evidence-live-checkout-image-only-r1649d": {
+      "id": "payment-evidence-live-checkout-image-only-r1649d",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-image-only-r1649d.webp",
+      "aspectRatio": "16:9",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1600,
+      "height": 900,
+      "sha256": "32139b3fd14c84141b28f2430b44771ff170771fccd4d96f21902a341e3cf32e",
+      "alt": "Two live-store research photographs showing cashier and self-checkout payment behaviour.",
+      "alt_zh": "兩張門市研究照片，呈現人工收銀與自助結帳的付款行為。",
+      "sourcePackage": "payment_visual_evidence_package_v3.zip",
+      "sourceFiles": [
+        "01_selected_sources/live_store_research_photo_01.jpg",
+        "01_selected_sources/live_store_research_photo_02.jpg"
+      ],
+      "privacyTreatment": "Human-approved source photographs; image-only crop contains no editorial overlay.",
+      "sectionUsage": "evidence-live-checkout",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
+      "humanApprovalStatus": "pending-re-review"
+    },
+    "payment-return-recovery-human-r1649d": {
+      "id": "payment-return-recovery-human-r1649d",
+      "projectId": "payment",
+      "type": "image/webp",
+      "publicPath": "/site/assets/projects/payment/payment-return-recovery-human-r1649d.webp",
+      "aspectRatio": "8:5",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 2048,
+      "height": 1280,
+      "sha256": "67d8e30aae15600fc11b6a2bb00b0890081bb02974f8ba30f34f1f73b3d302d7",
+      "alt": "Before-and-shipped comparison showing return support move from a separate help path into the payment record.",
+      "alt_zh": "Before 與 Shipped 比較：退貨支援由分離的協助路徑移入付款紀錄。",
+      "sourcePackage": "Human-provided R164.9D correction asset",
+      "sourceFiles": [
+        "payment recovery(2).jpg"
+      ],
+      "privacyTreatment": "Human-provided portfolio-ready composition using approved synthetic replacement transaction data; composition unchanged.",
+      "sectionUsage": "evidence-return-recovery",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
+      "humanApprovalStatus": "pending-re-review"
     }
   },
   "frameSystemContract": {
