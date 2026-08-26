@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-25-r182-non-asset-complete",
+  "contentVersion": "2026-08-26-r1822-shared-primary-parity",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -100,8 +100,8 @@
       "type": "Incentive System",
       "scope": "End-to-end incentive journey",
       "scope_zh": "端到端獎勵旅程",
-      "audience": "Primary: Customers\nSecondary: Operations, Marketing, Product, Engineering",
-      "audience_zh": "主要：顧客\n次要：營運、行銷、產品、工程",
+      "audience": "Primary: Customers\nSecondary: Voucher operations",
+      "audience_zh": "主要：顧客\n次要：優惠券營運人員",
       "timeline": "2022–2025",
       "timeline_zh": "3 年",
       "period": "2022–2025",
@@ -133,8 +133,8 @@
               "zh": "端到端獎勵旅程"
             },
             "audience": {
-              "en": "Primary: Customers\nSecondary: Operations, Marketing, Product, Engineering",
-              "zh": "主要：顧客\n次要：營運、行銷、產品、工程"
+              "en": "Primary: Customers\nSecondary: Voucher operations",
+              "zh": "主要：顧客\n次要：優惠券營運人員"
             },
             "timeline": {
               "en": "3 years",
@@ -4783,18 +4783,10 @@
           },
           "secondary": {
             "en": [
-              "Operations",
-              "Marketing",
-              "Product",
-              "Business",
-              "Sponsors"
+              "Voucher operations"
             ],
             "zh": [
-              "營運",
-              "行銷",
-              "產品",
-              "商務",
-              "贊助單位"
+              "優惠券營運人員"
             ]
           }
         },
@@ -5912,8 +5904,8 @@
       "type": "Incentive System",
       "scope": "Persistent Voucher discovery and access, from homepage entry to category access and explicit Claim → View states.",
       "scope_zh": "常設優惠券探索與領取，涵蓋首頁入口、分類存取與明確的領取 → 查看狀態。",
-      "audience": "Primary: Customers discovering and claiming Vouchers\nSecondary: Campaign / Voucher Operations, Business / Sponsor stakeholders",
-      "audience_zh": "主要：探索並領取優惠券的顧客\n次要：活動／優惠券營運、商務／贊助利害關係人",
+      "audience": "Primary: Customers discovering and claiming Vouchers\nSecondary: Campaign / Voucher Operations",
+      "audience_zh": "主要：探索並領取優惠券的顧客\n次要：活動／優惠券營運人員",
       "timeline": "Nov 2024–Apr 2025",
       "timeline_zh": "5 個月",
       "timelineStatus": "user-confirmed",
@@ -6975,12 +6967,10 @@
           },
           "secondary": {
             "en": [
-              "Campaign / Voucher Operations",
-              "Business / Sponsor stakeholders"
+              "Campaign / Voucher Operations"
             ],
             "zh": [
-              "活動／優惠券營運",
-              "商務／贊助利害關係人"
+              "活動／優惠券營運人員"
             ]
           }
         },
@@ -7550,12 +7540,10 @@
           },
           "secondary": {
             "en": [
-              "Sponsors",
               "Operations"
             ],
             "zh": [
-              "贊助單位",
-              "營運團隊"
+              "營運人員"
             ]
           }
         },
@@ -9752,16 +9740,8 @@
             "zh": "預訂機場與城市交通的旅客"
           },
           "secondary": {
-            "en": [
-              "Taxi suppliers",
-              "Accommodation and Flight teams",
-              "Product, Engineering, Data and Research"
-            ],
-            "zh": [
-              "計程車供應商",
-              "住宿與航班團隊",
-              "產品、工程、數據與研究團隊"
-            ]
+            "en": [],
+            "zh": []
           }
         },
         "timeline": {
@@ -10820,8 +10800,8 @@
       "type": "Transaction System",
       "scope": "Cross-market readiness across language, content, colour, interaction, and governed exceptions",
       "scope_zh": "跨市場的語言、內容、色彩、互動與受治理例外準備度",
-      "audience": "Primary: Travellers\nSecondary: Localisation, product, engineering, and market teams",
-      "audience_zh": "主要：旅客\n次要：在地化、產品、工程與市場團隊",
+      "audience": "Primary: Travellers booking airport and city transport",
+      "audience_zh": "主要：預訂機場與城市交通的旅客",
       "timeline": "Apr–Oct 2019",
       "timeline_zh": "6 個月",
       "why": "Taxi booking sat outside accommodation and flight journeys, forcing travellers to compare unclear options, re-enter known trip details, and interpret market-specific pickup rules without enough context.",
@@ -12166,10 +12146,10 @@
           },
           "secondary": {
             "en": [
-              "Bank operations and marketplace stakeholders"
+              "Bank operations"
             ],
             "zh": [
-              "銀行營運與市集利害關係人"
+              "銀行營運人員"
             ]
           }
         },
@@ -13461,12 +13441,10 @@
           },
           "secondary": {
             "en": [
-              "Prospective mortgage customers",
-              "Delivery stakeholders"
+              "Prospective mortgage customers"
             ],
             "zh": [
-              "潛在房貸客戶",
-              "交付利害關係人"
+              "潛在房貸客戶"
             ]
           }
         },
@@ -15929,6 +15907,8 @@
             "measured": [
               {
                 "value": "~190",
+                "tier": "primary",
+                "priority": 5,
                 "label": {
                   "en": "stores",
                   "zh": "間門市"
@@ -15944,6 +15924,8 @@
               },
               {
                 "value": "~57K",
+                "tier": "primary",
+                "priority": 4,
                 "label": {
                   "en": "users",
                   "zh": "名使用者"
@@ -15959,6 +15941,8 @@
               },
               {
                 "value": "~228K",
+                "tier": "primary",
+                "priority": 3,
                 "label": {
                   "en": "monthly transactions",
                   "zh": "每月交易筆數"
@@ -15974,6 +15958,8 @@
               },
               {
                 "value": "98.5%",
+                "tier": "primary",
+                "priority": 2,
                 "label": {
                   "en": "transaction success rate",
                   "zh": "交易成功率"
@@ -15989,6 +15975,8 @@
               },
               {
                 "value": "70.2",
+                "tier": "primary",
+                "priority": 1,
                 "label": {
                   "en": "NPS",
                   "zh": "NPS"
@@ -16004,6 +15992,8 @@
               },
               {
                 "value": "12.49s",
+                "tier": "supporting",
+                "priority": 6,
                 "label": {
                   "en": "faster checkout",
                   "zh": "結帳加快"
@@ -17116,14 +17106,12 @@
             "en": [
               "Referral agents",
               "Customer Service",
-              "Operations and Compliance",
-              "Development team"
+              "Operations and Compliance"
             ],
             "zh": [
               "推薦業務員",
               "客服團隊",
-              "營運與法遵團隊",
-              "開發團隊"
+              "營運與法遵人員"
             ]
           }
         },
@@ -18562,17 +18550,13 @@
           },
           "secondary": {
             "en": [
-              "Product managers",
               "AML/compliance",
               "Customer Service",
-              "Engineering",
               "Referral agents"
             ],
             "zh": [
-              "產品經理",
-              "防制洗錢／法遵",
-              "客服",
-              "工程",
+              "防制洗錢／法遵人員",
+              "客服人員",
               "推薦業務員"
             ]
           }
@@ -21550,16 +21534,8 @@
             "zh": "旅客"
           },
           "secondary": {
-            "en": [
-              "Product",
-              "Commercial",
-              "Suppliers"
-            ],
-            "zh": [
-              "產品團隊",
-              "商務團隊",
-              "供應商"
-            ]
+            "en": [],
+            "zh": []
           }
         },
         "timeline": {

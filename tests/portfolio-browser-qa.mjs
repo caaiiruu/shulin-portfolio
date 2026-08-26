@@ -413,14 +413,20 @@ for (const viewport of viewports) {
     const link=navigator.getByRole("link",{name:label,exact:true});
     const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    const positions=[];let stableFrames=0;let previous=before;
+    for(let frame=0;frame<60&&stableFrames<4;frame+=1){
+      await page.waitForTimeout(20);
+      const position=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
+      positions.push(position);stableFrames=Math.abs(position-previous)<=1?stableFrames+1:0;previous=position;
+    }
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
       return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
     });
-    state.before=before;collection.push({label,...state});
+    state.before=before;state.positions=positions;collection.push({label,...state});
     if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
     if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
+    if(Math.abs(state.after-state.before)>8&&new Set(positions.map(position=>Math.round(position))).size<3)failures.push(`${viewport.name} navigator ${label} did not expose intermediate smooth-scroll positions`);
     if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
   for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])await certifyNavigatorClick(label,navigatorInteractions.clicks);

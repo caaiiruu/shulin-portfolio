@@ -9,7 +9,7 @@ const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-proje
 const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
-  assert.equal(content.contentVersion,'2026-08-25-r182-non-asset-complete');
+  assert.match(content.contentVersion,/r182(?:2|-non-asset-complete)/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
   assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
