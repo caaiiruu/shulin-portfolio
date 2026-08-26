@@ -1069,7 +1069,7 @@ test("prevents narrow-column recruiter content and forced word breaking", () => 
   assert.match(overview, /\.project-signals-v45\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(overview, /@media\(max-width:600px\)[\s\S]*\.project-signals-v45\{grid-template-columns:1fr/);
   assert.match(overview, /\.quick-view-v51--project\{grid-template-columns:minmax\(0,7fr\) minmax\(var\(--dimension-280px\),5fr\)/);
-  assert.match(overview, /@media\(max-width:760px\)\{\.quick-view-v51--project\{grid-template-columns:1fr\}\.quick-view-v51--project>\*\{grid-column:1\}/);
+  assert.match(overview, /@media\(max-width:900px\)\{\.quick-view-v51--project\{grid-template-columns:1fr\}\.quick-view-v51--project>\*\{grid-column:1\}/);
   assert.match(overview, /\.modal-content-v45\{[^}]*overflow-wrap:normal;word-break:normal/);
   assert.match(overview, /\.decision-considerations-v46\{[^}]*grid-template-columns:1fr/);
   assert.match(overview, /\.decision-card-v46\{[^}]*grid-template-columns:minmax\(0,1fr\)/);

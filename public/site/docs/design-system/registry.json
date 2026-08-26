@@ -127,8 +127,8 @@
         "variants": ["Recruiter-first Primary", "Experiment detail"],
         "variantConsumers": {"Recruiter-first Primary": ["primaryDetails"], "Experiment detail": ["experimentDetails"]},
         "consumerGroups": ["primaryDetails", "experimentDetails"],
-        "compositionOrder": ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual", "Complexity / remaining case content"],
-        "mediaVariants": {"Lead Project Visual": {"aspectRatio": "16:9", "fit": "contain", "placeholderPolicy": "governed non-evidentiary placeholder", "consumerGroups": ["primaryDetails"]}},
+        "compositionOrder": ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content"],
+        "mediaVariants": {"Lead Project Visual": {"aspectRatio": "16:9", "fit": "contain", "placeholderPolicy": "pending or placeholder media does not render in recruiter-facing Primary details", "consumerGroups": ["primaryDetails"]}},
         "discoveryMarkers": ["renderSystemCaseParent", "renderExperiment", "projectDetailHeroVisual"],
         "regressionProfiles": ["projectDetailStructure", "floatingNavigatorInteraction"],
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]

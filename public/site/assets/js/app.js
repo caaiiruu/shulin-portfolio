@@ -2578,11 +2578,10 @@
     if(existingHeroVisual)existingHeroVisual.remove();
     if(recruiterFirstPresentationContract(p)){
       const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
-      if(heroAsset){
-        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus=heroAsset.isPlaceholder?'placeholder-active':'real-active';
+      if(heroAsset&&!heroAsset.isPlaceholder){
+        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus='real-active';
         const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='lazy';image.decoding='async';
         if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
-        if(heroAsset.isPlaceholder)image.dataset.assetStatus='placeholder-active';
         figure.append(image);doc.querySelector('#projectOverviewSection .detail-commerce-v45__summary')?.after(figure);
       }
     }
