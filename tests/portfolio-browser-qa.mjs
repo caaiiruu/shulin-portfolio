@@ -906,13 +906,15 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     const sharedGeometry=await page.evaluate(()=>{
       const root=document.querySelector("#detailDialog .dialog-scroll"),nav=document.querySelector("#projectSectionNav"),rail=nav?.querySelector(".floating-navigator__rail");
       if(!root||!nav||!rail)return null;
+      const previousScrollBehavior=root.style.scrollBehavior;root.style.scrollBehavior="auto";
       const verifyNode=node=>{const rootRect=root.getBoundingClientRect(),nodeRect=node.getBoundingClientRect(),navTop=nav.getBoundingClientRect().top;if(nodeRect.top<rootRect.top)root.scrollTop+=nodeRect.top-rootRect.top;if(node.getBoundingClientRect().bottom>navTop)root.scrollTop+=node.getBoundingClientRect().bottom-navTop+1;return node.getBoundingClientRect().top>=rootRect.top-1&&node.getBoundingClientRect().bottom<=nav.getBoundingClientRect().top+1};
       const captions=[...document.querySelectorAll("#detailDialog figcaption")];
       const captionClearance=captions.map(verifyNode);
       root.scrollTop=root.scrollHeight;
       const finalNode=document.querySelector("#programmeSurface > :last-child"),navRect=nav.getBoundingClientRect();
       const active=rail.querySelector('a[aria-current="location"]'),railRect=rail.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
-      return {bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+      const result={bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+      root.style.scrollBehavior=previousScrollBehavior;return result;
     });
     if(!sharedGeometry)failures.push(`${viewport.name} R172.3 ${projectId} shared owners missing`);
     else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
