@@ -1488,7 +1488,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   const css=read("assets/css/components/project-card.css");
   const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const asset=manifest.items["voucher-hero-incentive-journey-public-v1"];
-  assert.equal(asset.sha256,"ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409");
+  assert.equal(asset.sha256,"4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8");
   assert.equal(asset.implementationStatus,"real-active");
   assert.doesNotMatch(work,/work-artifact--voucher/);
   assert.match(work,/data-frame-role="project-cover"/);
@@ -1947,7 +1947,8 @@ test("R165.1G binds public-safe Cathay Evidence while preserving internal Search
   assert.equal(evidence.items[0].supportingFacts.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
   for(const assetId of expectedAssets){
     const asset=manifest.items[assetId];
-    assert.ok(asset?.publicPath?.startsWith("/site/assets/projects/cathay-review/"),`${assetId}: canonical path missing`);
+    const expectedDirectory=assetId==="cathay-review-research-operating-baseline-public-v1"?"/site/assets/projects/cathay-sit-review-remediation-operations/":"/site/assets/projects/cathay-review/";
+    assert.ok(asset?.publicPath?.startsWith(expectedDirectory),`${assetId}: canonical path missing`);
     assert.equal(asset.implementationStatus,"real-active");
     assert.equal(asset.replacementRequired,false);
   }
@@ -1982,8 +1983,8 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.match(outcomes.supportingStatements[0].text.en,/Post-launch performance was not available/);
   assert.equal(project.deliveryBoundary.needsConfirmation.includes("Exact project Timeline"),false);
   assert.equal(project.deliveryBoundary.needsConfirmation.includes("Sole versus Primary Product Designer wording"),false);
-  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"placeholder-active");
-  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,null);
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"real-active");
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,"/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.match(app,/if\(!evidenceItems\.length\)return null/);
   assert.match(app,/\['aligned','aligned-five'\]\.includes\(source\.metricLayout\)/);
@@ -2024,7 +2025,8 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
   assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
   assert.equal(project.heroVisualBrief.assetId,"booking-taxi-pickup-overview-source-v1");
-  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"placeholder-active");
+  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"real-active");
+  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].publicPath,"/site/assets/projects/booking-taxi-pickup-service-strategy/booking-taxi-strategy-lead-visual-taxi-insights-public-v1.jpg");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
   for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
@@ -2077,7 +2079,8 @@ test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with
     const asset=manifest.items[assetId];
     assert.equal(asset.implementationStatus,"real-active");
     assert.equal(asset.replacementRequired,false);
-    assert.match(asset.publicPath,/^\/site\/assets\/projects\/cathay-mortgage\//);
+    const expectedDirectory=assetId==="cathay-mortgage-hero-consultation-public-v1"?"cathay-mortgage-assistant":"cathay-mortgage";
+    assert.match(asset.publicPath,new RegExp(`^/site/assets/projects/${expectedDirectory}/`));
   }
   assert.equal(ssot.contentVersion,manifest.contentVersion);
   assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));

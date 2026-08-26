@@ -628,6 +628,76 @@
         }
       ],
       "mutationAuthorized": true
+    },
+    {
+      "deltaId": "DELTA-R1825-LEAD-VISUAL-ASSET-INTEGRATION",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-26",
+      "targetType": "PRIMARY_LEAD_VISUAL_ASSET_INTEGRATION",
+      "implementationStatus": "APPLIED_ON_R1825_BRANCH",
+      "truthReferences": [],
+      "contentTruthReferences": [],
+      "assetTruthReferences": [
+        {
+          "assetId": "voucher-hero-incentive-journey-public-v1"
+        },
+        {
+          "assetId": "voucher-center-hero-centralised-discovery-public-v1"
+        },
+        {
+          "assetId": "gamecenter-hero-shipped-before-after-public-v1"
+        },
+        {
+          "assetId": "dbs-project-card-primary-01"
+        },
+        {
+          "assetId": "booking-hero-connected-booking-public-v1"
+        },
+        {
+          "assetId": "bandzo-hero-guided-practice-public-v1"
+        },
+        {
+          "assetId": "payment-hero-unified-checkout-public-v1"
+        },
+        {
+          "assetId": "cathay-sit-hero-final-flow-public-v1"
+        },
+        {
+          "assetId": "taishin-marketplace-hero-inuse-v1"
+        },
+        {
+          "assetId": "cathay-mortgage-hero-consultation-public-v1"
+        },
+        {
+          "assetId": "cathay-review-research-operating-baseline-public-v1"
+        },
+        {
+          "assetId": "ctbc-mortgage-hero-final-flow-public-v1"
+        },
+        {
+          "assetId": "booking-taxi-pickup-overview-source-v1"
+        }
+      ],
+      "operations": [
+        {
+          "operation": "REGISTER_APPROVED_PRIMARY_LEAD_VISUALS",
+          "path": "public/site/content/portfolio-asset-manifest.json"
+        },
+        {
+          "operation": "ADD_APPROVED_PRIMARY_LEAD_VISUAL_BINARIES",
+          "path": "public/site/assets/projects/**"
+        },
+        {
+          "operation": "EXTEND_SHARED_REAL_MEDIA_LEAD_VISUAL_TO_ALL_PRIMARY",
+          "path": "public/site/assets/js/app.js"
+        },
+        {
+          "operation": "ADD_ASSET_BINDING_REGRESSION",
+          "path": "tests/**"
+        }
+      ],
+      "mutationAuthorized": true
     }
   ],
   "workOrders": [
@@ -726,6 +796,46 @@
         "ACCESSIBILITY_AUTOMATION",
         "PERFORMANCE_BASELINE",
         "SECURITY_PRIVACY"
+      ],
+      "productionAuthorized": false,
+      "approvedBy": "HUMAN"
+    },
+    {
+      "workOrderId": "WO-R1825-LEAD-VISUAL-ASSET-INTEGRATION",
+      "status": "APPROVED",
+      "state": "ENGINEERING_QA",
+      "repository": "caaiiruu/shulin-portfolio",
+      "baseBranch": "closure/r182-non-asset-finalization",
+      "expectedHead": "18cbc58b78e0ba815687e9e0cec84f05756b91a0",
+      "approvedDeltaIds": [
+        "DELTA-R1825-LEAD-VISUAL-ASSET-INTEGRATION"
+      ],
+      "allowedPaths": [
+        "public/site/content/portfolio-asset-manifest.json",
+        "public/site/assets/projects/**",
+        "public/site/assets/js/app.js",
+        "tests/**",
+        "docs/portfolio-automation/execution-ledger.json"
+      ],
+      "forbiddenPaths": [
+        "public/site/content/portfolio-content.json",
+        "public/site/assets/css/**",
+        "public/site/assets/css/tokens.css",
+        ".github/workflows/**"
+      ],
+      "qaRoutes": [
+        "AUTOMATION_VALIDATOR",
+        "SSOT_VALIDATION",
+        "ASSET_GOVERNANCE",
+        "DESIGN_SYSTEM_LINT",
+        "TOKEN_GOVERNANCE",
+        "DESIGN_SYSTEM_IMPACT",
+        "PROJECT_CARD_REGRESSION",
+        "PROJECT_DETAIL_REGRESSION",
+        "BROWSER_RESPONSIVE",
+        "ACCESSIBILITY_AUTOMATION",
+        "PERFORMANCE_ASSET_RECERTIFICATION",
+        "SECURITY_ASSET_RECHECK"
       ],
       "productionAuthorized": false,
       "approvedBy": "HUMAN"
@@ -835,28 +945,30 @@
     }
   ],
   "assetPhaseStatus": {
-    "phase": "HUMAN_ASSET_INTAKE_NEXT",
-    "integrated": false,
-    "explicitHeroUploadsRequired": [
+    "phase": "R1825_PRIMARY_LEAD_VISUALS_INTEGRATED",
+    "integrated": true,
+    "integratedProjectIds": [
+      "voucher",
       "voucher-center",
+      "game-center",
+      "dbs",
       "booking",
       "bandzo",
+      "payment",
       "cathay-sit-online-account-opening",
-      "ctbc-mortgage-self-service-app"
+      "taishin-p2p-marketplace-platform",
+      "cathay-mortgage-assistant",
+      "cathay-sit-review-remediation-operations",
+      "ctbc-mortgage-self-service-app",
+      "booking-taxi-pickup-service-strategy"
     ],
+    "explicitHeroUploadsRequired": [],
     "voucherCandidateSourceVisuals": {
       "minimum": 4,
       "maximum": 8
     },
-    "noUploadCurrentlyRequired": [
-      "game-center",
-      "dbs",
-      "taishin-p2p-marketplace-platform",
-      "cathay-mortgage-assistant",
-      "cathay-sit-review-remediation-operations",
-      "booking-taxi-pickup-service-strategy"
-    ],
-    "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+    "noUploadCurrentlyRequired": [],
+    "payment": "R1825_APPROVED_LEAD_VISUAL_INTEGRATED"
   },
   "projectPrDependencies": [
     {
@@ -931,14 +1043,21 @@
     "unresolvedP0P1": []
   },
   "consolidatedAssetIntake": {
-    "status": "ONE_FUTURE_HUMAN_SESSION",
+    "status": "PRIMARY_LEAD_VISUALS_INTEGRATED_R1825",
     "primary": [
-      "Voucher Center hero",
-      "Booking hero",
-      "Bandzo hero",
-      "Cathay Online Account Opening hero",
-      "CTBC Mortgage Self-Service hero",
-      "Voucher 4–8 high-information-density candidate source visuals"
+      "voucher-hero-incentive-journey-public-v1",
+      "voucher-center-hero-centralised-discovery-public-v1",
+      "gamecenter-hero-shipped-before-after-public-v1",
+      "dbs-project-card-primary-01",
+      "booking-hero-connected-booking-public-v1",
+      "bandzo-hero-guided-practice-public-v1",
+      "payment-hero-unified-checkout-public-v1",
+      "cathay-sit-hero-final-flow-public-v1",
+      "taishin-marketplace-hero-inuse-v1",
+      "cathay-mortgage-hero-consultation-public-v1",
+      "cathay-review-research-operating-baseline-public-v1",
+      "ctbc-mortgage-hero-final-flow-public-v1",
+      "booking-taxi-pickup-overview-source-v1"
     ],
     "experiments": [
       "Freelance Project Operations Tool screenshot set",
@@ -949,11 +1068,7 @@
       "A-Ha! Creative Toolbox visual pack",
       "Hello SABAU! visual pack"
     ],
-    "eliminatedByGovernedReuse": [
-      "Game Center replacement already exists on PR #16 and does not require a new upload",
-      "Payment candidate media already exists on PR #12; reconcile before requesting any upload",
-      "DBS, Taishin, Cathay Mortgage, Cathay Review and Booking Taxi Strategy require no upload"
-    ]
+    "eliminatedByGovernedReuse": []
   },
   "reconciliations": [
     {

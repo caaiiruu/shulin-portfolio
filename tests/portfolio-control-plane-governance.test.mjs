@@ -214,6 +214,7 @@ test("SSOT-04 registry is the only live activation owner", () => {
   const duplicateOwners = [];
   for (const file of tracked) {
     if (file === registryPath || file === allowedHistoricalRecord) continue;
+    if (!fs.existsSync(file)) continue;
     const bytes = fs.readFileSync(file);
     if (bytes.includes(0)) continue;
     if (bytes.toString("utf8").includes(ssotAtomicityEnforcedFrom)) duplicateOwners.push(file);
