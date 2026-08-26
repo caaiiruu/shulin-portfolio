@@ -2576,13 +2576,14 @@
     safeText(dialogTitle,recruiterFirstDisplayTitle(p));
     const existingHeroVisual=doc.getElementById('projectDetailHeroVisual');
     if(existingHeroVisual)existingHeroVisual.remove();
-    if(p.presentation?.detailHeroVisual){
+    if(recruiterFirstPresentationContract(p)){
       const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
-      if(heroAsset&&!heroAsset.isPlaceholder){
-        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailHeroVisual';
-        const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='eager';image.decoding='async';
+      if(heroAsset){
+        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus=heroAsset.isPlaceholder?'placeholder-active':'real-active';
+        const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='lazy';image.decoding='async';
         if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
-        figure.append(image);doc.querySelector('.modal-head-v45')?.after(figure);
+        if(heroAsset.isPlaceholder)image.dataset.assetStatus='placeholder-active';
+        figure.append(image);doc.querySelector('#projectOverviewSection .detail-commerce-v45__summary')?.after(figure);
       }
     }
     renderDeliveryStatus('');
@@ -2918,6 +2919,7 @@
     doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
     const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.hidden=true;
     const overviewContext=doc.querySelector('.project-context-v45--overview');if(overviewContext)overviewContext.hidden=true;
+    const legacyIntervention=doc.getElementById('projectKeyIntervention');if(legacyIntervention)legacyIntervention.hidden=true;
     const legacyOwnership=doc.querySelector('.ownership-section-v45');if(legacyOwnership)legacyOwnership.hidden=true;
 
     const hardSource=projectContentRef(p,refs.whatMadeThisHard)||p.hard;

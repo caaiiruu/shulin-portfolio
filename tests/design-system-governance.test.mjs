@@ -101,3 +101,17 @@ test("golden consumers cover every registered structural variant at approved vie
   assert.ok(golden.projectCards.some((item) => item.variant === "Experiment"));
   assert.ok(golden.projectCards.some((item) => item.variant === "Related"));
 });
+
+test("recruiter-first overview governs decision-filter order and lead visual media", () => {
+  const contract = registry.governanceGraph.componentContracts.ProjectDetailOverview;
+  assert.deepEqual(contract.compositionOrder, ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual", "Complexity / remaining case content"]);
+  assert.deepEqual(contract.mediaVariants["Lead Project Visual"], {
+    aspectRatio: "16:9",
+    fit: "contain",
+    placeholderPolicy: "governed non-evidentiary placeholder",
+    consumerGroups: ["primaryDetails"]
+  });
+  assert.match(overview, /quick-view-v51--project\{grid-template-columns:minmax\(0,7fr\) minmax\(var\(--dimension-280px\),5fr\)/);
+  assert.match(overview, /project-detail-hero-visual\{[^}]*aspect-ratio:16\/9/);
+  assert.match(overview, /project-detail-hero-visual img\{[^}]*object-fit:contain/);
+});

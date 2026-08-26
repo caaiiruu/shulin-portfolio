@@ -13,6 +13,7 @@ const viewports = [
   { name: "mobile-430", width: 430, height: 932 },
 ];
 const primaryIds=['voucher','voucher-center','game-center','dbs','booking','bandzo','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy'];
+const recruiterFirstPrimaryIds=new Set(['dbs','booking','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy']);
 const routes = ["/site/", "/site/work", "/site/experiments", ...primaryIds.map(id=>`/site/work/${id}`)];
 const failures = [];
 const report = { baseUrl, viewports: {} };
@@ -60,12 +61,15 @@ for (const viewport of viewports) {
       const jsBytes=sum(/\.js$/),cssBytes=sum(/\.css$/),imageBytes=sum(/\.(png|jpe?g|webp|avif|gif|svg)$/i);
       const belowFoldEager=[...document.images].filter(img=>img.getBoundingClientRect().top>innerHeight*1.25&&img.loading!=='lazy').length;
       const smallTargets=innerWidth<=430?interactive.filter(node=>{if(node.matches('.info-tooltip__trigger'))return false;const r=node.getBoundingClientRect();return r.width>0&&r.height>0&&(r.width<24||r.height<24)}).length:0;
+      const overview=document.querySelector('#projectOverviewSection'),summary=document.querySelector('#projectView .project-summary-v45'),signals=document.querySelector('#projectSignals'),lead=document.querySelector('#projectDetailHeroVisual'),leadImage=lead?.querySelector('img'),complexity=document.querySelector('#systemCaseComplexitySection');
+      const rect=node=>{const value=node?.getBoundingClientRect();return value?{top:value.top,bottom:value.bottom,left:value.left,right:value.right,width:value.width,height:value.height}:null};
       return {
         clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,
         horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,
         bodyWidth:document.body.getBoundingClientRect().width,title:document.title,
         a11y:{h1:document.querySelectorAll('h1').length,main:document.querySelectorAll('main').length,headingSkip,unnamed,imagesWithoutAlt:[...document.images].filter(img=>visible(img)&&!img.hasAttribute('alt')).length,smallTargets},
-        performance:{jsBytes,cssBytes,imageBytes,belowFoldEager,cls:window.__r182Vitals?.cls||0,lcp:window.__r182Vitals?.lcp||0,score:Math.max(0,100-(jsBytes>2500000?20:0)-(cssBytes>1000000?15:0)-(window.__r182Vitals?.cls>.1?20:0))}
+        performance:{jsBytes,cssBytes,imageBytes,belowFoldEager,cls:window.__r182Vitals?.cls||0,lcp:window.__r182Vitals?.lcp||0,score:Math.max(0,100-(jsBytes>2500000?20:0)-(cssBytes>1000000?15:0)-(window.__r182Vitals?.cls>.1?20:0))},
+        opening:overview?{summary:rect(summary),signals:rect(signals),lead:rect(lead),complexity:rect(complexity),columns:getComputedStyle(document.querySelector('#projectView')).gridTemplateColumns,ratio:lead?lead.getBoundingClientRect().width/lead.getBoundingClientRect().height:null,fit:leadImage?getComputedStyle(leadImage).objectFit:null,assetStatus:lead?.dataset.assetStatus,owner:lead?.dataset.componentOwner,variant:lead?.dataset.mediaVariant}:null
       };
     });
     if (!response?.ok()) failures.push(`${viewport.name} ${route} HTTP ${response?.status()}`);
@@ -73,6 +77,18 @@ for (const viewport of viewports) {
     if(metrics.a11y.h1!==1||metrics.a11y.main!==1||metrics.a11y.headingSkip||metrics.a11y.unnamed||metrics.a11y.imagesWithoutAlt)failures.push(`${viewport.name} ${route} automated accessibility failed: ${JSON.stringify(metrics.a11y)}`);
     if(metrics.a11y.smallTargets)failures.push(`${viewport.name} ${route} deterministic touch targets below 24px: ${metrics.a11y.smallTargets}`);
     if(metrics.performance.score<80||metrics.performance.cls>.1||metrics.performance.jsBytes>2500000||metrics.performance.cssBytes>1000000||metrics.performance.belowFoldEager)failures.push(`${viewport.name} ${route} non-asset performance budget failed: ${JSON.stringify(metrics.performance)}`);
+    const projectId=route.match(/^\/site\/work\/([^/]+)$/)?.[1];
+    if(projectId&&recruiterFirstPrimaryIds.has(projectId)){
+      const opening=metrics.opening;
+      if(!opening?.summary||!opening.signals||!opening.lead||!opening.complexity)failures.push(`${viewport.name} ${projectId} recruiter-first opening owner missing: ${JSON.stringify(opening)}`);
+      else{
+        if(opening.lead.top<Math.max(opening.summary.bottom,opening.signals.bottom)-1||opening.complexity.top<opening.lead.bottom-1)failures.push(`${viewport.name} ${projectId} opening order mismatch: ${JSON.stringify(opening)}`);
+        if(Math.abs(opening.ratio-16/9)>.02||opening.fit!=='contain'||opening.owner!=='ProjectDetailOverview'||opening.variant!=='Lead Project Visual')failures.push(`${viewport.name} ${projectId} Lead Project Visual contract mismatch: ${JSON.stringify(opening)}`);
+        const stacked=Math.abs(opening.summary.left-opening.signals.left)<2&&opening.signals.top>=opening.summary.bottom-1;
+        if(viewport.width===430&&!stacked)failures.push(`${viewport.name} ${projectId} mobile Overview order mismatch: ${JSON.stringify(opening)}`);
+        if(viewport.width>=871&&stacked)failures.push(`${viewport.name} ${projectId} wide Overview unexpectedly stacked: ${JSON.stringify(opening)}`);
+      }
+    }
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
   }
