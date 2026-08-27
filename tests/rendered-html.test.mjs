@@ -566,7 +566,7 @@ test("keeps project-detail hierarchy line-free, aligned, and unnumbered", () => 
     assert.doesNotMatch(read(page), /section-index-v45/);
   }
   assert.match(tokens, /--cmp-evidence-section-padding:clamp\(/);
-  assert.match(overview, /\.project-signals-v45>div\{[^}]*border-bottom:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
+  assert.match(overview, /\.project-signals-v45>div\{[^}]*border:0;[^}]*background:transparent/);
   assert.match(overview, /\.modal-classification-v45\{[^}]*align-items:start;[^}]*border-left:var\(--dimension-3px\) solid var\(--color-border-strong\)/);
   assert.match(overview, /\.modal-classification-v45__label\{[^}]*padding-block:var\(--dimension-4px\);[^}]*line-height:1.4/);
   assert.match(overview, /\.modal-tags>\*\{[^}]*display:inline-flex;[^}]*align-items:center;[^}]*font-weight:var\(--sys-weight-bold\)/);
@@ -733,7 +733,9 @@ test("R183.2 keeps Human-remediated shared presentation contracts canonical", ()
   assert.match(app, /const scrollable=max>2/);
   assert.match(app, /controlsHead\.hidden=!scrollable/);
   assert.match(app, /positionActiveProjectNavItem[\s\S]*?rail\.scrollTo\(\{left:target,behavior:'auto'\}\)/);
-  assert.match(app, /visibility\.contribution===false\?null:contribution/);
+  const primaryRenderer=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
+  assert.doesNotMatch(primaryRenderer, /ContributionBlock|my-contribution|keyProblems|criticalProblem/);
+  assert.match(primaryRenderer, /list\(contract\?\.canonicalOrder\)/);
   assert.equal(ssot.projects["voucher-center"].presentation.composition, "recruiter-first-system-case");
   assert.equal(ssot.projects["game-center"].presentation.composition, "recruiter-first-system-case");
   assert.equal(ssot.projects["voucher-center"].presentation.visibility.contribution, false);
@@ -1212,20 +1214,27 @@ test("keeps Search and Domain entity relationships resolvable", () => {
   assert.match(app, /appendExploration/);
 });
 
-test("keeps interactive prototypes in-site, lazy, and owned only by Voucher Center", () => {
+test("keeps private prototype locations outside public runtime without a broken control", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const overview = read("assets/css/components/project-detail-overview.css");
   const flow = ssot.interactiveFlowRegistry["voucher-center-discovery-ut-2024"];
   assert.equal(flow.ownerProjectId, "voucher-center");
+  assert.equal(flow.prototypeUrl, undefined);
+  assert.deepEqual(flow.prototypeReference, {
+    provider: "figma",
+    fileName: "Nov 2024 Voucher Center with new voucher cards",
+    nodeId: "162:35182",
+    frameName: "Voucher Center discovery usability-test prototype",
+  });
   assert.equal(ssot.projects.voucher.publicContent.journeyChapters[0].interactiveFlowRef, undefined);
   assert.deepEqual(ssot.projectInteractiveFlowRefs["voucher-center"], [flow.id]);
   assert.equal(flow.evidenceRefs.length, 2);
   for (const path of flow.evidenceRefs) {
     assert.match(path, /^projects\.voucher-center\.publicContent\.whatResearchChanged\.proofStrip\[\d+\]$/);
   }
+  assert.match(app, /if\(!flow\?\.prototypeUrl\)return null/);
   assert.match(app, /function createInteractiveFlow\(flow,\{compact=false\}=\{\}\)/);
-  assert.match(app, /function prototypeEmbedUrl\(prototypeUrl\)/);
   assert.match(app, /embed\.loading='lazy'/);
   assert.match(app, /embed\.setAttribute\('sandbox','allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-presentation'\)/);
   assert.match(app, /source\.searchParams\.set\('show-proto-sidebar','0'\)/);
@@ -1380,19 +1389,17 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.equal(real.filter(item=>item.projectId==='voucher').length,13);
 });
 
-test("converges every project on one SSOT-ordered CaseStudySection system", () => {
+test("converges every Primary project on one archetype-owned CaseStudySection system", () => {
   const app = read("assets/js/app.js");
   const css = read("assets/css/components/project-detail-overview.css");
   assert.match(app, /const CASE_STUDY_SECTION_REGISTRY=\{/);
   assert.doesNotMatch(app, /PROJECT_SECTION_REGISTRY/);
-  assert.match(app, /project\.section_order\|\|\[\]/);
-  assert.match(app, /Unknown canonical section/);
-  assert.match(app, /mappedCanonicalSectionOrder/);
-  assert.match(app, /programmeOwner:'journey'/);
-  assert.match(app, /candidates\.forEach\(node=>\{node\.hidden=true/);
-  assert.match(app, /dataset\.canonicalSectionId=sectionId/);
-  assert.doesNotMatch(app, /\[problem,complexity,\.\.\.supplemental,decisions,gallery,impact,ownership,delivery\]/);
-  assert.match(app, /applyCaseStudySectionSystem\(p\)/);
+  assert.match(app, /function presentationContract\(archetype\)/);
+  assert.match(app, /function resolveProjectSemanticSlot\(project,slot\)/);
+  assert.match(app, /isRecruiterSystemCase=currentDetail\.type==='project'&&DATA\.projects\[currentDetail\.key\]\?\.archetype==='primary'/);
+  const primaryRenderer=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
+  assert.match(primaryRenderer, /list\(contract\?\.canonicalOrder\)/);
+  assert.doesNotMatch(primaryRenderer, /section_order|presentation\?\.sectionOrder|ContributionBlock/);
   for (const variant of ["canvas", "soft", "emphasis"]) {
     assert.match(css, new RegExp(`\\.case-study-section--${variant}\\{`));
   }
@@ -1429,7 +1436,7 @@ test("converges every project on one SSOT-ordered CaseStudySection system", () =
   ]) assert.doesNotMatch(css, forbidden);
 });
 
-test("contracts every approved recruiter block to an explicit public role", () => {
+test("contracts every approved recruiter block to an explicit data role while archetype owns public IA", () => {
   const ssot=JSON.parse(read("content/portfolio-content.json"));
   const contract=ssot.implementationContracts.contentPresentationContract;
   assert.deepEqual(contract.allowedPublicRoles,["RENDER","SUPPORTING","DEMOTED","PRIVATE"]);
@@ -1439,26 +1446,13 @@ test("contracts every approved recruiter block to an explicit public role", () =
   for(const [id,project] of Object.entries(ssot.projects)){
     const projectContract=contract.projects[id];
     assert.ok(projectContract,`${id}: missing content presentation contract`);
-    if(project.presentation?.composition==="recruiter-first-system-case"){
-      const order=project.presentation.sectionOrder;
-      assert.ok(Array.isArray(order),`${id}: missing shared presentation sectionOrder`);
-      assert.equal(new Set(order).size,order.length,`${id}: duplicate shared presentation section`);
-      const canonicalOrder=ssot.implementationContracts.recruiterFirstPresentation.sectionOrder.filter(section=>!(section==='contribution'&&project.presentation.visibility?.contribution===false));
-      assert.deepEqual(order,canonicalOrder,`${id}: shared presentation sectionOrder diverged`);
-      for(const [owner,path] of Object.entries(project.presentation.contentRefs||{})){
-        const value=String(path).split(".").reduce((current,key)=>current?.[key],project);
-        assert.notEqual(value,undefined,`${id}: shared content owner ${owner} does not resolve ${path}`);
-      }
-      continue;
-    }
+    assert.deepEqual(ssot.implementationContracts.portfolioPresentation.archetypes.primary.canonicalOrder,["hero","overview","complexity","core-insight","decisions","evidence","outcomes","ownership","related-work"]);
     for(const [sectionId,section] of Object.entries(projectContract.sections||{})){
       if(!section.renderRequired)continue;
-      assert.ok(project.sectionOrder.includes(sectionId),`${id}: ${sectionId} missing from sectionOrder`);
       assert.ok(section.presentationType,`${id}: ${sectionId} missing presentationType`);
       assert.ok(section.sourcePaths?.length,`${id}: ${sectionId} missing sourcePaths`);
     }
     for(const supporting of projectContract.supporting||[]){
-      assert.ok(project.sectionOrder.includes(supporting.parentSectionId),`${id}: supporting parent ${supporting.parentSectionId} missing`);
       assert.ok(supporting.presentationType,`${id}: supporting block missing presentationType`);
     }
   }
@@ -1563,35 +1557,29 @@ test("contracts Cathay Evidence to four ordered visual proofs without duplicate 
 test("executes the Human-approved recruiter-first presentation contract prospectively", () => {
   const ssot=JSON.parse(read("content/portfolio-content.json"));
   const app=read("assets/js/app.js");
-  const contract=ssot.implementationContracts.recruiterFirstPresentation;
-  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const contract=ssot.implementationContracts.portfolioPresentation.archetypes.primary;
+  const titleContract=ssot.implementationContracts.recruiterFirstPresentation;
+  const expectedOrder=["hero","overview","complexity","core-insight","decisions","evidence","outcomes","ownership","related-work"];
   const expectedNavigation=["overview","complexity","decisions","evidence","outcomes","ownership"];
-  assert.deepEqual(contract.sectionOrder,expectedOrder);
-  assert.deepEqual(contract.navigation.map(item=>item.key),expectedNavigation);
-  assert.deepEqual(contract.hero.forbiddenVisiblePrefixes,["From "]);
-  assert.equal(contract.heroTaxonomy.publicOwner,"none");
+  assert.deepEqual(contract.canonicalOrder,expectedOrder);
+  assert.deepEqual(contract.navigatorSlots,expectedNavigation);
+  assert.deepEqual(titleContract.hero.forbiddenVisiblePrefixes,["From "]);
+  assert.equal(titleContract.heroTaxonomy.publicOwner,"none");
   assert.match(app,/recruiterFirstDisplayTitle\(p\)/);
   assert.match(app,/function canonicalProjectNavItems\(\)/);
-  assert.match(app,/DATA\.implementationContracts\?\.recruiterFirstPresentation/);
+  assert.match(app,/portfolioPresentation/);
   assert.doesNotMatch(app,/PROJECT_NAV_ITEMS/);
-  assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
-  for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
-    const visibleTitle=contract.hero.forbiddenVisiblePrefixes.reduce(
+  assert.match(app,/list\(contract\?\.canonicalOrder\)/);
+  const primaryRenderer=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
+  assert.doesNotMatch(primaryRenderer,/presentation\?\.sectionOrder|section_order|ContributionBlock/);
+  for(const [id,project] of Object.entries(ssot.projects)){
+    const visibleTitle=titleContract.hero.forbiddenVisiblePrefixes.reduce(
       (title,prefix)=>title.startsWith(prefix)?title.slice(prefix.length):title,
       project.title.en
     );
     assert.equal(visibleTitle.startsWith("From "),false,`${id}: visible Hero title starts with From`);
     assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
-    const visibleExpectedOrder=expectedOrder.filter(section=>!(section==='contribution'&&project.presentation.visibility?.contribution===false));
-    assert.deepEqual(project.presentation.sectionOrder,visibleExpectedOrder,`${id}: canonical macro order diverged`);
-    for(const ref of contract.requiredContentRefs){
-      if(['contribution','contributionIntervention'].includes(ref)&&project.presentation.visibility?.contribution===false)continue;
-      const path=project.presentation.contentRefs?.[ref];
-      assert.ok(path,`${id}: missing ${ref} contentRef`);
-      assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`${id}: unresolved ${ref} contentRef`);
-    }
-    assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"),`${id}: Decisions must precede Evidence`);
-    assert.equal(project.presentation.sectionOrder.some(section=>contract.disallowedVisibleLegacySections.includes(section)),false,`${id}: legacy section leaked into recruiter-first order`);
+    assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
   }
 });
 
@@ -1602,24 +1590,24 @@ test("projects DBS through the shared recruiter-first system-case composition", 
   const overview = read("assets/css/components/project-detail-overview.css");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.composition, "recruiter-first-system-case");
-  assert.deepEqual(ssot.implementationContracts.recruiterFirstPresentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes", "ownership"]);
+  assert.deepEqual(ssot.implementationContracts.portfolioPresentation.archetypes.primary.navigatorSlots, ["overview", "complexity", "decisions", "evidence", "outcomes", "ownership"]);
   assert.match(app, /function renderSystemCaseParent\(p\)/);
-  assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
+  assert.match(app, /archetype==='primary'/);
   assert.match(app, /const items=canonicalProjectNavItems\(\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
   assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
 });
 
 
-test("consolidates verified DBS intervention into shared ContributionBlock", () => {
+test("retains verified DBS intervention as migration data without a public Contribution slot", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.contentRefs.contributionIntervention, "keyInterventionMap");
   assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
   assert.equal(dbs.presentation.visibility.evidence, true);
-  assert.match(app, /function appendContributionFlow\(section,transformation\)/);
-  assert.match(app, /appendContributionFlow\(contribution,/);
+  const primaryRenderer=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
+  assert.doesNotMatch(primaryRenderer, /appendContributionFlow|ContributionBlock|my-contribution/);
   assert.doesNotMatch(app, /Evidence to strategy and system model/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
@@ -1671,7 +1659,8 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
   assert.equal(dbs.presentation.contentRefs.coreSystemInsight, "publicContent.coreSystemInsight");
   assert.match(app, /project\.presentation\?\.heroMetadata/);
-  assert.match(app, /'MY INTERVENTION'/);
+  const primaryRenderer=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
+  assert.doesNotMatch(primaryRenderer, /'MY INTERVENTION'|ContributionBlock/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
 

@@ -119,6 +119,10 @@
   --project-card-cta-gap-mobile: var(--space-4);
   --info-grid-cell-gap: var(--space-4);
   --project-overview-title-summary-gap: var(--space-4);
+  --project-overview-body-size: var(--cmp-popup-body-size);
+  --project-overview-body-weight: var(--cmp-popup-body-weight);
+  --project-overview-body-color: var(--color-text-primary);
+  --project-overview-body-leading: var(--leading-body);
   --decision-card-gap: var(--space-5);
   --decision-card-padding-block: var(--space-6);
   --decision-card-padding-block-mobile: var(--space-5);
