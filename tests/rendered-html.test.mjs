@@ -1888,9 +1888,9 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
   assert.equal(evidence.length,3);
   assert.equal(ctbc.publicContent.decisionEvidence.presentation,"decision-support");
   assert.deepEqual(evidence.map(item=>item.heading.en),[
-    "One application model had to connect entry, progress and follow-up",
-    "Interruption was part of the normal application journey",
-    "Multiple applicants still needed one coherent application"
+    "Application model before screens",
+    "Interruption required persistent progress",
+    "Related parties shared one application"
   ]);
   assert.deepEqual(evidence.map(item=>item.decisionLink.en),[
     "Defined the shared application structure before individual screen execution",
