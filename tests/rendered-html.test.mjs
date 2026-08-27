@@ -721,6 +721,26 @@ test("keeps horizontal rails operable, visible, and singly owned", () => {
   assert.doesNotMatch(rail, /!important|overflow-wrap:anywhere|word-break:break-all|scrollbar-width:none/);
 });
 
+test("R183.2 keeps Human-remediated shared presentation contracts canonical", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const card = read("assets/css/components/project-card.css");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const navigator = read("assets/css/components/domain-selector.css");
+  assert.match(navigator, /padding:var\(--floating-nav-item-padding-block\) var\(--floating-nav-item-padding-inline\)/);
+  assert.match(card, /\.related-project-card-v45,\.detail-related-card-v45\{[^}]*overflow:hidden;isolation:isolate/);
+  assert.match(overview, /\.quick-view-v51--project \.project-summary-v45\{order:1;padding-top:var\(--space-3\)\}/);
+  assert.match(app, /const scrollable=max>2/);
+  assert.match(app, /controlsHead\.hidden=!scrollable/);
+  assert.match(app, /positionActiveProjectNavItem[\s\S]*?rail\.scrollTo\(\{left:target,behavior:'auto'\}\)/);
+  assert.match(app, /visibility\.contribution===false\?null:contribution/);
+  assert.equal(ssot.projects["voucher-center"].presentation.composition, "recruiter-first-system-case");
+  assert.equal(ssot.projects["game-center"].presentation.composition, "recruiter-first-system-case");
+  assert.equal(ssot.projects["voucher-center"].presentation.visibility.contribution, false);
+  assert.equal(ssot.projects["game-center"].presentation.visibility.contribution, false);
+  assert.equal(ssot.projects["booking-taxi-pickup-service-strategy"].publicContent.strategyEvidence.structuredGroups[0].assetId, undefined);
+});
+
 test("uses one canonical SVG arrow system and consistent supplemental headings", () => {
   const base = read("assets/css/components/arrow-icon.css");
   const app = read("assets/js/app.js");
@@ -943,8 +963,8 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.equal((html.match(/<section class="hero"/g) ?? []).length, 1);
   assert.equal((html.match(/hero-clarity-system\.svg/g) ?? []).length, 1);
   const heroCopy=Object.values(JSON.parse(read("content/portfolio-content.json")).localizationRegistry.staticPageCopy);
-  assert.ok(heroCopy.some(value=>value.en==='Principal Product Designer'));
-  assert.ok(heroCopy.some(value=>value.en==='Principal'));
+  assert.ok(heroCopy.some(value=>value.en==='Turn confusion into clear systems'&&value.zh==='把混亂轉化為清晰的系統'));
+  assert.ok(heroCopy.some(value=>value.en==='Turn confusion<br>into'&&value.zh==='把混亂<br>轉化為'));
   assert.match(html, /data-copy-html-key="index\.turn-confusion-br-into-/);
   assert.match(read("assets/css/tokens.css"), /--hero-title-size-zh-wide:\s*clamp\(8\.75rem,\s*9\.8vw,\s*140pt\)/);
   assert.match(read("assets/css/tokens.css"), /--hero-title-scale-zh-compact:\s*\.96/);
@@ -1423,7 +1443,8 @@ test("contracts every approved recruiter block to an explicit public role", () =
       const order=project.presentation.sectionOrder;
       assert.ok(Array.isArray(order),`${id}: missing shared presentation sectionOrder`);
       assert.equal(new Set(order).size,order.length,`${id}: duplicate shared presentation section`);
-      assert.deepEqual(order,ssot.implementationContracts.recruiterFirstPresentation.sectionOrder,`${id}: shared presentation sectionOrder diverged`);
+      const canonicalOrder=ssot.implementationContracts.recruiterFirstPresentation.sectionOrder.filter(section=>!(section==='contribution'&&project.presentation.visibility?.contribution===false));
+      assert.deepEqual(order,canonicalOrder,`${id}: shared presentation sectionOrder diverged`);
       for(const [owner,path] of Object.entries(project.presentation.contentRefs||{})){
         const value=String(path).split(".").reduce((current,key)=>current?.[key],project);
         assert.notEqual(value,undefined,`${id}: shared content owner ${owner} does not resolve ${path}`);
@@ -1561,8 +1582,10 @@ test("executes the Human-approved recruiter-first presentation contract prospect
     );
     assert.equal(visibleTitle.startsWith("From "),false,`${id}: visible Hero title starts with From`);
     assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
-    assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
+    const visibleExpectedOrder=expectedOrder.filter(section=>!(section==='contribution'&&project.presentation.visibility?.contribution===false));
+    assert.deepEqual(project.presentation.sectionOrder,visibleExpectedOrder,`${id}: canonical macro order diverged`);
     for(const ref of contract.requiredContentRefs){
+      if(['contribution','contributionIntervention'].includes(ref)&&project.presentation.visibility?.contribution===false)continue;
       const path=project.presentation.contentRefs?.[ref];
       assert.ok(path,`${id}: missing ${ref} contentRef`);
       assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`${id}: unresolved ${ref} contentRef`);
@@ -1690,7 +1713,7 @@ test("uses the approved structured SharedAccountability projection for DBS", () 
   const dbs = ssot.projects.dbs;
   assert.equal(dbs.presentation.accountabilityMode, "structured");
   assert.equal(dbs.ownershipModel.publicSummary.en, "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.");
-  assert.match(app, /if\(accountabilityPresentation\)appendSharedAccountability\(accountability,accountabilityPresentation,\{translate:t\}\)/);
+  assert.match(app, /if\(accountabilityPresentation\|\|ownershipSource\?\.owned\)appendSharedAccountability\(accountability,accountabilityPresentation\|\|ownershipSource,\{translate:t\}\)/);
   assert.doesNotMatch(app, /key===['"]dbs['"]/);
 });
 
@@ -2021,7 +2044,7 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
   assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
-  assert.deepEqual(project.publicContent.strategyEvidence.structuredGroups.map(item=>item.assetId||null),["booking-taxi-strategy-traveller-context-public-v1",null,"booking-taxi-strategy-proposition-comparison-public-v1","booking-taxi-strategy-experiment-risk-framing-public-v1"]);
+  assert.deepEqual(project.publicContent.strategyEvidence.structuredGroups.map(item=>item.assetId||null),[null,null,"booking-taxi-strategy-proposition-comparison-public-v1","booking-taxi-strategy-experiment-risk-framing-public-v1"]);
   assert.ok(project.publicContent.strategyEvidence.structuredGroups.filter(item=>item.assetId).every(item=>item.caption?.en&&manifest.items[item.assetId]?.implementationStatus==="real-active"));
   assert.match(app,/structured-evidence-v223__media/);
   const sharedEvidenceStart=app.indexOf("if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length)");

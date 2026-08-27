@@ -1220,7 +1220,7 @@
     else if(linkRect.left<leadingEdge)target-=leadingEdge-linkRect.left;
     else if(linkRect.right>trailingEdge)target+=linkRect.right-trailingEdge;
     target=Math.min(maximumScroll,Math.max(0,target));
-    rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
+    rail.scrollTo({left:target,behavior:'auto'});
   }
   function setActiveProjectSection(id){
     activeProjectSectionId=id||'';
@@ -3028,7 +3028,7 @@
     if(decisionListNode)decisions.append(decisionListNode);
 
     const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy||(outcomesSource?.change?outcomesSource:null);
     const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
     const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
     outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
@@ -3051,14 +3051,14 @@
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(accountabilityPresentation?.intro||ownershipSource?.publicSummary));
     accountability.id='systemCaseAccountabilitySection';accountability.dataset.projectNavTarget='ownership';accountability.dataset.canonicalSectionId='my-accountability';
-    if(accountabilityPresentation)appendSharedAccountability(accountability,accountabilityPresentation,{translate:t});
+    if(accountabilityPresentation||ownershipSource?.owned)appendSharedAccountability(accountability,accountabilityPresentation||ownershipSource,{translate:t});
     else accountability.dataset.componentOwner='SharedAccountability';
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
     const systemCaseSections={
       'what-made-this-hard':hard,
-      'contribution':contribution,
+      'contribution':visibility.contribution===false?null:contribution,
       'core-system-insight':insight,
       'evidence':evidence,
       'design-decisions':decisions,

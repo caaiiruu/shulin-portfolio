@@ -118,6 +118,7 @@
   --project-card-cta-gap: var(--space-5);
   --project-card-cta-gap-mobile: var(--space-4);
   --info-grid-cell-gap: var(--space-4);
+  --project-overview-title-summary-gap: var(--space-4);
   --decision-card-gap: var(--space-5);
   --decision-card-padding-block: var(--space-6);
   --decision-card-padding-block-mobile: var(--space-5);
@@ -126,6 +127,8 @@
   --outcome-metric-support-gap: var(--space-2);
   --floating-nav-shell-inset: var(--space-3);
   --floating-nav-rail-gap: var(--space-2);
+  --floating-nav-item-padding-block: var(--dimension-9px);
+  --floating-nav-item-padding-inline: var(--dimension-9px);
   --experiment-card-min-block: clamp(380px, 31vw, 420px);
   --experiment-card-min-block-mobile: 360px;
   --profile-card-min-block: 248px;
@@ -232,7 +235,7 @@
   --hero-outcome-top-zh: 35%;
   --hero-title-leading: .88;
   --hero-outcome-line-offset: 1.76em;
-  --hero-copy-size: clamp(1rem, 1.15vw, 1.25rem);
+  --hero-copy-size: var(--dimension-1rem);
   --hero-copy-measure: 48ch;
   --hero-bottom-safe: clamp(var(--space-8), 10vh, var(--space-10));
   --hero-cta-shadow-rest: 0 var(--dimension-2px) 0 var(--hero-accent);

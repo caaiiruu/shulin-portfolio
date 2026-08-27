@@ -13,7 +13,7 @@ const viewports = [
   { name: "mobile-430", width: 430, height: 932 },
 ];
 const primaryIds=['voucher','voucher-center','game-center','dbs','booking','bandzo','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy'];
-const recruiterFirstPrimaryIds=new Set(['dbs','booking','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy']);
+const recruiterFirstPrimaryIds=new Set(['voucher-center','game-center','dbs','booking','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy']);
 const portfolioContent=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const portfolioManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
 const recruiterFirstRealLeadIds=new Set([...recruiterFirstPrimaryIds].filter(projectId=>{const project=portfolioContent.projects[projectId],assetId=project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId,asset=portfolioManifest.items[assetId];return asset?.assetStatus==='production'&&asset?.implementationStatus==='real-active'}));
@@ -40,6 +40,7 @@ for (const viewport of viewports) {
     isMobile: viewport.width <= 430,
   });
   const page = await context.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.addInitScript(()=>{
     window.__r182Vitals={cls:0,lcp:0};
     new PerformanceObserver(list=>{for(const entry of list.getEntries())if(!entry.hadRecentInput)window.__r182Vitals.cls+=entry.value}).observe({type:'layout-shift',buffered:true});
@@ -110,11 +111,13 @@ for (const viewport of viewports) {
         if(viewport.width===1419&&stacked)failures.push(`${viewport.name} ${projectId} desktop Overview unexpectedly stacked: ${JSON.stringify(opening)}`);
       }
     }
+    if(await page.locator("#systemCaseEvidenceSection img").count())await loadEvidenceImages(page);
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
   }
 
   await page.goto(`${baseUrl}/site/work/taishin-p2p-marketplace-platform`,{waitUntil:"networkidle"});
+  await loadEvidenceImages(page);
   const taishinPresentation=await page.evaluate(()=>{
     const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll");
     const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
@@ -682,7 +685,7 @@ researchValues: metricTypography.map(item=>item.value),
     };
   });
   const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
-  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
+  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-16)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
 if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
   if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
   if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
@@ -860,6 +863,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     ctbcReadingEdges: ctbcCertification.geometry,
   };
   await page.goto(`${baseUrl}/site/work/booking-taxi-pickup-service-strategy`,{waitUntil:"networkidle"});
+  await page.waitForFunction(()=>document.querySelector('#detailTitle')?.textContent.trim().length>0);
   const r171Presentation=await page.evaluate(()=>{
     const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
     const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
@@ -963,6 +967,8 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   ];
   for(const [projectId,route] of r1723RegressionProjects){
     await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});
+    await page.waitForFunction(()=>document.querySelector('#detailTitle')?.textContent.trim().length>0);
+    await loadEvidenceImages(page);
     const sharedGeometry=await page.evaluate(()=>{
       const root=document.querySelector("#detailDialog .dialog-scroll"),nav=document.querySelector("#projectSectionNav"),rail=nav?.querySelector(".floating-navigator__rail");
       if(!root||!nav||!rail)return null;
