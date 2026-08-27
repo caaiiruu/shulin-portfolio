@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-27-r183-strategic-signal-evidence",
+  "contentVersion": "2026-08-27-r1831-principal-hiring-signal",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -14637,7 +14637,7 @@
       },
       "infoGrid": {
         "type": {
-          "value": "Transaction System",
+          "value": "0→1 Product",
           "visibility": "info-grid-only",
           "rationale": {
             "en": "Manages a stateful exchange such as payment, booking, entitlement, purchase or account completion.",
@@ -16642,7 +16642,7 @@
           "付款復原缺口"
         ]
       },
-      "type": "Transaction System",
+      "type": "0→1 Product",
       "legacyAliasStatus": "synchronised-non-canonical-r142",
       "voucherIntegration": {
         "status": "confirmed-cross-team-delivery",
@@ -20341,17 +20341,40 @@
           "metrics": [],
           "structuredGroups": [
             {
+              "id": "product-model-before-screens",
+              "supportingLabel": {
+                "en": "PRODUCT MODEL EVIDENCE",
+                "zh": "產品模型證據"
+              },
               "heading": {
-                "en": "Different readiness states required a state-driven journey",
-                "zh": "不同準備狀態需要以狀態驅動的旅程"
+                "en": "One application model had to connect entry, progress and follow-up",
+                "zh": "一套申請模型必須串連入口、進度與後續作業"
               },
               "summary": {
-                "en": "Different entry readiness made application state—not a fixed screen sequence—the product model for deciding what each applicant should do next.",
-                "zh": "使用者進入時掌握的資訊與依賴關係各不相同，因此單一固定順序無法適用每一種申請狀態。"
+                "en": "The decision map showed that mortgage self-service was not one linear form. It defined how different starts, participant work and interrupted states converge into a resumable application that continues after submission.",
+                "zh": "決策地圖顯示房貸自助申請並非一張線性表單，而是要定義不同入口、參與者任務與中斷狀態如何匯入同一套可續辦、且送件後仍持續運作的申請模型。"
               },
+              "bullets": [
+                {
+                  "en": "Entry model — Direct, calculator-led and employee-assisted starts converge into one application.",
+                  "zh": "入口模型——直接申請、試算後申請與員工協助入口，匯入同一份申請。"
+                },
+                {
+                  "en": "Application model — Loan information, applicant information, related-party work, terms and confirmation form one staged structure.",
+                  "zh": "申請模型——貸款資訊、申請人資訊、關係人任務、條款與確認，組成一套分階段結構。"
+                },
+                {
+                  "en": "Persistent state — Saved progress, known information and resume behaviour return applicants to the relevant state.",
+                  "zh": "持續狀態——保存進度、既有資訊與續辦行為，讓申請人返回正確的申請狀態。"
+                },
+                {
+                  "en": "Post-submission orchestration — Documents, related-party completion and bank follow-up continue beyond the primary applicant’s submission.",
+                  "zh": "送件後協作——文件、關係人完成與銀行後續作業，延伸至主申請人送件之後。"
+                }
+              ],
               "decisionLink": {
-                "en": "Defined the state-driven entry model",
-                "zh": "導向決策 01"
+                "en": "Defined the shared application structure before individual screen execution",
+                "zh": "在個別畫面設計前，先定義共用申請結構"
               }
             },
             {
@@ -21324,14 +21347,14 @@
       },
       "problemTypes": {
         "en": [
-          "Unvalidated market demand",
-          "Supplier feasibility",
-          "High-risk expansion"
+          "Travel mobility",
+          "Pickup experience",
+          "Proposition optimisation"
         ],
         "zh": [
-          "市場需求未驗證",
-          "供應端可行性",
-          "高風險擴張"
+          "旅遊移動",
+          "接送體驗",
+          "服務主張優化"
         ]
       },
       "problemTypes_zh": [
@@ -21345,7 +21368,7 @@
       },
       "infoGrid": {
         "type": {
-          "value": "Transaction System",
+          "value": "Product Optimisation",
           "visibility": "info-grid-only",
           "rationale": {
             "en": "Optimises an existing stateful taxi-booking proposition through traveller, supplier and market evidence.",
@@ -22239,7 +22262,7 @@
       ],
       "at_glance": "Led nine months of research and strategy for Booking.com’s taxi pre-booking expansion, combining customer, supplier, market and performance evidence to redefine the proposition and recommend a lower-cost Phase 1 experiment in selected target markets.",
       "at_glance_zh": "主導 Booking.com 計程車預約服務為期九個月的研究與策略，整合顧客、供應商、市場與產品表現證據，重新定義服務主張，並建議在選定目標市場進行低成本的第一階段實驗。",
-      "type": "Transaction System",
+      "type": "Product Optimisation",
       "legacyAliasStatus": "synchronised-non-canonical-r142",
       "whatThisProves": {
         "en": "Translating ambiguous pickup behaviour and service constraints into a phased product strategy.",
@@ -24825,12 +24848,12 @@
       "hero": {
         "targetRole": "Principal Product Designer",
         "headline": {
-          "en": "I identify the product structure teams need to define, make the decisions discussable and carry them into shipped behaviour.",
-          "zh": "我將複雜產品系統轉化為清晰方向、可擴充運作模型與實際上線成果。"
+          "en": "Principal Product Designer",
+          "zh": "Principal Product Designer"
         },
         "supportingLine": {
-          "en": "Principal-level product design across 0→1 transactions, incentive behaviour, regulated operations and global travel products.",
-          "zh": "橫跨 Incentives、Payments、受監管營運團隊與全球旅遊平台，從 0→1 framing 到正式環境品質。"
+          "en": "I define and ship product models, interaction behaviour and decision logic across 0→1 transactions, incentives, regulated operations and global travel.",
+          "zh": "我定義並交付產品模型、互動行為與決策邏輯，涵蓋 0→1 交易產品、獎勵機制、受監管營運與全球旅遊。"
         },
         "accuracyBoundary": "Do not publicly claim the historical job title Principal Product Designer unless the user has held that title."
       },
@@ -33169,24 +33192,24 @@
         "zh": "選單"
       },
       "index.turn-confusion-into-clear-systems-9a4e42e6": {
-        "en": "Turn confusion into clear systems",
-        "zh": "把混亂轉化為清晰的系統"
+        "en": "Principal Product Designer",
+        "zh": "Principal Product Designer"
       },
       "index.clear-b2efa2af": {
-        "en": "clear",
-        "zh": "清晰的"
+        "en": "Product",
+        "zh": "產品"
       },
       "index.systems-935af1b3": {
-        "en": "systems",
-        "zh": "系統"
+        "en": "Designer",
+        "zh": "設計師"
       },
       "index.explore-domain-experience-05eec558": {
         "en": "Explore domain experience",
         "zh": "探索領域經驗"
       },
       "index.i-design-systems-that-bring-clarity-to-compl-c54db8a3": {
-        "en": "I design systems that bring clarity to complex workflows, reduce operational risk, and enable faster decision-making.",
-        "zh": "我設計能釐清複雜流程、降低營運風險，並加速團隊決策的產品系統。"
+        "en": "I define and ship product models, interaction behaviour and decision logic across 0→1 transactions, incentives, regulated operations and global travel.",
+        "zh": "我定義並交付產品模型、互動行為與決策邏輯，涵蓋 0→1 交易產品、獎勵機制、受監管營運與全球旅遊。"
       },
       "index.years-94ac86b7": {
         "en": "years",
@@ -33977,8 +34000,8 @@
         "zh": "同時設計角色、狀態、例外與復原路徑，而不只處理理想流程。"
       },
       "profile.align-teams-around-one-system-model-0f81efcf": {
-        "en": "Align teams around one system model",
-        "zh": "用一套系統模型對齊跨職能團隊"
+        "en": "Give teams one product model to act on",
+        "zh": "讓團隊依同一套產品模型採取行動"
       },
       "profile.connect-product-engineering-operations-and-b-bccd745e": {
         "en": "Connect product, engineering, operations, and business around shared rules and ownership.",
@@ -34221,16 +34244,16 @@
         "zh": "獲獎探索作品"
       },
       "index.turn-confusion-br-into-92f66d41": {
-        "en": "Turn confusion<br>into",
-        "zh": "把混亂<br>轉化為"
+        "en": "Principal",
+        "zh": "Principal"
       },
       "experiments.small-experiments-br-em-real-questions-em-c5787d3a": {
         "en": "Small experiments.<br><em>Real questions.</em>",
         "zh": "小型實驗。<br><em>真實問題。</em>"
       },
       "profile.i-turn-complex-rules-into-em-systems-teams-c-bb4c9e12": {
-        "en": "I turn complex rules into <em>systems teams can scale.</em>",
-        "zh": "我把複雜規則，轉化為<em>團隊能擴展的系統。</em>"
+        "en": "I define complex products and carry them into <em>shipped behaviour.</em>",
+        "zh": "我定義複雜產品，並將決策落實為<em>可交付的產品行為。</em>"
       },
       "index.skip-to-content-7a1033b5": {
         "en": "Skip to content",
@@ -34675,7 +34698,8 @@
         "Incentive System",
         "Transaction System",
         "Marketplace Platform",
-        "0→1 Product"
+        "0→1 Product",
+        "Product Optimisation"
       ]
     },
     "contentStatus": "approved"

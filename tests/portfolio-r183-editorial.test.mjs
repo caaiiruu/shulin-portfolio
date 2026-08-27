@@ -23,12 +23,34 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
 
 test("R183 classifies Booking Taxi as existing-proposition optimisation, never 0→1", () => {
   const taxi = content.projects["booking-taxi-pickup-service-strategy"];
-  assert.equal(taxi.type, "Transaction System");
-  assert.equal(taxi.infoGrid.type.value, "Transaction System");
+  assert.equal(taxi.type, "Product Optimisation");
+  assert.equal(taxi.infoGrid.type.value, "Product Optimisation");
+  assert.notEqual(taxi.type, "Transaction System");
+  assert.deepEqual(taxi.problemTypes.en, ["Travel mobility", "Pickup experience", "Proposition optimisation"]);
   assert.doesNotMatch(JSON.stringify(taxi), /0→1|greenfield|new product creation/i);
   assert.equal(content.workIndex.workFilters.find((filter) => filter.id === "zero").projectIds.includes(taxi.id), false);
   assert.deepEqual(taxi.publicContent.strategyEvidence.metrics, []);
   assert.match(taxi.publicContent.outcomes.closing.en, /implementation, launch and experiment results are not verified/i);
+});
+
+test("R183.1 preserves Payment as a true 0→1 product and protects the shared Type enum", () => {
+  const payment = content.projects.payment;
+  assert.equal(payment.type, "0→1 Product");
+  assert.equal(payment.infoGrid.type.value, "0→1 Product");
+  assert.ok(content.projectHeroContentContract.type.allowedValues.includes("Product Optimisation"));
+});
+
+test("R183.1 makes CTBC product-model reasoning the first recruiter Evidence", () => {
+  const evidence = content.projects["ctbc-mortgage-self-service-app"].publicContent.decisionEvidence;
+  const first = evidence.structuredGroups[0];
+  assert.equal(first.id, "product-model-before-screens");
+  assert.deepEqual(first.bullets.map(item => item.en), [
+    "Entry model — Direct, calculator-led and employee-assisted starts converge into one application.",
+    "Application model — Loan information, applicant information, related-party work, terms and confirmation form one staged structure.",
+    "Persistent state — Saved progress, known information and resume behaviour return applicants to the relevant state.",
+    "Post-submission orchestration — Documents, related-party completion and bank follow-up continue beyond the primary applicant’s submission."
+  ]);
+  assert.doesNotMatch(JSON.stringify(first), /launch|adoption|conversion|approval rate/i);
 });
 
 test("R183 keeps Taishin delivery claims below launch and commercial outcome", () => {

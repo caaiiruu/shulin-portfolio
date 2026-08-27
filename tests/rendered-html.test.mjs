@@ -137,7 +137,7 @@ test("keeps every rendered project overview bilingual without English fallback i
 
 test("keeps every project Type consistent across canonical SSOT representations", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
-  const allowed = new Set(["Internal System", "Incentive System", "Transaction System", "Marketplace Platform", "0→1 Product"]);
+  const allowed = new Set(["Internal System", "Incentive System", "Transaction System", "Marketplace Platform", "0→1 Product", "Product Optimisation"]);
   for (const [id, project] of Object.entries(ssot.projects)) {
     const canonical = project.infoGrid?.type?.value;
     assert.ok(allowed.has(canonical), `${id}: unapproved Type ${canonical}`);
@@ -899,7 +899,7 @@ test("keeps Profile as one truthful, responsive recruitment experience", () => {
   const entry = registry.components.find((component) => component.component === "ProfileExperience");
   assert.equal(entry.cssOwner, "assets/css/components/profile-card.css");
   const profileCopy=Object.values(JSON.parse(read("content/portfolio-content.json")).localizationRegistry.staticPageCopy).map(value=>value.en);
-  assert.ok(profileCopy.some(value=>value.includes('I turn complex rules into')));
+  assert.ok(profileCopy.some(value=>value.includes('I define complex products')));
   assert.ok(profileCopy.some(value=>value.includes('10+ years across regulated operations')));
   assert.ok(profileCopy.some(value=>value.includes('Explorations with verified recognition')));
   assert.equal((html.match(/class="experiment-index-card-v36(?:\s[^"]*)?"/g) ?? []).length, 4);
@@ -943,8 +943,8 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.equal((html.match(/<section class="hero"/g) ?? []).length, 1);
   assert.equal((html.match(/hero-clarity-system\.svg/g) ?? []).length, 1);
   const heroCopy=Object.values(JSON.parse(read("content/portfolio-content.json")).localizationRegistry.staticPageCopy);
-  assert.ok(heroCopy.some(value=>value.en==='Turn confusion into clear systems'&&value.zh==='把混亂轉化為清晰的系統'));
-  assert.ok(heroCopy.some(value=>value.en==='Turn confusion<br>into'&&value.zh==='把混亂<br>轉化為'));
+  assert.ok(heroCopy.some(value=>value.en==='Principal Product Designer'));
+  assert.ok(heroCopy.some(value=>value.en==='Principal'));
   assert.match(html, /data-copy-html-key="index\.turn-confusion-br-into-/);
   assert.match(read("assets/css/tokens.css"), /--hero-title-size-zh-wide:\s*clamp\(8\.75rem,\s*9\.8vw,\s*140pt\)/);
   assert.match(read("assets/css/tokens.css"), /--hero-title-scale-zh-compact:\s*\.96/);
@@ -1888,16 +1888,17 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
   assert.equal(evidence.length,3);
   assert.equal(ctbc.publicContent.decisionEvidence.presentation,"decision-support");
   assert.deepEqual(evidence.map(item=>item.heading.en),[
-    "Different readiness states required a state-driven journey",
+    "One application model had to connect entry, progress and follow-up",
     "Interruption was part of the normal application journey",
     "Multiple applicants still needed one coherent application"
   ]);
   assert.deepEqual(evidence.map(item=>item.decisionLink.en),[
-    "Defined the state-driven entry model",
+    "Defined the shared application structure before individual screen execution",
     "Defined persistent progress and recovery",
     "Defined coordinated multi-party completion"
   ]);
-  assert.ok(evidence.every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
+  assert.equal(evidence[0].bullets.length,4);
+  assert.ok(evidence.slice(1).every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
   assert.equal(outcomes.headline,undefined);
   assert.deepEqual(outcomes.cards.map(item=>item.heading.en),[
     "One staged application model",
@@ -1919,7 +1920,8 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   const css=read("assets/css/components/project-detail-overview.css");
   const evidence=ssot.projects["ctbc-mortgage-self-service-app"].publicContent.decisionEvidence;
   assert.equal(evidence.structuredGroups.length,3);
-  assert.ok(evidence.structuredGroups.every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
+  assert.deepEqual(Object.keys(evidence.structuredGroups[0]).sort(),["bullets","decisionLink","heading","id","summary","supportingLabel"]);
+  assert.ok(evidence.structuredGroups.slice(1).every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
   assert.match(app,/evidenceSource\.presentation==='decision-support'/);
   assert.match(app,/structured-evidence-v223__decision-link voucher-r149-eyebrow/);
   assert.doesNotMatch(app,/ctbc[^\n]*decision-support/i);
@@ -2012,7 +2014,7 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.equal(project.problemTypes.length,undefined);
   assert.equal(project.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
   assert.doesNotMatch(project.title.en,/^From\s/);
-  assert.equal(project.infoGrid.type.value,"Transaction System");
+  assert.equal(project.infoGrid.type.value,"Product Optimisation");
   assert.doesNotMatch(JSON.stringify(project),/0→1|greenfield|new product creation/i);
   assert.equal(project.infoGrid.timeline.duration.en,"9 months");
   assert.equal(project.whatMadeThisHard.length,3);

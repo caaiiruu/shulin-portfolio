@@ -17,6 +17,7 @@ const allowedProjectTypes = new Set([
   "Transaction System",
   "Marketplace Platform",
   "0→1 Product",
+  "Product Optimisation",
 ]);
 for (const [id, project] of Object.entries(content.projects || {})) {
   const canonicalType = project.infoGrid?.type?.value;
