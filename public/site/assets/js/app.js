@@ -1187,6 +1187,12 @@
   function semanticSlotContract(slot){
     return DATA.implementationContracts?.portfolioPresentation?.semanticSlots?.[slot]||null;
   }
+  function approvedSemanticVariant(project,slot){
+    const baseline=DATA.implementationContracts?.portfolioPresentation?.approvedBaseline?.semanticVariants?.[slot];
+    const projectId=project?.project_id||project?.id||'';
+    const variant=baseline?.projects?.[projectId];
+    return list(baseline?.allowed).includes(variant)?variant:null;
+  }
   function hasSemanticContent(value){
     if(value==null||value==='')return false;
     if(Array.isArray(value))return value.some(hasSemanticContent);
@@ -2799,11 +2805,11 @@
   }
   function createRecruiterSection(eyebrow,title,copy='',lead=''){
     const node=element('section','voucher-r149-section case-study-section case-study-section--canvas');
-    const heading=element('header','voucher-r149-heading case-study-section__header');
+    const heading=element('header','voucher-r149-heading case-study-section__header case-content-span case-content-span--headline');
     if(eyebrow)heading.append(element('span','voucher-r149-eyebrow',eyebrow));
     if(title)heading.append(element('h2','',title));
-    if(lead)heading.append(element('p','voucher-r149-lead',lead));
-    if(copy)heading.append(element('p','voucher-r149-intro',copy));
+    if(lead)heading.append(element('p','voucher-r149-lead case-content-span case-content-span--focus',lead));
+    if(copy)heading.append(element('p','voucher-r149-intro case-content-span case-content-span--reading',copy));
     node.append(heading);
     return node;
   }
@@ -2963,8 +2969,9 @@
     const contract=presentationContract('primary');
     const t=value=>localize(value);
     const overview=doc.getElementById('projectOverviewSection');
-    if(overview){overview.dataset.archetype='primary';overview.dataset.presentationContract='portfolioPresentation.primary';overview.dataset.projectNavTarget='overview'}
-    doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+    if(overview){overview.dataset.archetype='primary';overview.dataset.presentationContract='portfolioPresentation.primary';overview.dataset.projectNavTarget='overview';overview.classList.add('case-content-span','case-content-span--full')}
+    const projectSummary=overview?.querySelector('.project-summary-v45');projectSummary?.classList.add('case-content-span','case-content-span--summary');
+    const projectSignals=doc.getElementById('projectSignals');projectSignals?.classList.add('info-grid-v45--frameless','case-content-span','case-content-span--full');
     const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.hidden=true;
     const overviewContext=doc.querySelector('.project-context-v45--overview');if(overviewContext)overviewContext.hidden=true;
     const legacyIntervention=doc.getElementById('projectKeyIntervention');if(legacyIntervention)legacyIntervention.hidden=true;
@@ -2975,8 +2982,9 @@
     const hardItems=Array.isArray(hardSource)?hardSource:hardSource?.items;
     const hard=createRecruiterSection('',lang==='zh'?'困難之處':'What made this hard',t(hardSource?.intro));
     hard.id='systemCaseComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';hard.dataset.componentOwner='WhatMadeThisHard';
-    const hardRows=element('div','recruiter-complexity-grid');
-    if(p.presentation?.complexityLayout==='featured-first')hardRows.classList.add('recruiter-complexity-grid--featured-first');
+    const complexityVariant=approvedSemanticVariant(p,'complexity')||'equal';
+    const hardRows=element('div',`recruiter-complexity-grid recruiter-complexity-grid--${complexityVariant} case-content-span case-content-span--full`);
+    hardRows.dataset.layoutVariant=complexityVariant;
     list(hardItems).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
     hard.append(hardRows);
 
@@ -3010,7 +3018,7 @@
     const evidence=evidenceSource
       ?createRecruiterSection('',t(evidenceSource.title)):null;
     if(evidence){
-      evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence';evidence.dataset.componentOwner=evidenceSource.resolvedComponent||'StructuredEvidence';evidence.dataset.evidenceVariant=evidenceSource.presentation||'default';evidence.dataset.semanticSource=evidenceSource.resolvedSourcePath||evidenceResolution.sourcePath||'';
+      evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence';evidence.dataset.componentOwner=evidenceSource.resolvedComponent||'StructuredEvidence';evidence.dataset.evidenceVariant=evidenceSource.presentation||'default';evidence.dataset.semanticSource=evidenceSource.resolvedSourcePath||evidenceResolution.sourcePath||'';evidence.classList.add('case-content-span','case-content-span--full');
       const orderedVisualProofs=evidenceSource.presentation==='ordered-visual-proofs';
       const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
@@ -3068,13 +3076,14 @@
 
     const outcomesResolution=resolveProjectSemanticSlot(p,'outcomes');
     const outcomesSource=normalizeOutcomeResolution(outcomesResolution);
+    const outcomeVariant=approvedSemanticVariant(p,'outcomes')||'system-operating';
     const outcomesHierarchy=outcomesSource?.semanticHierarchy||(outcomesSource?.change?outcomesSource:null);
     const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
     const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
-    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
+    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner=outcomeVariant==='quantified'?'OutcomeMetric':'OutcomeStatement';outcomes.dataset.outcomeSemantic=outcomeVariant;
     if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
-      const qualitative=element('div','outcome-qualitative-hierarchy');
+      const qualitative=element('div',`outcome-qualitative-hierarchy outcome-qualitative-hierarchy--${outcomeVariant}`);
       if(t(outcomesSource?.headline)){
         const headline=element('article','outcome-semantic-change outcome-semantic-change--qualitative');
         headline.append(element('h3','outcome-semantic-change__title',t(outcomesSource.headline)));

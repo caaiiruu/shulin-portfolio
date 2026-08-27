@@ -279,6 +279,11 @@
   --case-page-max: var(--dimension-1280px);
   --case-reading-max: var(--dimension-760px);
   --case-evidence-max: var(--dimension-1120px);
+  --case-span-headline: var(--case-evidence-max);
+  --case-span-summary: var(--dimension-58ch);
+  --case-span-reading: var(--case-reading-max);
+  --case-span-full: var(--case-evidence-max);
+  --case-span-focus: var(--dimension-900px);
   --case-gutter-desktop: var(--space-8);
   --case-gutter-tablet: var(--space-7);
   --case-gutter-mobile: var(--space-5);
@@ -288,6 +293,11 @@
   --case-gap-subsection: var(--space-7);
   --case-gap-content: var(--space-5);
   --case-gap-caption: var(--space-2);
+  --case-section-title-content-gap: var(--case-gap-content);
+  --case-section-canvas-inset: var(--space-0);
+  --case-overview-summary-grid-gap: var(--case-gap-subsection);
+  --case-complexity-item-gap: var(--case-gap-content);
+  --case-outcome-item-gap: var(--case-gap-content);
   --project-detail-copy-measure: var(--case-reading-max);
   --project-detail-section-gap: var(--case-gap-section);
   --project-detail-section-pad-block: var(--case-gap-section);

@@ -2127,7 +2127,6 @@
               }
             },
             "performanceEvidence": {
-              "sourceStatus": "interim-campaign-report-through-week-5",
               "publicApproximateSummary": {
                 "matchedWeeks": "Across the first four comparable post-drop weeks, total redemptions were approximately 5-20% above 2023, while digital share was about 4-7 percentage points higher.",
                 "week5Snapshot": "By the Week 5 snapshot, the campaign had generated roughly 750K redemptions, with digital channels contributing about 39%.",
@@ -2581,7 +2580,6 @@
                   "~12% continued to a Product Details Page",
                   "~2% later added from PDP"
                 ],
-                "sourceStatus": "internal-baseline-funnel",
                 "confidentialityNotePath": "confidentiality.metricDisclosurePolicy.confidentialityNote"
               },
               "contentStatus": "approved"
@@ -2839,10 +2837,6 @@
                   "2024 Online Grocery Delivery-tag Add-to-Cart MVP",
                   "Single and multiple eligible-product cart actions",
                   "2025 progressive-disclosure visibility optimisation"
-                ],
-                "needsConfirmation": [
-                  "Which in-store, omni, generic-item and special-criteria variants reached production",
-                  "Which Phase 2 variants remained specification or concept"
                 ]
               },
               "contentStatus": "approved"
@@ -3312,7 +3306,6 @@
                 "weakness": "Keeps multiple mental models and much of the existing operational complexity."
               }
             ],
-            "sourceStatus": "strategic-comparison-not-proof-of-final-approval",
             "contentStatus": "approved"
           },
           "northStarMechanic": {
@@ -9144,28 +9137,6 @@
           "zh": "在風險與營運限制下建立跨市場系統標準。"
         }
       },
-      "imagePlan": {
-        "hero": {
-          "purpose": "Show the shipped operating-system transformation within five seconds.",
-          "recommendedContent": "One strong shipped workbench view paired with a simplified cross-role decision architecture.",
-          "statusLabel": "SHIPPED · 6 MARKETS"
-        },
-        "researchProgramme": {
-          "recommendedContent": "Show 6 markets, 50+ participants, 4 personas, 2 journeys and 3 co-creation workshops plus follow-up validation."
-        },
-        "operatingModel": {
-          "recommendedContent": "Use a public redraw derived from the earlier architecture to show systems, roles and the EOD/real-time operating model.",
-          "statusLabel": "SYSTEM ARCHITECTURE · DELIVERED"
-        },
-        "crossRoleFlow": {
-          "recommendedContent": "Use a simplified version of the new flow to show RM, CRM and CCU action paths through release or abort.",
-          "statusLabel": "DECISION MODEL · DELIVERED"
-        },
-        "workbenchProof": {
-          "recommendedContent": "Three shipped views: pending cases, borrower/case detail, and actions or monitoring.",
-          "statusLabel": "SHIPPED"
-        }
-      },
       "systemClassification": {
         "publicLabel": {
           "en": "Enterprise Internal System",
@@ -9974,8 +9945,7 @@
         ],
         "primaryOutcome": {
           "metric": "~150 additional rides per day",
-          "window": "Within the first two weeks",
-          "sourceStatus": "historical portfolio source; publish approximately"
+          "window": "Within the first two weeks"
         },
         "researchAndExperimentEvidence": {
           "competitiveResearch": [
@@ -12422,8 +12392,7 @@
       "evidenceScale": {
         "moderatedInterviews": 30,
         "logicFlowSheets": 7,
-        "functionalDocumentations": 25,
-        "sourceStatus": "Historical portfolio counts"
+        "functionalDocumentations": 25
       },
       "domainTags": {
         "primaryDomainId": "retail-commerce",
@@ -14865,8 +14834,7 @@
         "award": {
           "programme": "Asian Experience Awards 2021",
           "title": "Singapore User Experience Award of the Year - Retail",
-          "recipient": "FairPrice Group",
-          "sourceStatus": "Confirmed by the interview deck award slide"
+          "recipient": "FairPrice Group"
         },
         "confidentialityNote": "For confidentiality reasons, public metrics use approximate values."
       },
@@ -15145,6 +15113,38 @@
         }
       },
       "publicContent": {
+        "imagePlan": [
+          {
+            "order": 1,
+            "assetId": "payment-hero-unified-checkout-public-v1",
+            "role": "hero",
+            "loading": "eager"
+          },
+          {
+            "order": 2,
+            "assetId": "payment-evidence-live-checkout-image-only-r1649d",
+            "role": "research",
+            "loading": "lazy"
+          },
+          {
+            "order": 3,
+            "assetId": "payment-evidence-sco-entry-public-v2",
+            "role": "decision",
+            "loading": "lazy"
+          },
+          {
+            "order": 4,
+            "assetId": "payment-evidence-operational-recovery-public-v2",
+            "role": "decision",
+            "loading": "lazy"
+          },
+          {
+            "order": 5,
+            "assetId": "payment-evidence-outcomes-award-public-v2",
+            "role": "outcome",
+            "loading": "lazy"
+          }
+        ],
         "imageBudget": {
           "initialLoadImages": 5,
           "hero": {
@@ -15163,43 +15163,6 @@
             "maxImages": 4
           }
         },
-        "imagePlan": [
-          {
-            "order": 1,
-            "assetId": "payment-hero-unified-checkout-public-v1",
-            "role": "hero",
-            "purpose": "Show app, cashier/SCO and system scope in one composite.",
-            "loading": "eager"
-          },
-          {
-            "order": 2,
-            "assetId": "payment-evidence-live-checkout-image-only-r1649d",
-            "role": "research",
-            "purpose": "Show the two strongest live cashier and self-checkout research photographs without embedded editorial copy.",
-            "loading": "lazy"
-          },
-          {
-            "order": 3,
-            "assetId": "payment-evidence-sco-entry-public-v2",
-            "role": "decision",
-            "purpose": "Show the final SCO entry and the tested payment/loyalty relationship.",
-            "loading": "lazy"
-          },
-          {
-            "order": 4,
-            "assetId": "payment-evidence-operational-recovery-public-v2",
-            "role": "decision",
-            "purpose": "Combine portal, refund and communication evidence into one readable operational-system story.",
-            "loading": "lazy"
-          },
-          {
-            "order": 5,
-            "assetId": "payment-evidence-outcomes-award-public-v2",
-            "role": "outcome",
-            "purpose": "Show selected product metrics, store scale, NPS and award.",
-            "loading": "lazy"
-          }
-        ],
         "contentStatus": "approved-r164.2-visual-evidence",
         "programmeLeadership": {
           "title": {
@@ -17066,12 +17029,6 @@
           "Bank, external-bank, e-payment and paper routes specified",
           "Interruption, progress and exception states specified",
           "Complete UI specifications and UX explanations delivered for client development"
-        ],
-        "needsConfirmation": [
-          "Client development status",
-          "Production launch status",
-          "Post-launch completion, rejection, support or operational outcomes",
-          "Final scope changes after handoff"
         ]
       },
       "publicContent": {
@@ -17393,140 +17350,48 @@
             "en": "Outcomes",
             "zh": "成果"
           },
-          "semanticHierarchy": {
-            "measuredLabel": {
-              "en": "One aligned account-opening model and a development-ready specification set.",
-              "zh": "一套已對齊的開戶模型與可供開發的完整規格。"
-            },
-            "measured": [
-              {
-                "value": "1",
-                "label": {
-                  "en": "aligned end-to-end model",
-                  "zh": "套已對齊的端到端模型"
-                },
-                "supportingCopy": {
-                  "en": "covering entry, verification, routing, recovery and completion",
-                  "zh": "涵蓋入口、驗證、分流、續辦與完成"
-                }
-              },
-              {
-                "value": "6 stages",
-                "label": {
-                  "en": "account-opening journey",
-                  "zh": "開戶旅程"
-                },
-                "supportingCopy": {
-                  "en": "from discovery through completion and status",
-                  "zh": "從探索到完成與狀態"
-                }
-              },
-              {
-                "value": "4 routes",
-                "label": {
-                  "en": "account-verification paths",
-                  "zh": "帳戶驗證路徑"
-                },
-                "supportingCopy": {
-                  "en": "bank · external bank · e-payment · paper",
-                  "zh": "銀行 · 外部銀行 · 電子支付 · 紙本"
-                }
-              },
-              {
-                "value": "3 contexts",
-                "label": {
-                  "en": "cross-device journey",
-                  "zh": "跨裝置旅程"
-                },
-                "supportingCopy": {
-                  "en": "web · app · external authentication",
-                  "zh": "網頁 · App · 外部驗證"
-                }
-              },
-              {
-                "value": "1 month",
-                "label": {
-                  "en": "completed-stage retention",
-                  "zh": "已完成階段保留"
-                },
-                "supportingCopy": {
-                  "en": "source-supported recovery constraint",
-                  "zh": "來源支持的續辦限制"
-                }
-              },
-              {
-                "value": "Complete",
-                "label": {
-                  "en": "UI/UX specification delivery",
-                  "zh": "UI／UX 規格交付"
-                },
-                "supportingCopy": {
-                  "en": "prepared for client development",
-                  "zh": "供客戶開發使用"
-                }
-              }
-            ],
-            "metricLayout": "aligned",
-            "supportingStatements": [
-              {
-                "text": {
-                  "en": "Post-launch performance was not available within the consulting engagement; outcomes are reported through validated system decisions and delivered specification scope.",
-                  "zh": "顧問合作期間無法取得上線後成效；成果以已驗證的系統決策與已交付的規格範圍呈現。"
-                }
-              }
-            ]
+          "headline": {
+            "en": "One aligned account-opening model and a development-ready specification set.",
+            "zh": "一套已對齊的開戶模型與可供開發的完整規格。"
           },
+          "cards": [
+            {
+              "heading": {
+                "en": "Aligned end-to-end model",
+                "zh": "已對齊的端到端模型"
+              },
+              "copy": {
+                "en": "Covering entry, verification, routing, recovery and completion.",
+                "zh": "涵蓋入口、驗證、分流、續辦與完成。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Complete UI/UX specification delivery",
+                "zh": "完整 UI／UX 規格交付"
+              },
+              "copy": {
+                "en": "Prepared for client development.",
+                "zh": "供客戶開發使用。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Post-launch performance was not available within the consulting engagement; outcomes are reported through validated system decisions and delivered specification scope.",
+            "zh": "顧問合作期間無法取得上線後成效；成果以已驗證的系統決策與已交付的規格範圍呈現。"
+          },
+          "deliveryScopeFacts": [
+            "6 stages",
+            "4 routes",
+            "3 contexts",
+            "1 month completed-stage retention"
+          ],
           "contentStatus": "approved-r166.2"
         },
         "approvedDeliveryBoundary": {
           "en": "Validated target flow — final implementation and development remained client-owned.",
           "zh": "經驗證的目標流程；最終實作與開發由客戶端負責。"
         }
-      },
-      "imagePlan": {
-        "hero": {
-          "purpose": "Show the final product direction in five seconds.",
-          "recommendedContent": "A composed 3-5-screen sequence representing entry, identity/document capture, KYC, account verification and completion.",
-          "format": "16:9 or 3:2 montage",
-          "statusLabel": "FINAL DESIGN · DELIVERED FOR DEVELOPMENT",
-          "avoid": "The full Figma board or raw flow source."
-        },
-        "opportunityModel": {
-          "purpose": "Prove discovery quality and prioritisation.",
-          "recommendedContent": "Redraw the source journey into five pain-point clusters and their matching opportunity themes; retain only the most decision-relevant evidence.",
-          "format": "Wide 16:9 or 2:1 diagram with optional zoom",
-          "avoid": "Publishing the complete internal board, exact traffic mix, names or unreadably small notes."
-        },
-        "systemArchitecture": {
-          "purpose": "Show system-level scope without exposing the raw 15,952-point-wide flow.",
-          "recommendedContent": "A simplified architecture across entry, identity, KYC, account verification and completion, with referral/self-entry, bank/e-payment/paper branches and resume loops.",
-          "format": "2:1 horizontal framework",
-          "avoid": "Using the raw full user-flow image as a recruiter-facing visual."
-        },
-        "decisionFlow": {
-          "purpose": "Explain Decision 2.",
-          "recommendedContent": "A before/target comparison showing late account discovery and full restart versus upfront routing and stage-level resume.",
-          "format": "Wide before-and-after evidence block",
-          "avoid": "Implying field-level autosave or production launch."
-        },
-        "exceptionModel": {
-          "purpose": "Demonstrate regulated transaction and recovery thinking.",
-          "recommendedContent": "A focused visual covering OTP, OCR/document, phone mismatch and external-authentication failure states with retry, switch-route or resume-later outcomes.",
-          "format": "4:3 system card or four-state matrix",
-          "avoid": "Showing every source exception or confidential threshold."
-        },
-        "specificationProof": {
-          "purpose": "Demonstrate implementation craft.",
-          "recommendedContent": "Two or three UI-spec excerpts showing one cross-device interaction, one error/recovery state and one external-service handoff.",
-          "format": "4:3 cards or swipeable gallery",
-          "avoid": "A full specification canvas."
-        }
-      },
-      "sourceStatus": {
-        "currentBasis": "User confirmation plus two canonical one-page PDF sources",
-        "attachmentStatus": "Resolved and parsed",
-        "visualReview": "Both oversized boards were rendered at reduced scale and visually inspected.",
-        "contentStatus": "approved"
       },
       "contentStatus": "approved-r182-non-asset",
       "sourceEvidence": {
@@ -19138,40 +19003,6 @@
           "contentStatus": "approved-r165.1"
         }
       },
-      "imagePlan": {
-        "hero": {
-          "purpose": "Communicate operational complexity and the delivered system view within five seconds.",
-          "recommendedContent": "A public redraw of the five-phase review and remediation operating model, showing people, internal systems, external checks and major handoffs.",
-          "format": "16:9 system overview",
-          "statusLabel": "OPERATING MODEL · DELIVERED",
-          "avoid": "The raw 11,168-point-wide process diagram."
-        },
-        "operatingBaseline": {
-          "purpose": "Prove the depth of current-state discovery.",
-          "recommendedContent": "A simplified map of the five pain-point clusters with a small system inventory and selected manual handoffs.",
-          "format": "2:1 framework",
-          "avoid": "Exact customer names, internal screen captures, database paths or dense source notes."
-        },
-        "workshopPrioritisation": {
-          "purpose": "Show how competing opinions became an evidence-based priority model.",
-          "recommendedContent": "A public impact-versus-feasibility matrix using relative positions, not exact participant scores.",
-          "format": "4:3 matrix",
-          "avoid": "Participant names and exact internal vote markers."
-        },
-        "futureRoadmap": {
-          "purpose": "Show sequencing rather than a speculative future-state screen.",
-          "recommendedContent": "Three phases: input quality and transparency, manual-review reduction, connected internal digitisation.",
-          "format": "Wide roadmap",
-          "statusLabel": "RECOMMENDATION · NOT IMPLEMENTED",
-          "avoid": "Presenting the ideal workshop flow as approved or shipped."
-        },
-        "detailedProcessProof": {
-          "purpose": "Demonstrate rigorous operational modelling.",
-          "recommendedContent": "Two zoomed and redrawn excerpts: early review/AML and remediation/high-risk handling.",
-          "format": "Two 4:3 evidence cards with zoom",
-          "avoid": "Publishing the complete raw flow as one unreadable image."
-        }
-      },
       "contentStatus": "approved-r165.1-migration",
       "sourceEvidence": {
         "workshopPhase": {
@@ -20199,14 +20030,6 @@
           "Save, session and resume states specified",
           "Related-party, guarantor and document follow-up models specified",
           "Representative interface flows are present in the source maps"
-        ],
-        "needsConfirmation": [
-          "Exact project Timeline",
-          "Core team and client stakeholder model",
-          "Whether detailed UI specification is complete",
-          "Engineering development status",
-          "Production launch status",
-          "Post-launch completion, abandonment, document or operational outcomes"
         ]
       },
       "publicContent": {
@@ -20269,19 +20092,15 @@
           "structuredGroups": [
             {
               "id": "product-model-before-screens",
-              "supportingLabel": {
-                "en": "PRODUCT MODEL EVIDENCE",
-                "zh": "產品模型證據"
-              },
               "heading": {
                 "en": "Application model before screens",
                 "zh": "畫面設計前的申請模型"
               },
               "summary": {
-                "en": "The decision map showed that mortgage self-service was not one linear form. It defined how different starts, participant work and interrupted states converge into a resumable application that continues after submission.",
-                "zh": "決策地圖顯示房貸自助申請並非一張線性表單，而是要定義不同入口、參與者任務與中斷狀態如何匯入同一套可續辦、且送件後仍持續運作的申請模型。"
+                "en": "The decision map defined how three entry contexts, staged information, persistent progress, related-party participation and post-submission work converge into one resumable application.",
+                "zh": "決策地圖定義三種入口情境、分階段資訊、持續進度、關係人參與與送件後任務，如何匯入同一套可續辦的申請模型。"
               },
-              "bullets": [
+              "verifiedModelFacts": [
                 {
                   "en": "Entry model — Direct, calculator-led and employee-assisted starts converge into one application.",
                   "zh": "入口模型——直接申請、試算後申請與員工協助入口，匯入同一份申請。"
@@ -20379,45 +20198,6 @@
           },
           "evidence": [],
           "contentStatus": "approved-r163-3b"
-        }
-      },
-      "imagePlan": {
-        "hero": {
-          "purpose": "Show the new app experience within five seconds.",
-          "recommendedContent": "A 3-5-screen montage showing preparation, loan data, save/resume, confirmation and result/status.",
-          "format": "16:9 or 3:2",
-          "statusLabel": "0→1 DESIGN · DELIVERY STATUS TO CONFIRM",
-          "avoid": "The complete 16,176-point or 28,704-point source maps."
-        },
-        "userEntryModel": {
-          "purpose": "Prove product framing.",
-          "recommendedContent": "A clean three-route framework for direct, calculator/comparison and relationship-manager entry, with the distinct mindset and design implication for each.",
-          "format": "Wide 16:9 framework",
-          "avoid": "Publishing the full raw user-analysis board."
-        },
-        "systemArchitecture": {
-          "purpose": "Show 0→1 system scope.",
-          "recommendedContent": "A simplified architecture connecting the main applicant, customer-state branches, related-party subflows, financial credential, supporting documents and result/status states.",
-          "format": "2:1 horizontal system map",
-          "avoid": "A raw full-flow screenshot with unreadable text."
-        },
-        "stagedJourney": {
-          "purpose": "Explain Decision 2.",
-          "recommendedContent": "A before/after comparison: one mixed restart-prone form versus staged tasks with purpose explanations, progress, prefill and resume.",
-          "format": "Wide before/after block",
-          "avoid": "Claiming implementation or measured abandonment improvement."
-        },
-        "postSubmissionModel": {
-          "purpose": "Explain Decision 3.",
-          "recommendedContent": "A main-submission-to-follow-up map showing documents, guarantor declaration, co-borrower invitation and status-based next actions.",
-          "format": "4:3 framework or horizontal sequence",
-          "avoid": "Showing internal policy wording or unapproved legal copy."
-        },
-        "craftProof": {
-          "purpose": "Demonstrate interaction and UI quality.",
-          "recommendedContent": "Three focused examples: save/resume, dynamic confirmation/editing and a result state with clear next actions.",
-          "format": "Three 4:3 cards or swipeable gallery",
-          "avoid": "Using the entire flow canvas as one image."
         }
       },
       "contentStatus": "approved-r163",
@@ -20995,8 +20775,8 @@
       },
       "whatMadeThisHard": {
         "intro": {
-          "en": "CTBC wanted mortgage applicants to complete more of the journey inside the app, but the work crossed dense financial information, different levels of readiness, information that might not be available yet, and tasks involving more than one applicant.",
-          "zh": "CTBC 希望房貸申請人能在 App 內完成更多流程，但此問題橫跨密集的金融資訊、不同準備程度、當下可能尚未取得的資料，以及涉及多位申請人的任務。"
+          "en": "Mortgage self-service had to coordinate dependent financial information, different readiness states and multi-party work inside one resumable application.",
+          "zh": "房貸自助申請必須在同一套可續辦申請中，協調相互依賴的金融資訊、不同準備狀態與多方任務。"
         },
         "items": [
           {
@@ -22474,8 +22254,14 @@
             "outcomeEvidenceModel",
             "outcome_evidence_model"
           ],
-          "component": "OutcomeMetric",
-          "fallback": "OutcomeStatement"
+          "component": "OutcomeStatement",
+          "fallback": "OutcomeStatement",
+          "semanticComponents": {
+            "quantified": "OutcomeMetric",
+            "system-operating": "OutcomeStatement",
+            "consulting-implementation": "OutcomeStatement",
+            "current-operator-value": "OutcomeStatement"
+          }
         },
         "ownership": {
           "sourcePaths": [
@@ -22535,6 +22321,7 @@
         "presentation.sectionOrder",
         "presentation.navigation",
         "presentation.visibility",
+        "presentation.complexityLayout",
         "criticalProblem",
         "keyProblems",
         "publicContent.contribution",
@@ -22565,6 +22352,53 @@
           "sharedBodySemantic": "project-overview-body",
           "infoGridDividers": false,
           "reference": "dbs"
+        },
+        "semanticVariants": {
+          "complexity": {
+            "allowed": [
+              "dominant-supporting",
+              "equal",
+              "two-up"
+            ],
+            "projects": {
+              "voucher": "equal",
+              "voucher-center": "equal",
+              "game-center": "equal",
+              "dbs": "dominant-supporting",
+              "booking": "dominant-supporting",
+              "bandzo": "equal",
+              "taishin-p2p-marketplace-platform": "dominant-supporting",
+              "cathay-mortgage-assistant": "equal",
+              "payment": "dominant-supporting",
+              "cathay-sit-online-account-opening": "equal",
+              "cathay-sit-review-remediation-operations": "dominant-supporting",
+              "ctbc-mortgage-self-service-app": "dominant-supporting",
+              "booking-taxi-pickup-service-strategy": "equal"
+            }
+          },
+          "outcomes": {
+            "allowed": [
+              "quantified",
+              "system-operating",
+              "consulting-implementation",
+              "current-operator-value"
+            ],
+            "projects": {
+              "voucher": "quantified",
+              "voucher-center": "system-operating",
+              "game-center": "quantified",
+              "dbs": "system-operating",
+              "booking": "quantified",
+              "bandzo": "consulting-implementation",
+              "taishin-p2p-marketplace-platform": "system-operating",
+              "cathay-mortgage-assistant": "system-operating",
+              "payment": "quantified",
+              "cathay-sit-online-account-opening": "consulting-implementation",
+              "cathay-sit-review-remediation-operations": "consulting-implementation",
+              "ctbc-mortgage-self-service-app": "consulting-implementation",
+              "booking-taxi-pickup-service-strategy": "consulting-implementation"
+            }
+          }
         },
         "protectedTruths": {
           "booking-taxi-pickup-service-strategy.infoGrid.type.value": "Product Optimisation",
@@ -25662,7 +25496,6 @@
           "zh": "2016"
         },
         "dateRelationship": "The project year and Red Dot award year are both 2016.",
-        "sourceStatus": "confirmed by user on 2026-08-03",
         "contentStatus": "approved"
       },
       "category": {
@@ -26849,7 +26682,7 @@
     "domains": [
       {
         "id": "financial-services",
-        "order": 1,
+        "order": 2,
         "label": {
           "en": "Financial services",
           "zh": "金融服務"
@@ -26969,7 +26802,7 @@
       },
       {
         "id": "enterprise-operations",
-        "order": 2,
+        "order": 1,
         "label": {
           "en": "Enterprise operations",
           "zh": "企業營運"
@@ -27086,7 +26919,7 @@
       },
       {
         "id": "growth-incentive-systems",
-        "order": 3,
+        "order": 5,
         "label": {
           "en": "Rewards & incentives",
           "zh": "獎勵與激勵"
@@ -27321,7 +27154,7 @@
       },
       {
         "id": "retail-commerce",
-        "order": 5,
+        "order": 3,
         "label": {
           "en": "Retail & commerce",
           "zh": "零售與商務"
@@ -31478,8 +31311,7 @@
           "result": {
             "en": "Game Design Winner",
             "zh": "遊戲設計得主"
-          },
-          "sourceStatus": "project attribution confirmed by user on 2026-08-03"
+          }
         },
         {
           "projectId": "matsu-temple-packaging",
@@ -31495,7 +31327,6 @@
             "en": "Packaging Design Winner",
             "zh": "包裝設計得主"
           },
-          "sourceStatus": "project attribution confirmed by user on 2026-08-03",
           "officialChineseProjectTitleStatus": "translated public label; preserve an existing official title if one is found in the canonical source"
         }
       ],
