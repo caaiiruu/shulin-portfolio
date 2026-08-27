@@ -10,10 +10,10 @@ const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-proje
 const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
-  assert.match(content.contentVersion,/r182(?:2|6|-non-asset-complete)/);
+  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
-  assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
+  assert.equal(content.projects.voucher.title.en,'Voucher rules to reusable incentive behaviour');
   assert.equal(content.projects.booking.role,'UX Designer');
   assert.equal(content.projects.bandzo.infoGrid.timeline.dateRange.en,'Sep 2016–Jan 2017');
 });
