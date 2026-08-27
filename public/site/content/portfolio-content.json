@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-27-r1831-principal-hiring-signal",
+  "contentVersion": "2026-08-27-r1832-human-visual-remediation",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -7219,16 +7219,83 @@
         "en": "Retail incentives",
         "zh": "零售獎勵"
       },
+      "coreSystemInsight": {
+        "title": {
+          "en": "Claiming and applying are different product states",
+          "zh": "領取與套用是不同的產品狀態"
+        },
+        "statement": {
+          "en": "A persistent Voucher product needed to separate participation from purchase-time application, then make ownership visible through an explicit Claim → View transition.",
+          "zh": "常設 Voucher 產品必須將參與領取與購買時套用分開，並透過明確的領取 → 查看轉換呈現擁有狀態。"
+        }
+      },
+      "canonicalEvidence": {
+        "title": {"en": "Evidence", "zh": "證據"},
+        "presentation": "decision-support",
+        "structuredGroups": [
+          {
+            "heading": {"en": "Entry visibility", "zh": "入口可見性"},
+            "summary": {"en": "12 / 20 participants preferred the stronger Voucher Center entry.", "zh": "12／20 位參與者偏好更醒目的 Voucher Center 入口。"}
+          },
+          {
+            "heading": {"en": "Action semantics", "zh": "操作語意"},
+            "summary": {"en": "18 / 20 misunderstood “Use now”, supporting an explicit Claim action and a separate post-claim View state.", "zh": "18／20 位參與者誤解「立即使用」，支持採用明確的領取操作與獨立的領取後查看狀態。"}
+          },
+          {
+            "heading": {"en": "Architecture direction", "zh": "架構方向"},
+            "summary": {"en": "Among the compared alternatives, consolidated navigation was preferred 7 to 4 and remained the target direction beyond the scoped first release.", "zh": "在比較方案中，整合式導覽以 7 比 4 獲得偏好，並保留為聚焦首版後的目標方向。"}
+          }
+        ]
+      },
+      "canonicalOutcomes": {
+        "change": {
+          "label": {"en": "Product change", "zh": "產品變化"},
+          "statement": {"en": "A permanent discovery-and-claim foundation shipped: homepage entry, claimable count, red/green status hierarchy and Claim → View card state.", "zh": "常設探索與領取基礎正式上線：首頁入口、可領取數量、紅綠狀態層級與領取 → 查看卡片狀態。"}
+        },
+        "supportingStatements": [
+          {"text": {"en": "Intent validation: 8 participants already checked routinely; 11 said they would check next time.", "zh": "使用意圖驗證：8 位參與者已習慣查看；11 位表示下次會查看。"}}
+        ]
+      },
+      "canonicalAccountability": {
+        "owned": {"title": {"en": "Product design ownership", "zh": "產品設計責任"}, "items": [
+          {"en": "Product architecture and entry-point concepts", "zh": "產品架構與入口概念"},
+          {"en": "Prototype direction, testing synthesis and Claim → View interaction states", "zh": "原型方向、測試統整與領取 → 查看互動狀態"}
+        ]},
+        "shared": {"title": {"en": "Shared decisions", "zh": "共同決策"}, "items": [
+          {"en": "Phase-one scope and the roadmap from Flash Voucher to Voucher Center", "zh": "第一階段範圍與從 Flash Voucher 演進至 Voucher Center 的路線圖"}
+        ]},
+        "partnerOwned": {"title": {"en": "Partner-owned boundary", "zh": "合作夥伴負責邊界"}, "items": [
+          {"en": "Business prioritisation, engineering feasibility and release planning", "zh": "商業優先順序、工程可行性與上線規劃"}
+        ]}
+      },
       "sectionOrder": [
         "hero",
-        "phased-validation-path",
-        "research-changed-the-model",
-        "key-decisions",
-        "product-scope",
-        "reusable-system",
-        "ownership-and-evidence",
-        "continue-exploring"
+        "at-a-glance",
+        "info-grid",
+        "what-made-this-hard",
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": ["hero", "at-a-glance", "info-grid", "what-made-this-hard", "core-system-insight", "design-decisions", "evidence", "outcomes", "my-accountability", "related-work"],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "coreSystemInsight": "coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "canonicalEvidence",
+          "outcomes": "canonicalOutcomes",
+          "accountability": "canonicalAccountability"
+        },
+        "visibility": {"contribution": false, "coreSystemInsight": true, "evidence": true},
+        "decisionOptions": {"variant": "featured", "showVisuals": true, "outcomeField": "effectOrResult"},
+        "accountabilityMode": "structured",
+        "detailHeroVisual": true
+      },
       "flashVoucherEvidence": {
         "id": "flash-voucher-poc-2024-r142",
         "ownerProjectId": "voucher-center",
@@ -8326,17 +8393,65 @@
       ],
       "sectionOrder": [
         "hero",
-        "critical-problem",
+        "at-a-glance",
+        "info-grid",
         "what-made-this-hard",
-        "task-and-reward-model",
-        "key-decisions",
-        "shipped-experience",
-        "completion-evidence",
-        "business-impact",
-        "ownership-and-collaboration",
-        "delivery-and-measurement",
-        "continue-exploring"
+        "core-system-insight",
+        "design-decisions",
+        "evidence",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
+      "coreSystemInsight": {
+        "title": {"en": "Growing game inventory required a discovery and configuration model, not another campaign page.", "zh": "持續增加的遊戲內容需要探索與配置模型，而不是另一個活動頁。"},
+        "statement": {"en": "The product had to separate reusable discovery, lifecycle and operator-controlled listing behaviour from the gameplay already owned by each campaign.", "zh": "產品必須將可重用的探索、生命週期與營運配置列表行為，和各活動既有的遊戲流程分開。"}
+      },
+      "canonicalEvidence": {
+        "title": {"en": "Evidence", "zh": "證據"},
+        "presentation": "decision-support",
+        "structuredGroups": [
+          {"heading": {"en": "Inventory constraint", "zh": "內容庫限制"}, "summary": {"en": "The existing direct entry exposed one game at a time, limiting preference coverage and concurrent sponsor campaigns.", "zh": "既有直接入口一次只呈現一個遊戲，限制偏好涵蓋與多個贊助活動並行。"}},
+          {"heading": {"en": "Configuration need", "zh": "配置需求"}, "summary": {"en": "Running several games in parallel required Operations to control listing imagery, descriptions and visibility without a front-end release for every campaign change.", "zh": "多個遊戲平行執行時，營運團隊必須能控制列表圖片、說明與顯示，而不需每次活動改動都重新發布前端。"}},
+          {"heading": {"en": "Lifecycle evidence", "zh": "生命週期證據"}, "summary": {"en": "Scroll and state analysis exposed visibility, completion, cooldown, expiry, loading and recovery needs across single-play and repeatable games.", "zh": "捲動與狀態分析揭示單次與可重複遊戲在可見性、完成、冷卻、到期、載入與恢復上的需求。"}}
+        ]
+      },
+      "canonicalOutcomes": {
+        "change": {"label": {"en": "Product change", "zh": "產品變化"}, "statement": {"en": "A reusable multi-game discovery product launched, preserving existing gameplay integrations while giving Operations configurable listing control.", "zh": "可重用的多遊戲探索產品正式上線，保留既有遊戲整合，並讓營運團隊配置列表內容。"}},
+        "measuredLabel": {"en": "Validated outcomes", "zh": "驗證成果"},
+        "measured": [
+          {"value": "~70%", "label": {"en": "of weekly mini-game players engaged with 2+ games across 10 launch weeks", "zh": "上線後 10 週，每週小遊戲玩家中參與 2 個以上遊戲的比例"}},
+          {"value": "~23%", "label": {"en": "ten-week rounded Gamification MAU / app MAU", "zh": "10 週四捨五入後的 Gamification MAU／app MAU"}}
+        ],
+        "note": {"en": "The MAU deck also printed a percentage-change figure that does not reconcile with its underlying values; that change claim is excluded.", "zh": "MAU 簡報另列的變化百分比與底層數值不一致，因此不公開該變化主張。"}
+      },
+      "canonicalAccountability": {
+        "owned": {"title": {"en": "Product design ownership", "zh": "產品設計責任"}, "items": [
+          {"en": "Design-phase planning, experience model, prototype, final UI and engineering handoff", "zh": "設計階段規劃、體驗模型、原型、最終介面與工程交接"}
+        ]},
+        "shared": {"title": {"en": "Shared decisions", "zh": "共同決策"}, "items": [
+          {"en": "Problem framing, release scope and measurement priorities with the Product Manager", "zh": "與產品經理共同決定問題定義、上線範圍與衡量優先順序"}
+        ]},
+        "partnerOwned": {"title": {"en": "Partner-owned boundary", "zh": "合作夥伴負責邊界"}, "items": [
+          {"en": "PRD, business rules and technical implementation", "zh": "產品需求文件、商業規則與技術實作"}
+        ]}
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "sectionOrder": ["hero", "at-a-glance", "info-grid", "what-made-this-hard", "core-system-insight", "design-decisions", "evidence", "outcomes", "my-accountability", "related-work"],
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "coreSystemInsight": "coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "canonicalEvidence",
+          "outcomes": "canonicalOutcomes",
+          "accountability": "canonicalAccountability"
+        },
+        "visibility": {"contribution": false, "coreSystemInsight": true, "evidence": true},
+        "decisionOptions": {"variant": "featured", "showVisuals": true, "outcomeField": "effectOrResult"},
+        "accountabilityMode": "structured",
+        "detailHeroVisual": true
+      },
       "domain": {
         "en": "Retail gamification",
         "zh": "零售遊戲化"
@@ -22087,7 +22202,6 @@
               "en": "Set the traveller conditions for market and proposition comparison",
                 "zh": "支持決策一與決策二"
               },
-              "assetId": "booking-taxi-strategy-traveller-context-public-v1",
               "caption": {
               "en": "Urgency, late arrivals, luggage, waiting, price and safety showed where the existing proposition warranted improvement; this is qualitative context, not quantified demand.",
                 "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
@@ -24195,90 +24309,85 @@
         },
         "voucher-center": {
           "sections": {
-            "phased-validation-path": {
-              "sourcePaths": [
-                "publicContent.phasedValidationPath"
-              ],
-              "presentationType": "product-evolution",
+            "what-made-this-hard": {
+              "sourcePaths": ["whatMadeThisHard"],
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "research-changed-the-model": {
-              "sourcePaths": [
-                "publicContent.researchChangedTheModel"
-              ],
-              "presentationType": "research-decision-evidence",
+            "core-system-insight": {
+              "sourcePaths": ["coreSystemInsight"],
+              "presentationType": "shared-core-system-insight",
               "renderRequired": true
             },
-            "key-decisions": {
-              "sourcePaths": [
-                "publicContent.decisionNarrative.primaryDecisions"
-              ],
-              "presentationType": "decision-sequence",
+            "design-decisions": {
+              "sourcePaths": ["decisionNarrative.primaryDecisions"],
+              "presentationType": "shared-design-decisions",
               "renderRequired": true
             },
-            "product-scope": {
-              "sourcePaths": [
-                "publicContent.productScope"
-              ],
-              "presentationType": "shipped-next",
+            "evidence": {
+              "sourcePaths": ["canonicalEvidence"],
+              "presentationType": "shared-structured-evidence",
               "renderRequired": true
             },
-            "reusable-system": {
-              "sourcePaths": [
-                "publicContent.systemFoundation"
-              ],
-              "presentationType": "system-foundation",
+            "outcomes": {
+              "sourcePaths": ["canonicalOutcomes"],
+              "presentationType": "shared-outcomes",
               "renderRequired": true
             },
-            "ownership-and-evidence": {
-              "sourcePaths": [
-                "ownershipModel"
-              ],
-              "presentationType": "ownership",
+            "my-accountability": {
+              "sourcePaths": ["canonicalAccountability"],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           },
           "supporting": [
             {
               "sourcePath": "publicContent.decisionNarrative.supportingDecisions",
-              "parentSectionId": "key-decisions",
+              "parentSectionId": "design-decisions",
               "presentationType": "supporting-decision"
             },
             {
               "sourcePath": "productEvolution.flashVoucher2024",
-              "parentSectionId": "phased-validation-path",
+              "parentSectionId": "evidence",
               "presentationType": "precursor-evidence"
             },
             {
               "sourcePath": "research.competitiveVisualAudit2025",
-              "parentSectionId": "research-changed-the-model",
+              "parentSectionId": "evidence",
               "presentationType": "supporting-research"
             }
           ]
         },
         "game-center": {
           "sections": {
-            "task-and-reward-model": {
-              "sourcePaths": [
-                "publicContent.taskAndRewardModel",
-                "strategy"
-              ],
-              "presentationType": "system-model",
+            "what-made-this-hard": {
+              "sourcePaths": ["whatMadeThisHard"],
+              "presentationType": "shared-complexity",
               "renderRequired": true
             },
-            "shipped-experience": {
-              "sourcePaths": [
-                "delivery"
-              ],
-              "presentationType": "shipped-proof",
+            "core-system-insight": {
+              "sourcePaths": ["coreSystemInsight"],
+              "presentationType": "shared-core-system-insight",
               "renderRequired": true
             },
-            "completion-evidence": {
-              "sourcePaths": [
-                "publicContent.completionEvidence",
-                "impactEvidence"
-              ],
-              "presentationType": "outcome-evidence",
+            "design-decisions": {
+              "sourcePaths": ["decisionNarrative.primaryDecisions"],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "evidence": {
+              "sourcePaths": ["canonicalEvidence"],
+              "presentationType": "shared-structured-evidence",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": ["canonicalOutcomes"],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": ["canonicalAccountability"],
+              "presentationType": "shared-accountability",
               "renderRequired": true
             }
           }
@@ -24848,12 +24957,12 @@
       "hero": {
         "targetRole": "Principal Product Designer",
         "headline": {
-          "en": "Principal Product Designer",
-          "zh": "Principal Product Designer"
+          "en": "Turn confusion into clear systems",
+          "zh": "把混亂轉化為清晰的系統"
         },
         "supportingLine": {
-          "en": "I define and ship product models, interaction behaviour and decision logic across 0→1 transactions, incentives, regulated operations and global travel.",
-          "zh": "我定義並交付產品模型、互動行為與決策邏輯，涵蓋 0→1 交易產品、獎勵機制、受監管營運與全球旅遊。"
+          "en": "I design systems that bring clarity to complex workflows, reduce operational risk, and enable faster decision-making.",
+          "zh": "我設計能釐清複雜流程、降低營運風險，並加速團隊決策的產品系統。"
         },
         "accuracyBoundary": "Do not publicly claim the historical job title Principal Product Designer unless the user has held that title."
       },
@@ -33192,24 +33301,24 @@
         "zh": "選單"
       },
       "index.turn-confusion-into-clear-systems-9a4e42e6": {
-        "en": "Principal Product Designer",
-        "zh": "Principal Product Designer"
+        "en": "Turn confusion into clear systems",
+        "zh": "把混亂轉化為清晰的系統"
       },
       "index.clear-b2efa2af": {
-        "en": "Product",
-        "zh": "產品"
+        "en": "clear",
+        "zh": "清晰的"
       },
       "index.systems-935af1b3": {
-        "en": "Designer",
-        "zh": "設計師"
+        "en": "systems",
+        "zh": "系統"
       },
       "index.explore-domain-experience-05eec558": {
         "en": "Explore domain experience",
         "zh": "探索領域經驗"
       },
       "index.i-design-systems-that-bring-clarity-to-compl-c54db8a3": {
-        "en": "I define and ship product models, interaction behaviour and decision logic across 0→1 transactions, incentives, regulated operations and global travel.",
-        "zh": "我定義並交付產品模型、互動行為與決策邏輯，涵蓋 0→1 交易產品、獎勵機制、受監管營運與全球旅遊。"
+        "en": "I design systems that bring clarity to complex workflows, reduce operational risk, and enable faster decision-making.",
+        "zh": "我設計能釐清複雜流程、降低營運風險，並加速團隊決策的產品系統。"
       },
       "index.years-94ac86b7": {
         "en": "years",
@@ -33258,6 +33367,14 @@
       "index.teams-i-joined-5790c303": {
         "en": "Teams I joined",
         "zh": "任職與嵌入式團隊"
+      },
+      "index.selected-organisations-3f42c901": {
+        "en": "Selected organisations",
+        "zh": "精選合作組織"
+      },
+      "index.more-organisations-2d74cbe1": {
+        "en": "+ more",
+        "zh": "+ 更多"
       },
       "index.selected-client-engagements-b70534eb": {
         "en": "Selected client engagements",
@@ -34244,8 +34361,8 @@
         "zh": "獲獎探索作品"
       },
       "index.turn-confusion-br-into-92f66d41": {
-        "en": "Principal",
-        "zh": "Principal"
+        "en": "Turn confusion<br>into",
+        "zh": "把混亂<br>轉化為"
       },
       "experiments.small-experiments-br-em-real-questions-em-c5787d3a": {
         "en": "Small experiments.<br><em>Real questions.</em>",

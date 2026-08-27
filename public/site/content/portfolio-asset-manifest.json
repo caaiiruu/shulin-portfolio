@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-27-r1831-principal-hiring-signal",
+  "contentVersion": "2026-08-27-r1832-human-visual-remediation",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -857,26 +857,6 @@
       "sha256": "54ca2aa5097ca7353be01be404c705c41721427dd366a61829a16e1220f26fa2",
       "alt": "LinkPoints, loyalty discounts, payable value and payment confirmation shown across the checkout transaction.",
       "alt_zh": "LinkPoints, loyalty discounts, payable value and payment confirmation shown across the checkout transaction."
-    },
-    "booking-taxi-strategy-traveller-context-public-v1": {
-      "id": "booking-taxi-strategy-traveller-context-public-v1",
-      "projectId": "booking-taxi-pickup-service-strategy",
-      "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/booking-taxi-strategy/booking-taxi-strategy-traveller-context-public-v1.jpg",
-      "aspectRatio": "2048:1536",
-      "assetStatus": "production",
-      "implementationStatus": "real-active",
-      "placeholderFallbackAssetId": null,
-      "replacementRequired": false,
-      "publicBuild": true,
-      "width": 2048,
-      "height": 1536,
-      "sha256": "6e1d49f7fb601ea0fc5838cb2b47475e7230dbb6481fc13817effb3fd0f68ed5",
-      "evidenceRole": "Traveller-context synthesis",
-      "sourceBoundary": "Research synthesis only; not quantified demand.",
-      "derivativeStatus": "human-selected-public-safe-original",
-      "alt": "Handwritten synthesis mapping traveller urgency, airport arrival, baggage, waiting, price and safety considerations.",
-      "alt_zh": "手寫研究統整圖，呈現旅客急迫性、機場抵達、行李、等待、價格與安全考量。"
     },
     "booking-taxi-strategy-proposition-comparison-public-v1": {
       "id": "booking-taxi-strategy-proposition-comparison-public-v1",
