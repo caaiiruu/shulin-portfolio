@@ -14,6 +14,7 @@ const forbiddenKeys=new Set([
   "sourceFile","sourceFiles","sourceFilename","sourceFilenames","sourceFileId",
   "sourceFileLibraryId","sourcePackage","sourcePackageId","sourceProjectName","sourceSection",
   "canonicalSource","canonicalSources","duplicateUploadVerified",
+  "needsConfirmation","sourceStatus",
 ]);
 
 for(const key of forbiddenTopLevel)if(key in content)failures.push(`non-public top-level owner remains: ${key}`);
@@ -25,6 +26,9 @@ function inspect(value,path=[]){
   if(value&&typeof value==="object"){
     for(const [key,entry] of Object.entries(value)){
       const next=[...path,key];
+      if(key==="imagePlan"){
+        if(!Array.isArray(entry)||entry.some(item=>!item?.assetId||Object.keys(item).some(field=>!["order","assetId","role","loading"].includes(field))))failures.push(`non-runtime image plan metadata: ${next.join(".")}`);
+      }
       if(forbiddenKeys.has(key)||/^private(?:Source|Target|Values?)/.test(key)||/^keepInternal/.test(key))failures.push(`private provenance field: ${next.join(".")}`);
       inspect(entry,next);
     }

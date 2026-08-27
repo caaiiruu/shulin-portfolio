@@ -27,8 +27,13 @@ const inspectDialog=()=>{
   const surface=document.querySelector("#programmeSurface");
   const sections=[...surface.children].filter(visible);
   const overviewBody=document.querySelector("#projectAtGlance");
-  const infoValue=document.querySelector("#projectSignals dd");
+  const infoValue=document.querySelector("#projectSignals strong");
+  const summary=document.querySelector(".quick-view-v51--project .project-summary-v45");
+  const infoGrid=document.querySelector("#projectSignals");
+  const complexity=document.querySelector(".recruiter-complexity-grid");
+  const outcomes=document.querySelector("#systemCaseOutcomesSection");
   const style=node=>node?getComputedStyle(node):null;
+  const rect=node=>node?Object.fromEntries(["left","right","width"].map(key=>[key,Math.round(node.getBoundingClientRect()[key])])):null;
   return {
     open:Boolean(dialog?.open),
     horizontalOverflow:dialog?dialog.scrollWidth>dialog.clientWidth:false,
@@ -41,7 +46,11 @@ const inspectDialog=()=>{
       body:overviewBody&&style(overviewBody)?{fontSize:style(overviewBody).fontSize,fontWeight:style(overviewBody).fontWeight,color:style(overviewBody).color,lineHeight:style(overviewBody).lineHeight}:null,
       info:infoValue&&style(infoValue)?{fontSize:style(infoValue).fontSize,fontWeight:style(infoValue).fontWeight,color:style(infoValue).color,lineHeight:style(infoValue).lineHeight}:null,
       dividers:[...document.querySelectorAll("#projectSignals > div")].filter(node=>style(node).borderBottomWidth!=="0px"||style(node).borderTopWidth!=="0px").length,
+      summaryRect:rect(summary),
+      infoGridRect:rect(infoGrid),
     },
+    complexity:complexity?{variant:complexity.dataset.layoutVariant,columns:style(complexity).gridTemplateColumns,rect:rect(complexity)}:null,
+    outcomes:outcomes?{semantic:outcomes.dataset.outcomeSemantic,owner:outcomes.dataset.componentOwner}:null,
   };
 };
 
@@ -69,7 +78,15 @@ for(const viewport of viewports){
     if(result.navigator[0]?.label!=="Overview")failures.push(`${prefix}: required Overview navigator slot missing or out of order`);
     if(result.overview.dividers)failures.push(`${prefix}: InfoGrid divider remains`);
     if(result.overview.body&&result.overview.info&&JSON.stringify(result.overview.body)!==JSON.stringify(result.overview.info))failures.push(`${prefix}: Overview body semantic mismatch ${JSON.stringify(result.overview)}`);
-    if(["dbs","bandzo","payment","ctbc-mortgage-self-service-app","voucher-center","game-center"].includes(id))await page.screenshot({path:path.join(screenshotDir,`primary-${id}.png`),fullPage:true});
+    const approvedComplexity=contracts.approvedBaseline.semanticVariants.complexity.projects[id];
+    const approvedOutcome=contracts.approvedBaseline.semanticVariants.outcomes.projects[id];
+    if(result.complexity?.variant!==approvedComplexity)failures.push(`${prefix}: Complexity variant ${result.complexity?.variant} != ${approvedComplexity}`);
+    if(result.outcomes?.semantic!==approvedOutcome)failures.push(`${prefix}: Outcome semantic ${result.outcomes?.semantic} != ${approvedOutcome}`);
+    const expectedOutcomeOwner=approvedOutcome==="quantified"?"OutcomeMetric":"OutcomeStatement";
+    if(result.outcomes?.owner!==expectedOutcomeOwner)failures.push(`${prefix}: Outcome owner ${result.outcomes?.owner} != ${expectedOutcomeOwner}`);
+    if(viewport.width===1419&&result.overview.summaryRect&&result.overview.infoGridRect&&result.overview.summaryRect.width>=result.overview.infoGridRect.width*1.8)failures.push(`${prefix}: At a Glance summary lost governed compact span`);
+    if(result.overview.summaryRect&&result.complexity?.rect&&Math.abs(result.overview.summaryRect.left-result.complexity.rect.left)>1)failures.push(`${prefix}: canonical left anchor drift ${result.overview.summaryRect.left} != ${result.complexity.rect.left}`);
+    if(["dbs","bandzo","payment","ctbc-mortgage-self-service-app","voucher","booking","cathay-sit-online-account-opening","voucher-center","game-center"].includes(id))await page.screenshot({path:path.join(screenshotDir,`primary-${id}.png`),fullPage:true});
   }
   for(const id of experimentIds){
     await page.goto(`${baseUrl}/site/experiments`,{waitUntil:"networkidle"});

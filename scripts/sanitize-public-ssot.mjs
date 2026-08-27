@@ -55,11 +55,21 @@ const forbiddenKeys=new Set([
   "canonicalSource",
   "canonicalSources",
   "duplicateUploadVerified",
+  "needsConfirmation",
+  "sourceStatus",
 ]);
 function sanitize(value){
   if(Array.isArray(value)){value.forEach(sanitize);return}
   if(!value||typeof value!=="object")return;
   for(const key of Object.keys(value)){
+    if(key==="imagePlan"){
+      const publicAssetSlots=Array.isArray(value[key])
+        ?value[key].filter(item=>item?.assetId).map(({order,assetId,role,loading})=>({order,assetId,role,loading}))
+        :[];
+      if(publicAssetSlots.length)value[key]=publicAssetSlots;
+      else delete value[key];
+      continue;
+    }
     if(forbiddenKeys.has(key)||/^private(?:Source|Target|Values?)/.test(key)||/^keepInternal/.test(key)){
       delete value[key];
       continue;

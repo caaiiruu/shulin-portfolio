@@ -1909,7 +1909,9 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
     "Defined persistent progress and recovery",
     "Defined coordinated multi-party completion"
   ]);
-  assert.equal(evidence[0].bullets.length,4);
+  assert.equal(evidence[0].verifiedModelFacts.length,4);
+  assert.equal(evidence[0].supportingLabel,undefined);
+  assert.equal(evidence[0].bullets,undefined);
   assert.ok(evidence.slice(1).every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
   assert.equal(outcomes.headline,undefined);
   assert.deepEqual(outcomes.cards.map(item=>item.heading.en),[
@@ -1932,7 +1934,8 @@ test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support
   const css=read("assets/css/components/project-detail-overview.css");
   const evidence=ssot.projects["ctbc-mortgage-self-service-app"].publicContent.decisionEvidence;
   assert.equal(evidence.structuredGroups.length,3);
-  assert.deepEqual(Object.keys(evidence.structuredGroups[0]).sort(),["bullets","decisionLink","heading","id","summary","supportingLabel"]);
+  assert.deepEqual(Object.keys(evidence.structuredGroups[0]).sort(),["decisionLink","heading","id","summary","verifiedModelFacts"]);
+  assert.equal(evidence.structuredGroups[0].verifiedModelFacts.length,4);
   assert.ok(evidence.structuredGroups.slice(1).every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
   assert.match(app,/evidenceSource\.presentation==='decision-support'/);
   assert.match(app,/structured-evidence-v223__decision-link voucher-r149-eyebrow/);
@@ -1992,14 +1995,13 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.equal(project.publicContent.accountOpeningEvidence.presentation,"structured-html");
   assert.equal(project.publicContent.accountOpeningEvidence.items.length,0);
   assert.deepEqual(project.publicContent.accountOpeningEvidence.structuredGroups.map(item=>item.id),["journey-synthesis","account-opening-architecture","recovery-exception-model","delivery-proof"]);
-  const outcomes=project.publicContent.outcomes.semanticHierarchy;
-  assert.deepEqual(outcomes.measured.map(item=>item.value),["1","6 stages","4 routes","3 contexts","1 month","Complete"]);
-  assert.equal(outcomes.change,undefined);
-  assert.equal(outcomes.metricLayout,"aligned");
-  assert.equal(outcomes.measuredLabel.en,"One aligned account-opening model and a development-ready specification set.");
-  assert.match(outcomes.supportingStatements[0].text.en,/Post-launch performance was not available/);
-  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Exact project Timeline"),false);
-  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Sole versus Primary Product Designer wording"),false);
+  const outcomes=project.publicContent.outcomes;
+  assert.equal(outcomes.semanticHierarchy,undefined);
+  assert.equal(outcomes.headline.en,"One aligned account-opening model and a development-ready specification set.");
+  assert.deepEqual(outcomes.cards.map(item=>item.heading.en),["Aligned end-to-end model","Complete UI/UX specification delivery"]);
+  assert.deepEqual(outcomes.deliveryScopeFacts,["6 stages","4 routes","3 contexts","1 month completed-stage retention"]);
+  assert.match(outcomes.closing.en,/Post-launch performance was not available/);
+  assert.equal(project.deliveryBoundary.needsConfirmation,undefined);
   assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"real-active");
   assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,"/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg");
   assert.equal(ssot.contentVersion,manifest.contentVersion);
