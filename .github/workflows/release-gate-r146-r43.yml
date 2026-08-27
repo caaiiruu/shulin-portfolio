@@ -148,7 +148,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node tests/portfolio-browser-qa.mjs 2>&1 | tee "$EVIDENCE_DIR/r159-browser-qa-result.txt"
+          npm run test:browser-contract 2>&1 | tee "$EVIDENCE_DIR/r1833a-browser-contract-result.txt"
 
       - name: Compose engineering QA report
         if: always()
