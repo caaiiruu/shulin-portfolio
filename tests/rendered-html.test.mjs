@@ -847,10 +847,11 @@ test("uses the SSOT-owned many-to-many Work filter mapping", () => {
     assert.equal(new Set(filter.projectIds).size, filter.projectIds.length, filter.id);
     filter.projectIds.forEach((id) => assert.ok(data.projects[id], `${filter.id}: ${id}`));
   }
-  allProjects.forEach((id) => assert.ok(filters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id)), id));
+  const allOnly = new Set(data.workIndex.filterCoverageExceptions.map((item) => item.projectId));
+  allProjects.forEach((id) => assert.ok(allOnly.has(id) || filters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id)), id));
   assert.deepEqual(
     new Set(filters.find((filter) => filter.id === "zero").projectIds),
-    new Set(["payment", "game-center", "ctbc-mortgage-self-service-app", "bandzo", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]),
+    new Set(["payment", "game-center", "ctbc-mortgage-self-service-app", "bandzo", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant"]),
   );
   assert.match(app, /workFilterIdsForProject/);
   assert.match(app, /dataset\.workCategories/);
@@ -1637,11 +1638,11 @@ test("projects the R160.4 approved DBS orientation and complexity copy", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const dbs = ssot.projects.dbs;
-  assert.equal(dbs.title.en, "Fragmented excess handling to a shared cross-market risk workflow");
-  assert.equal(dbs.atAGlance.en, "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.");
+  assert.equal(dbs.title.en, "Market variation to a shared exception model");
+  assert.equal(dbs.atAGlance.en, "Led problem framing and workflow design for excess and risk operations, separating necessary market variation from a shared decision model validated across six markets.");
   assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
     "Two fundamentally different operating modes",
-    "Fragmented operational context",
+    "Case context was split across reports, email and local workarounds",
     "Decisions crossed roles, authority levels and markets"
   ]);
   assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
@@ -1892,9 +1893,9 @@ test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
     "Multiple applicants still needed one coherent application"
   ]);
   assert.deepEqual(evidence.map(item=>item.decisionLink.en),[
-    "LED TO DECISION 01",
-    "LED TO DECISION 02",
-    "LED TO DECISION 03"
+    "Defined the state-driven entry model",
+    "Defined persistent progress and recovery",
+    "Defined coordinated multi-party completion"
   ]);
   assert.ok(evidence.every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
   assert.equal(outcomes.headline,undefined);
@@ -2011,7 +2012,8 @@ test("R171 migrates Booking Taxi Pickup Strategy without main Booking contaminat
   assert.equal(project.problemTypes.length,undefined);
   assert.equal(project.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
   assert.doesNotMatch(project.title.en,/^From\s/);
-  assert.equal(project.infoGrid.type.value,"0→1 Product");
+  assert.equal(project.infoGrid.type.value,"Transaction System");
+  assert.doesNotMatch(JSON.stringify(project),/0→1|greenfield|new product creation/i);
   assert.equal(project.infoGrid.timeline.duration.en,"9 months");
   assert.equal(project.whatMadeThisHard.length,3);
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
@@ -2122,7 +2124,7 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
   assert.equal(project.presentation.decisionOptions.showVisuals,false);
   assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
   assert.ok(!project.title.en.startsWith("From "));
-  assert.equal(project.atAGlance.en,"Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.");
+  assert.equal(project.atAGlance.en,"Co-led P2P marketplace UX definition, using 30 interviews to make buyer, seller, bank and vendor responsibilities explicit in one transaction model.");
   assert.equal(project.infoGrid.type.value,"Marketplace Platform");
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
   assert.equal(project.whatMadeThisHard.length,3);

@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-26-r1826-payment-restoration-voucher-freeze",
+  "contentVersion": "2026-08-27-r183-strategic-signal-evidence",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -67,7 +67,7 @@
     "voucher": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+          "en": "I connected campaign and channel rules into one reusable product direction across five shopping stages.",
           "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
         },
         "supportingStatement": {
@@ -77,7 +77,7 @@
       },
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
-      "transformation": "Fragmented voucher journeys to a reusable incentive ecosystem",
+      "transformation": "Voucher rules to reusable incentive behaviour",
       "transformation_zh": "從分散的優惠券旅程到可重用的獎勵生態系",
       "problem_types": [
         "Incentive systems",
@@ -116,11 +116,11 @@
             "zh": "多年期獎勵系統計畫・2022–2025"
           },
           "title": {
-            "en": "From fragmented campaign logic to a reusable incentive system",
+            "en": "Defining reusable incentive behaviour across the shopping journey",
             "zh": "從分散的活動規則，到可重用的獎勵系統"
           },
           "atAGlance": {
-            "en": "Led the three-year evolution of FairPrice’s incentive experience, turning fragmented Voucher logic into reusable rules across product, checkout, Wallet and in-store journeys.",
+            "en": "Led the three-year evolution of FairPrice’s incentive experience, defining reusable qualification, activation and redemption rules across product, checkout, Wallet and in-store journeys.",
             "zh": "主導 FairPrice 三年期獎勵體驗演進，將分散的 Voucher 邏輯轉化為橫跨商品、結帳、Wallet 與門市旅程的可重用規則。"
           },
           "infoGrid": {
@@ -200,7 +200,7 @@
                 "zh": "盤點系統"
               },
               "content": {
-                "en": "Mapped how issuance mechanisms, Voucher types, product services, payment paths and redemption locations intersected across Online Grocery, Scan & Go, LinkPay and Kopitiam.",
+                "en": "Mapping issuance, qualification, payment and redemption across Online Grocery, Scan & Go, LinkPay and Kopitiam exposed which rules had to become reusable product behaviour.",
                 "zh": "盤點發放機制、優惠券類型、產品服務、付款路徑與兌換地點，如何橫跨 Online Grocery、Scan & Go、LinkPay 與 Kopitiam。"
               },
               "assetIds": [
@@ -214,7 +214,7 @@
                 "zh": "對齊假設"
               },
               "content": {
-                "en": "Co-planned and co-facilitated a cross-functional workshop that synthesised prior research, shared pain points and journey-specific opportunities into five experience principles and initial product directions.",
+                "en": "A cross-functional workshop made early Voucher, Offer and Promo Code definitions discussable as hypotheses, producing five experience principles without treating the workshop taxonomy as final.",
                 "zh": "共同規劃並主持跨職能工作坊，將既有研究、共同痛點與旅程機會收斂成五項體驗原則與初步產品方向。"
               },
               "assetIds": [
@@ -229,7 +229,7 @@
                 "zh": "驗證並修正"
               },
               "content": {
-                "en": "Tested behavioural assumptions through usability studies, experience surveys, product analytics and operational evidence before turning selected directions into shipped capabilities.",
+                "en": "Usability studies, experience surveys, product analytics and operating evidence determined which hypotheses became qualification, activation and redemption behaviour—and which remained deferred.",
                 "zh": "透過可用性測試、體驗問卷、產品分析與營運證據驗證行為假設，再將選定方向轉化為正式上線能力。"
               },
               "assetIds": [
@@ -730,7 +730,7 @@
                 "layoutVariant": "single-screen",
                 "aspectRatio": "wide",
                 "caption": {
-                  "en": "Post-use evidence should confirm savings, usage or returned value without overstating future-state coverage.",
+                  "en": "The shipped review state confirmed selected Voucher value inside payment while keeping broader post-use coverage outside the claim boundary.",
                   "zh": "使用後證據應確認節省、使用或退回價值，且不誇大尚未全面實現的狀態。"
                 },
                 "alt": {
@@ -838,7 +838,7 @@
         ],
         "systemBehindJourney": {
           "summary": {
-            "en": "Converted fragmented customer, commercial and implementation knowledge into shared definitions, rules, states and reusable delivery patterns.",
+          "en": "Converted customer, commercial and implementation knowledge held in different teams into shared definitions, rules, states and reusable delivery patterns.",
             "zh": "將分散的顧客、商業與實作知識，轉化為共享定義、規則、狀態與可重用交付模式。"
           },
           "pillars": [
@@ -1154,7 +1154,7 @@
             "zh": "策略任務"
           },
           "title": {
-            "en": "Create one decision model for a fragmented incentive ecosystem",
+          "en": "Create one decision model across campaign and channel incentive rules",
             "zh": "為分散的獎勵生態建立共同決策模型"
           },
           "summary": {
@@ -4736,11 +4736,11 @@
         "跨通路獎勵系統"
       ],
       "title": {
-        "en": "Fragmented voucher journeys to a reusable incentive ecosystem",
+        "en": "Voucher rules to reusable incentive behaviour",
         "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
       },
       "atAGlance": {
-        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025.",
+        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning campaign-specific rules into reusable incentive capabilities across 2022–2025.",
         "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力。"
       },
       "problemTypes": {
@@ -4931,7 +4931,7 @@
       "company": "FairPrice Group",
       "legacyContextStatus": "company-only-non-canonical-r144",
       "whatThisProves": {
-        "en": "Turning fragmented incentive rules into a reusable cross-channel product model.",
+        "en": "Turning campaign-specific incentive rules into a reusable cross-channel product model.",
         "zh": "將分散的獎勵規則，轉化為可跨通路重用的產品模型。",
         "contentStatus": "approved-domain-copy-2026-08-07"
       },
@@ -7501,7 +7501,7 @@
       "publicStatus": "principal-ready-zero-to-one-incentive-product",
       "contentStatus": "approved-r182-non-asset",
       "title": {
-        "en": "Single-game entry to scalable multi-game discovery",
+        "en": "Single-game entry to reusable multi-game discovery",
         "zh": "從單一遊戲入口到可擴展的多遊戲探索"
       },
       "problemTypes": {
@@ -8315,11 +8315,11 @@
         },
         {
           "title": {
-            "en": "Customer clarity and sponsor operations had to coexist",
+            "en": "Customer comprehension and sponsor operations had to coexist",
             "zh": "顧客清晰度與贊助營運必須並存"
           },
           "description": {
-            "en": "Sponsors and Operations needed configurable programme mechanics without exposing internal campaign complexity to customers.",
+            "en": "Sponsors and Operations needed configurable programme mechanics without exposing campaign setup rules to customers.",
             "zh": "贊助單位與營運團隊需要可配置的計畫機制，同時不能把內部活動複雜度轉嫁給顧客。"
           }
         }
@@ -8393,7 +8393,7 @@
     "dbs": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented exception handling into a shared decision system across four operational roles and six markets.",
+          "en": "I turned locally interpreted exception handling into a shared decision system across four operational roles and six markets.",
           "zh": "我把分散的例外處理，建立成橫跨六個市場、四種角色的共享決策系統。"
         },
         "supportingStatement": {
@@ -8419,7 +8419,7 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "Fragmented excess handling to a shared cross-market risk workflow",
+        "en": "Market variation to a shared exception model",
         "zh": "從分散的超額處理到跨市場共用風險流程"
       },
       "problemTypes": {
@@ -8435,7 +8435,7 @@
         ]
       },
       "atAGlance": {
-        "en": "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.",
+        "en": "Led problem framing and workflow design for excess and risk operations, separating necessary market variation from a shared decision model validated across six markets.",
         "zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經六個市場驗證的共用決策模型。"
       },
       "infoGrid": {
@@ -8855,7 +8855,7 @@
         "contentStatus": "approved",
         "hero": {
           "title": {
-            "en": "Turning fragmented credit-exception handling into a shared six-market decision system",
+            "en": "Separating market variation from a shared six-market exception model",
             "zh": "從分散的例外處理，到六個市場共用的授信決策系統"
           },
           "atAGlance": {
@@ -8917,7 +8917,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Research showed that end-of-day monitoring and real-time exceptions required different decision paths, so they could not be treated as one shared workflow.",
+                "en": "Research separated end-of-day monitoring from real-time intervention, defining which market behaviours required distinct paths inside the common exception model.",
                 "zh": ""
               },
               "publicAssetId": "dbs-evidence-research-synthesis-01"
@@ -8928,7 +8928,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Workshop synthesis ranked recurring real-time pain points, helping distinguish which problems required system-level intervention.",
+                "en": "Ranking recurring real-time failure points focused investment on the exceptions that required shared system behaviour rather than local workarounds.",
                 "zh": ""
               },
               "publicAssetId": "dbs-evidence-realtime-painpoint-ranking-01"
@@ -8939,7 +8939,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "Early concepts were tested through prioritisation, field grouping, feature-importance feedback and recurring prototype validation before the operating model was standardised.",
+                "en": "Concept validation tested field grouping, feature importance and decision context before common behaviour was standardised across six markets.",
                 "zh": ""
               },
               "publicAssetId": "dbs-evidence-concept-validation-01"
@@ -8994,7 +8994,7 @@
                 "zh": ""
               },
               "copy": {
-                "en": "The programme moved from fragmented local handling toward a common operating structure for case review, decision ownership and escalation.",
+                "en": "The programme replaced market-by-market handling with a common operating structure for case review, decision ownership and escalation.",
                 "zh": ""
               }
             },
@@ -9292,7 +9292,7 @@
               "zh": ""
             },
             "title": {
-              "en": "Turn fragmented exception handling into one cross-market operating model",
+              "en": "Separate market-specific handling from one common exception model",
               "zh": ""
             },
             "text": {
@@ -9357,7 +9357,7 @@
       },
       "type_zh": "內部系統",
       "transformation_zh": "從分散的超額處理到跨市場共用風險流程",
-      "transformation": "Fragmented excess handling to a shared cross-market risk workflow",
+      "transformation": "Market variation to a shared exception model",
       "problem_types": [
         "Risk operations",
         "Exception handling",
@@ -9368,7 +9368,7 @@
         "例外處理",
         "跨市場流程"
       ],
-      "at_glance": "Led problem framing and end-to-end workflow design for excess and risk operations, translating fragmented market practices into a shared decision model validated across six markets.",
+      "at_glance": "Led problem framing and workflow design for excess and risk operations, separating necessary market variation from a shared decision model validated across six markets.",
       "at_glance_zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經六個市場驗證的共用決策模型。",
       "type": "Internal System",
       "scope": "End-to-end exception handling across monitoring, review, delegated approval and case closure",
@@ -9395,7 +9395,7 @@
         },
         {
           "title": {
-            "en": "Fragmented operational context",
+            "en": "Case context was split across reports, email and local workarounds",
             "zh": "跨市場差異"
           },
           "description": {
@@ -9492,7 +9492,7 @@
               "zh": ""
             },
             "whyThisChoice": {
-              "en": "Manual filtering and fragmented case information forced each role to reconstruct the situation before making or escalating a decision.",
+              "en": "Manual filtering and case information split across sources forced each role to reconstruct the situation before making or escalating a decision.",
               "zh": ""
             },
             "outcome": {
@@ -9706,7 +9706,7 @@
         "contentStatus": "approved"
       },
       "title": {
-        "en": "Fragmented booking touchpoints to a connected trip timeline",
+        "en": "Taxi options and trip context to a connected booking journey",
         "zh": "從分散的預訂接觸點到連續的旅程時間軸"
       },
       "problemTypes": {
@@ -10164,7 +10164,7 @@
                 "zh": "跨團隊統整預訂準則"
               },
               "copy": {
-                "en": "Workshop synthesis connected customer needs, product constraints and implementation criteria.",
+              "en": "Workshop synthesis made customer needs, product constraints and implementation criteria comparable before the connected-trip direction entered delivery.",
                 "zh": "工作坊統整串接顧客需求、產品限制與實作準則。"
               },
               "publicAssetId": "booking-evidence-workshop-phase2-synthesis-01"
@@ -10175,7 +10175,7 @@
                 "zh": "優先處理主要易用性訊號"
               },
               "copy": {
-                "en": "~155 feedback results included ~120 Ease of Use or Navigation mentions, focusing attention on comparison and journey clarity.",
+              "en": "About 120 of ~155 feedback results concerned ease of use or navigation, prioritising option comparison and a shorter decision path.",
                 "zh": "約 155 筆回饋中，約 120 筆提及易用性或導覽，使團隊聚焦於比較與旅程清晰度。"
               },
               "publicAssetId": "booking-evidence-research-feedback-summary-01"
@@ -11084,21 +11084,21 @@
         "booking-decision-01": {
           "publicAssetId": "booking-evidence-decision-01-ride-mix-public-01",
           "caption": {
-            "en": "Across ~944K analysed rides, Standard taxis represented the majority of observed bookings.",
+            "en": "Across ~944K analysed rides, the dominant Standard-taxi pattern justified showing comparable options without treating every attribute as equally important.",
             "zh": "在約 944K 趟分析行程中，Standard taxi 佔觀察預訂的多數。"
           }
         },
         "booking-decision-02": {
           "publicAssetId": "booking-evidence-decision-02-hotjar-edit-trip-01",
           "caption": {
-            "en": "Behavioural evidence showed travellers reviewing and editing known trip information.",
+            "en": "Behavioural evidence showed travellers reviewing and editing known trip information, supporting confirmation and edit control instead of asking them to rebuild the trip.",
             "zh": "行為證據顯示旅客會檢視並修改已知旅程資訊。"
           }
         },
         "booking-decision-03": {
           "publicAssetId": "booking-evidence-decision-03-baggage-language-01",
           "caption": {
-            "en": "Supplier specifications were translated into carry-on and checked-baggage language familiar to travellers.",
+            "en": "Baggage and pickup constraints were expressed in traveller-native language, turning supplier rules into guidance people could use before committing.",
             "zh": "將供應商規格轉譯為旅客熟悉的隨身與托運行李用語。"
           }
         }
@@ -12123,7 +12123,7 @@
         ]
       },
       "atAGlance": {
-        "en": "Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.",
+        "en": "Co-led P2P marketplace UX definition, using 30 interviews to make buyer, seller, bank and vendor responsibilities explicit in one transaction model.",
         "zh": "共同主導 P2P 市集使用者體驗定義，透過 30 場訪談，將分散流程整合為銀行與軟體供應商共用模型。"
       },
       "infoGrid": {
@@ -13036,7 +13036,7 @@
                 "zh": "研究統整"
               },
               "copy": {
-                "en": "Buyer and seller research synthesis translated participant needs into a shared marketplace model.",
+                "en": "Buyer and seller research exposed where responsibility changed hands, defining the participant roles the marketplace transaction had to govern.",
                 "zh": "買賣雙方研究統整將參與者需求轉化為共享的市集模型。"
               }
             },
@@ -13048,7 +13048,7 @@
                 "zh": "交易規範"
               },
               "copy": {
-                "en": "Payment, logistics and notification states were defined as one transaction regulation.",
+                "en": "One transaction regulation made payment, logistics, notification and exception responsibility explicit across buyer and seller actions.",
                 "zh": "付款、物流與通知狀態被定義為一套交易規範。"
               }
             },
@@ -13060,7 +13060,7 @@
                 "zh": "市集結構"
               },
               "copy": {
-                "en": "The architecture connected participant journeys with marketplace functions.",
+                "en": "The marketplace structure connected each participant action to the transaction state and function it could change.",
                 "zh": "這套架構將參與者旅程與市集功能連結起來。"
               }
             },
@@ -13072,7 +13072,7 @@
                 "zh": "線框規格"
               },
               "copy": {
-                "en": "Detailed specifications converted the marketplace structure into implementation guidance.",
+                "en": "Detailed specifications preserved role, state and edge-case rules as the client and software vendor moved into implementation.",
                 "zh": "詳細規格將市集結構轉化為實作指引。"
               }
             },
@@ -13084,7 +13084,7 @@
                 "zh": "交付對齊"
               },
               "copy": {
-                "en": "Client and vendor clarification connected design intent to delivery decisions.",
+                "en": "Client–vendor clarification resolved ownership and functional-rule gaps before they became conflicting delivery assumptions.",
                 "zh": "客戶與供應商之間的澄清，將設計意圖連結到交付決策。"
               }
             }
@@ -13097,11 +13097,11 @@
                 "zh": "研究統整"
               },
               "summary": {
-                "en": "Buyer and seller research synthesis.",
+              "en": "Buyer and seller research exposed where responsibility changed hands and defined the participant roles the transaction model had to govern.",
                 "zh": "買賣雙方研究統整。"
               },
               "decisionLink": {
-                "en": "SUPPORTED DECISION 02",
+              "en": "Defined participant responsibility",
                 "zh": "支持決策 02"
               },
               "sourceRef": "30 moderated interviews",
@@ -13114,11 +13114,11 @@
                 "zh": "交易規範"
               },
               "summary": {
-                "en": "Payment, logistics and notification state definition.",
+              "en": "Payment, logistics, notification and exception states became one transaction regulation across buyer and seller actions.",
                 "zh": "付款、物流與通知狀態定義。"
               },
               "decisionLink": {
-                "en": "SUPPORTED DECISION 01",
+              "en": "Defined the governed transaction states",
                 "zh": "支持決策 01"
               },
               "sourceRef": "7 logic-flow sheets",
@@ -13131,11 +13131,11 @@
                 "zh": "市集結構＋規格"
               },
               "summary": {
-                "en": "Marketplace architecture and implementation detail.",
+              "en": "Marketplace architecture connected participant actions to state-changing functions and implementation rules.",
                 "zh": "市集架構與實作細節。"
               },
               "decisionLink": {
-                "en": "SUPPORTED DECISIONS 02 AND 03",
+              "en": "Defined product structure and delivery rules",
                 "zh": "支持決策 02 與 03"
               },
               "sourceRef": "Marketplace structure + wireframe specification",
@@ -13148,11 +13148,11 @@
                 "zh": "交付對齊"
               },
               "summary": {
-                "en": "Cross-organization client/vendor clarification and handoff.",
+              "en": "Client–vendor clarification resolved ownership and functional-rule gaps before implementation handoff.",
                 "zh": "跨組織客戶／供應商澄清與交付。"
               },
               "decisionLink": {
-                "en": "SUPPORTED DECISION 03",
+              "en": "Resolved cross-organisation delivery ownership",
                 "zh": "支持決策 03"
               },
               "sourceRef": "Delivery alignment",
@@ -15651,7 +15651,7 @@
                 "zh": "真實結帳行為"
               },
               "copy": {
-                "en": "3 days · 8 shoppers across cashier and self-checkout revealed queue pressure, assurance needs and time-sensitive behaviour at the point of payment.",
+                "en": "Across 3 days and 8 shoppers, cashier and self-checkout fieldwork showed that payment had to preserve assurance without slowing a time-sensitive handoff.",
                 "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
               },
               "presentation": "raw"
@@ -15663,7 +15663,7 @@
                 "zh": "橫跨交易流程的旅程綜整"
               },
               "copy": {
-                "en": "Mapped queue, preparation, checkout and post-checkout as one journey, exposing where speed, loyalty clarity, payment assurance and recovery broke across the transaction.",
+                "en": "Mapping queue, preparation, checkout and post-checkout as one transaction showed that loyalty value, payment assurance and recovery had to remain continuous across surfaces.",
                 "zh": "將排隊、準備、結帳與結帳後映射成一段旅程，揭示速度、會員價值清晰度、付款安心感與復原在交易中的斷點。"
               },
               "presentation": "raw"
@@ -15675,7 +15675,7 @@
                 "zh": "SCO 入口辨識驗證"
               },
               "copy": {
-                "en": "6 structured + 7 guerrilla SCO participants. Validated clearer entry recognition and QR action language.",
+                "en": "6 structured + 7 guerrilla SCO participants validated the App-to-SCO entry cue and QR action language used for the checkout handoff.",
                 "zh": "6 位結構化＋7 位游擊 SCO 參與者。驗證更清楚的入口辨識與 QR 行動語言。"
               },
               "presentation": "raw"
@@ -18339,7 +18339,7 @@
         ]
       },
       "title": {
-        "en": "Fragmented review knowledge to a shared remediation operating model",
+        "en": "Interface symptoms to a prioritised remediation model",
         "zh": "從分散的審件知識，到共享的補件營運模型"
       },
       "problemTypes": {
@@ -18355,7 +18355,7 @@
         ]
       },
       "atAGlance": {
-        "en": "As Lead Product Designer (independent consultant), I led workflow reconstruction and prioritisation across the review-remediation operating model, turning fragmented operational knowledge into a shared baseline and phased direction over a five-month engagement.",
+        "en": "As Lead Product Designer (independent consultant), I reconstructed review-remediation roles, systems and handoffs into a shared baseline and phased direction over a five-month engagement.",
         "zh": "身為首席產品設計師（獨立顧問），我主導審件補件營運模型的流程重建與優先排序，並在五個月的合作期間，將分散的營運知識轉化為共享基線與分階段方向。"
       },
       "infoGrid": {
@@ -18407,7 +18407,7 @@
         "zh": "審件與補件邏輯分散在人員、文件、系統與交接之間，使內部人員無法驗證一套端到端營運模型。"
       },
       "businessImpact": {
-        "en": "Established a shared operating reference for review and remediation, reducing dependency on fragmented documents and individual memory.",
+        "en": "Established a shared operating reference for review and remediation, reducing dependency on disconnected documents and individual memory.",
         "zh": "建立審件與補件的共同營運參考，降低對分散文件與個人記憶的依賴。"
       },
       "roleAndOwnership": {
@@ -18907,7 +18907,7 @@
                 "zh": "研究涵蓋"
               },
               "copy": {
-                "en": "Research reconstructed the routine review and remediation flow before the operating model was defined.",
+                "en": "Research reconstructed the routine review and remediation flow, separating recurring operating causes from isolated interface symptoms.",
                 "zh": "研究先重建日常審件與補件流程，再據此定義營運模型。"
               },
               "supportingFacts": [
@@ -18949,7 +18949,7 @@
                 "zh": "營運模型複雜度"
               },
               "copy": {
-                "en": "Reconstructed roles, systems, decision points and remediation handoffs into one end-to-end operating view.",
+                "en": "The operating view exposed where roles, systems and remediation handoffs—not screen layout alone—created avoidable review friction.",
                 "zh": "將角色、系統、決策點與補件交接重建為一套端到端營運視圖。"
               }
             },
@@ -18961,7 +18961,7 @@
                 "zh": "效益與可行性排序"
               },
               "copy": {
-                "en": "Separated expected benefit from implementation difficulty to make meaningful priority differences visible.",
+                "en": "Comparing expected benefit with implementation difficulty gave the Product Manager a defensible basis for remediation priority.",
                 "zh": "將預期效益與實作難度分開，使有意義的優先差異清楚可見。"
               }
             },
@@ -18973,7 +18973,7 @@
                 "zh": "分階段方向"
               },
               "copy": {
-                "en": "Sequenced opportunities into near-, mid- and long-term recommendations rather than one undifferentiated digitisation scope.",
+                "en": "Near-, mid- and long-term recommendations separated immediate interface work from changes that depended on operating or system investment.",
                 "zh": "將機會排序為近、中、長期建議，而非一個未分化的數位化範圍。"
               }
             }
@@ -19935,7 +19935,7 @@
         ]
       },
       "title": {
-        "en": "Building one self-service mortgage application from fragmented application tasks",
+        "en": "Defining one stateful mortgage product before designing its screens",
         "zh": "將分散的申請任務整合為單一房貸自助申請"
       },
       "problemTypes": {
@@ -19951,7 +19951,7 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the 0→1 product design of an in-app mortgage application, restructuring fragmented information into a staged, resumable journey that supported contextual entry, related-party participation and regulated guidance.",
+        "en": "Led the 0→1 product design of an in-app mortgage application, defining a staged, resumable model for contextual entry, related-party participation and regulated guidance.",
         "zh": "主導 App 內房貸申請的 0→1 產品設計，將分散資訊重整為可分階段、可續辦的旅程，支援情境式進入、關係人參與與受監管的資訊引導。"
       },
       "infoGrid": {
@@ -20316,7 +20316,7 @@
         "sectionOrderRef": "projects.ctbc-mortgage-self-service-app.sectionOrder",
         "hero": {
           "title": {
-            "en": "Building one self-service mortgage application from fragmented application tasks",
+            "en": "Defining one stateful mortgage product before designing its screens",
             "zh": "將分散的申請任務整合為單一房貸自助申請"
           },
           "contentStatus": "approved-r163"
@@ -20346,11 +20346,11 @@
                 "zh": "不同準備狀態需要以狀態驅動的旅程"
               },
               "summary": {
-                "en": "Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",
+                "en": "Different entry readiness made application state—not a fixed screen sequence—the product model for deciding what each applicant should do next.",
                 "zh": "使用者進入時掌握的資訊與依賴關係各不相同，因此單一固定順序無法適用每一種申請狀態。"
               },
               "decisionLink": {
-                "en": "LED TO DECISION 01",
+                "en": "Defined the state-driven entry model",
                 "zh": "導向決策 01"
               }
             },
@@ -20360,11 +20360,11 @@
                 "zh": "中斷是正常申請旅程的一部分"
               },
               "summary": {
-                "en": "Missing information or documents meant users needed to leave and return without losing progress.",
+                "en": "Normal pauses and missing documents made persistent progress and resume behaviour part of the core mortgage product, not an exception flow.",
                 "zh": "資訊或文件未備齊，意味著使用者需要離開後再返回，同時保留既有進度。"
               },
               "decisionLink": {
-                "en": "LED TO DECISION 02",
+                "en": "Defined persistent progress and recovery",
                 "zh": "導向決策 02"
               }
             },
@@ -20374,11 +20374,11 @@
                 "zh": "多位申請人仍需要一份連貫的申請"
               },
               "summary": {
-                "en": "Related applicants could contribute at different moments, but their input still had to remain within the same application.",
+                "en": "Related applicants could contribute at different times, so participant access and completion had to resolve into one persistent application state.",
                 "zh": "關係申請人可能在不同時間提供資料，但其輸入仍須維持在同一份申請中。"
               },
               "decisionLink": {
-                "en": "LED TO DECISION 03",
+                "en": "Defined coordinated multi-party completion",
                 "zh": "導向決策 03"
               }
             }
@@ -20749,7 +20749,7 @@
               "zh": "定義 0→1 房貸旅程背後的產品模型"
             },
             "text": {
-              "en": "I led the product framing, journey architecture and interaction strategy that turned fragmented mortgage tasks into one coherent in-app experience.",
+              "en": "I led the product framing, journey architecture and interaction strategy that connected mortgage tasks into one stateful in-app product.",
               "zh": "我主導產品定義、旅程架構與互動策略，將分散的房貸任務轉化為單一連貫的 App 內體驗。"
             }
           },
@@ -20954,7 +20954,7 @@
           "zh": "將工作從畫面重設轉向產品模型定義。"
         },
         "supportingStatement": {
-          "en": "I mapped the fragmented requirements into one working model of stages, states and dependencies, giving the team a coherent basis for product and interaction decisions.",
+          "en": "I mapped requirements across applicants, documents and regulations into one model of stages, states and dependencies for product and interaction decisions.",
           "zh": "我將分散需求整理成一套涵蓋階段、狀態與依賴關係的工作模型，讓團隊能以一致基礎做出產品與互動決策。"
         }
       },
@@ -21345,11 +21345,11 @@
       },
       "infoGrid": {
         "type": {
-          "value": "0→1 Product",
+          "value": "Transaction System",
           "visibility": "info-grid-only",
           "rationale": {
-            "en": "Establishes a new product capability and operating model where no equivalent product previously existed.",
-            "zh": "建立先前不存在的新產品能力與運作模式。"
+            "en": "Optimises an existing stateful taxi-booking proposition through traveller, supplier and market evidence.",
+            "zh": "透過旅客、供應商與市場證據，優化既有的計程車預訂交易主張。"
           }
         },
         "scope": {
@@ -21770,13 +21770,13 @@
         "systemTags": {
           "en": [
             "market-entry strategy",
-            "0→1 mobility",
+            "proposition optimisation",
             "taxi pickup service",
             "selected-market Phase 1 experiment"
           ],
           "zh": [
             "市場進入策略",
-            "0→1 移動服務",
+            "服務主張優化",
             "計程車接送服務",
             "選定市場第一階段實驗"
           ]
@@ -22061,12 +22061,12 @@
                 "zh": "旅客行為、機場習慣、行李需求、價格期待及與在地交通替代方案的比較，共同形塑需求條件。"
               },
               "decisionLink": {
-                "en": "Supports Decisions 01 and 02",
+              "en": "Set the traveller conditions for market and proposition comparison",
                 "zh": "支持決策一與決策二"
               },
               "assetId": "booking-taxi-strategy-traveller-context-public-v1",
               "caption": {
-                "en": "Qualitative research synthesis mapping urgency, late arrivals, luggage, waiting, uncertainty, price and safety; context evidence, not quantified demand.",
+              "en": "Urgency, late arrivals, luggage, waiting, price and safety showed where the existing proposition warranted improvement; this is qualitative context, not quantified demand.",
                 "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
               }
             },
@@ -22081,7 +22081,7 @@
                 "zh": "供應商可行性、覆蓋與在地市場限制，決定市場是否能可信地支持該服務主張。"
               },
               "decisionLink": {
-                "en": "Supports Decision 01",
+              "en": "Bound the recommendation to supportable markets",
                 "zh": "支持決策一"
               }
             },
@@ -22096,12 +22096,12 @@
                 "zh": "價格期待、行程脈絡與機場熟悉的行李語言，共同支持適合聚焦驗證的服務主張。"
               },
               "decisionLink": {
-                "en": "Supports Decision 02",
+              "en": "Established the proposition attributes worth testing",
                 "zh": "支持決策二"
               },
               "assetId": "booking-taxi-strategy-proposition-comparison-public-v1",
               "caption": {
-                "en": "Working comparison of hailing and pre-booking across traveller scenarios and proposition attributes; proposition framing, not an experiment result, shipped pricing or business outcome.",
+              "en": "Comparing hailing and pre-booking across traveller scenarios exposed where the existing proposition differed and which attributes were worth testing; it is not an experiment result, shipped pricing or business outcome.",
                 "zh": "依旅客情境與服務主張屬性比較路邊攔車與預約接送；屬主張定義，並非實驗結果、已上線定價或商業成果。"
               }
             },
@@ -22116,12 +22116,12 @@
                 "zh": "整合證據支持在立即廣泛擴張前，先進行選定市場實驗。"
               },
               "decisionLink": {
-                "en": "Supports Decision 03",
+              "en": "Bound investment to a lower-risk experiment direction",
                 "zh": "支持決策三"
               },
               "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
               "caption": {
-                "en": "Pre-mortem used to surface experiment risks before larger commitment; evidence of risk framing, not an indication that an experiment ran or achieved a successful result.",
+              "en": "The pre-mortem exposed failure conditions before larger commitment and shaped a bounded experiment direction; it does not prove that an experiment ran or succeeded.",
                 "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表實驗已執行或取得成功結果。"
               }
             }
@@ -22239,7 +22239,7 @@
       ],
       "at_glance": "Led nine months of research and strategy for Booking.com’s taxi pre-booking expansion, combining customer, supplier, market and performance evidence to redefine the proposition and recommend a lower-cost Phase 1 experiment in selected target markets.",
       "at_glance_zh": "主導 Booking.com 計程車預約服務為期九個月的研究與策略，整合顧客、供應商、市場與產品表現證據，重新定義服務主張，並建議在選定目標市場進行低成本的第一階段實驗。",
-      "type": "0→1 Product",
+      "type": "Transaction System",
       "legacyAliasStatus": "synchronised-non-canonical-r142",
       "whatThisProves": {
         "en": "Translating ambiguous pickup behaviour and service constraints into a phased product strategy.",
@@ -24825,11 +24825,11 @@
       "hero": {
         "targetRole": "Principal Product Designer",
         "headline": {
-          "en": "I turn complex product systems into clear direction, scalable operating models and shipped outcomes.",
+          "en": "I identify the product structure teams need to define, make the decisions discussable and carry them into shipped behaviour.",
           "zh": "我將複雜產品系統轉化為清晰方向、可擴充運作模型與實際上線成果。"
         },
         "supportingLine": {
-          "en": "From 0→1 framing to production quality across incentives, payments, regulated operations and global travel platforms.",
+          "en": "Principal-level product design across 0→1 transactions, incentive behaviour, regulated operations and global travel products.",
           "zh": "橫跨 Incentives、Payments、受監管營運團隊與全球旅遊平台，從 0→1 framing 到正式環境品質。"
         },
         "accuracyBoundary": "Do not publicly claim the historical job title Principal Product Designer unless the user has held that title."
@@ -24960,8 +24960,7 @@
           "ctbc-mortgage-self-service-app",
           "bandzo",
           "taishin-p2p-marketplace-platform",
-          "cathay-mortgage-assistant",
-          "booking-taxi-pickup-service-strategy"
+          "cathay-mortgage-assistant"
         ]
       },
       {
@@ -24973,6 +24972,14 @@
         "projectIds": [
           "bandzo"
         ]
+      }
+    ],
+    "filterCoverageExceptions": [
+      {
+        "projectId": "booking-taxi-pickup-service-strategy",
+        "coverage": "all-only",
+        "reason": "The current controlled filters have no truthful category for optimisation and experiment framing inside an existing taxi product; do not misclassify the case as 0→1, rollout or an operational workflow.",
+        "contentStatus": "human-confirmed-r183"
       }
     ],
     "principalPortfolioArchitecture": {
@@ -25014,7 +25021,7 @@
         "cathay-sit-online-account-opening": "Current regulated onboarding redesign spanning discovery, resumability, external authentication and implementation-ready delivery",
         "cathay-sit-review-remediation-operations": "Current internal review and remediation operating-model discovery, workshop prioritisation and phase planning",
         "ctbc-mortgage-self-service-app": "Current 0→1 mortgage self-service app spanning entry strategy, multi-party lending, recovery and post-submission orchestration",
-        "booking-taxi-pickup-service-strategy": "0→1 mobility strategy, demand validation and lower-risk market experimentation"
+        "booking-taxi-pickup-service-strategy": "Existing taxi proposition optimisation through traveller context, supply readiness and lower-risk experiment framing"
       },
       "domainGroups": [
         {
@@ -25619,7 +25626,7 @@
             "zh": "能力賦能"
           },
           "content": {
-            "en": "Shared the method for converting complex product information into reusable rules, states and data structures.",
+            "en": "Shared methods for turning product rules, transaction states and dependencies into reusable specifications and data structures.",
             "zh": "分享如何將複雜產品資訊轉化為可重用規則、狀態與資料結構。"
           },
           "evidenceLinks": [
@@ -34551,7 +34558,7 @@
       "zh": "具 Principal 職能範疇的產品設計師，將複雜流程、決策與規則轉化為清楚的產品系統。"
     }
   },
-  "lastUpdated": "2026-08-25",
+  "lastUpdated": "2026-08-27",
   "recoveryMetadata": {
     "candidateId": "r143-content-candidate-5",
     "status": "canonical-ready-content-awaiting-work-integration",
