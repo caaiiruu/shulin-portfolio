@@ -357,12 +357,18 @@ for (const viewport of viewports) {
   if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
-  const expectedEvidence=[
-    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",legacyLabels:[]},
-    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",legacyLabels:[]},
-    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",legacyLabels:[]}
-  ];
-  if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(expectedEvidence))failures.push(`${viewport.name} CTBC recruiter-compressed Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
+  const [applicationModelEvidence,interruptionEvidence,relatedPartyEvidence]=ctbcCertification.evidenceGroups;
+  const applicationModelSignals=(applicationModelEvidence?.legacyLabels||[]).join(" ");
+  if(ctbcCertification.evidenceGroups.length!==3
+    ||applicationModelEvidence?.headline!=="Application model before screens"
+    ||!/different starts|entry model/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/staged structure|application model/i.test(applicationModelSignals)
+    ||!/persistent state|saved progress|resume/i.test(applicationModelSignals)
+    ||!/related-party|participant work/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/post-submission|continues after submission/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/persistent progress|resume/i.test(`${interruptionEvidence?.headline||""} ${interruptionEvidence?.body||""}`)
+    ||!/related parties|related applicants/i.test(`${relatedPartyEvidence?.headline||""} ${relatedPartyEvidence?.body||""}`)
+  )failures.push(`${viewport.name} CTBC Principal-level Evidence semantics mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
   if(/OBSERVED|DESIGN IMPLICATION|SUPPORTS DECISION/.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC legacy Evidence layers remain`);
   if(viewport.width===1419&&ctbcCertification.evidenceColumns!==3)failures.push(`${viewport.name} CTBC Evidence must scan in three columns: ${ctbcCertification.evidenceColumns}`);
   if(viewport.width===871&&ctbcCertification.evidenceColumns!==1)failures.push(`${viewport.name} CTBC Evidence tablet balance mismatch: ${ctbcCertification.evidenceColumns}`);
