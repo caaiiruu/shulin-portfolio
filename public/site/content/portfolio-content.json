@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-27-r1832-human-visual-remediation",
+  "contentVersion": "2026-08-28-r1833b7-payment-human-qa-remediation",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -15130,7 +15130,7 @@
           },
           {
             "order": 2,
-            "assetId": "payment-evidence-live-checkout-image-only-r1649d",
+            "assetId": "payment-evidence-live-checkout-privacy-safe-v1",
             "role": "research",
             "loading": "lazy"
           },
@@ -15672,7 +15672,7 @@
           },
           "items": [
             {
-              "assetId": "payment-evidence-live-checkout-image-only-r1649d",
+              "assetId": "payment-evidence-live-checkout-privacy-safe-v1",
               "title": {
                 "en": "Live checkout behaviour",
                 "zh": "真實結帳行為"
@@ -15708,7 +15708,7 @@
                 "zh": "在門市觀察購物者使用自助結帳流程，以驗證入口提示、QR 互動與真實結帳行為。"
               },
               "supportingLabel": {"en": "LIVE VALIDATION", "zh": "現場驗證"},
-              "presentation": "editorial-composite"
+              "presentation": "raw"
             },
             {
               "assetId": "payment-comparative-validation-existing-vs-proposed-v1",
@@ -15721,7 +15721,7 @@
                 "zh": "參與者依主觀易用程度比較既有與提案的人工收銀及自助結帳流程，以協助驗證新互動是否降低結帳摩擦。"
               },
               "supportingLabel": {"en": "COMPARATIVE VALIDATION", "zh": "比較驗證"},
-              "presentation": "natural-ratio"
+              "presentation": "raw"
             }
           ],
           "quotes": [
