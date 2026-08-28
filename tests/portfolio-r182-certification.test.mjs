@@ -119,9 +119,13 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).supportingCopy.en,'19.78 sec → 7.29 sec');
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.ctaLabel.en,'View award announcement ↗');
   assert.equal(payment.relatedProjects[0].projectId,'voucher');
-  assert.deepEqual(Object.keys(payment.decisionEvidenceMap),['payment-r1641-decision-01','payment-r1641-decision-02','payment-r1641-decision-03']);
-  assert.equal(payment.decisionEvidenceMap['payment-r1641-decision-03'].publicAssetId,'payment-return-recovery-human-r1649d');
-  assert.equal(payment.decisionEvidenceMap['payment-r1641-decision-04'],undefined);
+  assert.deepEqual(Object.keys(payment.decisionEvidenceMap),['payment-r1641-decision-01','payment-r1641-decision-02','payment-r1641-decision-03','payment-r1641-decision-04']);
+  assert.deepEqual(Object.values(payment.decisionEvidenceMap).map(item=>item.publicAssetId),[
+    'payment-decision-01-app-entry-r1649h',
+    'payment-decision-02-loyalty-history-r1649h',
+    'payment-decision-03-return-record-r1649h',
+    'payment-decision-04-operations-pos-guidelines-r1649h'
+  ]);
   assert.match(decisions[3].whatIDecided.en,/Payments Engineering, POS, Finance, Security, Customer Service, NCR and store-operation stakeholders/);
   assert.match(decisions[3].whyThisChoice.en,/internal operational interfaces for transaction review and refund handling/);
   assert.equal(payment.latestConfirmedCorrection.supersededTitle,'Transaction continuity across App and in-store checkout');
@@ -131,7 +135,11 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
     'payment-core-checkout-compression-approved-v3',
     'payment-evidence-journey-synthesis-r1649c',
     'payment-evidence-live-checkout-image-only-r1649d',
-    'payment-return-recovery-human-r1649d'
+    'payment-return-recovery-human-r1649d',
+    'payment-decision-01-app-entry-r1649h',
+    'payment-decision-02-loyalty-history-r1649h',
+    'payment-decision-03-return-record-r1649h',
+    'payment-decision-04-operations-pos-guidelines-r1649h'
   ];
   for(const id of restoredAssets){
     const asset=manifest.items[id];

@@ -16823,24 +16823,31 @@
       },
       "decisionEvidenceMap": {
         "payment-r1641-decision-01": {
-          "publicAssetId": "payment-evidence-sco-entry-public-v2",
+          "publicAssetId": "payment-decision-01-app-entry-r1649h",
           "caption": {
-            "en": "Validated App-to-checkout entry recognition and QR handoff.",
-            "zh": "經驗證的 App-to-checkout 入口辨識與 QR 交接。"
+            "en": "Multiple cards and payment paths became one App entry for in-store payment.",
+            "zh": "多張卡片與付款路徑整合為一個門市付款 App 入口。"
           }
         },
         "payment-r1641-decision-02": {
-          "publicAssetId": "payment-evidence-value-visibility-public-v1",
+          "publicAssetId": "payment-decision-02-loyalty-history-r1649h",
           "caption": {
-            "en": "LinkPoints, discounts and payable value stayed visible inside payment.",
-            "zh": "LinkPoints、折扣與應付金額在付款中保持可見。"
+            "en": "Loyalty value stayed visible before payment, after payment, in history and in the final receipt.",
+            "zh": "會員價值在付款前、付款後、歷史紀錄與最終收據中都保持可見。"
           }
         },
         "payment-r1641-decision-03": {
-          "publicAssetId": "payment-return-recovery-human-r1649d",
+          "publicAssetId": "payment-decision-03-return-record-r1649h",
           "caption": {
-            "en": "Returns moved from a separate support path into the payment record.",
-            "zh": "退貨由分離的支援路徑移入付款紀錄。"
+            "en": "Return support moved from a separate help path into the payment record.",
+            "zh": "退貨支援由分離的協助路徑移入付款紀錄。"
+          }
+        },
+        "payment-r1641-decision-04": {
+          "publicAssetId": "payment-decision-04-operations-pos-guidelines-r1649h",
+          "caption": {
+            "en": "The payment model extended into SCO, internal operations, cashier POS verification and shared guidance.",
+            "zh": "付款模型延伸至 SCO、內部營運、收銀 POS 驗證與共享規範。"
           }
         }
       },
