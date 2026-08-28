@@ -14641,6 +14641,14 @@
         "en": "Led 0→1 design of FairPrice’s payment system across App, cashier and self-checkout, reaching ~190 stores and ~228K monthly transactions at 98.5% success while cutting checkout time from 19.78 sec to 7.29 sec.",
         "zh": "主導 FairPrice 付款系統的 0→1 設計，橫跨 App、人工收銀與自助結帳，推展至約 190 間門市及每月約 22.8 萬筆交易，交易成功率達 98.5%，並將結帳時間從 19.78 秒縮短至 7.29 秒。"
       },
+      "atAGlanceEmphasis": {
+        "variant": "inline-metric",
+        "identities": ["0→1", "~190 stores", "~228K monthly transactions", "98.5% success", "19.78 sec → 7.29 sec"],
+        "sourceSegments": {
+          "en": ["0→1", "~190 stores", "~228K monthly transactions", "98.5% success", "19.78 sec to 7.29 sec"],
+          "zh": ["0→1", "約 190 間門市", "每月約 22.8 萬筆交易", "98.5%", "19.78 秒縮短至 7.29 秒"]
+        }
+      },
       "infoGrid": {
         "type": {
           "value": "Transaction System",
@@ -15128,8 +15136,8 @@
           },
           {
             "order": 3,
-            "assetId": "payment-evidence-sco-entry-public-v2",
-            "role": "decision",
+            "assetId": "payment-sco-research-photo-human-approved-v1",
+            "role": "research",
             "loading": "lazy"
           },
           {
@@ -15599,7 +15607,7 @@
           "evidence": [
             {
               "assetId": "payment-core-checkout-compression-approved-v3",
-              "presentation": "raw",
+              "presentation": "natural-ratio",
               "showCaption": false
             }
           ],
@@ -15608,10 +15616,44 @@
         },
         "decisionEvidence": {
           "title": {
-            "en": "Evidence that shaped the decisions",
-            "zh": "形塑設計決策的證據"
+            "en": "Research signals that shaped the payment model",
+            "zh": "形塑付款模型的研究訊號"
           },
           "presentation": "decision-support",
+          "researchInsights": {
+            "title": {
+              "en": "Key research insights",
+              "zh": "關鍵研究洞察"
+            },
+            "metrics": [
+              {
+                "value": "87.5%",
+                "label": {"en": "Time is money", "zh": "時間就是金錢"},
+                "supportingCopy": {"en": "Shoppers consistently prioritised the shorter, faster checkout path.", "zh": "購物者持續優先選擇較短、較快的結帳路徑。"},
+                "note": {"en": "62.5% of this group preferred the cashier to take care of everything.", "zh": "其中 62.5% 偏好由收銀員處理所有步驟。"}
+              },
+              {
+                "value": "87.5%",
+                "label": {"en": "Social pressure", "zh": "社交壓力"},
+                "supportingCopy": {"en": "Blocking others in a queue created friction and embarrassment.", "zh": "在排隊時阻擋他人會造成摩擦與尷尬。"}
+              },
+              {
+                "value": "87.5%",
+                "label": {"en": "Assurance", "zh": "安心感"},
+                "supportingCopy": {"en": "Payment needed transparency, real-time feedback and clear alternatives when something went wrong.", "zh": "付款需要透明度、即時回饋，以及出錯時清楚的替代方案。"}
+              },
+              {
+                "value": "75%",
+                "label": {"en": "Rebate awareness", "zh": "回饋認知"},
+                "supportingCopy": {"en": "Rebates could attract attention and change which payment or benefit option shoppers chose.", "zh": "回饋能吸引注意，並改變購物者選擇的付款或權益選項。"}
+              },
+              {
+                "value": "37.5%",
+                "label": {"en": "Additional value", "zh": "額外價值"},
+                "supportingCopy": {"en": "Some shoppers also saw payment interactions as creating educational value for children.", "zh": "部分購物者也認為付款互動能為兒童創造教育價值。"}
+              }
+            ]
+          },
           "items": [
             {
               "assetId": "payment-evidence-live-checkout-image-only-r1649d",
@@ -15623,6 +15665,7 @@
                 "en": "Across 3 days and 8 shoppers, cashier and self-checkout fieldwork showed that payment had to preserve assurance without slowing a time-sensitive handoff.",
                 "zh": "3 天・8 位購物者橫跨人工收銀與自助結帳，揭示付款當下的排隊壓力、安心感需求與時間敏感行為。"
               },
+              "supportingLabel": {"en": "FIELD RESEARCH", "zh": "田野研究"},
               "presentation": "raw"
             },
             {
@@ -15635,38 +15678,41 @@
                 "en": "Mapping queue, preparation, checkout and post-checkout as one transaction showed that loyalty value, payment assurance and recovery had to remain continuous across surfaces.",
                 "zh": "將排隊、準備、結帳與結帳後映射成一段旅程，揭示速度、會員價值清晰度、付款安心感與復原在交易中的斷點。"
               },
+              "supportingLabel": {"en": "JOURNEY SYNTHESIS", "zh": "旅程綜整"},
               "presentation": "raw"
             },
             {
-              "assetId": "payment-evidence-sco-entry-public-v2",
+              "assetId": "payment-sco-research-photo-human-approved-v1",
               "title": {
-                "en": "SCO entry recognition validation",
-                "zh": "SCO 入口辨識驗證"
+                "en": "Live SCO validation",
+                "zh": "現場 SCO 驗證"
               },
               "copy": {
-                "en": "6 structured + 7 guerrilla SCO participants validated the App-to-SCO entry cue and QR action language used for the checkout handoff.",
-                "zh": "6 位結構化＋7 位游擊 SCO 參與者。驗證更清楚的入口辨識與 QR 行動語言。"
+                "en": "Observed shoppers using the self-checkout flow in-store to validate entry cues, QR interaction and real checkout behaviour.",
+                "zh": "在門市觀察購物者使用自助結帳流程，以驗證入口提示、QR 互動與真實結帳行為。"
               },
-              "presentation": "raw"
+              "supportingLabel": {"en": "LIVE VALIDATION", "zh": "現場驗證"},
+              "presentation": "natural-ratio"
             },
             {
-              "assetId": "payment-return-recovery-human-r1649d",
+              "assetId": "payment-comparative-validation-existing-vs-proposed-v1",
               "title": {
-                "en": "Return recovery in the shipped flow",
-                "zh": "已上線流程中的退貨復原"
+                "en": "Existing vs proposed checkout",
+                "zh": "既有與提案結帳流程比較"
               },
               "copy": {
-                "en": "Returns moved from a separate support path into the payment record, giving shoppers a direct starting point for recovery after payment.",
-                "zh": "退貨由分離的支援路徑移入付款紀錄，讓購物者能在付款後直接開始復原。"
+                "en": "Participants compared the existing and proposed cashier and self-checkout flows by perceived ease of use, helping validate whether the new interaction reduced checkout friction.",
+                "zh": "參與者依主觀易用程度比較既有與提案的人工收銀及自助結帳流程，以協助驗證新互動是否降低結帳摩擦。"
               },
-              "presentation": "raw"
+              "supportingLabel": {"en": "COMPARATIVE VALIDATION", "zh": "比較驗證"},
+              "presentation": "natural-ratio"
             }
           ],
           "quotes": [
             {
               "quote": {
-                "en": "“I have to fish out 2 cards — MyNTUC and a credit card. Here, it’s only one app.”",
-                "zh": "「我原本要拿出兩張卡——MyNTUC 和信用卡。這裡只需要一個 App。」"
+                "en": "I have to fish out 2 cards — MyNTUC and a credit card. Here, it’s only one app.",
+                "zh": "我原本要拿出兩張卡——MyNTUC 和信用卡。這裡只需要一個 App。"
               },
               "role": {
                 "en": "SHOPPER VOICE",
@@ -15675,8 +15721,8 @@
             },
             {
               "quote": {
-                "en": "“It’s express payment. It cuts down the steps of swiping cards, and it’s cashless.”",
-                "zh": "「這是快速付款。它減少刷卡步驟，而且是無現金的。」"
+                "en": "It’s express payment. It cuts down the steps of swiping cards, and it’s cashless.",
+                "zh": "這是快速付款。它減少刷卡步驟，而且是無現金的。"
               },
               "role": {
                 "en": "SHOPPER VOICE",
@@ -15684,6 +15730,10 @@
               }
             }
           ],
+          "quotesCaption": {
+            "en": "Two representative shopper quotes from the in-store research.",
+            "zh": "兩則來自門市研究的代表性購物者引言。"
+          },
           "validationLayer": {
             "title": {
               "en": "Focused validation",
@@ -16254,8 +16304,8 @@
               "zh": "我對成果負責"
             },
             "title": {
-              "en": "Defined the transaction model behind FairPrice’s 0→1 in-store payment capability",
-              "zh": "定義 FairPrice 0→1 門市付款能力背後的交易模型"
+              "en": "Defined FairPrice’s 0→1 in-store payment model",
+              "zh": "定義 FairPrice 的 0→1 門市付款模型"
             },
             "text": {
               "en": "As the only dedicated product designer on the core team, I led product framing, field research, transaction architecture, interaction design and validation across App, cashier and self-checkout contexts.",
@@ -16838,6 +16888,10 @@
         },
         "payment-r1641-decision-03": {
           "publicAssetId": "payment-decision-03-return-record-r1649h",
+          "supportingProof": {
+            "assetId": "payment-return-recovery-human-r1649d",
+            "role": "D03 decision proof only"
+          },
           "caption": {
             "en": "Return support moved from a separate help path into the payment record.",
             "zh": "退貨支援由分離的協助路徑移入付款紀錄。"

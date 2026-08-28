@@ -15,10 +15,18 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
     [
       "payment-evidence-live-checkout-image-only-r1649d",
       "payment-evidence-journey-synthesis-r1649c",
-      "payment-evidence-sco-entry-public-v2",
-      "payment-return-recovery-human-r1649d",
+      "payment-sco-research-photo-human-approved-v1",
+      "payment-comparative-validation-existing-vs-proposed-v1",
     ],
   );
+  assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.metrics.map((item) => [item.value, item.label.en]), [
+    ["87.5%", "Time is money"],
+    ["87.5%", "Social pressure"],
+    ["87.5%", "Assurance"],
+    ["75%", "Rebate awareness"],
+    ["37.5%", "Additional value"],
+  ]);
+  assert.equal(manifest.items["payment-return-recovery-human-r1649d"].sectionUsage, "decision-03-proof-only");
 });
 
 test("R183 classifies Booking Taxi as existing-proposition optimisation, never 0→1", () => {

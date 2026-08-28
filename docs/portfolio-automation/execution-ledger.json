@@ -1070,6 +1070,25 @@
     ],
     "eliminatedByGovernedReuse": []
   },
+  "humanImplementationAuthorizations": [
+    {
+      "approvalId": "PA-20260828-PAYMENT-HR01",
+      "status": "IMPLEMENTATION_AUTHORIZED_HUMAN_ACCEPTANCE_PENDING",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-28",
+      "scope": "Payment Human Review Remediation — Evidence, research signals, approved asset correction and presentation hierarchy",
+      "reason": "Correct Human-review defects without reopening Payment strategy or shared-system redesign.",
+      "affectedSystems": ["Payment content SSOT", "Payment asset manifest", "StructuredEvidence semantic variants", "ProjectDetailOverview inline emphasis", "RecognitionProof CTA reuse", "Payment baseline tests"],
+      "pullRequest": 25,
+      "startingCommit": "bef07a1b50481f814139692b1ab46d33e30d2a89",
+      "startingTree": "6d5823bfaf8dfaae07c6f779cb4a39456d9cfd48",
+      "productionCommit": "c2e007dbfacf02dfacab2e4b551ffa95e1df0856",
+      "supersededRoles": ["payment-evidence-sco-entry-public-v2 as SCO Evidence", "payment-return-recovery-human-r1649d as research Evidence"],
+      "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW",
+      "productionAuthorized": false,
+      "mergeAuthorized": false
+    }
+  ],
   "reconciliations": [
     {
       "pr": 16,
