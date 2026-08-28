@@ -1084,6 +1084,21 @@
       "startingTree": "6d5823bfaf8dfaae07c6f779cb4a39456d9cfd48",
       "productionCommit": "c2e007dbfacf02dfacab2e4b551ffa95e1df0856",
       "supersededRoles": ["payment-evidence-sco-entry-public-v2 as SCO Evidence", "payment-return-recovery-human-r1649d as research Evidence"],
+      "implementationRounds": [
+        {
+          "round": "R183.3B.4",
+          "startingCommit": "bef07a1b50481f814139692b1ab46d33e30d2a89",
+          "result": "Content, research signals, approved asset roles and presentation hierarchy restored; Human acceptance pending exact-head review."
+        },
+        {
+          "round": "R183.3B.5",
+          "startingCommit": "7c41e3276c7b4747a9756a0916b46567abfed4a5",
+          "startingTree": "dffc4664aa3b1df429412c9a1c6d07767dbb71c8",
+          "scope": "Payment visual contract closure only",
+          "contracts": ["project-media-radius", "Live validation editorial pair", "payment-live-interview-privacy-safe-v1", "editorial quotation framing", "integrated validation summary", "inline-metric-emphasis-surface"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        }
+      ],
       "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW",
       "productionAuthorized": false,
       "mergeAuthorized": false

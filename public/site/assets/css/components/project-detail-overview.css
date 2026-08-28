@@ -934,3 +934,22 @@
 .voucher-r149-foundation--natural-ratio .voucher-r149-foundation__media{aspect-ratio:auto;overflow:visible}
 .voucher-r149-foundation--natural-ratio .voucher-r149-foundation__media img{height:auto}
 .structured-evidence-v223__validation-note{margin:0;color:var(--color-text-muted);font-size:var(--text-xs);line-height:1.5}
+
+/* Governed project-media, research synthesis, and inline emphasis contracts. */
+.project-detail-hero-visual,.programme-stage-visual__frame,.structured-evidence-v223__media,.voucher-r149-foundation__media,.outcome-recognition-proof__media,.structured-evidence-v223__validation-media{overflow:hidden;border-radius:var(--project-media-radius)}
+.structured-evidence-v223__media{overflow:hidden}
+.semantic-inline-emphasis{background:var(--inline-metric-emphasis-surface)}
+.voucher-r149-foundation--natural-ratio .voucher-r149-foundation__media{aspect-ratio:auto;overflow:hidden}
+.voucher-r149-foundation--editorial-pair{grid-column:1/-1}
+.voucher-r149-foundation__media--group{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);aspect-ratio:auto;background:transparent}
+.voucher-r149-foundation__media--group img{width:100%;height:auto;max-height:var(--dimension-640px);object-fit:contain}
+.structured-evidence-v223__validation-summary{display:grid;gap:var(--space-4);padding-top:var(--space-6)}
+.structured-evidence-v223__validation-summary-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
+.structured-evidence-v223__validation-summary-metric{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:var(--space-4);padding:var(--space-5);border-radius:var(--radius-md);background:var(--color-surface-evidence-accent)}
+.structured-evidence-v223__validation-summary-metric .structured-evidence-v223__validation-value{color:var(--color-text-accent)}
+.structured-evidence-quote blockquote{padding:0}
+.structured-evidence-quote blockquote::before,.structured-evidence-quote blockquote::after{position:static;color:var(--color-text-accent);font-weight:var(--sys-weight-heavy);line-height:inherit}
+.structured-evidence-quote blockquote::before{content:"“"}
+.structured-evidence-quote blockquote::after{content:"”"}
+.structured-evidence-quote figcaption{order:initial}
+@media(max-width:600px){.voucher-r149-foundation__media--group,.structured-evidence-v223__validation-summary-metrics{grid-template-columns:1fr}.voucher-r149-foundation__media--group img{max-height:none}.structured-evidence-v223__validation-summary-metric{grid-template-columns:1fr}}

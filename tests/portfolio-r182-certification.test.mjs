@@ -114,10 +114,12 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.match(app,/element\('blockquote','',t\(item\.quote\)\)/);
   assert.match(projectDetailCss,/\.structured-evidence-quote blockquote\{/);
   assert.match(projectDetailCss,/\.structured-evidence-quote blockquote::before\{content:"“"/);
+  assert.match(projectDetailCss,/\.structured-evidence-quote blockquote::after\{content:"”"/);
   assert.equal(payment.publicContent.decisionEvidence.quotesCaption.en,'Two representative shopper quotes from the in-store research.');
   assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.metrics.map(item=>item.value),['87.5%','87.5%','87.5%','75%','37.5%']);
   assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.metrics.map(item=>item.label.en),['Time is money','Social pressure','Assurance','Rebate awareness','Additional value']);
-  assert.deepEqual(payment.publicContent.decisionEvidence.validationLayer.metrics.map(item=>item.value),['87.5%','85.7%']);
+  assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.validationSignals.metrics.map(item=>item.value),['87.5%','85.7%']);
+  assert.equal(payment.publicContent.decisionEvidence.validationLayer,undefined);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured[0].value,'70.2');
   assert.deepEqual(payment.publicContent.outcomes.semanticHierarchy.measured.map(item=>item.value),['70.2','~190','~57K','~228K','98.5%','2.7× faster']);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).supportingCopy.en,'19.78 sec → 7.29 sec');

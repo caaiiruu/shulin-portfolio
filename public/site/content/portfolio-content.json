@@ -15652,7 +15652,23 @@
                 "label": {"en": "Additional value", "zh": "額外價值"},
                 "supportingCopy": {"en": "Some shoppers also saw payment interactions as creating educational value for children.", "zh": "部分購物者也認為付款互動能為兒童創造教育價值。"}
               }
-            ]
+            ],
+            "validationSignals": {
+              "title": {"en": "Validation signals", "zh": "驗證訊號"},
+              "intro": {"en": "Two distinct validation signals clarified checkout assurance and transaction-history retrieval.", "zh": "兩個不同驗證訊號釐清結帳安心感與交易紀錄查找。"},
+              "metrics": [
+                {
+                  "value": "87.5%",
+                  "label": {"en": "showed assurance, social-pressure or time-sensitivity needs during digital checkout", "zh": "在數位結帳中呈現安心感、社交壓力或時間敏感需求"},
+                  "supportingCopy": {"en": "Supported a shorter checkout handoff with clearer recovery options.", "zh": "支持更短的結帳交接與更清楚的復原選項。"}
+                },
+                {
+                  "value": "85.7%",
+                  "label": {"en": "preferred a clearly separated transaction-history structure", "zh": "偏好清楚分隔的交易紀錄結構"},
+                  "supportingCopy": {"en": "Supported separating payment records from other activity for faster retrieval.", "zh": "支持將付款紀錄與其他活動分開，以便更快查找。"}
+                }
+              ]
+            }
           },
           "items": [
             {
@@ -15683,6 +15699,10 @@
             },
             {
               "assetId": "payment-sco-research-photo-human-approved-v1",
+              "assetIds": [
+                "payment-sco-research-photo-human-approved-v1",
+                "payment-live-interview-privacy-safe-v1"
+              ],
               "title": {
                 "en": "Live SCO validation",
                 "zh": "現場 SCO 驗證"
@@ -15692,7 +15712,7 @@
                 "zh": "在門市觀察購物者使用自助結帳流程，以驗證入口提示、QR 互動與真實結帳行為。"
               },
               "supportingLabel": {"en": "LIVE VALIDATION", "zh": "現場驗證"},
-              "presentation": "natural-ratio"
+              "presentation": "editorial-pair"
             },
             {
               "assetId": "payment-comparative-validation-existing-vs-proposed-v1",
@@ -15733,40 +15753,6 @@
           "quotesCaption": {
             "en": "Two representative shopper quotes from the in-store research.",
             "zh": "兩則來自門市研究的代表性購物者引言。"
-          },
-          "validationLayer": {
-            "title": {
-              "en": "Focused validation",
-              "zh": "聚焦驗證"
-            },
-            "intro": {
-              "en": "Two distinct validation signals clarified checkout assurance and transaction-history retrieval.",
-              "zh": "兩個不同驗證訊號釐清結帳安心感與交易紀錄查找。"
-            },
-            "metrics": [
-              {
-                "value": "87.5%",
-                "label": {
-                  "en": "showed assurance, social-pressure or time-sensitivity needs during digital checkout",
-                  "zh": "在數位結帳中呈現安心感、社交壓力或時間敏感需求"
-                },
-                "supportingCopy": {
-                  "en": "Supported a shorter checkout handoff with clearer recovery options.",
-                  "zh": "支持更短的結帳交接與更清楚的復原選項。"
-                }
-              },
-              {
-                "value": "85.7%",
-                "label": {
-                  "en": "preferred a clearly separated transaction-history structure",
-                  "zh": "偏好清楚分隔的交易紀錄結構"
-                },
-                "supportingCopy": {
-                  "en": "Supported separating payment records from other activity for faster retrieval.",
-                  "zh": "支持將付款紀錄與其他活動分開，以便更快查找。"
-                }
-              }
-            ]
           },
           "contentStatus": "approved-r164.9d"
         },
