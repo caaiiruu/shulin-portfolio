@@ -101,23 +101,30 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(payment.publicContent.coreSystemInsight.evidence[0].assetId,'payment-core-checkout-compression-approved-v3');
   assert.equal(payment.publicContent.coreSystemInsight.showInsightLabel,false);
   assert.equal(payment.publicContent.coreSystemInsight.showVisualProofLabel,false);
-  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].presentation,'raw');
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].presentation,'natural-ratio');
   assert.deepEqual(payment.publicContent.decisionEvidence.items.map(item=>item.assetId),[
     'payment-evidence-live-checkout-image-only-r1649d',
     'payment-evidence-journey-synthesis-r1649c',
-    'payment-evidence-sco-entry-public-v2',
-    'payment-return-recovery-human-r1649d'
+    'payment-sco-research-photo-human-approved-v1',
+    'payment-comparative-validation-existing-vs-proposed-v1'
   ]);
   assert.equal(payment.publicContent.decisionEvidence.quotes.length,2);
   assert.ok(payment.publicContent.decisionEvidence.quotes.every(item=>item.role.en==='SHOPPER VOICE'));
   assert.match(app,/element\('figure','structured-evidence-quote'\)/);
   assert.match(app,/element\('blockquote','',t\(item\.quote\)\)/);
   assert.match(projectDetailCss,/\.structured-evidence-quote blockquote\{/);
+  assert.match(projectDetailCss,/\.structured-evidence-quote blockquote::before\{content:"“"/);
+  assert.equal(payment.publicContent.decisionEvidence.quotesCaption.en,'Two representative shopper quotes from the in-store research.');
+  assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.metrics.map(item=>item.value),['87.5%','87.5%','87.5%','75%','37.5%']);
+  assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.metrics.map(item=>item.label.en),['Time is money','Social pressure','Assurance','Rebate awareness','Additional value']);
   assert.deepEqual(payment.publicContent.decisionEvidence.validationLayer.metrics.map(item=>item.value),['87.5%','85.7%']);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured[0].value,'70.2');
   assert.deepEqual(payment.publicContent.outcomes.semanticHierarchy.measured.map(item=>item.value),['70.2','~190','~57K','~228K','98.5%','2.7× faster']);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).supportingCopy.en,'19.78 sec → 7.29 sec');
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.ctaLabel.en,'View award announcement ↗');
+  assert.match(app,/outcome-recognition-proof__cta text-cta/);
+  assert.equal(payment.ownershipModel.accountabilityPresentation.owned.title.en,'Defined FairPrice’s 0→1 in-store payment model');
+  assert.deepEqual(payment.atAGlanceEmphasis.identities,['0→1','~190 stores','~228K monthly transactions','98.5% success','19.78 sec → 7.29 sec']);
   assert.equal(payment.relatedProjects[0].projectId,'voucher');
   assert.deepEqual(Object.keys(payment.decisionEvidenceMap),['payment-r1641-decision-01','payment-r1641-decision-02','payment-r1641-decision-03','payment-r1641-decision-04']);
   assert.deepEqual(Object.values(payment.decisionEvidenceMap).map(item=>item.publicAssetId),[
@@ -136,6 +143,8 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
     'payment-evidence-journey-synthesis-r1649c',
     'payment-evidence-live-checkout-image-only-r1649d',
     'payment-return-recovery-human-r1649d',
+    'payment-sco-research-photo-human-approved-v1',
+    'payment-comparative-validation-existing-vs-proposed-v1',
     'payment-decision-01-app-entry-r1649h',
     'payment-decision-02-loyalty-history-r1649h',
     'payment-decision-03-return-record-r1649h',

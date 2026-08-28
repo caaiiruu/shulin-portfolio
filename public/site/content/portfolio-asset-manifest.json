@@ -233,22 +233,51 @@
       "alt_zh": "FairPrice App 與自助結帳付款體驗的手機與機台畫面。",
       "projectCardFocalPosition": "center center"
     },
-    "payment-evidence-sco-entry-public-v2": {
-      "id": "payment-evidence-sco-entry-public-v2",
+    "payment-sco-research-photo-human-approved-v1": {
+      "id": "payment-sco-research-photo-human-approved-v1",
       "projectId": "payment",
       "type": "image/jpeg",
-      "publicPath": "/site/assets/projects/payment/payment-decision-01-handoff-v2.jpg",
-      "aspectRatio": "wide",
+      "publicPath": "/site/assets/projects/payment/payment-sco-research-photo-human-approved-v1.jpg",
+      "aspectRatio": "3:4",
       "assetStatus": "production",
       "implementationStatus": "real-active",
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "width": 1800,
-      "height": 1020,
-      "sha256": "d425a1a0ebd6774b3713a9bce57efd3508f15019e08ad391aadbc135b5634ca7",
-      "alt": "Field context, tested checkout entry model and QR handoff at self-checkout.",
-      "alt_zh": "Field context, tested checkout entry model and QR handoff at self-checkout."
+      "width": 1536,
+      "height": 2048,
+      "sha256": "7e465960eb4283d711f2e35c146f7c97bc6e06dc9b70d3f9f90a1c852cc8f089",
+      "alt": "Two shoppers using a self-checkout station during live in-store research.",
+      "alt_zh": "兩位購物者在門市研究中使用自助結帳機台。",
+      "sourcePackage": "payment-r1833b4-handoff.zip",
+      "sourceFiles": ["payment-sco-research-photo-human-approved.jpg"],
+      "privacyTreatment": "Human-provided and explicitly approved for Payment Evidence.",
+      "sectionUsage": "evidence-live-sco-validation",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence.items",
+      "humanApprovalStatus": "human-approved-pa-20260828-payment-hr01"
+    },
+    "payment-comparative-validation-existing-vs-proposed-v1": {
+      "id": "payment-comparative-validation-existing-vs-proposed-v1",
+      "projectId": "payment",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/payment/payment-comparative-validation-existing-vs-proposed-v1.png",
+      "aspectRatio": "439:270",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1756,
+      "height": 1080,
+      "sha256": "678a5dea984da333a4181dc68e0986e2d973b13737e457b96a7adf482d7e43aa",
+      "alt": "Research slide comparing perceived ease of use for existing and proposed cashier and self-checkout flows.",
+      "alt_zh": "研究投影片，比較既有與提案的人工收銀及自助結帳流程之主觀易用程度。",
+      "sourcePackage": "payment-r1833b4-handoff.zip",
+      "sourceFiles": ["Research-Findings-Digital-Checkout-Jan-2021.pdf#page=56"],
+      "privacyTreatment": "Direct derivative of the authoritative research PDF; no chart values or composition were fabricated.",
+      "sectionUsage": "evidence-comparative-validation",
+      "contentSsotReference": "projects.payment.publicContent.decisionEvidence.items",
+      "humanApprovalStatus": "authorized-pa-20260828-payment-hr01"
     },
     "payment-evidence-operational-recovery-public-v2": {
       "id": "payment-evidence-operational-recovery-public-v2",
@@ -1277,9 +1306,11 @@
         "payment recovery(2).jpg"
       ],
       "privacyTreatment": "Human-provided portfolio-ready composition using approved synthetic replacement transaction data; composition unchanged.",
-      "sectionUsage": "evidence-return-recovery",
-      "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
-      "humanApprovalStatus": "pending-re-review"
+      "sectionUsage": "decision-03-proof-only",
+      "contentSsotReference": "projects.payment.decisionEvidenceMap.payment-r1641-decision-03",
+      "humanApprovalStatus": "human-approved-pa-20260828-payment-hr01",
+      "supersededRole": "evidence-return-recovery",
+      "supersessionApprovalId": "PA-20260828-PAYMENT-HR01"
     }
   },
   "frameSystemContract": {

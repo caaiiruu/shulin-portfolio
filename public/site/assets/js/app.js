@@ -374,6 +374,15 @@
       :resolved;
     node.textContent=text==null?'':String(text);
   }
+  function renderInlineEmphasis(node,value,segments,variant='inline-metric'){
+    if(!node)return;
+    const text=String(localize(value)||'');
+    const matches=list(segments).map(segment=>String(segment||'')).filter(Boolean).sort((a,b)=>b.length-a.length);
+    if(!matches.length){safeText(node,text);return}
+    clear(node);node.dataset.emphasisVariant=variant;
+    const pattern=new RegExp(`(${matches.map(segment=>segment.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})`,'g');
+    text.split(pattern).filter(Boolean).forEach(part=>node.append(matches.includes(part)?element('mark','semantic-inline-emphasis',part):doc.createTextNode(part)));
+  }
   function clear(node){while(node&&node.firstChild)node.removeChild(node.firstChild)}
   function decorateArrow(node){
     if(!node||node.children?.length||node.querySelector?.('.icon-arrow'))return;
@@ -2625,7 +2634,10 @@
     renderTags(showProblemTypes?(localize(p.problemTypes)||[]):[]);
     if(classification)classification.hidden=!showProblemTypes;
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
-    safeText(doc.getElementById('projectAtGlance'),localize(p.atAGlance));
+    const atGlanceNode=doc.getElementById('projectAtGlance');
+    const emphasis=p.atAGlanceEmphasis;
+    if(emphasis?.variant==='inline-metric')renderInlineEmphasis(atGlanceNode,p.atAGlance,emphasis.sourceSegments?.[lang==='zh'?'zh':'en'],emphasis.variant);
+    else safeText(atGlanceNode,localize(p.atAGlance));
     const confidentiality=doc.getElementById('confidentialityNote');
     const confidentialityText=localize([p.confidentiality_note,p.confidentiality_note_zh]);
     safeText(confidentiality?.querySelector('em'),String(confidentialityText||'').replace(/^\*|\*$/g,''));
@@ -2846,14 +2858,15 @@
     if(!evidenceItems.length)return null;
     const grid=element('div','voucher-r149-foundations');
     evidenceItems.forEach(item=>{
-      const card=element('article','voucher-r149-foundation');
+      const card=element('article',`voucher-r149-foundation${item.presentation==='natural-ratio'?' voucher-r149-foundation--natural-ratio':''}`);
+      card.dataset.evidencePresentation=item.presentation||'default';
       if(item.id)card.dataset.evidenceBlockId=item.id;
       const media=element('div','voucher-r149-foundation__media');
       const caption=element('div','voucher-r149-foundation__caption');
       const resolved=resolveProjectAsset(item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1');
       const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
       if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-      media.append(image);caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
+      media.append(image);if(translate(item.supportingLabel))caption.append(element('span','voucher-r149-eyebrow',translate(item.supportingLabel)));caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
       if(list(item.supportingFacts).length){const facts=element('ul','structured-evidence-v223__supporting-facts');list(item.supportingFacts).forEach(fact=>facts.append(element('li','',`${fact.value} ${translate(fact.label)}`)));caption.append(facts)}
       card.append(media,caption);grid.append(card);
     });
@@ -2912,7 +2925,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel))copy.append(element('span','outcome-recognition-proof__cta',translate(source.recognition.ctaLabel)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
@@ -3020,9 +3033,10 @@
     if(evidence){
       evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence';evidence.dataset.componentOwner=evidenceSource.resolvedComponent||'StructuredEvidence';evidence.dataset.evidenceVariant=evidenceSource.presentation||'default';evidence.dataset.semanticSource=evidenceSource.resolvedSourcePath||evidenceResolution.sourcePath||'';evidence.classList.add('case-content-span','case-content-span--full');
       const orderedVisualProofs=evidenceSource.presentation==='ordered-visual-proofs';
+      if(!orderedVisualProofs&&evidenceSource.researchInsights){const source=evidenceSource.researchInsights,insights=element('section','structured-evidence-v223__validation structured-evidence-v223__research-insights');insights.dataset.componentOwner='StructuredEvidence';insights.dataset.evidenceVariant='key-research-insights';insights.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label');safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));if(t(item.note))body.append(element('p','structured-evidence-v223__validation-note',t(item.note)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});insights.append(grid);evidence.append(insights)}
       const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
-      if(!orderedVisualProofs&&list(evidenceSource.quotes).length){const voices=element('div','structured-evidence-quotes');voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});evidence.append(voices)}
+      if(!orderedVisualProofs&&list(evidenceSource.quotes).length){const voiceFamily=element('section','structured-evidence-voice-family'),voices=element('div','structured-evidence-quotes');voiceFamily.dataset.componentOwner='StructuredEvidence';voiceFamily.dataset.evidenceVariant='editorial-quotation';voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});voiceFamily.append(voices);if(t(evidenceSource.quotesCaption))voiceFamily.append(element('p','structured-evidence-quotes__caption',t(evidenceSource.quotesCaption)));evidence.append(voiceFamily)}
       if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
       if(!orderedVisualProofs&&t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length){
