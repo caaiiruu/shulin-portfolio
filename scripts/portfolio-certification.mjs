@@ -85,7 +85,10 @@ for(const [projectId,project] of Object.entries(content.projects)){
 if(primaryLeadAssets.length!==13)fail('Primary Lead Visual count must be 13');
 const leadPaths=new Set(),leadHashes=new Set();let leadAssetBytes=0;
 for(const asset of primaryLeadAssets){
-  if(asset.projectId!==manifest.items[asset.assetId]?.projectId||asset.type!=='image/jpeg'||asset.width!==2048||asset.height!==1152||asset.aspectRatio!=='16:9'||asset.assetStatus!=='production'||asset.implementationStatus!=='real-active'||asset.placeholderFallbackAssetId!==null||asset.replacementRequired!==false||asset.publicBuild!==true)fail(`${asset.projectId}: invalid approved Primary Lead Visual contract`);
+  const approvedGeometry=asset.projectId==='voucher'
+    ? asset.width===1536&&asset.height===691&&asset.aspectRatio==='wide'
+    : asset.width===2048&&asset.height===1152&&asset.aspectRatio==='16:9';
+  if(asset.projectId!==manifest.items[asset.assetId]?.projectId||asset.type!=='image/jpeg'||!approvedGeometry||asset.assetStatus!=='production'||asset.implementationStatus!=='real-active'||asset.placeholderFallbackAssetId!==null||asset.replacementRequired!==false||asset.publicBuild!==true)fail(`${asset.projectId}: invalid approved Primary Lead Visual contract`);
   if(!asset.publicPath?.startsWith('/site/assets/projects/')){fail(`${asset.projectId}: invalid Lead Visual public path`);continue}
   const localPath=path.join(root,'public',asset.publicPath);
   if(!fs.existsSync(localPath)){fail(`${asset.projectId}: Lead Visual file is missing`);continue}
