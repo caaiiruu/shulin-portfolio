@@ -1097,6 +1097,14 @@
           "scope": "Payment visual contract closure only",
           "contracts": ["project-media-radius", "Live validation editorial pair", "payment-live-interview-privacy-safe-v1", "editorial quotation framing", "integrated validation summary", "inline-metric-emphasis-surface"],
           "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        },
+        {
+          "round": "R183.3B.6",
+          "startingCommit": "091de088873aef41ca2d6dbb5484ca425de3a8b3",
+          "startingTree": "61587ce981dff98bf204fe798766ce2bfab901a1",
+          "scope": "Payment final visual closure and governed horizontal boundary calibration",
+          "contracts": ["Live validation editorial composite", "content-fitted editorial quotations", "project-editorial-composite-aspect", "case-content-anchor-inline"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
         }
       ],
       "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW",

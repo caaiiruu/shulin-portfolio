@@ -4,6 +4,9 @@ import test from "node:test";
 
 const content = JSON.parse(fs.readFileSync("public/site/content/portfolio-content.json", "utf8"));
 const manifest = JSON.parse(fs.readFileSync("public/site/content/portfolio-asset-manifest.json", "utf8"));
+const app = fs.readFileSync("public/site/assets/js/app.js", "utf8");
+const projectDetailCss = fs.readFileSync("public/site/assets/css/components/project-detail-overview.css", "utf8");
+const tokens = fs.readFileSync("public/site/assets/css/tokens.css", "utf8");
 
 test("R183 preserves Payment as a four-decision 0→1 transaction product", () => {
   const payment = content.projects.payment;
@@ -15,7 +18,7 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
     [
       "payment-evidence-live-checkout-image-only-r1649d",
       "payment-evidence-journey-synthesis-r1649c",
-      "payment-sco-research-photo-human-approved-v1",
+      "payment-live-validation-field-research-composite-v1",
       "payment-comparative-validation-existing-vs-proposed-v1",
     ],
   );
@@ -28,11 +31,21 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   ]);
   assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.validationSignals.metrics.map((item) => item.value), ["87.5%", "85.7%"]);
   assert.equal(payment.publicContent.decisionEvidence.validationLayer, undefined);
-  assert.deepEqual(payment.publicContent.decisionEvidence.items[2].assetIds, [
+  assert.equal(payment.publicContent.decisionEvidence.items[2].assetId, "payment-live-validation-field-research-composite-v1");
+  assert.equal(payment.publicContent.decisionEvidence.items[2].assetIds, undefined);
+  assert.equal(payment.publicContent.decisionEvidence.items[2].presentation, "editorial-composite");
+  assert.deepEqual(manifest.items["payment-live-validation-field-research-composite-v1"].derivedFromAssetIds, [
     "payment-sco-research-photo-human-approved-v1",
     "payment-live-interview-privacy-safe-v1",
   ]);
-  assert.equal(payment.publicContent.decisionEvidence.items[2].presentation, "editorial-pair");
+  assert.equal(manifest.items["payment-live-validation-field-research-composite-v1"].aspectRatio, "3:2");
+  assert.match(app, /presentation==='editorial-composite'/);
+  assert.match(tokens, /--ratio-editorial-composite: 3 \/ 2/);
+  assert.match(tokens, /--project-editorial-composite-aspect: var\(--ratio-editorial-composite\)/);
+  assert.match(projectDetailCss, /\.voucher-r149-foundation--editorial-composite \.voucher-r149-foundation__media\{aspect-ratio:var\(--project-editorial-composite-aspect\)\}/);
+  assert.match(projectDetailCss, /\.structured-evidence-quotes\{[^}]*align-items:start/);
+  assert.match(projectDetailCss, /\.structured-evidence-quote\{[^}]*height:auto/);
+  assert.match(projectDetailCss, /\.case-reading-wrapper[^}]*margin-inline:var\(--case-content-anchor-inline\)/);
   assert.equal(manifest.items["payment-live-interview-privacy-safe-v1"].derivativeStatus, "privacy-safe-face-blur-v1");
   assert.match(manifest.items["payment-live-interview-privacy-safe-v1"].sourceBoundary, /source is preserved outside the public build/i);
   assert.equal(manifest.items["payment-return-recovery-human-r1649d"].sectionUsage, "decision-03-proof-only");

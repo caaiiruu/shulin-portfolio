@@ -51,7 +51,10 @@ function deriveSlots(value, projectId, location = []) {
   }
 }
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
-fail(itemEntries.length === new Set(slots.map((slot) => slot.assetId)).size + placeholderIds.length, "Manifest contains non-runtime records");
+const derivativeLineageIds = new Set(itemEntries.flatMap(([, record]) => Array.isArray(record.derivedFromAssetIds) ? record.derivedFromAssetIds : []));
+for (const id of derivativeLineageIds) fail(Boolean(items[id]), `Derivative lineage references missing asset ${id}`);
+const governedAssetIds = new Set([...slots.map((slot) => slot.assetId), ...derivativeLineageIds]);
+fail(itemEntries.length === governedAssetIds.size + placeholderIds.length, "Manifest contains non-runtime or non-lineage records");
 fail(slots.length > 0, "Runtime visual slots must not be empty");
 fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id)), "Every canonical project needs a visual slot");
 

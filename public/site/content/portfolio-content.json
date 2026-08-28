@@ -15698,11 +15698,7 @@
               "presentation": "raw"
             },
             {
-              "assetId": "payment-sco-research-photo-human-approved-v1",
-              "assetIds": [
-                "payment-sco-research-photo-human-approved-v1",
-                "payment-live-interview-privacy-safe-v1"
-              ],
+              "assetId": "payment-live-validation-field-research-composite-v1",
               "title": {
                 "en": "Live SCO validation",
                 "zh": "現場 SCO 驗證"
@@ -15712,7 +15708,7 @@
                 "zh": "在門市觀察購物者使用自助結帳流程，以驗證入口提示、QR 互動與真實結帳行為。"
               },
               "supportingLabel": {"en": "LIVE VALIDATION", "zh": "現場驗證"},
-              "presentation": "editorial-pair"
+              "presentation": "editorial-composite"
             },
             {
               "assetId": "payment-comparative-validation-existing-vs-proposed-v1",

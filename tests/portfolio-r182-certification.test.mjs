@@ -105,7 +105,7 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.deepEqual(payment.publicContent.decisionEvidence.items.map(item=>item.assetId),[
     'payment-evidence-live-checkout-image-only-r1649d',
     'payment-evidence-journey-synthesis-r1649c',
-    'payment-sco-research-photo-human-approved-v1',
+    'payment-live-validation-field-research-composite-v1',
     'payment-comparative-validation-existing-vs-proposed-v1'
   ]);
   assert.equal(payment.publicContent.decisionEvidence.quotes.length,2);
@@ -146,6 +146,8 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
     'payment-evidence-live-checkout-image-only-r1649d',
     'payment-return-recovery-human-r1649d',
     'payment-sco-research-photo-human-approved-v1',
+    'payment-live-interview-privacy-safe-v1',
+    'payment-live-validation-field-research-composite-v1',
     'payment-comparative-validation-existing-vs-proposed-v1',
     'payment-decision-01-app-entry-r1649h',
     'payment-decision-02-loyalty-history-r1649h',

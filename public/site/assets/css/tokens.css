@@ -13,6 +13,7 @@
   --space-10: 128px;
   --dimension-360deg: 360deg;
   --dimension-90deg: 90deg;
+  --ratio-editorial-composite: 3 / 2;
 
   --ink-950: #1d2021;
   --ink-800: #34393b;
@@ -166,6 +167,7 @@
   --radius-control: var(--radius-pill);
   --radius-icon: var(--radius-pill);
   --project-media-radius: var(--radius-lg);
+  --project-editorial-composite-aspect: var(--ratio-editorial-composite);
   --inline-metric-emphasis-surface: var(--brand-100);
   --header-height: 72px;
   --control-height: 48px;
@@ -298,6 +300,7 @@
   --case-gap-caption: var(--space-2);
   --case-section-title-content-gap: var(--case-gap-content);
   --case-section-canvas-inset: var(--space-0);
+  --case-content-anchor-inline: var(--space-0);
   --case-overview-summary-grid-gap: var(--case-gap-subsection);
   --case-complexity-item-gap: var(--case-gap-content);
   --case-outcome-item-gap: var(--case-gap-content);
