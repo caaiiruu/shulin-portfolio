@@ -16,7 +16,7 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.deepEqual(
     payment.publicContent.decisionEvidence.items.map((item) => item.assetId),
     [
-      "payment-evidence-live-checkout-image-only-r1649d",
+      "payment-evidence-live-checkout-privacy-safe-v1",
       "payment-evidence-journey-synthesis-r1649c",
       "payment-live-validation-field-research-composite-v1",
       "payment-comparative-validation-existing-vs-proposed-v1",
@@ -33,7 +33,9 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.equal(payment.publicContent.decisionEvidence.validationLayer, undefined);
   assert.equal(payment.publicContent.decisionEvidence.items[2].assetId, "payment-live-validation-field-research-composite-v1");
   assert.equal(payment.publicContent.decisionEvidence.items[2].assetIds, undefined);
-  assert.equal(payment.publicContent.decisionEvidence.items[2].presentation, "editorial-composite");
+  assert.equal(payment.publicContent.decisionEvidence.items.length, 4);
+  assert.ok(payment.publicContent.decisionEvidence.items.every((item) => item.presentation === "raw"));
+  assert.doesNotMatch(JSON.stringify(payment.publicContent.decisionEvidence.items), /editorial-composite|natural-ratio/);
   assert.deepEqual(manifest.items["payment-live-validation-field-research-composite-v1"].derivedFromAssetIds, [
     "payment-sco-research-photo-human-approved-v1",
     "payment-live-interview-privacy-safe-v1",
@@ -43,11 +45,25 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.match(tokens, /--ratio-editorial-composite: 3 \/ 2/);
   assert.match(tokens, /--project-editorial-composite-aspect: var\(--ratio-editorial-composite\)/);
   assert.match(projectDetailCss, /\.voucher-r149-foundation--editorial-composite \.voucher-r149-foundation__media\{aspect-ratio:var\(--project-editorial-composite-aspect\)\}/);
-  assert.match(projectDetailCss, /\.structured-evidence-quotes\{[^}]*align-items:start/);
+  assert.match(projectDetailCss, /\.voucher-r149-foundations\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(projectDetailCss, /\.voucher-r149-metrics,\.voucher-r149-findings,\.voucher-r149-foundations\{grid-template-columns:1fr\}/);
+  assert.match(projectDetailCss, /\.structured-evidence-quotes\{[^}]*width:100%[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)[^}]*align-items:start/);
   assert.match(projectDetailCss, /\.structured-evidence-quote\{[^}]*height:auto/);
   assert.match(projectDetailCss, /\.case-reading-wrapper[^}]*margin-inline:var\(--case-content-anchor-inline\)/);
   assert.equal(manifest.items["payment-live-interview-privacy-safe-v1"].derivativeStatus, "privacy-safe-face-blur-v1");
   assert.match(manifest.items["payment-live-interview-privacy-safe-v1"].sourceBoundary, /source is preserved outside the public build/i);
+  const liveCheckout = manifest.items["payment-evidence-live-checkout-privacy-safe-v1"];
+  assert.equal(liveCheckout.derivativeStatus, "privacy-safe-face-blur-v1");
+  assert.deepEqual(liveCheckout.sourceFiles, [
+    "01_selected_sources/live_store_research_photo_01.jpg",
+    "01_selected_sources/live_store_research_photo_02.jpg",
+  ]);
+  assert.match(liveCheckout.sourceBoundary, /outside the public runtime manifest/i);
+  assert.match(liveCheckout.privacyTreatment, /blue-top shopper/i);
+  assert.equal(manifest.items["payment-evidence-live-checkout-image-only-r1649d"], undefined);
+  assert.match(app, /const owner=source\.recognition\.href\?element\('a','outcome-recognition-proof__link'\)/);
+  assert.match(app, /owner\.append\(media\)[^\n]*owner\.append\(copy\)[^\n]*proof\.append\(owner\)/);
+  assert.match(projectDetailCss, /\.outcome-recognition-proof__link:focus-visible\{/);
   assert.equal(manifest.items["payment-return-recovery-human-r1649d"].sectionUsage, "decision-03-proof-only");
 });
 

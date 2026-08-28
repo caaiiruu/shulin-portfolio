@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-27-r1832-human-visual-remediation",
+  "contentVersion": "2026-08-28-r1833b7-payment-human-qa-remediation",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -1308,11 +1308,11 @@
       "sectionUsage": "evidence-research-synthesis",
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence"
     },
-    "payment-evidence-live-checkout-image-only-r1649d": {
-      "id": "payment-evidence-live-checkout-image-only-r1649d",
+    "payment-evidence-live-checkout-privacy-safe-v1": {
+      "id": "payment-evidence-live-checkout-privacy-safe-v1",
       "projectId": "payment",
       "type": "image/webp",
-      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-image-only-r1649d.webp",
+      "publicPath": "/site/assets/projects/payment/payment-evidence-live-checkout-privacy-safe-v1.webp",
       "aspectRatio": "16:9",
       "assetStatus": "production",
       "implementationStatus": "real-active",
@@ -1321,7 +1321,7 @@
       "publicBuild": true,
       "width": 1600,
       "height": 900,
-      "sha256": "32139b3fd14c84141b28f2430b44771ff170771fccd4d96f21902a341e3cf32e",
+      "sha256": "b42bd0cab1c0ef3f48a8fd8f396d171f07934bc5494cd1976944c4aee8d7d53b",
       "alt": "Two live-store research photographs showing cashier and self-checkout payment behaviour.",
       "alt_zh": "兩張門市研究照片，呈現人工收銀與自助結帳的付款行為。",
       "sourcePackage": "payment_visual_evidence_package_v3.zip",
@@ -1329,10 +1329,12 @@
         "01_selected_sources/live_store_research_photo_01.jpg",
         "01_selected_sources/live_store_research_photo_02.jpg"
       ],
-      "privacyTreatment": "Human-approved source photographs; image-only crop contains no editorial overlay.",
+      "privacyTreatment": "Deterministic face-only Gaussian blur obscures the blue-top shopper in the right-hand photograph; the back-of-head view requires no additional face mask. The white-top researcher, clothing, body and store context remain unblurred.",
+      "derivativeStatus": "privacy-safe-face-blur-v1",
+      "sourceBoundary": "Original source remains preserved in payment_visual_evidence_package_v3.zip and Git history, outside the public runtime manifest.",
       "sectionUsage": "evidence-live-checkout",
       "contentSsotReference": "projects.payment.publicContent.decisionEvidence",
-      "humanApprovalStatus": "pending-re-review"
+      "humanApprovalStatus": "human-authorized-r183.3b.7"
     },
     "payment-return-recovery-human-r1649d": {
       "id": "payment-return-recovery-human-r1649d",

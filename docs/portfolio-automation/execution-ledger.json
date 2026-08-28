@@ -1105,6 +1105,14 @@
           "scope": "Payment final visual closure and governed horizontal boundary calibration",
           "contracts": ["Live validation editorial composite", "content-fitted editorial quotations", "project-editorial-composite-aspect", "case-content-anchor-inline"],
           "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        },
+        {
+          "round": "R183.3B.7",
+          "startingCommit": "a1d7d8b0801e75f4c4acb57f0c11cd19d96d136d",
+          "startingTree": "14b91efe2db35c7142839b442530bd12f988a6f4",
+          "scope": "Payment final Human QA remediation only",
+          "contracts": ["four-peer Evidence grid", "shared Evidence media frame", "RecognitionProof whole-block link", "StructuredEvidence full-width quotation family", "payment-evidence-live-checkout-privacy-safe-v1"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
         }
       ],
       "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW",
