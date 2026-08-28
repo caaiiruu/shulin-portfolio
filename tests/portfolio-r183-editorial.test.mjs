@@ -49,6 +49,7 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.match(projectDetailCss, /\.voucher-r149-metrics,\.voucher-r149-findings,\.voucher-r149-foundations\{grid-template-columns:1fr\}/);
   assert.match(projectDetailCss, /\.structured-evidence-quotes\{[^}]*width:100%[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)[^}]*align-items:start/);
   assert.match(projectDetailCss, /\.structured-evidence-quote\{[^}]*height:auto/);
+  assert.match(projectDetailCss, /\.structured-evidence-quote blockquote\{width:100%;max-width:none;padding:0\}/);
   assert.match(projectDetailCss, /\.case-reading-wrapper[^}]*margin-inline:var\(--case-content-anchor-inline\)/);
   assert.equal(manifest.items["payment-live-interview-privacy-safe-v1"].derivativeStatus, "privacy-safe-face-blur-v1");
   assert.match(manifest.items["payment-live-interview-privacy-safe-v1"].sourceBoundary, /source is preserved outside the public build/i);
@@ -64,6 +65,8 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.match(app, /const owner=source\.recognition\.href\?element\('a','outcome-recognition-proof__link'\)/);
   assert.match(app, /owner\.append\(media\)[^\n]*owner\.append\(copy\)[^\n]*proof\.append\(owner\)/);
   assert.match(projectDetailCss, /\.outcome-recognition-proof__link:focus-visible\{/);
+  assert.match(projectDetailCss, /\.outcome-recognition-proof__link:is\(:hover,:focus-visible\) \.outcome-recognition-proof__cta::after\{[^}]*transform:scaleX\(1\)/);
+  assert.doesNotMatch(projectDetailCss, /\.outcome-recognition-proof__link:is\(:hover,:focus-visible\) \.outcome-recognition-proof__cta\{[^}]*text-decoration:underline/);
   assert.equal(manifest.items["payment-return-recovery-human-r1649d"].sectionUsage, "decision-03-proof-only");
 });
 
