@@ -7,6 +7,8 @@ const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.
 const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
 const ledger=JSON.parse(fs.readFileSync('docs/portfolio-automation/execution-ledger.json','utf8'));
 const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-project-truth.json','utf8'));
+const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+const projectDetailCss=fs.readFileSync('public/site/assets/css/components/project-detail-overview.css','utf8');
 const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
@@ -82,6 +84,12 @@ test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detai
 test('R182.6 restores final Payment semantics and retires stale Payment and Voucher requests',()=>{
   const payment=content.projects.payment;
   const decisions=payment.decisionNarrative.primaryDecisions;
+  assert.equal(payment.title.en,'Unifying App, cashier and self-checkout into one payment system');
+  assert.equal(payment.atAGlance.en,'Led 0→1 design of FairPrice’s payment system across App, cashier and self-checkout, reaching ~190 stores and ~228K monthly transactions at 98.5% success while cutting checkout time from 19.78 sec to 7.29 sec.');
+  assert.equal(payment.infoGrid.type.value,'Transaction System');
+  assert.equal(payment.infoGrid.timeline.duration.en,'1 year');
+  assert.equal(payment.infoGrid.timeline.dateRange.en,'Dec 2020–Nov 2021');
+  assert.equal(payment.presentation.contentRefs.decisions,'decisionNarrative.primaryDecisions');
   assert.equal(decisions.length,4);
   assert.deepEqual(decisions.map(item=>item.title.en),[
     'Orchestrate one shared transaction across App, cashier and self-checkout',
@@ -93,6 +101,7 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(payment.publicContent.coreSystemInsight.evidence[0].assetId,'payment-core-checkout-compression-approved-v3');
   assert.equal(payment.publicContent.coreSystemInsight.showInsightLabel,false);
   assert.equal(payment.publicContent.coreSystemInsight.showVisualProofLabel,false);
+  assert.equal(payment.publicContent.coreSystemInsight.evidence[0].presentation,'raw');
   assert.deepEqual(payment.publicContent.decisionEvidence.items.map(item=>item.assetId),[
     'payment-evidence-live-checkout-image-only-r1649d',
     'payment-evidence-journey-synthesis-r1649c',
@@ -100,10 +109,22 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
     'payment-return-recovery-human-r1649d'
   ]);
   assert.equal(payment.publicContent.decisionEvidence.quotes.length,2);
+  assert.ok(payment.publicContent.decisionEvidence.quotes.every(item=>item.role.en==='SHOPPER VOICE'));
+  assert.match(app,/element\('figure','structured-evidence-quote'\)/);
+  assert.match(app,/element\('blockquote','',t\(item\.quote\)\)/);
+  assert.match(projectDetailCss,/\.structured-evidence-quote blockquote\{/);
   assert.deepEqual(payment.publicContent.decisionEvidence.validationLayer.metrics.map(item=>item.value),['87.5%','85.7%']);
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured[0].value,'70.2');
-  assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).value,'12.49 sec');
+  assert.deepEqual(payment.publicContent.outcomes.semanticHierarchy.measured.map(item=>item.value),['70.2','~190','~57K','~228K','98.5%','2.7× faster']);
+  assert.equal(payment.publicContent.outcomes.semanticHierarchy.measured.at(-1).supportingCopy.en,'19.78 sec → 7.29 sec');
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.ctaLabel.en,'View award announcement ↗');
+  assert.equal(payment.relatedProjects[0].projectId,'voucher');
+  assert.deepEqual(Object.keys(payment.decisionEvidenceMap),['payment-r1641-decision-01','payment-r1641-decision-02','payment-r1641-decision-03']);
+  assert.equal(payment.decisionEvidenceMap['payment-r1641-decision-03'].publicAssetId,'payment-return-recovery-human-r1649d');
+  assert.equal(payment.decisionEvidenceMap['payment-r1641-decision-04'],undefined);
+  assert.match(decisions[3].whatIDecided.en,/Payments Engineering, POS, Finance, Security, Customer Service, NCR and store-operation stakeholders/);
+  assert.match(decisions[3].whyThisChoice.en,/internal operational interfaces for transaction review and refund handling/);
+  assert.equal(payment.latestConfirmedCorrection.supersededTitle,'Transaction continuity across App and in-store checkout');
   assert.doesNotMatch(JSON.stringify(payment),/Key in Payment ref\./);
 
   const restoredAssets=[
