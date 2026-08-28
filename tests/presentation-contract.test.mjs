@@ -47,10 +47,10 @@ test('protects the Human-approved baseline',()=>{
   assert.equal(baseline.homepage.headline.zh,'把混亂轉化為清晰的系統');
   assert.equal(baseline.homepage.cta.en,'Explore domain experience');
   assert.equal(baseline.protectedTruths['booking-taxi-pickup-service-strategy.infoGrid.type.value'],'Product Optimisation');
-  assert.equal(baseline.protectedTruths['payment.infoGrid.type.value'],'0→1 Product');
+  assert.equal(baseline.protectedTruths['payment.infoGrid.type.value'],'Transaction System');
   assert.equal(baseline.protectedTruths['ctbc-mortgage-self-service-app.publicContent.decisionEvidence.structuredGroups.0.heading.en'],'Application model before screens');
   assert.equal(ssot.projects['booking-taxi-pickup-service-strategy'].infoGrid.type.value,'Product Optimisation');
-  assert.equal(ssot.projects.payment.infoGrid.type.value,'0→1 Product');
+  assert.equal(ssot.projects.payment.infoGrid.type.value,'Transaction System');
   assert.equal(ssot.projects['ctbc-mortgage-self-service-app'].publicContent.decisionEvidence.structuredGroups[0].heading.en,'Application model before screens');
 });
 

@@ -14622,8 +14622,8 @@
       "projectRelationship": "independent-project",
       "parentProject": null,
       "title": {
-        "en": "Transaction continuity across App and in-store checkout",
-        "zh": "串連 App 與門市結帳的交易連續性"
+        "en": "Unifying App, cashier and self-checkout into one payment system",
+        "zh": "將 App、人工收銀與自助結帳整合為一套付款系統"
       },
       "problemTypes": {
         "en": [
@@ -14638,12 +14638,12 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the 0→1 product design of FairPrice’s in-store payment system, connecting App payment entry with cashier and self-checkout execution, benefit visibility and transaction recovery across ~190 stores.",
-        "zh": "主導 FairPrice 門市付款系統的 0→1 產品設計，串接 App 付款入口、人工收銀與自助結帳執行、權益顯示及交易復原，推展至約 190 間門市。"
+        "en": "Led 0→1 design of FairPrice’s payment system across App, cashier and self-checkout, reaching ~190 stores and ~228K monthly transactions at 98.5% success while cutting checkout time from 19.78 sec to 7.29 sec.",
+        "zh": "主導 FairPrice 付款系統的 0→1 設計，橫跨 App、人工收銀與自助結帳，推展至約 190 間門市及每月約 22.8 萬筆交易，交易成功率達 98.5%，並將結帳時間從 19.78 秒縮短至 7.29 秒。"
       },
       "infoGrid": {
         "type": {
-          "value": "0→1 Product",
+          "value": "Transaction System",
           "visibility": "info-grid-only",
           "rationale": {
             "en": "Manages a stateful exchange such as payment, booking, entitlement, purchase or account completion.",
@@ -14672,8 +14672,8 @@
         },
         "timeline": {
           "duration": {
-            "en": "Dec 2020–Nov 2021",
-            "zh": "2020 年 12 月至 2021 年 11 月"
+            "en": "1 year",
+            "zh": "1 年"
           },
           "dateRange": {
             "en": "Dec 2020–Nov 2021",
@@ -15788,7 +15788,7 @@
                 }
               },
               {
-                "value": "12.49 sec",
+                "value": "2.7× faster",
                 "label": {
                   "en": "faster checkout",
                   "zh": "結帳加快"
@@ -16576,9 +16576,10 @@
         "related-work"
       ],
       "latestConfirmedCorrection": {
-        "round": "R164.9",
-        "date": "2026-08-20",
-        "summary": "Integrated Human-approved transaction-compression proof, focused validation, verified real recovery UI, outcome hierarchy and team recognition from stabilized QA.",
+        "round": "R183.3B.3",
+        "date": "2026-08-28",
+        "summary": "Recovered the Human-approved Payment baseline and applied the latest approved Hero title and At a Glance summary.",
+        "supersededTitle": "Transaction continuity across App and in-store checkout",
         "productionMutable": false
       },
       "domain": {
@@ -22402,7 +22403,7 @@
         },
         "protectedTruths": {
           "booking-taxi-pickup-service-strategy.infoGrid.type.value": "Product Optimisation",
-          "payment.infoGrid.type.value": "0→1 Product",
+          "payment.infoGrid.type.value": "Transaction System",
           "ctbc-mortgage-self-service-app.publicContent.decisionEvidence.structuredGroups.0.heading.en": "Application model before screens"
         }
       }

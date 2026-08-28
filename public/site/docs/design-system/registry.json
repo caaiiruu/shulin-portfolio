@@ -193,10 +193,10 @@
         "semanticRole": "Evidence / Artefact",
         "acceptedContentTypes": ["shipped-ui", "research-synthesis", "prototype", "workshop-artifact", "framework", "text-only"],
         "requiredData": ["verified source content"],
-        "optionalData": ["assetId", "caption", "metrics", "decision mapping"],
+        "optionalData": ["assetId", "caption", "metrics", "decision mapping", "editorial quotations"],
         "allowedArchetypes": ["primary", "experiment"],
-        "variants": ["default", "ordered-visual-proofs", "decision-support", "image-text", "text-only"],
-        "variantConsumers": {"default": ["primaryDetails"], "ordered-visual-proofs": ["primaryDetails"], "decision-support": ["primaryDetails"], "image-text": ["primaryDetails"], "text-only": ["primaryDetails", "experimentDetails"]},
+        "variants": ["default", "ordered-visual-proofs", "decision-support", "image-text", "text-only", "editorial-quotation"],
+        "variantConsumers": {"default": ["primaryDetails"], "ordered-visual-proofs": ["primaryDetails"], "decision-support": ["primaryDetails"], "image-text": ["primaryDetails"], "text-only": ["primaryDetails", "experimentDetails"], "editorial-quotation": ["primaryDetails"]},
         "consumerGroups": ["primaryDetails", "experimentDetails"],
         "discoveryMarkers": ["structured-evidence-v223", "TextEvidence"],
         "regressionProfiles": ["projectDetailStructure"],
@@ -206,7 +206,7 @@
         "usageScope": ["Evidence semantic slot"],
         "fallbackComponent": "TextEvidence",
         "forbiddenUsage": ["Synthetic proof", "raw confidential detail", "blank media frame"],
-        "protectedBehavior": ["Public-safe evidence", "Meaningful composition", "Mobile stacking"],
+        "protectedBehavior": ["Public-safe evidence", "Meaningful composition", "Editorial quotation semantics", "Mobile stacking"],
         "figmaMapping": null
       },
       "Decision": {
