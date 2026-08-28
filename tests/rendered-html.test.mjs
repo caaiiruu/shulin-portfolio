@@ -1333,9 +1333,9 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
       assert.ok(visual.caption.en && visual.caption.zh, stage.id);
       assert.ok(visual.alt.en && visual.alt.zh, stage.id);
       assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
-      assert.equal(manifest.items[visual.assetId].implementationStatus, "real-active");
-      assert.ok(manifest.items[visual.assetId].publicPath);
-      assert.equal(manifest.items[visual.assetId].replacementRequired, false);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+      assert.equal(manifest.items[visual.assetId].publicPath, null);
+      assert.equal(manifest.items[visual.assetId].replacementRequired, true);
     }
   }
   assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
@@ -1506,7 +1506,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   const css=read("assets/css/components/project-card.css");
   const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const asset=manifest.items["voucher-hero-incentive-journey-public-v1"];
-  assert.equal(asset.sha256,"4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8");
+  assert.equal(asset.sha256,"ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409");
   assert.equal(asset.implementationStatus,"real-active");
   assert.doesNotMatch(work,/work-artifact--voucher/);
   assert.match(work,/data-frame-role="project-cover"/);
