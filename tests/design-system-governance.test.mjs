@@ -82,8 +82,8 @@ test("impact validation rejects broken graph references and duplicate intent own
   }
 });
 
-test("stable Human-approved geometry uses component-intent tokens without changing values", () => {
-  for (const token of ["project-card-body-gap", "project-card-cta-gap", "info-grid-cell-gap", "project-overview-title-summary-gap", "decision-card-gap", "decision-card-padding-block", "outcome-metric-gap", "floating-nav-shell-inset", "floating-nav-rail-gap", "floating-nav-item-padding-block", "floating-nav-item-padding-inline"]) {
+test("Human-approved geometry uses governed component-intent tokens", () => {
+  for (const token of ["project-card-body-gap", "project-card-cta-gap", "info-grid-cell-gap", "project-overview-title-summary-gap", "decision-card-gap", "decision-card-padding-block", "outcome-metric-gap", "floating-nav-shell-inset", "floating-nav-shell-padding-inline", "floating-nav-rail-gap", "floating-nav-item-padding-block", "floating-nav-item-padding-inline"]) {
     assert.match(tokens, new RegExp(`--${token}:`));
   }
   assert.match(projectCard, /margin-top:var\(--project-card-body-gap\)/);
@@ -93,6 +93,8 @@ test("stable Human-approved geometry uses component-intent tokens without changi
   assert.match(overview, /gap:var\(--decision-card-gap\)/);
   assert.match(overview, /row-gap:var\(--outcome-metric-gap\)/);
   assert.match(navigator, /bottom:calc\(var\(--floating-nav-shell-inset\)/);
+  assert.match(navigator, /padding:var\(--dimension-2px\) var\(--floating-nav-shell-padding-inline\)/);
+  assert.match(navigator, /scroll-padding-inline:var\(--floating-nav-shell-padding-inline\)/);
   assert.match(navigator, /padding:var\(--floating-nav-item-padding-block\) var\(--floating-nav-item-padding-inline\)/);
   assert.match(projectCard, /\.related-project-card-v45,\.detail-related-card-v45\{[^}]*overflow:hidden;isolation:isolate/);
   assert.match(overview, /\.quick-view-v51--project \.project-summary-v45\{order:1;padding-top:var\(--space-3\)\}/);

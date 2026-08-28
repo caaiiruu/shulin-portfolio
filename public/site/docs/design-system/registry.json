@@ -54,6 +54,7 @@
       "outcome-metric-gap": {"primitive": "space-3", "intent": "OutcomeMetric value-to-label hierarchy", "owner": "OutcomeMetric"},
       "outcome-metric-support-gap": {"primitive": "space-2", "intent": "OutcomeMetric qualitative support hierarchy", "owner": "OutcomeMetric"},
       "floating-nav-shell-inset": {"primitive": "space-3", "intent": "FloatingNavigator viewport and safe-area inset", "owner": "FloatingNavigator"},
+      "floating-nav-shell-padding-inline": {"primitive": "space-1", "intent": "FloatingNavigator balanced outer-shell inline density", "owner": "FloatingNavigator"},
       "floating-nav-rail-gap": {"primitive": "space-2", "intent": "FloatingNavigator item rhythm", "owner": "FloatingNavigator"},
       "project-overview-body-size": {"primitive": "cmp-popup-body-size", "intent": "Shared At a Glance and Info Grid value typography", "owner": "InfoGrid"},
       "project-overview-body-weight": {"primitive": "cmp-popup-body-weight", "intent": "Shared At a Glance and Info Grid value weight", "owner": "InfoGrid"},
@@ -252,8 +253,8 @@
         "registryComponent": "FloatingNavigator",
         "cssOwner": "assets/css/components/domain-selector.css",
         "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
-        "tokenDependencies": ["floating-nav-shell-inset", "floating-nav-rail-gap", "control-height", "radius-pill", "motion-base"],
-        "componentIntentTokens": ["floating-nav-shell-inset", "floating-nav-rail-gap"],
+        "tokenDependencies": ["floating-nav-shell-inset", "floating-nav-shell-padding-inline", "floating-nav-rail-gap", "control-height", "radius-pill", "motion-base"],
+        "componentIntentTokens": ["floating-nav-shell-inset", "floating-nav-shell-padding-inline", "floating-nav-rail-gap"],
         "variants": ["Domain", "Project detail"],
         "variantConsumers": {"Domain": ["domainNavigation"], "Project detail": ["primaryDetails"]},
         "consumerGroups": ["domainNavigation", "primaryDetails"],
@@ -1102,7 +1103,7 @@
         "Domain supplies domain item state; Project derives Overview, Complexity, Decisions, Evidence, Outcomes and Ownership targets from the canonical recruiter-first section contract and supplies aria-current",
         "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior",
         "Homepage Domain rail and floating rail are both generated from the same domainSource canonical IDs; legacy shorthand IDs and legacy rail selectors are forbidden.",
-        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing."
+        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; floating-nav-shell-padding-inline owns balanced symmetric visible edge spacing."
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",

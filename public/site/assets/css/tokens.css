@@ -130,6 +130,7 @@
   --outcome-metric-gap: var(--space-3);
   --outcome-metric-support-gap: var(--space-2);
   --floating-nav-shell-inset: var(--space-3);
+  --floating-nav-shell-padding-inline: var(--space-1);
   --floating-nav-rail-gap: var(--space-2);
   --floating-nav-item-padding-block: var(--dimension-9px);
   --floating-nav-item-padding-inline: var(--dimension-9px);

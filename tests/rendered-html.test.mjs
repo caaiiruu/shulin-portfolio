@@ -1754,13 +1754,13 @@ test("R161.2.1 converges Domain ProjectCards and floating navigation on canonica
 });
 
 
-test("clamps floating Domain items inside the shared rail safe area", () => {
+test("clamps floating Domain items inside the governed shell edge inset", () => {
   const home = read("assets/js/home.js");
   const domain = read("assets/css/components/domain-selector.css");
   assert.match(home, /const desired=\(selected\.offsetLeft\+\(selected\.offsetWidth\/2\)\)-\(rail\.clientWidth\/2\)/);
   assert.match(home, /return Math\.min\(max,Math\.max\(0,desired\)\)/);
   assert.match(home, /if\(show&&!wasVisible\)syncFloatingDomain\(domain,\{immediate:true\}\)/);
-  assert.match(domain, /\.floating-navigator__rail\{[^}]*box-sizing:border-box[^}]*padding:var\(--dimension-2px\) var\(--interactive-state-safe-area\)[^}]*scroll-padding-inline:var\(--interactive-state-safe-area\)/);
+  assert.match(domain, /\.floating-navigator__rail\{[^}]*box-sizing:border-box[^}]*padding:var\(--dimension-2px\) var\(--floating-nav-shell-padding-inline\)[^}]*scroll-padding-inline:var\(--floating-nav-shell-padding-inline\)/);
   assert.doesNotMatch(home, /domain(?:Floating)?===['"](?:financial-services|enterprise-operations|complex-systems)['"].*(?:scroll|offset|target)/);
 });
 
