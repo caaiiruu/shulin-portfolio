@@ -26,6 +26,15 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
     ["75%", "Rebate awareness"],
     ["37.5%", "Additional value"],
   ]);
+  assert.deepEqual(payment.publicContent.decisionEvidence.researchInsights.validationSignals.metrics.map((item) => item.value), ["87.5%", "85.7%"]);
+  assert.equal(payment.publicContent.decisionEvidence.validationLayer, undefined);
+  assert.deepEqual(payment.publicContent.decisionEvidence.items[2].assetIds, [
+    "payment-sco-research-photo-human-approved-v1",
+    "payment-live-interview-privacy-safe-v1",
+  ]);
+  assert.equal(payment.publicContent.decisionEvidence.items[2].presentation, "editorial-pair");
+  assert.equal(manifest.items["payment-live-interview-privacy-safe-v1"].derivativeStatus, "privacy-safe-face-blur-v1");
+  assert.match(manifest.items["payment-live-interview-privacy-safe-v1"].sourceBoundary, /source is preserved outside the public build/i);
   assert.equal(manifest.items["payment-return-recovery-human-r1649d"].sectionUsage, "decision-03-proof-only");
 });
 

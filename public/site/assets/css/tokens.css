@@ -165,6 +165,8 @@
   --radius-panel: var(--radius-lg);
   --radius-control: var(--radius-pill);
   --radius-icon: var(--radius-pill);
+  --project-media-radius: var(--radius-lg);
+  --inline-metric-emphasis-surface: var(--brand-100);
   --header-height: 72px;
   --control-height: 48px;
   --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus) 28%, transparent);
