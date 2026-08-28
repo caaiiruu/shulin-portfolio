@@ -15,7 +15,7 @@ test('R182 applies the Human-approved Primary content package atomically',()=>{
   assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
-  assert.equal(content.projects.voucher.title.en,'Voucher rules to reusable incentive behaviour');
+  assert.equal(content.projects.voucher.title.en,'From fragmented campaign logic to a reusable incentive system');
   assert.equal(content.projects.booking.role,'UX Designer');
   assert.equal(content.projects.bandzo.infoGrid.timeline.dateRange.en,'Sep 2016–Jan 2017');
 });
@@ -52,7 +52,7 @@ test('Production and asset mutation remain unauthorized',()=>{
 
 test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detail slot',()=>{
   const expected={
-    voucher:['voucher-hero-incentive-journey-public-v1','voucher-lead-visual-incentive-ecosystem-public-v1.jpg','4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8'],
+    voucher:['voucher-hero-incentive-journey-public-v1','voucher-offer-work-card-primary-01.jpeg','ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409'],
     'voucher-center':['voucher-center-hero-centralised-discovery-public-v1','voucher-center-lead-visual-claim-journey-public-v1.jpg','0baae930d225c7fa67222e112afbdab562bb8b7511ad1c270bd6bfd92f8f1ec2'],
     'game-center':['gamecenter-hero-shipped-before-after-public-v1','game-center-lead-visual-multi-game-discovery-public-v1.jpg','063b8259d3505d9cb4dfdb9bd2a5995391cf342f1d0f54bb124b010f417ced17'],
     dbs:['dbs-project-card-primary-01','dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg','79f35586b956d33143655de49f28cce77c2fc8b14c79f76823f50b8d8dc95039'],
@@ -71,7 +71,8 @@ test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detai
     const project=content.projects[projectId];
     assert.equal(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId,assetId);
     const asset=manifest.items[assetId];
-    assert.deepEqual({projectId:asset.projectId,type:asset.type,aspectRatio:asset.aspectRatio,assetStatus:asset.assetStatus,implementationStatus:asset.implementationStatus,placeholderFallbackAssetId:asset.placeholderFallbackAssetId,replacementRequired:asset.replacementRequired,publicBuild:asset.publicBuild,width:asset.width,height:asset.height},{projectId,type:'image/jpeg',aspectRatio:'16:9',assetStatus:'production',implementationStatus:'real-active',placeholderFallbackAssetId:null,replacementRequired:false,publicBuild:true,width:2048,height:1152});
+    const expectedGeometry=projectId==='voucher'?{aspectRatio:'wide',width:1536,height:691}:{aspectRatio:'16:9',width:2048,height:1152};
+    assert.deepEqual({projectId:asset.projectId,type:asset.type,aspectRatio:asset.aspectRatio,assetStatus:asset.assetStatus,implementationStatus:asset.implementationStatus,placeholderFallbackAssetId:asset.placeholderFallbackAssetId,replacementRequired:asset.replacementRequired,publicBuild:asset.publicBuild,width:asset.width,height:asset.height},{projectId,type:'image/jpeg',...expectedGeometry,assetStatus:'production',implementationStatus:'real-active',placeholderFallbackAssetId:null,replacementRequired:false,publicBuild:true});
     assert.ok(asset.publicPath.endsWith(`/${filename}`));
     assert.equal(asset.sha256,sha256);
     assert.ok(asset.alt&&asset.alt_zh);
@@ -165,24 +166,38 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
 
   const retiredIds=[
     'payment-evidence-order-history-public-v1',
-    'payment-video-core-app-pos-public-v1',
-    'voucher-proof-sec-transformation-public-v1',
-    'voucher-framework-error-recovery-public-v1',
-    'voucher-framework-pdp-contextual-discovery-public-v1',
-    'voucher-framework-voucher-details-evolution-public-v1',
-    'voucher-framework-voucher-condition-action-matrix-public-v1',
-    'voucher-framework-mechanism-transition-public-v1',
-    'voucher-framework-channel-redemption-public-v1',
-    'voucher-framework-voucher-card-system-public-v1',
-    'voucher-framework-voucher-card-research-evidence-public-v1',
-    'voucher-evidence-component-properties-public-v1',
-    'voucher-evidence-operations-reuse-public-v1',
-    'voucher-stage-review-post-use-public-v1'
+    'payment-video-core-app-pos-public-v1'
   ];
   for(const id of retiredIds){
     assert.equal(manifest.items[id],undefined);
     assert.doesNotMatch(JSON.stringify(content),new RegExp(id));
     assert.doesNotMatch(JSON.stringify(truth),new RegExp(id));
   }
-  assert.equal(Object.values(manifest.items).filter(asset=>['payment','voucher'].includes(asset.projectId)&&asset.implementationStatus==='placeholder-active').length,0);
+  assert.equal(Object.values(manifest.items).filter(asset=>asset.projectId==='payment'&&asset.implementationStatus==='placeholder-active').length,0);
+});
+
+test('R183.4 freezes accepted Payment and restores the Human-approved Voucher baseline',()=>{
+  const paymentFreeze=ledger.lockedProjectBoundaries.find(item=>item.projectId==='payment');
+  const paymentApproval=ledger.humanImplementationAuthorizations.find(item=>item.approvalId==='PA-20260828-PAYMENT-HR01');
+  assert.deepEqual({content:paymentFreeze.content,visuals:paymentFreeze.visuals,interactions:paymentFreeze.interactions,exactHead:paymentFreeze.exactHead},{content:'FROZEN',visuals:'FROZEN',interactions:'FROZEN',exactHead:'5492fd5d4609c8141b21c496fdafd4422c9eba72'});
+  assert.equal(paymentApproval.humanAcceptance,'ACCEPTED');
+  assert.equal(paymentApproval.freezeStatus,'FROZEN');
+
+  const voucher=content.projects.voucher;
+  assert.equal(voucher.title.en,'From fragmented campaign logic to a reusable incentive system');
+  assert.equal(voucher.title.zh,'從分散的活動規則，到可重用的獎勵系統');
+  assert.match(voucher.atAGlance.en,/three-year evolution of FairPrice’s incentive experience/);
+  assert.deepEqual(voucher.problemTypes.en,['Fragmented voucher rules','Eligibility ambiguity','Cross-channel redemption']);
+  assert.deepEqual(voucher.infoGrid.audience.secondary.en,['Operations','Marketing','Product','Business','Sponsors']);
+  assert.deepEqual(voucher.infoGrid.timeline,{duration:{en:'3 years',zh:'3 年'},dateRange:{en:'',zh:''},status:'source-preserved'});
+  assert.deepEqual(voucher.sectionOrder,['hero','what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence']);
+  assert.equal(voucher.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(voucher.publicContent.journeyChapters.slice(1).map(item=>item.visualEvidence.primary.assetId),['voucher-framework-voucher-condition-action-matrix-public-v1','voucher-framework-mechanism-transition-public-v1','voucher-framework-error-recovery-public-v1','voucher-stage-review-post-use-public-v1']);
+  assert.equal(voucher.publicContent.systemBehindJourney.summary.en,'Converted fragmented customer, commercial and implementation knowledge into shared definitions, rules, states and reusable delivery patterns.');
+  assert.equal(voucher.whatThisProves.en,'Turning fragmented incentive rules into a reusable cross-channel product model.');
+
+  const lead=manifest.items['voucher-hero-incentive-journey-public-v1'];
+  assert.equal(lead.publicPath,'/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg');
+  assert.deepEqual([lead.aspectRatio,lead.width,lead.height,lead.sha256],['wide',1536,691,'ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409']);
+  assert.equal(crypto.createHash('sha256').update(fs.readFileSync(`public${lead.publicPath}`)).digest('hex'),lead.sha256);
 });
