@@ -2859,7 +2859,7 @@
     const grid=element('div','voucher-r149-foundations');
     evidenceItems.forEach(item=>{
       const presentation=item.presentation||'default';
-      const card=element('article',`voucher-r149-foundation${presentation==='natural-ratio'?' voucher-r149-foundation--natural-ratio':''}${presentation==='editorial-pair'?' voucher-r149-foundation--editorial-pair':''}`);
+      const card=element('article',`voucher-r149-foundation${presentation==='natural-ratio'?' voucher-r149-foundation--natural-ratio':''}${presentation==='editorial-pair'?' voucher-r149-foundation--editorial-pair':''}${presentation==='editorial-composite'?' voucher-r149-foundation--editorial-composite':''}`);
       card.dataset.evidencePresentation=item.presentation||'default';
       if(item.id)card.dataset.evidenceBlockId=item.id;
       const media=element('div',`voucher-r149-foundation__media${presentation==='editorial-pair'?' voucher-r149-foundation__media--group':''}`);
