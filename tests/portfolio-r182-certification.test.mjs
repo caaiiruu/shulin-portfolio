@@ -15,7 +15,7 @@ test('R182 applies the Human-approved Primary content package atomically',()=>{
   assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
-  assert.equal(content.projects.voucher.title.en,'From fragmented campaign logic to a reusable incentive system');
+  assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
   assert.equal(content.projects.booking.role,'UX Designer');
   assert.equal(content.projects.bandzo.infoGrid.timeline.dateRange.en,'Sep 2016–Jan 2017');
 });
@@ -176,7 +176,7 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(Object.values(manifest.items).filter(asset=>asset.projectId==='payment'&&asset.implementationStatus==='placeholder-active').length,0);
 });
 
-test('R183.4 freezes accepted Payment and restores the Human-approved Voucher baseline',()=>{
+test('R183.4C keeps Payment frozen and restores the final Human-approved Voucher presentation',()=>{
   const paymentFreeze=ledger.lockedProjectBoundaries.find(item=>item.projectId==='payment');
   const paymentApproval=ledger.humanImplementationAuthorizations.find(item=>item.approvalId==='PA-20260828-PAYMENT-HR01');
   assert.deepEqual({content:paymentFreeze.content,visuals:paymentFreeze.visuals,interactions:paymentFreeze.interactions,exactHead:paymentFreeze.exactHead},{content:'FROZEN',visuals:'FROZEN',interactions:'FROZEN',exactHead:'5492fd5d4609c8141b21c496fdafd4422c9eba72'});
@@ -184,20 +184,31 @@ test('R183.4 freezes accepted Payment and restores the Human-approved Voucher ba
   assert.equal(paymentApproval.freezeStatus,'FROZEN');
 
   const voucher=content.projects.voucher;
-  assert.equal(voucher.title.en,'From fragmented campaign logic to a reusable incentive system');
-  assert.equal(voucher.title.zh,'從分散的活動規則，到可重用的獎勵系統');
-  assert.match(voucher.atAGlance.en,/three-year evolution of FairPrice’s incentive experience/);
-  assert.deepEqual(voucher.problemTypes.en,['Fragmented voucher rules','Eligibility ambiguity','Cross-channel redemption']);
-  assert.deepEqual(voucher.infoGrid.audience.secondary.en,['Operations','Marketing','Product','Business','Sponsors']);
-  assert.deepEqual(voucher.infoGrid.timeline,{duration:{en:'3 years',zh:'3 年'},dateRange:{en:'',zh:''},status:'source-preserved'});
+  assert.equal(voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
+  assert.equal(voucher.title.zh,'從分散的優惠券旅程到可重用的獎勵生態系');
+  assert.match(voucher.atAGlance.en,/~125K digital redemptions in the final three weeks of 2023, \+90\.9% redemption-share change and ~167% add-to-cart uplift/);
+  assert.match(voucher.atAGlance.zh,/約 12\.5 萬次數位兌換、\+90\.9% 兌換占比變化與約 167% 加入購物車提升/);
+  assert.deepEqual(voucher.problemTypes.en,['Incentive systems','Voucher lifecycle','Commerce operations']);
+  assert.deepEqual(voucher.infoGrid.audience.secondary.en,['Voucher operations']);
+  assert.deepEqual(voucher.infoGrid.timeline,{duration:{en:'2022–2025',zh:'2022–2025 年'},dateRange:{en:'2022–2025',zh:'2022–2025 年'},status:'human-approved-r182'});
+  assert.deepEqual(voucher.publicContent.hero.infoGrid.timeline,{en:'2022–2025',zh:'2022–2025'});
   assert.deepEqual(voucher.sectionOrder,['hero','what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence']);
   assert.equal(voucher.decisionNarrative.primaryDecisions.length,3);
-  assert.deepEqual(voucher.publicContent.journeyChapters.slice(1).map(item=>item.visualEvidence.primary.assetId),['voucher-framework-voucher-condition-action-matrix-public-v1','voucher-framework-mechanism-transition-public-v1','voucher-framework-error-recovery-public-v1','voucher-stage-review-post-use-public-v1']);
-  assert.equal(voucher.publicContent.systemBehindJourney.summary.en,'Converted fragmented customer, commercial and implementation knowledge into shared definitions, rules, states and reusable delivery patterns.');
-  assert.equal(voucher.whatThisProves.en,'Turning fragmented incentive rules into a reusable cross-channel product model.');
+  assert.deepEqual(voucher.publicContent.journeyChapters.slice(1).map(item=>item.visualEvidence.primary.assetId),['voucher-offer-reusable-system-shared-rules-01','voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01','voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01','voucher-offer-stage-review-payment-voucher-selection-review-shipped-01']);
+  assert.match(voucher.publicContent.coreSystemInsight.insight.en,/could not be solved screen by screen/);
+  assert.match(voucher.publicContent.coreSystemInsight.whatThisChanged.en,/reusable foundations across shopping touchpoints/);
+  assert.equal(voucher.whatThisProves.en,'Turning campaign-specific incentive rules into a reusable cross-channel product model.');
 
   const lead=manifest.items['voucher-hero-incentive-journey-public-v1'];
   assert.equal(lead.publicPath,'/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg');
   assert.deepEqual([lead.aspectRatio,lead.width,lead.height,lead.sha256],['wide',1536,691,'ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409']);
   assert.equal(crypto.createHash('sha256').update(fs.readFileSync(`public${lead.publicPath}`)).digest('hex'),lead.sha256);
+  assert.match(app,/isRecruiterSystemCase=currentDetail\.type==='project'&&DATA\.projects\[currentDetail\.key\]\?\.archetype==='primary'/);
+  assert.doesNotMatch(app,/isApprovedVoucherProgramme/);
+  assert.match(app,/const canonicalOrder=isVoucher\?\['complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work'\]/);
+  assert.match(app,/child-stage-navigation__previous/);
+  assert.match(app,/child-stage-navigation__next/);
+  assert.doesNotMatch(app,/dataset\.stageBack/);
+  assert.match(projectDetailCss,/\.child-stage-navigation__previous\{grid-column:1;justify-self:start\}/);
+  assert.match(projectDetailCss,/\.child-stage-navigation__next\{grid-column:2;justify-self:end/);
 });

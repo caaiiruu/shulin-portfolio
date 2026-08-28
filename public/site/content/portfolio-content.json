@@ -72,7 +72,7 @@
     "voucher": {
       "valueIBrought": {
         "headline": {
-          "en": "I turned fragmented incentive work into one reusable product direction across five shopping stages.",
+          "en": "I connected campaign and channel rules into one reusable product direction across five shopping stages.",
           "zh": "我將分散的獎勵工作整合為橫跨五個購物階段的單一可重用產品方向。"
         },
         "supportingStatement": {
@@ -82,17 +82,17 @@
       },
       "context": "FairPrice Group",
       "context_zh": "FairPrice Group",
-      "transformation": "From fragmented campaign logic to a reusable incentive system",
-      "transformation_zh": "從分散的活動規則，到可重用的獎勵系統",
+      "transformation": "Fragmented voucher journeys to a reusable incentive ecosystem",
+      "transformation_zh": "從分散的優惠券旅程到可重用的獎勵生態系",
       "problem_types": [
-        "Fragmented voucher rules",
-        "Eligibility ambiguity",
-        "Cross-channel redemption"
+        "Incentive systems",
+        "Voucher lifecycle",
+        "Commerce operations"
       ],
       "problem_types_zh": [
-        "優惠券規則分散",
-        "資格判斷模糊",
-        "跨通路兌換斷裂"
+        "獎勵系統",
+        "優惠券生命週期",
+        "商務營運"
       ],
       "summary": "A multi-year programme turned fragmented customer, commercial and operational evidence into shared cross-channel incentive rules and shipped capabilities.",
       "summary_zh": "一項多年期計畫，將分散的顧客、商業與營運證據轉化為共享的跨通路獎勵規則與正式上線能力。",
@@ -100,15 +100,15 @@
       "role_zh": "資深產品設計師",
       "owned": "Evidence synthesis · Cross-channel system framing · Journey strategy · Initiative design · Workshop co-facilitation · Shared taxonomy and state modelling",
       "owned_zh": "證據統整・跨通路系統定義・旅程策略・產品計畫設計・工作坊共同主持・共享分類與狀態模型",
-      "at_glance": "Led the three-year evolution of FairPrice’s incentive experience, turning fragmented Voucher logic into reusable rules across product, checkout, Wallet and in-store journeys.",
-      "at_glance_zh": "主導 FairPrice 三年期獎勵體驗演進，將分散的 Voucher 邏輯轉化為橫跨商品、結帳、Wallet 與門市旅程的可重用規則。",
+      "at_glance": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
+      "at_glance_zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。",
       "type": "Incentive System",
       "scope": "End-to-end incentive journey",
       "scope_zh": "端到端獎勵旅程",
-      "audience": "Primary: Customers\nSecondary: Operations, Marketing, Product, Engineering",
-      "audience_zh": "主要：顧客\n次要：營運、行銷、產品、工程",
-      "timeline": "3 years",
-      "timeline_zh": "3 年",
+      "audience": "Primary: Customers\nSecondary: Voucher operations",
+      "audience_zh": "主要：顧客\n次要：優惠券營運人員",
+      "timeline": "2022–2025",
+      "timeline_zh": "2022–2025",
       "period": "2022–2025",
       "why": "Voucher rules had evolved separately by campaign and channel, leaving discovery, eligibility, redemption, and internal setup inconsistent across the retail ecosystem.",
       "why_zh": "優惠券規則隨活動與通路各自發展，使探索、資格判斷、兌換與內部設定在整個零售生態中缺乏一致性。",
@@ -121,12 +121,12 @@
             "zh": "多年期獎勵系統計畫・2022–2025"
           },
           "title": {
-            "en": "From fragmented campaign logic to a reusable incentive system",
-            "zh": "從分散的活動規則，到可重用的獎勵系統"
+            "en": "Fragmented voucher journeys to a reusable incentive ecosystem",
+            "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
           },
           "atAGlance": {
-            "en": "Led the three-year evolution of FairPrice’s incentive experience, turning fragmented Voucher logic into reusable rules across product, checkout, Wallet and in-store journeys.",
-            "zh": "主導 FairPrice 三年期獎勵體驗演進，將分散的 Voucher 邏輯轉化為橫跨商品、結帳、Wallet 與門市旅程的可重用規則。"
+            "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
+            "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。"
           },
           "infoGrid": {
             "type": {
@@ -138,12 +138,12 @@
               "zh": "端到端獎勵旅程"
             },
             "audience": {
-              "en": "Primary: Customers\nSecondary: Operations, Marketing, Product, Engineering",
-              "zh": "主要：顧客\n次要：營運、行銷、產品、工程"
+              "en": "Primary: Customers\nSecondary: Voucher operations",
+              "zh": "主要：顧客\n次要：優惠券營運人員"
             },
             "timeline": {
-              "en": "3 years",
-              "zh": "3 年"
+              "en": "2022–2025",
+              "zh": "2022–2025"
             }
           },
           "whyItMattered": {
@@ -190,7 +190,15 @@
               "zh": "狀態與名詞隨通路改變"
             }
           ],
-          "contentStatus": "approved"
+          "contentStatus": "approved",
+          "insight": {
+            "en": "Voucher experience could not be solved screen by screen.",
+            "zh": "優惠券體驗無法逐一畫面解決。"
+          },
+          "whatThisChanged": {
+            "en": "Recurring incentive rules, states and behaviours needed reusable foundations across shopping touchpoints.",
+            "zh": "反覆出現的獎勵規則、狀態與行為，需要成為跨購物接觸點可重用的基礎。"
+          }
         },
         "evidenceToStrategy": {
           "title": {
@@ -205,7 +213,7 @@
                 "zh": "盤點系統"
               },
               "content": {
-                "en": "Mapped how issuance mechanisms, Voucher types, product services, payment paths and redemption locations intersected across Online Grocery, Scan & Go, LinkPay and Kopitiam.",
+                "en": "Mapping issuance, qualification, payment and redemption across Online Grocery, Scan & Go, LinkPay and Kopitiam exposed which rules had to become reusable product behaviour.",
                 "zh": "盤點發放機制、優惠券類型、產品服務、付款路徑與兌換地點，如何橫跨 Online Grocery、Scan & Go、LinkPay 與 Kopitiam。"
               },
               "assetIds": [
@@ -219,7 +227,7 @@
                 "zh": "對齊假設"
               },
               "content": {
-                "en": "Co-planned and co-facilitated a cross-functional workshop that synthesised prior research, shared pain points and journey-specific opportunities into five experience principles and initial product directions.",
+                "en": "A cross-functional workshop made early Voucher, Offer and Promo Code definitions discussable as hypotheses, producing five experience principles without treating the workshop taxonomy as final.",
                 "zh": "共同規劃並主持跨職能工作坊，將既有研究、共同痛點與旅程機會收斂成五項體驗原則與初步產品方向。"
               },
               "assetIds": [
@@ -234,7 +242,7 @@
                 "zh": "驗證並修正"
               },
               "content": {
-                "en": "Tested behavioural assumptions through usability studies, experience surveys, product analytics and operational evidence before turning selected directions into shipped capabilities.",
+                "en": "Usability studies, experience surveys, product analytics and operating evidence determined which hypotheses became qualification, activation and redemption behaviour—and which remained deferred.",
                 "zh": "透過可用性測試、體驗問卷、產品分析與營運證據驗證行為假設，再將選定方向轉化為正式上線能力。"
               },
               "assetIds": [
@@ -496,7 +504,7 @@
             "status": "shipped-and-used",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+                "assetId": "voucher-offer-reusable-system-shared-rules-01",
                 "evidenceRole": "system-rule",
                 "layoutVariant": "system-visual",
                 "aspectRatio": "wide",
@@ -574,7 +582,7 @@
             "status": "partially-realised",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-mechanism-transition-public-v1",
+                "assetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
                 "evidenceRole": "flow",
                 "layoutVariant": "flow-strip",
                 "aspectRatio": "wide",
@@ -652,7 +660,7 @@
             "status": "shipped-and-used",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-framework-error-recovery-public-v1",
+                "assetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
                 "evidenceRole": "flow",
                 "layoutVariant": "flow-strip",
                 "aspectRatio": "wide",
@@ -730,12 +738,12 @@
             "status": "partially-realised-and-future-state",
             "visualEvidence": {
               "primary": {
-                "assetId": "voucher-stage-review-post-use-public-v1",
+                "assetId": "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
                 "evidenceRole": "shipped-state",
                 "layoutVariant": "single-screen",
                 "aspectRatio": "wide",
                 "caption": {
-                  "en": "Post-use evidence should confirm savings, usage or returned value without overstating future-state coverage.",
+                  "en": "The shipped review state confirmed selected Voucher value inside payment while keeping broader post-use coverage outside the claim boundary.",
                   "zh": "使用後證據應確認節省、使用或退回價值，且不誇大尚未全面實現的狀態。"
                 },
                 "alt": {
@@ -843,7 +851,7 @@
         ],
         "systemBehindJourney": {
           "summary": {
-            "en": "Converted fragmented customer, commercial and implementation knowledge into shared definitions, rules, states and reusable delivery patterns.",
+            "en": "Converted customer, commercial and implementation knowledge held in different teams into shared definitions, rules, states and reusable delivery patterns.",
             "zh": "將分散的顧客、商業與實作知識，轉化為共享定義、規則、狀態與可重用交付模式。"
           },
           "pillars": [
@@ -1158,7 +1166,7 @@
             "zh": "策略任務"
           },
           "title": {
-            "en": "Create one decision model for a fragmented incentive ecosystem",
+            "en": "Create one decision model across campaign and channel incentive rules",
             "zh": "為分散的獎勵生態建立共同決策模型"
           },
           "summary": {
@@ -4412,7 +4420,7 @@
             "en": "Led the campaign-flow and state design; the preloaded-wallet release direction was aligned with PM, business and engineering.",
             "zh": "主導活動流程與狀態設計；Preloaded-wallet 上線方向則與產品經理、商務及工程共同對齊。"
           },
-          "publicAssetId": "voucher-proof-sec-transformation-public-v1",
+          "publicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
           "sourceAssetIds": [
             "voucher-source-sec-user-journey-2023-v1",
             "voucher-source-save-every-day-2024-v1"
@@ -4424,7 +4432,7 @@
             "en": "Co-led the phased recovery model with the PM and owned the interaction, state and message design.",
             "zh": "與產品經理共同主導分階段復原模型，並負責互動、狀態與 Message 設計。"
           },
-          "publicAssetId": "voucher-framework-error-recovery-public-v1",
+          "publicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-programme-recommendations-v1"
           ]
@@ -4435,7 +4443,7 @@
             "en": "Led the hypothesis, prototype and product-page experience; business problem definition and rollout were aligned with business, PM and research.",
             "zh": "主導 Hypothesis、原型與產品團隊-頁面 experience；商業問題與推行則與商務團隊、產品經理及研究團隊對齊。"
           },
-          "publicAssetId": "voucher-framework-pdp-contextual-discovery-public-v1",
+          "publicAssetId": "voucher-offer-stage-discover-pdp-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-pdp-voucher-ut-learnings-2024-v1",
             "voucher-source-pdp-learning1-design-2024-v1"
@@ -4447,7 +4455,7 @@
             "en": "Owned the interaction structure and shipped-state specification.",
             "zh": "負責互動結構與已上線-狀態規格。"
           },
-          "publicAssetId": "voucher-framework-voucher-details-evolution-public-v1",
+          "publicAssetId": "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-voucher-details-atc-product-review-2024-v1",
             "voucher-source-voucher-details-master-screens-v1"
@@ -4459,7 +4467,7 @@
             "en": "Led the condition and channel action model; feasibility and business rules were jointly resolved with PM and engineering.",
             "zh": "主導 Condition／通路操作模型；Feasibility 與商業規則則與產品經理及工程團隊共同解決。"
           },
-          "publicAssetId": "voucher-framework-voucher-condition-action-matrix-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-rules-01",
           "sourceAssetIds": [
             "voucher-source-voucher-details-visibility-2025-v1",
             "voucher-source-voucher-details-master-screens-v1"
@@ -4471,7 +4479,7 @@
             "en": "Prepared the evidence, mechanism comparison and transition model; the long-term mechanism and phasing were programme decisions shared with product, business, operations and engineering.",
             "zh": "整理證據、機制 comparison 與轉型模型；長期機制及 Phasing 則由產品、商務、營運及工程共同決定。"
           },
-          "publicAssetId": "voucher-framework-mechanism-transition-public-v1",
+          "publicAssetId": "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
           "sourceAssetIds": [
             "voucher-source-omni-incentive-vision-2024-v1"
           ]
@@ -4482,7 +4490,7 @@
             "en": "Led channel-constraint and customer-friction analysis; the final mechanism direction required shared business and engineering approval.",
             "zh": "主導通路 constraint 與顧客-friction 分析；最終機制方向需由商務與工程共同核准。"
           },
-          "publicAssetId": "voucher-framework-channel-redemption-public-v1",
+          "publicAssetId": "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
           "sourceAssetIds": [
             "voucher-source-omni-incentive-vision-2024-v1"
           ]
@@ -4493,7 +4501,7 @@
             "en": "Co-led early card exploration and translated cross-team feedback into responsive variants; formal component adoption was completed with the Design System team.",
             "zh": "共同主導早期卡片 exploration，將跨團隊回饋轉化為響應式版本；正式元件採用則與設計系統 team 共同完成。"
           },
-          "publicAssetId": "voucher-framework-voucher-card-system-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-component-foundation-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-ut-2024-v1",
             "voucher-source-voucher-card-component-spec-2025-v1"
@@ -4505,7 +4513,7 @@
             "en": "Led evidence synthesis and information-priority recommendations; final visual semantics were aligned with the Design System team.",
             "zh": "主導證據統整與資訊priority recommendations；最終 Visual 語意與設計系統 team 對齊。"
           },
-          "publicAssetId": "voucher-framework-voucher-card-research-evidence-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-reusable-patterns-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-ut-2024-v1"
           ]
@@ -4516,7 +4524,7 @@
             "en": "Defined the cross-journey property and state requirements; component API and governance were resolved with Design System and engineering.",
             "zh": "定義跨旅程 Property 與狀態需求；元件 API 與治理則與設計系統及工程團隊共同解決。"
           },
-          "publicAssetId": "voucher-evidence-component-properties-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-states-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-component-spec-2025-v1"
           ]
@@ -4527,7 +4535,7 @@
             "en": "Mapped operational rules and reusable states; final configuration ownership and governance were shared with operations, product, engineering and Design System.",
             "zh": "整理營運規則與 Reusable 狀態；最終 Configuration ownership 與治理則由營運團隊、產品團隊、工程團隊及設計系統共同承擔。"
           },
-          "publicAssetId": "voucher-evidence-operations-reuse-public-v1",
+          "publicAssetId": "voucher-offer-reusable-system-shared-rules-01",
           "sourceAssetIds": [
             "voucher-source-voucher-card-component-spec-2025-v1"
           ]
@@ -4643,23 +4651,23 @@
         "跨通路獎勵系統"
       ],
       "title": {
-        "en": "From fragmented campaign logic to a reusable incentive system",
-        "zh": "從分散的活動規則，到可重用的獎勵系統"
+        "en": "Fragmented voucher journeys to a reusable incentive ecosystem",
+        "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
       },
       "atAGlance": {
-        "en": "Led the three-year evolution of FairPrice’s incentive experience, turning campaign-specific Voucher logic into reusable product rules and capabilities across product, cart, checkout, Wallet and in-store journeys.",
-        "zh": "主導 FairPrice 三年獎勵體驗演進，將各活動獨立的 Voucher 邏輯轉化為可重用的產品規則與能力，涵蓋商品、購物車、結帳、優惠券錢包 與門市旅程。"
+        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
+        "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。"
       },
       "problemTypes": {
         "en": [
-          "Fragmented voucher rules",
-          "Eligibility ambiguity",
-          "Cross-channel redemption"
+          "Incentive systems",
+          "Voucher lifecycle",
+          "Commerce operations"
         ],
         "zh": [
-          "優惠券規則分散",
-          "資格判斷模糊",
-          "跨通路兌換斷裂"
+          "獎勵系統",
+          "優惠券生命週期",
+          "商務營運"
         ]
       },
       "whyItMattered": {
@@ -4690,31 +4698,23 @@
           },
           "secondary": {
             "en": [
-              "Operations",
-              "Marketing",
-              "Product",
-              "Business",
-              "Sponsors"
+              "Voucher operations"
             ],
             "zh": [
-              "營運",
-              "行銷",
-              "產品",
-              "商務",
-              "贊助單位"
+              "優惠券營運人員"
             ]
           }
         },
         "timeline": {
           "duration": {
-            "en": "3 years",
-            "zh": "3 年"
+            "en": "2022–2025",
+            "zh": "2022–2025 年"
           },
           "dateRange": {
-            "en": "",
-            "zh": ""
+            "en": "2022–2025",
+            "zh": "2022–2025 年"
           },
-          "status": "source-preserved"
+          "status": "human-approved-r182"
         },
         "schemaVersion": "2026-08-06-r142"
       },
@@ -4846,7 +4846,7 @@
       "company": "FairPrice Group",
       "legacyContextStatus": "company-only-non-canonical-r144",
       "whatThisProves": {
-        "en": "Turning fragmented incentive rules into a reusable cross-channel product model.",
+        "en": "Turning campaign-specific incentive rules into a reusable cross-channel product model.",
         "zh": "將分散的獎勵規則，轉化為可跨通路重用的產品模型。",
         "contentStatus": "approved-domain-copy-2026-08-07"
       },

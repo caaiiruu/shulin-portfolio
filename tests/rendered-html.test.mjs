@@ -1333,9 +1333,9 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
       assert.ok(visual.caption.en && visual.caption.zh, stage.id);
       assert.ok(visual.alt.en && visual.alt.zh, stage.id);
       assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
-      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
-      assert.equal(manifest.items[visual.assetId].publicPath, null);
-      assert.equal(manifest.items[visual.assetId].replacementRequired, true);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "real-active");
+      assert.ok(manifest.items[visual.assetId].publicPath);
+      assert.equal(manifest.items[visual.assetId].replacementRequired, false);
     }
   }
   assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);

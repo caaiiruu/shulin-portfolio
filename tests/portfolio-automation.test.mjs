@@ -45,14 +45,14 @@ test("approved content packages reject superseded truth", () => {
   expectError(errorsFor(truth, next), /approved delta references non-approved truth/);
 });
 
-test("R183.4 restores the Human-approved Voucher asset boundary", () => {
+test("R183.4C restores the latest Human-approved Voucher asset boundary", () => {
   const request = truth.assetRequests.find((item) => item.requestId === "AR-R179-VOUCHER-EVIDENCE-PACK");
   assert.equal(request, undefined);
   const voucherAssets = Object.values(manifest.items).filter((item) => item.projectId === "voucher");
   assert.ok(voucherAssets.length > 0);
   assert.equal(voucherAssets.some((item) => item.implementationStatus === "real-active"), true);
-  assert.equal(voucherAssets.some((item) => item.implementationStatus === "placeholder-active"), true);
-  assert.equal(voucherAssets.some((item) => item.replacementRequired === true), true);
+  assert.equal(voucherAssets.some((item) => item.implementationStatus === "placeholder-active"), false);
+  assert.equal(voucherAssets.some((item) => item.replacementRequired === true), false);
 });
 
 test("all canonical primary cases and experiments have exactly one source pack", () => {
