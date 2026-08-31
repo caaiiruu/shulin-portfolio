@@ -13,6 +13,7 @@
   --space-10: 128px;
   --dimension-360deg: 360deg;
   --dimension-90deg: 90deg;
+  --ratio-editorial-composite: 3 / 2;
 
   --ink-950: #1d2021;
   --ink-800: #34393b;
@@ -112,6 +113,28 @@
   --project-card-related-media-block: 160px;
   --project-card-related-media-block-mobile: 144px;
   --project-card-related-title: clamp(1.25rem, 1.15rem + .45vw, 1.6rem);
+  /* Stable component-intent relationships. These aliases preserve approved
+     primitive values while making cross-component impact explicit. */
+  --project-card-body-gap: var(--space-4);
+  --project-card-cta-gap: var(--space-5);
+  --project-card-cta-gap-mobile: var(--space-4);
+  --info-grid-cell-gap: var(--space-4);
+  --project-overview-title-summary-gap: var(--space-4);
+  --project-overview-body-size: var(--cmp-popup-body-size);
+  --project-overview-body-weight: var(--cmp-popup-body-weight);
+  --project-overview-body-color: var(--color-text-primary);
+  --project-overview-body-leading: var(--leading-body);
+  --decision-card-gap: var(--space-5);
+  --decision-card-padding-block: var(--space-6);
+  --decision-card-padding-block-mobile: var(--space-5);
+  --decision-field-gap: var(--space-3);
+  --outcome-metric-gap: var(--space-3);
+  --outcome-metric-support-gap: var(--space-2);
+  --floating-nav-shell-inset: var(--space-3);
+  --floating-nav-shell-padding-inline: var(--space-1);
+  --floating-nav-rail-gap: var(--space-2);
+  --floating-nav-item-padding-block: var(--dimension-9px);
+  --floating-nav-item-padding-inline: var(--dimension-9px);
   --experiment-card-min-block: clamp(380px, 31vw, 420px);
   --experiment-card-min-block-mobile: 360px;
   --profile-card-min-block: 248px;
@@ -143,6 +166,9 @@
   --radius-panel: var(--radius-lg);
   --radius-control: var(--radius-pill);
   --radius-icon: var(--radius-pill);
+  --project-media-radius: var(--radius-lg);
+  --project-editorial-composite-aspect: var(--ratio-editorial-composite);
+  --inline-metric-emphasis-surface: var(--brand-100);
   --header-height: 72px;
   --control-height: 48px;
   --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus) 28%, transparent);
@@ -218,7 +244,7 @@
   --hero-outcome-top-zh: 35%;
   --hero-title-leading: .88;
   --hero-outcome-line-offset: 1.76em;
-  --hero-copy-size: clamp(1rem, 1.15vw, 1.25rem);
+  --hero-copy-size: var(--dimension-1rem);
   --hero-copy-measure: 48ch;
   --hero-bottom-safe: clamp(var(--space-8), 10vh, var(--space-10));
   --hero-cta-shadow-rest: 0 var(--dimension-2px) 0 var(--hero-accent);
@@ -258,6 +284,11 @@
   --case-page-max: var(--dimension-1280px);
   --case-reading-max: var(--dimension-760px);
   --case-evidence-max: var(--dimension-1120px);
+  --case-span-headline: var(--case-evidence-max);
+  --case-span-summary: var(--dimension-58ch);
+  --case-span-reading: var(--case-reading-max);
+  --case-span-full: var(--case-evidence-max);
+  --case-span-focus: var(--dimension-900px);
   --case-gutter-desktop: var(--space-8);
   --case-gutter-tablet: var(--space-7);
   --case-gutter-mobile: var(--space-5);
@@ -267,6 +298,12 @@
   --case-gap-subsection: var(--space-7);
   --case-gap-content: var(--space-5);
   --case-gap-caption: var(--space-2);
+  --case-section-title-content-gap: var(--case-gap-content);
+  --case-section-canvas-inset: var(--space-0);
+  --case-content-anchor-inline: var(--space-0);
+  --case-overview-summary-grid-gap: var(--case-gap-subsection);
+  --case-complexity-item-gap: var(--case-gap-content);
+  --case-outcome-item-gap: var(--case-gap-content);
   --project-detail-copy-measure: var(--case-reading-max);
   --project-detail-section-gap: var(--case-gap-section);
   --project-detail-section-pad-block: var(--case-gap-section);

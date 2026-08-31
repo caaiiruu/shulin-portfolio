@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "ledgerVersion": "2026-08-25-r181-experiments-shared-ia",
+  "ledgerVersion": "2026-08-25-r182-non-asset-complete",
   "repository": "caaiiruu/shulin-portfolio",
   "canonicalQaBranch": "qa/r146-r43-preview-2026-08-06",
   "stateVocabulary": [
@@ -169,7 +169,7 @@
       "approvedBy": "HUMAN",
       "approvedAt": "2026-08-25",
       "targetType": "CONTENT_PACKAGE",
-      "implementationStatus": "NOT_APPLIED",
+      "implementationStatus": "APPLIED_ON_R182_BRANCH",
       "truthReferences": [
         "FACT-R179-VOUCHER-TIMELINE",
         "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY",
@@ -515,7 +515,7 @@
         "PR_RECONCILIATION_WHERE_LISTED",
         "FUTURE_APPROVED_WORK_ORDER"
       ],
-      "mutationAuthorized": false
+      "mutationAuthorized": true
     },
     {
       "deltaId": "DELTA-R181-SEVEN-EXPERIMENT-INTEGRATION",
@@ -547,6 +547,154 @@
         {
           "operation": "EXTEND_SHARED_EXPERIMENT_STYLES",
           "path": "public/site/assets/css/components/experiment-card.css"
+        }
+      ],
+      "mutationAuthorized": true
+    },
+    {
+      "deltaId": "DELTA-R182-NON-ASSET-CLOSURE",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-25",
+      "targetType": "NON_ASSET_CLOSURE",
+      "implementationStatus": "APPLIED_ON_R182_BRANCH",
+      "truthReferences": [
+        "FACT-R179-VOUCHER-TIMELINE",
+        "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY",
+        "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+        "FACT-R179-VOUCHER-CENTER-ROLE",
+        "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R179-GAME-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R179-DBS-TIMELINE",
+        "FACT-R179-DBS-ROLE",
+        "FACT-R179-DBS-EVIDENCE-BOUNDARY",
+        "FACT-R179-BOOKING-TIMELINE",
+        "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+        "FACT-R179-BOOKING-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BANDZO-TIMELINE",
+        "FACT-R179-BANDZO-EVIDENCE-BOUNDARY",
+        "FACT-R179-PAYMENT-TIMELINE",
+        "FACT-R179-PAYMENT-ROLE",
+        "FACT-R179-PAYMENT-EVIDENCE-BOUNDARY",
+        "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP"
+      ],
+      "contentTruthReferences": [
+        {
+          "projectId": "voucher",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "voucher-center",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "game-center",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "dbs",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "booking",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "bandzo",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "payment",
+          "fieldPath": "transformation"
+        },
+        {
+          "projectId": "cathay-sit-online-account-opening",
+          "fieldPath": "transformation"
+        }
+      ],
+      "assetTruthReferences": [],
+      "operations": [
+        {
+          "operation": "APPLY_APPROVED_PRIMARY_CONTENT",
+          "path": "public/site/content/portfolio-content.json"
+        },
+        {
+          "operation": "RECONSTRUCT_STALE_PR_NON_ASSET_DELTAS",
+          "path": "public/site/content/portfolio-content.json"
+        },
+        {
+          "operation": "ADD_ZERO_COST_CERTIFICATION",
+          "path": "scripts/portfolio-certification.mjs"
+        }
+      ],
+      "mutationAuthorized": true
+    },
+    {
+      "deltaId": "DELTA-R1825-LEAD-VISUAL-ASSET-INTEGRATION",
+      "status": "APPROVED",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-26",
+      "targetType": "PRIMARY_LEAD_VISUAL_ASSET_INTEGRATION",
+      "implementationStatus": "APPLIED_ON_R1825_BRANCH",
+      "truthReferences": [],
+      "contentTruthReferences": [],
+      "assetTruthReferences": [
+        {
+          "assetId": "voucher-hero-incentive-journey-public-v1"
+        },
+        {
+          "assetId": "voucher-center-hero-centralised-discovery-public-v1"
+        },
+        {
+          "assetId": "gamecenter-hero-shipped-before-after-public-v1"
+        },
+        {
+          "assetId": "dbs-project-card-primary-01"
+        },
+        {
+          "assetId": "booking-hero-connected-booking-public-v1"
+        },
+        {
+          "assetId": "bandzo-hero-guided-practice-public-v1"
+        },
+        {
+          "assetId": "payment-hero-unified-checkout-public-v1"
+        },
+        {
+          "assetId": "cathay-sit-hero-final-flow-public-v1"
+        },
+        {
+          "assetId": "taishin-marketplace-hero-inuse-v1"
+        },
+        {
+          "assetId": "cathay-mortgage-hero-consultation-public-v1"
+        },
+        {
+          "assetId": "cathay-review-research-operating-baseline-public-v1"
+        },
+        {
+          "assetId": "ctbc-mortgage-hero-final-flow-public-v1"
+        },
+        {
+          "assetId": "booking-taxi-pickup-overview-source-v1"
+        }
+      ],
+      "operations": [
+        {
+          "operation": "REGISTER_APPROVED_PRIMARY_LEAD_VISUALS",
+          "path": "public/site/content/portfolio-asset-manifest.json"
+        },
+        {
+          "operation": "ADD_APPROVED_PRIMARY_LEAD_VISUAL_BINARIES",
+          "path": "public/site/assets/projects/**"
+        },
+        {
+          "operation": "EXTEND_SHARED_REAL_MEDIA_LEAD_VISUAL_TO_ALL_PRIMARY",
+          "path": "public/site/assets/js/app.js"
+        },
+        {
+          "operation": "ADD_ASSET_BINDING_REGRESSION",
+          "path": "tests/**"
         }
       ],
       "mutationAuthorized": true
@@ -610,6 +758,84 @@
         "RENDERED_HTML",
         "BROWSER_RESPONSIVE",
         "ACCESSIBILITY_REGRESSION"
+      ],
+      "productionAuthorized": false,
+      "approvedBy": "HUMAN"
+    },
+    {
+      "workOrderId": "WO-R182-NON-ASSET-CLOSURE",
+      "status": "APPROVED",
+      "state": "ENGINEERING_QA",
+      "repository": "caaiiruu/shulin-portfolio",
+      "baseBranch": "migration/r181-experiments-shared-ia",
+      "expectedHead": "a959d6021e2a7beffad2995ec36501dd20cd2ab2",
+      "approvedDeltaIds": [
+        "DELTA-R1801-APPROVED-CONTENT-PACKAGE",
+        "DELTA-R182-NON-ASSET-CLOSURE"
+      ],
+      "allowedPaths": [
+        "public/site/content/**",
+        "public/site/assets/js/**",
+        "public/site/docs/**",
+        "docs/portfolio-automation/**",
+        "scripts/**",
+        "tests/**",
+        ".github/workflows/**",
+        "package.json",
+        "vercel.json"
+      ],
+      "forbiddenPaths": [
+        "public/site/assets/projects/**"
+      ],
+      "qaRoutes": [
+        "AUTOMATION_VALIDATOR",
+        "SSOT_VALIDATION",
+        "DESIGN_SYSTEM_LINT",
+        "RENDERED_HTML",
+        "BROWSER_RESPONSIVE",
+        "ACCESSIBILITY_AUTOMATION",
+        "PERFORMANCE_BASELINE",
+        "SECURITY_PRIVACY"
+      ],
+      "productionAuthorized": false,
+      "approvedBy": "HUMAN"
+    },
+    {
+      "workOrderId": "WO-R1825-LEAD-VISUAL-ASSET-INTEGRATION",
+      "status": "APPROVED",
+      "state": "ENGINEERING_QA",
+      "repository": "caaiiruu/shulin-portfolio",
+      "baseBranch": "closure/r182-non-asset-finalization",
+      "expectedHead": "18cbc58b78e0ba815687e9e0cec84f05756b91a0",
+      "approvedDeltaIds": [
+        "DELTA-R1825-LEAD-VISUAL-ASSET-INTEGRATION"
+      ],
+      "allowedPaths": [
+        "public/site/content/portfolio-asset-manifest.json",
+        "public/site/assets/projects/**",
+        "public/site/assets/js/app.js",
+        "tests/**",
+        "docs/portfolio-automation/execution-ledger.json"
+      ],
+      "forbiddenPaths": [
+        "public/site/content/portfolio-content.json",
+        "public/site/assets/css/**",
+        "public/site/assets/css/tokens.css",
+        ".github/workflows/**"
+      ],
+      "qaRoutes": [
+        "AUTOMATION_VALIDATOR",
+        "SSOT_VALIDATION",
+        "ASSET_GOVERNANCE",
+        "DESIGN_SYSTEM_LINT",
+        "TOKEN_GOVERNANCE",
+        "DESIGN_SYSTEM_IMPACT",
+        "PROJECT_CARD_REGRESSION",
+        "PROJECT_DETAIL_REGRESSION",
+        "BROWSER_RESPONSIVE",
+        "ACCESSIBILITY_AUTOMATION",
+        "PERFORMANCE_ASSET_RECERTIFICATION",
+        "SECURITY_ASSET_RECHECK"
       ],
       "productionAuthorized": false,
       "approvedBy": "HUMAN"
@@ -681,6 +907,19 @@
   "certifications": [],
   "lockedProjectBoundaries": [
     {
+      "projectId": "payment",
+      "content": "FROZEN",
+      "visuals": "FROZEN",
+      "interactions": "FROZEN",
+      "frozenAt": "2026-08-28",
+      "frozenBy": "HUMAN",
+      "approvalId": "PA-20260828-PAYMENT-HR01",
+      "exactHead": "5492fd5d4609c8141b21c496fdafd4422c9eba72",
+      "exactTree": "c5c74cb37bbfd3ad7d3aee9a1d311ee7c8cad509",
+      "engineeringQa": "Portfolio Remote Engineering QA #978 — PASS",
+      "reopenPolicy": "Future Human authorization required"
+    },
+    {
       "projectId": "taishin-p2p-marketplace-platform",
       "content": "LOCKED",
       "truthReferences": [
@@ -719,28 +958,30 @@
     }
   ],
   "assetPhaseStatus": {
-    "phase": "HUMAN_ASSET_INTAKE_NEXT",
-    "integrated": false,
-    "explicitHeroUploadsRequired": [
+    "phase": "R1825_PRIMARY_LEAD_VISUALS_INTEGRATED",
+    "integrated": true,
+    "integratedProjectIds": [
+      "voucher",
       "voucher-center",
+      "game-center",
+      "dbs",
       "booking",
       "bandzo",
+      "payment",
       "cathay-sit-online-account-opening",
-      "ctbc-mortgage-self-service-app"
+      "taishin-p2p-marketplace-platform",
+      "cathay-mortgage-assistant",
+      "cathay-sit-review-remediation-operations",
+      "ctbc-mortgage-self-service-app",
+      "booking-taxi-pickup-service-strategy"
     ],
+    "explicitHeroUploadsRequired": [],
     "voucherCandidateSourceVisuals": {
       "minimum": 4,
       "maximum": 8
     },
-    "noUploadCurrentlyRequired": [
-      "game-center",
-      "dbs",
-      "taishin-p2p-marketplace-platform",
-      "cathay-mortgage-assistant",
-      "cathay-sit-review-remediation-operations",
-      "booking-taxi-pickup-service-strategy"
-    ],
-    "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+    "noUploadCurrentlyRequired": [],
+    "payment": "R1825_APPROVED_LEAD_VISUAL_INTEGRATED"
   },
   "projectPrDependencies": [
     {
@@ -757,6 +998,196 @@
       "pr": 17,
       "head": "3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
       "status": "UNCHANGED_RECONCILIATION_LATER"
+    }
+  ],
+  "technicalDebtClassification": {
+    "unexplainedWarnings": 0,
+    "acceptedWarnings": [
+      {
+        "owner": "public/site/assets/js/app.js",
+        "classification": "LEGACY_SAFE",
+        "count": 14,
+        "rationale": "Inactive helper bindings remain inside the canonical shared runtime; removing them without an owner migration would create disproportionate regression risk. Generated production runtime mirrors this owner."
+      },
+      {
+        "owner": "public/site/assets/js/home.js",
+        "classification": "LEGACY_SAFE",
+        "count": 1,
+        "rationale": "Unused callback index is non-public behavior and retained until the canonical Home owner is next modified."
+      },
+      {
+        "owner": "public/site/assets/js/production.*.js",
+        "classification": "GENERATED_OWNER",
+        "count": 15,
+        "rationale": "Generated mirror of canonical source; never edited independently."
+      },
+      {
+        "owner": "public/site/qa and focused historical tests",
+        "classification": "FALSE_POSITIVE",
+        "count": 4,
+        "rationale": "Read-only geometry/debug captures intentionally preserve intermediate values in historical QA owners."
+      }
+    ],
+    "fixedWarnings": [
+      "Removed unused content-completeness project parameter",
+      "Removed unused browser-QA separator style binding"
+    ],
+    "mustFixBeforeRelease": []
+  },
+  "designSystemClosureAudit": {
+    "status": "PASS_NO_UNRESOLVED_P0_P1",
+    "canonicalOwners": {
+      "projectDetail": "ProjectDetailOverview / RecruiterFirstCaseStudy",
+      "experiments": "ExperimentExperience",
+      "cards": "ProjectCard",
+      "navigator": "FloatingNavigator",
+      "search": "SearchMatcher",
+      "evidence": "SelectedEvidence / ArtifactVisual"
+    },
+    "verified": [
+      "registry parity",
+      "token ownership",
+      "single generated-runtime owner",
+      "no parallel Experiment renderer",
+      "no project-specific R182 CSS",
+      "no globals.css reusable override",
+      "no stale shared-owner code reconstructed from PR #12/#16/#17"
+    ],
+    "unresolvedP0P1": []
+  },
+  "consolidatedAssetIntake": {
+    "status": "PRIMARY_LEAD_VISUALS_INTEGRATED_R1825",
+    "primary": [
+      "voucher-hero-incentive-journey-public-v1",
+      "voucher-center-hero-centralised-discovery-public-v1",
+      "gamecenter-hero-shipped-before-after-public-v1",
+      "dbs-project-card-primary-01",
+      "booking-hero-connected-booking-public-v1",
+      "bandzo-hero-guided-practice-public-v1",
+      "payment-hero-unified-checkout-public-v1",
+      "cathay-sit-hero-final-flow-public-v1",
+      "taishin-marketplace-hero-inuse-v1",
+      "cathay-mortgage-hero-consultation-public-v1",
+      "cathay-review-research-operating-baseline-public-v1",
+      "ctbc-mortgage-hero-final-flow-public-v1",
+      "booking-taxi-pickup-overview-source-v1"
+    ],
+    "experiments": [
+      "Freelance Project Operations Tool screenshot set",
+      "Weekly Design Session visual pack",
+      "Food Testing Workshop visual pack",
+      "AJA Creative Workshop visual pack",
+      "Capture Ideas visual pack",
+      "A-Ha! Creative Toolbox visual pack",
+      "Hello SABAU! visual pack"
+    ],
+    "eliminatedByGovernedReuse": []
+  },
+  "humanImplementationAuthorizations": [
+    {
+      "approvalId": "PA-20260828-PAYMENT-HR01",
+      "status": "HUMAN_ACCEPTED_FROZEN",
+      "approvedBy": "HUMAN",
+      "approvedAt": "2026-08-28",
+      "scope": "Payment Human Review Remediation — Evidence, research signals, approved asset correction and presentation hierarchy",
+      "reason": "Correct Human-review defects without reopening Payment strategy or shared-system redesign.",
+      "affectedSystems": ["Payment content SSOT", "Payment asset manifest", "StructuredEvidence semantic variants", "ProjectDetailOverview inline emphasis", "RecognitionProof CTA reuse", "Payment baseline tests"],
+      "pullRequest": 25,
+      "startingCommit": "bef07a1b50481f814139692b1ab46d33e30d2a89",
+      "startingTree": "6d5823bfaf8dfaae07c6f779cb4a39456d9cfd48",
+      "productionCommit": "c2e007dbfacf02dfacab2e4b551ffa95e1df0856",
+      "supersededRoles": ["payment-evidence-sco-entry-public-v2 as SCO Evidence", "payment-return-recovery-human-r1649d as research Evidence"],
+      "implementationRounds": [
+        {
+          "round": "R183.3B.4",
+          "startingCommit": "bef07a1b50481f814139692b1ab46d33e30d2a89",
+          "result": "Content, research signals, approved asset roles and presentation hierarchy restored; Human acceptance pending exact-head review."
+        },
+        {
+          "round": "R183.3B.5",
+          "startingCommit": "7c41e3276c7b4747a9756a0916b46567abfed4a5",
+          "startingTree": "dffc4664aa3b1df429412c9a1c6d07767dbb71c8",
+          "scope": "Payment visual contract closure only",
+          "contracts": ["project-media-radius", "Live validation editorial pair", "payment-live-interview-privacy-safe-v1", "editorial quotation framing", "integrated validation summary", "inline-metric-emphasis-surface"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        },
+        {
+          "round": "R183.3B.6",
+          "startingCommit": "091de088873aef41ca2d6dbb5484ca425de3a8b3",
+          "startingTree": "61587ce981dff98bf204fe798766ce2bfab901a1",
+          "scope": "Payment final visual closure and governed horizontal boundary calibration",
+          "contracts": ["Live validation editorial composite", "content-fitted editorial quotations", "project-editorial-composite-aspect", "case-content-anchor-inline"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        },
+        {
+          "round": "R183.3B.7",
+          "startingCommit": "a1d7d8b0801e75f4c4acb57f0c11cd19d96d136d",
+          "startingTree": "14b91efe2db35c7142839b442530bd12f988a6f4",
+          "scope": "Payment final Human QA remediation only",
+          "contracts": ["four-peer Evidence grid", "shared Evidence media frame", "RecognitionProof whole-block link", "StructuredEvidence full-width quotation family", "payment-evidence-live-checkout-privacy-safe-v1"],
+          "humanAcceptance": "PENDING_EXACT_HEAD_REVIEW"
+        },
+        {
+          "round": "R183.3B.11",
+          "startingCommit": "d831b60d31f16f1ba183bf5ab927b381c39fe841",
+          "acceptedCommit": "5492fd5d4609c8141b21c496fdafd4422c9eba72",
+          "acceptedTree": "c5c74cb37bbfd3ad7d3aee9a1d311ee7c8cad509",
+          "scope": "Payment final Human review remediation acceptance and freeze",
+          "contracts": ["single Recognition underline treatment", "RecognitionProof whole-block accessible link", "Shopper Voice full-width quote content", "four-peer Evidence grid", "payment-evidence-live-checkout-privacy-safe-v1", "exactly four Decisions", "unchanged Payment copy, hierarchy, metrics, evidence roles, outcomes and Floating Navigator"],
+          "engineeringQa": "Portfolio Remote Engineering QA #978 — PASS",
+          "humanAcceptance": "ACCEPTED",
+          "freezeStatus": "FROZEN"
+        }
+      ],
+      "humanAcceptance": "ACCEPTED",
+      "freezeStatus": "FROZEN",
+      "acceptedHead": "5492fd5d4609c8141b21c496fdafd4422c9eba72",
+      "acceptedTree": "c5c74cb37bbfd3ad7d3aee9a1d311ee7c8cad509",
+      "productionAuthorized": false,
+      "mergeAuthorized": false
+    }
+  ],
+  "reconciliations": [
+    {
+      "pr": 16,
+      "head": "36e5ab0363ba19a330dc62f2e2cb9dd4af90ef5f",
+      "projectId": "game-center",
+      "status": "SUPERSEDED_CANDIDATE_AFTER_R182",
+      "classifications": [
+        "ALREADY_CANONICAL",
+        "STILL_REQUIRED",
+        "SUPERSEDED_BY_HUMAN_DELTA",
+        "ASSET_DEFERRED",
+        "SHARED_OWNER_OBSOLETE"
+      ],
+      "result": "Human-approved title and At a Glance applied; current evidence semantics and ~50% boundary retained; replacement image deferred."
+    },
+    {
+      "pr": 17,
+      "head": "3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
+      "projectId": "voucher-center",
+      "status": "SUPERSEDED_CANDIDATE_AFTER_R182",
+      "classifications": [
+        "STILL_REQUIRED",
+        "SUPERSEDED_BY_HUMAN_DELTA",
+        "ASSET_DEFERRED",
+        "SHARED_OWNER_OBSOLETE"
+      ],
+      "result": "Human-approved timeline and recruiter framing applied; four validation signals and non-shipped boundaries retained; hero deferred."
+    },
+    {
+      "pr": 12,
+      "head": "10821d25833af40bcd6d1db37f5d07bc03d9a1a8",
+      "projectId": "payment",
+      "status": "SUPERSEDED_CANDIDATE_AFTER_R182",
+      "classifications": [
+        "ALREADY_CANONICAL",
+        "STILL_REQUIRED",
+        "SUPERSEDED_BY_HUMAN_DELTA",
+        "ASSET_DEFERRED",
+        "REJECTED"
+      ],
+      "result": "Approved At a Glance and hierarchy retained; optional media deferred; unverified uplift remains rejected."
     }
   ]
 }

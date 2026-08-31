@@ -22,6 +22,262 @@
     "interactiveContrastContract": "Every default, hover, active, selected and focus state must pair its foreground and background tokens. Inverse text may not remain on a light hover surface.",
     "stageCaseCardContract": "Use one canonical stage identity and one View related work action; keep multi-item count separate, suppress duplicate evidence, and render only populated evidence columns."
   },
+  "governanceGraph": {
+    "schemaVersion": 1,
+    "consumerDiscoveryOwner": "qa/design-system-impact.mjs",
+    "structuralOverridePolicy": {
+      "projectIdentityMayOwnGeometry": false,
+      "allowedLocalControls": [
+        "asset focal position",
+        "asset object position",
+        "content-dependent visibility",
+        "registered component variant"
+      ],
+      "forbiddenLocalControls": [
+        "spacing",
+        "dimensions",
+        "alignment",
+        "typography hierarchy",
+        "grid structure",
+        "navigator structure"
+      ]
+    },
+    "tokenContracts": {
+      "project-card-body-gap": {"primitive": "space-4", "intent": "ProjectCard title-to-body rhythm", "owner": "ProjectCard"},
+      "project-card-cta-gap": {"primitive": "space-5", "intent": "ProjectCard desktop content-to-CTA separation", "owner": "ProjectCard"},
+      "project-card-cta-gap-mobile": {"primitive": "space-4", "intent": "ProjectCard compact content-to-CTA separation", "owner": "ProjectCard"},
+      "info-grid-cell-gap": {"primitive": "space-4", "intent": "InfoGrid cell rhythm", "owner": "InfoGrid"},
+      "decision-card-gap": {"primitive": "space-5", "intent": "Decision internal block rhythm", "owner": "Decision"},
+      "decision-card-padding-block": {"primitive": "space-6", "intent": "Decision desktop vertical boundary", "owner": "Decision"},
+      "decision-card-padding-block-mobile": {"primitive": "space-5", "intent": "Decision compact vertical boundary", "owner": "Decision"},
+      "decision-field-gap": {"primitive": "space-3", "intent": "Decision field-group rhythm", "owner": "Decision"},
+      "outcome-metric-gap": {"primitive": "space-3", "intent": "OutcomeMetric value-to-label hierarchy", "owner": "OutcomeMetric"},
+      "outcome-metric-support-gap": {"primitive": "space-2", "intent": "OutcomeMetric qualitative support hierarchy", "owner": "OutcomeMetric"},
+      "floating-nav-shell-inset": {"primitive": "space-3", "intent": "FloatingNavigator viewport and safe-area inset", "owner": "FloatingNavigator"},
+      "floating-nav-shell-padding-inline": {"primitive": "space-1", "intent": "FloatingNavigator balanced outer-shell inline density", "owner": "FloatingNavigator"},
+      "floating-nav-rail-gap": {"primitive": "space-2", "intent": "FloatingNavigator item rhythm", "owner": "FloatingNavigator"},
+      "project-overview-body-size": {"primitive": "cmp-popup-body-size", "intent": "Shared At a Glance and Info Grid value typography", "owner": "InfoGrid"},
+      "project-overview-body-weight": {"primitive": "cmp-popup-body-weight", "intent": "Shared At a Glance and Info Grid value weight", "owner": "InfoGrid"},
+      "project-overview-body-color": {"primitive": "color-text-primary", "intent": "Shared At a Glance and Info Grid value color", "owner": "InfoGrid"},
+      "project-overview-body-leading": {"primitive": "leading-body", "intent": "Shared At a Glance and Info Grid reading rhythm", "owner": "InfoGrid"},
+      "case-span-headline": {"primitive": "case-evidence-max", "intent": "Canonical project-detail heading span", "owner": "ProjectDetailOverview"},
+      "case-span-summary": {"primitive": "dimension-58ch", "intent": "Recruiter-first At a Glance summary span", "owner": "ProjectDetailOverview"},
+      "case-span-reading": {"primitive": "case-reading-max", "intent": "Long-form editorial reading span", "owner": "ProjectDetailOverview"},
+      "case-span-full": {"primitive": "case-evidence-max", "intent": "Full evidence and composition span", "owner": "ProjectDetailOverview"},
+      "case-span-focus": {"primitive": "dimension-900px", "intent": "Core thesis and focal statement span", "owner": "ProjectDetailOverview"},
+      "case-section-title-content-gap": {"primitive": "case-gap-content", "intent": "Project section title-to-content rhythm", "owner": "ProjectDetailOverview"},
+      "case-section-canvas-inset": {"primitive": "space-0", "intent": "Project page shell exclusively owns the shared outer inset", "owner": "ProjectDetailOverview"},
+      "case-content-anchor-inline": {"primitive": "space-0", "intent": "Align reading, evidence and section content to one canonical project-detail left edge", "owner": "ProjectDetailOverview"},
+      "case-overview-summary-grid-gap": {"primitive": "case-gap-subsection", "intent": "At a Glance summary-to-Info Grid composition gap", "owner": "ProjectDetailOverview"},
+      "case-complexity-item-gap": {"primitive": "case-gap-content", "intent": "Complexity item composition gap", "owner": "ProjectDetailOverview"},
+      "case-outcome-item-gap": {"primitive": "case-gap-content", "intent": "Outcome statement composition gap", "owner": "OutcomeStatement"}
+      ,"project-media-radius": {"primitive": "radius-lg", "intent": "Canonical corner radius for normal project-detail editorial and case-study media", "owner": "ProjectDetailOverview"}
+      ,"project-editorial-composite-aspect": {"primitive": "ratio-editorial-composite", "intent": "Fixed responsive frame for integrated editorial photo composites", "owner": "ProjectDetailOverview"}
+      ,"inline-metric-emphasis-surface": {"primitive": "brand-100", "intent": "Visible brand-family surface for non-interactive inline metric emphasis", "owner": "ProjectDetailOverview"}
+    },
+    "consumerGroups": {
+      "homepageCards": {
+        "surface": "Homepage project cards",
+        "discoveryMarkers": ["work-card-v32"]
+      },
+      "workCards": {
+        "surface": "Work listing cards",
+        "discoveryMarkers": ["work-gallery-v32"]
+      },
+      "experimentCards": {
+        "surface": "Experiment listing cards",
+        "discoveryMarkers": ["experiment-index-card-v36"]
+      },
+      "searchCards": {
+        "surface": "Search and Results cards",
+        "discoveryMarkers": ["global-search-v114__projects"]
+      },
+      "relatedCards": {
+        "surface": "Related Work cards",
+        "discoveryMarkers": ["related-project-card-v45"]
+      },
+      "primaryDetails": {
+        "surface": "Primary project details",
+        "discoveryMarkers": ["renderSystemCaseParent"]
+      },
+      "experimentDetails": {
+        "surface": "Experiment detail pages",
+        "discoveryMarkers": ["experiment-overview-v45"]
+      },
+      "domainNavigation": {
+        "surface": "Homepage domain navigation",
+        "discoveryMarkers": ["updateDomainFloatingNav"]
+      }
+    },
+    "regressionProfiles": {
+      "listingCards": {
+        "viewports": [1419, 871, 430],
+        "checks": ["Primary card", "Experiment card", "Related Work card", "CTA bottom alignment", "canonical media", "visible focus", "no horizontal overflow"]
+      },
+      "projectDetailStructure": {
+        "viewports": [1419, 871, 430],
+        "checks": ["exhaustive structural assertions", "Primary golden detail", "Experiment golden detail", "EN/ZH parity", "visible focus", "no horizontal overflow"]
+      },
+      "floatingNavigatorInteraction": {
+        "viewports": [1419, 871, 430],
+        "checks": ["Domain navigation", "Project Detail navigation", "smooth forward navigation", "smooth reverse navigation", "deep links", "reduced motion", "wheel interruption", "touch interruption", "active state"]
+      }
+    },
+    "componentContracts": {
+      "ProjectCard": {
+        "registryComponent": "ProjectCard",
+        "cssOwner": "assets/css/components/project-card.css",
+        "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
+        "tokenDependencies": ["project-card-media-ratio", "project-card-content-padding", "project-card-body-gap", "project-card-cta-gap", "project-card-cta-gap-mobile", "project-card-company-title-gap"],
+        "componentIntentTokens": ["project-card-body-gap", "project-card-cta-gap", "project-card-cta-gap-mobile"],
+        "variants": ["Primary", "Experiment", "Related", "Search"],
+        "variantConsumers": {"Primary": ["homepageCards", "workCards"], "Experiment": ["experimentCards"], "Related": ["relatedCards"], "Search": ["searchCards"]},
+        "consumerGroups": ["homepageCards", "workCards", "experimentCards", "searchCards", "relatedCards"],
+        "discoveryMarkers": ["work-card-v32", "experiment-index-card-v36", "related-project-card-v45"],
+        "regressionProfiles": ["listingCards"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "ProjectDetailOverview": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["panel-padding", "section-heading-content-gap", "case-reading-max", "case-evidence-max", "radius-lg", "color-surface-subtle", "project-media-radius", "project-editorial-composite-aspect", "case-content-anchor-inline", "inline-metric-emphasis-surface"],
+        "componentIntentTokens": ["project-media-radius", "project-editorial-composite-aspect", "case-content-anchor-inline", "inline-metric-emphasis-surface"],
+        "variants": ["Recruiter-first Primary", "Experiment detail", "Inline metric emphasis"],
+        "variantConsumers": {"Recruiter-first Primary": ["primaryDetails"], "Experiment detail": ["experimentDetails"], "Inline metric emphasis": ["primaryDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "compositionOrder": ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content"],
+        "mediaVariants": {"Lead Project Visual": {"aspectRatio": "16:9", "fit": "contain", "placeholderPolicy": "pending or placeholder media does not render in recruiter-facing Primary details", "consumerGroups": ["primaryDetails"]}},
+        "discoveryMarkers": ["renderSystemCaseParent", "renderExperiment", "projectDetailHeroVisual", "semantic-inline-emphasis"],
+        "regressionProfiles": ["projectDetailStructure", "floatingNavigatorInteraction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "InfoGrid": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["info-grid-cell-gap", "info-card-label-value-gap", "info-card-padding", "project-overview-body-size", "project-overview-body-weight", "project-overview-body-color", "project-overview-body-leading"],
+        "componentIntentTokens": ["info-grid-cell-gap", "project-overview-body-size", "project-overview-body-weight", "project-overview-body-color", "project-overview-body-leading"],
+        "variants": ["Primary", "Experiment compact"],
+        "variantConsumers": {"Primary": ["primaryDetails"], "Experiment compact": ["experimentDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["info-grid-v45", "info-grid-v45--experiment"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "SemanticComponentResolver": {
+        "registryComponent": "ProjectDetailOverview",
+        "status": "Live / Current Production",
+        "renderOwners": ["assets/js/app.js#resolveProjectSemanticSlot"],
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "semanticRole": "Resolve verified semantic content to an approved Design Library component without project-name branching",
+        "acceptedContentTypes": ["metric", "qualitative-result", "shipped-ui", "research-synthesis", "prototype", "workshop-artifact", "framework", "text-only"],
+        "requiredData": ["archetype", "semantic slot", "verified source path"],
+        "optionalData": ["approved asset", "caption", "supporting metric", "delivery boundary"],
+        "allowedArchetypes": ["primary", "experiment"],
+        "variants": ["ProductEvidence", "ResearchEvidence", "PrototypeEvidence", "ArtefactEvidence", "FrameworkEvidence", "TextEvidence", "OutcomeMetric", "OutcomeStatement"],
+        "variantConsumers": {"ProductEvidence": ["primaryDetails"], "ResearchEvidence": ["primaryDetails", "experimentDetails"], "PrototypeEvidence": ["primaryDetails", "experimentDetails"], "ArtefactEvidence": ["primaryDetails", "experimentDetails"], "FrameworkEvidence": ["primaryDetails", "experimentDetails"], "TextEvidence": ["primaryDetails", "experimentDetails"], "OutcomeMetric": ["primaryDetails"], "OutcomeStatement": ["primaryDetails", "experimentDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["resolveProjectSemanticSlot", "semanticSource"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "tokenDependencies": ["project-overview-body-size", "project-overview-body-weight", "project-overview-body-color", "project-overview-body-leading"],
+        "componentIntentTokens": [],
+        "usageScope": ["Primary project detail", "Experiment detail"],
+        "fallbackComponent": "TextEvidence",
+        "forbiddenUsage": ["Runtime AI guessing", "project-name-specific branching", "fabricated asset", "placeholder evidence", "unregistered component"],
+        "protectedBehavior": ["Deterministic source priority", "Missing optional content renders no blank section", "Fallback preserves verified text only"],
+        "figmaMapping": null,
+        "regressionContracts": ["tests/presentation-contract.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "StructuredEvidence": {
+        "registryComponent": "ProjectDetailOverview",
+        "status": "Live / Current Production",
+        "renderOwners": ["assets/js/app.js#renderSystemCaseParent"],
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "semanticRole": "Evidence / Artefact",
+        "acceptedContentTypes": ["shipped-ui", "research-synthesis", "prototype", "workshop-artifact", "framework", "text-only"],
+        "requiredData": ["verified source content"],
+        "optionalData": ["assetId", "assetIds", "caption", "metrics", "decision mapping", "editorial quotations", "research insight hierarchy", "validation summary", "natural-ratio media", "editorial media group"],
+        "allowedArchetypes": ["primary", "experiment"],
+        "variants": ["default", "ordered-visual-proofs", "decision-support", "image-text", "text-only", "editorial-quotation", "key-research-insights", "validation-summary", "natural-ratio", "editorial-pair", "editorial-composite"],
+        "variantConsumers": {"default": ["primaryDetails"], "ordered-visual-proofs": ["primaryDetails"], "decision-support": ["primaryDetails"], "image-text": ["primaryDetails"], "text-only": ["primaryDetails", "experimentDetails"], "editorial-quotation": ["primaryDetails"], "key-research-insights": ["primaryDetails"], "validation-summary": ["primaryDetails"], "natural-ratio": ["primaryDetails"], "editorial-pair": ["primaryDetails"], "editorial-composite": ["primaryDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["structured-evidence-v223", "TextEvidence"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "regressionContracts": ["tests/presentation-contract.test.mjs", "tests/portfolio-browser-qa.mjs"],
+        "tokenDependencies": ["case-evidence-max", "radius-lg", "project-media-radius", "project-editorial-composite-aspect", "color-surface-evidence-item"],
+        "componentIntentTokens": [],
+        "usageScope": ["Evidence semantic slot"],
+        "fallbackComponent": "TextEvidence",
+        "forbiddenUsage": ["Synthetic proof", "raw confidential detail", "blank media frame"],
+        "protectedBehavior": ["Public-safe evidence", "Meaningful composition", "Editorial quotation semantics", "Mobile stacking"],
+        "figmaMapping": null
+      },
+      "Decision": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
+        "componentIntentTokens": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
+        "variants": ["Canonical", "Featured"],
+        "variantConsumers": {"Canonical": ["primaryDetails"], "Featured": ["primaryDetails"]},
+        "optionalContentBlocks": ["CONSTRAINT MANAGED", "TRADE-OFF ACCEPTED", "WHAT THIS REQUIRED"],
+        "consumerGroups": ["primaryDetails"],
+        "discoveryMarkers": ["decision-card-v46", "createFeaturedDecisionGroup"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "OutcomeMetric": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["cmp-popup-outcome-metric-size", "outcome-metric-gap", "outcome-metric-support-gap"],
+        "componentIntentTokens": ["outcome-metric-gap", "outcome-metric-support-gap"],
+        "variants": ["Quantified outcome", "Featured"],
+        "variantConsumers": {"Quantified outcome": ["primaryDetails"], "Featured": ["primaryDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["outcome-metric", "outcome-metric--qualitative"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      },
+      "OutcomeStatement": {
+        "registryComponent": "ProjectDetailOverview",
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "renderOwners": ["assets/js/app.js"],
+        "tokenDependencies": ["case-span-full", "case-outcome-item-gap", "cmp-popup-card-title-size"],
+        "componentIntentTokens": ["case-outcome-item-gap"],
+        "variants": ["System / operating outcome", "Consulting / implementation outcome", "Current / operator value"],
+        "variantConsumers": {"System / operating outcome": ["primaryDetails"], "Consulting / implementation outcome": ["primaryDetails"], "Current / operator value": ["primaryDetails"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "discoveryMarkers": ["outcome-qualitative-hierarchy"],
+        "regressionProfiles": ["projectDetailStructure"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/presentation-contract-browser-qa.mjs"]
+      },
+      "FloatingNavigator": {
+        "registryComponent": "FloatingNavigator",
+        "cssOwner": "assets/css/components/domain-selector.css",
+        "renderOwners": ["assets/js/app.js", "assets/js/home.js"],
+        "tokenDependencies": ["floating-nav-shell-inset", "floating-nav-shell-padding-inline", "floating-nav-rail-gap", "control-height", "radius-pill", "motion-base"],
+        "componentIntentTokens": ["floating-nav-shell-inset", "floating-nav-shell-padding-inline", "floating-nav-rail-gap"],
+        "variants": ["Domain", "Project detail"],
+        "variantConsumers": {"Domain": ["domainNavigation"], "Project detail": ["primaryDetails"]},
+        "consumerGroups": ["domainNavigation", "primaryDetails"],
+        "discoveryMarkers": ["floating-navigator", "canonicalProjectNavItems"],
+        "regressionProfiles": ["floatingNavigatorInteraction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+      }
+    },
+    "goldenConsumers": {
+      "viewports": [1419, 871, 430],
+      "primaryProjectDetail": {"projectId": "payment", "covers": ["InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]},
+      "experimentProjectDetail": {"projectId": "freelance-project-operations-tool", "covers": ["InfoGrid", "OutcomeMetric"]},
+      "projectCards": [
+        {"variant": "Primary", "surface": "Work"},
+        {"variant": "Experiment", "surface": "Experiments"},
+        {"variant": "Related", "surface": "Related Work"}
+      ]
+    }
+  },
   "components": [
     {
       "component": "Foundation",
@@ -252,6 +508,21 @@
         "leading-body",
         "color-surface-evidence-item",
         "info-card-padding",
+        "project-overview-title-summary-gap",
+        "case-span-headline",
+        "case-span-summary",
+        "case-span-reading",
+        "case-span-full",
+        "case-span-focus",
+        "case-section-title-content-gap",
+        "case-section-canvas-inset",
+        "case-content-anchor-inline",
+        "case-overview-summary-grid-gap",
+        "case-complexity-item-gap",
+        "case-outcome-item-gap",
+        "project-media-radius",
+        "project-editorial-composite-aspect",
+        "inline-metric-emphasis-surface",
         "section-heading-content-gap",
         "interactive-state-safe-area",
         "work-card-hover-border",
@@ -300,7 +571,7 @@
         "Outcome metric evidence",
         "Structured case evidence",
         "Two-stage product validation path",
-        "Voucher Center r119 popup composition",
+        "Recruiter-first Voucher Center and Game Center",
         "Primary UI Evidence",
         "Portrait Evidence",
         "Supporting Evidence",
@@ -308,15 +579,15 @@
         "Before / After Evidence"
       ],
       "interactionContract": [
-        "Voucher Center is the only r119 composition variant: it reads projects.voucher-center.popupComposition and renders exactly Hero, validation path, research, two decisions, scope, reusable system, ownership/evidence and Continue exploring in that order; its legacy generic sections do not render in parallel",
-        "The Voucher Center navigator is generated from the seven stable section IDs in popupComposition, never from an index or generic fallback; other projects retain the default shared navigator contract",
-        "Unresolved Voucher Center media retains its canonical Asset ID in a labelled Product image pending placeholder inside the existing media surface; it does not simulate shipped evidence and can be replaced without changing composition",
-        "The Voucher Center validation-path variant renders one ordered pilot → evidence → product-foundation composition from the Content SSOT, followed by an explicit carry-forward mapping; tablet and mobile preserve the same vertical order without horizontal page overflow",
-        "Until both public derivatives exist, the validation-path media slots use clearly labelled non-evidentiary placeholders and never expose private source boards, fabricated product proof or conversion metrics",
-        "Professional cases with at least two available chapters expose one compact, content-width, bottom-floating four-destination anchor navigator as a direct dialog child outside the transformed scroll container; it remains stationary throughout the popup and never uses tab semantics or hides content panels",
+        "Voucher Center and Game Center reuse the recruiter-first Primary composition: Hero, At a Glance + Info Grid, Complexity, Core System Insight, Decisions, Evidence, Outcomes, Accountability and Related Work; neither renders a standalone Contribution section.",
+        "Voucher Center and Game Center navigation is derived from the same rendered recruiter-first section targets as every other Primary case, with no project-specific taxonomy.",
+        "Voucher Center exposes only verified 20-participant decision evidence and shipped Claim → View scope; proposal-era modelled targets never render as outcomes.",
+        "Game Center separates reusable discovery and operator configuration from existing gameplay, and its measured outcomes retain denominator, period and conflict boundaries.",
+        "At a Glance applies canonical block-start alignment and heading-to-summary spacing against the Type row at desktop, tablet and mobile.",
+        "Professional cases expose one compact, content-width, bottom-floating navigator derived from the canonical recruiter-first section contract: Overview, Complexity, Decisions, Evidence, Outcomes and Ownership; missing rendered sections are omitted and no competing runtime taxonomy is allowed",
         "Project navigation at desktop, tablet, and mobile reuses the canonical Domain FloatingNavigator shell; ProjectDetailOverview owns only section labels, active state, and anchor navigation.",
         "Every navigator destination is calculated from the dialog scroll root with the sticky control inset applied exactly once.",
-        "Navigator active state and visible section share one runtime owner: the latest cancellable click transaction owns active state until alignment, manual scrolling restores scroll-spy, and section headings never receive programmatic visible focus.",
+        "Navigator active state and visible section share one runtime owner: the latest cancellable live-target animation owns active state until alignment, wheel or touch interruption returns ownership to scroll-spy, reduced motion settles immediately, and section headings never receive programmatic visible focus.",
         "Outcome cards promote verified leading values through the shared popup metric token while preserving evidence tier, attribution and measurement boundaries",
         "Structured case evidence uses one claim-led intro, semantic metric pairs, capability-group cards and a subtle public boundary; internal completeness notes, authoring reasons and publication instructions never enter the rendered page",
         "Verified projects pair At a glance and one Key Intervention Map inside the same governed overview container, with matched card treatment and balanced height; Before, Key intervention and After stay in DOM order without a heading above the visual, while the semantic section heading sits directly above the supporting copy below",
@@ -410,7 +681,7 @@
         "Card rails show only complete cards: three on desktop, two on tablet and one on mobile; partially clipped cards are forbidden as a scrolling affordance",
         "A token-owned inline safety inset keeps rotated, focused and hovered card edges visible at the first and last snap positions",
         "Overflow is measured from untransformed layout geometry; decorative card rotation never creates a false extra view or residual final click",
-        "Previous and next controls move to exact adjacent card snap anchors and disappear when no alternate card view exists",
+        "Previous and next controls move to exact adjacent card snap anchors and disappear whenever measured content geometry does not overflow; resize recomputes the state",
         "Previous/next controls and the native scrollbar communicate continuation",
         "Domain supporting-work rails use compact symmetrical block padding because the Domain panel already owns the outer section inset",
         "Touch scrolling, snap alignment and operable previous/next controls remain available",
@@ -476,12 +747,12 @@
         "Work follows workIndex.principalPortfolioArchitecture.featuredOrder; the first record uses the full-width featured variant, the next four use compact supporting variants, and remaining records use the same owner under More work",
         "featured cards use the shared horizontal desktop structure; compact cards use the shared stacked structure with a 22–26px title and 14px body/action tier",
         "Compact and responsive Work cards use content-sized grid rows, so the manifest-ratio media block owns its complete height and cannot overlap metadata or copy.",
-        "Work and Homepage Domain ProjectCards use an explicit media-stack grammar: the card shell alone owns border/radius/clipping; media is the first full-width row with zero content padding; a separate content wrapper owns text padding.",
+        "Work and Homepage Domain ProjectCards use an explicit media-stack grammar: the card shell alone owns border/radius/clipping and contains transformed media at rest, hover, focus and active states; media is the first full-width row with zero content padding; a separate content wrapper owns text padding.",
         "both Work variants collapse to one stacked column on compact viewports",
         "related-experiment titles use a compact responsive tier and wider measure for readable mixed Chinese/English wrapping",
         "explicit internal grid or flex owner",
         "token-owned media height",
-        "bottom-aligned CTA",
+        "Every card content owner stretches through its grid row and uses auto block-start margin to keep the CTA structurally bottom-aligned without fixed heights or per-project offsets",
         "search-result eyebrow reserves one stable row whether company metadata is populated or intentionally absent",
         "company names are indivisible max-content metadata and never wrap across Work, Related, Domain, or Search variants; adjacent context owns any necessary wrapping",
         "compact Work and Related variants omit redundant Domain metadata; the featured Work and Search variants retain context when it improves relevance",
@@ -490,15 +761,15 @@
         "shared Work hover contract across routes",
         "Work project covers resolve through the canonical asset manifest and shared project-cover frame; composition-integrity assets use contain without crop.",
         "Compact company metadata and title use the shared project-card-company-title-gap token.",
-        "Every resolved project cover derives its frame ratio from canonical Asset Manifest width and height; placeholder-only assets use their semantic fallback ratio.",
-        "Work and Homepage Domain ProjectCards consume the same ratio projection and preserve composition with contain.",
-        "Assets with a numeric source ratio of 2:1 or wider are classified generically as panoramic: desktop/tablet preserve the canonical source ratio; compact viewports use the shared 5:3 readability frame with cover and manifest-owned focal position.",
+        "Every listing-card cover uses one canonical 16:9 visible frame; Asset Manifest source dimensions never set card height.",
+        "Work, Homepage, Results, Search, Related Work and Experiment card consumers preserve composition with the shared contain and centered safe-area contract.",
+        "Recommended future card source size is 1920 × 1080; minimum acceptable source size is 1600 × 900. Tall or narrow sources remain contained inside the shared frame without project-specific wrappers.",
         "Company metadata uses the neutral project-card-company-color token; Work and Domain variants each project company and title through a non-expanding heading stack whose sole gap is project-card-company-title-gap = space-4 (16px)."
       ],
       "exclusiveOwner": true,
       "assetFrameContract": {
         "contentOwner": "content/portfolio-asset-manifest.json",
-        "runtimeOwner": "assets/js/app.js#resolveProjectAsset + projectAssetRatio",
+        "runtimeOwner": "assets/js/app.js#resolveProjectAsset",
         "cssOwner": "assets/css/components/project-card.css#work-card-v32__visual-v225 + related-project-card-v45--media-stack",
         "focalPositionOwner": "content/portfolio-asset-manifest.json#projectCardFocalPosition"
       },
@@ -582,7 +853,10 @@
       "exclusiveOwner": true,
       "layoutContract": [
         "Experiments & Practice remains visually and semantically subordinate to the 13 Primary Cases.",
+        "Experiment listing cards reuse the canonical ProjectCard shell, spacing, border/radius, title, CTA and 16:9 media language while retaining lighter information density.",
         "Compact detail order is Hero, The Question, maximum-three-part Experiment, visual Evidence, What This Proved, and Related / Next Experiment.",
+        "Experiment overview uses the canonical InfoGrid with Role, Scale, Audience and Timeline; Format and a separate top metadata trio are forbidden.",
+        "What This Proved, recognition and qualitative proof reuse the canonical qualitative OutcomeMetric presentation rather than an experiment-only banner.",
         "Problem Type metadata is search-only and renders no chip rail or reserved spacing.",
         "The compact variant does not use the Primary Case floating section navigator.",
         "Evidence uses the shared governed abstract treatment until a public-safe source asset exists.",
@@ -834,10 +1108,10 @@
       ],
       "interactionContract": [
         "One Shell, Rail, and Item primitive owns fixed positioning, safe-area offset, surface, radius, elevation, motion, horizontal overflow, focus-visible, reduced motion, and forced colors",
-        "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
+        "Domain supplies domain item state; Project derives Overview, Complexity, Decisions, Evidence, Outcomes and Ownership targets from the canonical recruiter-first section contract and supplies aria-current",
         "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior",
         "Homepage Domain rail and floating rail are both generated from the same domainSource canonical IDs; legacy shorthand IDs and legacy rail selectors are forbidden.",
-        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing."
+        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; floating-nav-shell-padding-inline owns balanced symmetric visible edge spacing."
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",
@@ -849,25 +1123,27 @@
       "renderSource": "public/site/assets/js/app.js#renderSystemCaseParent",
       "cssOwner": "assets/css/components/project-detail-overview.css",
       "tokenDependencies": [
-        "case-reading-max",
-        "space-5",
+        "case-span-full",
+        "case-complexity-item-gap",
         "radius-md",
         "color-border",
         "color-surface-evidence-item",
         "cmp-popup-card-title-size"
       ],
       "variants": [
-        "Bordered reading-edge cards",
-        "Featured-first 1 + 2 composition"
+        "Equal",
+        "Dominant + supporting",
+        "Two-up"
       ],
       "usageScope": [
         "DBS recruiter-first system case",
         "Future recruiter-first system cases with equivalent complexity semantics"
       ],
       "interactionContract": [
-        "Heading and card grid share the canonical reading edge.",
-        "Featured-first composition uses one full-width priority card followed by two equal supporting cards.",
-        "The supporting row remains two columns while readable and becomes one ordered column at 600px and below.",
+        "Heading and card grid share the canonical project-detail left anchor.",
+        "Dominant + supporting uses one full-width priority card followed by two equal supporting cards.",
+        "Semantic hierarchy comes only from the Human-approved baseline; item count and numeric appearance never infer priority.",
+        "All variants become one ordered column at the tablet breakpoint while preserving semantic order.",
         "Cards use natural height and never exceed the section content boundary."
       ],
       "allowedModifications": [

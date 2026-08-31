@@ -18,6 +18,8 @@ const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
 const content = JSON.parse(fs.readFileSync(contentPath, "utf8"));
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const browserQa = fs.readFileSync("tests/portfolio-browser-qa.mjs", "utf8");
+const appRuntime = fs.readFileSync("public/site/assets/js/app.js", "utf8");
+const projectCardCss = fs.readFileSync("public/site/assets/css/components/project-card.css", "utf8");
 const ssotAtomicityEnforcedFrom = registry.ssotGovernance?.ssotAtomicityEnforcedFrom;
 const liveCurrentStateConsumers = [
   "scripts/build-production-assets.mjs",
@@ -212,6 +214,7 @@ test("SSOT-04 registry is the only live activation owner", () => {
   const duplicateOwners = [];
   for (const file of tracked) {
     if (file === registryPath || file === allowedHistoricalRecord) continue;
+    if (!fs.existsSync(file)) continue;
     const bytes = fs.readFileSync(file);
     if (bytes.includes(0)) continue;
     if (bytes.toString("utf8").includes(ssotAtomicityEnforcedFrom)) duplicateOwners.push(file);
@@ -219,10 +222,30 @@ test("SSOT-04 registry is the only live activation owner", () => {
   assert.deepEqual(duplicateOwners, [], `duplicate live activation owners: ${duplicateOwners.join(", ")}`);
 });
 
-test("active-asset ProjectCard QA derives expectations from current runtime asset state", () => {
+test("active-asset ProjectCard QA enforces the shared 16:9 frame", () => {
   assert.match(browserQa, /assetStatus:frame\?\.dataset\.assetStatus/);
-  assert.match(browserQa, /x\.assetStatus==="real-active"&&x\.naturalRatio/);
+  assert.match(browserQa, /Math\.abs\(x\.frameRatio-16\/9\)/);
+  assert.match(browserQa, /x\.objectFit==="contain"/);
   assert.doesNotMatch(browserQa, /Placeholder ProjectCard semantic ratio failed/);
+});
+
+test("R182.2 shared Primary owners preserve the Human-approved golden contracts", () => {
+  assert.match(projectCardCss, /\.work-card-v32__content\{[^}]*height:100%/);
+  assert.match(projectCardCss, /\.work-card-v32__action,[^{]+\{[^}]*margin-top:auto/);
+  assert.match(appRuntime, /function canonicalProjectNavItems\(\)/);
+  assert.doesNotMatch(appRuntime, /const PROJECT_NAV_ITEMS=/);
+  assert.match(appRuntime, /function animateProjectSectionNavigation\(token\)/);
+  assert.match(appRuntime, /addEventListener\('wheel',cancelProjectSectionNavigation/);
+  assert.match(appRuntime, /addEventListener\('touchstart',cancelProjectSectionNavigation/);
+  assert.match(appRuntime, /dataset\.outcomeTier/);
+});
+
+test("R182.2 Audience SSOT contains users and operators, not delivery collaborators", () => {
+  const forbidden = /Product managers|Engineering|Development team|Delivery stakeholders|Business \/ Sponsor stakeholders|marketplace stakeholders/i;
+  for (const [projectId, project] of Object.entries(content.projects)) {
+    const audience = JSON.stringify(project.infoGrid?.audience || project.audience || "");
+    assert.doesNotMatch(audience, forbidden, projectId);
+  }
 });
 
 test("historical Git blob reader handles output beyond Node's default subprocess buffer", () => {

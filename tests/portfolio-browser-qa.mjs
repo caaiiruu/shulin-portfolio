@@ -12,10 +12,24 @@ const viewports = [
   { name: "tablet-871", width: 871, height: 1024 },
   { name: "mobile-430", width: 430, height: 932 },
 ];
-const routes = ["/site/", "/site/work", "/site/work/booking", "/site/work/voucher", "/site/work/taishin-p2p-marketplace-platform", "/site/work/booking-taxi-pickup-service-strategy", "/site/work/cathay-sit-online-account-opening", "/site/work/cathay-sit-review-remediation-operations"];
+const primaryIds=['voucher','voucher-center','game-center','dbs','booking','bandzo','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy'];
+const recruiterFirstPrimaryIds=new Set(['voucher-center','game-center','dbs','booking','payment','cathay-sit-online-account-opening','taishin-p2p-marketplace-platform','cathay-mortgage-assistant','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','booking-taxi-pickup-service-strategy']);
+const portfolioContent=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
+const portfolioManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
+const recruiterFirstRealLeadIds=new Set([...recruiterFirstPrimaryIds].filter(projectId=>{const project=portfolioContent.projects[projectId],assetId=project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId,asset=portfolioManifest.items[assetId];return asset?.assetStatus==='production'&&asset?.implementationStatus==='real-active'}));
+const routes = ["/site/", "/site/work", "/site/experiments", ...primaryIds.map(id=>`/site/work/${id}`)];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
+const loadEvidenceImages=async page=>{
+  const images=page.locator("#systemCaseEvidenceSection img");
+  for(let index=0;index<await images.count();index+=1){
+    const image=images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(node=>{node.loading="eager"});
+    await page.waitForFunction(node=>node.complete&&node.naturalWidth>0,await image.elementHandle(),{timeout:5000});
+  }
+};
 
 for (const viewport of viewports) {
   const directory = path.join(outputRoot, "viewports", viewport.name);
@@ -26,6 +40,12 @@ for (const viewport of viewports) {
     isMobile: viewport.width <= 430,
   });
   const page = await context.newPage();
+  page.setDefaultNavigationTimeout(60000);
+  await page.addInitScript(()=>{
+    window.__r182Vitals={cls:0,lcp:0};
+    new PerformanceObserver(list=>{for(const entry of list.getEntries())if(!entry.hadRecentInput)window.__r182Vitals.cls+=entry.value}).observe({type:'layout-shift',buffered:true});
+    new PerformanceObserver(list=>{const entries=list.getEntries();window.__r182Vitals.lcp=entries.at(-1)?.startTime||0}).observe({type:'largest-contentful-paint',buffered:true});
+  });
   const consoleErrors = [];
   const runtimeErrors = [];
   const networkErrors = [];
@@ -41,20 +61,63 @@ for (const viewport of viewports) {
   const routeResults = [];
   for (const [index, route] of routes.entries()) {
     const response = await page.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
-    const metrics = await page.evaluate(() => ({
-      clientWidth: document.documentElement.clientWidth,
-      scrollWidth: document.documentElement.scrollWidth,
-      horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-      bodyWidth: document.body.getBoundingClientRect().width,
-      title: document.title,
-    }));
+    await page.evaluate(()=>{if(window.__r182Vitals)window.__r182Vitals.cls=0});
+    await page.waitForTimeout(100);
+    const metrics = await page.evaluate(() => {
+      const visible=node=>Boolean(node&&getComputedStyle(node).visibility!=='hidden'&&getComputedStyle(node).display!=='none'&&node.getClientRects().length);
+      const interactive=[...document.querySelectorAll('a[href],button,input,select,textarea,[role="button"],[tabindex]')].filter(node=>visible(node)&&node.tabIndex>=0);
+      const unnamed=interactive.filter(node=>!(node.getAttribute('aria-label')||node.getAttribute('aria-labelledby')||node.textContent.trim()||node.getAttribute('title'))).length;
+      const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]')].filter(visible).map(node=>Number(node.getAttribute('aria-level')||node.tagName[1]));
+      const headingSkip=headings.some((level,index)=>index>0&&level>headings[index-1]+1);
+      const resources=performance.getEntriesByType('resource');
+      const sum=(pattern)=>resources.filter(x=>pattern.test(new URL(x.name).pathname)).reduce((total,x)=>total+(x.transferSize||x.encodedBodySize||0),0);
+      const jsBytes=sum(/\.js$/),cssBytes=sum(/\.css$/),imageBytes=sum(/\.(png|jpe?g|webp|avif|gif|svg)$/i);
+      const belowFoldEager=[...document.images].filter(img=>img.getBoundingClientRect().top>innerHeight*1.25&&img.loading!=='lazy').length;
+      const smallTargets=innerWidth<=430?interactive.filter(node=>{if(node.matches('.info-tooltip__trigger'))return false;const r=node.getBoundingClientRect();return r.width>0&&r.height>0&&(r.width<24||r.height<24)}).length:0;
+      const overview=document.querySelector('#projectOverviewSection'),summary=document.querySelector('#projectView .project-summary-v45'),signals=document.querySelector('#projectSignals'),lead=document.querySelector('#projectDetailHeroVisual'),leadImage=lead?.querySelector('img'),complexity=document.querySelector('#systemCaseComplexitySection');
+      const rect=node=>{const value=node?.getBoundingClientRect();return value?{top:value.top,bottom:value.bottom,left:value.left,right:value.right,width:value.width,height:value.height}:null};
+      return {
+        clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,
+        horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,
+        bodyWidth:document.body.getBoundingClientRect().width,title:document.title,
+        a11y:{h1:document.querySelectorAll('h1').length,main:document.querySelectorAll('main').length,headingSkip,unnamed,imagesWithoutAlt:[...document.images].filter(img=>visible(img)&&!img.hasAttribute('alt')).length,smallTargets},
+        performance:{jsBytes,cssBytes,imageBytes,belowFoldEager,cls:window.__r182Vitals?.cls||0,lcp:window.__r182Vitals?.lcp||0,score:Math.max(0,100-(jsBytes>2500000?20:0)-(cssBytes>1000000?15:0)-(window.__r182Vitals?.cls>.1?20:0))},
+        opening:overview?{summary:rect(summary),signals:rect(signals),lead:rect(lead),complexity:rect(complexity),columns:getComputedStyle(document.querySelector('#projectView')).gridTemplateColumns,ratio:lead?lead.getBoundingClientRect().width/lead.getBoundingClientRect().height:null,fit:leadImage?getComputedStyle(leadImage).objectFit:null,assetStatus:lead?.dataset.assetStatus,owner:lead?.dataset.componentOwner,variant:lead?.dataset.mediaVariant}:null
+      };
+    });
     if (!response?.ok()) failures.push(`${viewport.name} ${route} HTTP ${response?.status()}`);
     if (metrics.horizontalOverflow) failures.push(`${viewport.name} ${route} horizontal overflow`);
+    if(metrics.a11y.h1!==1||metrics.a11y.main!==1||metrics.a11y.headingSkip||metrics.a11y.unnamed||metrics.a11y.imagesWithoutAlt)failures.push(`${viewport.name} ${route} automated accessibility failed: ${JSON.stringify(metrics.a11y)}`);
+    if(metrics.a11y.smallTargets)failures.push(`${viewport.name} ${route} deterministic touch targets below 24px: ${metrics.a11y.smallTargets}`);
+    if(metrics.performance.score<80||metrics.performance.cls>.1||metrics.performance.jsBytes>2500000||metrics.performance.cssBytes>1000000||metrics.performance.belowFoldEager)failures.push(`${viewport.name} ${route} non-asset performance budget failed: ${JSON.stringify(metrics.performance)}`);
+    const projectId=route.match(/^\/site\/work\/([^/]+)$/)?.[1];
+    if(projectId&&primaryIds.includes(projectId)){
+      const opening=metrics.opening;
+      if(!opening?.lead)failures.push(`${viewport.name} ${projectId} approved Primary Lead Project Visual missing: ${JSON.stringify(opening)}`);
+      else if(Math.abs(opening.ratio-16/9)>.02||opening.fit!=='contain'||opening.assetStatus!=='real-active'||opening.owner!=='ProjectDetailOverview'||opening.variant!=='Lead Project Visual')failures.push(`${viewport.name} ${projectId} Primary Lead Project Visual contract mismatch: ${JSON.stringify(opening)}`);
+    }
+    if(projectId&&recruiterFirstPrimaryIds.has(projectId)){
+      const opening=metrics.opening;
+      const expectsRealLead=recruiterFirstRealLeadIds.has(projectId);
+      if(!opening?.summary||!opening.signals||!opening.complexity)failures.push(`${viewport.name} ${projectId} recruiter-first opening owner missing: ${JSON.stringify(opening)}`);
+      else if(expectsRealLead&&!opening.lead)failures.push(`${viewport.name} ${projectId} approved real Lead Project Visual missing: ${JSON.stringify(opening)}`);
+      else if(!expectsRealLead&&opening.lead)failures.push(`${viewport.name} ${projectId} pending placeholder rendered recruiter-facing: ${JSON.stringify(opening)}`);
+      else{
+        const overviewBottom=Math.max(opening.summary.bottom,opening.signals.bottom),openingTail=opening.lead?.bottom||overviewBottom;
+        if((opening.lead&&opening.lead.top<overviewBottom-1)||opening.complexity.top<openingTail-1)failures.push(`${viewport.name} ${projectId} opening order mismatch: ${JSON.stringify(opening)}`);
+        if(opening.lead&&(Math.abs(opening.ratio-16/9)>.02||opening.fit!=='contain'||opening.assetStatus!=='real-active'||opening.owner!=='ProjectDetailOverview'||opening.variant!=='Lead Project Visual'))failures.push(`${viewport.name} ${projectId} Lead Project Visual contract mismatch: ${JSON.stringify(opening)}`);
+        const stacked=Math.abs(opening.summary.left-opening.signals.left)<2&&opening.signals.top>=opening.summary.bottom-1;
+        if(viewport.width<=871&&!stacked)failures.push(`${viewport.name} ${projectId} tablet/mobile Overview order mismatch: ${JSON.stringify(opening)}`);
+        if(viewport.width===1419&&stacked)failures.push(`${viewport.name} ${projectId} desktop Overview unexpectedly stacked: ${JSON.stringify(opening)}`);
+      }
+    }
+    if(await page.locator("#systemCaseEvidenceSection img").count())await loadEvidenceImages(page);
     await page.screenshot({ path: path.join(directory, `${index + 1}-${route.replace(/[^a-z0-9]+/gi, "-")}.png`), fullPage: true });
     routeResults.push({ route, status: response?.status(), metrics });
   }
 
   await page.goto(`${baseUrl}/site/work/taishin-p2p-marketplace-platform`,{waitUntil:"networkidle"});
+  await loadEvidenceImages(page);
   const taishinPresentation=await page.evaluate(()=>{
     const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll");
     const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
@@ -86,8 +149,12 @@ for (const viewport of viewports) {
   if(JSON.stringify(taishinPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Taishin navigator mismatch: ${JSON.stringify(taishinPresentation.navigator)}`);
   if(JSON.stringify(taishinPresentation.sectionOrder)!==JSON.stringify(expectedTaishinSections)||!(taishinPresentation.decisionTop<taishinPresentation.evidenceTop))failures.push(`${viewport.name} Taishin IA mismatch: ${JSON.stringify(taishinPresentation)}`);
   if(taishinPresentation.decisionCount!==3||taishinPresentation.evidenceCount!==4||taishinPresentation.accountabilityGroups!==2)failures.push(`${viewport.name} Taishin shared primitive mismatch: ${JSON.stringify(taishinPresentation)}`);
-  if(taishinPresentation.atAGlance!=="Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.")failures.push(`${viewport.name} Taishin At a Glance mismatch`);
-  if(viewport.width===1419&&taishinPresentation.atAGlanceLines>2)failures.push(`${viewport.name} Taishin At a Glance exceeds two lines: ${taishinPresentation.atAGlanceLines}`);
+  if(!/^Co-led P2P marketplace UX definition/.test(taishinPresentation.atAGlance)
+    ||!taishinPresentation.atAGlance.includes("30 interviews")
+    ||!["buyer","seller","bank","vendor"].every(role=>taishinPresentation.atAGlance.toLowerCase().includes(role))
+    ||!taishinPresentation.atAGlance.includes("one transaction model")
+  )failures.push(`${viewport.name} Taishin At a Glance governance signal mismatch: ${taishinPresentation.atAGlance}`);
+  if(viewport.width===1419&&taishinPresentation.atAGlanceLines>3)failures.push(`${viewport.name} Taishin At a Glance exceeds three lines: ${taishinPresentation.atAGlanceLines}`);
   const expectedTaishinEvidence=["taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-delivery-alignment-v1"];
   if(JSON.stringify(taishinPresentation.evidenceMedia.map(item=>item.assetId))!==JSON.stringify(expectedTaishinEvidence)||taishinPresentation.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1))failures.push(`${viewport.name} Taishin asset-backed StructuredEvidence media mismatch: ${JSON.stringify(taishinPresentation.evidenceMedia)}`);
   if(taishinPresentation.legacy.length)failures.push(`${viewport.name} Taishin legacy leakage: ${JSON.stringify(taishinPresentation.legacy)}`);
@@ -136,6 +203,7 @@ for (const viewport of viewports) {
   }
 
   await page.goto(`${baseUrl}/site/work/cathay-sit-review-remediation-operations`,{waitUntil:"networkidle"});
+  await loadEvidenceImages(page);
   const cathayPresentation=await page.evaluate(()=>{
     const dialog=document.querySelector("#detailDialog");
     const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
@@ -161,11 +229,11 @@ for (const viewport of viewports) {
     };
   });
   const expectedCathaySections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
-  if(cathayPresentation.title!=="Fragmented review knowledge to a shared remediation operating model"||cathayPresentation.title.startsWith("From "))failures.push(`${viewport.name} Cathay Hero presentation contract failed: ${cathayPresentation.title}`);
+  if(cathayPresentation.title!=="Interface symptoms to a prioritised remediation model"||cathayPresentation.title.startsWith("From "))failures.push(`${viewport.name} Cathay Hero presentation contract failed: ${cathayPresentation.title}`);
   if(cathayPresentation.problemTypes.length||cathayPresentation.classificationVisible)failures.push(`${viewport.name} Cathay Hero taxonomy must be empty: ${JSON.stringify(cathayPresentation.problemTypes)}`);
   if(cathayPresentation.evidenceVariant!=="ordered-visual-proofs"||cathayPresentation.kpiStripVisible)failures.push(`${viewport.name} Cathay Research Coverage primitive mismatch: ${JSON.stringify(cathayPresentation)}`);
   if(JSON.stringify(cathayPresentation.evidenceBlocks.map(block=>block.id))!==JSON.stringify(["research-coverage","operating-model","prioritisation","phased-direction"]))failures.push(`${viewport.name} Cathay Evidence block order/duplication mismatch: ${JSON.stringify(cathayPresentation.evidenceBlocks)}`);
-  if(cathayPresentation.evidenceAssets.length!==4||cathayPresentation.evidenceAssets.some(image=>image.placeholder||!image.complete||!image.naturalWidth||!image.src?.includes("/site/assets/projects/cathay-review/")))failures.push(`${viewport.name} Cathay public-safe Evidence assets failed: ${JSON.stringify(cathayPresentation.evidenceAssets)}`);
+  if(cathayPresentation.evidenceAssets.length!==4||cathayPresentation.evidenceAssets.some((image,index)=>image.placeholder||!image.complete||!image.naturalWidth||!image.src?.includes(index===0?"/site/assets/projects/cathay-sit-review-remediation-operations/":"/site/assets/projects/cathay-review/")))failures.push(`${viewport.name} Cathay public-safe Evidence assets failed: ${JSON.stringify(cathayPresentation.evidenceAssets)}`);
   if(JSON.stringify(cathayPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Cathay navigator mismatch: ${JSON.stringify(cathayPresentation.navigator)}`);
   if(JSON.stringify(cathayPresentation.sectionOrder)!==JSON.stringify(expectedCathaySections)||!(cathayPresentation.decisionTop<cathayPresentation.evidenceTop))failures.push(`${viewport.name} Cathay rendered IA mismatch: ${JSON.stringify(cathayPresentation)}`);
   if(cathayPresentation.legacy.length)failures.push(`${viewport.name} Cathay legacy leakage: ${JSON.stringify(cathayPresentation.legacy)}`);
@@ -201,7 +269,7 @@ for (const viewport of viewports) {
     };
   });
   const expectedOaSections=["what-made-this-hard","my-contribution","core-system-insight","key-design-decisions","evidence-to-operating-model","outcomes","my-accountability","continue-exploring"];
-  if(cathayOaPresentation.title!=="Fragmented requirements to one end-to-end account-opening journey"||cathayOaPresentation.title.startsWith("From "))failures.push(`${viewport.name} Cathay OA Hero contract failed: ${cathayOaPresentation.title}`);
+  if(cathayOaPresentation.title!=="Fragmented account-opening steps to a validated end-to-end flow")failures.push(`${viewport.name} Cathay OA Hero contract failed: ${cathayOaPresentation.title}`);
   if(cathayOaPresentation.classificationVisible||cathayOaPresentation.tags.length)failures.push(`${viewport.name} Cathay OA Hero taxonomy leaked: ${JSON.stringify(cathayOaPresentation.tags)}`);
   if(JSON.stringify(cathayOaPresentation.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Cathay OA navigator mismatch: ${JSON.stringify(cathayOaPresentation.navigator)}`);
   if(JSON.stringify(cathayOaPresentation.sectionOrder)!==JSON.stringify(expectedOaSections))failures.push(`${viewport.name} Cathay OA rendered IA mismatch: ${JSON.stringify(cathayOaPresentation.sectionOrder)}`);
@@ -215,17 +283,22 @@ for (const viewport of viewports) {
   if(cathayOaPresentation.overflow>0)failures.push(`${viewport.name} Cathay OA dialog horizontal overflow: ${cathayOaPresentation.overflow}`);
 
   await page.goto(`${baseUrl}/site/work/booking`,{waitUntil:"networkidle"});
-  const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("img")].filter(image=>image.alt);await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));const required=["Connecting the global taxi-booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric")],outcomes=outcomeCards.map(card=>({value:card.querySelector(".outcome-metric__value")?.textContent.trim(),label:(()=>{const node=card.querySelector(".outcome-metric__label")?.cloneNode(true);node?.querySelectorAll(".info-tooltip").forEach(tip=>tip.remove());return node?.textContent.trim()})()})),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),publicText=dialog.innerText,decisionFields=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")].map(card=>[...card.querySelectorAll(".decision-field-label-v58,dt")].map(label=>({label:label.textContent.trim(),copy:((label.tagName==="DT"?label.parentElement?.querySelector("dd"):label.nextElementSibling)?.textContent||"").trim()}))),flow=dialog.querySelector(".contribution-block .voucher-r149-flow"),flowNodes=[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")],flowSupport=dialog.querySelector(".contribution-block>.voucher-r149-intro"),insight=dialog.querySelector(".core-system-insight-section"),insightTitle=dialog.querySelector(".core-system-insight-section h2"),insightVisual=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation"),insightCaption=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation__caption"),complexity=[...dialog.querySelectorAll(".recruiter-complexity-grid--featured-first>.recruiter-complexity-card")],outcomeGrid=dialog.querySelector("#systemCaseOutcomesSection .outcome-metric-grid"),quickView=dialog.querySelector(".quick-view-v51--project"),audienceNodes=[...dialog.querySelectorAll(".info-grid-v45__audience")],contributionSection=flow?.closest(".contribution-block");const rect=node=>{const r=node?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,center:r.left+r.width/2}:null},titleStyle=insightTitle?getComputedStyle(insightTitle):null;return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,publicText,decisionFields,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth,contribution:{count:visibleHeadings.filter(text=>text==="Contribution").length,flow:rect(flow),nodes:flowNodes.map(rect),support:rect(flowSupport)},insight:{section:rect(insight),title:rect(insightTitle),titleLines:insightTitle&&titleStyle?Math.round(insightTitle.getBoundingClientRect().height/parseFloat(titleStyle.lineHeight)):null,visual:rect(insightVisual),captionAlign:insightCaption?getComputedStyle(insightCaption).textAlign:null},complexity:complexity.map(rect),complexityColumns:dialog.querySelector(".recruiter-complexity-grid--featured-first")?getComputedStyle(dialog.querySelector(".recruiter-complexity-grid--featured-first")).gridTemplateColumns:null,outcomeRhythm:{rowGap:parseFloat(getComputedStyle(outcomeGrid).rowGap)||0,cards:outcomeCards.map(rect),innerGaps:outcomeCards.map(card=>{const value=card.querySelector(".outcome-metric__value")?.getBoundingClientRect(),label=card.querySelector(".outcome-metric__label")?.getBoundingClientRect();return value&&label?label.top-value.bottom:null})},audience:{total:audienceNodes.length,inInfoGrid:audienceNodes.filter(node=>node.closest("#projectSignals")).length,inProgramme:audienceNodes.filter(node=>node.closest("#programmeSurface")).length,quickHeight:getComputedStyle(quickView).height,quickOverflow:Math.max(0,quickView.scrollHeight-quickView.clientHeight),contributionHasAudience:/Primary:|Secondary:/.test(contributionSection?.innerText||"")}}});
+  await loadEvidenceImages(page);
+  const bookingCertification=await page.evaluate(async()=>{const dialog=document.querySelector("#detailDialog"),visibleHeadings=[...dialog.querySelectorAll("h2,h3")].filter(node=>{const style=getComputedStyle(node);return style.display!=="none"&&style.visibility!=="hidden"&&node.getClientRects().length}).map(node=>node.textContent.trim()),images=[...dialog.querySelectorAll("#systemCaseEvidenceSection img")].filter(image=>image.alt);const required=["Taxi options and trip context to a connected booking journey","At a glance","What made this hard","Contribution","The booking journey became clearer when known trip context and market-specific pickup guidance worked as one system.","Design decisions","Evidence that shaped the decisions","Outcomes","My accountability","Related work"],legacy=["Why It Mattered","Business Impact","Research Strategy","Delivery and Measurement","Status and Disclosure"],outcomeCards=[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric")],outcomes=outcomeCards.map(card=>({value:card.querySelector(".outcome-metric__value")?.textContent.trim(),label:(()=>{const node=card.querySelector(".outcome-metric__label")?.cloneNode(true);node?.querySelectorAll(".info-tooltip").forEach(tip=>tip.remove());return node?.textContent.trim()})()})),navigator=[...dialog.querySelectorAll("#projectSectionNav a")].map(node=>node.textContent.trim()),publicText=dialog.innerText,decisionFields=[...dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46")].map(card=>[...card.querySelectorAll(".decision-field-label-v58,dt")].map(label=>({label:label.textContent.trim(),copy:((label.tagName==="DT"?label.parentElement?.querySelector("dd"):label.nextElementSibling)?.textContent||"").trim()}))),flow=dialog.querySelector(".contribution-block .voucher-r149-flow"),flowNodes=[...dialog.querySelectorAll(".contribution-block .voucher-r149-flow article")],flowSupport=dialog.querySelector(".contribution-block>.voucher-r149-intro"),insight=dialog.querySelector(".core-system-insight-section"),insightTitle=dialog.querySelector(".core-system-insight-section h2"),insightVisual=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation"),insightCaption=dialog.querySelector(".core-system-insight-section .voucher-r149-foundation__caption"),complexity=[...dialog.querySelectorAll(".recruiter-complexity-grid--featured-first>.recruiter-complexity-card")],outcomeGrid=dialog.querySelector("#systemCaseOutcomesSection .outcome-metric-grid"),quickView=dialog.querySelector(".quick-view-v51--project"),audienceNodes=[...dialog.querySelectorAll(".info-grid-v45__audience")],contributionSection=flow?.closest(".contribution-block");const rect=node=>{const r=node?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,center:r.left+r.width/2}:null},titleStyle=insightTitle?getComputedStyle(insightTitle):null;return{requiredOrder:required.map(text=>visibleHeadings.indexOf(text)),legacy:visibleHeadings.filter(text=>legacy.includes(text)),outcomes,navigator,publicText,decisionFields,evidenceImages:images.filter(image=>image.currentSrc.includes("/booking/")).map(image=>({src:image.currentSrc,complete:image.complete,naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight})),overflow:dialog.scrollWidth-dialog.clientWidth,contribution:{count:visibleHeadings.filter(text=>text==="Contribution").length,flow:rect(flow),nodes:flowNodes.map(rect),support:rect(flowSupport)},insight:{section:rect(insight),title:rect(insightTitle),titleLines:insightTitle&&titleStyle?Math.round(insightTitle.getBoundingClientRect().height/parseFloat(titleStyle.lineHeight)):null,visual:rect(insightVisual),captionAlign:insightCaption?getComputedStyle(insightCaption).textAlign:null},complexity:complexity.map(rect),complexityColumns:dialog.querySelector(".recruiter-complexity-grid--featured-first")?getComputedStyle(dialog.querySelector(".recruiter-complexity-grid--featured-first")).gridTemplateColumns:null,outcomeRhythm:{rowGap:parseFloat(getComputedStyle(outcomeGrid).rowGap)||0,cards:outcomeCards.map(rect),innerGaps:outcomeCards.map(card=>{const value=card.querySelector(".outcome-metric__value")?.getBoundingClientRect(),label=card.querySelector(".outcome-metric__label")?.getBoundingClientRect();return value&&label?label.top-value.bottom:null})},audience:{total:audienceNodes.length,inInfoGrid:audienceNodes.filter(node=>node.closest("#projectSignals")).length,inProgramme:audienceNodes.filter(node=>node.closest("#programmeSurface")).length,quickHeight:getComputedStyle(quickView).height,quickOverflow:Math.max(0,quickView.scrollHeight-quickView.clientHeight),contributionHasAudience:/Primary:|Secondary:/.test(contributionSection?.innerText||"")}}});
   if(bookingCertification.requiredOrder.some(index=>index<0)||bookingCertification.requiredOrder.some((index,position,array)=>position&&index<=array[position-1]))failures.push(`${viewport.name} Booking architecture order failed: ${JSON.stringify(bookingCertification.requiredOrder)}`);
   if(bookingCertification.legacy.length)failures.push(`${viewport.name} Booking legacy standalone sections visible: ${JSON.stringify(bookingCertification.legacy)}`);
   if(JSON.stringify(bookingCertification.outcomes)!==JSON.stringify([{value:"+~7%",label:"desktop conversion rate"},{value:"+~3%",label:"mobile conversion rate"},{value:"+~10%",label:"tablet conversion rate"},{value:"~150",label:"additional rides per day after launch"}]))failures.push(`${viewport.name} Booking outcomes mismatch: ${JSON.stringify(bookingCertification.outcomes)}`);
   if(/\b2-step\b|\b3-step\b|943,818|65\.48%/.test(bookingCertification.publicText))failures.push(`${viewport.name} Booking confidential/internal public text regression`);
   if(!bookingCertification.publicText.includes("6 of 7 analysed markets improved")||!bookingCertification.publicText.includes("Spain was the only analysed market to decline")||!bookingCertification.publicText.includes("40+ countries"))failures.push(`${viewport.name} Booking recruiter-first supporting outcome story missing`);
   if(JSON.stringify(bookingCertification.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} Booking navigator mismatch: ${JSON.stringify(bookingCertification.navigator)}`);
-  if(bookingCertification.evidenceImages.length!==8||bookingCertification.evidenceImages.some(image=>!image.complete||image.naturalWidth!==1600||image.naturalHeight!==900)||!bookingCertification.evidenceImages.some(image=>image.src.includes("ride-mix-public-01.svg"))||bookingCertification.evidenceImages.some(image=>image.src.includes("outcomes-cross-market")||image.src.includes("outcomes-post-launch")))failures.push(`${viewport.name} Booking evidence readiness/confidentiality failed: ${JSON.stringify(bookingCertification.evidenceImages)}`);
+  if(bookingCertification.evidenceImages.length!==2
+    ||bookingCertification.evidenceImages.some(image=>!image.complete||image.naturalWidth!==1600||image.naturalHeight!==900)
+    ||!["booking-evidence-workshop-phase2-synthesis-01.jpg","booking-evidence-research-feedback-summary-01.jpg"].every(name=>bookingCertification.evidenceImages.some(image=>image.src.includes(name)))
+    ||bookingCertification.evidenceImages.some(image=>/outcomes-cross-market|outcomes-post-launch|booking-taxi/.test(image.src))
+  )failures.push(`${viewport.name} Booking evidence readiness/confidentiality failed: ${JSON.stringify(bookingCertification.evidenceImages)}`);
   if(bookingCertification.decisionFields.length!==3||bookingCertification.decisionFields.some(fields=>!fields.some(x=>x.label==="WHAT I DECIDED"&&x.copy)||!fields.some(x=>x.label==="WHY THIS CHOICE"&&x.copy)||!fields.some(x=>["TRADE-OFF ACCEPTED","WHAT THIS REQUIRED"].includes(x.label)&&x.copy)||!fields.some(x=>x.label==="OUTCOME"&&x.copy)))failures.push(`${viewport.name} Booking decision field completeness failed: ${JSON.stringify(bookingCertification.decisionFields)}`);
   if(bookingCertification.contribution.count!==1||!bookingCertification.contribution.flow||bookingCertification.contribution.nodes.length!==3||Math.abs(bookingCertification.contribution.nodes[1].center-bookingCertification.contribution.flow.center)>.75||Math.abs(bookingCertification.contribution.support.left-bookingCertification.contribution.flow.left)>.75)failures.push(`${viewport.name} Booking contribution alignment failed: ${JSON.stringify(bookingCertification.contribution)}`);
-  if(viewport.width===1419&&(bookingCertification.insight.titleLines>4||bookingCertification.insight.title.width<700))failures.push(`${viewport.name} Booking Core System Insight headline width failed: ${JSON.stringify(bookingCertification.insight)}`);
+  if(viewport.width===1419&&(bookingCertification.insight.titleLines>5||bookingCertification.insight.title.width<700))failures.push(`${viewport.name} Booking Core System Insight headline width failed: ${JSON.stringify(bookingCertification.insight)}`);
   if(!bookingCertification.insight.visual||Math.abs(bookingCertification.insight.visual.center-bookingCertification.insight.section.center)>1||bookingCertification.insight.captionAlign!=="center")failures.push(`${viewport.name} Booking Core System Insight visual centring failed: ${JSON.stringify(bookingCertification.insight)}`);
   if(viewport.width>600&&Math.abs(bookingCertification.complexity[1].height-bookingCertification.complexity[2].height)>.75)failures.push(`${viewport.name} Booking complexity equal-height failed: ${JSON.stringify(bookingCertification.complexity)}`);
   if(viewport.width<=600&&bookingCertification.complexityColumns.split(" ").length!==1)failures.push(`${viewport.name} Booking complexity mobile stacking failed: ${bookingCertification.complexityColumns}`);
@@ -240,7 +313,7 @@ for (const viewport of viewports) {
     const dialog=document.querySelector("#detailDialog");
     const text=dialog?.innerText||"";
     const order=[
-      "Building one self-service mortgage application from fragmented application tasks",
+      "Defining one stateful mortgage product before designing its screens",
       "At a glance",
       "What made this hard",
       "Contribution",
@@ -306,12 +379,18 @@ for (const viewport of viewports) {
   if(!ctbcCertification.signals.some(signal=>signal.includes("0→1 Product"))||!ctbcCertification.signals.some(signal=>signal.includes("3 months"))||!ctbcCertification.signals.some(signal=>signal.includes("Mortgage applicants")&&signal.includes("Co-borrowers")&&signal.includes("Guarantors"))||ctbcCertification.signals.some(signal=>/Product|Engineering|Operations/.test(signal.replace("0→1 Product",""))))failures.push(`${viewport.name} CTBC Info Grid mismatch: ${JSON.stringify(ctbcCertification.signals)}`);
   if(ctbcCertification.decisionCount!==3||ctbcCertification.decisionFields.some(fields=>!["WHAT I DECIDED","WHY THIS CHOICE","CONSTRAINT MANAGED","OUTCOME"].every(label=>fields.includes(label))))failures.push(`${viewport.name} CTBC Decisions incomplete: ${JSON.stringify(ctbcCertification.decisionFields)}`);
   if(!ctbcCertification.deliveryBoundary?.includes("Further contextual routing options were not validated within the project scope."))failures.push(`${viewport.name} CTBC Delivery Boundary missing: ${ctbcCertification.deliveryBoundary}`);
-  const expectedEvidence=[
-    {headline:"Different readiness states required a state-driven journey",body:"Users entered with different information and dependencies, so one fixed sequence could not serve every application state.",legacyLabels:[]},
-    {headline:"Interruption was part of the normal application journey",body:"Missing information or documents meant users needed to leave and return without losing progress.",legacyLabels:[]},
-    {headline:"Multiple applicants still needed one coherent application",body:"Related applicants could contribute at different moments, but their input still had to remain within the same application.",legacyLabels:[]}
-  ];
-  if(JSON.stringify(ctbcCertification.evidenceGroups)!==JSON.stringify(expectedEvidence))failures.push(`${viewport.name} CTBC recruiter-compressed Evidence mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
+  const [applicationModelEvidence,interruptionEvidence,relatedPartyEvidence]=ctbcCertification.evidenceGroups;
+  const applicationModelSignals=(applicationModelEvidence?.legacyLabels||[]).join(" ");
+  if(ctbcCertification.evidenceGroups.length!==3
+    ||applicationModelEvidence?.headline!=="Application model before screens"
+    ||!/different starts|entry model/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/staged structure|application model/i.test(applicationModelSignals)
+    ||!/persistent state|saved progress|resume/i.test(applicationModelSignals)
+    ||!/related-party|participant work/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/post-submission|continues after submission/i.test(`${applicationModelEvidence?.body||""} ${applicationModelSignals}`)
+    ||!/persistent progress|resume/i.test(`${interruptionEvidence?.headline||""} ${interruptionEvidence?.body||""}`)
+    ||!/related parties|related applicants/i.test(`${relatedPartyEvidence?.headline||""} ${relatedPartyEvidence?.body||""}`)
+  )failures.push(`${viewport.name} CTBC Principal-level Evidence semantics mismatch: ${JSON.stringify(ctbcCertification.evidenceGroups)}`);
   if(/OBSERVED|DESIGN IMPLICATION|SUPPORTS DECISION/.test(ctbcCertification.text))failures.push(`${viewport.name} CTBC legacy Evidence layers remain`);
   if(viewport.width===1419&&ctbcCertification.evidenceColumns!==3)failures.push(`${viewport.name} CTBC Evidence must scan in three columns: ${ctbcCertification.evidenceColumns}`);
   if(viewport.width===871&&ctbcCertification.evidenceColumns!==1)failures.push(`${viewport.name} CTBC Evidence tablet balance mismatch: ${ctbcCertification.evidenceColumns}`);
@@ -339,12 +418,9 @@ for (const viewport of viewports) {
   await page.goto(`${baseUrl}/site/work.html`,{waitUntil:"networkidle"});
   const projectCardGeometry=await page.evaluate(()=>["dbs","voucher","payment"].map(projectId=>{const card=document.querySelector(`[data-project="${projectId}"]`)?.closest(".work-card-v32"),frame=card?.querySelector("[data-frame-role='project-cover']"),image=frame?.querySelector("img"),title=card?.querySelector("h2"),company=card?.querySelector(".related-project-card__company-v135"),summary=card?.querySelector(".work-card-v32__content>p"),rect=frame?.getBoundingClientRect();return{projectId,frameWidth:rect?.width,frameHeight:rect?.height,frameRatio:rect?.width/rect?.height,naturalRatio:image?.naturalWidth/image?.naturalHeight,mediaAspect:frame?.dataset.mediaAspect,mediaFormat:frame?.dataset.mediaFormat,assetStatus:frame?.dataset.assetStatus,objectPosition:image?getComputedStyle(image).objectPosition:null,companyColor:company?getComputedStyle(company).color:null,neutralReference:summary?getComputedStyle(summary).color:null,companyTitleGap:title?parseFloat(getComputedStyle(title).marginTop):null,objectFit:image?getComputedStyle(image).objectFit:null,overflow:frame?getComputedStyle(frame).overflow:null}}));
   const dbs=projectCardGeometry.find(x=>x.projectId==="dbs"),voucherCard=projectCardGeometry.find(x=>x.projectId==="voucher");
-  const compactPanoramic=viewport.width<=560;
-  assert(Math.abs(dbs.frameRatio-(compactPanoramic?5/3:20/9))<.02,"DBS ProjectCard responsive ratio failed");
-  for(const x of [dbs,voucherCard]){assert(x.mediaFormat==="panoramic",`${x.projectId} panoramic classification failed`);assert(x.objectFit===(compactPanoramic?"cover":"contain"),`${x.projectId} responsive fit failed`)}
-  if(!compactPanoramic)projectCardGeometry.filter(x=>x.assetStatus==="real-active"&&x.naturalRatio).forEach(x=>assert(Math.abs(x.frameRatio-x.naturalRatio)<.02,`${x.projectId} frame ratio mismatch`));
+  for(const x of [dbs,voucherCard]){assert(Math.abs(x.frameRatio-16/9)<.02,`${x.projectId} shared 16:9 frame failed`);assert(x.mediaFormat==="standard",`${x.projectId} 16:9 source classification failed`);assert(x.objectFit==="contain",`${x.projectId} shared containment failed`)}
   const payment=projectCardGeometry.find(x=>x.projectId==="payment"),paymentSemanticRatio=payment.mediaAspect?.split("/").map(Number),paymentSemanticRatioValue=paymentSemanticRatio?.length===2?paymentSemanticRatio[0]/paymentSemanticRatio[1]:NaN;
-  assert(payment.assetStatus==="real-active"&&Math.abs(paymentSemanticRatioValue-payment.naturalRatio)<.02&&payment.mediaFormat==="panoramic"&&payment.objectFit===(compactPanoramic?"cover":"contain")&&Math.abs(payment.frameRatio-(compactPanoramic?5/3:payment.naturalRatio))<.02,"Payment ProjectCard active-asset semantic contract failed");
+  assert(payment.assetStatus==="real-active"&&Math.abs(paymentSemanticRatioValue-16/9)<.02&&payment.mediaFormat==="standard"&&payment.objectFit==="contain"&&Math.abs(payment.frameRatio-16/9)<.02,"Payment ProjectCard shared 16:9 contract failed");
   projectCardGeometry.forEach(x=>{assert(x.overflow==="hidden",`${x.projectId} overflow contract failed`);assert(x.companyColor===x.neutralReference,`${x.projectId} company metadata must be neutral`);assert(x.companyTitleGap===24,`${x.projectId} company/title gap must resolve to 24px`)});
   if(viewport.width===430)console.log(`R161.1 430 geometry ${JSON.stringify(projectCardGeometry)}`);
   await page.locator('[data-project="dbs"]').first().screenshot({path:path.join(directory,"project-card-dbs-ratio.png")});
@@ -393,14 +469,20 @@ for (const viewport of viewports) {
     const link=navigator.getByRole("link",{name:label,exact:true});
     const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    const positions=[];let stableFrames=0;let previous=before;
+    for(let frame=0;frame<100&&stableFrames<4;frame+=1){
+      await page.waitForTimeout(20);
+      const sample=await link.evaluate(node=>{const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();return{position:root.scrollTop,current:node.getAttribute("aria-current"),visible:headingRect.top>=rootRect.top&&headingRect.bottom<=rootRect.bottom}});
+      positions.push(sample.position);stableFrames=sample.current==="location"&&sample.visible&&Math.abs(sample.position-previous)<=1?stableFrames+1:0;previous=sample.position;
+    }
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
       return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
     });
-    state.before=before;collection.push({label,...state});
+    state.before=before;state.positions=positions;collection.push({label,...state});
     if(state.current!=="location")failures.push(`${viewport.name} navigator ${label} click did not own active state`);
     if(label!=="Overview"&&state.after<=2)failures.push(`${viewport.name} navigator ${label} click left .dialog-scroll at the top`);
+    if(Math.abs(state.after-state.before)>8&&new Set(positions.map(position=>Math.round(position))).size<3)failures.push(`${viewport.name} navigator ${label} did not expose intermediate smooth-scroll positions`);
     if(state.headingTop<0||state.headingBottom>state.rootHeight)failures.push(`${viewport.name} navigator ${label} heading is clipped: ${JSON.stringify(state)}`);
   };
   for(const label of ["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"])await certifyNavigatorClick(label,navigatorInteractions.clicks);
@@ -410,13 +492,20 @@ for (const viewport of viewports) {
   navigatorInteractions.repeated=(await outcomesLink.getAttribute("aria-current"))==="location";
   if(!navigatorInteractions.repeated)failures.push(`${viewport.name} repeated navigator click left stale state`);
   const overviewLink=navigator.getByRole("link",{name:"Overview",exact:true});
-  await overviewLink.focus();await overviewLink.press("Enter");await page.waitForTimeout(80);
+  await overviewLink.focus();await overviewLink.press("Enter");
+  let keyboardStableFrames=0,keyboardPreviousScroll=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
+  for(let frame=0;frame<60&&keyboardStableFrames<4;frame+=1){
+    await page.waitForTimeout(20);
+    const position=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
+    keyboardStableFrames=Math.abs(position-keyboardPreviousScroll)<=1?keyboardStableFrames+1:0;
+    keyboardPreviousScroll=position;
+  }
   navigatorInteractions.keyboard=(await overviewLink.getAttribute("aria-current"))==="location" && !(await page.locator("#projectOverviewSection").evaluate(node=>node===document.activeElement));
   if(!navigatorInteractions.keyboard)failures.push(`${viewport.name} keyboard navigator activation or focus ownership failed`);
   const scrollRootForNav=page.locator(".dialog-scroll").first();
   await scrollRootForNav.hover();
   await page.mouse.wheel(0,2400);
-  await page.waitForTimeout(180);
+  await page.waitForFunction(()=>{const active=[...document.querySelectorAll('#projectSectionNav a[aria-current="location"]')];return active.length===1&&active[0].textContent.trim()!=="Overview"});
   const manualActive=await navigator.locator('a[aria-current="location"]').allTextContents();
   navigatorInteractions.manualScroll=manualActive.length===1&&manualActive[0]!=="Overview";
   if(!navigatorInteractions.manualScroll)failures.push(`${viewport.name} manual wheel did not synchronize visible section: ${JSON.stringify(manualActive)}`);
@@ -596,7 +685,7 @@ researchValues: metricTypography.map(item=>item.value),
     };
   });
   const uniform=a=>a.length>0&&a.every(value=>JSON.stringify(value)===JSON.stringify(a[0]));
-  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-8)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
+  if(r1592.overviewGap===null||Math.abs(r1592.overviewGap-16)>2)failures.push(`${viewport.name} At a glance rendered gap ${r1592.overviewGap}`);
 if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypography.map(x=>x.valueStyle))||!uniform(r1592.metricTypography.map(x=>x.labelStyle)))failures.push(`${viewport.name} research metric rendered typography mismatch`);
   if(r1592.tooltipBoxes.some(box=>Math.abs(box.width-box.height)>1||box.width>18||box.height>18))failures.push(`${viewport.name} Tooltip trigger is not a compact square: ${JSON.stringify(r1592.tooltipBoxes)}`);
   if(viewport.width===430){const boxes=r1592.metricTypography.map(x=>x.box);if(boxes.length!==3||boxes.some((b,i)=>i&&Math.abs(b.left-boxes[0].left)>2)||!(boxes[1].top>boxes[0].bottom&&boxes[2].top>boxes[1].bottom)||boxes.some(b=>b.width<200))failures.push(`${viewport.name} research metric rendered rows invalid: ${JSON.stringify(boxes)}`);const cards=r1592.foundationBoxes;if(cards.length!==4||cards.some((b,i)=>i&&Math.abs(b.left-cards[0].left)>2)||cards.some((b,i)=>i&&!(b.top>cards[i-1].bottom))||cards.some(b=>b.width<200))failures.push(`${viewport.name} reusable foundation rendered rows invalid: ${JSON.stringify(cards)}`);}
@@ -699,7 +788,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
       ["booking-core-insight", "/site/work/booking-taxi-pickup-service-strategy", "Taxi pickup expansion could not be treated as one global product assumption"],
       ["cathay-oa-core-insight", "/site/work/cathay-sit-online-account-opening", "Self-service account opening only worked"],
       ["cathay-review-core-insight", "/site/work/cathay-sit-review-remediation-operations", "Review remediation needed a shared internal operating model"],
-      ["dbs-regression", "/site/work/dbs", "Turning fragmented credit-exception handling"],
+      ["dbs-regression", "/site/work/dbs", "Scaling the workflow required shared decision logic"],
     ]) {
       await page.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
       const target = page.getByText(text, { exact: false }).first();
@@ -732,7 +821,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   const projectCardVisual=await page.locator(".work-card-v32__top").evaluateAll(nodes=>nodes.slice(0,5).map(top=>{const root=top.closest(".work-card-v32"),metadata=top.firstElementChild||top,title=root?.querySelector("h2"),context=metadata.querySelector(".company-context-v132"),cs=getComputedStyle(metadata),tr=title?.getBoundingClientRect(),cr=top.getBoundingClientRect();return {company:metadata.textContent.trim(),color:cs.color,neutral:(()=>{const probe=document.createElement("span");probe.style.color="var(--color-text-secondary)";document.body.append(probe);const color=getComputedStyle(probe).color;probe.remove();return color})(),titleGap:tr?tr.top-cr.bottom:null,separator:context?getComputedStyle(context,"::before").marginInline:null}}));
   if(projectCardVisual.length<3||projectCardVisual.some(x=>x.color!==x.neutral||x.titleGap===null||Math.abs(x.titleGap-24)>.5))failures.push(`${viewport.name} ProjectCard rendered company hierarchy failed: ${JSON.stringify(projectCardVisual)}`);
   await page.screenshot({path:path.join(targetedDirectory,"r1593-project-cards.png"),fullPage:false});
-  await page.goto(`${baseUrl}/`,{waitUntil:"networkidle"});
+  await page.goto(`${baseUrl}/site/`,{waitUntil:"networkidle"});
   await page.locator("#domains").scrollIntoViewIfNeeded();
   await page.waitForTimeout(180);
   const domainShared=await page.locator(".related-project-card-v45--media-stack").evaluateAll(cards=>cards.slice(0,3).map(card=>{const media=card.querySelector(".related-project-card__visual-v45"),content=card.querySelector(".related-project-card__content-v1612"),company=card.querySelector(".related-project-card__top-v45"),title=card.querySelector(".related-project-card__title"),cr=card.getBoundingClientRect(),mr=media?.getBoundingClientRect(),xr=content?.getBoundingClientRect(),br=company?.getBoundingClientRect(),tr=title?.getBoundingClientRect();return{insetLeft:mr?mr.left-(cr.left+parseFloat(getComputedStyle(card).borderLeftWidth)):null,insetRight:mr?(cr.right-parseFloat(getComputedStyle(card).borderRightWidth))-mr.right:null,overlap:mr&&xr?Math.max(0,mr.bottom-xr.top):null,titleGap:br&&tr?tr.top-br.bottom:null,contentPadding:xr?getComputedStyle(content).paddingInline:null}}));
@@ -740,7 +829,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   const domainState=await page.evaluate(()=>({rail:[...document.querySelectorAll(".domain-tab")].map(x=>x.getAttribute("aria-selected")),floating:[...document.querySelectorAll("[data-domain-floating]")].map(x=>x.getAttribute("aria-pressed")),classes:[...document.querySelectorAll("[data-domain-floating]")].map(x=>x.classList.contains("floating-navigator__item"))}));
   if(domainState.classes.some(x=>!x))failures.push(`${viewport.name} Domain floating item canonical class missing: ${JSON.stringify(domainState)}`);
   await page.goto(`${baseUrl}/site/work/voucher`,{waitUntil:"networkidle"});
-  const headerMetadata=await page.locator(".modal-head-meta-v60").evaluate(node=>{const company=node.querySelector(".company-name-v132"),separator=node.querySelector(".company-separator-v159"),context=node.querySelector(".company-context-v132"),rect=n=>{const r=n?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom}:null},cs=getComputedStyle(node),ss=separator?getComputedStyle(separator):null;const cr=rect(company),sr=rect(separator),xr=rect(context);return {company:company?.textContent.trim(),separator:separator?.textContent.trim(),context:context?.textContent.trim(),gap:cs.columnGap,padding:[company,separator,context].map(n=>n?getComputedStyle(n).padding:null),margins:[company,separator,context].map(n=>n?getComputedStyle(n).margin:null),pseudoContent:context?getComputedStyle(context,"::before").content:null,companyToSeparator:cr&&sr?sr.left-cr.right:null,separatorToContext:sr&&xr?xr.left-sr.right:null}});
+  const headerMetadata=await page.locator(".modal-head-meta-v60").evaluate(node=>{const company=node.querySelector(".company-name-v132"),separator=node.querySelector(".company-separator-v159"),context=node.querySelector(".company-context-v132"),rect=n=>{const r=n?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom}:null},cs=getComputedStyle(node);const cr=rect(company),sr=rect(separator),xr=rect(context);return {company:company?.textContent.trim(),separator:separator?.textContent.trim(),context:context?.textContent.trim(),gap:cs.columnGap,padding:[company,separator,context].map(n=>n?getComputedStyle(n).padding:null),margins:[company,separator,context].map(n=>n?getComputedStyle(n).margin:null),pseudoContent:context?getComputedStyle(context,"::before").content:null,companyToSeparator:cr&&sr?sr.left-cr.right:null,separatorToContext:sr&&xr?xr.left-sr.right:null}});
   if(headerMetadata.context&&(!headerMetadata.separator||headerMetadata.gap!=="4px"||headerMetadata.padding.some(x=>x!=="0px")||headerMetadata.margins.some(x=>x!=="0px")||Math.abs(headerMetadata.companyToSeparator-4)>.75||Math.abs(headerMetadata.separatorToContext-4)>.75||!['none','normal'].includes(headerMetadata.pseudoContent)))failures.push(`${viewport.name} inline company glyph spacing ${JSON.stringify(headerMetadata)}`);
   await page.screenshot({path:path.join(targetedDirectory,"r1593-company-metadata.png"),fullPage:false});
 
@@ -774,6 +863,7 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     ctbcReadingEdges: ctbcCertification.geometry,
   };
   await page.goto(`${baseUrl}/site/work/booking-taxi-pickup-service-strategy`,{waitUntil:"networkidle"});
+  await page.waitForFunction(()=>document.querySelector('#detailTitle')?.textContent.trim().length>0);
   const r171Presentation=await page.evaluate(()=>{
     const dialog=document.querySelector("#detailDialog"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
     const surface=[...dialog.querySelectorAll("#programmeSurface > *")].filter(visible);
@@ -877,16 +967,20 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   ];
   for(const [projectId,route] of r1723RegressionProjects){
     await page.goto(`${baseUrl}${route}`,{waitUntil:"networkidle"});
+    await page.waitForFunction(()=>document.querySelector('#detailTitle')?.textContent.trim().length>0);
+    await loadEvidenceImages(page);
     const sharedGeometry=await page.evaluate(()=>{
       const root=document.querySelector("#detailDialog .dialog-scroll"),nav=document.querySelector("#projectSectionNav"),rail=nav?.querySelector(".floating-navigator__rail");
       if(!root||!nav||!rail)return null;
-      const verifyNode=node=>{root.scrollTop=Math.min(root.scrollHeight-root.clientHeight,root.scrollTop+node.getBoundingClientRect().bottom-nav.getBoundingClientRect().top+1);return node.getBoundingClientRect().bottom<=nav.getBoundingClientRect().top+1};
+      const previousScrollBehavior=root.style.scrollBehavior;root.style.scrollBehavior="auto";
+      const verifyNode=node=>{const rootRect=root.getBoundingClientRect(),nodeRect=node.getBoundingClientRect(),navTop=nav.getBoundingClientRect().top;if(nodeRect.top<rootRect.top)root.scrollTop+=nodeRect.top-rootRect.top;if(node.getBoundingClientRect().bottom>navTop)root.scrollTop+=node.getBoundingClientRect().bottom-navTop+1;return node.getBoundingClientRect().top>=rootRect.top-1&&node.getBoundingClientRect().bottom<=nav.getBoundingClientRect().top+1};
       const captions=[...document.querySelectorAll("#detailDialog figcaption")];
       const captionClearance=captions.map(verifyNode);
       root.scrollTop=root.scrollHeight;
       const finalNode=document.querySelector("#programmeSurface > :last-child"),navRect=nav.getBoundingClientRect();
       const active=rail.querySelector('a[aria-current="location"]'),railRect=rail.getBoundingClientRect(),activeRect=active?.getBoundingClientRect();
-      return {bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+      const result={bodyWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewportWidth:innerWidth,navLeft:navRect.left,navRight:navRect.right,finalBottom:finalNode?.getBoundingClientRect().bottom,navTop:navRect.top,captionClearance,activeFullyVisible:!activeRect||(activeRect.left>=railRect.left&&activeRect.right<=railRect.right),railOverflow:getComputedStyle(rail).overflowX};
+      root.style.scrollBehavior=previousScrollBehavior;return result;
     });
     if(!sharedGeometry)failures.push(`${viewport.name} R172.3 ${projectId} shared owners missing`);
     else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
@@ -896,17 +990,19 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
   await page.goto(`${baseUrl}/site/experiments`,{waitUntil:'networkidle'});
   const r181Dir=path.join(outputRoot,'r181-experiments',viewport.name);fs.mkdirSync(r181Dir,{recursive:true});
   await page.screenshot({path:path.join(r181Dir,'00-listing.png'),fullPage:true});
-  const listing=await page.evaluate(()=>({ids:[...document.querySelectorAll('#experimentPageRail [data-experiment]')].map(node=>node.dataset.experiment),overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
-  if(JSON.stringify(listing.ids)!==JSON.stringify(r181Ids)||listing.overflow>1)failures.push(`${viewport.name} R181 listing/order/overflow mismatch: ${JSON.stringify(listing)}`);
+  const listing=await page.evaluate(()=>({ids:[...document.querySelectorAll('#experimentPageRail [data-experiment]')].map(node=>node.dataset.experiment),overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,cards:[...document.querySelectorAll('#experimentPageRail [data-experiment]')].map(node=>{const style=getComputedStyle(node);return{radius:style.borderRadius,display:style.display,transform:style.transform}})}));
+  if(JSON.stringify(listing.ids)!==JSON.stringify(r181Ids)||listing.overflow>1||listing.cards.some(card=>card.display!=="grid"||card.transform!=="none"))failures.push(`${viewport.name} R182.1 listing/order/shared-shell mismatch: ${JSON.stringify(listing)}`);
   for(const [index,id] of r181Ids.entries()){
     await page.locator(`#experimentPageRail [data-experiment="${id}"]`).click();
     await page.waitForSelector('#detailDialog[open]');
     const result=await page.evaluate(()=>{
       const dialog=document.querySelector('#detailDialog'),scroll=dialog?.querySelector('.dialog-scroll');
       const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=='none'&&node.getClientRects().length);
-      return{classificationVisible:visible(dialog.querySelector('#detailClassification')),navigatorVisible:visible(dialog.querySelector('#projectSectionNav')),question:dialog.querySelector('#experimentQuestion')?.textContent.trim(),galleryCount:dialog.querySelectorAll('#galleryThumbs button').length,proof:dialog.querySelector('#experimentLearning')?.textContent.trim(),overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),headings:[...dialog.querySelectorAll('h3')].filter(visible).map(node=>node.textContent.trim())};
+      const info=[...dialog.querySelectorAll('#detailInfoExperiment>div')].map(node=>({label:node.querySelector('small')?.textContent.trim(),value:node.querySelector('strong')?.textContent.trim()}));
+      const proofOwner=dialog.querySelector('#experimentLearning')?.closest('article');
+      return{classificationVisible:visible(dialog.querySelector('#detailClassification')),navigatorVisible:visible(dialog.querySelector('#projectSectionNav')),question:dialog.querySelector('#experimentQuestion')?.textContent.trim(),galleryCount:dialog.querySelectorAll('#galleryThumbs button').length,proof:dialog.querySelector('#experimentLearning')?.textContent.trim(),proofCanonical:proofOwner?.classList.contains('outcome-metric--qualitative'),info,topPeriod:dialog.querySelector('#detailPeriod')?.textContent.trim(),overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),headings:[...dialog.querySelectorAll('h3')].filter(visible).map(node=>node.textContent.trim())};
     });
-    if(result.classificationVisible||result.navigatorVisible||!result.question||result.galleryCount!==3||!result.proof||result.overflow>1||!result.headings.includes('What This Proved'))failures.push(`${viewport.name} R181 ${id} compact contract mismatch: ${JSON.stringify(result)}`);
+    if(result.classificationVisible||result.navigatorVisible||!result.question||result.galleryCount!==3||!result.proof||!result.proofCanonical||result.topPeriod||JSON.stringify(result.info.map(item=>item.label))!==JSON.stringify(['Role','Scale','Audience','Timeline'])||result.info.some(item=>!item.value)||result.overflow>1||!result.headings.includes('What This Proved'))failures.push(`${viewport.name} R182.1 ${id} compact contract mismatch: ${JSON.stringify(result)}`);
     await page.locator('#detailDialog .dialog-scroll').screenshot({path:path.join(r181Dir,`${String(index+1).padStart(2,'0')}-${id}.png`)});
     await page.locator('#detailClose').click();
     await page.waitForSelector('#detailDialog[open]', { state: 'hidden' });

@@ -14,7 +14,7 @@ const report={contentVersion:data.contentVersion,projects:{}};
 const list=value=>Array.isArray(value)?value:value==null?[]:[value];
 const hasPath=(object,pathText)=>pathText.split('.').reduce((value,key)=>value==null?undefined:value[key],object)!==undefined;
 const approved=value=>typeof value==='string'&&new RegExp(contract.approvedStatusPattern||'^approved').test(value);
-const statusBlocks=(project,id)=>{
+const statusBlocks=(project)=>{
   const rows=[];
   const walk=(value,parts)=>{
     if(!value||typeof value!=='object')return;
@@ -44,7 +44,7 @@ for(const [id,project] of Object.entries(data.projects||{})){
   }
   const supporting=list(projectContract.supporting).map(item=>({...item,publicRole:'SUPPORTING',renderRequired:false}));
   const explicit=[...renderContracts,...supporting].sort((a,b)=>b.sourcePath.length-a.sourcePath.length);
-  const blocks=statusBlocks(project,id);
+  const blocks=statusBlocks(project);
   const resolved=blocks.map(blockPath=>{
     const match=explicit.find(item=>starts(blockPath,item.sourcePath));
     if(match)return {blockPath,...match,contentStatus:(blockPath.split('.').reduce((v,k)=>v?.[k],project)||{}).contentStatus||'public-recruiter-content'};

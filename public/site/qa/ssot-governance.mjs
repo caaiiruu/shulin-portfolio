@@ -17,6 +17,7 @@ const allowedProjectTypes = new Set([
   "Transaction System",
   "Marketplace Platform",
   "0→1 Product",
+  "Product Optimisation",
 ]);
 for (const [id, project] of Object.entries(content.projects || {})) {
   const canonicalType = project.infoGrid?.type?.value;
@@ -46,8 +47,17 @@ const allFilter = workFilters.find((filter) => filter.id === "all");
 if (!allFilter || allFilter.projectIds.length !== projectIds.length || projectIds.some((id) => !allFilter.projectIds.includes(id))) {
   failures.push("work filters: all must contain every canonical project exactly once");
 }
+const filterCoverageExceptions = content.workIndex?.filterCoverageExceptions || [];
+for (const exception of filterCoverageExceptions) {
+  if (!projectIdSet.has(exception.projectId) || exception.coverage !== "all-only" || !exception.reason) {
+    failures.push(`work filters: invalid all-only coverage exception for ${exception.projectId || "unknown"}`);
+  }
+}
 for (const id of projectIds) {
-  if (!workFilters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id))) failures.push(`work filters: ${id} has no concrete category`);
+  const isDocumentedAllOnly = filterCoverageExceptions.some((exception) => exception.projectId === id && exception.coverage === "all-only");
+  if (!isDocumentedAllOnly && !workFilters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id))) {
+    failures.push(`work filters: ${id} has no concrete category`);
+  }
 }
 if (/觸發條件s|日終\s+monitoring|例外\s+handling|證據\s+needs/i.test(serializedContent)) {
   failures.push("localization: malformed mixed-language DBS decision copy must not return");
@@ -98,6 +108,7 @@ if (structuredContentFiles.some((name) => /(?:v\d+|new|final|latest|fixed)/i.tes
 const approvedZhCardTerms = [
   "NTUC FairPrice",
   "Booking.com",
+  "UX Designer",
   "Voucher Center",
   "Voucher",
   "Game Center",

@@ -29,12 +29,12 @@ test("Voucher Center and Bandzo timeline candidates are closed by Human correcti
   }
 });
 
-test("R180.1 content package remains approved but unapplied", () => {
+test("R180.1 content package is applied only through the Human-approved R182 Work Order", () => {
   const delta = ledger.approvedDeltas.find((item) => item.deltaId === "DELTA-R1801-APPROVED-CONTENT-PACKAGE");
   assert.equal(delta.status, "APPROVED");
   assert.equal(delta.approvedBy, "HUMAN");
-  assert.equal(delta.implementationStatus, "NOT_APPLIED");
-  assert.equal(delta.mutationAuthorized, false);
+  assert.equal(delta.implementationStatus, "APPLIED_ON_R182_BRANCH");
+  assert.equal(delta.mutationAuthorized, true);
   assert.equal(delta.fieldDeltas.length, 8);
 });
 
@@ -45,11 +45,14 @@ test("approved content packages reject superseded truth", () => {
   expectError(errorsFor(truth, next), /approved delta references non-approved truth/);
 });
 
-test("Voucher asset intake is one candidate pack rather than twelve required uploads", () => {
+test("R183.4C restores the latest Human-approved Voucher asset boundary", () => {
   const request = truth.assetRequests.find((item) => item.requestId === "AR-R179-VOUCHER-EVIDENCE-PACK");
-  assert.equal(request.requirement, "REQUIRED_CANDIDATE_PACK");
-  assert.deepEqual(request.candidateSourceVisualRange, { minimum: 4, maximum: 8 });
-  assert.equal(request.slotModel, "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT");
+  assert.equal(request, undefined);
+  const voucherAssets = Object.values(manifest.items).filter((item) => item.projectId === "voucher");
+  assert.ok(voucherAssets.length > 0);
+  assert.equal(voucherAssets.some((item) => item.implementationStatus === "real-active"), true);
+  assert.equal(voucherAssets.some((item) => item.implementationStatus === "placeholder-active"), false);
+  assert.equal(voucherAssets.some((item) => item.replacementRequired === true), false);
 });
 
 test("all canonical primary cases and experiments have exactly one source pack", () => {

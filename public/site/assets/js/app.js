@@ -103,8 +103,7 @@
       {assetId:'payment-evidence-operational-recovery-public-v2',title:['Operational transaction review','營運交易檢視'],text:['A representative internal payment-operations view.','代表性的內部 Payment operations 畫面。'],src:'/site/assets/validation/payment/validation-payment-internal-portal-list-r77.jpg',alt:['An internal payment transaction review list.','內部 Payment transaction review 清單。']},
       ...['01','02','03','04','05'].map((step,index)=>({title:[`Refund state ${index+1}`,`退款狀態 ${index+1}`],text:['A deferred-loading state from the cross-channel refund flow.','跨通路退款流程中延後載入的狀態畫面。'],src:`/site/assets/validation/payment/validation-payment-refund-state-${step}-r77.jpg`,alt:[`Refund flow state ${index+1}.`,`退款流程狀態 ${index+1}。`]})),
       {title:['Payment receipt','付款收據'],text:['Supporting customer communication loaded only with this evidence section.','僅在此證據區塊載入的顧客溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-receipt-email-mobile-r77.jpg',alt:['Mobile payment receipt email.','Mobile 付款收據 Email。']},
-      {title:['Refund receipt','退款收據'],text:['Supporting refund communication loaded only with this evidence section.','僅在此證據區塊載入的退款溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-refund-email-mobile-r77.jpg',alt:['Mobile refund receipt email.','Mobile 退款收據 Email。']},
-      {assetId:'payment-video-core-app-pos-public-v1',title:['Order-details interaction','訂單詳情互動'],text:['Poster-first video; media mounts only on demand.','Poster-first 影片；媒體僅在需要時掛載。'],poster:'/site/assets/validation/payment/validation-payment-video-order-details-poster-r77.png',video:'/site/assets/validation/payment/validation-payment-video-order-details-r77.mov',alt:['Order details interaction preview.','Order details 互動預覽。']}
+      {title:['Refund receipt','退款收據'],text:['Supporting refund communication loaded only with this evidence section.','僅在此證據區塊載入的退款溝通畫面。'],src:'/site/assets/validation/payment/validation-payment-refund-email-mobile-r77.jpg',alt:['Mobile refund receipt email.','Mobile 退款收據 Email。']}
     ]:[[title[0],atGlance[0],title[1],atGlance[1]]];
     const status=String(p.status||p.publicStatus||p.contentStatus||'');
     const confidentiality=pair(
@@ -124,7 +123,9 @@
     const programmeContent=p.publicContent||{};
     const interactiveFlows=list(raw?.projectInteractiveFlowRefs?.[id]).map(ref=>{
       const flow=raw?.interactiveFlowRegistry?.[ref];
-      if(!flow)return null;
+      // Private prototype locations never enter the public SSOT. Keep the safe
+      // semantic reference for provenance, but do not render a broken control.
+      if(!flow?.prototypeUrl)return null;
       return {
         ...flow,
         evidence:list(flow.evidenceRefs).map(path=>valueAtPath(raw,path)).filter(Boolean)
@@ -148,7 +149,7 @@
       status:stage.status
     }));
     return {
-      ...p,project_id:id,valueIBrought,company,domain,title_pair:title,
+      ...p,project_id:id,archetype:'primary',valueIBrought,company,domain,title_pair:title,
       problem_type_pairs:problemTypes.map((item,index)=>[pair(item)[0],pair(problemTypesZh[index])[0]]),
       at_a_glance_pair:atGlance,
       type_pair:type,scope_pair:scope,audience_pair:audience,timeline_pair:timeline,why_pair:why,impact_pair:impact,
@@ -164,7 +165,9 @@
       key_intervention_map:p.keyInterventionMap||null,
       hard:list(p.whatMadeThisHard||[]),
       confidentiality_note:confidentiality[0],confidentiality_note_zh:confidentiality[1],
-      section_order:p.sectionOrder,
+      // Historical project sectionOrder remains data for migration audit only.
+      // Public IA is exclusively owned by implementationContracts.portfolioPresentation.
+      section_order:list(raw?.implementationContracts?.portfolioPresentation?.archetypes?.primary?.canonicalOrder),
       led:list(ownedWork).map(item=>pair(item)[0]),
       led_zh:list(ownedWork).map(item=>pair(item)[1]),
       contributed:list(partneredWork).map(item=>pair(item)[0]),
@@ -194,7 +197,7 @@
     const next=pair(item.next||item.nextStep||item.futureDirection);
     const blocks=list(item.experimentBlocks).slice(0,3);
     const gallery=blocks.length?blocks.map(block=>[pair(block.title),pair(block.body)]):[[title,summary]];
-    return {...item,title,question,summary,prototype,learning,next,category:pair(item.category||item.explorationType||item.type||'Exploration'),timeline:pair(item.timeline||item.period),status:pair(item.status||item.contentStatus),gallery};
+    return {...item,archetype:'experiment',title,question,summary,prototype,learning,next,category:pair(item.category||item.explorationType||item.type||'Exploration'),timeline:pair(item.timeline||item.period),status:pair(item.status||item.contentStatus),gallery};
   }
   function adaptContent(raw){
     const domains=list(raw.contentDiscovery?.domains);
@@ -370,6 +373,15 @@
       ?[...new Set(publicSectionRows(resolved).map(item=>item.trim()).filter(Boolean))].join(' · ')
       :resolved;
     node.textContent=text==null?'':String(text);
+  }
+  function renderInlineEmphasis(node,value,segments,variant='inline-metric'){
+    if(!node)return;
+    const text=String(localize(value)||'');
+    const matches=list(segments).map(segment=>String(segment||'')).filter(Boolean).sort((a,b)=>b.length-a.length);
+    if(!matches.length){safeText(node,text);return}
+    clear(node);node.dataset.emphasisVariant=variant;
+    const pattern=new RegExp(`(${matches.map(segment=>segment.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})`,'g');
+    text.split(pattern).filter(Boolean).forEach(part=>node.append(matches.includes(part)?element('mark','semantic-inline-emphasis',part):doc.createTextNode(part)));
   }
   function clear(node){while(node&&node.firstChild)node.removeChild(node.firstChild)}
   function decorateArrow(node){
@@ -971,8 +983,7 @@
       image.alt=localize(coverAsset.alt);image.dataset.assetId=coverAsset.assetId;
       image.dataset.assetStatus=coverAsset.isPlaceholder?'placeholder-active':'real-active';
       if(coverAsset.width&&coverAsset.height){image.width=coverAsset.width;image.height=coverAsset.height}
-      const mediaRatio=projectAssetRatio(coverAsset);
-      if(mediaRatio){visual.style.setProperty('--project-card-media-ratio',mediaRatio);visual.dataset.mediaAspect=mediaRatio}
+      visual.dataset.mediaAspect='16 / 9';
       const mediaPresentation=projectAssetPresentation(coverAsset);
       visual.dataset.mediaFormat=mediaPresentation.format;
       visual.style.setProperty('--project-card-media-focal-position',mediaPresentation.focalPosition);
@@ -1114,6 +1125,7 @@
   evidenceLightboxClose.setAttribute('aria-label',localize(DATA?.implementationContracts?.expandableImageLabels?.close)||'Close');
   const evidenceLightboxImage=doc.createElement('img');
   evidenceLightboxImage.className='evidence-lightbox-v147__image';
+  evidenceLightboxImage.alt='';
   const evidenceLightboxCaption=element('p','evidence-lightbox-v147__caption');
   evidenceLightbox.append(evidenceLightboxClose,evidenceLightboxImage);
   body.append(evidenceLightbox);
@@ -1137,11 +1149,11 @@
     rootNode.querySelectorAll('.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img').forEach(image=>{
       if(image.dataset.assetStatus==='placeholder-active')return;
       const invoker=image.closest('[data-expandable-evidence]')||image;
+      if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
       if(!matchMedia('(max-width: 600px)').matches){invoker.removeAttribute('tabindex');invoker.removeAttribute('role');invoker.removeAttribute('aria-haspopup');return}
       invoker.tabIndex=0;
       invoker.setAttribute('role','button');
       invoker.setAttribute('aria-haspopup','dialog');
-      if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
     });
   }
   evidenceLightboxClose.addEventListener('click',closeEvidenceLightbox);
@@ -1176,12 +1188,47 @@
   let suppressHistorySync=false;
   let activeProjectSectionId='';
   let visibleProjectSectionId='';
-  const PROJECT_NAV_ITEMS=[
-    ['overview','projectOverviewSection','Overview','概覽'],
-    ['complexity','projectComplexitySection','Complexity','複雜度'],
-    ['decisions','projectDecisionsSection','Decisions','設計決策'],
-    ['impact','projectImpactSection','Impact','影響與成果']
-  ];
+  let projectSectionNavigationToken=0;
+  let projectSectionNavigation=null;
+  function presentationContract(archetype){
+    return DATA.implementationContracts?.portfolioPresentation?.archetypes?.[archetype]||null;
+  }
+  function semanticSlotContract(slot){
+    return DATA.implementationContracts?.portfolioPresentation?.semanticSlots?.[slot]||null;
+  }
+  function approvedSemanticVariant(project,slot){
+    const baseline=DATA.implementationContracts?.portfolioPresentation?.approvedBaseline?.semanticVariants?.[slot];
+    const projectId=project?.project_id||project?.id||'';
+    const variant=baseline?.projects?.[projectId];
+    return list(baseline?.allowed).includes(variant)?variant:null;
+  }
+  function hasSemanticContent(value){
+    if(value==null||value==='')return false;
+    if(Array.isArray(value))return value.some(hasSemanticContent);
+    if(typeof value==='object')return Object.entries(value).some(([key,item])=>!['status','contentStatus','implementationStatus','sourcePath'].includes(key)&&hasSemanticContent(item));
+    return String(value).trim().length>0;
+  }
+  function resolveProjectSemanticSlot(project,slot){
+    const contract=semanticSlotContract(slot);
+    for(const path of list(contract?.sourcePaths)){
+      const value=valueAtPath(project,path);
+      if(hasSemanticContent(value))return {slot,value,sourcePath:path,component:contract.component,fallback:contract.fallback||null};
+    }
+    return {slot,value:null,sourcePath:null,component:null,fallback:contract?.fallback||null};
+  }
+  window.resolveProjectSemanticSlot=resolveProjectSemanticSlot;
+  const NAV_LABELS={
+    overview:{en:'Overview',zh:'概覽'},complexity:{en:'Complexity',zh:'複雜度'},decisions:{en:'Decisions',zh:'設計決策'},evidence:{en:'Evidence',zh:'證據'},outcomes:{en:'Outcomes',zh:'成果'},ownership:{en:'Ownership',zh:'責任範圍'},
+    'exploration-question':{en:'Question',zh:'探索問題'},'explored-or-built':{en:'Prototype',zh:'探索成果'},'learning-or-decision':{en:'Learning',zh:'學習'},'delivery-state':{en:'Status',zh:'狀態'}
+  };
+  function canonicalProjectNavItems(){
+    const archetype=currentDetail?.type==='experiment'?'experiment':'primary';
+    const contract=presentationContract(archetype);
+    return list(contract?.navigatorSlots).map(key=>{
+      const labels=pair(NAV_LABELS[key]||{en:key,zh:key});
+      return [key,'',labels[0],labels[1]];
+    });
+  }
   function projectNavTarget(key,fallbackId){
     const configuredTarget=fallbackId?doc.getElementById(fallbackId):null;
     const semanticTargets=[...doc.querySelectorAll(`[data-project-nav-target="${key}"]`)];
@@ -1203,13 +1250,6 @@
     if(!dialogScrollRoot)return 0;
     return Math.max(projectSectionInset(),Math.min(160,dialogScrollRoot.clientHeight*.2));
   }
-  function alignProjectSectionTarget(target){
-    if(!target||!dialogScrollRoot)return;
-    const rootTop=dialogScrollRoot.getBoundingClientRect().top;
-    const targetTop=target.getBoundingClientRect().top;
-    const correction=targetTop-rootTop-projectSectionInset();
-    if(Math.abs(correction)>2)dialogScrollRoot.scrollTop=Math.max(0,dialogScrollRoot.scrollTop+correction);
-  }
   function positionActiveProjectNavItem(link){
     const rail=projectSectionNavLinks;
     if(!rail||!link)return;
@@ -1225,7 +1265,7 @@
     else if(linkRect.left<leadingEdge)target-=leadingEdge-linkRect.left;
     else if(linkRect.right>trailingEdge)target+=linkRect.right-trailingEdge;
     target=Math.min(maximumScroll,Math.max(0,target));
-    rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
+    rail.scrollTo({left:target,behavior:'auto'});
   }
   function setActiveProjectSection(id){
     activeProjectSectionId=id||'';
@@ -1236,14 +1276,52 @@
     });
     if(activeLink)window.requestAnimationFrame(()=>positionActiveProjectNavItem(activeLink));
   }
+  function completeProjectSectionNavigation(token){
+    if(!projectSectionNavigation||projectSectionNavigation.token!==token)return;
+    projectSectionNavigation=null;
+    updateProjectSectionLocation();
+  }
+  function cancelProjectSectionNavigation(){
+    if(!projectSectionNavigation)return;
+    projectSectionNavigation=null;
+    updateProjectSectionLocation();
+  }
+  function animateProjectSectionNavigation(token){
+    const navigation=projectSectionNavigation;
+    if(!navigation||navigation.token!==token||!dialogScrollRoot)return;
+    const rootTop=dialogScrollRoot.getBoundingClientRect().top;
+    const targetTop=navigation.target.getBoundingClientRect().top;
+    const maximumScroll=Math.max(0,dialogScrollRoot.scrollHeight-dialogScrollRoot.clientHeight);
+    const destination=Math.min(maximumScroll,Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset()));
+    const delta=destination-dialogScrollRoot.scrollTop;
+    navigation.stable=Math.abs(delta)<=1?navigation.stable+1:0;
+    if(navigation.stable>=4){dialogScrollRoot.scrollTop=destination;completeProjectSectionNavigation(token);return}
+    dialogScrollRoot.scrollTop+=Math.sign(delta)*Math.max(1,Math.abs(delta)*.18);
+    window.requestAnimationFrame(()=>animateProjectSectionNavigation(token));
+  }
   function scrollToProjectSection(target){
     if(!target||!dialogScrollRoot)return;
     closeProjectSectionMenu();
+    const token=++projectSectionNavigationToken;
+    projectSectionNavigation={token,target,stable:0};
+    visibleProjectSectionId=target.id;
+    setActiveProjectSection(target.id);
+    const url=new URL(window.location.href);url.hash=target.id;history.replaceState(history.state,'',url);
+    if(prefersReduced.matches){
+      const rootTop=dialogScrollRoot.getBoundingClientRect().top;
+      const maximumScroll=Math.max(0,dialogScrollRoot.scrollHeight-dialogScrollRoot.clientHeight);
+      dialogScrollRoot.scrollTop=Math.min(maximumScroll,Math.max(0,dialogScrollRoot.scrollTop+target.getBoundingClientRect().top-rootTop-projectSectionInset()));
+      completeProjectSectionNavigation(token);
+    }else window.requestAnimationFrame(()=>animateProjectSectionNavigation(token));
+  }
+  function restoreProjectSectionHash(){
+    if(currentDetail?.type!=='project'||!dialogScrollRoot||!window.location.hash)return;
+    const target=doc.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+    const link=target&&projectSectionNavLinks?.querySelector(`a[href="#${CSS.escape(target.id)}"]`);
+    if(!target||!link)return;
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
-    const targetTop=target.getBoundingClientRect().top;
-    const destination=Math.max(0,dialogScrollRoot.scrollTop+targetTop-rootTop-projectSectionInset());
-    dialogScrollRoot.scrollTo({left:0,top:destination,behavior:'auto'});
-    alignProjectSectionTarget(target);
+    const maximumScroll=Math.max(0,dialogScrollRoot.scrollHeight-dialogScrollRoot.clientHeight);
+    dialogScrollRoot.scrollTop=Math.min(maximumScroll,Math.max(0,dialogScrollRoot.scrollTop+target.getBoundingClientRect().top-rootTop-projectSectionInset()));
     visibleProjectSectionId=target.id;
     setActiveProjectSection(target.id);
   }
@@ -1265,17 +1343,11 @@
     activeProjectSectionId='';
     visibleProjectSectionId='';
     clear(projectSectionNavLinks);
-    const project=currentDetail?.type==='project'?DATA.projects[currentDetail.key]:null;
-    const recruiterContract=recruiterFirstPresentationContract(project);
-    const configured=list(recruiterContract?.navigation||project?.presentation?.navigation).map(item=>{
-      const labels=pair(item.label);
-      return [item.key,item.target,labels[0],labels[1]];
-    });
-    const items=(configured.length?configured:PROJECT_NAV_ITEMS).filter(([key,id])=>{
+    const items=canonicalProjectNavItems().filter(([key,id])=>{
       const target=projectNavTarget(key,id);
       return target&&!target.hidden;
     });
-    projectSectionNav.hidden=currentDetail?.type!=='project'||items.length<2;
+    projectSectionNav.hidden=!['project','experiment'].includes(currentDetail?.type)||items.length<2;
     closeProjectSectionMenu();
     syncProjectFloatingPrimitive();
     projectSectionNav.classList.toggle('is-visible',!projectSectionNav.hidden);
@@ -1302,8 +1374,11 @@
   });
   dialogScrollRoot?.addEventListener('scroll',()=>{
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
+    if(projectSectionNavigation)return;
     updateProjectSectionLocation();
   },{passive:true});
+  dialogScrollRoot?.addEventListener('wheel',cancelProjectSectionNavigation,{passive:true});
+  dialogScrollRoot?.addEventListener('touchstart',cancelProjectSectionNavigation,{passive:true});
 
 
   function setDialogOpenState(open){body.classList.toggle('is-locked',open);cursor.hide()}
@@ -2228,7 +2303,7 @@
   }
   function caseStudySection(node,id,surface='canvas'){if(!node)return null;node.classList.remove('case-study-section--canvas','case-study-section--soft','case-study-section--emphasis');node.classList.add('case-study-section',`case-study-section--${surface}`);node.dataset.caseStudySection=id;return node}
   function caseStudyHeader(node,index=''){if(!node)return;const governed=node.matches('.case-study-section__header')?node:node.querySelector(':scope > .case-study-section__header');if(governed){const eyebrow=governed.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);return}const existing=node.matches('.section-heading-v45')?node:node.querySelector(':scope > .section-heading-v45');const header=existing||node.querySelector(':scope > h2, :scope > h3, :scope > h4')||node.querySelector('h2, h3, h4');if(!header)return;if(existing){existing.classList.add('case-study-section__header');const eyebrow=existing.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);else if(index)existing.prepend(element('span','case-study-section__eyebrow',index));const title=existing.querySelector('h3, h4');if(title){const h2=element('h2',title.className,title.textContent);for(const attr of title.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);title.replaceWith(h2)}return}if(header.matches('h3, h4')){const h2=element('h2',header.className,header.textContent);for(const attr of header.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);header.replaceWith(h2)}const title=node.querySelector(':scope > h2')||node.querySelector('h2');if(!title)return;const wrapper=element('div','case-study-section__header');if(index)wrapper.appendChild(element('span','case-study-section__eyebrow',index));node.prepend(wrapper);wrapper.appendChild(title)}
-  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=[...new Set(project.section_order||[])];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;node.dataset.contentBlockIds=contentPresentationSources(project,sectionId).join('|');ordered.push(node);mapped.push(sectionId);appended.add(node)}if(impactEvidence&&!appended.has(impact)){impact.hidden=false;impact.dataset.recruiterSectionId='outcomes';const ownershipIndex=ordered.indexOf(ownership);if(ownershipIndex>=0)ordered.splice(ownershipIndex,0,impact);else ordered.push(impact);appended.add(impact)}ordered.forEach(node=>evidence.appendChild(node));evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>{if(!ordered.includes(node))delete node.dataset.canonicalSectionId});ordered.filter(node=>!node.hidden).forEach(node=>caseStudyHeader(node,''));if(appended.has(impact)){const outcomeTitle=impact.querySelector(':scope > .case-study-section__header h2');if(outcomeTitle)safeText(outcomeTitle,lang==='zh'?'成果':'Outcomes');if(impactCopy&&!impactCopy.querySelector(':scope > .case-study-impact-copy__label'))impactCopy.prepend(element('span','case-study-impact-copy__label',lang==='zh'?'商業影響':'Business impact'));impact.dataset.recruiterOutcomeSection='visible'}caseStudyHeader(value,'');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');const cleanupDirectRouteCanonical=()=>{const directSurface=doc.getElementById('programmeSurface');if(evidence.closest('[hidden]')&&directSurface&&!directSurface.hidden&&directSurface.getClientRects().length)evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>delete node.dataset.canonicalSectionId)};cleanupDirectRouteCanonical();requestAnimationFrame(cleanupDirectRouteCanonical)}
+  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;overview.dataset.projectNavTarget='overview';complexity.dataset.projectNavTarget='complexity';decisions.dataset.projectNavTarget='decisions';gallery.dataset.projectNavTarget='evidence';impact.dataset.projectNavTarget='outcomes';ownership.dataset.projectNavTarget='ownership';caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=[...new Set(project.section_order||[])];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;node.dataset.contentBlockIds=contentPresentationSources(project,sectionId).join('|');ordered.push(node);mapped.push(sectionId);appended.add(node)}if(impactEvidence&&!appended.has(impact)){impact.hidden=false;impact.dataset.recruiterSectionId='outcomes';const ownershipIndex=ordered.indexOf(ownership);if(ownershipIndex>=0)ordered.splice(ownershipIndex,0,impact);else ordered.push(impact);appended.add(impact)}ordered.forEach(node=>evidence.appendChild(node));evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>{if(!ordered.includes(node))delete node.dataset.canonicalSectionId});ordered.filter(node=>!node.hidden).forEach(node=>caseStudyHeader(node,''));if(appended.has(impact)){const outcomeTitle=impact.querySelector(':scope > .case-study-section__header h2');if(outcomeTitle)safeText(outcomeTitle,lang==='zh'?'成果':'Outcomes');if(impactCopy&&!impactCopy.querySelector(':scope > .case-study-impact-copy__label'))impactCopy.prepend(element('span','case-study-impact-copy__label',lang==='zh'?'商業影響':'Business impact'));impact.dataset.recruiterOutcomeSection='visible'}caseStudyHeader(value,'');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');const cleanupDirectRouteCanonical=()=>{const directSurface=doc.getElementById('programmeSurface');if(evidence.closest('[hidden]')&&directSurface&&!directSurface.hidden&&directSurface.getClientRects().length)evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>delete node.dataset.canonicalSectionId)};cleanupDirectRouteCanonical();requestAnimationFrame(cleanupDirectRouteCanonical)}
   function renderKeyInterventionMap(project){
     const section=doc.getElementById('projectKeyIntervention');
     const flow=doc.getElementById('projectKeyInterventionFlow');
@@ -2292,7 +2367,7 @@
     const title=localize([decision.title,decision.title_zh]);
     const changed=localize([decision.result||decision.whatIDecided,decision.result_zh]);
     const rationale=localize([decision.evidence||decision.why||decision.whyThisChoice,decision.evidence_zh||decision.why_zh]);
-    body.append(element('h4','',title));
+    body.append(element('h3','',title));
     if(decision.fixedStageFields){
       const grid=element('div','voucher-stage-decision__grid');
       const featuredOptional=decision.optionalBlock||{};
@@ -2519,12 +2594,11 @@
     return section;
   }
   function recruiterFirstPresentationContract(project){
-    const contract=DATA.implementationContracts?.recruiterFirstPresentation;
-    return project?.presentation?.composition===contract?.appliesToComposition?contract:null;
+    return project?.archetype==='primary'?presentationContract('primary'):null;
   }
   function recruiterFirstDisplayTitle(project){
     let title=String(localize(project?.title)||'');
-    const contract=recruiterFirstPresentationContract(project);
+    const contract=DATA.implementationContracts?.recruiterFirstPresentation;
     for(const prefix of list(contract?.hero?.forbiddenVisiblePrefixes))if(title.startsWith(prefix)){
       title=title.slice(prefix.length);
       title=title?title.charAt(0).toLocaleUpperCase(lang==='zh'?'zh-TW':'en')+title.slice(1):title;
@@ -2545,24 +2619,25 @@
     safeText(dialogTitle,recruiterFirstDisplayTitle(p));
     const existingHeroVisual=doc.getElementById('projectDetailHeroVisual');
     if(existingHeroVisual)existingHeroVisual.remove();
-    if(p.presentation?.detailHeroVisual){
-      const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
-      if(heroAsset&&!heroAsset.isPlaceholder){
-        const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailHeroVisual';
-        const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='eager';image.decoding='async';
-        if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
-        figure.append(image);doc.querySelector('.modal-head-v45')?.after(figure);
-      }
+    const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
+    if(heroAsset&&!heroAsset.isPlaceholder){
+      const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus='real-active';figure.dataset.assetId=heroAsset.assetId;
+      const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='lazy';image.decoding='async';
+      if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
+      figure.append(image);doc.querySelector('#projectOverviewSection .detail-commerce-v45__summary')?.after(figure);
     }
     renderDeliveryStatus('');
     const recruiterContract=recruiterFirstPresentationContract(p);
     // Search Mapping is internal discovery/recommendation metadata. Recruiter-first
     // Hero taxonomy must not fall back to problemTypes, keyProblems, or search tags.
-    const showProblemTypes=!recruiterContract&&(p.presentation?.visibility?.problemTypes ?? !p.recruiterFirstPopup);
+    const showProblemTypes=!recruiterContract;
     renderTags(showProblemTypes?(localize(p.problemTypes)||[]):[]);
     if(classification)classification.hidden=!showProblemTypes;
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
-    safeText(doc.getElementById('projectAtGlance'),localize(p.atAGlance));
+    const atGlanceNode=doc.getElementById('projectAtGlance');
+    const emphasis=p.atAGlanceEmphasis;
+    if(emphasis?.variant==='inline-metric')renderInlineEmphasis(atGlanceNode,p.atAGlance,emphasis.sourceSegments?.[lang==='zh'?'zh':'en'],emphasis.variant);
+    else safeText(atGlanceNode,localize(p.atAGlance));
     const confidentiality=doc.getElementById('confidentialityNote');
     const confidentialityText=localize([p.confidentiality_note,p.confidentiality_note_zh]);
     safeText(confidentiality?.querySelector('em'),String(confidentialityText||'').replace(/^\*|\*$/g,''));
@@ -2582,7 +2657,7 @@
     safeText(doc.getElementById('projectWhy'),localize(p.why_pair));
     safeText(doc.getElementById('projectImpact'),localize(p.impact_pair));
     doc.getElementById('projectEvidence')?.setAttribute('data-section-order',(p.section_order||[]).join(' '));
-    renderRegisteredProjectSections(p);
+    // Public Primary pages never execute the migration-era registered section renderer.
     doc.querySelectorAll('#projectImpactSection > .impact-evidence-v147').forEach(node=>node.remove());
     renderDeliveryOutcomes(p);
     const hardList=doc.getElementById('projectHard');clear(hardList);
@@ -2630,8 +2705,7 @@
     if(hardSection)hardSection.hidden=!doc.getElementById('projectHard')?.childElementCount;
     renderTeamImpact(key,p);
     safeText(doc.getElementById('projectReflection'),localize(p.recruiter.reflection));
-    applyCaseStudySectionSystem(p);
-  const genericSurface=visibleCaseStudySurface();const si=p.publicContent?.coreSystemInsight;if(si){const n=createProgrammeSection(localize(si.eyebrow),localize(si.title),'core-system-insight-section case-study-cloud-emphasis');n.dataset.componentOwner='CoreSystemInsightSection';n.dataset.canonicalSectionId='core-system-insight';n.append(element('p','core-system-insight-section__statement',localize(si.statement)));genericSurface.append(n)}const fo=p.publicContent?.futureServiceOpportunities;if(fo){const n=createProgrammeSection(lang==='zh'?'未來概念／機會':'Future concepts / opportunities',localize(fo.title),'future-service-opportunities'),g=element('div','future-service-opportunities__grid');n.dataset.canonicalSectionId='future-service-opportunities';list(fo.items).forEach(x=>{const m=element('article','decision-module');m.append(element('span','future-service-opportunities__status',lang==='zh'?'未上線概念':'Future concept — not shipped'),element('h3','',localize(x.title)),element('p','',localize(x.concept)),element('p','',localize(x.whyItMatters)),element('p','',localize(x.systemRequirement)));g.append(m)});n.append(g);genericSurface.append(n)}}
+  }
   function localizedField(item,key){
     if(!item)return '';
     const legacy=lang==='zh'?item[`${key}_zh`]:undefined;
@@ -2743,11 +2817,11 @@
   }
   function createRecruiterSection(eyebrow,title,copy='',lead=''){
     const node=element('section','voucher-r149-section case-study-section case-study-section--canvas');
-    const heading=element('header','voucher-r149-heading case-study-section__header');
+    const heading=element('header','voucher-r149-heading case-study-section__header case-content-span case-content-span--headline');
     if(eyebrow)heading.append(element('span','voucher-r149-eyebrow',eyebrow));
     if(title)heading.append(element('h2','',title));
-    if(lead)heading.append(element('p','voucher-r149-lead',lead));
-    if(copy)heading.append(element('p','voucher-r149-intro',copy));
+    if(lead)heading.append(element('p','voucher-r149-lead case-content-span case-content-span--focus',lead));
+    if(copy)heading.append(element('p','voucher-r149-intro case-content-span case-content-span--reading',copy));
     node.append(heading);
     return node;
   }
@@ -2784,22 +2858,26 @@
     if(!evidenceItems.length)return null;
     const grid=element('div','voucher-r149-foundations');
     evidenceItems.forEach(item=>{
-      const card=element('article','voucher-r149-foundation');
+      const presentation=item.presentation||'default';
+      const card=element('article',`voucher-r149-foundation${presentation==='natural-ratio'?' voucher-r149-foundation--natural-ratio':''}${presentation==='editorial-pair'?' voucher-r149-foundation--editorial-pair':''}${presentation==='editorial-composite'?' voucher-r149-foundation--editorial-composite':''}`);
+      card.dataset.evidencePresentation=item.presentation||'default';
       if(item.id)card.dataset.evidenceBlockId=item.id;
-      const media=element('div','voucher-r149-foundation__media');
+      const media=element('div',`voucher-r149-foundation__media${presentation==='editorial-pair'?' voucher-r149-foundation__media--group':''}`);
       const caption=element('div','voucher-r149-foundation__caption');
-      const resolved=resolveProjectAsset(item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1');
-      const image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
-      if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
-      media.append(image);caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
+      const assetIds=list(item.assetIds).length?list(item.assetIds):[item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1'];
+      assetIds.forEach(assetId=>{const resolved=resolveProjectAsset(assetId),image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image)});
+      if(translate(item.supportingLabel))caption.append(element('span','voucher-r149-eyebrow',translate(item.supportingLabel)));caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
       if(list(item.supportingFacts).length){const facts=element('ul','structured-evidence-v223__supporting-facts');list(item.supportingFacts).forEach(fact=>facts.append(element('li','',`${fact.value} ${translate(fact.label)}`)));caption.append(facts)}
       card.append(media,caption);grid.append(card);
     });
     section.append(grid);return grid;
   }
   function appendOutcomeCards(grid,items,{metric=false,translate=localize}={}){
-    list(items).forEach(item=>{
-      const card=element('article',metric?'outcome-metric':'outcome-metric outcome-metric--qualitative');
+    const ordered=[...list(items)].sort((a,b)=>(a?.priority??Number.MAX_SAFE_INTEGER)-(b?.priority??Number.MAX_SAFE_INTEGER));
+    ordered.forEach(item=>{
+      const metricClasses=metric?`outcome-metric${item?.featured||item?.tier==='primary'?' outcome-metric--featured':''}`:'outcome-metric outcome-metric--qualitative';
+      const card=element('article',metricClasses);
+      if(metric)card.dataset.outcomeTier=item?.featured||item?.tier==='primary'?'primary':'supporting';
       if(metric){
         const primary=element('div','outcome-metric__primary');
         const labelCopy=translate(item.label),supportingCopy=translate(item.supportingCopy),fallbackCopy=translate(item.primaryCopy)||labelCopy;
@@ -2820,7 +2898,7 @@
       section.append(block);
     }
     if(list(source?.measured).length){
-      const group=element('section','outcome-semantic-group outcome-semantic-group--measured');
+      const group=element('section',`outcome-semantic-group outcome-semantic-group--measured${measuredLabelInHeader?' outcome-semantic-group--label-in-header':''}`);
       if(!measuredLabelInHeader)group.append(element('h3','outcome-semantic-group__title',translate(source.measuredLabel)));
       const grid=element('div','outcome-metric-grid outcome-semantic-group__grid');
       if(['aligned','aligned-five'].includes(source.metricLayout))grid.classList.add('outcome-semantic-group__grid--aligned');
@@ -2847,7 +2925,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside','outcome-recognition-proof');proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
@@ -2875,55 +2953,121 @@
     }
     section.append(grid);section.dataset.componentOwner='SharedAccountability';return grid;
   }
+  function normalizeEvidenceResolution(resolution){
+    const source=resolution?.value;
+    if(!hasSemanticContent(source))return null;
+    if(source&&typeof source==='object'&&!Array.isArray(source)&&(
+      source.items||source.structuredGroups||source.metrics||source.validationLayer||source.quotes
+    ))return {...source,resolvedComponent:resolution.component,resolvedSourcePath:resolution.sourcePath};
+    const rows=[...new Set(publicSectionRows(source).map(value=>String(value).trim()).filter(Boolean))].slice(0,6);
+    if(!rows.length)return null;
+    return {
+      title:{en:'Evidence',zh:'證據'},
+      presentation:'text-only',
+      structuredGroups:rows.map((summary,index)=>({id:`text-evidence-${index+1}`,heading:{en:`Evidence ${String(index+1).padStart(2,'0')}`,zh:`證據 ${String(index+1).padStart(2,'0')}`},summary:{en:summary,zh:summary}})),
+      resolvedComponent:resolution.fallback||'TextEvidence',
+      resolvedSourcePath:resolution.sourcePath
+    };
+  }
+  function normalizeOutcomeResolution(resolution){
+    const source=resolution?.value;
+    if(!hasSemanticContent(source))return null;
+    if(source&&typeof source==='object'&&!Array.isArray(source)&&(source.cards||source.semanticHierarchy||source.change||source.headline||source.metrics))return source;
+    const items=list(source).filter(hasSemanticContent);
+    return {title:{en:'Outcomes',zh:'成果'},cards:items.map(item=>typeof item==='object'?item:{text:{en:String(item),zh:String(item)}})};
+  }
+  function renderVoucherRecruiterContribution(project){
+    const source=project?.valueIBrought;
+    if(!source)return null;
+    const contribution=createRecruiterSection('',lang==='zh'?'貢獻':'Contribution',localize(source.supportingStatement),localize(source.headline));
+    contribution.classList.add('contribution-block');
+    contribution.dataset.componentOwner='ContributionBlock';
+    contribution.dataset.canonicalSectionId='my-contribution';
+    return contribution;
+  }
   function renderSystemCaseParent(p){
     const decisionListNode=doc.getElementById('projectDecisions');
     const surface=programmeSurface();clear(surface);surface.classList.add('recruiter-system-case');
-    const refs=p.presentation?.contentRefs||{};
-    const visibility=p.presentation?.visibility||{};
+    const contract=presentationContract('primary');
     const t=value=>localize(value);
-    doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+    const isVoucher=p.project_id==='voucher';
+    const overview=doc.getElementById('projectOverviewSection');
+    if(overview){overview.dataset.archetype='primary';overview.dataset.presentationContract='portfolioPresentation.primary';overview.dataset.projectNavTarget='overview';overview.classList.add('case-content-span','case-content-span--full')}
+    const projectSummary=overview?.querySelector('.project-summary-v45');projectSummary?.classList.add('case-content-span','case-content-span--summary');
+    const projectSignals=doc.getElementById('projectSignals');projectSignals?.classList.add('info-grid-v45--frameless','case-content-span','case-content-span--full');
     const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.hidden=true;
     const overviewContext=doc.querySelector('.project-context-v45--overview');if(overviewContext)overviewContext.hidden=true;
+    const legacyIntervention=doc.getElementById('projectKeyIntervention');if(legacyIntervention)legacyIntervention.hidden=true;
     const legacyOwnership=doc.querySelector('.ownership-section-v45');if(legacyOwnership)legacyOwnership.hidden=true;
 
-    const hardSource=projectContentRef(p,refs.whatMadeThisHard)||p.hard;
+    const hardResolution=resolveProjectSemanticSlot(p,'complexity');
+    const hardSource=hardResolution.value;
     const hardItems=Array.isArray(hardSource)?hardSource:hardSource?.items;
     const hard=createRecruiterSection('',lang==='zh'?'困難之處':'What made this hard',t(hardSource?.intro));
     hard.id='systemCaseComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';hard.dataset.componentOwner='WhatMadeThisHard';
-    const hardRows=element('div','recruiter-complexity-grid');
-    if(p.presentation?.complexityLayout==='featured-first')hardRows.classList.add('recruiter-complexity-grid--featured-first');
+    const complexityVariant=approvedSemanticVariant(p,'complexity')||'equal';
+    const hardRows=element('div',`recruiter-complexity-grid recruiter-complexity-grid--${complexityVariant} case-content-span case-content-span--full`);
+    hardRows.dataset.layoutVariant=complexityVariant;
     list(hardItems).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
     hard.append(hardRows);
 
-    const contributionSource=projectContentRef(p,refs.contribution)||p.valueIBrought;
-    const interventionSource=projectContentRef(p,refs.contributionIntervention);
-    const contribution=createRecruiterSection('',lang==='zh'?'貢獻':'Contribution','',t(contributionSource?.headline));
-    contribution.classList.add('contribution-block');contribution.dataset.componentOwner='ContributionBlock';contribution.dataset.canonicalSectionId='my-contribution';
-    if(interventionSource){
-      appendContributionFlow(contribution,[
-        {label:lang==='zh'?'之前':'BEFORE',text:interventionSource.before},
-        {label:lang==='zh'?'我的介入':'MY INTERVENTION',text:interventionSource.intervention},
-        {label:lang==='zh'?'之後':'AFTER',text:interventionSource.after}
-      ]);
-      contribution.append(element('p','voucher-r149-intro case-reading-wrapper',t(interventionSource.supportingCopy)));
-    }else{
-      contribution.append(element('p','voucher-r149-intro case-reading-wrapper',t(contributionSource?.supportingStatement)));
+    const contribution=isVoucher?renderVoucherRecruiterContribution(p):null;
+
+    const insightResolution=resolveProjectSemanticSlot(p,'core-insight');
+    const insightSource=insightResolution.value;
+    const semanticInsight=Boolean(insightSource?.insight||insightSource?.whatThisChanged);
+    const insightTitle=insightSource?.insight||insightSource?.headline;
+    const insightCopy=insightSource?.whatThisChanged||insightSource?.supportingCopy;
+    const insight=insightSource
+      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightTitle),semanticInsight?'':t(insightSource?.supportingCopy)):null;
+    if(insight){
+      insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');
+      insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';
+      const heading=insight.querySelector('.voucher-r149-heading');
+      if(insightSource?.insight&&insightSource?.showInsightLabel!==false&&heading)heading.insertBefore(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'洞察':'INSIGHT'),heading.querySelector('h2'));
+      if(semanticInsight&&t(insightCopy)){
+        const changed=element('div','core-system-insight-section__change');
+        if(insightSource?.whatThisChanged)changed.append(element('span','voucher-r149-eyebrow core-system-insight-section__semantic-label',lang==='zh'?'這改變了什麼':'WHAT THIS CHANGED'));
+        changed.append(element('p','core-system-insight-section__statement',t(insightCopy)));
+        if(t(insightSource?.supportingOutcome))changed.append(element('p','core-system-insight-section__supporting-outcome',t(insightSource.supportingOutcome)));
+        insight.append(changed);
+      }
+      if(insightSource?.evidence){
+        if(insightSource?.showVisualProofLabel!==false)insight.append(element('span','voucher-r149-eyebrow core-system-insight-section__visual-proof-label',lang==='zh'?'視覺證據':'VISUAL PROOF'));
+        appendVisualEvidenceModules(insight,insightSource.evidence,{translate:t});
+      }
     }
-    if(contributionSource?.evidence)appendVisualEvidenceModules(contribution,contributionSource.evidence,{translate:t});
 
-    const insightSource=projectContentRef(p,refs.coreSystemInsight);
-    const insight=visibility.coreSystemInsight!==false&&insightSource
-      ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightSource.headline),t(insightSource.supportingCopy)):null;
-    if(insight){insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';insight.dataset.canonicalSectionId='core-system-insight';if(insightSource?.evidence)appendVisualEvidenceModules(insight,insightSource.evidence,{translate:t})}
-
-    const evidenceSource=projectContentRef(p,refs.evidence);
-    const evidence=visibility.evidence!==false&&evidenceSource
+    const evidenceResolution=resolveProjectSemanticSlot(p,'evidence');
+    const voucherEvidence=isVoucher?{
+      title:p.recruiterFirstPopup?.programmeResearch?.title,
+      items:list(p.publicContent?.journeyChapters).map(stage=>({
+        ...stage.visualEvidence?.primary,
+        title:stage.label,
+        caption:stage.visualEvidence?.primary?.caption||stage.visualEvidence?.primary?.copy?.shippedCaption
+      })),
+      metrics:p.recruiterFirstPopup?.programmeResearch?.metrics,
+      resolvedComponent:'StructuredEvidence',
+      resolvedSourcePath:'publicContent.journeyChapters|recruiterFirstPopup.programmeResearch'
+    }:null;
+    const evidenceSource=voucherEvidence||normalizeEvidenceResolution(evidenceResolution);
+    const evidence=evidenceSource
       ?createRecruiterSection('',t(evidenceSource.title)):null;
     if(evidence){
-      evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence-to-operating-model';evidence.dataset.componentOwner='StructuredEvidence';evidence.dataset.evidenceVariant=evidenceSource.presentation||'default';
+      evidence.id='systemCaseEvidenceSection';evidence.dataset.projectNavTarget='evidence';evidence.dataset.canonicalSectionId='evidence';evidence.dataset.componentOwner=evidenceSource.resolvedComponent||'StructuredEvidence';evidence.dataset.evidenceVariant=evidenceSource.presentation||'default';evidence.dataset.semanticSource=evidenceSource.resolvedSourcePath||evidenceResolution.sourcePath||'';evidence.classList.add('case-content-span','case-content-span--full');
       const orderedVisualProofs=evidenceSource.presentation==='ordered-visual-proofs';
+      if(!orderedVisualProofs&&evidenceSource.researchInsights){
+        const source=evidenceSource.researchInsights,insights=element('section','structured-evidence-v223__validation structured-evidence-v223__research-insights');
+        insights.dataset.componentOwner='StructuredEvidence';insights.dataset.evidenceVariant='key-research-insights';insights.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));
+        const grid=element('div','structured-evidence-v223__validation-metrics');
+        list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label');safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));if(t(item.note))body.append(element('p','structured-evidence-v223__validation-note',t(item.note)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});
+        insights.append(grid);
+        if(source.validationSignals){const summary=source.validationSignals,validation=element('section','structured-evidence-v223__validation-summary');validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant='validation-summary';validation.append(element('h4','structured-evidence-v223__validation-title',t(summary.title)));if(t(summary.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(summary.intro)));const summaryGrid=element('div','structured-evidence-v223__validation-summary-metrics');list(summary.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-summary-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label');safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);summaryGrid.append(card)});validation.append(summaryGrid);insights.append(validation)}
+        evidence.append(insights);
+      }
       const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
+      if(!orderedVisualProofs&&list(evidenceSource.quotes).length){const voiceFamily=element('section','structured-evidence-voice-family'),voices=element('div','structured-evidence-quotes');voiceFamily.dataset.componentOwner='StructuredEvidence';voiceFamily.dataset.evidenceVariant='editorial-quotation';voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});voiceFamily.append(voices);if(t(evidenceSource.quotesCaption))voiceFamily.append(element('p','structured-evidence-quotes__caption',t(evidenceSource.quotesCaption)));evidence.append(voiceFamily)}
       if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
       if(!orderedVisualProofs&&t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length){
@@ -2975,50 +3119,59 @@
     decisions.id='systemCaseDecisionsSection';decisions.dataset.projectNavTarget='decisions';decisions.dataset.canonicalSectionId='key-design-decisions';
     if(decisionListNode)decisions.append(decisionListNode);
 
-    const outcomesSource=projectContentRef(p,refs.outcomes);
-    const outcomesHierarchy=outcomesSource?.semanticHierarchy;
+    const outcomesResolution=resolveProjectSemanticSlot(p,'outcomes');
+    const voucherOutcomes=p.recruiterFirstPopup?.outcomes;
+    const outcomesSource=isVoucher&&voucherOutcomes?{title:voucherOutcomes.title,cards:voucherOutcomes.metrics,closing:voucherOutcomes.systemChange}:normalizeOutcomeResolution(outcomesResolution);
+    const outcomeVariant=approvedSemanticVariant(p,'outcomes')||'system-operating';
+    const outcomesHierarchy=outcomesSource?.semanticHierarchy||(outcomesSource?.change?outcomesSource:null);
     const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
     const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
-    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';
+    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner=outcomeVariant==='quantified'?'OutcomeMetric':'OutcomeStatement';outcomes.dataset.outcomeSemantic=outcomeVariant;
     if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
     else{
-      const qualitative=element('div','outcome-qualitative-hierarchy');
+      const qualitative=element('div',`outcome-qualitative-hierarchy outcome-qualitative-hierarchy--${outcomeVariant}`);
       if(t(outcomesSource?.headline)){
         const headline=element('article','outcome-semantic-change outcome-semantic-change--qualitative');
         headline.append(element('h3','outcome-semantic-change__title',t(outcomesSource.headline)));
         qualitative.append(headline);
       }
       const outcomeGrid=element('div','voucher-r149-metrics outcome-metric-grid outcome-card-grid');
-      appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{translate:t});qualitative.append(outcomeGrid);
+      appendOutcomeCards(outcomeGrid,outcomesSource?.cards,{metric:isVoucher,translate:t});qualitative.append(outcomeGrid);
       if(t(outcomesSource?.closing))qualitative.append(element('p','outcome-semantic-closing',t(outcomesSource.closing)));
       outcomes.append(qualitative);
     }
     if(outcomesSource?.evidence)appendVisualEvidenceModules(outcomes,outcomesSource.evidence,{translate:t});
 
-    const ownershipSource=projectContentRef(p,refs.accountability);
+    const ownershipResolution=resolveProjectSemanticSlot(p,'ownership');
+    const voucherOwnership=isVoucher?{
+      publicSummary:p.ownershipModel?.publicSummary,
+      owned:{title:{en:'What I led',zh:'我主導的工作'},items:p.ownershipModel?.ledByMe},
+      shared:{title:{en:'What I decided with partners',zh:'與夥伴共同決策'},items:p.ownershipModel?.coDecided},
+      partnerOwned:{title:{en:'Partner-owned delivery',zh:'合作夥伴負責的交付'},items:p.ownershipModel?.partnerOwned}
+    }:null;
+    const ownershipSource=voucherOwnership||ownershipResolution.value;
     const accountabilityPresentation=ownershipSource?.accountabilityPresentation;
     const accountability=createRecruiterSection('',lang==='zh'?'我的責任範圍':'My accountability',t(accountabilityPresentation?.intro||ownershipSource?.publicSummary));
     accountability.id='systemCaseAccountabilitySection';accountability.dataset.projectNavTarget='ownership';accountability.dataset.canonicalSectionId='my-accountability';
-    if(accountabilityPresentation)appendSharedAccountability(accountability,accountabilityPresentation,{translate:t});
+    if(accountabilityPresentation||ownershipSource?.owned)appendSharedAccountability(accountability,accountabilityPresentation||ownershipSource,{translate:t});
     else accountability.dataset.componentOwner='SharedAccountability';
 
     const related=doc.getElementById('detailRelated');
     if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring'}
     const systemCaseSections={
-      'what-made-this-hard':hard,
+      'complexity':hard,
       'contribution':contribution,
-      'core-system-insight':insight,
+      'core-insight':insight,
       'evidence':evidence,
-      'design-decisions':decisions,
+      'decisions':decisions,
       'outcomes':outcomes,
-      'my-accountability':accountability,
+      'ownership':accountability,
       'related-work':related
     };
-    const presentationContract=recruiterFirstPresentationContract(p);
-    const orderedKeys=list(presentationContract?.sectionOrder||p.presentation?.sectionOrder).filter(key=>systemCaseSections[key]);
-    const fallbackKeys=['what-made-this-hard','contribution','core-system-insight','design-decisions','evidence','outcomes','my-accountability','related-work'];
-    [...orderedKeys,...fallbackKeys.filter(key=>!orderedKeys.includes(key))]
-      .map(key=>systemCaseSections[key]).filter(Boolean).forEach(node=>surface.append(node));
+    const canonicalOrder=isVoucher?['complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work']:list(contract?.canonicalOrder);
+    canonicalOrder.map(key=>systemCaseSections[key]).filter(Boolean).forEach(node=>surface.append(node));
+    surface.dataset.archetype='primary';
+    surface.dataset.presentationContract='portfolioPresentation.primary';
   }
   function renderProgrammeParent(key,p){
  const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
@@ -3041,13 +3194,13 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');appendVisualEvidenceModules(reusable,c.reusableSystem?.foundations,{translate:t});
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence',[t(x.label)]);appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='impact';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.id='voucherEvidenceSection';programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';programmeResearchSection.dataset.projectNavTarget='evidence';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence',[t(x.label)]);appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
  journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';
  reusable.dataset.canonicalSectionId='reusable-system';reusable.dataset.contentBlockIds='recruiterFirstPopup.reusableSystem|publicContent.systemFoundations|publicContent.futureVision';
  outcomes.dataset.canonicalSectionId='validated-outcomes';outcomes.dataset.contentBlockIds='recruiterFirstPopup.outcomes|impactEvidence';
- const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro));appendSharedAccountability(account,c.accountability,{translate:t});account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
+ const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro));account.id='voucherOwnershipSection';appendSharedAccountability(account,c.accountability,{translate:t});account.dataset.projectNavTarget='ownership';account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
  const related=doc.getElementById('detailRelated');if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring';related.dataset.contentBlockIds='relatedProjects'}[hard,contribution,insight,journey,programmeResearchSection,reusable,outcomes,account,related].filter(Boolean).forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence','continue-exploring'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
 }
   function renderInitiative(parentKey,initiativeKey){
@@ -3133,9 +3286,10 @@
     if(valueSection)valueSection.hidden=true;
     safeText(doc.getElementById('gallerySectionTitle'),lang==='zh'?'實驗':'The Experiment');
     safeText(doc.getElementById('detailContext'),localize(e.category));
-    safeText(doc.getElementById('detailPeriod'),localize(e.timeline));
+    safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(e.title));
     const fullStatus=localize(e.status);const stage=String(fullStatus).split(' · ')[0];
+    renderDeliveryStatus(fullStatus);
 
     renderTags([]);
     const questionText=localize(e.question);
@@ -3146,16 +3300,31 @@
     safeText(doc.querySelector('.experiment-overview-v45__question>span'),lang==='zh'?'實驗問題':'The Question');
     renderInfoGrid('detailInfoExperiment',[
       [lang==='zh'?'角色':'Role',localize(e.role)],
-      [lang==='zh'?'期間':'Period',localize(e.timeline)],
-      [lang==='zh'?'形式':'Format',localize(e.format)]
+      [lang==='zh'?'規模':'Scale',localize(e.scale||e.format)],
+      [lang==='zh'?'對象':'Audience',localize(e.audience)],
+      [lang==='zh'?'時間':'Timeline',localize(e.timeline)]
     ]);
     safeText(doc.getElementById('experimentPrototype'),prototypeText);safeText(doc.getElementById('experimentLearning'),learningText);safeText(doc.getElementById('experimentNext'),nextText);
     safeText(doc.querySelector('#experimentEvidence article:first-child h3'),lang==='zh'?'這證明了什麼':'What This Proved');
     safeText(doc.querySelector('#experimentEvidence article:nth-child(2) h3'),lang==='zh'?'建構方式':'Build Approach');
     doc.getElementById('experimentQuestion')?.closest('.experiment-overview-v45__question')?.toggleAttribute('hidden',!questionText&&!localize(e.summary));
-    doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build')?.toggleAttribute('hidden',true);
+    doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build')?.toggleAttribute('hidden',!prototypeText);
     doc.getElementById('experimentLearning')?.closest('article')?.toggleAttribute('hidden',!learningText);
     doc.getElementById('experimentNext')?.closest('article')?.toggleAttribute('hidden',!nextText);
+    doc.getElementById('experimentLearning')?.closest('article')?.classList.add('outcome-metric','outcome-metric--qualitative');
+    doc.getElementById('experimentNext')?.closest('article')?.classList.add('outcome-metric','outcome-metric--qualitative');
+    const overview=doc.getElementById('experimentView');
+    const question=doc.getElementById('experimentQuestion')?.closest('.experiment-overview-v45__question');
+    const built=doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build');
+    const evidence=doc.getElementById('sharedGallery');
+    const learning=doc.getElementById('experimentEvidence');
+    const delivery=doc.getElementById('detailStatus');
+    if(overview){overview.dataset.archetype='experiment';overview.dataset.presentationContract='portfolioPresentation.experiment';overview.dataset.projectNavTarget='overview'}
+    if(question){question.id='experimentQuestionSection';question.dataset.projectNavTarget='exploration-question'}
+    if(built){built.id='experimentBuiltSection';built.dataset.projectNavTarget='explored-or-built'}
+    if(evidence&&!evidence.hidden)evidence.dataset.projectNavTarget='evidence';
+    if(learning&&!learning.hidden){learning.id='experimentLearningSection';learning.dataset.projectNavTarget='learning-or-decision'}
+    if(delivery&&!delivery.hidden){delivery.id='experimentDeliveryStateSection';delivery.dataset.projectNavTarget='delivery-state'}
   }
   const RELATED_PROJECTS={
     voucher:['voucher-center','game-center','dbs'],
@@ -3211,14 +3380,14 @@
     if(type==='experiment'){
       const learning=element('div','detail-experiment-card-v101__learning');
       learning.append(element('small','',ui("current-learning-112d6ab4")),element('strong','',localize(item.learning)));
-      card.append(element('span','detail-related-card-v45__context',context),element('h4','',title),element('p','detail-experiment-card-v101__question',localize(item.question)),learning,element('span','experiment-card-action',ui("view-experiment-8788e030")));
+      card.append(element('span','detail-related-card-v45__context',context),element('h3','',title),element('p','detail-experiment-card-v101__question',localize(item.question)),learning,element('span','experiment-card-action',ui("view-experiment-8788e030")));
       return card;
     }
     const action=element('span','detail-related-action-v46');
     action.append(element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right'));
     card.append(
       element('span','detail-related-card-v45__context',context),
-      element('h4','',title),
+      element('h3','',title),
       action
     );
     return card;
@@ -3237,8 +3406,8 @@
     const overviewContext=doc.querySelector('.project-context-v45--overview');
     if(overviewContext)overviewContext.hidden=!isProject;
     if(currentDetail.type!=='project')doc.getElementById('projectKeyIntervention').hidden=true;
-    const isProgramme=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
-    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.presentation?.composition==='recruiter-first-system-case';
+    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.archetype==='primary';
+    const isProgramme=currentDetail.type==='project'&&!isRecruiterSystemCase&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
     doc.getElementById('projectEvidence').hidden=!isProject||isInitiative||isStage||isProgramme||isRecruiterSystemCase;
     doc.getElementById('experimentEvidence').hidden=isProject;
     // Professional cases use contextual evidence beside the claim it proves.
@@ -3283,20 +3452,15 @@
         }));
       });
       surface.append(decisionList);
-      const previousStage=parent.journey_stages[stageIndex-1],nextStage=parent.journey_stages[stageIndex+1];const navigation=element('nav','voucher-stage-next child-stage-navigation');navigation.dataset.componentOwner='ChildStageNavigation';if(previousStage){const u=new URL(location.href),a=element('a','button button--dark voucher-stage-next__link',`${lang==='zh'?'上一階段':'Previous stage'}: ${localizedField(previousStage,'label')}`);u.searchParams.set('stage',previousStage.id);a.href=u.pathname+u.search;a.dataset.stage=previousStage.id;navigation.append(a)}
+      const previousStage=parent.journey_stages[stageIndex-1],nextStage=parent.journey_stages[stageIndex+1];const navigation=element('nav','voucher-stage-next child-stage-navigation');navigation.dataset.componentOwner='ChildStageNavigation';if(previousStage){const u=new URL(location.href),a=element('a','button button--dark voucher-stage-next__link child-stage-navigation__previous',`${lang==='zh'?'上一階段':'Previous stage'}: ${localizedField(previousStage,'label')}`);u.searchParams.set('stage',previousStage.id);a.href=u.pathname+u.search;a.dataset.stage=previousStage.id;a.dataset.stageDirection='previous';navigation.append(a)}
       if(nextStage){
         const nextUrl=new URL(window.location.href);
         nextUrl.searchParams.set('case',currentDetail.parentKey);
         nextUrl.searchParams.set('stage',nextStage.id);
         nextUrl.searchParams.delete('initiative');
-        const link=element('a','button button--dark voucher-stage-next__link',`${lang==='zh'?'下一階段':'Next stage'}: ${localizedField(nextStage,'label')}`);
+        const link=element('a','button button--dark voucher-stage-next__link child-stage-navigation__next',`${lang==='zh'?'下一階段':'Next stage'}: ${localizedField(nextStage,'label')}`);
         link.href=nextUrl.pathname+nextUrl.search+nextUrl.hash;
-        link.dataset.stage=nextStage.id;link.dataset.parentProject=currentDetail.parentKey;
-        navigation.append(link);
-      }else{
-        const parentUrl=canonicalProjectUrl(currentDetail.parentKey);
-        const link=element('a','button button--dark voucher-stage-next__link',lang==='zh'?'返回 Voucher / Offer Vision':'Return to Voucher / Offer Vision');
-        link.href=parentUrl.pathname+parentUrl.search+parentUrl.hash;link.dataset.stageBack='true';
+        link.dataset.stage=nextStage.id;link.dataset.parentProject=currentDetail.parentKey;link.dataset.stageDirection='next';
         navigation.append(link);
       }
       programmeSurface().append(hero,surface,navigation);
@@ -3304,10 +3468,11 @@
     else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key]);else if(isRecruiterSystemCase)renderSystemCaseParent(DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
     if(isStage&&sharedRelated)sharedRelated.hidden=true;else if(isInitiative&&sharedRelated){sharedRelated.hidden=false;sharedProgrammeSurface.append(sharedRelated)}
-    enableExpandableEvidence(projectView);
     renderProjectSectionNav();
     if(currentDetail.type==='experiment')renderGallery();
     renderRelated();
+    enableExpandableEvidence(dialog);
+    dialog.querySelectorAll('h4').forEach(heading=>{heading.setAttribute('role','heading');heading.setAttribute('aria-level','3')});
     if(dialogScrollRoot){dialogScrollRoot.scrollLeft=0;}
   }
   function openDetail(type,key,invoker,parentKey){
@@ -3339,7 +3504,7 @@
     updateCloseControl();
     if(!dialog.open){setDialogOpenState(true);dialog.classList.add('is-opening');dialog.showModal()}
     requestAnimationFrame(()=>{dialog.classList.remove('is-opening');
-      if(dialogScroll){dialogScroll.scrollTo({top:0,left:0,behavior:'auto'});}
+      if(dialogScroll){dialogScroll.scrollTo({top:0,left:0,behavior:'auto'});restoreProjectSectionHash();}
       doc.dispatchEvent(new CustomEvent('portfolio:detail-ready'));
     });
     safeText(dialogStatus,ui("details-opened-c2398239"));

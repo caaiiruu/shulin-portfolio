@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "truthVersion": "2026-08-25-r181-experiments-shared-ia",
-  "status": "R181_APPROVED_EXPERIMENT_IMPLEMENTATION",
+  "truthVersion": "2026-08-25-r182-non-asset-complete",
+  "status": "R182_NON_ASSET_COMPLETE",
   "lifecycleVocabulary": [
     "UNVERIFIED_CANDIDATE",
     "APPROVED",
@@ -2059,6 +2059,35 @@
       "publicSafety": "PUBLIC_SAFE",
       "deliveryBoundary": "SHIPPED",
       "supersedes": []
+    },
+    {
+      "factId": "FACT-R182-STALE-PR-RECONCILIATION",
+      "projectId": "game-center",
+      "field": "stalePrReconciliation",
+      "value": {
+        "prs": [
+          12,
+          16,
+          17
+        ],
+        "status": "SUPERSEDED_CANDIDATE_AFTER_R182",
+        "assetWorkDeferred": true
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-PR12",
+        "SRC-R179-GAME-CENTER-PR16",
+        "SRC-R179-VOUCHER-CENTER-PR17"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_RECONCILIATION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
     }
   ],
   "claims": [],
@@ -2569,48 +2598,6 @@
   ],
   "assetRequests": [
     {
-      "requestId": "AR-R179-VOUCHER-EVIDENCE-PACK",
-      "projectId": "voucher",
-      "assetIds": [
-        "voucher-proof-sec-transformation-public-v1",
-        "voucher-framework-error-recovery-public-v1",
-        "voucher-framework-pdp-contextual-discovery-public-v1",
-        "voucher-framework-voucher-details-evolution-public-v1",
-        "voucher-framework-voucher-condition-action-matrix-public-v1",
-        "voucher-framework-mechanism-transition-public-v1",
-        "voucher-framework-channel-redemption-public-v1",
-        "voucher-framework-voucher-card-system-public-v1",
-        "voucher-framework-voucher-card-research-evidence-public-v1",
-        "voucher-evidence-component-properties-public-v1",
-        "voucher-evidence-operations-reuse-public-v1",
-        "voucher-stage-review-post-use-public-v1"
-      ],
-      "requirement": "REQUIRED_CANDIDATE_PACK",
-      "section": "Evidence / reusable system",
-      "evidenceRole": "Shipped journey and reusable-system proof",
-      "mustProve": "Shipped state changes and reusable operating/component model",
-      "mustNotImply": "Future platform direction shipped",
-      "recommendedSource": "Public-safe cropped product states or reconstructed diagrams",
-      "confidentialityRisk": "HIGH",
-      "publicSafetyRequirement": "Redact internal identifiers and unpublished data",
-      "aspectGuidance": "wide",
-      "humanUploadRequired": true,
-      "candidateSourceVisualRange": {
-        "minimum": 4,
-        "maximum": 8
-      },
-      "slotModel": "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT",
-      "coverageTargets": [
-        "discovery",
-        "qualification",
-        "redemption",
-        "error / recovery",
-        "reusable card / component system",
-        "operational / configuration model"
-      ],
-      "reuseRule": "One approved source visual may satisfy multiple evidence slots when truthfully supported."
-    },
-    {
       "requestId": "AR-R179-VOUCHER-CENTER-HERO",
       "projectId": "voucher-center",
       "assetIds": [
@@ -2694,40 +2681,6 @@
       "publicSafetyRequirement": "No applicant or bank data",
       "aspectGuidance": "wide",
       "humanUploadRequired": true
-    },
-    {
-      "requestId": "AR-R179-PAYMENT-ORDER-HISTORY",
-      "projectId": "payment",
-      "assetIds": [
-        "payment-evidence-order-history-public-v1"
-      ],
-      "requirement": "OPTIONAL",
-      "section": "Evidence",
-      "evidenceRole": "Post-payment continuity",
-      "mustProve": "History/recovery continuity",
-      "mustNotImply": "All branch states shipped",
-      "recommendedSource": "Reconciled PR #12 candidate",
-      "confidentialityRisk": "HIGH",
-      "publicSafetyRequirement": "No invoice/cashier/store/user identifiers",
-      "aspectGuidance": "wide",
-      "humanUploadRequired": false
-    },
-    {
-      "requestId": "AR-R179-PAYMENT-VIDEO",
-      "projectId": "payment",
-      "assetIds": [
-        "payment-video-core-app-pos-public-v1"
-      ],
-      "requirement": "OPTIONAL",
-      "section": "Evidence",
-      "evidenceRole": "App/POS operating flow",
-      "mustProve": "End-to-end interaction continuity",
-      "mustNotImply": "Unverified operational coverage",
-      "recommendedSource": "Existing #12 stills preferred",
-      "confidentialityRisk": "HIGH",
-      "publicSafetyRequirement": "No production transaction data",
-      "aspectGuidance": "wide",
-      "humanUploadRequired": false
     },
     {
       "requestId": "AR-R179-BOOKING-TAXI-OVERVIEW",
