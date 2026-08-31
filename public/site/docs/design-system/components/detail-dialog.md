@@ -16,13 +16,13 @@ Accessibility: modal semantics, visible close, Escape, focus return, scroll rese
 - `popup-shell.css` is the only owner of the dialog surface, sticky controls, safe-area spacing, and open/close motion.
 - Back and Close use the shared dialog control inset; page-level top or side offsets are forbidden.
 - `project-detail-overview.css` owns the Related work section layout; `horizontal-rail.css` owns its horizontal scrolling and controls.
-- Opening focuses the detail title. Closing or pressing Escape returns focus to the original card.
+- Pointer or route entry does not programmatically focus the detail title. Keyboard opening relies on the modal control order; closing or pressing Escape returns focus to the original card.
 - Every newly opened project, experiment, related case, search result, or deep link begins at the top and clears unrelated detail history.
 - Header metadata is one non-wrapping, horizontally scrollable line in the order company · domain/type · timeline. Company and domain/type share the same text baseline and separator rhythm.
-- Navigator clicks run as one cancellable navigation transaction. A newer click cancels every older animation frame and correction, owns the active state through arrival, and only then returns control to scroll-spy. Manual wheel, touch, or keyboard scrolling cancels the transaction and immediately restores scroll-spy.
+- Navigator clicks run as one cancellable navigation transaction. A newer click cancels every older animation frame and correction, owns the active state through arrival, and only then returns control to scroll-spy without moving visible focus to the section heading. Manual wheel, touch, or keyboard scrolling cancels the transaction and immediately restores scroll-spy.
 - Every section heading uses the shared title-to-subtitle and subtitle-to-content spacing tokens. A section may not add a second margin between its heading block and content.
 - Professional project cases with at least two available chapters use one compact bottom-floating anchor navigator with Overview, Complexity, Decisions, and Impact. It is a direct child of the dialog shell, outside the animated scroll container, so it remains stationary throughout the popup. It is document navigation rather than a tablist; missing chapters are omitted without hiding the remaining navigator. Every destination is calculated against the dialog scroll root after the mobile disclosure closes, with the sticky control height included exactly once.
-- At 700px and below, the navigator becomes one `Jump to section` disclosure with a vertical link list. Horizontal navigation scrolling is forbidden.
+- At every viewport, Project navigation reuses the shared FloatingNavigator shell, horizontal chip rail, and item states. A Project-only disclosure, dropdown, accordion, or `Jump to section` control is forbidden.
 - Every programme child resolves its parent from the canonical `parentKey`; return never depends on a temporary stack being present.
 - Parent → child navigation restores the stored parent reading position. A direct child deep link returns to the parent overview at the top.
 - Every public Project Popup owns one canonical, reload-safe path at `/site/work/{canonical-project-slug}`. Programme children extend the same path as `/site/work/{canonical-project-slug}/{child-slug}` without mounting a nested dialog.

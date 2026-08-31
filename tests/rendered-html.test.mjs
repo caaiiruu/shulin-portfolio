@@ -21,15 +21,32 @@ test("serves the portfolio root through a server redirect", async () => {
   assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
   assert.match(response.headers.get("strict-transport-security") ?? "", /max-age=31536000/);
 });
-
 test("loads one fingerprinted stylesheet and runtime on every page", () => {
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
-    assert.equal((html.match(/<link[^>]+\.css/g) ?? []).length, 1);
-    assert.equal((html.match(/<script[^>]+src=/g) ?? []).length, 1);
-    assert.match(html, /production\.[a-f0-9]{16}\.css/);
-    assert.match(html, /production\.[a-f0-9]{16}\.js/);
+    assert.equal(html.split("<link").length - 1, 1);
+    assert.equal(html.split("<script").length - 1, 1);
+    assert.match(html, /production[.][a-f0-9]{16}[.]css/);
+    assert.match(html, /production[.][a-f0-9]{16}[.]js/);
     assert.match(html, /id="detailDialog"/);
+  }
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  assert.equal(Object.keys(ssot.projects).length, 13);
+  for (const [id, project] of Object.entries(ssot.projects)) {
+    const html = read(`work/${id}.html`);
+    assert.ok(html.includes(`<title>${project.title.en} — Shulin Chou</title>`));
+    assert.ok(html.includes('name="description" content="'));
+    assert.ok(html.includes(`rel="canonical" href="https://shulinchou.com/site/work/${id}"`));
+    assert.ok(html.includes('property="og:title"'));
+    assert.ok(html.includes('property="og:description"'));
+    assert.ok(html.includes(`property="og:url" content="https://shulinchou.com/site/work/${id}"`));
+    assert.ok(!html.includes("<title>Work — Shulin Chou</title>"));
+    assert.ok(html.includes(`data-project-route-summary="${id}"`));
+    assert.ok(html.includes(project.title.en));
+    if(project.presentation?.composition==="recruiter-first-system-case"){
+      assert.ok(html.includes(project.atAGlance.en));
+      assert.doesNotMatch(html,/Critical problem:|Business impact:/);
+    }else assert.ok(html.includes(project.criticalProblem.en));
   }
 });
 
@@ -77,6 +94,28 @@ test("hydrates all six domain selectors from the canonical SSOT without legacy s
   }
 });
 
+test("keeps Voucher Center evidence and listing boundaries canonical", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects["voucher-center"];
+  const serialized = JSON.stringify({ research: voucher.publicContent.researchChangedTheModel, decisions: voucher.publicContent.decisionNarrative.primaryDecisions, scope: voucher.publicContent.productScope });
+  assert.deepEqual(voucher.problemTypes.en, ["Voucher discovery", "Claim-state clarity", "Campaign operations"]);
+  assert.deepEqual(voucher.heroVisualBrief.problemSignal, { en: "Voucher discovery", zh: "優惠券探索" });
+  assert.match(voucher.publicContent.phasedValidationPath.stages[0].boundary.en, /proposal-era modelled targets—not actual results/);
+  assert.equal(voucher.flashVoucherEvidence.businessCase.status, "modelled-proposal-targets-not-achieved-outcomes");
+  assert.equal(voucher.flashVoucherEvidence.businessCase.actualResult, undefined);
+  assert.doesNotMatch(serialized, /9\s*\+\s*9|Applicable \/ Not applicable|Select all|Checkout research|Search decision/i);
+  assert.equal(voucher.publicContent.decisionNarrative.primaryDecisions[0].title.en, "Separate participation from application");
+  assert.equal(voucher.publicContent.decisionNarrative.primaryDecisions[1].title.en, "Preserve the target architecture without blocking launch");
+  assert.deepEqual(voucher.publicContent.productScope.notShipped, ["Claim all", "Complete consolidated navigation"]);
+  assert.match(voucher.publicContent.systemFoundation.ownership.en, /did not create the original Voucher Card system from scratch/);
+  assert.match(voucher.publicContent.systemFoundation.evolution[0].title.en, /Original white Voucher Card/);
+  assert.match(voucher.publicContent.systemFoundation.evolution[2].title.en, /Reusable Tangram component/);
+  assert.equal(voucher.localizationStatus.traditionalChinese, "complete-no-runtime-fallback");
+  for (const value of [voucher.title.zh, voucher.atAGlance.zh, ...voucher.problemTypes.zh]) {
+    assert.doesNotMatch(value, /phased validation path|research changed the model/i);
+  }
+});
+
 test("keeps every rendered project overview bilingual without English fallback in Chinese mode", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const unresolvedTimelineProjects = [];
@@ -90,7 +129,7 @@ test("keeps every rendered project overview bilingual without English fallback i
     if (!timeline.duration?.en) unresolvedTimelineProjects.push(id);
     else assert.ok(timeline.duration.zh, `${id}: timeline.duration.zh is required`);
   }
-  assert.deepEqual(unresolvedTimelineProjects, ["cathay-mortgage-assistant"]);
+  assert.deepEqual(unresolvedTimelineProjects, []);
   const app = read("assets/js/app.js");
   assert.match(app, /value\.secondary\?\.zh/);
   assert.match(app, /value\.duration/);
@@ -176,7 +215,8 @@ test("keeps one live registry owner per component", () => {
   const registry = JSON.parse(read("docs/design-system/registry.json"));
   const live = registry.components.filter((entry) => entry.status === "Live / Current Production");
   assert.equal(new Set(live.map((entry) => entry.component)).size, live.length);
-  assert.equal(new Set(live.filter((entry) => entry.exclusiveOwner !== false).map((entry) => entry.cssOwner)).size, live.length);
+  const exclusive = live.filter((entry) => entry.exclusiveOwner !== false);
+  assert.equal(new Set(exclusive.map((entry) => entry.cssOwner)).size, exclusive.length);
   for (const entry of live) {
     assert.doesNotMatch(entry.cssOwner.split("/").at(-1), /v\d+/i);
     assert.equal(fs.existsSync(new URL(entry.cssOwner, site)), true);
@@ -245,11 +285,10 @@ test("keeps global typography readable and singly owned by Foundation", () => {
   assert.doesNotMatch(foundation.match(/html\{[\s\S]*?h1\+p,h2\+p,h3\+p,h4\+p[^}]*\}/)?.[0] ?? "", /!important/);
 });
 
-test("keeps the project navigator outside the animated dialog scroll container", () => {
+test("keeps one shared FloatingNavigator outside the scroll container at every viewport", () => {
   const projectDetail = read("assets/css/components/project-detail-overview.css");
   const tokens = read("assets/css/tokens.css");
-  assert.match(projectDetail, /\.pd-section-nav\{position:absolute/);
-  assert.doesNotMatch(projectDetail, /\.pd-section-nav\{position:fixed/);
+  assert.doesNotMatch(projectDetail, /\.pd-section-nav:not\(\.floating-navigator\)/);
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
     const html = read(page);
     const scrollStart = html.indexOf('<div class="dialog-scroll">');
@@ -294,7 +333,8 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   for (const retiredField of ["'My role'", "'Scale & reach'", "'Design strategy'"]) {
     assert.doesNotMatch(app, new RegExp(retiredField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
-  assert.equal(ssot.contentVersion, "2026-08-06-r146");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.equal(ssot.contentVersion, manifest.contentVersion);
   assert.equal(Object.keys(ssot.projects).length, 13);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
@@ -348,7 +388,8 @@ test("preserves approved delivery and confidentiality metadata", () => {
   assert.ok(ssot.projects.voucher.publicContent);
   assert.match(JSON.stringify(ssot.projects.payment), /shipped-and-scaled/);
   assert.match(app, /function renderDeliveryStatus\(value\)/);
-  assert.match(app, /localizedField\(item,'delivery_status'\)/);
+  assert.doesNotMatch(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
+  assert.match(app, /if\(isStage\)[\s\S]*?renderDeliveryStatus\(''\)/);
   assert.doesNotMatch(app, /safeText\(detailStatus,isConfidential/);
   assert.match(overview, /\.detail-status\{[^}]*display:grid;[^}]*grid-template-columns:max-content max-content;[^}]*align-items:start/);
   assert.match(overview, /\.detail-status__chip\[data-state="shipped"\]/);
@@ -412,19 +453,24 @@ test("renders verified Key Intervention Maps from the canonical SSOT only", () =
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const css = read("assets/css/components/project-detail-overview.css");
-  const verifiedIds = [
-    "voucher", "voucher-center", "game-center", "payment", "dbs", "booking", "bandzo",
-    "cathay-sit-online-account-opening", "cathay-sit-review-remediation-operations",
-    "ctbc-mortgage-self-service-app",
-  ];
+  const verifiedIds = Object.entries(ssot.projects)
+    .filter(([, project]) => project.keyInterventionMap?.status?.startsWith("verified"))
+    .map(([id]) => id);
   for (const id of verifiedIds) {
-    const map = ssot.projects[id].keyInterventionMap;
+    const project = ssot.projects[id];
+    const map = project.keyInterventionMap;
     assert.ok(map.status.startsWith("verified"), id);
-    for (const field of ["sectionLabel", "before", "intervention", "after", "supportingCopy"]) {
+    for (const field of ["before", "intervention", "after", "supportingCopy"]) {
       assert.ok(map[field]?.en && map[field]?.zh, `${id}.${field}`);
     }
+    const sharedContributionOwnsLabel =
+      project.presentation?.composition === "recruiter-first-system-case" &&
+      project.presentation?.contentRefs?.contributionIntervention === "keyInterventionMap";
+    if (!sharedContributionOwnsLabel) {
+      assert.ok(map.sectionLabel?.en && map.sectionLabel?.zh, `${id}.sectionLabel`);
+    }
   }
-  for (const id of ["taishin-p2p-marketplace-platform", "cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
+  for (const id of ["cathay-mortgage-assistant", "booking-taxi-pickup-service-strategy"]) {
     assert.equal(ssot.projects[id].keyInterventionMap, undefined, id);
   }
   for (const page of ["index.html", "work.html", "experiments.html", "profile.html"]) {
@@ -473,14 +519,17 @@ test("keeps domain selectors concise and card hover states inside their rails", 
   assert.doesNotMatch(tokens, /--work-card-hover-transform:[^;]*rotate/);
 });
 
-test("keeps project metadata on one line and global search in the active language", () => {
+test("keeps project metadata on one desktop line, allows a two-line mobile eyebrow, and keeps global search in the active language", () => {
   const foundation = read("assets/css/components/foundation.css");
   const overview = read("assets/css/components/project-detail-overview.css");
   const app = read("assets/js/app.js");
   assert.doesNotMatch(foundation, /#detailContext:has\(\.company-name-v132\)\{display:grid/);
-  assert.match(foundation, /\.company-context-v132::before\{content:"·"/);
+  assert.match(foundation, /\.company-separator-v159\{[^}]*margin:0;[^}]*padding:0/);
+  assert.doesNotMatch(foundation, /\.company-context-v132::before\{content:"·"/);
+  assert.match(app, /element\('span','company-separator-v159','·'\)/);
   assert.match(overview, /\.modal-head-meta-v60\{[^}]*align-items:baseline;[^}]*flex-wrap:nowrap/);
-  assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
+  assert.match(overview, /\.modal-head-meta-v60\{display:flex;flex-wrap:wrap;[^}]*max-block-size:var\(--project-hero-eyebrow-mobile-max-block-size\)/);
+  assert.match(overview, /\.modal-head-meta-v60 \.company-name-v132,.modal-head-meta-v60 \.company-separator-v159,.modal-head-meta-v60 \.company-context-v132\{[^}]*display:inline/);
   for (const contract of [
     "safeText(title,ui(",
     "input.placeholder=ui(",
@@ -517,17 +566,17 @@ test("keeps project-detail hierarchy line-free, aligned, and unnumbered", () => 
     assert.doesNotMatch(read(page), /section-index-v45/);
   }
   assert.match(tokens, /--cmp-evidence-section-padding:clamp\(/);
-  assert.match(overview, /\.project-signals-v45>div\{[^}]*background:var\(--color-surface\)/);
-  assert.match(overview, /\.modal-classification-v45\{[^}]*align-items:start;[^}]*border-left:var\(--dimension-3px\) solid var\(--color-text-accent\)/);
+  assert.match(overview, /\.project-signals-v45>div\{[^}]*border-bottom:var\(--dimension-1px\) solid var\(--color-border\)[^}]*background:transparent/);
+  assert.match(overview, /\.modal-classification-v45\{[^}]*align-items:start;[^}]*border-left:var\(--dimension-3px\) solid var\(--color-border-strong\)/);
   assert.match(overview, /\.modal-classification-v45__label\{[^}]*padding-block:var\(--dimension-4px\);[^}]*line-height:1.4/);
-  assert.match(overview, /\.modal-tags>\*\{[^}]*padding:var\(--dimension-4px\) 0;[^}]*font-weight:var\(--sys-weight-bold\)/);
+  assert.match(overview, /\.modal-tags>\*\{[^}]*display:inline-flex;[^}]*align-items:center;[^}]*font-weight:var\(--sys-weight-bold\)/);
   assert.doesNotMatch(overview, /\.modal-tags>\*\{[^}]*(?:border-radius|background):/);
   assert.doesNotMatch(overview, /\.project-signals-v45>div:nth-child\(2\)\{[^}]*grid-column:1\/-1/);
   assert.match(overview, /@media\(max-width:980px\)\{\.detail-commerce-v45\{grid-template-columns:1fr/);
   assert.match(overview, /\.programme-stage-case\{[^}]*width:100%;[^}]*max-width:none/);
-  assert.match(overview, /\.programme-stage-case\{[^}]*grid-template-columns:minmax\(var\(--dimension-260px\),.72fr\) minmax\(0,1.28fr\)/);
-  assert.match(overview, /\.programme-stage-case__proof\{[^}]*grid-column:1\/-1;[^}]*grid-template-columns:minmax\(var\(--dimension-260px\),.72fr\) minmax\(0,1.28fr\) max-content/);
-  assert.match(overview, /\.programme-stage-case__facts\{[^}]*grid-template-columns:minmax\(0,1fr\) max-content/);
+  assert.match(overview, /\.programme-stage-case\{[^}]*grid-template-columns:var\(--dimension-32px\) minmax\(var\(--dimension-220px\),.68fr\) minmax\(0,1.32fr\)/);
+  for (const columns of [2, 3, 4]) assert.match(overview, new RegExp(`\\.programme-stage-case__proof\\[data-columns="${columns}"\\]\\{grid-template-columns:repeat\\(${columns},minmax\\(0,1fr\\)\\)`));
+  assert.doesNotMatch(overview, /\.programme-stage-case__facts\{/);
   assert.match(overview, /\.programme-stage-case__cta\{[^}]*border:0;[^}]*white-space:nowrap/);
   assert.match(overview, /\.modal-gallery-v45\.is-initiative-context \.gallery-stage-v45\{[^}]*height:clamp\(/);
   assert.match(overview, /\.voucher-accountability article\{[^}]*grid-template-rows:auto auto auto/);
@@ -547,51 +596,30 @@ test("preserves popup stack, close, and back behavior", () => {
   assert.match(app, /detailCommerce\.hidden=isStage/);
 });
 
-test("supports the r85 Voucher programme without replacing sibling projects", () => {
+test("supports the recruiter-first Voucher programme without replacing sibling projects", () => {
   const data = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
   const css = read("assets/css/components/project-detail-overview.css");
   const voucher = data.projects.voucher;
   assert.equal(voucher.projectModel.renderVariant, "programme-case-with-stage-evidence");
   assert.ok(voucher.programmeInitiatives);
+  assert.equal(Object.keys(data.projects).length, 13);
   assert.match(app, /function renderProgrammeParent/);
-  const labels = Object.values(data.localizationRegistry.runtimeUiLabels).map((value) => value.en);
-  assert.ok(labels.includes("One journey—from research signals to product decisions"));
-  assert.ok(labels.includes("View stage case"));
-  assert.match(app, /cta\.dataset\.stage=stage\.id/);
-  assert.doesNotMatch(app, /Detailed case and approved imagery are being prepared/);
+  assert.match(app, /'View solution details'/);
+  assert.match(app, /'查看解決方案細節'/);
+  assert.match(app, /programme-stage-case__cta[^\n]*icon-arrow--right/);
+  assert.doesNotMatch(app, /'View related work →'|'查看相關作品 →'/);
+  assert.match(app, /const stageProjection=parent\.recruiterFirstPopup/);
+  assert.match(app, /voucher-r149-decision-list voucher-stage-decision-list/);
+  assert.match(app, /function createFeaturedDecisionGroup\(/);
+  assert.match(app, /createDecisionCard\(model,index,\{projectKey,showVisual:showVisual&&Boolean\(model\.evidenceAssetId\)\}\)/);
+  assert.match(app, /card\.querySelector\('\.decision-visual-v58\.evidence-frame'\)/);
+  assert.match(app, /createFeaturedDecisionGroup\(decision,index,\{projectKey:key,showVisual:showDecisionVisuals/);
+  assert.match(app, /'WHAT I DECIDED'/);
   assert.match(app, /currentDetail\?\.type==='stage'/);
   assert.match(app, /url\.searchParams\.delete\('stage'\)/);
-  assert.ok(labels.includes("One shared system behind all five journey stages"));
-  assert.doesNotMatch(app, /Capability added:/);
-  assert.ok(labels.includes("REPRESENTATIVE SHIPPED WORK"));
-  assert.ok(labels.includes("DELIVERY STATUS"));
-  assert.match(app, /'button button--dark programme-stage-case__cta'/);
-  assert.doesNotMatch(css, /\.programme-stage-case__cta:(?:hover|active)\{/);
-  assert.match(app, /\['Marketing','Consistent messaging'/);
-  assert.doesNotMatch(app, /\['CRM \/ Marketing'/);
-  assert.match(app, /role','tablist'/);
-  assert.match(app, /ArrowLeft','ArrowRight/);
-  assert.ok(labels.includes("My accountability"));
-  assert.match(app, /const isProgrammeChild=currentDetail\?\.type==='initiative'\|\|isJourneyStage/);
-  assert.doesNotMatch(app, /dataset\.stageBack/);
-  assert.match(app, /type==='stage'/);
-  assert.match(app, /deepLinkedStage/);
-  assert.match(app, /deepLinkedInitiative&&DATA\.projects/);
-  assert.ok(data.projects["voucher-center"]);
-  assert.ok(data.projects["game-center"]);
-  assert.match(css, /\.programme-surface-v103/);
-  assert.match(css, /\.voucher-decision-journey__thesis/);
-  assert.match(css, /\.programme-stage-cases/);
-  assert.match(css, /\.programme-stage-case__proof/);
-  assert.match(css, /\.voucher-foundation-gallery/);
-  assert.match(css, /\.voucher-foundation-gallery__tab\[aria-selected="true"\]/);
-  assert.match(css, /\.voucher-stage-summary/);
-  assert.match(css, /\.voucher-stage-decision-list/);
-  assert.match(app, /createDecisionCard/);
-  assert.doesNotMatch(css, /\.voucher-stage-evidence-card/);
-  assert.doesNotMatch(css, /\.stage-parent-link/);
-  assert.doesNotMatch(css, /overflow-wrap:anywhere/);
+  assert.match(css, /\.voucher-r149-stage/);
+  assert.match(css, /\.voucher-stage-surface/);
 });
 
 test("preserves search interaction while using r85 as the active inventory", () => {
@@ -603,7 +631,8 @@ test("preserves search interaction while using r85 as the active inventory", () 
   for (const contract of ["let mode='idle'", "setWorkspace('matched',before)", "setMatcherState('loading',keep)", "pendingResultFocus=true"]) assert.ok(home.includes(contract), contract);
   const labels = Object.values(content.localizationRegistry.runtimeUiLabels).map((value) => value.en);
   for (const label of ["Why it fits", "Evidence"]) assert.ok(labels.includes(label), label);
-  for (const contract of ["p.card_outcome", "localize(v)"]) assert.ok(home.includes(contract), contract);
+  for (const contract of ["window.PORTFOLIO_RUNTIME_DATA", "p.search_evidence_pair", "p.what_this_proves", "localize(v)"]) assert.ok(home.includes(contract), contract);
+  assert.doesNotMatch(home, /p\.card_outcome|p\.domain_proof/);
   for (const contract of ["matcherSuggestions", "match-project-grid"]) assert.ok(html.includes(contract), contract);
   assert.ok(Object.values(content.localizationRegistry.staticPageCopy).some(value=>value.en==='Most relevant projects'));
   assert.equal(Object.keys(content.projects).length, 13);
@@ -679,7 +708,7 @@ test("keeps horizontal rails operable, visible, and singly owned", () => {
     /\.domain-project-list-v30\{grid-auto-columns:100%\}/
   ]) assert.match(rail.replace(/\s+/g," "), contract);
   assert.doesNotMatch(rail, /width:calc\(100% \+|margin-inline:calc\([^)]*\* -1\)/);
-  for (const scroller of [".domain-floating-nav-v52__rail", ".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
+  for (const scroller of [".domain-selectors", ".chip-rail", ".match-project-grid", ".modal-head-meta-v60", ".gallery-thumbs-v45", ".programme-chapters-v116", ".programme-journey-map-v106", ".programme-evolution-v106", ".voucher-foundation-gallery__tabs"]) assert.ok(rail.includes(scroller), scroller);
   assert.match(rail, /unobscured content edge/);
   assert.match(rail, /padding-block:var\(--experiment-card-state-safe-block\) var\(--space-8\)/);
   assert.match(rail, /\.domain-project-list-v30\)\{display:grid;grid-auto-flow:column;grid-auto-columns:/);
@@ -712,6 +741,41 @@ test("uses one canonical SVG arrow system and consistent supplemental headings",
   assert.match(selected, /\.evidence-list__item:hover\{[^}]*border-radius:var\(--work-card-hover-radius\)[^}]*box-shadow:var\(--work-card-hover-shadow\)[^}]*transform:var\(--work-card-hover-transform\)/);
 });
 
+test("keeps Voucher child stages canonical, deterministic, and shared", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const stages = ssot.projects.voucher.recruiterFirstPopup.stages;
+  assert.deepEqual(Object.fromEntries(stages.map((stage) => [stage.id, stage.decisions.length])), {
+    discover: 2, qualify: 1, activate: 1, redeem: 1, review: 1,
+  });
+  const evidence = stages.flatMap((stage) => stage.decisions.map((decision) => decision.evidence.assetId));
+  assert.deepEqual(evidence, [
+    "voucher-offer-stage-discover-pdp-before-shipped-01",
+    "voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01",
+    "voucher-offer-stage-qualify-voucher-details-eligibility-before-shipped-01",
+    "voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01",
+    "voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01",
+    "voucher-offer-stage-review-payment-voucher-selection-review-shipped-01",
+  ]);
+  for (const stage of stages) for (const decision of stage.decisions) {
+    for (const field of ["whatIDecided", "whyThisChoice", "whatThisRequired", "outcome"]) {
+      assert.ok(decision[field].en && decision[field].zh, `${stage.id}: ${field}`);
+    }
+    assert.doesNotMatch(JSON.stringify(decision), /To be added|EFFECT/);
+  }
+  assert.match(app, /Stage links keep their native canonical href/);
+  assert.doesNotMatch(app, /const stage=event\.target\.closest\('\[data-stage\]'\)/);
+  assert.match(app, /nextUrl\.searchParams\.set\('stage',nextStage\.id\)/);
+  assert.match(app, /voucher-stage-decision__grid/);
+  assert.match(css, /\.voucher-stage-decision__grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css, /@media\(max-width:600px\)\{\.voucher-stage-decision__grid\{grid-template-columns:1fr\}/);
+  assert.match(css, /\.voucher-r149-metrics,\.impact-evidence-v147__metrics\{grid-template-columns:1fr\}/);
+  assert.match(app, /voucher-stage-surface case-study-cloud-emphasis core-system-insight-section/);
+  assert.match(css, /\.case-study-cloud-emphasis::before,\.case-study-cloud-emphasis::after/);
+  assert.doesNotMatch(css, /M553\.077 103\.851|M1727\.15 0C1714\.02/);
+});
+
 test("keeps popup navigation and related work in their canonical owners", () => {
   const base = read("assets/css/base.css");
   const shell = read("assets/css/components/popup-shell.css");
@@ -739,9 +803,16 @@ test("keeps popup navigation and related work in their canonical owners", () => 
     "function returnToPreviousDetail()",
     "dialog?.addEventListener('cancel'",
     "rootInvoker?.focus()",
-    "dialogTitle.focus({preventScroll:true})",
+    "if(!dialog.open){setDialogOpenState(true)",
   ]) assert.ok(app.includes(contract), contract);
   assert.doesNotMatch(shell, /!important|overflow-wrap:anywhere|word-break:break-all/);
+  assert.match(overview, /\.case-study-cloud-emphasis\{[^}]*var\(--portfolio-cloud-surface/);
+  assert.doesNotMatch(overview.match(/\.voucher-r149-insight\{[^}]*\}/)?.[0] ?? "", /box-shadow|clip-path|dimension-100vw/);
+  assert.match(overview, /\.detail-related-v45\{[^}]*gap:var\(--section-heading-content-gap\)/);
+  assert.match(app, /querySelector\('#detailRelated \.kicker'\)\?\.remove\(\)/);
+  assert.match(app, /controlsHead\.hidden=!scrollable/);
+  assert.doesNotMatch(app, /scheduleProjectSectionFrame\(transaction,animate\)/);
+  assert.match(app, /getBoundingClientRect\(\)\.top<=offset\+2/);
 });
 
 test("keeps the Work library filters readable and singly owned", () => {
@@ -995,19 +1066,16 @@ test("prevents narrow-column recruiter content and forced word breaking", () => 
   assert.match(overview, /\.decision-considerations-v46\{[^}]*grid-template-columns:1fr/);
   assert.match(overview, /\.decision-card-v46\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
   assert.match(overview, /\.decision-considerations-v46>div\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
-  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*background:var\(--cmp-popup-info-surface\)/);
-  assert.match(overview, /\.decision-evidence-v58\{background:var\(--color-surface-evidence-accent\)\}/);
-  assert.doesNotMatch(overview, /\.decision-(?:result-block-v58|considerations-v46)[^{]*\{[^}]*border-top:/);
+  assert.match(overview, /\.decision-result-block-v58,[^{]*\{[^}]*border:0;[^}]*background:transparent/);
   assert.doesNotMatch(overview, /\.decision-result-block-v58\{[^}]*padding-left:/);
   assert.match(overview, /\.project-context-v45__hard ul\{[^}]*padding:0[^}]*list-style:none/);
   assert.match(overview, /\.ownership-section-v45>\.section-heading-v45\{[^}]*margin-bottom:0/);
   assert.match(overview, /\.ownership-section-v45 \.section-heading-v45\+\*\{margin-top:var\(--cmp-popup-subtitle-content-gap\)/);
   assert.match(tokens, /--color-surface-evidence-neutral: var\(--paper-50\)/);
   assert.match(tokens, /--color-surface-evidence-accent: var\(--paper-50\)/);
-  assert.match(overview, /\.impact-grid-v45>article\{background:var\(--color-surface-evidence-neutral\)\}/);
-  assert.match(overview, /\.ownership-section-v45,\.delivery-grid-v45 article\{background:var\(--color-surface-evidence-accent\)\}/);
+  assert.match(overview, /\.impact-grid-v45>article,\.ownership-section-v45,\.delivery-grid-v45 article\{background:transparent\}/);
   assert.match(tokens, /--color-surface-evidence-item: var\(--paper-0\)/);
-  assert.match(overview, /\.ownership-grid-v45>article\{[^}]*background:var\(--color-surface-evidence-item\)/);
+  assert.match(overview, /\.ownership-grid-v45>article\{[^}]*border-radius:0;[^}]*background:transparent/);
   assert.match(overview, /\.team-impact-item-v47,\.recruiter-proof-item-v46\{[^}]*background:var\(--color-surface-evidence-item\)/);
   assert.match(overview, /\.detail-related-v45__head h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
   assert.match(cards, /\.related-project-card-v45,.detail-related-card-v45\{display:grid;[^}]*grid-template-rows:auto minmax\(0,1fr\) auto/);
@@ -1055,11 +1123,16 @@ test("provides recruiter anchor navigation and outcome metric hierarchy", () => 
   assert.match(app, /const PROJECT_NAV_ITEMS=/);
   assert.match(app, /setAttribute\('aria-current','location'\)/);
   assert.match(app, /appendEvidenceValue\(card,value\)/);
-  assert.match(overview, /\.pd-section-nav\{position:absolute[^}]*bottom:calc\(var\(--space-5\) \+ env\(safe-area-inset-bottom\)\)/);
-  assert.match(overview, /\.pd-section-nav\{[^}]*width:max-content[^}]*max-width:calc\(100% - var\(--space-9\)\)/);
-  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch[^}]*border:var\(--dimension-1px\) solid var\(--color-border\)/);
+  assert.doesNotMatch(overview, /\.pd-section-nav:not\(\.floating-navigator\)/);
+  assert.match(overview, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
+  assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
+  assert.match(overview, /\.detail-commerce-v45\{[^}]*align-items:stretch/);
   assert.match(overview, /\.key-intervention-map__flow\{[^}]*min-height:var\(--dimension-220px\)/);
-  assert.match(overview, /@media\(max-width:700px\)[\s\S]*\.pd-section-nav__toggle\{display:flex\}/);
+  assert.match(app, /classList\.add\('floating-navigator'\)/);
+  assert.match(app, /classList\.add\('floating-navigator__rail'\)/);
+  assert.match(app, /floating-navigator__item/);
+  assert.doesNotMatch(overview, /\.pd-section-nav__toggle\{display:flex/);
+  for (const page of ["index.html", "work.html", "profile.html", "experiments.html"]) assert.doesNotMatch(read(page), /[←→⌄]/);
   assert.doesNotMatch(overview, /\.project-section-nav/);
   assert.match(overview, /\.recruiter-proof-item-v46__metric-value\{[^}]*font-size:var\(--cmp-popup-outcome-metric-size\)/);
   assert.match(app, /function embeddedOutcomeMetric\(text\)/);
@@ -1185,4 +1258,898 @@ test("preserves localized arrays and structured values during Chinese copy clean
   const publicCopyNormalizer = app.match(/const normalizePublicCopy=[\s\S]*?\n  \};/)?.[0] ?? "";
   assert.match(publicCopyNormalizer, /\.normalize\('NFC'\)/);
   assert.doesNotMatch(publicCopyNormalizer, /\.normalize\('NFKC'\)/);
+});
+
+
+test("removes obsolete Stage CTA copy from canonical source", () => {
+  const forbidden = /Explore \\d+ initiatives|View stage case|Explore initiatives/;
+  assert.doesNotMatch(read("content/portfolio-content.json"), forbidden);
+  assert.doesNotMatch(read("assets/js/app.js"), forbidden);
+});
+
+
+test("renders governed Stage visual evidence from canonical Voucher journey contracts", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const stages = ssot.projects.voucher.publicContent.journeyChapters;
+  assert.deepEqual(stages.map((stage) => stage.label.en), ["DISCOVER", "QUALIFY", "ACTIVATE", "REDEEM", "REVIEW"]);
+  const allowedRoles = new Set(["decision-proof", "shipped-state", "before-after", "flow", "system-rule"]);
+  const allowedLayouts = new Set(["single-screen", "before-after", "flow-strip", "system-visual"]);
+  assert.equal(stages.length, 5);
+  for (const stage of stages) {
+    const visual = stage.visualEvidence?.primary;
+    assert.ok(visual, stage.id);
+    assert.ok(allowedRoles.has(visual.evidenceRole), stage.id);
+    assert.ok(allowedLayouts.has(visual.layoutVariant), stage.id);
+    if(stage.id==="discover"){
+      assert.ok(visual.copy.en.beforeCaption && visual.copy.zh.shippedCaption);
+      assert.equal(manifest.items[visual.beforeAssetId].implementationStatus, "real-active");
+      assert.equal(manifest.items[visual.shippedAssetId].implementationStatus, "real-active");
+    }else{
+      assert.ok(visual.caption.en && visual.caption.zh, stage.id);
+      assert.ok(visual.alt.en && visual.alt.zh, stage.id);
+      assert.ok(manifest.items[visual.assetId], stage.visualEvidence.primary.assetId);
+      assert.equal(manifest.items[visual.assetId].implementationStatus, "placeholder-active");
+    }
+  }
+  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
+  assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
+  assert.match(app, /localizedField\(stageProjection\|\|stage,'whatChanged'\)/);
+  assert.match(app, /source\.evidence\?\.assetId/);
+  assert.match(app, /createDecisionCard\(model,index/);
+  assert.match(app, /decision-visual-v58/);
+  assert.match(app, /evidence-lightbox-v147/);
+  assert.match(app, /impact-evidence-v147/);
+  assert.match(css, /\.programme-stage-visual\{/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{/);
+  assert.match(css, /@media\(max-width:700px\)[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
+});
+
+test("locks the existing Voucher Card history and independent-project boundaries", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const voucher = ssot.projects.voucher;
+  const card = voucher.systemFoundations.voucherCardComponentSystem2024_2025;
+  assert.match(card.history.en, /original white Voucher Card already existed/);
+  assert.match(card.history.en, /Claim → View/);
+  assert.match(card.history.en, /reusable Tangram component/);
+  assert.doesNotMatch(card.title.en, /one-off Voucher cards/);
+  assert.ok(card.forbiddenClaims.includes("I created the Voucher Card system from scratch."));
+  assert.equal(voucher.publicContent.publicArchitecture.voucherCenterIsIndependentProject, true);
+  assert.equal(voucher.publicContent.continueExploring.independentProjectCards.some((item) => item.projectId === "game-center"), true);
+  assert.deepEqual(voucher.publicContent.selectedInitiatives.order, ["save-everyday-digital-campaign-2023", "brand-challenges"]);
+  assert.equal(voucher.publicContent.voucherWalletEvidence.forbiddenProjection.includes("voucher-center"), true);
+});
+
+test("closes the final P1 case-study runtime contracts", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const domain = read("assets/css/components/domain-selector.css");
+  const home = read("assets/js/home.js");
+  const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.doesNotMatch(app, /representative-shipped-work-94a1458e/);
+  assert.doesNotMatch(app, /renderDeliveryStatus\(localizedField\(item,'status'\)\)/);
+  assert.match(overview, /@media\(max-width:600px\)[\s\S]*\.modal-classification-v45\{grid-template-columns:1fr;align-items:start;gap:var\(--space-2\)\}/);
+  assert.doesNotMatch(overview, /#detailClassification[^}]*display:none/);
+  assert.match(overview, /\.decision-number-v48\{[^}]*border:var\(--dimension-1px\) solid var\(--color-text-accent\)[^}]*background:var\(--color-surface-evidence-accent\)/);
+  assert.match(overview, /\.quick-view-v51\{[^}]*padding:0;[^}]*background:transparent/);
+  assert.match(overview, /\.decision-card-v46\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(app, /stage-focus-v148__statement/);
+  assert.match(home, /image\.dataset\.assetStatus=asset\.isPlaceholder\?'placeholder-active':'real-active'/);
+  assert.match(home, /window\.resolveProjectAsset\?\.\(assetId\)/);
+  assert.match(home, /window\.projectAssetRatio\?\.\(asset\)/);
+  assert.doesNotMatch(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{/);
+  const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
+  assert.equal(real.filter(item=>item.projectId==='voucher').length,13);
+});
+
+test("converges every project on one SSOT-ordered CaseStudySection system", () => {
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /const CASE_STUDY_SECTION_REGISTRY=\{/);
+  assert.doesNotMatch(app, /PROJECT_SECTION_REGISTRY/);
+  assert.match(app, /project\.section_order\|\|\[\]/);
+  assert.match(app, /Unknown canonical section/);
+  assert.match(app, /mappedCanonicalSectionOrder/);
+  assert.match(app, /programmeOwner:'journey'/);
+  assert.match(app, /candidates\.forEach\(node=>\{node\.hidden=true/);
+  assert.match(app, /dataset\.canonicalSectionId=sectionId/);
+  assert.doesNotMatch(app, /\[problem,complexity,\.\.\.supplemental,decisions,gallery,impact,ownership,delivery\]/);
+  assert.match(app, /applyCaseStudySectionSystem\(p\)/);
+  for (const variant of ["canvas", "soft", "emphasis"]) {
+    assert.match(css, new RegExp(`\\.case-study-section--${variant}\\{`));
+  }
+  assert.match(css, /\.case-study-section__header\{/);
+  assert.match(css, /\.case-study-section__eyebrow\{[^}]*color:var\(--color-text-secondary\)/);
+  assert.match(css, /\.project-value-v207\{[^}]*background:transparent/);
+  assert.doesNotMatch(css, /\.project-value-v207\{[^}]*border-radius:/);
+  assert.match(css, /\.info-grid-v45 small\{[^}]*color:var\(--color-text-accent\)[^}]*font-size:var\(--text-xs\)/);
+  assert.match(css, /\.info-grid-v45>div\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.project-context-v45--decision-band\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.ownership-grid-v45>article\{[^}]*border-radius:0;[^}]*background:transparent/);
+  assert.match(css, /\.gallery-copy-v45\{[^}]*background:transparent/);
+  assert.match(css, /\.gallery-thumbs-v45\{[^}]*background:transparent/);
+  assert.match(css, /\.impact-evidence-v147\{display:grid;gap:var\(--case-gap-content\);width:min\(100%,var\(--case-evidence-max\)\);max-width:var\(--case-evidence-max\)\}/);
+  assert.match(app, /dataset\.recruiterOutcome='visible'/);
+  assert.match(app, /impact\.dataset\.recruiterOutcomeSection='visible'/);
+  assert.match(app, /impactEvidence&&!appended\.has\(impact\)/);
+  assert.match(app, /impact\.dataset\.recruiterSectionId='outcomes'/);
+  assert.match(app, /if\(!ordered\.includes\(node\)\)delete node\.dataset\.canonicalSectionId/);
+  assert.match(app, /evidence\.closest\('\[hidden\]'\)&&directSurface/);
+  assert.match(app, /lang==='zh'\?'成果':'Outcomes'/);
+  assert.match(css, /\.case-study-section\{[^}]*border:0;[^}]*border-radius:0/);
+  assert.doesNotMatch(css, /\.case-study-section\{[^}]*border-top:/);
+  assert.match(css, /\.case-study-section\[data-recruiter-outcome-section="visible"\]/);
+  assert.match(css, /\.programme-stage-case__breakpoint\{[^}]*border-radius:0;[^}]*background:transparent/);
+  for (const forbidden of [
+    /\.project-context-v45--decision-band\{grid-template-columns:1fr;padding:var\(--space-5\)\}/,
+    /\.quick-view-v51\{display:grid;grid-template-columns:1fr;gap:var\(--space-5\);padding:var\(--space-5\)\}/,
+    /\.gallery-copy-v45\{padding:var\(--space-4\)\}/,
+    /\.gallery-thumbs-v45\{padding:0 var\(--space-4\) var\(--space-4\)\}/,
+    /\.voucher-stage-decision-list \.decision-card-v46\{[^}]*background:var\(--color-surface\)/,
+    /\.stage-decision-problem\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-evidence-item\)/,
+    /\.stage-decision-meta>div\{[^}]*border-radius:var\(--radius-md\)[^}]*background:var\(--color-surface-subtle\)/
+  ]) assert.doesNotMatch(css, forbidden);
+});
+
+test("contracts every approved recruiter block to an explicit public role", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const contract=ssot.implementationContracts.contentPresentationContract;
+  assert.deepEqual(contract.allowedPublicRoles,["RENDER","SUPPORTING","DEMOTED","PRIVATE"]);
+  assert.match(contract.statusResolution,/longest matching sourcePath/i);
+  assert.match(read("../../scripts/content-completeness-audit.mjs"),/unexpectedMissingBlocks/);
+  assert.match(read("../../scripts/content-completeness-audit.mjs"),/orphanedBlocks/);
+  for(const [id,project] of Object.entries(ssot.projects)){
+    const projectContract=contract.projects[id];
+    assert.ok(projectContract,`${id}: missing content presentation contract`);
+    if(project.presentation?.composition==="recruiter-first-system-case"){
+      const order=project.presentation.sectionOrder;
+      assert.ok(Array.isArray(order),`${id}: missing shared presentation sectionOrder`);
+      assert.equal(new Set(order).size,order.length,`${id}: duplicate shared presentation section`);
+      assert.deepEqual(order,ssot.implementationContracts.recruiterFirstPresentation.sectionOrder,`${id}: shared presentation sectionOrder diverged`);
+      for(const [owner,path] of Object.entries(project.presentation.contentRefs||{})){
+        const value=String(path).split(".").reduce((current,key)=>current?.[key],project);
+        assert.notEqual(value,undefined,`${id}: shared content owner ${owner} does not resolve ${path}`);
+      }
+      continue;
+    }
+    for(const [sectionId,section] of Object.entries(projectContract.sections||{})){
+      if(!section.renderRequired)continue;
+      assert.ok(project.sectionOrder.includes(sectionId),`${id}: ${sectionId} missing from sectionOrder`);
+      assert.ok(section.presentationType,`${id}: ${sectionId} missing presentationType`);
+      assert.ok(section.sourcePaths?.length,`${id}: ${sectionId} missing sourcePaths`);
+    }
+    for(const supporting of projectContract.supporting||[]){
+      assert.ok(project.sectionOrder.includes(supporting.parentSectionId),`${id}: supporting parent ${supporting.parentSectionId} missing`);
+      assert.ok(supporting.presentationType,`${id}: supporting block missing presentationType`);
+    }
+  }
+  assert.ok(ssot.projects.voucher.sectionOrder.includes("core-system-insight"));
+  assert.match(read("assets/js/app.js"),/contentPresentationSources\(project,sectionId\)/);
+  assert.match(read("assets/js/app.js"),/dataset\.contentBlockIds/);
+  assert.match(read("assets/css/components/project-detail-overview.css"),/\.editorial-statement-v224__statement/);
+});
+
+
+test("projects exact canonical Outcome claims through the shared Case Study system", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const tokens = read("assets/css/tokens.css");
+  for (const contract of ["function publicOutcomeSignals(project)", "dataset.outcomeSourcePath", "dataset.outcomeExactProjection='true'", "Business impact", "商業影響"]) assert.ok(app.includes(contract), contract);
+  for (const token of ["--case-page-max:", "--case-reading-max:", "--case-evidence-max:", "--case-page-gutter:", "--case-gap-chapter:", "--case-gap-section:", "--case-gap-subsection:", "--case-gap-content:", "--case-gap-caption:"]) assert.ok(tokens.includes(token), token);
+  assert.match(overview, /\.case-study-section\{[^}]*width:min\(100%,var\(--case-page-max\)\)/);
+  assert.match(overview, /\.impact-evidence-v147\{[^}]*var\(--case-evidence-max\)/);
+  assert.match(overview, /\.impact-evidence-v147__heading h4,[^}]*font-size:var\(--text-h3\)/);
+  assert.doesNotMatch(overview, /\.impact-evidence-v147__heading h3\{[^}]*font-size:var\(--cmp-popup-section-title-size\)/);
+  assert.doesNotMatch(overview, /\.case-study-section\{[^}]*border-top:/);
+});
+
+
+test("Step 6A image frame system keeps canonical roles, intrinsic evidence and placeholder fidelity",()=>{
+  const app=read("assets/js/app.js");
+  const home=read("assets/js/home.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const domain=read("assets/css/components/domain-selector.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.equal(manifest.frameSystemContract.status,"frozen-after-step-6a");
+  assert.match(home,/dataset\.frameRole='project-cover'/);
+  for(const role of ["primary-evidence","portrait-evidence","supporting-evidence","system-diagram"])assert.ok(css.includes(`data-frame-role="${role}"`),role);
+  assert.match(css,/data-frame-role="primary-evidence"[^}]*[\s\S]*aspect-ratio:auto/);
+  assert.match(css,/data-frame-role="portrait-evidence"[^}]*var\(--dimension-420px\)/);
+  assert.match(css,/data-frame-role="system-diagram"[^}]*[\s\S]*overflow-x:auto/);
+  assert.match(css,/\.before-after-evidence-v147__grid\{[^}]*grid-template-columns:minmax\(0,2fr\) minmax\(0,3fr\)[^}]*align-items:start/);
+  assert.match(css,/\.before-after-evidence-v147__item\{[^}]*gap:var\(--case-gap-caption\)/);
+  assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.before-after-evidence-v147__grid\{grid-template-columns:1fr/);
+  const projectCard=read("assets/css/components/project-card.css");
+  assert.match(projectCard,/related-project-card__visual-v45\{[^}]*aspect-ratio:var\(--project-card-media-ratio,16\/10\)/);
+  assert.match(projectCard,/related-project-card__image-v148\{[^}]*object-fit:contain/);
+  assert.doesNotMatch(domain,/related-project-card__visual-v45\{/);
+  assert.match(app,/media\.dataset\.frameRole='primary-evidence'/);
+});
+
+
+test("Work Voucher card uses the canonical project-cover image owner", () => {
+  const app=read("assets/js/app.js");
+  const work=read("work.html");
+  const css=read("assets/css/components/project-card.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const asset=manifest.items["voucher-hero-incentive-journey-public-v1"];
+  assert.equal(asset.sha256,"ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409");
+  assert.equal(asset.implementationStatus,"real-active");
+  assert.doesNotMatch(work,/work-artifact--voucher/);
+  assert.match(work,/data-frame-role="project-cover"/);
+  assert.match(app,/resolveProjectAsset\(coverAssetId\)/);
+  assert.match(app,/image\.dataset\.assetId=coverAsset\.assetId/);
+  assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
+});
+
+test("Voucher recruiter-first IA uses canonical SSOT and shared responsive owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),manifest=JSON.parse(read("content/portfolio-asset-manifest.json")),v=data.projects.voucher;assert.equal(data.contentVersion,manifest.contentVersion);assert.equal(v.infoGrid.audience.primary.en,"Customers");assert.equal(v.recruiterFirstPopup.hero.showKeyProblems,false);assert.deepEqual(v.recruiterFirstPopup.stages.map(x=>x.id),["discover","qualify","activate","redeem","review"]);assert.match(app,/View solution details/);assert.match(css,/\.voucher-r149-flow\{[^}]*grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\) auto minmax\(0,1fr\)/);assert.match(css,/@media\(max-width:871px\)/)});
+
+test("R157 locks Voucher visual correction content and shared interaction owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css"),data=JSON.parse(read("content/portfolio-content.json")),v=data.projects.voucher,c=v.recruiterFirstPopup,d=c.stages.find(x=>x.id==="discover");assert.equal(c.outcomes.metrics.length,4);assert.equal(c.outcomes.metrics[1].value,"+~167%");assert.match(c.outcomes.metrics[1].primaryCopy.en,/approximate increase/);assert.match(c.outcomes.metrics[1].evidenceNote.en,/~1\.5% to ~4%/);assert.equal(c.programmeResearch.metrics.length,5);assert.equal(c.programmeResearch.metrics[2].label.en,"participants");assert.equal((app.match(/voucher-r149-voucher-card-integrated/g)||[]).length,0);assert.doesNotMatch(app,/dialogTitle\.focus\(\{preventScroll:true\}\);\n      doc\.dispatchEvent/);assert.equal(d.decisions[0].evidence.assetId,"voucher-offer-stage-discover-pdp-before-shipped-01");assert.equal(d.decisions[1].evidence.assetId,"voucher-offer-stage-discover-voucher-details-concept-eligibility-tracker-01");assert.match(css,/\.contribution-block__intervention\{/);assert.doesNotMatch(css,/\.contribution-block--emphasis\{/);assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.research-evidence-metrics,\.outcome-metric-grid[^\{]*\{grid-template-columns:1fr\}/);assert.match(css,/\.case-study-cloud-emphasis::after\{bottom:var\(--dimension-1px\);transform:translateY\(100%\) rotate\(var\(--dimension-180deg\)\)\}/)});
+
+
+test("keeps Search Mapping independent from recruiter-first Hero presentation", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const contract=ssot.implementationContracts.recruiterFirstPresentation;
+  assert.equal(contract.heroTaxonomy.publicOwner,"none");
+  assert.deepEqual(contract.heroTaxonomy.forbiddenFallbacks,["problemTypes","keyProblems","searchIndexV2"]);
+  assert.match(app, /const showProblemTypes=!recruiterContract/);
+  assert.doesNotMatch(app, /renderTags\([^\n]*(?:searchIndexV2|keyProblems)/);
+  assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
+});
+
+test("keeps recruiter-first static routes free of legacy summary headings", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition==="recruiter-first-system-case")){
+    const html=read(`work/${id}.html`);
+    assert.doesNotMatch(html,/Critical problem:|Business impact:/,`${id}: legacy static summary leaked`);
+    assert.match(html,new RegExp(project.atAGlance.en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
+  }
+});
+
+test("contracts Cathay Evidence to four ordered visual proofs without duplicate presentation", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const evidence=ssot.projects["cathay-sit-review-remediation-operations"].publicContent.operatingEvidence;
+  const expected=["research-coverage","operating-model","prioritisation","phased-direction"];
+  assert.equal(evidence.presentation,"ordered-visual-proofs");
+  assert.deepEqual(evidence.blockOrder,expected);
+  assert.deepEqual(evidence.items.map(item=>item.id),expected);
+  assert.equal(evidence.items[0].supportingFacts.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
+  assert.equal(evidence.items.some(item=>/supporting Decision|支援決策/.test(JSON.stringify(item))),false);
+  const app=read("assets/js/app.js");
+  assert.match(app,/orderedVisualProofs/);
+  assert.match(app,/data(?:set)?\.evidenceBlockId|dataset\.evidenceBlockId/);
+});
+
+test("executes the Human-approved recruiter-first presentation contract prospectively", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const contract=ssot.implementationContracts.recruiterFirstPresentation;
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNavigation=["overview","complexity","decisions","evidence","outcomes","ownership"];
+  assert.deepEqual(contract.sectionOrder,expectedOrder);
+  assert.deepEqual(contract.navigation.map(item=>item.key),expectedNavigation);
+  assert.deepEqual(contract.hero.forbiddenVisiblePrefixes,["From "]);
+  assert.equal(contract.heroTaxonomy.publicOwner,"none");
+  assert.match(app,/recruiterFirstDisplayTitle\(p\)/);
+  assert.match(app,/recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation/);
+  assert.match(app,/presentationContract\?\.sectionOrder\|\|p\.presentation\?\.sectionOrder/);
+  for(const [id,project] of Object.entries(ssot.projects).filter(([,item])=>item.presentation?.composition===contract.appliesToComposition)){
+    const visibleTitle=contract.hero.forbiddenVisiblePrefixes.reduce(
+      (title,prefix)=>title.startsWith(prefix)?title.slice(prefix.length):title,
+      project.title.en
+    );
+    assert.equal(visibleTitle.startsWith("From "),false,`${id}: visible Hero title starts with From`);
+    assert.ok(project.searchIndexV2?.problemTags?.en?.length,`${id}: recruiter-first Search Mapping missing`);
+    assert.deepEqual(project.presentation.sectionOrder,expectedOrder,`${id}: canonical macro order diverged`);
+    for(const ref of contract.requiredContentRefs){
+      const path=project.presentation.contentRefs?.[ref];
+      assert.ok(path,`${id}: missing ${ref} contentRef`);
+      assert.notEqual(path.split(".").reduce((value,key)=>value?.[key],project),undefined,`${id}: unresolved ${ref} contentRef`);
+    }
+    assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"),`${id}: Decisions must precede Evidence`);
+    assert.equal(project.presentation.sectionOrder.some(section=>contract.disallowedVisibleLegacySections.includes(section)),false,`${id}: legacy section leaked into recruiter-first order`);
+  }
+});
+
+
+test("projects DBS through the shared recruiter-first system-case composition", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.composition, "recruiter-first-system-case");
+  assert.deepEqual(dbs.presentation.navigation.map(item => item.key), ["overview", "complexity", "decisions", "evidence", "outcomes"]);
+  assert.match(app, /function renderSystemCaseParent\(p\)/);
+  assert.match(app, /presentation\?\.composition==='recruiter-first-system-case'/);
+  assert.match(app, /const configured=list\(recruiterContract\?\.navigation\|\|project\?\.presentation\?\.navigation\)/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+  assert.match(overview, /@media\(max-width:430px\)\{\.recruiter-system-case__metrics\{grid-template-columns:1fr\}\}/);
+});
+
+
+test("consolidates verified DBS intervention into shared ContributionBlock", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.contentRefs.contributionIntervention, "keyInterventionMap");
+  assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
+  assert.equal(dbs.presentation.visibility.evidence, true);
+  assert.match(app, /function appendContributionFlow\(section,transformation\)/);
+  assert.match(app, /appendContributionFlow\(contribution,/);
+  assert.doesNotMatch(app, /Evidence to strategy and system model/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+
+test("renders DBS decisions through the shared Decision card with canonical OUTCOME", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal("designDecisions" in dbs, false);
+  assert.equal(dbs.decisionNarrative.primaryDecisions.length, 3);
+  dbs.decisionNarrative.primaryDecisions.forEach(decision => {
+    assert.ok(decision.whatIDecided);
+    assert.ok(decision.whyThisChoice);
+    assert.ok(decision.outcome);
+    assert.equal("effectOrResult" in decision, false);
+    assert.equal("evidence" in decision, false);
+  });
+  assert.match(app, /lang==='zh'\?'成果':'OUTCOME'/);
+  assert.match(app, /showDecisionVisuals=p\.presentation\?\.decisionOptions\?\.showVisuals \?\? true/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+
+test("uses frozen recruiter-first research, validation and accountability primitives for DBS", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const research = ssot.projects.dbs.publicContent.decisionEvidence;
+  assert.deepEqual(research.metrics.map(item => typeof item.value === "object" ? item.value.en : String(item.value)), ["50+", "4", "2", "3"]);
+  assert.ok(research.metrics.find(item => String(item.value) === "3").note);
+  assert.equal("claimBoundary" in research, false);
+  assert.match(app, /research-evidence-metrics recruiter-system-case__metrics/);
+  assert.match(app, /createInfoTooltip\(t\(item\.note\)/);
+  assert.match(app, /data\.componentOwner='SharedAccountability'|dataset\.componentOwner='SharedAccountability'/);
+});
+
+
+test("projects the R160.4 approved DBS orientation and complexity copy", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.title.en, "Turning fragmented credit-exception handling into a shared six-market decision system");
+  assert.equal(dbs.atAGlance.en, "Led end-to-end design of a credit-exception operating system, replacing fragmented report-driven workflows with role-based case management and a shared decision model launched across six markets.");
+  assert.deepEqual(dbs.whatMadeThisHard.map(item => item.title.en), [
+    "Two fundamentally different operating modes",
+    "Fragmented operational context",
+    "Decisions crossed roles, authority levels and markets"
+  ]);
+  assert.equal(dbs.presentation.visibility.coreSystemInsight, true);
+  assert.equal(dbs.presentation.contentRefs.coreSystemInsight, "publicContent.coreSystemInsight");
+  assert.match(app, /project\.presentation\?\.heroMetadata/);
+  assert.match(app, /'MY INTERVENTION'/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+
+test("orders approved DBS decisions before evidence and renders exactly four research metrics", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.decisionNarrative.primaryDecisions.length, 3);
+  assert.equal(dbs.publicContent.decisionEvidence.items.length, 3);
+  assert.deepEqual(dbs.publicContent.decisionEvidence.metrics.map(item => String(item.value)), ["50+", "4", "2", "3"]);
+  assert.equal(dbs.publicContent.decisionEvidence.metrics.some(item => String(item.value).includes("6 market")), false);
+  const order = dbs.presentation.sectionOrder;
+  assert.ok(order.indexOf("design-decisions") < order.indexOf("evidence"));
+  assert.match(app, /dataset\.componentOwner='StructuredEvidence'/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+
+test("renders approved DBS qualitative Outcomes through the shared OutcomeMetric owner", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.publicContent.outcomes.cards.length, 3);
+  assert.equal("validatedOutcomes" in dbs.publicContent, false);
+  assert.equal(dbs.presentation.contentRefs.outcomes, "publicContent.outcomes");
+  assert.deepEqual(ssot.implementationContracts.recruiterFirstPresentation.navigation.map(item => item.label.en), ["Overview", "Complexity", "Decisions", "Evidence", "Outcomes", "Ownership"]);
+  assert.match(app, /function appendOutcomeCards\(grid,items/);
+  assert.match(app, /appendOutcomeCards\(metrics,c\.outcomes\?\.metrics,\{metric:true,translate:t\}\)/);
+  assert.match(css, /\.outcome-metric--qualitative\{/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+
+test("uses the approved structured SharedAccountability projection for DBS", () => {
+  const ssot = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const dbs = ssot.projects.dbs;
+  assert.equal(dbs.presentation.accountabilityMode, "structured");
+  assert.equal(dbs.ownershipModel.publicSummary.en, "As Lead Product Designer, I owned problem framing, cross-market synthesis, operating-model definition, role and workflow architecture, product design direction and prototype validation, working with Product, Engineering and operational stakeholders through delivery.");
+  assert.match(app, /if\(accountabilityPresentation\)appendSharedAccountability\(accountability,accountabilityPresentation,\{translate:t\}\)/);
+  assert.doesNotMatch(app, /key===['"]dbs['"]/);
+});
+
+test("R161.1 owns panoramic mobile readability and metadata hierarchy in shared ProjectCard",()=>{
+  const app=read("assets/js/app.js");
+  const home=read("assets/js/home.js");
+  const css=read("assets/css/components/project-card.css");
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  assert.match(app,/ratio>=2\?'panoramic':'standard'/);
+  assert.match(app,/projectCardFocalPosition/);
+  assert.match(home,/window\.projectAssetPresentation\?\.\(asset\)/);
+  assert.match(css,/--project-card-mobile-panoramic-media-ratio:5\/3/);
+  assert.match(css,/--project-card-company-color:var\(--color-text-secondary\)/);
+  assert.match(css,/--project-card-company-title-gap:var\(--space-5\)/);
+  assert.match(css,/@media\(max-width:560px\)[\s\S]*data-media-format="panoramic"[^}]*var\(--project-card-mobile-panoramic-media-ratio\)/);
+  assert.doesNotMatch(css,/dbs|voucher/i);
+  assert.equal(manifest.items["dbs-project-card-primary-01"].projectCardFocalPosition,"center center");
+});
+
+
+test("R161.2 keeps ProjectCard media full-bleed and Domain content adjacent through shared owners",()=>{
+  const card=read("assets/css/components/project-card.css");
+  const domain=read("assets/css/components/domain-selector.css");
+  assert.match(card,/work-card-v32__button\{display:grid;width:100%;height:100%;min-height:0;padding:0;/);
+  assert.match(card,/work-card-v32--compact \.work-card-v32__button\{grid-template-columns:1fr;grid-template-rows:auto minmax\(0,1fr\)/);
+  assert.match(card,/@media\(max-width:900px\)\{[\s\S]*grid-template-rows:auto minmax\(0,1fr\)/);
+  assert.match(card,/@media\(max-width:560px\)\{:root\{[^}]*\}\.work-card-v32__content,\.related-project-card__content-v1612\{padding:var\(--space-5\)\}\.work-card-v32 \.work-card-v32__visual-v225\{padding:0\}/);
+  assert.doesNotMatch(card,/\.work-card-v32__content,\.work-artifact\{padding:/);
+  assert.match(card,/--project-card-company-title-gap:var\(--space-5\)/);
+  assert.match(domain,/@media\(max-width:900px\)\{[\s\S]*\.domain-layout\{grid-template-columns:1fr;gap:var\(--space-4\)\}/);
+});
+
+
+test("R161.2.1 converges Domain ProjectCards and floating navigation on canonical shared owners",()=>{
+  const home=read("assets/js/home.js");
+  const card=read("assets/css/components/project-card.css");
+  assert.match(home,/querySelector\('\.floating-navigator__rail'\)/);
+  assert.doesNotMatch(home,/domain-floating-nav-v52__rail/);
+  assert.match(home,/domain-floating-chip-v52 floating-navigator__item/);
+  assert.match(home,/card\.classList\.add\('related-project-card-v45--media-stack'\)/);
+  assert.match(home,/related-project-card__heading-v1612/);
+  assert.match(home,/related-project-card__content-v1612/);
+  assert.match(card,/\.related-project-card-v45--media-stack\{padding:0;grid-template-rows:auto minmax\(0,1fr\);gap:0;overflow:hidden\}/);
+  assert.match(card,/\.related-project-card-v45--media-stack \.related-project-card__visual-v45\{border-radius:0\}/);
+  assert.match(card,/\.related-project-card__heading-v1612\{[^}]*gap:var\(--project-card-company-title-gap\)/);
+  assert.match(card,/\.related-project-card__heading-v1612 \.related-project-card__title\{margin-top:0\}/);
+  assert.doesNotMatch(home,/key===['"]dbs['"]/);
+});
+
+
+test("clamps floating Domain items inside the shared rail safe area", () => {
+  const home = read("assets/js/home.js");
+  const domain = read("assets/css/components/domain-selector.css");
+  assert.match(home, /const desired=\(selected\.offsetLeft\+\(selected\.offsetWidth\/2\)\)-\(rail\.clientWidth\/2\)/);
+  assert.match(home, /return Math\.min\(max,Math\.max\(0,desired\)\)/);
+  assert.match(home, /if\(show&&!wasVisible\)syncFloatingDomain\(domain,\{immediate:true\}\)/);
+  assert.match(domain, /\.floating-navigator__rail\{[^}]*box-sizing:border-box[^}]*padding:var\(--dimension-2px\) var\(--interactive-state-safe-area\)[^}]*scroll-padding-inline:var\(--interactive-state-safe-area\)/);
+  assert.doesNotMatch(home, /domain(?:Floating)?===['"](?:financial-services|enterprise-operations|complex-systems)['"].*(?:scroll|offset|target)/);
+});
+
+
+test("SharedAccountability preserves optional partner-owned data as a subordinate shared boundary", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /source\?\.owned,role:lang===/);
+  assert.match(app, /source\?\.shared,role:lang===/);
+  assert.match(app, /if\(source\?\.partnerOwned\)/);
+  assert.match(app, /boundary\.dataset\.accountabilitySource='PARTNER-OWNED'/);
+  assert.match(app, /list\(item\.items\)\.forEach\(entry=>details\.append/);
+  assert.doesNotMatch(app, /booking.*partnerOwned|partnerOwned.*booking/i);
+  assert.match(overview, /\.voucher-r149-accountability__boundary\{[^}]*grid-column:1\/-1/);
+  assert.doesNotMatch(overview, /voucher-r149-accountability--three/);
+});
+
+
+test("shared Outcomes supports change, measured outcome, and scale semantics", () => {
+  const app = read("assets/js/app.js");
+  const overview = read("assets/css/components/project-detail-overview.css");
+  assert.match(app, /function appendOutcomeSemanticHierarchy\(section,source/);
+  assert.match(app, /source\?\.change/);
+  assert.match(app, /source\?\.measured/);
+  assert.match(app, /source\?\.scale/);
+  assert.match(app, /if\(outcomesHierarchy\)appendOutcomeSemanticHierarchy\(outcomes,outcomesHierarchy/);
+  assert.doesNotMatch(app, /booking.*semanticHierarchy|semanticHierarchy.*booking/i);
+  assert.match(overview, /\.outcome-semantic-change\{/);
+  assert.match(overview, /\.outcome-scale-grid\{/);
+});
+
+test("R162.5 keeps Booking recruiter-first, approximate, complete, and confidentiality-safe",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const booking=ssot.projects.booking;
+  const strategy=ssot.projects["booking-taxi-pickup-service-strategy"];
+  const outcomes=booking.publicContent.outcomes;
+  assert.deepEqual(outcomes.semanticHierarchy.measured.map(item=>[item.value,item.label.en]),[
+    ["+~7%","desktop conversion rate"],
+    ["+~3%","mobile conversion rate"],
+    ["+~10%","tablet conversion rate"],
+    ["~150","additional rides per day after launch"]
+  ]);
+  assert.equal(outcomes.evidence.length,0);
+  assert.match(outcomes.semanticHierarchy.supportingStatements[0].text.en,/6 of 7 analysed markets improved/);
+  assert.match(outcomes.semanticHierarchy.supportingStatements[1].text.en,/Spain was the only analysed market to decline/);
+  assert.match(outcomes.semanticHierarchy.closingStatement.en,/40\+ countries/);
+  assert.doesNotMatch(JSON.stringify(outcomes),/2-step|3-step|outcomes-cross-market|outcomes-post-launch/i);
+  for(const decision of booking.decisionNarrative.primaryDecisions){
+    assert.ok(decision.whatIDecided);
+    assert.ok(decision.whyThisChoice);
+    assert.ok(decision.optionalBlock?.content);
+    assert.ok(decision.outcome);
+  }
+  assert.deepEqual(booking.decisionNarrative.primaryDecisions,booking.publicContent.primaryDecisions);
+  assert.equal(booking.decisionEvidenceMap["booking-decision-01"].publicAssetId,"booking-evidence-decision-01-ride-mix-public-01");
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-public-01"].publicBuild,true);
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-public-01"].type,"image/svg+xml");
+  assert.equal(manifest.items["booking-evidence-decision-01-ride-mix-01"],undefined);
+  assert.equal(manifest.items["booking-evidence-outcomes-cross-market-conversion-01"],undefined);
+  assert.equal(manifest.items["booking-evidence-outcomes-post-launch-tradeoff-01"],undefined);
+  assert.equal(strategy.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.match(app,/supportingStatements/);
+  assert.match(css,/recruiter-complexity-grid\{[^}]*align-items:stretch/);
+  assert.match(css,/voucher-r149-insight \.voucher-r149-heading h2\{width:100%;max-width:var\(--case-reading-max\)\}/);
+  assert.match(css,/core-system-insight-section \.voucher-r149-foundations:has/);
+});
+
+test("R162.6 gives mobile Outcome groups independent rhythm and keeps Audience in one canonical Info Grid", () => {
+  const css = read("assets/css/components/project-detail-overview.css");
+  const app = read("assets/js/app.js");
+  const browserQa = read("../../tests/portfolio-browser-qa.mjs");
+  assert.match(css,/quick-view-v51\{display:grid;grid-template-columns:1fr;gap:var\(--space-5\);height:auto;padding:0\}/);
+  assert.match(css,/@media\(max-width:430px\)\{\.outcome-metric-grid\{row-gap:var\(--space-6\)\}/);
+  assert.doesNotMatch(css,/booking[^\n{]*\{[^}]*outcome-metric-grid/i);
+  assert.doesNotMatch(css,/outcome-metric-grid[^}]*!important/);
+  assert.match(app,/renderInfoGrid\('projectSignals',signalItems\)/);
+  assert.match(browserQa,/Booking mobile Outcome group rhythm failed/);
+  assert.match(browserQa,/Booking Audience projection duplicated/);
+  assert.match(browserQa,/Booking mobile Info Grid overflowed into Contribution/);
+});
+
+
+test("R163 installs the canonical Portfolio Skill v2 and extends only shared Project Detail owners", () => {
+  const app = read("assets/js/app.js");
+  const css = read("assets/css/components/project-detail-overview.css");
+  const content = JSON.parse(read("content/portfolio-content.json"));
+  const ctbc = content.projects["ctbc-mortgage-self-service-app"];
+
+  assert.match(app,/voucher-stage-decision__delivery-boundary/);
+  assert.match(app,/outcome-qualitative-hierarchy/);
+  assert.match(app,/structured-evidence-v223__groups/);
+  assert.doesNotMatch(app,/ctbc[^\n]*deliveryBoundary/i);
+  assert.match(css,/\.structured-evidence-v223__groups\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.doesNotMatch(app,/structured-evidence-grid|structured-evidence-card/);
+  assert.doesNotMatch(css,/\.structured-evidence-grid|\.structured-evidence-card/);
+  assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
+  assert.doesNotMatch(css,/structured-evidence[^}]*!important/i);
+
+  assert.equal(ctbc.presentation.composition,"recruiter-first-system-case");
+  assert.equal(content.implementationContracts.recruiterFirstPresentation.heroTaxonomy.publicOwner,"none");
+  assert.equal(ctbc.infoGrid.type.value,"0→1 Product");
+  assert.deepEqual(ctbc.infoGrid.audience.secondary.en,["Co-borrowers","Guarantors"]);
+  assert.equal(ctbc.infoGrid.timeline.duration.en,"3 months");
+  assert.equal(ctbc.decisionNarrative.primaryDecisions.length,3);
+  assert.equal(ctbc.decisionNarrative.primaryDecisions[0].deliveryBoundary.en,"Further contextual routing options were not validated within the project scope.");
+  assert.equal(ctbc.publicContent.decisionEvidence.structuredGroups.length,3);
+  assert.equal(ctbc.publicContent.outcomes.cards.length,3);
+  assert.match(ctbc.publicContent.outcomes.closing.en,/production launch and post-launch performance were not confirmed/);
+  assert.ok(!JSON.stringify(ctbc.publicContent.outcomes).match(/conversion|task success|completion rate/i));
+  assert.ok(ctbc.ownershipModel.partnerOwned.some(item=>item.en==="Existing acquisition entry points"));
+  assert.equal(ctbc.ownershipModel.accountabilityPresentation.partnerOwned,undefined);
+});
+
+
+test("R163.3 converges Core Insight and Accountability through canonical shared owners",()=>{const app=read("assets/js/app.js"),css=read("assets/css/components/project-detail-overview.css");assert.match(app,/sourceRole:'I LED'/);assert.match(app,/sourceRole:'I CO-DECIDED'/);assert.match(app,/PARTNER-OWNED BOUNDARY/);assert.doesNotMatch(app,/voucher-r149-accountability--three/);assert.match(css,/\.voucher-r149-insight\{justify-items:center;text-align:center\}/);assert.doesNotMatch(css,/\.voucher-r149-insight\{justify-items:center;text-align:left\}/);assert.match(css,/\.voucher-r149-accountability__boundary\{[^}]*grid-column:1\/-1/);assert.match(css,/@media\(max-width:600px\)\{\.voucher-r149-accountability\{grid-template-columns:1fr\}/)});
+
+
+test("R163.3B gives CTBC one evidence-to-decision-to-outcome spine", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const ctbc=ssot.projects["ctbc-mortgage-self-service-app"];
+  const decisions=ctbc.decisionNarrative.primaryDecisions;
+  const evidence=ctbc.publicContent.decisionEvidence.structuredGroups;
+  const outcomes=ctbc.publicContent.outcomes;
+  const accountability=ctbc.ownershipModel.accountabilityPresentation;
+  assert.equal(decisions.length,3);
+  assert.deepEqual(decisions.map(item=>item.title.en),[
+    "Structure the journey around application state",
+    "Treat interruption and return as a first-class application state",
+    "Keep multiple participants inside one coherent application"
+  ]);
+  assert.ok(decisions.every(item=>item.optionalBlock.type==="CONSTRAINT MANAGED"));
+  assert.match(app,/'CONSTRAINT MANAGED':lang==='zh'\?'管理的限制':'CONSTRAINT MANAGED'/);
+  assert.equal(evidence.length,3);
+  assert.equal(ctbc.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.deepEqual(evidence.map(item=>item.heading.en),[
+    "Different readiness states required a state-driven journey",
+    "Interruption was part of the normal application journey",
+    "Multiple applicants still needed one coherent application"
+  ]);
+  assert.deepEqual(evidence.map(item=>item.decisionLink.en),[
+    "LED TO DECISION 01",
+    "LED TO DECISION 02",
+    "LED TO DECISION 03"
+  ]);
+  assert.ok(evidence.every(item=>item.supportingLabel===undefined&&item.bullets===undefined));
+  assert.equal(outcomes.headline,undefined);
+  assert.deepEqual(outcomes.cards.map(item=>item.heading.en),[
+    "One staged application model",
+    "Resumable application progress",
+    "Coordinated multi-party completion"
+  ]);
+  assert.equal(accountability.owned.items,undefined);
+  assert.equal(accountability.shared.items,undefined);
+  assert.equal(accountability.partnerOwned,undefined);
+  assert.match(accountability.owned.title.en,/product model behind the 0→1 mortgage journey/);
+  assert.match(accountability.shared.title.en,/business and lending constraints/);
+  assert.doesNotMatch(JSON.stringify({accountability,outcomes,decisions,evidence}),/conversion rate|task success|completion rate/i);
+});
+
+
+test("R163.3C compresses CTBC Evidence through an opt-in shared decision-support variant",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const evidence=ssot.projects["ctbc-mortgage-self-service-app"].publicContent.decisionEvidence;
+  assert.equal(evidence.structuredGroups.length,3);
+  assert.ok(evidence.structuredGroups.every(item=>Object.keys(item).sort().join(",")==="decisionLink,heading,summary"));
+  assert.match(app,/evidenceSource\.presentation==='decision-support'/);
+  assert.match(app,/structured-evidence-v223__decision-link voucher-r149-eyebrow/);
+  assert.doesNotMatch(app,/ctbc[^\n]*decision-support/i);
+  assert.match(css,/\.structured-evidence-v223__groups--decision-support\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:900px\)\{[^}]*structured-evidence-v223__groups--decision-support\{grid-template-columns:1fr/);
+  assert.doesNotMatch(css,/ctbc[^\n{]*\{[^}]*structured-evidence/i);
+});
+
+test("R165.1G binds public-safe Cathay Evidence while preserving internal Search Mapping",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["cathay-sit-review-remediation-operations"];
+  const evidence=project.publicContent.operatingEvidence;
+  const expectedTags=["review handoffs","AML operations","remediation","manual screening","process visibility"];
+  const expectedAssets=[
+    "cathay-review-research-operating-baseline-public-v1",
+    "cathay-review-process-complexity-public-v1",
+    "cathay-review-prioritisation-public-v1",
+    "cathay-review-phased-direction-public-v1"
+  ];
+  assert.deepEqual(project.searchIndexV2.problemTags.en,expectedTags);
+  for(const [id,item] of Object.entries(ssot.projects).filter(([,item])=>!String(item.contentStatus||"").includes("hidden"))){
+    assert.ok(item.searchIndexV2,`${id}: Search Mapping missing`);
+    assert.ok(item.searchIndexV2.problemTags?.en?.length||item.searchIndexV2.intentIds?.length,`${id}: Search Mapping relevance metadata missing`);
+  }
+  assert.equal(evidence.presentation,"ordered-visual-proofs");
+  assert.deepEqual(evidence.items.map(item=>item.assetId),expectedAssets);
+  assert.equal(evidence.items[0].supportingFacts.find(item=>item.value==="80%+").label.en,"routine case-flow coverage");
+  for(const assetId of expectedAssets){
+    const asset=manifest.items[assetId];
+    assert.ok(asset?.publicPath?.startsWith("/site/assets/projects/cathay-review/"),`${assetId}: canonical path missing`);
+    assert.equal(asset.implementationStatus,"real-active");
+    assert.equal(asset.replacementRequired,false);
+  }
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+});
+
+test("R166.1 projects Cathay OA through the recruiter-first shared IA without placeholder evidence",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-sit-online-account-opening"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.equal(project.title.en,"From fragmented requirements to one end-to-end account-opening journey");
+  assert.deepEqual(project.searchIndexV2.problemTags.en,["account opening","identity verification","application recovery"]);
+  assert.equal(project.presentation.visibility.problemTypes,undefined);
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions,project.designDecisions);
+  assert.equal(project.decisionNarrative.primaryDecisions[1].optionalThirdBlock.type,"TRADE-OFF ACCEPTED");
+  assert.equal(project.decisionNarrative.primaryDecisions[2].optionalThirdBlock.type,"RISK MANAGED");
+  assert.equal(project.publicContent.accountOpeningEvidence.presentation,"structured-html");
+  assert.equal(project.publicContent.accountOpeningEvidence.items.length,0);
+  assert.deepEqual(project.publicContent.accountOpeningEvidence.structuredGroups.map(item=>item.id),["journey-synthesis","account-opening-architecture","recovery-exception-model","delivery-proof"]);
+  const outcomes=project.publicContent.outcomes.semanticHierarchy;
+  assert.deepEqual(outcomes.measured.map(item=>item.value),["1","6 stages","4 routes","3 contexts","1 month","Complete"]);
+  assert.equal(outcomes.change,undefined);
+  assert.equal(outcomes.metricLayout,"aligned");
+  assert.equal(outcomes.measuredLabel.en,"One aligned account-opening model and a development-ready specification set.");
+  assert.match(outcomes.supportingStatements[0].text.en,/Post-launch performance was not available/);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Exact project Timeline"),false);
+  assert.equal(project.deliveryBoundary.needsConfirmation.includes("Sole versus Primary Product Designer wording"),false);
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].implementationStatus,"placeholder-active");
+  assert.equal(manifest.items["cathay-sit-hero-final-flow-public-v1"].publicPath,null);
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.match(app,/if\(!evidenceItems\.length\)return null/);
+  assert.match(app,/\['aligned','aligned-five'\]\.includes\(source\.metricLayout\)/);
+  assert.match(app,/outcomesHierarchy&&!outcomesHierarchy\.change/);
+  assert.match(app,/measuredLabelInHeader=false/);
+  assert.match(app,/if\(!measuredLabelInHeader\)group\.append/);
+  assert.match(app,/createInfoTooltip\(translate\(item\.evidenceNote\)[^\n]*\[labelCopy,supportingCopy,fallbackCopy\]\)/);
+  assert.match(app,/if\(list\(visibleCopy\)\.some\(copy=>normalizedTooltipCopy\(copy\)===normalizedSource\)\)return null/);
+  assert.doesNotMatch(app,/createInfoTooltip\(translate\(item\.evidenceNote\)\|\|labelCopy/);
+  assert.doesNotMatch(app,/key===['"]cathay-sit-online-account-opening['"]/);
+});
+
+test("R171 migrates Booking Taxi Pickup Strategy without main Booking contamination",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["booking-taxi-pickup-service-strategy"];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"]);
+  assert.ok(project.presentation.sectionOrder.indexOf("design-decisions")<project.presentation.sectionOrder.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.problemTypes.length,undefined);
+  assert.equal(project.title.en,"Uncertain expansion to a lower-risk taxi pickup experiment");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.type.value,"0→1 Product");
+  assert.equal(project.infoGrid.timeline.duration.en,"9 months");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.strategyEvidence.structuredGroups.length,4);
+  assert.deepEqual(project.publicContent.strategyEvidence.structuredGroups.map(item=>item.assetId||null),["booking-taxi-strategy-traveller-context-public-v1",null,"booking-taxi-strategy-proposition-comparison-public-v1","booking-taxi-strategy-experiment-risk-framing-public-v1"]);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.filter(item=>item.assetId).every(item=>item.caption?.en&&manifest.items[item.assetId]?.implementationStatus==="real-active"));
+  assert.match(app,/structured-evidence-v223__media/);
+  const sharedEvidenceStart=app.indexOf("if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length)");
+  const sharedEvidenceEnd=app.indexOf("const metrics=",sharedEvidenceStart);
+  assert.ok(sharedEvidenceStart>0&&sharedEvidenceEnd>sharedEvidenceStart);
+  assert.doesNotMatch(app.slice(sharedEvidenceStart,sharedEvidenceEnd),/booking-taxi-strategy|booking-taxi-pickup-service-strategy/);
+  assert.ok(project.publicContent.strategyEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  assert.equal(project.publicContent.futureServiceOpportunities.status,"concept-not-shipped");
+  assert.equal(project.heroVisualBrief.assetId,"booking-taxi-pickup-overview-source-v1");
+  assert.equal(manifest.items["booking-taxi-pickup-overview-source-v1"].implementationStatus,"placeholder-active");
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"])assert.ok(!project.presentation.sectionOrder.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/~7%|150 rides|2-week|two-week|40\+ countries|conversion uplift|revenue uplift|experiment success|market-wide rollout/i);
+  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/experiment results are not verified/i);
+  assert.match(app,/projectSectionActivationInset/);
+  assert.match(app,/evidenceSource\.showDecisionMapping===true/);
+  assert.match(app,/'WHAT I OWNED'/);
+  assert.doesNotMatch(app,/'I OWNED THE OUTCOME'/);
+});
+
+test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with bounded launch claims",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const app=read("assets/js/app.js");
+  const project=ssot.projects["cathay-mortgage-assistant"];
+  const order=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const assetIds=[
+    "cathay-mortgage-hero-consultation-public-v1",
+    "cathay-mortgage-research-synthesis-public-v1",
+    "cathay-mortgage-structure-specification-public-v1",
+    "cathay-mortgage-prototype-validation-public-v1",
+    "cathay-mortgage-final-interface-home-public-v1",
+    "cathay-mortgage-final-interface-market-map-public-v1"
+  ];
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.sectionOrder,order);
+  assert.deepEqual(project.presentation.sectionOrder,order);
+  assert.ok(order.indexOf("design-decisions")<order.indexOf("evidence"));
+  assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
+  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");
+  assert.equal(project.company,"Cathay Life Insurance");
+  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");
+  assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.");
+  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
+  assert.equal(project.infoGrid.timeline.duration.en,"4 months");
+  assert.equal(project.infoGrid.timeline.duration.zh,"4 個月");
+  assert.equal(project.infoGrid.timeline.publicVisibility,"visible");
+  assert.equal(project.infoGrid.timeline.status,"human-source-verified");
+  assert.doesNotMatch(JSON.stringify(project.infoGrid.timeline),/unresolved|unavailable|pending|year-only|hide timeline/i);
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(item=>item.id),project.designDecisions.map(item=>item.id));
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.deepEqual(project.publicContent.mortgageEvidence.structuredGroups.map(item=>item.assetId),assetIds.slice(1));
+  assert.ok(project.publicContent.mortgageEvidence.structuredGroups.every(item=>item.caption?.en&&item.decisionLink?.en));
+  for(const assetId of assetIds){
+    const asset=manifest.items[assetId];
+    assert.equal(asset.implementationStatus,"real-active");
+    assert.equal(asset.replacementRequired,false);
+    assert.match(asset.publicPath,/^\/site\/assets\/projects\/cathay-mortgage\//);
+  }
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  for(const legacy of ["critical-problem","consultation-model","key-decisions","validation-and-launch","business-impact","ownership-and-collaboration","delivery-and-measurement","continue-exploring"])assert.ok(!order.includes(legacy));
+  const publicCopy=JSON.stringify({title:project.title,atAGlance:project.atAGlance,infoGrid:project.infoGrid,hard:project.whatMadeThisHard,decisions:project.decisionNarrative,publicContent:project.publicContent,ownership:project.ownershipModel.accountabilityPresentation});
+  assert.doesNotMatch(publicCopy,/adoption %|conversion|sales uplift|revenue uplift|time reduction|error reduction|training reduction|compliance improvement|3 months|6 months|1 year/i);
+  assert.match(project.publicContent.outcomes.closing.en,/metrics are not available/i);
+  assert.doesNotMatch(app,/cathay-mortgage-assistant[^\n]*(?:StructuredEvidence|recruiter-first-system-case)/i);
+});
+
+test("R172.3 shared FloatingNavigator contains mobile rails and dialog content clears the floating control",()=>{
+  const navigatorCss=read("assets/css/components/domain-selector.css");
+  const popupCss=read("assets/css/components/popup-shell.css");
+  const app=read("assets/js/app.js");
+  assert.match(navigatorCss,/@media\(max-width:560px\)\{\s*\.floating-navigator\{width:calc\(var\(--dimension-100vw\) - var\(--dimension-24px\)\)\}\s*\.floating-navigator__rail\{width:100%;max-width:none;min-width:0\}/);
+  assert.match(popupCss,/--dialog-floating-navigator-clearance:calc\(var\(--control-height\)/);
+  assert.match(popupCss,/padding-bottom:calc\(var\(--dialog-floating-navigator-clearance\) \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(app,/linkRect\.left<leadingEdge/);
+  assert.match(app,/linkRect\.right>trailingEdge/);
+  assert.doesNotMatch(navigatorCss,/cathay-mortgage-assistant/);
+  assert.doesNotMatch(popupCss,/cathay-mortgage-assistant|structured-evidence/);
+});
+
+test("R170 projects Taishin P2P through one recruiter-first owner without legacy or claim leakage",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const project=ssot.projects["taishin-p2p-marketplace-platform"];
+  const expectedOrder=["hero","at-a-glance","info-grid","what-made-this-hard","contribution","core-system-insight","design-decisions","evidence","outcomes","my-accountability","related-work"];
+  const expectedNav=["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"];
+  const legacy=["critical-problem","taishin-research-definition-model","key-design-decisions","research-and-specification-evidence","business-impact","ownership-and-collaboration","delivery-and-measurement","status-and-disclosure","continue-exploring"];
+  assert.equal(ssot.contentVersion,manifest.contentVersion);
+  assert.equal(project.presentation.composition,"recruiter-first-system-case");
+  assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
+  assert.deepEqual(project.sectionOrder,expectedOrder);
+  assert.deepEqual(project.presentation.navigation.map(item=>item.label.en),expectedNav);
+  assert.equal(project.presentation.visibility.problemTypes,false);
+  assert.equal(project.presentation.decisionOptions.showVisuals,false);
+  assert.equal(project.title.en,"Third-party payment to a governed P2P marketplace");
+  assert.ok(!project.title.en.startsWith("From "));
+  assert.equal(project.atAGlance.en,"Co-led P2P marketplace UX definition, using 30 interviews to align fragmented flows into a shared bank–vendor model.");
+  assert.equal(project.infoGrid.type.value,"Marketplace Platform");
+  assert.equal(project.infoGrid.timeline.dateRange.en,"2016–2017");
+  assert.equal(project.whatMadeThisHard.length,3);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.ok(project.decisionNarrative.primaryDecisions.every(item=>item.outcome?.en));
+  assert.equal(project.publicContent.decisionEvidence.presentation,"decision-support");
+  assert.equal(project.publicContent.decisionEvidence.structuredGroups.length,4);
+  assert.equal(project.publicContent.decisionEvidence.items.length,5);
+  assert.deepEqual(project.publicContent.decisionEvidence.structuredGroups.map(item=>item.assetId),[
+    "taishin-marketplace-evidence-research-synthesis-v1",
+    "taishin-marketplace-evidence-transaction-regulation-v1",
+    "taishin-marketplace-evidence-structure-v1",
+    "taishin-marketplace-evidence-delivery-alignment-v1"
+  ]);
+  assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>manifest.items[item.assetId]?.implementationStatus==="real-active"));
+  assert.equal(project.presentation.detailHeroVisual,true);
+  assert.equal(project.heroVisualBrief.assetId,"taishin-marketplace-hero-inuse-v1");
+  for (const id of ["taishin-marketplace-hero-inuse-v1","taishin-marketplace-evidence-research-synthesis-v1","taishin-marketplace-evidence-transaction-regulation-v1","taishin-marketplace-evidence-structure-v1","taishin-marketplace-evidence-wireframe-spec-v1","taishin-marketplace-evidence-delivery-alignment-v1"]) assert.equal(manifest.items[id]?.implementationStatus,"real-active",id);
+  assert.equal(project.publicContent.outcomes.cards.length,3);
+  assert.equal(project.publicContent.outcomes.closing,undefined);
+  assert.equal(project.whatMadeThisHard[0].title.en,"Buyer and seller journeys had to share one transaction-state model.");
+  assert.equal(project.publicContent.outcomes.cards[1].heading.en,"Shared marketplace delivery specifications");
+  assert.equal(project.ownershipModel.accountabilityPresentation.owned.label.en,"WHAT I OWNED");
+  assert.equal(project.ownershipModel.accountabilityPresentation.shared.label.en,"SHARED DECISIONS");
+  assert.equal(project.ownershipModel.accountabilityPresentation.partnerOwned.label.en,"PARTNER-OWNED BOUNDARY");
+  assert.match(project.ownershipModel.accountabilityPresentation.partnerOwned.text.en,/Production launch and measured business outcomes are not verified in the available source record/);
+  assert.equal((JSON.stringify(project.ownershipModel.accountabilityPresentation).match(/Production launch and measured business outcomes/g)||[]).length,1);
+  assert.ok(project.publicContent.decisionEvidence.structuredGroups.every(item=>item.decisionLink?.en));
+  for(const decisions of [project.designDecisions,project.decisionNarrative.primaryDecisions]){
+    for(const decision of decisions){
+      for(const field of [decision.title,decision.whatIDecided,decision.whyThisChoice,decision.optionalThirdBlock.content,decision.outcome]){
+        assert.notEqual(field.zh,field.en,`${decision.id} Chinese localization must differ from English`);
+        assert.match(field.zh,/[㐀-鿿]/,`${decision.id} Chinese localization must contain Chinese text`);
+      }
+    }
+  }
+  assert.doesNotMatch(JSON.stringify({atAGlance:project.atAGlance.zh,accountability:project.ownershipModel.accountabilityPresentation,evidence:project.publicContent.decisionEvidence.items.map(item=>({title:item.title.zh,copy:item.copy.zh})),search:project.searchIndexV2}),/Convert the|From payment|From separate|From design|Research synthesis|Transaction regulation|Marketplace structure|Wireframe specification|Delivery alignment|Service blueprint|Marketplace platform|Transaction system|Payment operations|Payment integration|Marketplace transaction/);
+  assert.ok(project.ownershipModel.accountabilityPresentation.partnerOwned);
+  assert.equal(project.searchIndexV2.canonicalId,"taishin-p2p-marketplace-platform");
+  assert.ok(project.searchIndexV2.problemTags.en.includes("transaction exception handling"));
+  assert.ok(legacy.every(key=>!project.presentation.sectionOrder.includes(key)));
+  assert.ok(Object.values(project.presentation.contentRefs).every(path=>path.split(".").reduce((value,key)=>value?.[key],project)!==undefined));
+  const publicOutcomeCopy={
+    title:project.title,
+    atAGlance:project.atAGlance,
+    headline:project.publicContent.outcomes.headline,
+    cards:project.publicContent.outcomes.cards,
+  };
+  assert.doesNotMatch(JSON.stringify(publicOutcomeCopy),/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/i);
 });

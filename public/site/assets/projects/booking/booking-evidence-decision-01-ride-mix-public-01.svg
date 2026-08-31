@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Standard taxi dominated the observed ride mix</title>
+  <desc id="desc">A simplified horizontal bar chart showing Standard at about 65 percent, People Carrier at about 12 percent, Executive and Large People Carrier at about 9 percent, and remaining vehicle types as a long tail at about 14 percent.</desc>
+  <rect width="1600" height="900" fill="#F7F5F0"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#1F2426">
+    <text x="120" y="135" font-size="52" font-weight="700">Standard taxi dominated the observed ride mix</text>
+    <text x="120" y="190" font-size="26" fill="#596164">Approximate public grouping · ~944K analysed rides</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#1F2426">
+    <text x="120" y="310" font-weight="700">Standard</text>
+    <rect x="455" y="270" width="910" height="58" rx="29" fill="#14747B"/>
+    <text x="1395" y="310" font-weight="700">~65%</text>
+
+    <text x="120" y="430" font-weight="700">People Carrier</text>
+    <rect x="455" y="390" width="168" height="58" rx="29" fill="#4E9296"/>
+    <text x="653" y="430" font-weight="700">~12%</text>
+
+    <text x="120" y="550" font-weight="700">Executive / Large People Carrier</text>
+    <rect x="455" y="510" width="126" height="58" rx="29" fill="#7AAEB0"/>
+    <text x="611" y="550" font-weight="700">~9%</text>
+
+    <text x="120" y="670" font-weight="700">Remaining vehicle types</text>
+    <rect x="455" y="630" width="196" height="58" rx="29" fill="#A9C9C8"/>
+    <text x="681" y="670" font-weight="700">~14% long tail</text>
+  </g>
+  <line x1="455" y1="745" x2="1455" y2="745" stroke="#CCD2D0" stroke-width="2"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#596164">
+    <text x="455" y="790">0%</text>
+    <text x="905" y="790">35%</text>
+    <text x="1400" y="790">70%</text>
+  </g>
+</svg>

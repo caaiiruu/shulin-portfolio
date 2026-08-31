@@ -1,0 +1,2521 @@
+{
+  "schemaVersion": 1,
+  "truthVersion": "2026-08-25-r180.1-approved-checkpoint",
+  "status": "HUMAN_APPROVED_CONTENT_CHECKPOINT",
+  "lifecycleVocabulary": [
+    "UNVERIFIED_CANDIDATE",
+    "APPROVED",
+    "SUPERSEDED",
+    "REJECTED",
+    "HUMAN_REQUIRED"
+  ],
+  "deliveryBoundaries": [
+    "SHIPPED",
+    "VALIDATED",
+    "RECOMMENDED",
+    "CONCEPTUAL",
+    "UNKNOWN"
+  ],
+  "differenceVocabulary": [
+    "MATCH",
+    "NORMALIZATION_REQUIRED",
+    "PUBLIC_COPY_REVIEW",
+    "SOURCE_CONFLICT",
+    "MISSING_EVIDENCE"
+  ],
+  "publicSafetyVocabulary": [
+    "PUBLIC_SAFE",
+    "RESTRICTED",
+    "PROHIBITED_RAW_EVIDENCE",
+    "HUMAN_REVIEW_REQUIRED"
+  ],
+  "sourcePrecedence": [
+    "LATEST_HUMAN_CORRECTION",
+    "HUMAN_APPROVED_VERIFIED_TRUTH",
+    "CANONICAL_CONTENT_SSOT",
+    "APPROVED_ASSET_OR_DECISION_REGISTRY",
+    "GOVERNED_SOURCE_EVIDENCE",
+    "HISTORICAL_PROJECT_MATERIAL",
+    "SUPERSEDED_DRAFT",
+    "MODEL_INFERENCE"
+  ],
+  "projects": [
+    {
+      "projectId": "voucher",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "voucher-center",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "game-center",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "dbs",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "booking",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "bandzo",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "taishin-p2p-marketplace-platform",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "cathay-mortgage-assistant",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "payment",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "cathay-sit-online-account-opening",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "cathay-sit-review-remediation-operations",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "ctbc-mortgage-self-service-app",
+      "status": "APPROVED"
+    },
+    {
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "status": "APPROVED"
+    }
+  ],
+  "sources": [
+    {
+      "sourceId": "SRC-R179-VOUCHER-CONTENT",
+      "projectId": "voucher",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.voucher",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-VOUCHER-CENTER-CONTENT",
+      "projectId": "voucher-center",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.voucher-center",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-GAME-CENTER-CONTENT",
+      "projectId": "game-center",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.game-center",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-DBS-CONTENT",
+      "projectId": "dbs",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.dbs",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-BOOKING-CONTENT",
+      "projectId": "booking",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.booking",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-BANDZO-CONTENT",
+      "projectId": "bandzo",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.bandzo",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.taishin-p2p-marketplace-platform",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT",
+      "projectId": "cathay-mortgage-assistant",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.cathay-mortgage-assistant",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-PAYMENT-CONTENT",
+      "projectId": "payment",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.payment",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT",
+      "projectId": "cathay-sit-online-account-opening",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.cathay-sit-online-account-opening",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT",
+      "projectId": "cathay-sit-review-remediation-operations",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.cathay-sit-review-remediation-operations",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.ctbc-mortgage-self-service-app",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "kind": "CANONICAL_CONTENT",
+      "location": "public/site/content/portfolio-content.json#projects.booking-taxi-pickup-service-strategy",
+      "contentHash": "git:e7c768a0ac847776e1e2212f422f996eb2e7d445",
+      "authority": "CANONICAL_CONTENT_SSOT",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-PAYMENT-PR12",
+      "projectId": "payment",
+      "kind": "STALE_PR_EVIDENCE",
+      "location": "git:refs/pull/12/head@10821d25833af40bcd6d1db37f5d07bc03d9a1a8",
+      "contentHash": "git:10821d25833af40bcd6d1db37f5d07bc03d9a1a8",
+      "authority": "HISTORICAL_LATER_EVIDENCE_REQUIRES_RECONCILIATION",
+      "confidence": "MEDIUM",
+      "publicSafety": "HUMAN_REVIEW_REQUIRED",
+      "lifecycle": "UNVERIFIED_CANDIDATE"
+    },
+    {
+      "sourceId": "SRC-R179-GAME-CENTER-PR16",
+      "projectId": "game-center",
+      "kind": "STALE_PR_EVIDENCE",
+      "location": "git:refs/pull/16/head@36e5ab0363ba19a330dc62f2e2cb9dd4af90ef5f",
+      "contentHash": "git:36e5ab0363ba19a330dc62f2e2cb9dd4af90ef5f",
+      "authority": "LATER_APPROVED_EVIDENCE_NOT_CANONICAL_IMPLEMENTATION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R179-VOUCHER-CENTER-PR17",
+      "projectId": "voucher-center",
+      "kind": "STALE_PR_EVIDENCE",
+      "location": "git:refs/pull/17/head@3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
+      "contentHash": "git:3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
+      "authority": "HISTORICAL_LATER_EVIDENCE_REQUIRES_RECONCILIATION",
+      "confidence": "MEDIUM",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "UNVERIFIED_CANDIDATE"
+    },
+    {
+      "sourceId": "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION",
+      "projectId": "voucher-center",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#voucher-center",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-BANDZO-HUMAN-CORRECTION",
+      "projectId": "bandzo",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#bandzo",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-BOOKING-HUMAN-CORRECTION",
+      "projectId": "booking",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#booking",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION",
+      "projectId": "cathay-sit-online-account-opening",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#cathay-sit-online-account-opening",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#ctbc-mortgage-self-service-app",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "kind": "LATEST_EXPLICIT_HUMAN_CORRECTION",
+      "location": "human:r180.1#taishin-p2p-marketplace-platform",
+      "contentHash": "human-approved:2026-08-25-r180.1",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    }
+  ],
+  "facts": [
+    {
+      "factId": "FACT-R179-VOUCHER-IDENTITY",
+      "projectId": "voucher",
+      "field": "identity",
+      "value": {
+        "company": "FairPrice Group",
+        "product": "Voucher and incentive programme"
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-TIMELINE",
+      "projectId": "voucher",
+      "field": "timeline",
+      "value": {
+        "period": "2022–2025",
+        "duration": "3 years"
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-ROLE",
+      "projectId": "voucher",
+      "field": "roleOwnership",
+      "value": {
+        "formalRole": "Senior Product Designer",
+        "boundary": "Initiative-level lead/contributor attribution must be preserved."
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY",
+      "projectId": "voucher",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "digitalRedemptions": "~125k in final three weeks of 2023",
+          "digitalShareChange": "+90.9%",
+          "addToCartUplift": "~167%"
+        },
+        "boundary": "2023–2025 shipped work is distinct from conceptual Omni Incentive Platform direction."
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-CENTER-IDENTITY",
+      "projectId": "voucher-center",
+      "field": "identity",
+      "value": {
+        "company": "FairPrice Group",
+        "product": "Voucher Center"
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-CENTER-TIMELINE",
+      "projectId": "voucher-center",
+      "field": "timeline",
+      "value": {
+        "period": null,
+        "duration": "5 months",
+        "knownEvidencePeriods": [
+          "Aug–Nov 2024 Flash Voucher",
+          "Nov 2024 usability test"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "MEDIUM",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-CENTER-ROLE",
+      "projectId": "voucher-center",
+      "field": "roleOwnership",
+      "value": {
+        "formalRole": "Senior Product Designer",
+        "researchScale": "20 participants"
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY",
+      "projectId": "voucher-center",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "modeledTargets": "SGD ~1.5m GMV and ~15x ROI are proposal targets, not outcomes"
+        },
+        "boundary": "Flash Voucher is pilot evidence; full Voucher Center shipment is not established."
+      },
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-GAME-CENTER-IDENTITY",
+      "projectId": "game-center",
+      "field": "identity",
+      "value": {
+        "company": "FairPrice Group",
+        "product": "0→1 Game Center"
+      },
+      "sourceIds": [
+        "SRC-R179-GAME-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-GAME-CENTER-TIMELINE",
+      "projectId": "game-center",
+      "field": "timeline",
+      "value": {
+        "period": "2025",
+        "duration": null
+      },
+      "sourceIds": [
+        "SRC-R179-GAME-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-GAME-CENTER-ROLE",
+      "projectId": "game-center",
+      "field": "roleOwnership",
+      "value": {
+        "responsibility": "Led 0→1 strategy and end-to-end design",
+        "formalRoleBoundary": "Inherit governed FairPrice engagement record."
+      },
+      "sourceIds": [
+        "SRC-R179-GAME-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-GAME-CENTER-EVIDENCE-BOUNDARY",
+      "projectId": "game-center",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "userCompletion": "~50%",
+          "qualifier": "approximately"
+        },
+        "boundary": "Multi-game change shipped; qualifier must remain approximate."
+      },
+      "sourceIds": [
+        "SRC-R179-GAME-CENTER-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-DBS-IDENTITY",
+      "projectId": "dbs",
+      "field": "identity",
+      "value": {
+        "company": "DBS",
+        "product": "Excess and risk exception-management system"
+      },
+      "sourceIds": [
+        "SRC-R179-DBS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-DBS-TIMELINE",
+      "projectId": "dbs",
+      "field": "timeline",
+      "value": {
+        "period": "Jan–Jun 2022",
+        "duration": "6 months"
+      },
+      "sourceIds": [
+        "SRC-R179-DBS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-DBS-ROLE",
+      "projectId": "dbs",
+      "field": "roleOwnership",
+      "value": {
+        "historicalRole": "Senior Product Designer",
+        "projectRole": "Lead Product Designer",
+        "ownership": "Primary design lead with delegated full project ownership"
+      },
+      "sourceIds": [
+        "SRC-R179-DBS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-DBS-EVIDENCE-BOUNDARY",
+      "projectId": "dbs",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "scale": {
+          "markets": 6
+        },
+        "boundary": "Cross-market research/validation; internal case and risk data remains prohibited."
+      },
+      "sourceIds": [
+        "SRC-R179-DBS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-IDENTITY",
+      "projectId": "booking",
+      "field": "identity",
+      "value": {
+        "company": "Booking.com",
+        "product": "Connected taxi-booking journey"
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-TIMELINE",
+      "projectId": "booking",
+      "field": "timeline",
+      "value": {
+        "period": "Apr–Oct 2019",
+        "duration": "6 months"
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-ROLE",
+      "projectId": "booking",
+      "field": "roleOwnership",
+      "value": {
+        "publicRole": "Led UX research and iterative product design",
+        "sourceRoleLabel": "Research & Web design",
+        "formalTitleBoundary": "A different title requires Human confirmation."
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-EVIDENCE-BOUNDARY",
+      "projectId": "booking",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "scale": {
+          "countries": "40+"
+        },
+        "outcomes": {
+          "conversion": "~7% uplift",
+          "rides": "~150 additional rides/day",
+          "window": "within first two weeks"
+        },
+        "boundary": "Approximate values and the post-launch window must be preserved."
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BANDZO-IDENTITY",
+      "projectId": "bandzo",
+      "field": "identity",
+      "value": {
+        "company": "Bandzo",
+        "product": "Cross-device learning product"
+      },
+      "sourceIds": [
+        "SRC-R179-BANDZO-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BANDZO-TIMELINE",
+      "projectId": "bandzo",
+      "field": "timeline",
+      "value": {
+        "period": null,
+        "duration": "5 months"
+      },
+      "sourceIds": [
+        "SRC-R179-BANDZO-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "MEDIUM",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BANDZO-ROLE",
+      "projectId": "bandzo",
+      "field": "roleOwnership",
+      "value": {
+        "boundary": "Formal role and employment boundary need governed source reconciliation."
+      },
+      "sourceIds": [
+        "SRC-R179-BANDZO-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "UNVERIFIED_CANDIDATE",
+      "confidence": "MEDIUM",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BANDZO-EVIDENCE-BOUNDARY",
+      "projectId": "bandzo",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "demonstrated": "Mobile/tablet apps and guided-practice structure shipped",
+          "notEstablished": "Measured learning improvement"
+        }
+      },
+      "sourceIds": [
+        "SRC-R179-BANDZO-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-IDENTITY",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "identity",
+      "value": {
+        "company": "Taishin Bank",
+        "product": "Governed P2P marketplace"
+      },
+      "sourceIds": [
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-TIMELINE",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "timeline",
+      "value": {
+        "period": "2016–2017",
+        "duration": null
+      },
+      "sourceIds": [
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-ROLE",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "roleOwnership",
+      "value": {
+        "boundary": "Exact division with the other UX Designer and launch ownership remain unknown."
+      },
+      "sourceIds": [
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "demonstrated": "Transaction model, payment integration and buyer/seller clarity"
+        },
+        "boundary": "Do not infer launch, adoption or revenue."
+      },
+      "sourceIds": [
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-IDENTITY",
+      "projectId": "cathay-mortgage-assistant",
+      "field": "identity",
+      "value": {
+        "company": "Cathay Life Insurance",
+        "product": "Tablet mortgage consultation flow"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-TIMELINE",
+      "projectId": "cathay-mortgage-assistant",
+      "field": "timeline",
+      "value": {
+        "period": "2016",
+        "duration": "4 months"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-ROLE",
+      "projectId": "cathay-mortgage-assistant",
+      "field": "roleOwnership",
+      "value": {
+        "historicalRole": "UX Designer",
+        "projectRole": "UX Designer / Primary UX owner",
+        "boundary": "Researcher and UI Designer collaboration is separately attributed."
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-EVIDENCE-BOUNDARY",
+      "projectId": "cathay-mortgage-assistant",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "status": "Launched"
+        },
+        "boundary": "Only abstracted consultation evidence is public-safe."
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-PAYMENT-IDENTITY",
+      "projectId": "payment",
+      "field": "identity",
+      "value": {
+        "company": "FairPrice Group",
+        "product": "Omni payment system"
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-PAYMENT-TIMELINE",
+      "projectId": "payment",
+      "field": "timeline",
+      "value": {
+        "period": "Dec 2020–Nov 2021",
+        "duration": null
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-PAYMENT-ROLE",
+      "projectId": "payment",
+      "field": "roleOwnership",
+      "value": {
+        "publicRole": "Lead Product Designer",
+        "historicalTitle": "Product Designer",
+        "engagement": "Full-time employee",
+        "boundary": "Only dedicated designer in the three-person core team; PM and engineering ownership remain separate."
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-PAYMENT-EVIDENCE-BOUNDARY",
+      "projectId": "payment",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "monthlyTransactions": "~228k, Sep 2021",
+          "successRate": "98.5%, Sep 2021",
+          "users": "~57k, Sep 2021",
+          "stores": "~190",
+          "nps": "70.2",
+          "sample": "1,798"
+        },
+        "boundary": "Award is a team award; unconfirmed uplifts and raw operational identifiers are prohibited."
+      },
+      "sourceIds": [
+        "SRC-R179-PAYMENT-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-IDENTITY",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "identity",
+      "value": {
+        "company": "Cathay Securities Investment Trust",
+        "product": "Online account opening"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-TIMELINE",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "timeline",
+      "value": {
+        "period": "Nov 2024–Jan 2025",
+        "duration": "3 months"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-ROLE",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "roleOwnership",
+      "value": {
+        "role": "Lead Product Designer",
+        "engagement": "Independent consultant",
+        "boundary": "Exact stakeholder and development ownership needs confirmation."
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "demonstrated": "Aligned target flow and development-ready specification"
+        },
+        "boundary": "Production launch is not established; raw account/client data is prohibited."
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-IDENTITY",
+      "projectId": "cathay-sit-review-remediation-operations",
+      "field": "identity",
+      "value": {
+        "company": "Cathay Securities Investment Trust",
+        "product": "Review remediation operating model"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "RECOMMENDED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-TIMELINE",
+      "projectId": "cathay-sit-review-remediation-operations",
+      "field": "timeline",
+      "value": {
+        "period": "Sep 2024–Jan 2025",
+        "duration": "5 months",
+        "phases": [
+          "Sep–Oct 2024 research/workshop",
+          "Nov 2024–Jan 2025 operations process"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-ROLE",
+      "projectId": "cathay-sit-review-remediation-operations",
+      "field": "roleOwnership",
+      "value": {
+        "role": "Lead Product Designer",
+        "engagement": "Independent consultant",
+        "ownership": "Primary lead; workshop plus two one-hour workflow interviews"
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-EVIDENCE-BOUNDARY",
+      "projectId": "cathay-sit-review-remediation-operations",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "demonstrated": "Reusable process baseline and prioritised roadmap"
+        },
+        "boundary": "Recommendation/operating model, not a claimed shipped remediation product."
+      },
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "RECOMMENDED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-IDENTITY",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "identity",
+      "value": {
+        "company": "CTBC Bank",
+        "product": "Mortgage self-service app"
+      },
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R176-CTBC-PROJECT-IDENTITY"
+      ]
+    },
+    {
+      "factId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-TIMELINE",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "timeline",
+      "value": {
+        "period": "Apr–Jun 2026",
+        "duration": "3 months"
+      },
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-ROLE",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "roleOwnership",
+      "value": {
+        "role": "Lead Product Designer",
+        "engagement": "Independent consultant",
+        "ownership": "Primary 0→1 product and journey lead",
+        "boundary": "PM, engineering, compliance and client roles need confirmation."
+      },
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "demonstrated": "App product model, end-to-end flow and related-party architecture"
+        },
+        "boundary": "Design engagement completed; production shipment is not established."
+      },
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-IDENTITY",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "field": "identity",
+      "value": {
+        "company": "Booking.com Transport",
+        "product": "Taxi pickup service strategy"
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "RECOMMENDED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-TIMELINE",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "field": "timeline",
+      "value": {
+        "period": null,
+        "duration": "9 months"
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "MEDIUM",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-ROLE",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "field": "roleOwnership",
+      "value": {
+        "responsibility": "Led research and strategy",
+        "formalRoleBoundary": "No historical title asserted in this project record."
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-EVIDENCE-BOUNDARY",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "field": "scaleOutcomesDeliverySafety",
+      "value": {
+        "outcomes": {
+          "recommended": "Selected-market Phase 1 experiment"
+        },
+        "boundary": "Do not infer launch, experiment result, growth or reuse connected-booking metrics."
+      },
+      "sourceIds": [
+        "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT"
+      ],
+      "provenance": {
+        "producer": "CANONICAL_CONTENT",
+        "precedence": 3,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "RECOMMENDED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R176-CTBC-PROJECT-IDENTITY",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "projectId",
+      "value": "ctbc-mortgage-self-service-app",
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED",
+        "precedence": 2,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "SUPERSEDED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "projectId": "voucher-center",
+      "field": "timeline",
+      "value": {
+        "start": "2024-11",
+        "end": "2025-04",
+        "period": "Nov 2024–Apr 2025",
+        "duration": "5 months"
+      },
+      "sourceIds": [
+        "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-VOUCHER-CENTER-TIMELINE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-BANDZO-TIMELINE",
+      "projectId": "bandzo",
+      "field": "timeline",
+      "value": {
+        "start": "2016-09",
+        "end": "2017-01",
+        "period": "Sep 2016–Jan 2017",
+        "duration": "5 months"
+      },
+      "sourceIds": [
+        "SRC-R1801-BANDZO-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-BANDZO-TIMELINE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "projectId": "booking",
+      "field": "roleOwnership",
+      "value": {
+        "formalRole": "UX Designer",
+        "ownershipBoundary": "Sole designer on the team",
+        "seniorityRule": "Do not inflate title seniority."
+      },
+      "sourceIds": [
+        "SRC-R1801-BOOKING-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "UNKNOWN",
+      "supersedes": [
+        "FACT-R179-BOOKING-ROLE"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "projectId": "cathay-sit-online-account-opening",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Led product design and target-flow definition; final implementation and development remained client-owned.",
+        "deliveryState": "VALIDATED",
+        "productionLaunchClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Led product design and validated architecture; production shipment is not claimed.",
+        "deliveryState": "VALIDATED",
+        "productionShipmentClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY"
+      ]
+    },
+    {
+      "factId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "projectId": "taishin-p2p-marketplace-platform",
+      "field": "deliveryOwnershipBoundary",
+      "value": {
+        "publicBoundary": "Design ownership may be claimed for the product and marketplace model; launch, adoption and revenue are not claimed.",
+        "deliveryState": "VALIDATED",
+        "launchClaimed": false,
+        "adoptionClaimed": false,
+        "revenueClaimed": false
+      },
+      "sourceIds": [
+        "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "VALIDATED",
+      "supersedes": [
+        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY"
+      ]
+    }
+  ],
+  "claims": [],
+  "humanCorrections": [
+    {
+      "correctionId": "CORR-R179-CATHAY-MORTGAGE-COMPANY",
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-IDENTITY",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Cathay Life Insurance supersedes Cathay United Bank."
+    },
+    {
+      "correctionId": "CORR-R179-CATHAY-MORTGAGE-TIMELINE",
+      "factId": "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "2016, four months."
+    },
+    {
+      "correctionId": "CORR-R179-PAYMENT-TIMELINE",
+      "factId": "FACT-R179-PAYMENT-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Dec 2020–Nov 2021."
+    },
+    {
+      "correctionId": "CORR-R179-CTBC-TIMELINE",
+      "factId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Apr–Jun 2026, three months."
+    },
+    {
+      "correctionId": "CORR-R1801-VOUCHER-CENTER-TIMELINE",
+      "factId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "correctionId": "CORR-R1801-BANDZO-TIMELINE",
+      "factId": "FACT-R1801-BANDZO-TIMELINE",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "correctionId": "CORR-R1801-BOOKING-ROLE-OWNERSHIP",
+      "factId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "correctionId": "CORR-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "correctionId": "CORR-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "correctionId": "CORR-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "factId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "actor": "HUMAN",
+      "precedence": 1,
+      "summary": "Human approved design ownership while excluding launch and commercial claims."
+    }
+  ],
+  "conflicts": [],
+  "projectSourcePacks": [
+    {
+      "projectId": "voucher",
+      "factIds": [
+        "FACT-R179-VOUCHER-IDENTITY",
+        "FACT-R179-VOUCHER-TIMELINE",
+        "FACT-R179-VOUCHER-ROLE",
+        "FACT-R179-VOUCHER-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CONTENT"
+      ],
+      "existingPublicClaims": [
+        "projects.voucher.transformation",
+        "projects.voucher.at_glance",
+        "projects.voucher.heroMetadata",
+        "projects.voucher.publicContent"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": [
+        "transformation",
+        "heroMetadata.timeline",
+        "at_glance",
+        "outcomes",
+        "delivery labels"
+      ]
+    },
+    {
+      "projectId": "voucher-center",
+      "factIds": [
+        "FACT-R179-VOUCHER-CENTER-IDENTITY",
+        "FACT-R179-VOUCHER-CENTER-ROLE",
+        "FACT-R179-VOUCHER-CENTER-EVIDENCE-BOUNDARY",
+        "FACT-R1801-VOUCHER-CENTER-TIMELINE"
+      ],
+      "sourceIds": [
+        "SRC-R179-VOUCHER-CENTER-CONTENT",
+        "SRC-R179-VOUCHER-CENTER-PR17",
+        "SRC-R1801-VOUCHER-CENTER-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.voucher-center.transformation",
+        "projects.voucher-center.at_glance",
+        "projects.voucher-center.heroMetadata",
+        "projects.voucher-center.publicContent"
+      ],
+      "difference": "PUBLIC_COPY_REVIEW",
+      "chatOptimizationTargets": [
+        "transformation",
+        "Flash Voucher relationship",
+        "modeled-target labels"
+      ]
+    },
+    {
+      "projectId": "game-center",
+      "factIds": [
+        "FACT-R179-GAME-CENTER-IDENTITY",
+        "FACT-R179-GAME-CENTER-TIMELINE",
+        "FACT-R179-GAME-CENTER-ROLE",
+        "FACT-R179-GAME-CENTER-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-GAME-CENTER-CONTENT",
+        "SRC-R179-GAME-CENTER-PR16"
+      ],
+      "existingPublicClaims": [
+        "projects.game-center.transformation",
+        "projects.game-center.at_glance",
+        "projects.game-center.heroMetadata",
+        "projects.game-center.publicContent"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": [
+        "transformation",
+        "timeline",
+        "formal role label",
+        "metric qualifier"
+      ]
+    },
+    {
+      "projectId": "dbs",
+      "factIds": [
+        "FACT-R179-DBS-IDENTITY",
+        "FACT-R179-DBS-TIMELINE",
+        "FACT-R179-DBS-ROLE",
+        "FACT-R179-DBS-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-DBS-CONTENT"
+      ],
+      "existingPublicClaims": [
+        "projects.dbs.transformation",
+        "projects.dbs.at_glance",
+        "projects.dbs.heroMetadata",
+        "projects.dbs.publicContent"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": [
+        "heroMetadata.timeline",
+        "role display",
+        "risk/operations abstraction"
+      ]
+    },
+    {
+      "projectId": "booking",
+      "factIds": [
+        "FACT-R179-BOOKING-IDENTITY",
+        "FACT-R179-BOOKING-TIMELINE",
+        "FACT-R179-BOOKING-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BOOKING-ROLE-OWNERSHIP"
+      ],
+      "sourceIds": [
+        "SRC-R179-BOOKING-CONTENT",
+        "SRC-R1801-BOOKING-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.booking.transformation",
+        "projects.booking.at_glance",
+        "projects.booking.heroMetadata",
+        "projects.booking.publicContent"
+      ],
+      "difference": "PUBLIC_COPY_REVIEW",
+      "chatOptimizationTargets": [
+        "transformation",
+        "formal role boundary",
+        "metric window",
+        "decision compression"
+      ]
+    },
+    {
+      "projectId": "bandzo",
+      "factIds": [
+        "FACT-R179-BANDZO-IDENTITY",
+        "FACT-R179-BANDZO-ROLE",
+        "FACT-R179-BANDZO-EVIDENCE-BOUNDARY",
+        "FACT-R1801-BANDZO-TIMELINE"
+      ],
+      "sourceIds": [
+        "SRC-R179-BANDZO-CONTENT",
+        "SRC-R1801-BANDZO-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.bandzo.transformation",
+        "projects.bandzo.at_glance",
+        "projects.bandzo.heroMetadata",
+        "projects.bandzo.publicContent"
+      ],
+      "difference": "PUBLIC_COPY_REVIEW",
+      "chatOptimizationTargets": [
+        "transformation",
+        "measured-vs-intended outcome"
+      ]
+    },
+    {
+      "projectId": "taishin-p2p-marketplace-platform",
+      "factIds": [
+        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-IDENTITY",
+        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-TIMELINE",
+        "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-ROLE",
+        "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP"
+      ],
+      "sourceIds": [
+        "SRC-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-CONTENT",
+        "SRC-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.taishin-p2p-marketplace-platform.transformation",
+        "projects.taishin-p2p-marketplace-platform.at_glance",
+        "projects.taishin-p2p-marketplace-platform.heroMetadata",
+        "projects.taishin-p2p-marketplace-platform.publicContent"
+      ],
+      "difference": "MATCH",
+      "chatOptimizationTargets": [
+        "ownership qualifier only if evidence resolves the division"
+      ]
+    },
+    {
+      "projectId": "cathay-mortgage-assistant",
+      "factIds": [
+        "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-IDENTITY",
+        "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-TIMELINE",
+        "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-ROLE",
+        "FACT-R179-CATHAY-MORTGAGE-ASSISTANT-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-CATHAY-MORTGAGE-ASSISTANT-CONTENT"
+      ],
+      "existingPublicClaims": [
+        "projects.cathay-mortgage-assistant.transformation",
+        "projects.cathay-mortgage-assistant.at_glance",
+        "projects.cathay-mortgage-assistant.heroMetadata",
+        "projects.cathay-mortgage-assistant.publicContent"
+      ],
+      "difference": "MATCH",
+      "chatOptimizationTargets": [
+        "cross-project consistency only"
+      ]
+    },
+    {
+      "projectId": "payment",
+      "factIds": [
+        "FACT-R179-PAYMENT-IDENTITY",
+        "FACT-R179-PAYMENT-TIMELINE",
+        "FACT-R179-PAYMENT-ROLE",
+        "FACT-R179-PAYMENT-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-PAYMENT-CONTENT",
+        "SRC-R179-PAYMENT-PR12"
+      ],
+      "existingPublicClaims": [
+        "projects.payment.transformation",
+        "projects.payment.at_glance",
+        "projects.payment.heroMetadata",
+        "projects.payment.publicContent"
+      ],
+      "difference": "PUBLIC_COPY_REVIEW",
+      "chatOptimizationTargets": [
+        "evidence selection",
+        "metric density",
+        "award attribution",
+        "PR #12 later evidence"
+      ]
+    },
+    {
+      "projectId": "cathay-sit-online-account-opening",
+      "factIds": [
+        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-IDENTITY",
+        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-TIMELINE",
+        "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-ROLE",
+        "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP"
+      ],
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-CONTENT",
+        "SRC-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.cathay-sit-online-account-opening.transformation",
+        "projects.cathay-sit-online-account-opening.at_glance",
+        "projects.cathay-sit-online-account-opening.heroMetadata",
+        "projects.cathay-sit-online-account-opening.publicContent"
+      ],
+      "difference": "PUBLIC_COPY_REVIEW",
+      "chatOptimizationTargets": [
+        "transformation",
+        "timeline",
+        "delivery wording",
+        "stakeholder boundary"
+      ]
+    },
+    {
+      "projectId": "cathay-sit-review-remediation-operations",
+      "factIds": [
+        "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-IDENTITY",
+        "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-TIMELINE",
+        "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-ROLE",
+        "FACT-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-CATHAY-SIT-REVIEW-REMEDIATION-OPERATIONS-CONTENT"
+      ],
+      "existingPublicClaims": [
+        "projects.cathay-sit-review-remediation-operations.transformation",
+        "projects.cathay-sit-review-remediation-operations.at_glance",
+        "projects.cathay-sit-review-remediation-operations.heroMetadata",
+        "projects.cathay-sit-review-remediation-operations.publicContent"
+      ],
+      "difference": "MATCH",
+      "chatOptimizationTargets": [
+        "recommendation boundary only"
+      ]
+    },
+    {
+      "projectId": "ctbc-mortgage-self-service-app",
+      "factIds": [
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-IDENTITY",
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-TIMELINE",
+        "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-ROLE",
+        "FACT-R176-CTBC-PROJECT-IDENTITY",
+        "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP"
+      ],
+      "sourceIds": [
+        "SRC-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-CONTENT",
+        "SRC-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-HUMAN-CORRECTION"
+      ],
+      "existingPublicClaims": [
+        "projects.ctbc-mortgage-self-service-app.transformation",
+        "projects.ctbc-mortgage-self-service-app.at_glance",
+        "projects.ctbc-mortgage-self-service-app.heroMetadata",
+        "projects.ctbc-mortgage-self-service-app.publicContent"
+      ],
+      "difference": "MATCH",
+      "chatOptimizationTargets": [
+        "shipment qualifier",
+        "team boundary if confirmed"
+      ]
+    },
+    {
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "factIds": [
+        "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-IDENTITY",
+        "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-TIMELINE",
+        "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-ROLE",
+        "FACT-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-EVIDENCE-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R179-BOOKING-TAXI-PICKUP-SERVICE-STRATEGY-CONTENT"
+      ],
+      "existingPublicClaims": [
+        "projects.booking-taxi-pickup-service-strategy.transformation",
+        "projects.booking-taxi-pickup-service-strategy.at_glance",
+        "projects.booking-taxi-pickup-service-strategy.heroMetadata",
+        "projects.booking-taxi-pickup-service-strategy.publicContent"
+      ],
+      "difference": "MATCH",
+      "chatOptimizationTargets": [
+        "portfolio consistency only; preserve recommendation boundary"
+      ]
+    }
+  ],
+  "assetRequests": [
+    {
+      "requestId": "AR-R179-VOUCHER-EVIDENCE-PACK",
+      "projectId": "voucher",
+      "assetIds": [
+        "voucher-proof-sec-transformation-public-v1",
+        "voucher-framework-error-recovery-public-v1",
+        "voucher-framework-pdp-contextual-discovery-public-v1",
+        "voucher-framework-voucher-details-evolution-public-v1",
+        "voucher-framework-voucher-condition-action-matrix-public-v1",
+        "voucher-framework-mechanism-transition-public-v1",
+        "voucher-framework-channel-redemption-public-v1",
+        "voucher-framework-voucher-card-system-public-v1",
+        "voucher-framework-voucher-card-research-evidence-public-v1",
+        "voucher-evidence-component-properties-public-v1",
+        "voucher-evidence-operations-reuse-public-v1",
+        "voucher-stage-review-post-use-public-v1"
+      ],
+      "requirement": "REQUIRED_CANDIDATE_PACK",
+      "section": "Evidence / reusable system",
+      "evidenceRole": "Shipped journey and reusable-system proof",
+      "mustProve": "Shipped state changes and reusable operating/component model",
+      "mustNotImply": "Future platform direction shipped",
+      "recommendedSource": "Public-safe cropped product states or reconstructed diagrams",
+      "confidentialityRisk": "HIGH",
+      "publicSafetyRequirement": "Redact internal identifiers and unpublished data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true,
+      "candidateSourceVisualRange": {
+        "minimum": 4,
+        "maximum": 8
+      },
+      "slotModel": "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT",
+      "coverageTargets": [
+        "discovery",
+        "qualification",
+        "redemption",
+        "error / recovery",
+        "reusable card / component system",
+        "operational / configuration model"
+      ],
+      "reuseRule": "One approved source visual may satisfy multiple evidence slots when truthfully supported."
+    },
+    {
+      "requestId": "AR-R179-VOUCHER-CENTER-HERO",
+      "projectId": "voucher-center",
+      "assetIds": [
+        "voucher-center-hero-centralised-discovery-public-v1"
+      ],
+      "requirement": "REQUIRED",
+      "section": "Hero",
+      "evidenceRole": "Centralized discovery and persistent claim model",
+      "mustProve": "Voucher Center product relationship",
+      "mustNotImply": "Full-platform shipment or modeled targets as outcomes",
+      "recommendedSource": "Public-safe final/prototype product composition",
+      "confidentialityRisk": "MEDIUM",
+      "publicSafetyRequirement": "No customer/campaign-sensitive data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true
+    },
+    {
+      "requestId": "AR-R179-BOOKING-HERO",
+      "projectId": "booking",
+      "assetIds": [
+        "booking-hero-connected-booking-public-v1"
+      ],
+      "requirement": "REQUIRED",
+      "section": "Hero",
+      "evidenceRole": "Connected global taxi-booking journey",
+      "mustProve": "Context reuse and cross-device journey",
+      "mustNotImply": "Unsupported commercial causality",
+      "recommendedSource": "Public-safe shipped-flow montage",
+      "confidentialityRisk": "MEDIUM",
+      "publicSafetyRequirement": "No traveller data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true
+    },
+    {
+      "requestId": "AR-R179-BANDZO-HERO",
+      "projectId": "bandzo",
+      "assetIds": [
+        "bandzo-hero-guided-practice-public-v1"
+      ],
+      "requirement": "REQUIRED",
+      "section": "Hero",
+      "evidenceRole": "Guided cross-device practice",
+      "mustProve": "Shipped product structure",
+      "mustNotImply": "Measured learning improvement",
+      "recommendedSource": "Public-safe mobile/tablet screens",
+      "confidentialityRisk": "LOW",
+      "publicSafetyRequirement": "No learner identity",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true
+    },
+    {
+      "requestId": "AR-R179-CATHAY-OA-HERO",
+      "projectId": "cathay-sit-online-account-opening",
+      "assetIds": [
+        "cathay-sit-hero-final-flow-public-v1"
+      ],
+      "requirement": "REQUIRED",
+      "section": "Hero",
+      "evidenceRole": "End-to-end account-opening flow",
+      "mustProve": "Aligned, development-ready target flow",
+      "mustNotImply": "Unverified production launch",
+      "recommendedSource": "Redacted/reconstructed flow or UI montage",
+      "confidentialityRisk": "HIGH",
+      "publicSafetyRequirement": "No customer/account/internal process data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true
+    },
+    {
+      "requestId": "AR-R179-CTBC-HERO",
+      "projectId": "ctbc-mortgage-self-service-app",
+      "assetIds": [
+        "ctbc-mortgage-hero-final-flow-public-v1"
+      ],
+      "requirement": "REQUIRED",
+      "section": "Hero",
+      "evidenceRole": "Resumable mortgage application architecture",
+      "mustProve": "0→1 flow and persistent-state model",
+      "mustNotImply": "Verified production shipment",
+      "recommendedSource": "Redacted prototype/flow montage",
+      "confidentialityRisk": "HIGH",
+      "publicSafetyRequirement": "No applicant or bank data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": true
+    },
+    {
+      "requestId": "AR-R179-PAYMENT-ORDER-HISTORY",
+      "projectId": "payment",
+      "assetIds": [
+        "payment-evidence-order-history-public-v1"
+      ],
+      "requirement": "OPTIONAL",
+      "section": "Evidence",
+      "evidenceRole": "Post-payment continuity",
+      "mustProve": "History/recovery continuity",
+      "mustNotImply": "All branch states shipped",
+      "recommendedSource": "Reconciled PR #12 candidate",
+      "confidentialityRisk": "HIGH",
+      "publicSafetyRequirement": "No invoice/cashier/store/user identifiers",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": false
+    },
+    {
+      "requestId": "AR-R179-PAYMENT-VIDEO",
+      "projectId": "payment",
+      "assetIds": [
+        "payment-video-core-app-pos-public-v1"
+      ],
+      "requirement": "OPTIONAL",
+      "section": "Evidence",
+      "evidenceRole": "App/POS operating flow",
+      "mustProve": "End-to-end interaction continuity",
+      "mustNotImply": "Unverified operational coverage",
+      "recommendedSource": "Existing #12 stills preferred",
+      "confidentialityRisk": "HIGH",
+      "publicSafetyRequirement": "No production transaction data",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": false
+    },
+    {
+      "requestId": "AR-R179-BOOKING-TAXI-OVERVIEW",
+      "projectId": "booking-taxi-pickup-service-strategy",
+      "assetIds": [
+        "booking-taxi-pickup-overview-source-v1"
+      ],
+      "requirement": "OPTIONAL",
+      "section": "Evidence",
+      "evidenceRole": "Traveller-context strategy overview",
+      "mustProve": "Synthesis and recommendation logic",
+      "mustNotImply": "Experiment result or launch",
+      "recommendedSource": "Reuse existing three approved strategy assets",
+      "confidentialityRisk": "MEDIUM",
+      "publicSafetyRequirement": "No supplier/market-confidential detail",
+      "aspectGuidance": "wide",
+      "humanUploadRequired": false
+    }
+  ],
+  "assetReuse": [
+    {
+      "requestId": "AR-R179-GAME-CENTER-HERO",
+      "projectId": "game-center",
+      "manifestAssetId": "gamecenter-hero-shipped-before-after-public-v1",
+      "reuseSourceId": "SRC-R179-GAME-CENTER-PR16",
+      "replacementAssetId": "game-center-single-to-multi-game-discovery-public-v1",
+      "result": "UPLOAD_ELIMINATED",
+      "reason": "Approved replacement exists on PR #16; implementation reconciliation is deferred."
+    }
+  ],
+  "prProvenance": [
+    {
+      "pr": 12,
+      "projectId": "payment",
+      "head": "10821d25833af40bcd6d1db37f5d07bc03d9a1a8",
+      "classification": {
+        "canonicalClaims": "KEEP",
+        "laterAssets": "NEEDS_RECONCILIATION",
+        "sharedOwnerEdits": "SUPERSEDED_OR_NEEDS_RECONCILIATION",
+        "unverifiedUplifts": "REJECTED"
+      },
+      "rule": "Evidence input, not implementation authority."
+    },
+    {
+      "pr": 16,
+      "projectId": "game-center",
+      "head": "36e5ab0363ba19a330dc62f2e2cb9dd4af90ef5f",
+      "classification": {
+        "approvedImage": "KEEP",
+        "recruiterFirstContent": "NEEDS_RECONCILIATION",
+        "sharedOwnerEdits": "NEEDS_RECONCILIATION"
+      },
+      "rule": "Preserve ~50% qualifier and shipped boundary."
+    },
+    {
+      "pr": 17,
+      "projectId": "voucher-center",
+      "head": "3a45925d62de3e92527bb4eb7c6b65476f4bfc9f",
+      "classification": {
+        "laterContent": "NEEDS_RECONCILIATION",
+        "manifestPlaceholder": "KEEP",
+        "sharedOwnerEdits": "NEEDS_RECONCILIATION"
+      },
+      "rule": "Stale branch is not higher authority than canonical content."
+    }
+  ],
+  "session1Input": {
+    "truthConflicts": [],
+    "contentReviewProjects": [
+      "voucher",
+      "voucher-center",
+      "game-center",
+      "dbs",
+      "booking",
+      "bandzo",
+      "payment",
+      "cathay-sit-online-account-opening"
+    ],
+    "requiredAssetRequestIds": [
+      "AR-R179-VOUCHER-EVIDENCE-PACK",
+      "AR-R179-VOUCHER-CENTER-HERO",
+      "AR-R179-BOOKING-HERO",
+      "AR-R179-BANDZO-HERO",
+      "AR-R179-CATHAY-OA-HERO",
+      "AR-R179-CTBC-HERO"
+    ],
+    "optionalAssetRequestIds": [
+      "AR-R179-PAYMENT-ORDER-HISTORY",
+      "AR-R179-PAYMENT-VIDEO",
+      "AR-R179-BOOKING-TAXI-OVERVIEW"
+    ],
+    "disclosureReview": [],
+    "instruction": "Chat may propose deltas from APPROVED facts only; candidates remain questions.",
+    "explicitHeroUploadCount": 5,
+    "voucherCandidateVisualRange": {
+      "minimum": 4,
+      "maximum": 8,
+      "coverage": [
+        "discovery",
+        "qualification",
+        "redemption",
+        "error / recovery",
+        "reusable card / component system",
+        "operational / configuration model"
+      ],
+      "reuseRule": "One approved source visual may satisfy multiple manifest evidence slots when truthfully supported."
+    }
+  },
+  "lifecycleHistory": [
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R176-CTBC-PROJECT-IDENTITY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "R179 expands the pilot into the all-project bootstrap without public-copy mutation."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-VOUCHER-CENTER-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-VOUCHER-CENTER-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Voucher Center period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-BANDZO-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-BANDZO-TIMELINE",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human-confirmed complete Bandzo period supersedes the duration-only candidate."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-BOOKING-ROLE",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-BOOKING-ROLE-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human confirmed formal role and sole-designer ownership boundary."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-CATHAY-SIT-ONLINE-ACCOUNT-OPENING-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the client-owned implementation boundary; Production launch remains unclaimed."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-CTBC-MORTGAGE-SELF-SERVICE-APP-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-CTBC-MORTGAGE-SELF-SERVICE-APP-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved the validated-architecture boundary without a shipment claim."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY",
+      "from": "APPROVED",
+      "to": "SUPERSEDED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved design ownership while excluding launch and commercial claims."
+    },
+    {
+      "recordType": "FACT",
+      "recordId": "FACT-R1801-TAISHIN-P2P-MARKETPLACE-PLATFORM-DELIVERY-OWNERSHIP",
+      "from": "UNVERIFIED_CANDIDATE",
+      "to": "APPROVED",
+      "actor": "HUMAN",
+      "at": "2026-08-25",
+      "reason": "Human approved design ownership while excluding launch and commercial claims."
+    }
+  ],
+  "assetPhaseStatus": {
+    "phase": "HUMAN_ASSET_INTAKE_NEXT",
+    "integrated": false,
+    "explicitHeroUploadsRequired": [
+      "voucher-center",
+      "booking",
+      "bandzo",
+      "cathay-sit-online-account-opening",
+      "ctbc-mortgage-self-service-app"
+    ],
+    "voucherCandidateSourceVisuals": {
+      "minimum": 4,
+      "maximum": 8
+    },
+    "noUploadCurrentlyRequired": [
+      "game-center",
+      "dbs",
+      "taishin-p2p-marketplace-platform",
+      "cathay-mortgage-assistant",
+      "cathay-sit-review-remediation-operations",
+      "booking-taxi-pickup-service-strategy"
+    ],
+    "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+  }
+}

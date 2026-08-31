@@ -424,6 +424,22 @@ html[lang="zh"] .profile-value-v44__grid p {
     transition: none;
   }
 }
+.award-logo-slot{
+  width:var(--dimension-68px);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  margin-block:var(--space-4);
+  border:var(--profile-border-width) solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius:var(--radius-md);
+  background:color-mix(in srgb, var(--paper-0) 34%, transparent);
+  color:inherit;
+}
+.award-logo-slot > span{
+  font-size:var(--text-xs);
+  font-weight:var(--sys-weight-heavy);
+  letter-spacing:var(--profile-track-label);
+}
 .profile-leadership-v81{padding-block:var(--space-9);background:var(--color-surface-soft)}
 .profile-leadership-v81__head{display:grid;gap:var(--space-4);max-width:var(--profile-hero-copy-max);margin-bottom:var(--space-8)}
 .profile-leadership-v81__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}

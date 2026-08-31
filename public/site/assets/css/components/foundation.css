@@ -19,9 +19,9 @@ h4{line-height:1.28;letter-spacing:var(--dimension-neg--025em)}
 .heading-3{font-size:var(--sys-type-heading-2)}
 .lead-copy,.body-copy{max-width:var(--sys-measure-lead);margin-top:var(--dimension-10px);color:var(--color-text-secondary);font-size:var(--sys-type-body-lg);line-height:1.5}
 .kicker+*,.project-context+*{margin-top:var(--sys-space-eyebrow-to-heading)}
-.company-name-v132{display:inline;color:var(--color-text-primary);font-size:var(--text-lead);font-weight:var(--sys-weight-heavy);line-height:1.15;letter-spacing:var(--dimension-neg--025em);text-transform:none}
-.company-context-v132{display:inline;color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);line-height:1.35;letter-spacing:var(--dimension-0-06em);text-transform:uppercase}
-.company-context-v132::before{content:"·";margin-inline:var(--space-2);color:var(--color-border-strong)}
+.company-name-v132{display:inline;margin:0;padding:0;color:var(--color-text-primary);font-size:var(--text-lead);font-weight:var(--sys-weight-heavy);line-height:1.15;letter-spacing:var(--dimension-neg--025em);text-transform:none}
+.company-context-v132{display:inline;margin:0;padding:0;color:var(--color-text-accent);font-size:var(--text-xs);font-weight:var(--sys-weight-bold);line-height:1.35;letter-spacing:var(--dimension-0-06em);text-transform:uppercase}
+.company-separator-v159{display:inline;margin:0;padding:0;color:var(--color-border-strong);font:inherit;letter-spacing:inherit;text-transform:none}
 #detailContext .company-name-v132{font-size:var(--text-sm)}
 h1+p,h2+p,h3+p,h4+p,.heading-1+.body-copy,.heading-2+.body-copy,.heading-3+.body-copy{margin-top:var(--sys-space-heading-to-body)}
 html[lang="zh-Hant"]{

@@ -517,7 +517,7 @@ test('project and experiment detail contracts remain stable', async ({page},test
   expect(controls.y+controls.height).toBeLessThanOrEqual(heading.y);
   await page.locator('#detailBack').click();
   await expect(page.locator('#detailBack')).toBeHidden();
-  await expect(page.locator('#detailTitle')).toBeFocused();
+  await expect(page.locator('#detailTitle')).not.toBeFocused();
   await page.screenshot({path:testInfo.outputPath('project-detail-v70.png'),fullPage:false});
   await page.locator('#detailClose').click();
   await expect(page.locator('[data-project="dbs"]').first()).toBeFocused();
