@@ -393,7 +393,8 @@ for (const viewport of viewports) {
     const link=navigator.getByRole("link",{name:label,exact:true});
     const before=await page.locator(".dialog-scroll").first().evaluate(root=>root.scrollTop);
     await link.click();
-    await page.waitForTimeout(80);
+    await page.waitForFunction(href=>{const root=document.querySelector(".dialog-scroll"),active=document.querySelector(`a[href="${href}"][aria-current="location"]`);if(!root||!active)return false;const state=window.__navigatorSettle||={top:root.scrollTop,stable:0};if(Math.abs(root.scrollTop-state.top)<=.5)state.stable+=1;else{state.top=root.scrollTop;state.stable=0}return state.stable>=6},await link.getAttribute("href"));
+    await page.evaluate(()=>{delete window.__navigatorSettle});
     const state=await link.evaluate(node=>{
       const root=document.querySelector(".dialog-scroll"),target=document.querySelector(node.getAttribute("href")),heading=target.querySelector("h2,h3")||target,rootRect=root.getBoundingClientRect(),headingRect=heading.getBoundingClientRect();
       return {current:node.getAttribute("aria-current"),before:null,after:root.scrollTop,headingTop:headingRect.top-rootRect.top,headingBottom:headingRect.bottom-rootRect.top,rootHeight:root.clientHeight};
@@ -890,6 +891,87 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     });
     if(!sharedGeometry)failures.push(`${viewport.name} R172.3 ${projectId} shared owners missing`);
     else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
+  }
+
+  await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
+  const r174GameCenter=await page.evaluate(async()=>{
+    const dialog=document.querySelector("#detailDialog"),scroll=dialog?.querySelector(".dialog-scroll"),visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=="none"&&node.getClientRects().length);
+    const images=[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__validation-media img")].filter(visible);
+    await Promise.all(images.map(image=>{image.loading="eager";if(image.complete)return true;return new Promise(resolve=>{image.addEventListener("load",()=>resolve(true),{once:true});image.addEventListener("error",()=>resolve(false),{once:true})})}));
+    const at=dialog.querySelector("#projectAtGlance"),style=at?getComputedStyle(at):null;
+    return {title:dialog.querySelector("#detailTitle")?.textContent.trim(),navigator:[...dialog.querySelectorAll("#projectSectionNav a")].filter(visible).map(node=>node.textContent.trim()),decisionCount:dialog.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,evidenceCount:dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__validation, #systemCaseEvidenceSection .structured-evidence-v223__group").length,evidenceMedia:images.map(image=>({src:image.getAttribute("src"),status:image.dataset.assetStatus||"real-active",naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight,alt:image.alt})),outcomeValues:[...dialog.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].filter(visible).map(node=>node.textContent.trim()),visibleDecisionMetadata:[...dialog.querySelectorAll("#systemCaseEvidenceSection .structured-evidence-v223__decision-link")].filter(visible).length,atGlanceLines:at&&style?Math.round(at.getBoundingClientRect().height/parseFloat(style.lineHeight)):null,text:dialog.innerText,pageOverflow:Math.max(0,Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth)};
+  });
+  const r174ExpectedAsset="game-center-single-to-multi-game-discovery-public-v1.png";
+  if(r174GameCenter.title!=="One live game to a scalable multi-game Game Center")failures.push(`${viewport.name} R174.2 Game Center title mismatch`);
+  if(JSON.stringify(r174GameCenter.navigator)!==JSON.stringify(["Overview","Complexity","Decisions","Evidence","Outcomes","Ownership"]))failures.push(`${viewport.name} R174.2 navigator mismatch: ${JSON.stringify(r174GameCenter.navigator)}`);
+  if(r174GameCenter.decisionCount!==3||r174GameCenter.evidenceCount!==3)failures.push(`${viewport.name} R174.3 shared primitive count mismatch: ${JSON.stringify(r174GameCenter)}`);
+  if(r174GameCenter.evidenceMedia.length!==1||!r174GameCenter.evidenceMedia[0]?.src?.split("?")[0].endsWith(r174ExpectedAsset)||r174GameCenter.evidenceMedia.some(item=>item.status!=="real-active"||item.naturalWidth<1||item.naturalHeight<1||!item.alt))failures.push(`${viewport.name} R174.3 Evidence media mismatch: ${JSON.stringify(r174GameCenter.evidenceMedia)}`);
+  if(/Acceptance Criteria|Multiple Game Hosting acceptance criteria|Phase 1\.2 acceptance criteria/i.test(r174GameCenter.text))failures.push(`${viewport.name} R174.3 raw source-document copy leaked into Evidence`);
+  if(JSON.stringify(r174GameCenter.outcomeValues)!==JSON.stringify(["70%","23%"]))failures.push(`${viewport.name} R174.2 Outcome mismatch: ${JSON.stringify(r174GameCenter.outcomeValues)}`);
+  if(r174GameCenter.visibleDecisionMetadata)failures.push(`${viewport.name} R174.2 internal decision metadata leaked`);
+  if(/approximately 50% user completion|~50% completion|\+408\.6%|\+39\.6%|\$803K|\$9\.6M|GMV causality/i.test(r174GameCenter.text))failures.push(`${viewport.name} R174.2 prohibited claim leaked`);
+  if(viewport.width===1419&&r174GameCenter.atGlanceLines>2)failures.push(`${viewport.name} R174.2 At a Glance exceeds two lines: ${r174GameCenter.atGlanceLines}`);
+  if(r174GameCenter.pageOverflow>0)failures.push(`${viewport.name} R174.2 page horizontal overflow: ${r174GameCenter.pageOverflow}`);
+  if([1419,871,430].includes(viewport.width)){
+    const targetDir=path.join(outputRoot,"r174-game-center",viewport.name);fs.mkdirSync(targetDir,{recursive:true});
+    const scroll=page.locator("#detailDialog .dialog-scroll").first();
+    for(const [name,selector] of [["01-overview","#projectOverviewSection"],["02-decisions","#systemCaseDecisionsSection"],["03-evidence","#systemCaseEvidenceSection"],["04-outcomes","#systemCaseOutcomesSection"],["05-ownership","#systemCaseAccountabilitySection"]]){
+      const target=page.locator(selector).first();if(!await target.count()){failures.push(`${viewport.name} R174.2 checkpoint missing: ${name}`);continue}
+      await scroll.evaluate((root,query)=>{const target=root.querySelector(query);if(target)root.scrollTop=Math.max(0,root.scrollTop+target.getBoundingClientRect().top-root.getBoundingClientRect().top-120)},selector);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await page.screenshot({path:path.join(targetDir,`${name}.png`),fullPage:false});
+    }
+  }
+
+  if(viewport.width===430){
+    const sharedNavigatorProjects=["payment","booking","dbs","ctbc-mortgage-self-service-app","cathay-sit-review-remediation-operations","cathay-sit-online-account-opening","booking-taxi-pickup-service-strategy","cathay-mortgage-assistant","taishin-p2p-marketplace-platform","game-center"];
+    for(const projectId of sharedNavigatorProjects){
+      await page.goto(`${baseUrl}/site/work/${projectId}`,{waitUntil:"networkidle"});
+      const semanticHygiene=await page.evaluate(()=>{const dialog=document.querySelector("#detailDialog"),normalize=value=>String(value||"").trim().replace(/\s+/g," ").replace(/[.!?。！？]+$/u,"").toLocaleLowerCase(),tooltips=[...dialog.querySelectorAll(".info-tooltip")].map(root=>{const trigger=root.querySelector(".info-tooltip__trigger"),panel=root.querySelector(".info-tooltip__panel"),tail=root.closest(".inline-tooltip-tail"),label=root.closest(".outcome-metric__label,.research-evidence-metric__label,.structured-evidence-v223__validation-label"),clone=label?.cloneNode(true);clone?.querySelectorAll(".info-tooltip").forEach(node=>node.remove());const visibleCopy=clone?.textContent.trim()||"",range=document.createRange();if(tail?.firstChild)range.selectNodeContents(tail.firstChild);const textRects=[...range.getClientRects()],textRect=textRects.at(-1),triggerRect=trigger?.getBoundingClientRect();return{content:panel?.textContent.trim(),visibleCopy,inlineTail:Boolean(tail&&tail.lastElementChild===root),gap:textRect&&triggerRect?triggerRect.left-textRect.right:null,verticalDelta:textRect&&triggerRect?Math.abs((triggerRect.top+triggerRect.height/2)-(textRect.top+textRect.height/2)):null,redundant:normalize(panel?.textContent)===normalize(visibleCopy)}});return{text:dialog?.innerText||"",tooltips}});
+      if(/Phase 1\.1|Phase 1\.2|New · Ending Soon · Play Once Per Day|\bPRD ownership\b/i.test(semanticHygiene.text))failures.push(`${viewport.name} R174.5 ${projectId} internal or unsynthesized public copy leaked`);
+      if(semanticHygiene.tooltips.some(item=>!item.content||item.redundant||!item.inlineTail||item.gap===null||item.gap<0||item.gap>8||item.verticalDelta>6))failures.push(`${viewport.name} R174.5 ${projectId} tooltip semantic/inline contract: ${JSON.stringify(semanticHygiene.tooltips)}`);
+      const links=page.locator("#projectSectionNavLinks a");
+      const count=await links.count();
+      const checkpoints=[0,Math.floor((count-1)/2),count-1];
+      const beginTrace=()=>page.evaluate(()=>{const root=document.querySelector("#detailDialog .dialog-scroll");window.__r1745NavTrace=[root?.scrollTop||0];window.__r1745NavTraceHandler=()=>window.__r1745NavTrace.push(root.scrollTop);root?.addEventListener("scroll",window.__r1745NavTraceHandler,{passive:true})});
+      const settle=async expectedHref=>{
+        await page.waitForTimeout(80);
+        await page.waitForFunction(href=>{const root=document.querySelector("#detailDialog .dialog-scroll"),active=document.querySelector('#projectSectionNavLinks a[aria-current="location"]');if(!root||active?.getAttribute("href")!==href)return false;const state=window.__r1745NavSettle||={top:root.scrollTop,stable:0};if(Math.abs(root.scrollTop-state.top)<=.5)state.stable+=1;else{state.top=root.scrollTop;state.stable=0}return state.stable>=6},expectedHref);
+        await page.evaluate(()=>{delete window.__r1745NavSettle});
+      };
+      const measure=expectedHref=>page.evaluate(expectedHref=>{
+        const rail=document.querySelector("#projectSectionNavLinks"),active=rail?.querySelector('a[aria-current="location"]'),railRect=rail?.getBoundingClientRect(),activeRect=active?.getBoundingClientRect(),root=document.querySelector("#detailDialog .dialog-scroll"),target=document.querySelector(expectedHref),controls=document.querySelector("#detailDialog .dialog-controls-v67"),rootRect=root?.getBoundingClientRect(),targetRect=target?.getBoundingClientRect(),controlsRect=controls?.getBoundingClientRect(),inset=Math.max(0,(controlsRect?.bottom||rootRect?.top||0)-(rootRect?.top||0))+24,atEnd=root?root.scrollTop+root.clientHeight>=root.scrollHeight-2:false,trace=window.__r1745NavTrace||[];
+        if(root&&window.__r1745NavTraceHandler)root.removeEventListener("scroll",window.__r1745NavTraceHandler);delete window.__r1745NavTraceHandler;delete window.__r1745NavTrace;
+        return {expectedHref,activeHref:active?.getAttribute("href"),label:active?.textContent.trim(),railLeft:railRect?.left,railRight:railRect?.right,activeLeft:activeRect?.left,activeRight:activeRect?.right,scrollLeft:rail?.scrollLeft,maxScroll:rail?rail.scrollWidth-rail.clientWidth:null,scrollTop:root?.scrollTop,targetOffset:targetRect&&rootRect?targetRect.top-rootRect.top:null,inset,atEnd,trace,animated:new Set(trace.map(value=>Math.round(value))).size>=3,activeFullyVisible:Boolean(railRect&&activeRect&&activeRect.left>=railRect.left-.5&&activeRect.right<=railRect.right+.5),activeTextVisible:Boolean(active&&active.scrollWidth<=active.clientWidth+1&&active.scrollHeight<=active.clientHeight+1),pageOverflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth};
+      },expectedHref);
+      for(const index of checkpoints){
+        const expected=links.nth(index);
+        const expectedHref=await expected.getAttribute("href");
+        await beginTrace();
+        await expected.click();
+        await settle(expectedHref);
+        const geometry=await measure(expectedHref),settledTop=geometry.scrollTop;
+        await page.waitForTimeout(180);
+        const drift=Math.abs((await page.locator("#detailDialog .dialog-scroll").first().evaluate(root=>root.scrollTop))-settledTop);
+        const landingValid=index===count-1?geometry.atEnd||Math.abs(geometry.targetOffset-geometry.inset)<=4:Math.abs(geometry.targetOffset-geometry.inset)<=4;
+        if(geometry.activeHref!==expectedHref||!geometry.activeFullyVisible||!geometry.activeTextVisible||geometry.pageOverflow>0||!landingValid||drift>2||(index>0&&!geometry.animated))failures.push(`${viewport.name} R174.5 ${projectId} shared smooth-anchor certification: ${JSON.stringify({...geometry,drift,landingValid})}`);
+        if(projectId==="game-center"){
+          const targetDir=path.join(outputRoot,"r174-game-center","mobile-430");fs.mkdirSync(targetDir,{recursive:true});
+          const label=index===0?"06-nav-first":index===count-1?"08-nav-final":"07-nav-middle";
+          await page.screenshot({path:path.join(targetDir,`${label}.png`),fullPage:false});
+        }
+      }
+      const first=links.first(),firstHref=await first.getAttribute("href"),beforeReverse=await page.locator("#detailDialog .dialog-scroll").first().evaluate(root=>root.scrollTop);
+      await beginTrace();await first.click();await settle(firstHref);const reverse=await measure(firstHref);
+      if(reverse.activeHref!==firstHref||reverse.scrollTop>=beforeReverse||Math.abs(reverse.targetOffset-reverse.inset)>4||!reverse.activeFullyVisible||!reverse.animated)failures.push(`${viewport.name} R174.5 ${projectId} reverse anchor failed: ${JSON.stringify({beforeReverse,...reverse})}`);
+    }
+    await page.goto(`${baseUrl}/site/work/game-center`,{waitUntil:"networkidle"});
+    await page.emulateMedia({reducedMotion:"reduce"});
+    const reducedLink=page.locator("#projectSectionNavLinks a").nth(2),reducedHref=await reducedLink.getAttribute("href");
+    await reducedLink.focus();await reducedLink.press("Space");await page.waitForTimeout(80);
+    const reduced=await page.evaluate(href=>{const root=document.querySelector("#detailDialog .dialog-scroll"),target=document.querySelector(href),active=document.querySelector('#projectSectionNavLinks a[aria-current="location"]');return{activeHref:active?.getAttribute("href"),targetVisible:Boolean(target&&target.getBoundingClientRect().bottom>root.getBoundingClientRect().top&&target.getBoundingClientRect().top<root.getBoundingClientRect().bottom),scrollTop:root.scrollTop}},reducedHref);
+    if(reduced.activeHref!==reducedHref||!reduced.targetVisible||reduced.scrollTop<=2)failures.push(`${viewport.name} R174.5 reduced-motion keyboard anchor failed: ${JSON.stringify(reduced)}`);
+    await page.emulateMedia({reducedMotion:"no-preference"});
   }
 
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);

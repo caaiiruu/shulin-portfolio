@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-08-24-r173.4",
+  "contentVersion": "2026-08-25-r174.5",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -244,18 +244,6 @@
     "voucher-center-hero-centralised-discovery-public-v1": {
       "id": "voucher-center-hero-centralised-discovery-public-v1",
       "projectId": "voucher-center",
-      "type": "image",
-      "publicPath": null,
-      "aspectRatio": "wide",
-      "assetStatus": "awaiting-user-asset",
-      "implementationStatus": "placeholder-active",
-      "placeholderFallbackAssetId": "project-visual-placeholder-wide-v1",
-      "replacementRequired": true,
-      "publicBuild": true
-    },
-    "gamecenter-hero-shipped-before-after-public-v1": {
-      "id": "gamecenter-hero-shipped-before-after-public-v1",
-      "projectId": "game-center",
       "type": "image",
       "publicPath": null,
       "aspectRatio": "wide",
@@ -1334,6 +1322,31 @@
       "height": 1108,
       "alt": "Cross-organization delivery alignment session reviewing marketplace screens.",
       "alt_zh": "跨組織檢視市集畫面的交付對齊會議。"
+    },
+    "game-center-single-to-multi-game-discovery-public-v1": {
+      "id": "game-center-single-to-multi-game-discovery-public-v1",
+      "projectId": "game-center",
+      "type": "image/png",
+      "publicPath": "/site/assets/projects/game-center/game-center-single-to-multi-game-discovery-public-v1.png",
+      "aspectRatio": "744:787",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 744,
+      "height": 787,
+      "sha256": "377c15871a1b43cbe7a859e66c0986b98baf3518b5e16de8e377d2dd8e100b4e",
+      "sourceFile": "Game Listing Page Performance.pdf",
+      "sourcePage": "1",
+      "sourceRegion": "Actual product UI states extracted from the From → To table; document headings, body copy, borders and whitespace removed",
+      "placement": "Game Center Hero and Evidence 01",
+      "publicSafeStatus": "approved-public-derivative",
+      "evidenceRole": "Before-to-after product transformation from one featured game to a centralized multi-game listing.",
+      "sourceBoundary": "Observed product transformation documented in the performance report; the image does not establish causal business impact.",
+      "derivativeStatus": "human-provided-source-public-safe-crop",
+      "alt": "Before-and-after comparison showing one featured game replaced by a multi-game listing.",
+      "alt_zh": "前後對照：單一主打遊戲被多遊戲列表取代。"
     }
   },
   "frameSystemContract": {

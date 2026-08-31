@@ -330,7 +330,8 @@
         "Recruiter-first system cases use one SSOT-driven presentation composition: complexity precedes ContributionBlock and Core System Insight, decisions precede structured evidence and research, qualitative system outcomes use the OutcomeMetric owner, and SharedAccountability may opt into a summary-only mode without project-identity conditionals.",
         "OutcomeMetric uses one shared value → short semantic label → supporting detail hierarchy; metricLayout aligned owns the responsive metric grid, while a short measuredLabel may occupy the section header and delivery or attribution boundaries remain subordinate supporting statements.",
         "Project Hero metadata preserves the shared eyebrow typography and title spacing; at mobile widths it wraps naturally within the shared measure and is clamped to at most two lines without project-specific breaks.",
-        "InfoTooltip renders only when non-empty auxiliary evidence differs materially from the visible label and supporting copy; substantive tooltips retain pointer, focus, Enter and Escape behavior.",
+        "InfoTooltip renders only when non-empty auxiliary evidence differs materially from the visible label and supporting copy; its trigger stays inline with the label's final word, while substantive tooltips retain pointer, focus, Enter and Escape behavior.",
+        "Optional Evidence supporting signals render only when substantive content exists; empty slots add no placeholder node or spacing.",
         "Every complete professional parent case opens with one shared decision filter: transformation title, up to three problem types, The value I brought, At a glance, Why it mattered, Business impact, context grid, and an evidence-bound confidentiality note",
         "The value I brought renders only its approved headline and supporting statement; internal company value, team value, evidence and review status never render publicly",
         "Every parent project overview renders Type, Scope, Audience, and Timeline only in the context grid; title metadata never duplicates them",
@@ -808,7 +809,8 @@
         "Domain supplies domain item state; Project supplies Overview, Complexity, Decisions, Impact targets and aria-current",
         "Project semantic pd-section-nav hooks own no shell, rail, item presentation, disclosure, or breakpoint behavior",
         "Homepage Domain rail and floating rail are both generated from the same domainSource canonical IDs; legacy shorthand IDs and legacy rail selectors are forbidden.",
-        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing."
+        "The floating rail centers middle active items and clamps first/last items within 0..maxScroll; interactive-state-safe-area owns symmetric visible edge spacing.",
+        "Project-section activation uses one smooth anchor-scroll owner, suppresses intermediate active-state churn until motion settles, and falls back to immediate navigation for reduced-motion preference."
       ],
       "exclusiveOwner": false,
       "component": "FloatingNavigator",
