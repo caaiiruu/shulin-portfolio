@@ -192,7 +192,9 @@
     const prototype=pair(item.prototype||item.whatIBuilt||item.output||(deliverables.length?deliverables.join(' · '):''));
     const learning=pair(item.learning||item.currentLearning||item.reflection);
     const next=pair(item.next||item.nextStep||item.futureDirection);
-    return {...item,title,question,summary,prototype,learning,next,category:pair(item.category||item.explorationType||item.type||'Exploration'),timeline:pair(item.timeline||item.period),status:pair(item.status||item.contentStatus),gallery:[[[title[0],title[1]],summary]]};
+    const blocks=list(item.experimentBlocks).slice(0,3);
+    const gallery=blocks.length?blocks.map(block=>[pair(block.title),pair(block.body)]):[[title,summary]];
+    return {...item,title,question,summary,prototype,learning,next,category:pair(item.category||item.explorationType||item.type||'Exploration'),timeline:pair(item.timeline||item.period),status:pair(item.status||item.contentStatus),gallery};
   }
   function adaptContent(raw){
     const domains=list(raw.contentDiscovery?.domains);
@@ -628,7 +630,7 @@
       return [...projects,...explorations]
         .map(entity=>({...rankProject(entity.key,entity.item,normalized,intentIds),type:entity.type}))
         .filter(result=>result.score>0)
-        .sort((a,b)=>b.score-a.score||b.matchCount-a.matchCount);
+        .sort((a,b)=>b.score-a.score||b.matchCount-a.matchCount||(a.type==='project'?-1:1));
     };
     const appendProject=(container,key,reasons=[])=>{
       const project=DATA.projects[key];if(!project)return;
@@ -1463,7 +1465,8 @@
       'hello-sabau':[['Culture','Practice','Recall'],['文化','練習','記憶']],
       'food-testing-workshop':[['Test','Compare','Learn'],['測試','比較','學習']],
       'aja-creative-workshop':[['Insight','Make','Reflect'],['洞察','實作','反思']],
-      'weekly-design-session':[['Share','Critique','Decide'],['分享','講評','決策']]
+      'weekly-design-session':[['Share','Critique','Decide'],['分享','講評','決策']],
+      'freelance-project-operations-tool':[['Track','Review','Estimate'],['記錄','回顧','估算']]
     };
     return (map[key]||[['Question','Model','Learning'],['問題','模型','學習']])[lang==='zh'?1:0];
   }
@@ -3128,7 +3131,7 @@
  renderDeliveryStatus('');
     const valueSection=doc.querySelector('.project-value-v207');
     if(valueSection)valueSection.hidden=true;
-    safeText(doc.getElementById('gallerySectionTitle'),ui("prototype-material-ab30eb18"));
+    safeText(doc.getElementById('gallerySectionTitle'),lang==='zh'?'實驗':'The Experiment');
     safeText(doc.getElementById('detailContext'),localize(e.category));
     safeText(doc.getElementById('detailPeriod'),localize(e.timeline));
     safeText(dialogTitle,localize(e.title));
@@ -3140,11 +3143,15 @@
     const learningText=localize(e.learning);
     const nextText=localize(e.next);
     safeText(doc.getElementById('experimentQuestion'),questionText);safeText(doc.getElementById('experimentSummary'),localize(e.summary));
+    safeText(doc.querySelector('.experiment-overview-v45__question>span'),lang==='zh'?'實驗問題':'The Question');
     renderInfoGrid('detailInfoExperiment',[
-      [ui("current-stage-890e8af9"),stage],
-      [ui("what-i-built-1e30e5f3"),prototypeText]
+      [lang==='zh'?'角色':'Role',localize(e.role)],
+      [lang==='zh'?'期間':'Period',localize(e.timeline)],
+      [lang==='zh'?'形式':'Format',localize(e.format)]
     ]);
     safeText(doc.getElementById('experimentPrototype'),prototypeText);safeText(doc.getElementById('experimentLearning'),learningText);safeText(doc.getElementById('experimentNext'),nextText);
+    safeText(doc.querySelector('#experimentEvidence article:first-child h3'),lang==='zh'?'這證明了什麼':'What This Proved');
+    safeText(doc.querySelector('#experimentEvidence article:nth-child(2) h3'),lang==='zh'?'建構方式':'Build Approach');
     doc.getElementById('experimentQuestion')?.closest('.experiment-overview-v45__question')?.toggleAttribute('hidden',!questionText&&!localize(e.summary));
     doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build')?.toggleAttribute('hidden',true);
     doc.getElementById('experimentLearning')?.closest('article')?.toggleAttribute('hidden',!learningText);
@@ -3166,12 +3173,13 @@
     'booking-taxi-pickup-service-strategy':['booking','taishin-p2p-marketplace-platform','dbs']
   };
   const RELATED_EXPERIMENTS={
+    'freelance-project-operations-tool':['weekly-design-session','food-testing-workshop','capture-ideas'],
     'capture-ideas':['aha-creative-toolbox','hello-sabau','weekly-design-session'],
     'aha-creative-toolbox':['capture-ideas','hello-sabau','aja-creative-workshop'],
     'hello-sabau':['capture-ideas','aha-creative-toolbox','food-testing-workshop'],
     'food-testing-workshop':['aja-creative-workshop','weekly-design-session','capture-ideas'],
     'aja-creative-workshop':['food-testing-workshop','weekly-design-session','aha-creative-toolbox'],
-    'weekly-design-session':['aja-creative-workshop','food-testing-workshop','capture-ideas']
+    'weekly-design-session':['freelance-project-operations-tool','aja-creative-workshop','food-testing-workshop']
   };
   function detailBrand(type,key){
     if(type==='experiment')return ui("experiment-81b73d30");

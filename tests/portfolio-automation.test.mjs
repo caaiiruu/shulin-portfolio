@@ -52,10 +52,14 @@ test("Voucher asset intake is one candidate pack rather than twelve required upl
   assert.equal(request.slotModel, "COVERAGE_TARGETS_NOT_ONE_FILE_PER_MANIFEST_SLOT");
 });
 
-test("all canonical projects have exactly one source pack", () => {
-  assert.equal(truth.projects.length, 13);
-  assert.equal(truth.projectSourcePacks.length, 13);
-  assert.deepEqual(new Set(truth.projectSourcePacks.map((pack) => pack.projectId)), new Set(Object.keys(content.projects)));
+test("all canonical primary cases and experiments have exactly one source pack", () => {
+  const experimentIds = Object.entries({ ...(content.experiments || {}), ...(content.sideProjects || {}) })
+    .filter(([, item]) => !String(item.contentStatus || "").includes("standalone-card-review"))
+    .map(([id]) => id);
+  const canonicalIds = [...Object.keys(content.projects), ...experimentIds];
+  assert.equal(truth.projects.length, 20);
+  assert.equal(truth.projectSourcePacks.length, 20);
+  assert.deepEqual(new Set(truth.projectSourcePacks.map((pack) => pack.projectId)), new Set(canonicalIds));
 });
 
 test("source packs reject invalid fact and source references", () => {

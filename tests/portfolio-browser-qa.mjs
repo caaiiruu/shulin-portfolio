@@ -892,6 +892,26 @@ if(r1592.researchValues.join('|')!=='2,857|93%|87%'||!uniform(r1592.metricTypogr
     else if(sharedGeometry.bodyWidth>sharedGeometry.viewportWidth||sharedGeometry.navLeft<0||sharedGeometry.navRight>sharedGeometry.viewportWidth||sharedGeometry.finalBottom>sharedGeometry.navTop||sharedGeometry.captionClearance.some(value=>!value)||!sharedGeometry.activeFullyVisible)failures.push(`${viewport.name} R172.3 ${projectId} shared regression: ${JSON.stringify(sharedGeometry)}`);
   }
 
+  const r181Ids=['freelance-project-operations-tool','weekly-design-session','food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox','hello-sabau'];
+  await page.goto(`${baseUrl}/site/experiments`,{waitUntil:'networkidle'});
+  const r181Dir=path.join(outputRoot,'r181-experiments',viewport.name);fs.mkdirSync(r181Dir,{recursive:true});
+  await page.screenshot({path:path.join(r181Dir,'00-listing.png'),fullPage:true});
+  const listing=await page.evaluate(()=>({ids:[...document.querySelectorAll('#experimentPageRail [data-experiment]')].map(node=>node.dataset.experiment),overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  if(JSON.stringify(listing.ids)!==JSON.stringify(r181Ids)||listing.overflow>1)failures.push(`${viewport.name} R181 listing/order/overflow mismatch: ${JSON.stringify(listing)}`);
+  for(const [index,id] of r181Ids.entries()){
+    await page.locator(`#experimentPageRail [data-experiment="${id}"]`).click();
+    await page.waitForSelector('#detailDialog[open]');
+    const result=await page.evaluate(()=>{
+      const dialog=document.querySelector('#detailDialog'),scroll=dialog?.querySelector('.dialog-scroll');
+      const visible=node=>Boolean(node&&!node.hidden&&getComputedStyle(node).display!=='none'&&node.getClientRects().length);
+      return{classificationVisible:visible(dialog.querySelector('#detailClassification')),navigatorVisible:visible(dialog.querySelector('#projectSectionNav')),question:dialog.querySelector('#experimentQuestion')?.textContent.trim(),galleryCount:dialog.querySelectorAll('#galleryThumbs button').length,proof:dialog.querySelector('#experimentLearning')?.textContent.trim(),overflow:Math.max(0,(scroll?.scrollWidth||0)-(scroll?.clientWidth||0)),headings:[...dialog.querySelectorAll('h3')].filter(visible).map(node=>node.textContent.trim())};
+    });
+    if(result.classificationVisible||result.navigatorVisible||!result.question||result.galleryCount!==3||!result.proof||result.overflow>1||!result.headings.includes('What This Proved'))failures.push(`${viewport.name} R181 ${id} compact contract mismatch: ${JSON.stringify(result)}`);
+    await page.locator('#detailDialog .dialog-scroll').screenshot({path:path.join(r181Dir,`${String(index+1).padStart(2,'0')}-${id}.png`)});
+    await page.locator('#detailClose').click();
+    await page.waitForSelector('#detailDialog[open]', { state: 'hidden' });
+  }
+
   if (consoleErrors.length) failures.push(`${viewport.name} console errors: ${consoleErrors.length}`);
   if (runtimeErrors.length) failures.push(`${viewport.name} runtime errors: ${runtimeErrors.length}`);
   if (networkErrors.length) failures.push(`${viewport.name} network errors: ${networkErrors.length}`);

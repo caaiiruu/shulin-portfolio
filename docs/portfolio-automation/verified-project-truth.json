@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "truthVersion": "2026-08-25-r180.1-approved-checkpoint",
-  "status": "HUMAN_APPROVED_CONTENT_CHECKPOINT",
+  "truthVersion": "2026-08-25-r181-experiments-shared-ia",
+  "status": "R181_APPROVED_EXPERIMENT_IMPLEMENTATION",
   "lifecycleVocabulary": [
     "UNVERIFIED_CANDIDATE",
     "APPROVED",
@@ -91,6 +91,41 @@
     {
       "projectId": "booking-taxi-pickup-service-strategy",
       "status": "APPROVED"
+    },
+    {
+      "projectId": "freelance-project-operations-tool",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "weekly-design-session",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "food-testing-workshop",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "aja-creative-workshop",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "capture-ideas",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "aha-creative-toolbox",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+    },
+    {
+      "projectId": "hello-sabau",
+      "status": "APPROVED",
+      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
     }
   ],
   "sources": [
@@ -332,6 +367,83 @@
       "location": "human:r180.1#taishin-p2p-marketplace-platform",
       "contentHash": "human-approved:2026-08-25-r180.1",
       "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-FREELANCE-PROJECT-OPERATIONS-TOOL",
+      "projectId": "freelance-project-operations-tool",
+      "kind": "HUMAN_CORRECTION",
+      "location": "human:r181#freelance-project-operations-tool",
+      "contentHash": "sha256:human-approved-r181-instruction",
+      "authority": "LATEST_HUMAN_CORRECTION",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-WEEKLY-DESIGN-SESSION",
+      "projectId": "weekly-design-session",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:workshop-01(2).html",
+      "contentHash": "sha256:aa7a7fe0d493738af6661cae116f5e0df04c7e01c167322a200dc23146e6abf6",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-FOOD-TESTING-WORKSHOP",
+      "projectId": "food-testing-workshop",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:workshop-03(2).html",
+      "contentHash": "sha256:75c5d941621801c45ccb66a7afc04e476fb7bec1692a258de41cce226815b0ab",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-AJA-CREATIVE-WORKSHOP",
+      "projectId": "aja-creative-workshop",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:workshop-02(2).html",
+      "contentHash": "sha256:6eed90251077cc432d892b208530b7b0c82e1b21f74d4c751ab0294547a91e11",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-CAPTURE-IDEAS",
+      "projectId": "capture-ideas",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:product-01(2).html",
+      "contentHash": "sha256:74cd15d7fee6cd1989b5a8da69735dbfb1c4fe0fd11d94290a4e851868063510",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-AHA-CREATIVE-TOOLBOX",
+      "projectId": "aha-creative-toolbox",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:product-03(2).html",
+      "contentHash": "sha256:2d89d1abdc9ae8b8d184ad82802dcf0b59fc3aec5d2ea899c272c8daf5a3d32b",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "lifecycle": "APPROVED"
+    },
+    {
+      "sourceId": "SRC-R181-HELLO-SABAU",
+      "projectId": "hello-sabau",
+      "kind": "HISTORICAL_PROJECT_MATERIAL",
+      "location": "human-upload:product-02(2).html",
+      "contentHash": "sha256:118dbe7b1aabe6c8b81537410e2da73281adfec1851e1fb6b2122894846b1a8c",
+      "authority": "GOVERNED_HISTORICAL_SOURCE",
       "confidence": "HIGH",
       "publicSafety": "PUBLIC_SAFE",
       "lifecycle": "APPROVED"
@@ -1710,6 +1822,243 @@
       "supersedes": [
         "FACT-R179-TAISHIN-P2P-MARKETPLACE-PLATFORM-EVIDENCE-BOUNDARY"
       ]
+    },
+    {
+      "factId": "FACT-R181-FREELANCE-PROJECT-OPERATIONS-TOOL-CONTENT-BOUNDARY",
+      "projectId": "freelance-project-operations-tool",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "freelance-project-operations-tool",
+        "title": "From scattered freelance records to a working project-operations system",
+        "period": "In active use",
+        "role": "Designer & Builder",
+        "format": "Independent 0→1 Product",
+        "question": "How could fragmented freelance records become evidence I could actually use for planning and pricing?",
+        "proof": "Built a working operational tool and used real project data to improve how future work is estimated. Across three projects, it surfaced approximately 18% of work that had been underestimated.",
+        "claimBoundary": "AI assisted construction; AI is not claimed as a core runtime capability. The ~18% figure is an estimation-gap signal, not productivity, revenue or profitability impact.",
+        "problemTypes": [
+          "AI-assisted development",
+          "freelance operations",
+          "project estimation",
+          "workload planning",
+          "internal tools",
+          "0→1 product"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-FREELANCE-PROJECT-OPERATIONS-TOOL"
+      ],
+      "provenance": {
+        "producer": "HUMAN_CORRECTION",
+        "precedence": 1,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-WEEKLY-DESIGN-SESSION-CONTENT-BOUNDARY",
+      "projectId": "weekly-design-session",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "weekly-design-session",
+        "title": "From isolated design knowledge to a recurring team learning loop",
+        "period": "Apr–Dec 2019",
+        "role": "Initiator & Facilitator",
+        "format": "Recurring Team Practice",
+        "question": "Could recurring design sessions make UX evidence part of the wider product team’s working knowledge?",
+        "proof": "Engineering Manager feedback documents that the team engaged with the shared insights.",
+        "claimBoundary": "Qualitative feedback only; no measured efficiency, cohesion or organisational-performance improvement is claimed.",
+        "problemTypes": [
+          "design leadership",
+          "knowledge sharing",
+          "facilitation",
+          "cross-functional practice"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-WEEKLY-DESIGN-SESSION"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-FOOD-TESTING-WORKSHOP-CONTENT-BOUNDARY",
+      "projectId": "food-testing-workshop",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "food-testing-workshop",
+        "title": "From individual usability testing to a group-research format",
+        "period": "2017",
+        "role": "Researcher · Planner · Facilitator",
+        "format": "Research Method Experiment",
+        "question": "Could usability-testing structure be adapted to capture group behavior without losing individual observations?",
+        "proof": "Created a reusable template for group-testing sessions.",
+        "claimBoundary": "Team-building is secondary context; no performance effect is claimed.",
+        "problemTypes": [
+          "research methods",
+          "group usability",
+          "usability testing",
+          "experiment design"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-FOOD-TESTING-WORKSHOP"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-AJA-CREATIVE-WORKSHOP-CONTENT-BOUNDARY",
+      "projectId": "aja-creative-workshop",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "aja-creative-workshop",
+        "title": "From design methodology to a hands-on learning experiment",
+        "period": "2017",
+        "role": "Planner · Facilitator · Presenter",
+        "format": "Workshop Experiment",
+        "question": "How could design methodology become understandable through practice instead of presentation alone?",
+        "proof": "Participant feedback provides qualitative evidence that the compressed hands-on format was useful and engaging.",
+        "claimBoundary": "No personality-performance causality or measured brand-awareness improvement is claimed.",
+        "problemTypes": [
+          "workshop facilitation",
+          "methodology transfer",
+          "collaborative ideation",
+          "group behavior"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-AJA-CREATIVE-WORKSHOP"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-CAPTURE-IDEAS-CONTENT-BOUNDARY",
+      "projectId": "capture-ideas",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "capture-ideas",
+        "title": "From scattered ideas to a connected capture-and-filter system",
+        "period": "2015",
+        "role": "Product Designer",
+        "format": "Physical + Digital Product",
+        "question": "How could idea generation become a continuous system instead of a disconnected set of activities?",
+        "proof": "RSA Student Design Awards — Final 7 Shortlist",
+        "claimBoundary": "Recognition is preserved exactly; no efficiency or engagement improvement is claimed.",
+        "problemTypes": [
+          "creativity tools",
+          "physical-digital systems",
+          "collaborative ideation"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-CAPTURE-IDEAS"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "CONCEPTUAL",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-AHA-CREATIVE-TOOLBOX-CONTENT-BOUNDARY",
+      "projectId": "aha-creative-toolbox",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "aha-creative-toolbox",
+        "title": "From open-ended brainstorming to a structured creative workflow",
+        "period": "2015",
+        "role": "Research · App & Product Design",
+        "format": "Creative Toolkit",
+        "question": "Could a creativity tool support both generating possibilities and converging on useful directions?",
+        "proof": "Developed a complete physical–digital creative-tool concept around one coherent design-thinking workflow.",
+        "claimBoundary": "No measured creativity or productivity improvement is claimed.",
+        "problemTypes": [
+          "creativity tools",
+          "design thinking",
+          "collaborative workflows"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-AHA-CREATIVE-TOOLBOX"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "CONCEPTUAL",
+      "supersedes": []
+    },
+    {
+      "factId": "FACT-R181-HELLO-SABAU-CONTENT-BOUNDARY",
+      "projectId": "hello-sabau",
+      "field": "compactExperimentPackage",
+      "value": {
+        "identity": "hello-sabau",
+        "title": "From cultural storytelling to a participatory Rukai experience",
+        "period": "2018",
+        "role": "Product Designer",
+        "format": "Cultural Experience + Physical Product",
+        "question": "How could cultural knowledge become something people actively experience rather than passively observe?",
+        "proof": "Red Dot Award — Game Design Winner. Existing governed recognition confirms the work and attribution.",
+        "claimBoundary": "No tourism, economic-growth, quality-of-life or talent-return causality is claimed.",
+        "problemTypes": [
+          "cultural experience",
+          "participatory design",
+          "service concepts"
+        ]
+      },
+      "sourceIds": [
+        "SRC-R181-HELLO-SABAU"
+      ],
+      "provenance": {
+        "producer": "HUMAN_APPROVED_SOURCE_EXTRACTION",
+        "precedence": 6,
+        "verifiedAt": "2026-08-25"
+      },
+      "lifecycle": "APPROVED",
+      "confidence": "HIGH",
+      "publicSafety": "PUBLIC_SAFE",
+      "deliveryBoundary": "SHIPPED",
+      "supersedes": []
     }
   ],
   "claims": [],
@@ -2104,6 +2453,118 @@
       "chatOptimizationTargets": [
         "portfolio consistency only; preserve recommendation boundary"
       ]
+    },
+    {
+      "projectId": "freelance-project-operations-tool",
+      "factIds": [
+        "FACT-R181-FREELANCE-PROJECT-OPERATIONS-TOOL-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-FREELANCE-PROJECT-OPERATIONS-TOOL"
+      ],
+      "existingPublicClaims": [
+        "experiments.freelance-project-operations-tool.title",
+        "experiments.freelance-project-operations-tool.summary",
+        "experiments.freelance-project-operations-tool.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "weekly-design-session",
+      "factIds": [
+        "FACT-R181-WEEKLY-DESIGN-SESSION-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-WEEKLY-DESIGN-SESSION"
+      ],
+      "existingPublicClaims": [
+        "experiments.weekly-design-session.title",
+        "experiments.weekly-design-session.summary",
+        "experiments.weekly-design-session.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "food-testing-workshop",
+      "factIds": [
+        "FACT-R181-FOOD-TESTING-WORKSHOP-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-FOOD-TESTING-WORKSHOP"
+      ],
+      "existingPublicClaims": [
+        "experiments.food-testing-workshop.title",
+        "experiments.food-testing-workshop.summary",
+        "experiments.food-testing-workshop.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "aja-creative-workshop",
+      "factIds": [
+        "FACT-R181-AJA-CREATIVE-WORKSHOP-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-AJA-CREATIVE-WORKSHOP"
+      ],
+      "existingPublicClaims": [
+        "experiments.aja-creative-workshop.title",
+        "experiments.aja-creative-workshop.summary",
+        "experiments.aja-creative-workshop.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "capture-ideas",
+      "factIds": [
+        "FACT-R181-CAPTURE-IDEAS-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-CAPTURE-IDEAS"
+      ],
+      "existingPublicClaims": [
+        "sideProjects.capture-ideas.title",
+        "sideProjects.capture-ideas.summary",
+        "sideProjects.capture-ideas.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "aha-creative-toolbox",
+      "factIds": [
+        "FACT-R181-AHA-CREATIVE-TOOLBOX-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-AHA-CREATIVE-TOOLBOX"
+      ],
+      "existingPublicClaims": [
+        "sideProjects.aha-creative-toolbox.title",
+        "sideProjects.aha-creative-toolbox.summary",
+        "sideProjects.aha-creative-toolbox.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
+    },
+    {
+      "projectId": "hello-sabau",
+      "factIds": [
+        "FACT-R181-HELLO-SABAU-CONTENT-BOUNDARY"
+      ],
+      "sourceIds": [
+        "SRC-R181-HELLO-SABAU"
+      ],
+      "existingPublicClaims": [
+        "sideProjects.hello-sabau.title",
+        "sideProjects.hello-sabau.summary",
+        "sideProjects.hello-sabau.question"
+      ],
+      "difference": "NORMALIZATION_REQUIRED",
+      "chatOptimizationTargets": []
     }
   ],
   "assetRequests": [
@@ -2517,5 +2978,109 @@
       "booking-taxi-pickup-service-strategy"
     ],
     "payment": "RECONCILE_PR_12_CANDIDATES_BEFORE_REQUESTING_HUMAN_UPLOAD"
+  },
+  "futureAssetRequirements": [
+    {
+      "requestId": "AR-R181-FREELANCE-OPERATIONS-SCREENSHOT",
+      "projectId": "freelance-project-operations-tool",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "requiredFor": "Replace governed abstract evidence with one truthful working-product screenshot",
+      "mustNotImply": "AI is a runtime capability or the 18% gap is a productivity/profit/revenue outcome"
+    },
+    {
+      "requestId": "AR-R181-CAPTURE-IDEAS-SOURCE-VISUALS",
+      "projectId": "capture-ideas",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "product-photo/01-pimg1.jpg",
+        "product-photo/01-pimg2.jpg",
+        "product-photo/01-pimg3.jpg"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    },
+    {
+      "requestId": "AR-R181-HELLO-SABAU-SOURCE-VISUALS",
+      "projectId": "hello-sabau",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "product-photo/02-pimg7.jpg",
+        "product-photo/02-pimg6.jpg",
+        "redot-logo.jpg"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    },
+    {
+      "requestId": "AR-R181-AHA-CREATIVE-TOOLBOX-SOURCE-VISUALS",
+      "projectId": "aha-creative-toolbox",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "product-photo/03-pimg1.jpg",
+        "product-photo/03-pimg2.jpg",
+        "product-photo/03-pimg3.jpg"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    },
+    {
+      "requestId": "AR-R181-WEEKLY-DESIGN-SESSION-SOURCE-VISUALS",
+      "projectId": "weekly-design-session",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "project-photo/01-pimg5.jpg",
+        "workshop-photo/01-pimg1.jpg",
+        "workshop-photo/01-pimg2.jpg"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    },
+    {
+      "requestId": "AR-R181-AJA-CREATIVE-WORKSHOP-SOURCE-VISUALS",
+      "projectId": "aja-creative-workshop",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "workshop-photo/02-pimg1.jpg",
+        "workshop-photo/02-pimg2.jpg",
+        "video/aja.mp4"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    },
+    {
+      "requestId": "AR-R181-FOOD-TESTING-WORKSHOP-SOURCE-VISUALS",
+      "projectId": "food-testing-workshop",
+      "status": "HUMAN_ASSET_REQUIRED",
+      "historicalReferences": [
+        "workshop-photo/03-pimg1.jpg",
+        "workshop-photo/03-pimg2.jpg",
+        "workshop-photo/03-pimg3.jpg"
+      ],
+      "minimumRequested": 1,
+      "maximumRequested": 4,
+      "requiredFor": "Replace abstract fallback with one dominant and up to three supporting public-safe visuals",
+      "mustNotImply": "Unsupported commercial, behavioural, learning or causal impact"
+    }
+  ],
+  "r181AssetAudit": {
+    "legacyImageBinariesPresent": false,
+    "classification": "MISSING",
+    "referencedSourceFamilies": [
+      "product-photo/*",
+      "workshop-photo/*",
+      "project-photo/*",
+      "legacy award/video references"
+    ],
+    "decision": "Do not migrate absent binaries or fabricate screenshots; use the existing shared abstract evidence owner until governed assets are supplied."
   }
 }

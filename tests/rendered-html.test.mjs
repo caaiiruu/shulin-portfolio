@@ -638,7 +638,7 @@ test("preserves search interaction while using r85 as the active inventory", () 
   assert.equal(Object.keys(content.projects).length, 13);
   const publicExplorations = [...Object.values(content.sideProjects), ...Object.values(content.experiments)]
     .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review"));
-  assert.equal(publicExplorations.length, 6);
+  assert.equal(publicExplorations.length, 7);
   const app = read("assets/js/app.js");
   assert.match(app, /const intentCatalog=list\(raw\.contentDiscovery\?\.queryIntentCatalog\)/);
   assert.match(app, /searchIndexV2:p\.searchIndexV2\|\|\{\}/);
@@ -871,7 +871,9 @@ test("keeps Experiment as one responsive, recruiter-scannable owner", () => {
   assert.equal((html.match(/class="experiment-index-card-v38__learning"><small/g) ?? []).length, 3);
   assert.equal((home.match(/class="poster-action"/g) ?? []).length, 3);
   for (const contract of [".experiment-feature-card-v32{display:grid", ".experiment-index-card-v36{display:flex", ".quick-view-v51--experiment{grid-template-columns:1fr;gap:var(--space-4)", ".quick-view-v51--experiment>.info-grid-v45{grid-column:auto;grid-template-columns:repeat(2,minmax(0,1fr))", ".experiment-overview-v45__question,.experiment-overview-v45__build{min-width:0;padding:0;border-radius:0;background:transparent}", ".experiment-sequence-v45{display:grid", "@media(max-width:560px)", "prefers-reduced-motion:reduce"]) assert.ok(experiment.includes(contract), contract);
-  assert.match(app, /ui\([^)]*\),prototypeText/);
+  assert.match(app, /localize\(e\.role\)/);
+  assert.match(app, /localize\(e\.format\)/);
+  assert.match(app, /if\(classification\)classification\.hidden=true/);
   for (const contract of [".detail-experiment-card-v101{", ".detail-experiment-card-v101__question", ".detail-experiment-card-v101__learning", ".detail-experiment-card-v101:is(:hover,:focus-visible) .experiment-card-action", "--experiment-card-cta-hover-inverse"]) assert.ok(experiment.includes(contract), contract);
   assert.match(experiment, /\.motion-ready \[data-motion-reveal\]\.is-inview\.poster:nth-child\(odd\)[\s\S]*?transform:var\(--experiment-card-rest-odd\)/);
   assert.match(experiment, /\.motion-ready \[data-motion-reveal\]\.is-inview:is\(\.poster,.experiment-feature-card-v32,.experiment-index-card-v36,.detail-experiment-card-v101\):is\(:hover,:focus-visible\)\{transform:var\(--experiment-card-hover-transform\)\}/);
