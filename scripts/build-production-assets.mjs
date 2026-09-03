@@ -31,12 +31,14 @@ const componentCssSources = [
   "assets/css/components/supporting-page-layout.css",
   "assets/css/components/selected-evidence.css",
   "assets/css/components/homepage-evidence.css",
+  "assets/css/components/visual-craft-prototype.css",
 ];
 const jsSources = [
   "assets/js/app.js",
   "assets/js/home.js",
   "assets/js/work.js",
   "assets/js/runtime.js",
+  "assets/js/visual-craft-prototype.js",
 ];
 const contentOwner = "content/portfolio-content.json";
 const assetManifestOwner = "content/portfolio-asset-manifest.json";
