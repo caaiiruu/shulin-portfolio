@@ -280,6 +280,20 @@
   },
   "components": [
     {
+      "component": "VisualCraftPrototype",
+      "status": "Live / Current Production",
+      "renderSource": "index.html and assets/js/visual-craft-prototype.js",
+      "cssOwner": "assets/css/components/visual-craft-prototype.css",
+      "contentOwner": null,
+      "tokenDependencies": ["Existing semantic colour, spacing, type, radius and motion tokens"],
+      "variants": ["ProductComposition", "VisualFirstProjectCard", "ProductSequence", "InteractiveStateViewer", "PrincipleEvidence"],
+      "usageScope": ["Homepage prototype", "Payment prototype"],
+      "figmaSource": null,
+      "codeConnectStatus": "Not applicable — isolated prototype",
+      "allowedModifications": ["Prototype-only visual composition and interaction refinement"],
+      "forbiddenModifications": ["Production content facts", "Shared production component overrides", "Main branch deployment"]
+    },
+    {
       "component": "Foundation",
       "status": "Live / Current Production",
       "renderSource": "Static page templates",
