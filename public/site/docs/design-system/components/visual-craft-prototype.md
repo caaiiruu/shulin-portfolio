@@ -14,4 +14,6 @@
 
 This owner deliberately groups the five V1 prototype primitives until the visual direction is validated. Split ownership only when the direction is approved for wider rollout.
 
-InteractiveTransactionLab keeps one customer-phone frame and one cashier/self-checkout frame inside a bounded stage. Selecting a product decision updates both surfaces; selecting Phone, Cashier / SCO, or Connected view changes visual emphasis without hiding the system relationship. Controls support click, tap, focus and arrow-key traversal, while reduced-motion preferences remove transition effects.
+InteractiveTransactionLab uses approved shopper voice and journey questions as the control layer around one bounded product stage. Selecting a question changes the corresponding real product evidence and concise design consequence. Controls support click, tap, focus and arrow-key traversal.
+
+Video is progressive enhancement only. The lightweight H.264 source has no initial `src`, uses `preload="none"`, is attached only when its question is selected near the viewport, pauses and detaches when inactive, and falls back to a small WebP poster. Reduced-motion preferences always receive the poster rather than autoplay video.
