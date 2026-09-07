@@ -7,6 +7,7 @@ const reducedFlame=fs.readFileSync(new URL('../public/site/assets/img/hero-resol
 const heroCss=fs.readFileSync(new URL('../public/site/assets/css/components/hero.css',import.meta.url),'utf8');
 const heroTemplate=fs.readFileSync(new URL('../site-source/templates/index.html',import.meta.url),'utf8');
 test('hero motion reuses the complete animated SVG implementation SSOT before certified flame handoff',()=>{
+  assert.match(svg,/<style type="text\/css">/);
   for(const id of ['Vector_1735','Vector_1734','Vector_1733','Vector_1732','Vector_1736','Ellipse_1755','fire','home-hero-arm_svg']) assert.match(svg,new RegExp(`id="${id}"`));
   for(const id of ['Vector_1735','Vector_1734','Vector_1733']) assert.match(svg,new RegExp(`kf_${id}_transform_0 9\\.916481s linear 1 forwards`));
   assert.match(svg,/id="Vector_1732"[\s\S]*attributeName="d"[\s\S]*keyTimes="0; 0\.254223; 0\.568293; 1"[\s\S]*dur="9\.91648s"/);
