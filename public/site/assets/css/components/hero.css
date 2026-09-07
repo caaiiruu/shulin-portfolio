@@ -80,7 +80,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
 }
 
 .hero.is-ready .hero__artwork {
-  animation: hero-hand-enter var(--dimension-2400ms) cubic-bezier(.22, .61, .36, 1) var(--dimension-620ms) both;
+  animation: hero-hand-enter var(--dimension-700ms) cubic-bezier(.22, .61, .36, 1) both;
 }
 
 @keyframes hero-hand-enter {

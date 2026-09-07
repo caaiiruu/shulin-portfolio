@@ -986,7 +986,9 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.match(hero, /@media \(max-width: 430px\)[\s\S]*\.hero__transformation \{ transform:translate\(var\(--dimension-9vw\),-13%\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /@keyframes hero-hand-enter/);
-  assert.match(transformation, /animation-duration:\s*5s/);
+  assert.match(transformation, /animation-duration:\s*4\.5s/);
+  assert.match(transformation, /animation:unified-cloud-takeover 6\.67s/);
+  assert.match(transformation, /animation: flame-reveal 6\.67s/);
   assert.match(transformation, /animation-delay:\s*0s/);
   assert.match(transformation, /transform-box:\s*fill-box/);
   assert.match(transformation,/hero-unified-cloud[\s\S]*unified-cloud-takeover/);

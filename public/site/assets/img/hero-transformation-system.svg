@@ -4,7 +4,7 @@
       transform-box: fill-box;
       transform-origin: center;
       will-change: transform, opacity;
-      animation-duration: 5s;
+      animation-duration: 4.5s;
       animation-delay: 0s;
       animation-fill-mode: both;
       animation-timing-function: cubic-bezier(.4, 0, .2, 1);
@@ -20,7 +20,7 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-reveal 5s cubic-bezier(.3, 0, .15, 1) both;
+      animation: flame-reveal 6.67s cubic-bezier(.3, 0, .15, 1) both;
     }
 
     .hero-grip-reveal { display: none; }
@@ -29,11 +29,11 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-breathe 4.4s cubic-bezier(.45, 0, .55, 1) 5s infinite;
+      animation: flame-breathe 4.4s cubic-bezier(.45, 0, .55, 1) 6.67s infinite;
     }
 
     .hero-flame-static { display: none; }
-    .hero-unified-cloud { transform-box:fill-box; transform-origin:50% 82%; opacity:0; will-change:transform,opacity; animation:unified-cloud-takeover 5s cubic-bezier(.33,0,.2,1) both; }
+    .hero-unified-cloud { transform-box:fill-box; transform-origin:50% 82%; opacity:0; will-change:transform,opacity; animation:unified-cloud-takeover 6.67s cubic-bezier(.33,0,.2,1) both; }
 
     @keyframes cloud-top-converge {
       0% { opacity: .88; transform: translate(0, 0) scale(.99); }

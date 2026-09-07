@@ -29,6 +29,12 @@ test('cloud convergence is monotonic and retains readable mass',()=>{
   assert.match(svg,/cubic-bezier\(\.4, 0, \.2, 1\)/);
   assert.match(svg,/cubic-bezier\(\.33,0,\.2,1\)/);
   assert.match(svg,/cubic-bezier\(\.3, 0, \.15, 1\)/);
+  assert.match(svg,/animation-duration: 4\.5s/);
+  assert.match(svg,/animation:unified-cloud-takeover 6\.67s/);
+  assert.match(svg,/animation: flame-reveal 6\.67s/);
+  assert.match(svg,/animation: flame-breathe 4\.4s[\s\S]*6\.67s infinite/);
+  assert.match(heroCss,/hero-hand-enter var\(--dimension-700ms\)[\s\S]*both/);
+  assert.doesNotMatch(heroCss,/hero-hand-enter var\(--dimension-2400ms\)/);
 });
 
 test('reduced motion resolves directly to one static flame at the host owner',()=>{
