@@ -1,13 +1,13 @@
 <svg width="1419" height="700" viewBox="0 0 1419 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <style>
     .hero-cloud {
-      transform-box: view-box;
-      transform-origin: 600px 360px;
+      transform-box: fill-box;
+      transform-origin: center;
       will-change: transform, opacity;
-      animation-duration: 4.2s;
-      animation-delay: .9s;
+      animation-duration: 5s;
+      animation-delay: 0s;
       animation-fill-mode: both;
-      animation-timing-function: cubic-bezier(.45, .05, .2, 1);
+      animation-timing-function: cubic-bezier(.4, 0, .2, 1);
     }
 
     .hero-cloud--top { animation-name: cloud-top-converge; }
@@ -20,7 +20,7 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-reveal 5.1s cubic-bezier(.22, 1, .36, 1) both;
+      animation: flame-reveal 5s cubic-bezier(.3, 0, .15, 1) both;
     }
 
     .hero-grip-reveal { display: none; }
@@ -29,60 +29,78 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-breathe 3.8s cubic-bezier(.45, 0, .55, 1) 5.1s infinite;
+      animation: flame-breathe 4.4s cubic-bezier(.45, 0, .55, 1) 5s infinite;
     }
 
     .hero-flame-static { display: none; }
+    .hero-unified-cloud { transform-box:fill-box; transform-origin:50% 82%; opacity:0; will-change:transform,opacity; animation:unified-cloud-takeover 5s cubic-bezier(.33,0,.2,1) both; }
 
     @keyframes cloud-top-converge {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -6px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-76px, 260px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-85px, 292px) scale(.08); }
+      0% { opacity: .88; transform: translate(0, 0) scale(.99); }
+      8% { opacity: 1; transform: translate(2px, 2px) scale(1); }
+      14% { opacity: 1; transform: translate(0, 0) scale(1); }
+      36% { opacity: 1; transform: translate(-11px, 136px) scale(.91); }
+      52% { opacity:.9; transform:translate(-17px,210px) scale(.68); }
+      62% { opacity:.48; transform:translate(-19px,238px) scale(.56); }
+      72%,100% { opacity:0; transform:translate(-20px,247px) scale(.5); }
     }
 
     @keyframes cloud-upper-right-converge {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, 5px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-548px, 190px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-615px, 213px) scale(.08); }
+      0% { opacity: .88; transform: translate(0, 0) scale(.99); }
+      8% { opacity: 1; transform: translate(-3px, 2px) scale(1); }
+      14% { opacity: 1; transform: translate(0, 0) scale(1); }
+      36% { opacity: 1; transform: translate(-278px, 109px) scale(.91); }
+      52% { opacity:.9; transform:translate(-430px,169px) scale(.66); }
+      62% { opacity:.48; transform:translate(-487px,191px) scale(.54); }
+      72%,100% { opacity:0; transform:translate(-505px,198px) scale(.48); }
     }
 
     @keyframes cloud-bottom-converge {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -4px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-132px, -171px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-148px, -192px) scale(.08); }
+      0% { opacity: .88; transform: translate(0, 0) scale(.99); }
+      8% { opacity: 1; transform: translate(2px, -2px) scale(1); }
+      14% { opacity: 1; transform: translate(0, 0) scale(1); }
+      36% { opacity: 1; transform: translate(-46px, -86px) scale(.91); }
+      52% { opacity:.9; transform:translate(-71px,-133px) scale(.68); }
+      62% { opacity:.48; transform:translate(-80px,-150px) scale(.56); }
+      72%,100% { opacity:0; transform:translate(-83px,-156px) scale(.5); }
     }
 
     @keyframes cloud-left-converge {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, 6px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(488px, 13px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(548px, 15px) scale(.08); }
+      0% { opacity: .88; transform: translate(0, 0) scale(.99); }
+      8% { opacity: 1; transform: translate(3px, 0) scale(1); }
+      14% { opacity: 1; transform: translate(0, 0) scale(1); }
+      36% { opacity: 1; transform: translate(313px, 6px) scale(.91); }
+      52% { opacity:.9; transform:translate(483px,9px) scale(.66); }
+      62% { opacity:.48; transform:translate(548px,10px) scale(.54); }
+      72%,100% { opacity:0; transform:translate(568px,10px) scale(.48); }
     }
 
     @keyframes cloud-lower-right-converge {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -5px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-701px, -79px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-787px, -89px) scale(.08); }
+      0% { opacity: .88; transform: translate(0, 0) scale(.99); }
+      8% { opacity: 1; transform: translate(-3px, -1px) scale(1); }
+      14% { opacity: 1; transform: translate(0, 0) scale(1); }
+      36% { opacity: 1; transform: translate(-375px, -35px) scale(.91); }
+      52% { opacity:.9; transform:translate(-580px,-54px) scale(.66); }
+      62% { opacity:.48; transform:translate(-658px,-62px) scale(.54); }
+      72%,100% { opacity:0; transform:translate(-682px,-64px) scale(.48); }
     }
 
     @keyframes flame-reveal {
-      0%, 82% { opacity: 0; transform: translateY(10px) scale(.9); }
-      94% { opacity: .76; transform: translateY(2px) scale(.98); }
+      0%, 78% { opacity: 0; transform: translateY(18px) scale(.82); }
+      84% { opacity: .14; transform: translateY(14px) scale(.86); }
+      90% { opacity: .48; transform: translateY(9px) scale(.9); }
+      96% { opacity: .9; transform: translateY(3px) scale(.97); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes unified-cloud-takeover {
+      0%,50% { opacity:0; transform:translateY(14px) scale(.86); }
+      58% { opacity:.32; transform:translateY(9px) scale(.92); }
+      68% { opacity:.92; transform:translateY(2px) scale(.995); }
+      76% { opacity:.98; transform:translateY(4px) scale(.97,.99); }
+      86% { opacity:.76; transform:translateY(9px) scale(.91,1.035); }
+      92% { opacity:.38; transform:translateY(13px) scale(.85,1); }
+      96% { opacity:.08; transform:translateY(15px) scale(.81,.97); }
+      100% { opacity:0; transform:translateY(15px) scale(.8,.96); }
     }
 
     @keyframes flame-breathe {
@@ -91,13 +109,34 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-cloud { display: none; animation: none; }
+      .hero-cloud,.hero-unified-cloud { display:none!important; opacity:0!important; animation:none!important; }
       .hero-grip-reveal { display: none; animation: none; }
       .hero-flame-reveal,
-      .hero-flame-breathe { display: block; opacity: 1; animation: none; transform: none; }
+      .hero-flame-breathe { display:block!important; opacity:1!important; animation:none!important; transform:none!important; }
       .hero-flame-morph { display: none; }
       .hero-flame-static { display: block; }
     }
+
+    @media (max-width: 430px) {
+      @keyframes unified-cloud-takeover {
+        0%,50% { opacity:0; transform:translate(10px,-102px) scale(.96); }
+        58% { opacity:.32; transform:translate(10px,-110px) scale(1.03); }
+        68% { opacity:.92; transform:translate(10px,-119px) scale(1.115); }
+        76% { opacity:.98; transform:translate(10px,-116px) scale(1.08,1.1); }
+        86% { opacity:.76; transform:translate(10px,-108px) scale(1.02,1.15); }
+        92% { opacity:.38; transform:translate(10px,-104px) scale(.96,1.11); }
+        96% { opacity:.08; transform:translate(10px,-101px) scale(.91,1.07); }
+        100% { opacity:0; transform:translate(10px,-100px) scale(.9,1.06); }
+      }
+      @keyframes flame-reveal {
+        0%,78% { opacity:0; transform:translate(10px,-112px) scale(.84); }
+        84% { opacity:.14; transform:translate(10px,-108px) scale(.88); }
+        90% { opacity:.48; transform:translate(10px,-101px) scale(.92); }
+        96% { opacity:.9; transform:translate(10px,-91px) scale(.98); }
+        100% { opacity:1; transform:translate(10px,-86px) scale(1); }
+      }
+    }
+
   </style>
 
   <g class="hero-cloud hero-cloud--top">
@@ -136,9 +175,15 @@
     </svg>
   </g>
 
+  <g class="hero-unified-cloud">
+    <svg x="485" y="225" width="360" height="317" viewBox="0 0 241 212" overflow="visible">
+      <path d="M176.256 35.4244C208.222 13.6951 231.464 62.7063 227.372 89.9974C227.12 91.6763 227.82 93.3682 229.137 94.4393C250.285 111.639 240.105 160.601 222.387 162.746C220.314 162.996 218.21 164.068 217.506 166.033C204.382 202.714 185.515 203.47 175.016 193.506C172.774 191.379 168.767 191.465 167.04 194.028C145.402 226.136 120.22 208.727 106.93 191.868C105.393 189.918 102.486 189.652 100.627 191.298C65.0846 222.767 42.4692 189.118 34.5359 165.362C33.9743 163.68 32.403 162.558 30.6838 162.124C15.3774 158.263 -9.58919 126.244 3.82916 77.8355C10.7664 52.8086 28.4658 43.2831 40.8012 47.1969C44.0344 48.2228 48.6195 46.5215 49.2268 43.1843C58.8251 -9.5654 94.2318 -6.43515 107.424 12.8288C109.684 16.1291 117.363 17.2128 120.441 14.6578C136.263 1.52284 160.502 13.5985 168.625 33.1031C169.821 35.9746 173.684 37.1731 176.256 35.4244Z" fill="url(#unified-cloud-fill)"/>
+    </svg>
+  </g>
+
   <g class="hero-flame-reveal">
     <g class="hero-flame-breathe">
-      <svg x="505" y="150" width="320" height="420" viewBox="0 0 280 351" overflow="visible">
+      <svg x="535" y="200" width="260" height="340" viewBox="0 0 280 351" overflow="visible">
         <path class="hero-flame-morph" d="M2.997 223.727C-19.782 336.057 92.866 354.351 152.037 349.456C291.905 324.080 290.417 172.437 269.969 88.102C269.424 85.853 264.117 86.036 262.980 88.051C259.961 93.406 254.572 97.620 245.466 96.620C228.738 94.785 221.886 52.110 220.551 31.002C220.484 32.127 220.304 33.467 219.982 34.962C218.160 43.432 211.814 56.864 196.082 64.041C179.914 71.416 172.076 31.004 169.364 1.906C169.155 -0.337 165.751 -0.728 165.074 1.420C158.544 22.142 147.855 52.457 139.581 64.041C131.056 75.974 117.147 57.864 108.663 42.803C107.636 40.981 104.429 41.629 104.116 43.697C101.281 62.408 91.372 83.799 84.018 97.041C83.007 98.863 79.430 98.051 78.786 96.069C76.776 89.885 72.621 83.535 68.991 78.928C67.821 77.443 65.377 78.405 65.240 80.291C64.377 92.178 58.986 114.549 41.704 140.672C21.061 171.875 7.298 209.043 2.997 223.727Z" fill="url(#flame-fill)">
           <animate attributeName="d" dur="5.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.333;0.667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M2.997 223.727C-19.782 336.057 92.866 354.351 152.037 349.456C291.905 324.080 290.417 172.437 269.969 88.102C269.424 85.853 264.117 86.036 262.980 88.051C259.961 93.406 254.572 97.620 245.466 96.620C228.738 94.785 221.886 52.110 220.551 31.002C220.484 32.127 220.304 33.467 219.982 34.962C218.160 43.432 211.814 56.864 196.082 64.041C179.914 71.416 172.076 31.004 169.364 1.906C169.155 -0.337 165.751 -0.728 165.074 1.420C158.544 22.142 147.855 52.457 139.581 64.041C131.056 75.974 117.147 57.864 108.663 42.803C107.636 40.981 104.429 41.629 104.116 43.697C101.281 62.408 91.372 83.799 84.018 97.041C83.007 98.863 79.430 98.051 78.786 96.069C76.776 89.885 72.621 83.535 68.991 78.928C67.821 77.443 65.377 78.405 65.240 80.291C64.377 92.178 58.986 114.549 41.704 140.672C21.061 171.875 7.298 209.043 2.997 223.727Z;M15.665 226.776C8.932 270.556 59.508 363.786 176.094 348.840C315.568 323.535 302.936 154.205 281.362 68.320C280.801 66.084 274.968 66.178 274.132 68.326C268.869 81.853 258.423 99.467 246.805 98.192C230.964 96.454 227.264 74.658 222.660 53.682C222.335 52.205 220.571 51.663 219.635 52.852C213.372 60.805 212.126 73.721 195.522 81.295C179.558 88.579 169.939 61.328 166.684 35.683C166.402 33.457 162.516 32.964 161.595 35.010C156.228 46.925 149.067 54.852 141.297 65.729C132.691 77.776 115.299 49.040 106.006 31.244C105.041 29.397 102.023 30.016 101.832 32.091C99.769 54.550 92.357 90.989 85.772 108.437C85.039 110.379 81.134 109.932 79.967 108.214C76.195 102.656 68.913 97.472 63.809 93.476C62.325 92.314 60.005 93.528 60.293 95.391C62.067 106.891 64.743 128.052 47.553 154.035C26.984 185.127 22.397 182.995 15.665 226.776Z;M10.280 226.834C8.790 265.116 48.066 363.555 164.405 348.640C300.973 323.863 271.681 169.774 253.312 91.921C252.771 89.629 248.830 90.072 247.911 92.240C246.135 96.429 242.460 99.345 234.967 98.523C222.620 97.168 220.677 57.032 220.496 36.435C220.476 34.188 216.904 33.468 215.994 35.523C209.393 50.432 196.597 75.821 183.792 81.662C167.583 89.057 158.315 34.160 155.329 1.846C155.122 -0.383 151.953 -0.696 151.384 1.470C145.820 22.657 137.922 54.593 129.682 66.128C121.387 77.740 107.701 73.685 99.138 63.133C97.827 61.519 94.525 62.329 94.354 64.401C92.912 81.911 88.592 93.477 82.388 104.029C81.678 105.236 79.964 105.312 79.000 104.297C74.535 99.596 68.585 96.801 63.902 93.678C62.337 92.635 59.720 93.898 59.709 95.779C59.643 107.796 56.451 130.558 36.136 154.248C24.199 168.169 11.770 188.553 10.280 226.834Z;M2.997 223.727C-19.782 336.057 92.866 354.351 152.037 349.456C291.905 324.080 290.417 172.437 269.969 88.102C269.424 85.853 264.117 86.036 262.980 88.051C259.961 93.406 254.572 97.620 245.466 96.620C228.738 94.785 221.886 52.110 220.551 31.002C220.484 32.127 220.304 33.467 219.982 34.962C218.160 43.432 211.814 56.864 196.082 64.041C179.914 71.416 172.076 31.004 169.364 1.906C169.155 -0.337 165.751 -0.728 165.074 1.420C158.544 22.142 147.855 52.457 139.581 64.041C131.056 75.974 117.147 57.864 108.663 42.803C107.636 40.981 104.429 41.629 104.116 43.697C101.281 62.408 91.372 83.799 84.018 97.041C83.007 98.863 79.430 98.051 78.786 96.069C76.776 89.885 72.621 83.535 68.991 78.928C67.821 77.443 65.377 78.405 65.240 80.291C64.377 92.178 58.986 114.549 41.704 140.672C21.061 171.875 7.298 209.043 2.997 223.727Z"/>
         </path>
@@ -155,5 +200,6 @@
     <linearGradient id="cloud-lower-right-fill" x1="88" y1="-33.8973" x2="88" y2="156.211" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity=".4"/><stop offset="1" stop-color="white"/></linearGradient>
     <linearGradient id="grip-fill" x1="81.6985" y1="-30.4021" x2="81.6985" y2="89.2547" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity=".4"/><stop offset="1" stop-color="white"/></linearGradient>
     <linearGradient id="flame-fill" x1="213.106" y1="-71.4661" x2="213.106" y2="274.172" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity=".4"/><stop offset="1" stop-color="white"/></linearGradient>
+    <linearGradient id="unified-cloud-fill" x1="120.5" y1="-74.8565" x2="120.5" y2="344.965" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity=".4"/><stop offset="1" stop-color="white"/></linearGradient>
   </defs>
 </svg>
