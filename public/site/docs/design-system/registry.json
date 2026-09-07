@@ -441,7 +441,9 @@
       ],
       "interactionContract": [
         "The transparent homepage header layers above the full 1419 × 780 Hero motion canvas so clouds remain visible through the Header region; the homepage alone releases the global main clip, while the SVG viewport remains the artwork clip owner, and the Header gains the shared chrome surface only after scrolling or opening the mobile menu",
-        "At 1419px the Hero transformation image fills the full-width Hero owner beside the governed content layer and anchors its source x=0 directly to viewport x=0 without page-shell centring, inline padding, max-width, margin-auto offset, or scrollbar-width overflow",
+        "The Hero transformation image is the sole responsive 1419 × 780 source artboard: object-fit cover applies one uniform scale on both axes and responsive object-position values translate only the complete artboard, never individual arm, cloud, energy, or flame elements",
+        "At 1419 × 780 the Hero transformation artboard maps source (0,0) to viewport (0,0); at compact fixed-Header widths the motion field starts at page y=0, remains independent of page-shell padding and max-width, and crops only at the viewport-aligned image box",
+        "At 430px the governed complete-artboard anchor keeps the settled hand between the opening and outcome text groups while the source convergence, energy, and flame centers remain one shared fist-relative anchor",
         "The Hero animation reuses the Human-supplied animated SVG transform, opacity, path-morph, energy, arm and source-fire timing values for its complete 9.916481-second authored timeline; only after that final frame does the certified flame retain its existing 5.4-second morph and 4.4-second breathing choreography",
         "The English outcome begins on the same typographic baseline as the final line of the opening statement",
         "The Chinese opening statement keeps the intentional two-line phrase break 把混亂／轉化為, reaches 140pt at wide-desktop scale, uses a three-CJK-character measure rather than Latin ch units, and returns to the compact responsive scale at 1100px and below",
