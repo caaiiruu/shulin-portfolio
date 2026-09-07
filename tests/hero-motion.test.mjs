@@ -19,6 +19,7 @@ test('hero motion reuses the complete animated SVG implementation SSOT before ce
   assert.match(svg,/class="source-cloud-owner"[\s\S]*class="source-energy-owner"[\s\S]*class="source-fire-owner"/);
   assert.match(svg,/begin="9\.916481s" dur="5\.4s" repeatCount="indefinite"/);
   assert.match(svg,/class="certified-flame-breathe"><svg x="476" y="191"/);
+  assert.match(svg,/<linearGradient id="flame-fill" x1="213\.106" y1="-71\.4661" x2="213\.106" y2="274\.172"/);
   assert.match(svg,/id="Vector_1732"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(svg,/id="Vector_1736"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(svg,/id="Ellipse_1755"[\s\S]*attributeName="height"[\s\S]*repeatCount="1" fill="freeze"[\s\S]*attributeName="width"[\s\S]*repeatCount="1" fill="freeze"/);

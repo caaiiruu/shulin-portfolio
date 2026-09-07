@@ -823,6 +823,10 @@
 <stop stop-color="white" stop-opacity="0.4"/>
 <stop offset="1" stop-color="white"/>
 </linearGradient>
+<linearGradient id="flame-fill" x1="213.106" y1="-71.4661" x2="213.106" y2="274.172" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity=".4"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
 <clipPath id="clip0_3121_86352">
 <rect width="1419" height="780" fill="white"/>
 </clipPath>
