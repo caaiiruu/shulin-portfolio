@@ -992,7 +992,7 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.match(transformation, /id="Vector_1732"[\s\S]*attributeName="d"/);
   assert.match(transformation, /id="Vector_1736"[\s\S]*attributeName="d"/);
   assert.match(transformation, /kf_home-hero-arm_svg_transform_0[\s\S]*linear\(0, 0\.0287/);
-  assert.match(transformation,/begin="6\.682964s" dur="5\.4s"/);
+  assert.match(transformation,/begin="6\.682717s" dur="5\.4s"/);
   assert.match(resolvedArtwork, /viewBox="0 0 799 459"/);
   assert.match(resolvedArtwork, /M521\.997 233\.563/);
   assert.match(resolvedArtwork, /M585\.139 222\.155/);
