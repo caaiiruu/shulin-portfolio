@@ -16,6 +16,9 @@ test('hero motion reuses the complete animated SVG implementation SSOT before ce
   assert.match(svg,/id="Ellipse_1755"[\s\S]*keyTimes="0; 0\.4063; 0\.4754; 0\.4864; 0\.5054; 0\.529; 0\.639; 0\.8267; 1"/);
   assert.match(svg,/source_visual_handoff 10\.083148s linear 1 forwards/);
   assert.match(svg,/98\.347%/);
+  assert.match(svg,/@keyframes human_energy_dissolve[\s\S]*0%, 63\.68%[\s\S]*cubic-bezier\(0\.5, 0, 0\.5, 1\)[\s\S]*67\.39%, 100% \{ opacity: 0; \}/);
+  assert.match(svg,/\.source-energy-owner \{ animation: human_energy_dissolve 9\.916481s linear 1 forwards; \}/);
+  assert.doesNotMatch(svg,/\.source-cloud-owner, \.source-energy-owner, \.source-fire-owner/);
   assert.match(svg,/class="source-cloud-owner"[\s\S]*class="source-energy-owner"[\s\S]*class="source-fire-owner"/);
   assert.match(svg,/begin="9\.916481s" dur="5\.4s" repeatCount="indefinite"/);
   assert.match(svg,/class="certified-flame-breathe"><svg x="476" y="191"/);
@@ -24,7 +27,9 @@ test('hero motion reuses the complete animated SVG implementation SSOT before ce
   assert.match(svg,/id="Vector_1736"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(svg,/id="Ellipse_1755"[\s\S]*attributeName="height"[\s\S]*repeatCount="1" fill="freeze"[\s\S]*attributeName="width"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(heroTemplate,/<section class="hero"[^>]*>\s*<img class="hero__transformation"[\s\S]*<div class="hero__layout">/);
-  assert.match(heroCss,/\.hero__transformation \{[\s\S]*width: var\(--dimension-100vw\);[\s\S]*transform: translateX\(-50%\);/);
+  assert.match(heroCss,/\.home-page main \{ overflow: visible; \}/);
+  assert.match(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: var\(--dimension-100vw\);[\s\S]*transform: none;/);
+  assert.doesNotMatch(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 50%;[\s\S]*transform: translateX\(-50%\);/);
   assert.doesNotMatch(heroCss,/@keyframes hero-hand-enter/);
 });
 

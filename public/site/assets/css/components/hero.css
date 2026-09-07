@@ -7,6 +7,11 @@
   color: var(--hero-ink);
 }
 
+/* The homepage motion canvas crosses the in-flow Header boundary. The global
+   main clip is intentionally released only here; the SVG's own 1419 x 780
+   viewport remains the artwork clip owner. */
+.home-page main { overflow: visible; }
+
 .hero__layout {
   position: relative;
   width: min(100%, var(--hero-max-inline));
@@ -84,14 +89,14 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
   position: absolute;
   z-index: 0;
   inset-block-start: calc(-1 * var(--header-height));
-  inset-inline-start: 50%;
+  inset-inline-start: 0;
   width: var(--dimension-100vw);
   max-width: none;
   height: calc(100% + var(--header-height));
   margin: 0;
   object-fit: fill;
   object-position: center;
-  transform: translateX(-50%);
+  transform: none;
   pointer-events: none;
   user-select: none;
 }
@@ -180,7 +185,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
     inset-block-start: var(--space-2);
     height: calc(100% - var(--space-2));
     object-position: left center;
-    transform: translateX(calc(-50% + var(--hero-transformation-shift-mobile)));
+    transform: translateX(var(--hero-transformation-shift-mobile));
   }
   .hero__resolved-flame {
     inset-block-start: var(--space-2);
@@ -199,7 +204,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
   .hero { --hero-title-size: clamp(var(--dimension-2-75rem), var(--dimension-15-8vw), var(--dimension-4rem)); }
   .hero__layout { min-height: var(--dimension-650px); grid-template-rows: auto minmax(var(--dimension-230px), 1fr) auto auto; }
   .hero__artwork { inset-block-start: 28%; inset-inline-start: -10%; width: 80%; min-width: 0; max-width: none; }
-  .hero__transformation { transform:translate(calc(-50% + var(--dimension-9vw)),-13%); }
+  .hero__transformation { transform:translate(var(--dimension-9vw),-13%); }
   .hero__resolved-flame { transform:translate(var(--dimension-9vw),-13%); }
   .hero__support p { font-size: var(--dimension-1rem); line-height: 1.5; }
   .hero__cta { width: 100%; justify-content: space-between; border-radius:var(--radius-control); }

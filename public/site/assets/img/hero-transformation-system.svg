@@ -747,7 +747,12 @@
 }
 @keyframes source_visual_handoff { 0%, 98.347% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes certified_flame_handoff { 0%, 98.347% { opacity: 0; } 100% { opacity: 1; } }
-.source-cloud-owner, .source-energy-owner, .source-fire-owner { animation: source_visual_handoff 10.083148s linear 1 forwards; }
+@keyframes human_energy_dissolve {
+  0%, 63.68% { opacity: 1; animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1); }
+  67.39%, 100% { opacity: 0; }
+}
+.source-cloud-owner, .source-fire-owner { animation: source_visual_handoff 10.083148s linear 1 forwards; }
+.source-energy-owner { animation: human_energy_dissolve 9.916481s linear 1 forwards; }
 .certified-flame-owner { opacity: 0; animation: certified_flame_handoff 10.083148s linear 1 forwards; }
 .certified-flame-breathe { transform-box: fill-box; transform-origin: 50% 82%; animation: certified-flame-breathe 4.4s cubic-bezier(.45, 0, .55, 1) 9.916481s infinite; }
 @keyframes certified-flame-breathe { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-5px) scale(1.018,.986)} }
