@@ -79,9 +79,9 @@ for (const [id, project] of Object.entries(portfolioContent.projects)) {
     errors.push(`ProjectCard: ${id} Chinese title contains untranslated English UI copy`);
   }
 }
-const heroAssets = [...index.matchAll(/hero-clarity-system\.svg/g)];
+const heroAssets = [...index.matchAll(/hero-clarity-system\.[a-f0-9]{16}\.svg/g)];
 if (heroAssets.length !== 1) errors.push("index.html: exactly one canonical Hero SVG reference is required");
-const heroTransformationAssets = [...index.matchAll(/hero-transformation-system\.svg/g)];
+const heroTransformationAssets = [...index.matchAll(/hero-transformation-system\.[a-f0-9]{16}\.svg/g)];
 if (heroTransformationAssets.length !== 1) errors.push("index.html: exactly one canonical Hero transformation SVG reference is required");
 const heroArtwork = fs.readFileSync(path.join(root, "assets/img/hero-clarity-system.svg"), "utf8");
 const heroTransformation = fs.readFileSync(path.join(root, "assets/img/hero-transformation-system.svg"), "utf8");

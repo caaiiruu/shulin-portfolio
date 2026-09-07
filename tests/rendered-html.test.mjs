@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
 const site = new URL("../public/site/", import.meta.url);
@@ -963,7 +968,7 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   const transformation = read("assets/img/hero-transformation-system.svg");
   const resolvedArtwork = read("assets/img/hero-clarity-system.svg");
   assert.equal((html.match(/<section class="hero"/g) ?? []).length, 1);
-  assert.equal((html.match(/hero-clarity-system\.svg/g) ?? []).length, 1);
+  assert.equal((html.match(/hero-clarity-system\.[a-f0-9]{16}\.svg/g) ?? []).length, 1);
   const heroCopy=Object.values(JSON.parse(read("content/portfolio-content.json")).localizationRegistry.staticPageCopy);
   assert.ok(heroCopy.some(value=>value.en==='Turn confusion into clear systems'&&value.zh==='把混亂轉化為清晰的系統'));
   assert.ok(heroCopy.some(value=>value.en==='Turn confusion<br>into'&&value.zh==='把混亂<br>轉化為'));
@@ -2196,4 +2201,45 @@ test("R170 projects Taishin P2P through one recruiter-first owner without legacy
     cards:project.publicContent.outcomes.cards,
   };
   assert.doesNotMatch(JSON.stringify(publicOutcomeCopy),/GMV|revenue uplift|conversion uplift|adoption uplift|transaction growth|operational efficiency/i);
+});
+
+
+test("Hero production URLs track source bytes deterministically without changing artwork", () => {
+  const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+  const fixture = fs.mkdtempSync(path.join(os.tmpdir(), "hero-cache-fingerprint-"));
+  const names = ["hero-transformation-system", "hero-resolved-flame", "hero-clarity-system"];
+  try {
+    for (const directory of ["scripts", "site-source", "public/site"]) {
+      fs.cpSync(path.join(projectRoot, directory), path.join(fixture, directory), { recursive: true });
+    }
+    fs.symlinkSync(path.join(projectRoot, "node_modules"), path.join(fixture, "node_modules"), "dir");
+    const build = () => execFileSync(process.execPath, ["scripts/build-production-assets.mjs"], { cwd: fixture, stdio: "pipe" });
+    const urls = () => {
+      const html = fs.readFileSync(path.join(fixture, "public/site/index.html"), "utf8");
+      return names.map(name => {
+        assert.ok(!html.includes(`/site/assets/img/${name}.svg`), `stable ${name} must not render`);
+        const url = html.match(new RegExp(`/site/assets/img/${name}\\.[a-f0-9]{16}\\.svg`))?.[0];
+        assert.ok(url, `generated HTML references fingerprinted ${name}`);
+        const source = fs.readFileSync(path.join(fixture, `public/site/assets/img/${name}.svg`));
+        const hash = createHash("sha256").update(source).digest("hex").slice(0, 16);
+        assert.equal(url, `/site/assets/img/${name}.${hash}.svg`);
+        assert.deepEqual(fs.readFileSync(path.join(fixture, "public", url)), source);
+        return url;
+      });
+    };
+    build();
+    const first = urls();
+    build();
+    assert.deepEqual(urls(), first, "identical bytes keep identical URLs");
+    // Mutate fixture copies only; canonical artwork is never edited by this test.
+    for (const name of names) fs.appendFileSync(path.join(fixture, `public/site/assets/img/${name}.svg`), "\n<!-- fingerprint fixture -->\n");
+    build();
+    const changed = urls();
+    changed.forEach((url, index) => {
+      assert.notEqual(url, first[index], "changed bytes invalidate each Hero URL");
+      assert.ok(!fs.existsSync(path.join(fixture, "public", first[index])), "stale generated copies are cleaned");
+    });
+  } finally {
+    fs.rmSync(fixture, { recursive: true, force: true });
+  }
 });

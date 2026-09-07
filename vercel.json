@@ -54,6 +54,15 @@
       ]
     },
     {
+      "source": "/site/assets/img/:asset(hero-transformation-system|hero-resolved-flame|hero-clarity-system).svg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/site/content/(.*)",
       "headers": [
         {
