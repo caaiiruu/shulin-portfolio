@@ -981,12 +981,13 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.match(hero, /@media \(max-width: 1100px\)[\s\S]*font-size:calc\(var\(--hero-title-size\) \* var\(--hero-title-scale-zh-compact\)\)/);
   assert.match(hero, /@media \(max-width: 1100px\)/);
   assert.match(hero, /@media \(max-width: 760px\)/);
-  assert.match(hero, /translateX\(var\(--hero-transformation-shift-mobile\)\)/);
+  assert.match(hero, /--hero-motion-anchor-x:\s*34%/);
   assert.match(hero, /@media \(max-width: 430px\)[\s\S]*\.hero__artwork \{[^}]*inset-inline-start: -10%;[^}]*width: 80%;[^}]*min-width: 0/);
-  assert.match(hero, /@media \(max-width: 430px\)[\s\S]*\.hero__transformation \{ transform:translate\(var\(--dimension-9vw\),-13%\)/);
+  assert.match(hero, /@media \(max-width: 430px\)[\s\S]*--hero-motion-anchor-x:\s*40%;[\s\S]*--hero-motion-translate-y:\s*-13%/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(hero, /@keyframes hero-hand-enter/);
-  assert.match(hero, /\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*max-width: none;[\s\S]*transform: none;/);
+  assert.match(hero, /\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*max-width: none;[\s\S]*object-fit: cover;[\s\S]*transform: translateY\(var\(--hero-motion-translate-y\)\);/);
+  assert.doesNotMatch(hero, /\.hero__transformation \{[^}]*object-fit: fill;/);
   assert.match(hero, /\.home-page main \{ overflow: visible; \}/);
   assert.match(transformation, /viewBox="0 0 1419 780"/);
   assert.match(transformation, /kf_Vector_1735_transform_0 9\.916481s linear 1 forwards/);
