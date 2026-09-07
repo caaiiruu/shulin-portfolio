@@ -98,6 +98,20 @@
   white-space: nowrap;
 }
 
+.brand__logo {
+  display: block;
+  width: var(--dimension-36px);
+  height: auto;
+  transform-origin: 50% 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .brand:hover .brand__logo,
+  .brand:focus-visible .brand__logo {
+    animation: brand-logo-bounce var(--motion-base) cubic-bezier(.22, .7, .35, 1);
+  }
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -737,6 +751,11 @@ body.is-locked {
   .mobile-menu.is-open {
     animation: none;
   }
+
+  .brand:hover .brand__logo,
+  .brand:focus-visible .brand__logo {
+    animation: none;
+  }
 }
 
 @media (forced-colors: active) {
@@ -750,6 +769,11 @@ body.is-locked {
   .mobile-menu a[aria-current="page"] {
     text-decoration: underline;
   }
+}
+
+@keyframes brand-logo-bounce {
+  0%, 100% { transform: translateY(0); }
+  45% { transform: translateY(var(--dimension-neg-2px)); }
 }
 
 @keyframes menu-enter {
