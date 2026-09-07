@@ -28,7 +28,12 @@ test('hero motion reuses the complete animated SVG implementation SSOT before ce
   assert.match(svg,/id="Ellipse_1755"[\s\S]*attributeName="height"[\s\S]*repeatCount="1" fill="freeze"[\s\S]*attributeName="width"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(heroTemplate,/<section class="hero"[^>]*>\s*<img class="hero__transformation"[\s\S]*<div class="hero__layout">/);
   assert.match(heroCss,/\.home-page main \{ overflow: visible; \}/);
-  assert.match(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*transform: none;/);
+  assert.match(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*object-fit: cover;[\s\S]*object-position: var\(--hero-motion-anchor-x\) center;[\s\S]*transform: translateY\(var\(--hero-motion-translate-y\)\);/);
+  assert.doesNotMatch(heroCss,/\.hero__transformation \{[^}]*object-fit: fill;/);
+  assert.match(heroCss,/@media \(max-width: 900px\)[\s\S]*--hero-motion-anchor-x: 30%;[\s\S]*\.hero__transformation \{[\s\S]*inset-block-start: 0;[\s\S]*height: 100%;/);
+  assert.match(heroCss,/@media \(max-width: 760px\)[\s\S]*--hero-motion-anchor-x: 34%;[\s\S]*overflow: visible;/);
+  assert.match(heroCss,/@media \(max-width: 430px\)[\s\S]*--hero-motion-anchor-x: 40%;[\s\S]*--hero-motion-translate-y: -13%;/);
+  assert.doesNotMatch(heroCss,/\.hero__transformation[^}]*translateX\(/);
   assert.doesNotMatch(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 50%;[\s\S]*transform: translateX\(-50%\);/);
   assert.doesNotMatch(heroCss,/@keyframes hero-hand-enter/);
 });
