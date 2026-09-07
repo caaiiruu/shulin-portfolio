@@ -440,7 +440,8 @@
         "hero-cta-shadow-hover"
       ],
       "interactionContract": [
-        "The transparent homepage header reveals the Hero surface at the top of the page and gains the shared chrome surface only after scrolling or opening the mobile menu",
+        "The transparent homepage header layers above the full 1419 × 780 Hero motion canvas so clouds remain visible through the Header region, and gains the shared chrome surface only after scrolling or opening the mobile menu",
+        "The Hero animation reuses the Human-supplied animated SVG transform, opacity, path-morph, energy and arm timing values exactly until the 67.39% certified-flame handoff; the certified flame retains its existing 5.4s morph and 4.4s breathing choreography after handoff",
         "The English outcome begins on the same typographic baseline as the final line of the opening statement",
         "The Chinese opening statement keeps the intentional two-line phrase break 把混亂／轉化為, reaches 140pt at wide-desktop scale, uses a three-CJK-character measure rather than Latin ch units, and returns to the compact responsive scale at 1100px and below",
         "The CTA and supporting copy share one viewport-safe bottom inset on wide screens",

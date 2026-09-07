@@ -6,25 +6,16 @@ const svg=fs.readFileSync(new URL('../public/site/assets/img/hero-transformation
 const reducedFlame=fs.readFileSync(new URL('../public/site/assets/img/hero-resolved-flame.svg',import.meta.url),'utf8');
 const heroCss=fs.readFileSync(new URL('../public/site/assets/css/components/hero.css',import.meta.url),'utf8');
 const heroTemplate=fs.readFileSync(new URL('../site-source/templates/index.html',import.meta.url),'utf8');
-const approvedUnifiedPath='M176.256 35.4244C208.222 13.6951 231.464 62.7063 227.372 89.9974';
-test('hero motion follows the approved 30fps reference timeline through flame handoff',()=>{
-  assert.match(svg,/hero-unified-cloud/);
-  assert.ok(svg.includes(approvedUnifiedPath),'unified state must use the Human-approved silhouette');
-  for(const name of ['cloud-top-converge','cloud-upper-right-converge','cloud-bottom-converge','cloud-left-converge','cloud-lower-right-converge']){
-    const block=svg.match(new RegExp(`@keyframes ${name} \\{([\\s\\S]*?)\\n    \\}`))?.[1]||'';
-    assert.ok((block.match(/% \{/g)||[]).length>=95,`${name} must retain frame-sampled interpolation stops`);
-  }
-  assert.match(svg,/@keyframes unified-cloud-takeover[\s\S]*60\.804% \{ opacity:0\.72;[\s\S]*75\.377% \{ opacity:1;[\s\S]*96\.985% \{ opacity:0\.72;/);
-  assert.match(svg,/hero-cloud,.hero-unified-cloud \{ display:none!important/);
-  assert.match(svg,/animation-duration: 6\.633333s/);
-  assert.match(svg,/animation-timing-function: linear/);
-  assert.match(svg,/animation:unified-cloud-takeover 6\.633333s linear both/);
-  assert.match(svg,/animation: flame-reveal 6\.633333s linear both/);
-  assert.match(svg,/96\.985% \{ opacity:0\.12;[\s\S]*100% \{ opacity:1;/);
-  assert.match(svg,/begin="6\.433333s" dur="5\.4s"/);
-  assert.match(svg,/animation: flame-breathe 4\.4s[\s\S]*6\.433333s infinite/);
-  assert.match(heroCss,/hero-hand-enter calc\(var\(--dimension-700ms\) \* 2\.380952\) linear both/);
-  assert.match(heroCss,/38% \{ opacity:1; transform:translateX\(9\.737%\); \}[\s\S]*100% \{ opacity:1; transform:translateX\(0%\); \}/);
+test('hero motion reuses the animated SVG implementation SSOT through certified flame handoff',()=>{
+  for(const id of ['Vector_1735','Vector_1734','Vector_1733','Vector_1732','Vector_1736','Ellipse_1755','fire','home-hero-arm_svg']) assert.match(svg,new RegExp(`id="${id}"`));
+  for(const id of ['Vector_1735','Vector_1734','Vector_1733']) assert.match(svg,new RegExp(`kf_${id}_transform_0 9\\.916481s linear infinite`));
+  assert.match(svg,/id="Vector_1732"[\s\S]*attributeName="d"[\s\S]*keyTimes="0; 0\.254223; 0\.568293; 1"[\s\S]*dur="9\.91648s"/);
+  assert.match(svg,/id="Vector_1736"[\s\S]*attributeName="d"[\s\S]*keyTimes="0; 0\.106691; 0\.221954; 0\.281854; 0\.362859; 0\.561058; 1"/);
+  assert.match(svg,/kf_home-hero-arm_svg_transform_0[\s\S]*linear\(0, 0\.0287[\s\S]*20\.21%/);
+  assert.match(svg,/id="Ellipse_1755"[\s\S]*keyTimes="0; 0\.4063; 0\.4754; 0\.4864; 0\.5054; 0\.529; 0\.639; 0\.8267; 1"/);
+  assert.match(svg,/67\.39%[\s\S]*69\.07%/);
+  assert.match(svg,/begin="6\.682964s" dur="5\.4s"/);
+  assert.doesNotMatch(heroCss,/@keyframes hero-hand-enter/);
 });
 
 test('reduced motion resolves directly to one static flame at the host owner',()=>{
