@@ -85,7 +85,7 @@ const heroTransformationAssets = [...index.matchAll(/hero-transformation-system\
 if (heroTransformationAssets.length !== 1) errors.push("index.html: exactly one canonical Hero transformation SVG reference is required");
 const heroArtwork = fs.readFileSync(path.join(root, "assets/img/hero-clarity-system.svg"), "utf8");
 const heroTransformation = fs.readFileSync(path.join(root, "assets/img/hero-transformation-system.svg"), "utf8");
-for (const contract of ["Vector_1735", "Vector_1734", "Vector_1733", "Vector_1732", "Vector_1736", "Ellipse_1755", "home-hero-arm_svg", "certified-flame-breathe", "hero-flame-morph", "attributeName=\"d\"", "9.916481s"]) {
+for (const contract of ["Vector_1735", "Vector_1734", "Vector_1733", "Vector_1732", "Vector_1736", "Ellipse_1755", "home-hero-arm_svg", "source_visual_handoff", "certified-flame-breathe", "hero-flame-morph", "attributeName=\"d\"", "9.916481s", "begin=\"9.916481s\""]) {
   if (!heroTransformation.includes(contract)) errors.push(`Hero transformation: missing approved Figma motion contract ${contract}`);
 }
 if (/clarity-(?:cloud|burst|flame)/.test(heroArtwork)) errors.push("Hero artwork: obsolete approximate transformation layers must not coexist with the canonical Figma vectors");
