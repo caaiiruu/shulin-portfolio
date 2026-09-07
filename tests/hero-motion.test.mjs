@@ -28,7 +28,7 @@ test('hero motion reuses the complete animated SVG implementation SSOT before ce
   assert.match(svg,/id="Ellipse_1755"[\s\S]*attributeName="height"[\s\S]*repeatCount="1" fill="freeze"[\s\S]*attributeName="width"[\s\S]*repeatCount="1" fill="freeze"/);
   assert.match(heroTemplate,/<section class="hero"[^>]*>\s*<img class="hero__transformation"[\s\S]*<div class="hero__layout">/);
   assert.match(heroCss,/\.home-page main \{ overflow: visible; \}/);
-  assert.match(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: var\(--dimension-100vw\);[\s\S]*transform: none;/);
+  assert.match(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*transform: none;/);
   assert.doesNotMatch(heroCss,/\.hero__transformation \{[\s\S]*inset-inline-start: 50%;[\s\S]*transform: translateX\(-50%\);/);
   assert.doesNotMatch(heroCss,/@keyframes hero-hand-enter/);
 });

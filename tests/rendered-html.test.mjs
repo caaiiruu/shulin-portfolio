@@ -986,7 +986,7 @@ test("keeps the homepage Hero as one accessible, responsive owner", () => {
   assert.match(hero, /@media \(max-width: 430px\)[\s\S]*\.hero__transformation \{ transform:translate\(var\(--dimension-9vw\),-13%\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(hero, /@keyframes hero-hand-enter/);
-  assert.match(hero, /\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: var\(--dimension-100vw\);[\s\S]*max-width: none;[\s\S]*transform: none;/);
+  assert.match(hero, /\.hero__transformation \{[\s\S]*inset-inline-start: 0;[\s\S]*width: 100%;[\s\S]*max-width: none;[\s\S]*transform: none;/);
   assert.match(hero, /\.home-page main \{ overflow: visible; \}/);
   assert.match(transformation, /viewBox="0 0 1419 780"/);
   assert.match(transformation, /kf_Vector_1735_transform_0 9\.916481s linear 1 forwards/);

@@ -90,7 +90,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
   z-index: 0;
   inset-block-start: calc(-1 * var(--header-height));
   inset-inline-start: 0;
-  width: var(--dimension-100vw);
+  width: 100%;
   max-width: none;
   height: calc(100% + var(--header-height));
   margin: 0;
