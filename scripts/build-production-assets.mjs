@@ -178,7 +178,27 @@ function fingerprint(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 16);
 }
 
+// Keep mutable source SVGs canonical; production pages use byte-identical,
+// content-addressed copies so immutable CDN/browser caching invalidates safely.
+const heroAssetNames = ["hero-transformation-system", "hero-resolved-flame", "hero-clarity-system"];
+const heroAssetUrls = new Map();
+for (const name of heroAssetNames) {
+  const directory = path.join(root, "assets/img");
+  for (const file of fs.readdirSync(directory)) {
+    if (new RegExp(`^${name}\\.[a-f0-9]{16}\\.svg$`).test(file)) {
+      fs.unlinkSync(path.join(directory, file));
+    }
+  }
+  const bytes = fs.readFileSync(path.join(directory, `${name}.svg`));
+  const output = `${name}.${fingerprint(bytes)}.svg`;
+  fs.writeFileSync(path.join(directory, output), bytes);
+  heroAssetUrls.set(`/site/assets/img/${name}.svg`, `/site/assets/img/${output}`);
+}
+
 function replaceProductionAssets(html, cssFile, jsFile) {
+  for (const [sourceUrl, fingerprintUrl] of heroAssetUrls) {
+    html = html.replaceAll(sourceUrl, fingerprintUrl);
+  }
   const withoutCss = html.replace(/<link\b[^>]*href="\/site\/assets\/css\/(?:tokens|base|production\.[a-f0-9]+)\.css"[^>]*>/g, "");
   const withoutJs = withoutCss.replace(/<script\b[^>]*src="\/site\/assets\/js\/(?:data|project-ssot|app|home|work|runtime|production\.[a-f0-9]+)\.js"[^>]*><\/script>/g, "");
   return withoutJs

@@ -1,10 +1,19 @@
 /* Hero — the single owner for homepage hero layout, artwork, and motion. */
 .hero {
+  --hero-motion-anchor-x: 50%;
+  --hero-motion-translate-y: 0%;
   position: relative;
   min-height: min(var(--hero-min-block), calc(100svh - var(--header-height)));
-  overflow: clip;
+  overflow: visible;
   background: var(--hero-surface);
   color: var(--hero-ink);
+}
+
+/* Preserve main overflow:clip. Equal negative margin and top padding extend
+   its top clip boundary to the viewport without moving following sections. */
+.home-page > main#main:has(> .hero:first-child) {
+  margin-block-start: calc(-1 * var(--header-height));
+  padding-block-start: var(--header-height);
 }
 
 .hero__layout {
@@ -70,6 +79,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
 }
 
 .hero__artwork {
+  display: none;
   position: absolute;
   z-index: 1;
   inset: auto auto 0 -4%;
@@ -79,16 +89,24 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
   user-select: none;
 }
 
-.hero.is-ready .hero__artwork {
-  animation: hero-hand-enter var(--dimension-900ms) var(--ease-standard) both;
-}
-
-@keyframes hero-hand-enter {
-  from { opacity: 0; transform: translateX(calc(var(--dimension-120px) * -1)); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
 .hero__transformation {
+  position: absolute;
+  z-index: 0;
+  inset-block-start: calc(-1 * var(--header-height));
+  inset-inline-start: 0;
+  width: 100%;
+  max-width: none;
+  height: calc(100% + var(--header-height));
+  margin: 0;
+  object-fit: cover;
+  object-position: var(--hero-motion-anchor-x) center;
+  transform: translateY(var(--hero-motion-translate-y));
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__resolved-flame {
+  display: none;
   position: absolute;
   z-index: 0;
   inset: 0;
@@ -155,6 +173,14 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
   html:lang(zh) .hero__outcome { top: 39%; }
 }
 
+/* At compact-header widths the Header is fixed, so the viewport-aligned
+   motion field starts at page y=0. object-fit:cover scales the complete
+   1419 x 780 source artboard uniformly; this single horizontal anchor moves
+   the artboard as a unit and never repositions an animated child. */
+@media (max-width: 900px) {
+  .hero { --hero-motion-anchor-x: 55%; }
+}
+
 @media (max-width: 760px) {
   .hero {
     --hero-min-block: auto;
@@ -163,11 +189,15 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
     --hero-title-size: clamp(var(--dimension-3-4rem), var(--dimension-15-8vw), var(--dimension-6-2rem));
     --domain-anchor-gap: var(--space-5);
   }
-  .hero { min-height: auto; overflow: hidden; }
+  .hero {
+    --hero-motion-anchor-x: 34%;
+    min-height: auto;
+    overflow: visible;
+  }
   .hero__layout { display: grid; min-height: var(--dimension-700px); padding-bottom: var(--space-7); grid-template-rows: auto minmax(var(--dimension-260px), 1fr) auto auto; }
   .hero__title { max-width: var(--dimension-6-5ch); }
   .hero__outcome { position: relative; left:auto; top: auto; z-index: 2; justify-self: start; align-self: end; width:auto; max-width:min(100%,var(--dimension-5-6ch)); margin-top: var(--dimension-neg-1-2em); }
-  .hero__transformation {
+  .hero__resolved-flame {
     inset-block-start: var(--space-2);
     height: calc(100% - var(--space-2));
     object-position: left center;
@@ -181,18 +211,35 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
 }
 
 @media (max-width: 430px) {
-  .hero { --hero-title-size: clamp(var(--dimension-2-75rem), var(--dimension-15-8vw), var(--dimension-4rem)); }
+  .hero {
+    --hero-title-size: clamp(var(--dimension-2-75rem), var(--dimension-15-8vw), var(--dimension-4rem));
+  }
   .hero__layout { min-height: var(--dimension-650px); grid-template-rows: auto minmax(var(--dimension-230px), 1fr) auto auto; }
   .hero__artwork { inset-block-start: 28%; inset-inline-start: -10%; width: 80%; min-width: 0; max-width: none; }
-  .hero__transformation { transform:translate(var(--dimension-9vw),-13%); }
+  .hero__resolved-flame { transform:translate(var(--dimension-9vw),-13%); }
   .hero__support p { font-size: var(--dimension-1rem); line-height: 1.5; }
   .hero__cta { width: 100%; justify-content: space-between; border-radius:var(--radius-control); }
   .hero__outcome{max-width:100%;letter-spacing:var(--dimension-neg--05em)}
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero__transformation { display: none; }
+  .hero__resolved-flame { display: block; }
+  .hero__artwork { display: block; }
   .hero.is-ready .hero__outcome { animation: none; }
   .hero.is-ready .hero__artwork { animation: none; }
   .hero__cta,
   .hero__cta-icon { transition: none; }
+}
+
+/* Phase 2.5: one complete mobile artboard; no per-element positioning. */
+@media (max-width: 430px) {
+  .hero__transformation {
+    width: calc(709.5 * var(--dimension-1px));
+    height: calc(390 * var(--dimension-1px));
+    inset-inline-start: calc(50% - 312.5 * var(--dimension-1px));
+    inset-block-start: calc(-1 * var(--header-height) + 83 * var(--dimension-1px));
+    object-fit: contain;
+    transform: none;
+  }
 }
