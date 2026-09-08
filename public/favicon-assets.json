@@ -1,0 +1,34 @@
+{
+  "apple-touch-icon.png": {
+    "bytes": 23045,
+    "sha256": "f3886a2f5fb1ed790fa698e29e7a0e76d71a8eab82772bf52729d4586fc13a2c"
+  },
+  "favicon-16x16.png": {
+    "bytes": 741,
+    "sha256": "4117f33b62db3bb10b008ff13f34d1aa1880ad6eedf90a4444aae650e14d40f8"
+  },
+  "favicon-32x32.png": {
+    "bytes": 1925,
+    "sha256": "e46e00289f3c1ecf43116e9e7dac11d13e54885930f4865a147f5567bae1db44"
+  },
+  "favicon-48x48.png": {
+    "bytes": 3288,
+    "sha256": "568c0af0189c9e1aaef1a92b88ec5f7c7497a9922ed813bb8fdd71e774fdc50c"
+  },
+  "favicon.ico": {
+    "bytes": 68039,
+    "sha256": "ed5731a82e5eec3a7dcad14036f811c4aaf7a05bdab362d39a1f8ef52e5eff1d"
+  },
+  "icon-192.png": {
+    "bytes": 25518,
+    "sha256": "580e70c32995380c603dfc22749aa4eef8153f3ea3b23f59441bff714929d609"
+  },
+  "icon-512.png": {
+    "bytes": 118619,
+    "sha256": "45199d8b29301bd88f59f8c77e5dfe1c5f4c6ddffa92ac81ccb8189ee1db3431"
+  },
+  "shulin-studio-favicon-source.png": {
+    "bytes": 118619,
+    "sha256": "45199d8b29301bd88f59f8c77e5dfe1c5f4c6ddffa92ac81ccb8189ee1db3431"
+  }
+}
