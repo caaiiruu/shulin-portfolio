@@ -42,6 +42,110 @@
         "navigator structure"
       ]
     },
+    "retiredTokenContracts": {
+      "case-page-max": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-section-max"
+        ],
+        "requiredCss": [
+          "width:min(100%,var(--project-detail-section-max))"
+        ]
+      },
+      "case-reading-max": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-reading-max",
+          "project-detail-narrative-max"
+        ],
+        "requiredCss": [
+          ".case-reading-wrapper{box-sizing:border-box;width:min(100%,var(--project-detail-reading-max));max-width:var(--project-detail-reading-max);margin-inline:0}"
+        ]
+      },
+      "case-evidence-max": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-section-max"
+        ],
+        "requiredCss": [
+          ".project-detail-hero-visual{grid-column:1/-1;display:grid;place-items:center;width:min(100%,var(--project-detail-section-max))"
+        ]
+      },
+      "case-span-headline": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-section-max"
+        ],
+        "requiredCss": [
+          ".case-content-span--headline{max-width:100%}"
+        ]
+      },
+      "case-span-summary": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-section-max",
+          "project-detail-narrative-max"
+        ],
+        "requiredCss": [
+          ".case-content-span--summary{max-width:100%}",
+          ".quick-view-v51--project .project-summary-v45 p{width:100%;max-width:none}"
+        ]
+      },
+      "case-span-reading": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-narrative-max"
+        ],
+        "requiredCss": [
+          ".case-content-span--reading{box-sizing:border-box;width:min(100%,var(--project-detail-narrative-max));max-width:var(--project-detail-narrative-max);margin-inline:0}"
+        ]
+      },
+      "case-span-full": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-section-max"
+        ],
+        "requiredCss": [
+          ".case-evidence-wrapper,.case-content-span--headline,.case-content-span--full,.contribution-block>.voucher-r149-heading,.contribution-block>.voucher-r149-rows{box-sizing:border-box;width:100%;max-width:100%;margin-inline:0}"
+        ]
+      },
+      "case-span-focus": {
+        "status": "DEAD_LEGACY",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [],
+        "requiredCss": [],
+        "forbiddenConsumerMarkers": [
+          "case-content-span--focus"
+        ]
+      },
+      "case-content-anchor-inline": {
+        "status": "SUPERSEDED",
+        "owner": "ProjectDetailOverview",
+        "migrationTree": "e06186a2a73185adc364c3c467c1b336803dd65e",
+        "replacementTokens": [
+          "project-detail-reading-max"
+        ],
+        "requiredCss": [
+          ".case-content-span{box-sizing:border-box;width:100%;margin-inline:0}",
+          ".case-reading-wrapper{box-sizing:border-box;width:min(100%,var(--project-detail-reading-max));max-width:var(--project-detail-reading-max);margin-inline:0}"
+        ]
+      }
+    },
     "tokenContracts": {
       "project-card-body-gap": {"primitive": "space-4", "intent": "ProjectCard title-to-body rhythm", "owner": "ProjectCard"},
       "project-card-cta-gap": {"primitive": "space-5", "intent": "ProjectCard desktop content-to-CTA separation", "owner": "ProjectCard"},

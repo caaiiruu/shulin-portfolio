@@ -136,15 +136,55 @@ function discoverChangedTokens(changedFiles) {
   }
 }
 
+// A deleted declaration is not a live-token query. Only explicitly audited
+// retirements may map to current dependencies; arbitrary missing tokens still fail.
+// Enforce the migration even when the current Git diff no longer includes it.
+const retiredTokens = graph?.retiredTokenContracts ?? {};
+function runtimeSources(directory) {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    if (entry.name === "docs" || entry.name === "qa") return [];
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) return runtimeSources(file);
+    return /\.(?:css|js|html)$/.test(entry.name) ? [[file, fs.readFileSync(file, "utf8")]] : [];
+  });
+}
+const migrationSources = runtimeSources(siteRoot);
+for (const [token, contract] of Object.entries(retiredTokens)) {
+  const owner = graph?.componentContracts?.[contract.owner];
+  const replacements = contract.replacementTokens;
+  if (!/^[a-z0-9-]+$/.test(token) || !owner || !/^[a-f0-9]{40}$/.test(contract.migrationTree ?? "")) {
+    failures.push(`${token}: malformed retirement ownership/provenance`);
+    continue;
+  }
+  if (!["SUPERSEDED", "DEAD_LEGACY"].includes(contract.status) || !Array.isArray(replacements)) {
+    failures.push(`${token}: malformed retirement contract`);
+    continue;
+  }
+  if (contract.status === "SUPERSEDED" && (!replacements.length || !contract.requiredCss?.length)) failures.push(`${token}: replacement chain and CSS proof required`);
+  if (contract.status === "DEAD_LEGACY" && (!contract.forbiddenConsumerMarkers?.length || replacements.length)) failures.push(`${token}: dead-token consumer proof required`);
+  const legacy = new RegExp(`--${token}(?![a-z0-9_-])`, "i");
+  for (const [file, source] of migrationSources) {
+    if (legacy.test(source)) failures.push(`${token}: retired token remains in runtime source ${file}`);
+    for (const marker of contract.forbiddenConsumerMarkers ?? []) if (source.includes(marker)) failures.push(`${token}: retired consumer remains in ${file}`);
+  }
+  for (const replacement of replacements) {
+    if (!owner.tokenDependencies.includes(replacement) || graph.tokenContracts?.[replacement]?.owner !== contract.owner || !allCss.includes(`--${replacement}:`)) failures.push(`${token}: ungoverned replacement --${replacement}`);
+  }
+  const ownerSource = sourceCache.get(owner.cssOwner) ?? "";
+  for (const marker of contract.requiredCss ?? []) if (!ownerSource.includes(marker)) failures.push(`${token}: replacement CSS contract missing: ${marker}`);
+}
+
 const changedFiles = discoverChangedFiles();
 const changedTokens = discoverChangedTokens(changedFiles);
-for (const token of changedTokens) if (!allCss.includes(`--${token}:`)) failures.push(`impact query references unknown token --${token}`);
+for (const token of changedTokens) if (!Object.hasOwn(retiredTokens, token) && !allCss.includes(`--${token}:`)) failures.push(`impact query references unknown token --${token}`);
+const impactTokens = [...new Set(changedTokens.flatMap((token) => retiredTokens[token]?.replacementTokens ?? [token]))];
 const impacted = [];
 for (const [name, contract] of Object.entries(graph?.componentContracts ?? {})) {
-  const matchedTokens = changedTokens.filter((token) => contract.tokenDependencies.includes(token));
+  const matchedTokens = impactTokens.filter((token) => contract.tokenDependencies.includes(token));
   const tokenChanged = matchedTokens.length > 0;
   const ownerChanged = changedFiles.some((file) => file.endsWith(contract.cssOwner) || contract.renderOwners?.some((owner) => file.endsWith(owner)));
-  if (tokenChanged || ownerChanged) impacted.push({ component: name, changedTokens: matchedTokens, variants: Object.entries(contract.variantConsumers).map(([variant, consumerGroups]) => ({variant, consumerGroups})), discoveredInstances: discovery.get(name), regressionProfiles: contract.regressionProfiles, regressionContracts: contract.regressionContracts });
+  const retiredOwnerChanged = changedTokens.some((token) => retiredTokens[token]?.owner === name);
+  if (tokenChanged || ownerChanged || retiredOwnerChanged) impacted.push({ component: name, changedTokens: matchedTokens, variants: Object.entries(contract.variantConsumers).map(([variant, consumerGroups]) => ({variant, consumerGroups})), discoveredInstances: discovery.get(name), regressionProfiles: contract.regressionProfiles, regressionContracts: contract.regressionContracts });
 }
 
 const golden = graph?.goldenConsumers;
