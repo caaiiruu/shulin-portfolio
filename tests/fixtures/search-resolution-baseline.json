@@ -1,0 +1,547 @@
+{
+  "provenance": "Search outputs before Phase 7 at c644a28b34f740ab3f47248eb006429f1e250517; real canonical entities only.",
+  "shortcuts": {
+    "0\u21921 product": [
+      {
+        "id": "payment",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "ctbc-mortgage-self-service-app",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "voucher-center",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "game-center",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "bandzo",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "capture-ideas",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "aha-creative-toolbox",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "hello-sabau",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
+        "id": "freelance-project-operations-tool",
+        "score": 75,
+        "intents": []
+      }
+    ],
+    "payment": [
+      {
+        "id": "payment",
+        "score": 85,
+        "intents": [
+          "design-payment-experience"
+        ]
+      },
+      {
+        "id": "taishin-p2p-marketplace-platform",
+        "score": 85,
+        "intents": [
+          "design-payment-experience"
+        ]
+      }
+    ],
+    "operational workflow": [
+      {
+        "id": "dbs",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      },
+      {
+        "id": "cathay-sit-review-remediation-operations",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      },
+      {
+        "id": "cathay-mortgage-assistant",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      }
+    ],
+    "internal tools": [
+      {
+        "id": "dbs",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      },
+      {
+        "id": "cathay-sit-review-remediation-operations",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      },
+      {
+        "id": "cathay-mortgage-assistant",
+        "score": 85,
+        "intents": [
+          "reduce-operational-friction"
+        ]
+      },
+      {
+        "id": "freelance-project-operations-tool",
+        "score": 75,
+        "intents": []
+      }
+    ],
+    "exception handling": [
+      {
+        "id": "dbs",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "cathay-sit-review-remediation-operations",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "payment",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "taishin-p2p-marketplace-platform",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "cathay-sit-online-account-opening",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "ctbc-mortgage-self-service-app",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      },
+      {
+        "id": "voucher",
+        "score": 85,
+        "intents": [
+          "handle-exceptions-and-recovery"
+        ]
+      }
+    ],
+    "onboarding": [
+      {
+        "id": "cathay-sit-online-account-opening",
+        "score": 65,
+        "intents": []
+      },
+      {
+        "id": "ctbc-mortgage-self-service-app",
+        "score": 65,
+        "intents": []
+      }
+    ],
+    "cross-market": [
+      {
+        "id": "dbs",
+        "score": 85,
+        "intents": [
+          "scale-across-markets"
+        ]
+      },
+      {
+        "id": "booking",
+        "score": 85,
+        "intents": [
+          "scale-across-markets"
+        ]
+      }
+    ],
+    "product strategy": [
+      {
+        "id": "booking-taxi-pickup-service-strategy",
+        "score": 85,
+        "intents": [
+          "product-strategy",
+          "strategy"
+        ]
+      },
+      {
+        "id": "voucher",
+        "score": 85,
+        "intents": [
+          "product-strategy",
+          "strategy"
+        ]
+      },
+      {
+        "id": "payment",
+        "score": 85,
+        "intents": [
+          "product-strategy",
+          "strategy"
+        ]
+      },
+      {
+        "id": "dbs",
+        "score": 85,
+        "intents": [
+          "product-strategy"
+        ]
+      },
+      {
+        "id": "taishin-p2p-marketplace-platform",
+        "score": 85,
+        "intents": [
+          "product-strategy",
+          "strategy"
+        ]
+      },
+      {
+        "id": "booking",
+        "score": 85,
+        "intents": [
+          "product-strategy",
+          "strategy"
+        ]
+      }
+    ]
+  },
+  "manual": {
+    "en": {
+      "payment": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        },
+        {
+          "id": "taishin-p2p-marketplace-platform",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        }
+      ],
+      "DBS": [],
+      "refund": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "refund-operations"
+          ]
+        }
+      ],
+      "checkout": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "retail-checkout"
+          ]
+        }
+      ],
+      "KYC": [
+        {
+          "id": "cathay-sit-online-account-opening",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-mortgage-assistant",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "ctbc-mortgage-self-service-app",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        }
+      ],
+      "voucher": [
+        {
+          "id": "voucher",
+          "score": 85,
+          "intents": [
+            "design-incentive-systems"
+          ]
+        },
+        {
+          "id": "game-center",
+          "score": 85,
+          "intents": [
+            "design-incentive-systems"
+          ]
+        },
+        {
+          "id": "voucher-center",
+          "score": 75,
+          "intents": []
+        }
+      ],
+      "mortgage application": [
+        {
+          "id": "ctbc-mortgage-self-service-app",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-sit-online-account-opening",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-mortgage-assistant",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        }
+      ],
+      "Booking.com Taxi": [
+        {
+          "id": "booking",
+          "score": 100,
+          "intents": []
+        },
+        {
+          "id": "booking-taxi-pickup-service-strategy",
+          "score": 45,
+          "intents": []
+        }
+      ],
+      "qzx-unmatched-987": [],
+      "\u4ed8\u6b3e": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        },
+        {
+          "id": "taishin-p2p-marketplace-platform",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        }
+      ],
+      "\u6388\u4fe1\u4f8b\u5916\u6848\u4ef6\u7ba1\u7406\u7cfb\u7d71": [
+        {
+          "id": "dbs",
+          "score": 100,
+          "intents": []
+        }
+      ],
+      "\u5b8c\u5168\u4e0d\u5b58\u5728987654": []
+    },
+    "zh": {
+      "payment": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        },
+        {
+          "id": "taishin-p2p-marketplace-platform",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        }
+      ],
+      "DBS": [],
+      "refund": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "refund-operations"
+          ]
+        }
+      ],
+      "checkout": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "retail-checkout"
+          ]
+        }
+      ],
+      "KYC": [
+        {
+          "id": "cathay-sit-online-account-opening",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-mortgage-assistant",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "ctbc-mortgage-self-service-app",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        }
+      ],
+      "voucher": [
+        {
+          "id": "voucher",
+          "score": 85,
+          "intents": [
+            "design-incentive-systems"
+          ]
+        },
+        {
+          "id": "game-center",
+          "score": 85,
+          "intents": [
+            "design-incentive-systems"
+          ]
+        },
+        {
+          "id": "voucher-center",
+          "score": 75,
+          "intents": []
+        }
+      ],
+      "mortgage application": [
+        {
+          "id": "ctbc-mortgage-self-service-app",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-sit-online-account-opening",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        },
+        {
+          "id": "cathay-mortgage-assistant",
+          "score": 85,
+          "intents": [
+            "design-regulated-onboarding"
+          ]
+        }
+      ],
+      "Booking.com Taxi": [
+        {
+          "id": "booking",
+          "score": 100,
+          "intents": []
+        },
+        {
+          "id": "booking-taxi-pickup-service-strategy",
+          "score": 45,
+          "intents": []
+        }
+      ],
+      "qzx-unmatched-987": [],
+      "\u4ed8\u6b3e": [
+        {
+          "id": "payment",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        },
+        {
+          "id": "taishin-p2p-marketplace-platform",
+          "score": 85,
+          "intents": [
+            "design-payment-experience"
+          ]
+        }
+      ],
+      "\u6388\u4fe1\u4f8b\u5916\u6848\u4ef6\u7ba1\u7406\u7cfb\u7d71": [
+        {
+          "id": "dbs",
+          "score": 100,
+          "intents": []
+        }
+      ],
+      "\u5b8c\u5168\u4e0d\u5b58\u5728987654": []
+    }
+  }
+}

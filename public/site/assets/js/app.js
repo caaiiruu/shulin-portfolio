@@ -712,6 +712,14 @@
       {label:{en:'Cross-Market Products',zh:'跨市場產品'},query:{en:'cross-market',zh:'跨市場'}},
       {label:{en:'Product Strategy',zh:'產品策略'},query:{en:'product strategy',zh:'產品策略'}}
     ];
+    // Shortcut translations are aliases of one certified query, not separate
+    // search intents. Match complete queries only; leave free text unchanged.
+    const normalizeSearchQuery=query=>{
+      const normalized=normalize(query);
+      const shortcut=SEARCH_RECOMMENDED_QUERIES.find(item=>
+        Object.values(item.query).some(value=>normalize(value)===normalized));
+      return shortcut?normalize(shortcut.query.en):normalized;
+    };
     const SEARCH_PROJECT_COMPANY_DISPLAY={
       'cathay-sit-online-account-opening':{en:'國泰投信',zh:'國泰投信'},
       'cathay-sit-review-remediation-operations':{en:'國泰投信',zh:'國泰投信'}
@@ -799,7 +807,7 @@
       };
     };
     const searchEntities=query=>{
-      const normalized=normalize(query);
+      const normalized=normalizeSearchQuery(query);
       if(!normalized)return [];
       const intentIds=matchingIntentIds(normalized);
       const projects=Object.entries(DATA.projects).map(([key,item])=>({key,type:'project',item}));
@@ -902,7 +910,7 @@
     const renderResults=(query)=>{
       clear(results);
       const ranked=searchEntities(query);
-      const bestIntent=matchingIntentIds(normalize(query))[0];
+      const bestIntent=matchingIntentIds(normalizeSearchQuery(query))[0];
       const intent=DATA.search.intentCatalog.find(item=>item.id===bestIntent);
       const heading=element('div','global-search-v114__result-head');
       heading.append(
