@@ -7,21 +7,22 @@ test('canonical project paths are owned by the browser route reader', async () =
     readFile(new URL('../public/site/assets/js/app.js', import.meta.url), 'utf8'),
     readFile(new URL('../vercel.json', import.meta.url), 'utf8').then(JSON.parse)
   ]);
-  const rewrite = vercelConfig.rewrites.find(({source}) => source === '/site/work/:projectId');
-  assert.equal(rewrite, undefined);
+  const rewrite = vercelConfig.rewrites.find(({source}) => source === '/work/:projectId');
+  assert.deepEqual(rewrite, {source:'/work/:projectId',destination:'/site/work/:projectId'});
   const generator = await readFile(new URL('../scripts/generate-project-pages.mjs', import.meta.url), 'utf8');
   assert.match(generator, /Object\.entries\(content\.projects/);
   assert.match(generator, /project\.title\.en/);
   assert.match(generator, /project\.atAGlance\.en/);
   assert.match(generator, /project\.criticalProblem\.en/);
   assert.match(runtimeSource, /function projectIdFromPath\(/);
-  assert.match(runtimeSource, /\/site\\\/work\\\/\(\[\^\/\]\+\)/);
+  assert.match(runtimeSource, /\^\\\/work\\\/\(\[\^\/\]\+\)/);
   assert.match(runtimeSource, /get\('case'\)\|\|projectIdFromPath\(\)/);
-  assert.match(runtimeSource, /history\.pushState\(\{detail:\{type:'project',key\}\},'',canonicalProjectUrl\(key\)\)/);
+  assert.match(runtimeSource, /const nextProjectUrl=canonicalProjectUrl\(key\);nextProjectUrl\.hash=''/);
+  assert.match(runtimeSource, /history\.pushState\(\{detail:\{type:'project',key\},scrollTop:0\},'',nextProjectUrl\)/);
   assert.match(runtimeSource, /closeDialog\(\{syncHistory:false\}\)/);
 });
 
-test('project detail paths serve generated canonical project documents', async () => {
+test('internal project documents remain serveable behind public rewrites', async () => {
   const {default:worker}=await import('../dist/server/index.js');
   const requested=[];
   const env={

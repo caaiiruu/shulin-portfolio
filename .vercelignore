@@ -3,3 +3,7 @@
 **/*.mp4
 **/*.webm
 **/*.m4v
+
+# Release-only public surface. These files are repository QA/governance inputs,
+# not browser-deliverable portfolio assets.
+public/site/qa/**

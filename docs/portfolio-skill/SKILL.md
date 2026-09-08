@@ -1,6 +1,6 @@
 ---
 name: portfolio-operating-system
-version: 2026-08-25-v2.8
+version: 2026-08-30-v3.1
 status: canonical
 description: Complete operating skill for Shulin Chou's recruiter-first portfolio content architecture, shared Project Detail system, evidence governance, GitHub-native execution, QA, and Chat↔Work collaboration.
 ---
@@ -209,13 +209,17 @@ Layout:
 Purpose:
 Show personal leverage and ownership, not repeat At a Glance or Outcomes.
 
-Preferred shared grammar:
-- Headline
-- BEFORE
-- KEY INTERVENTION
-- AFTER
-- WHERE I CHANGED THE SYSTEM
-- Supporting statement
+Canonical semantic separation:
+- Transformation = WHAT CHANGED, using `BEFORE → SYSTEM CHANGE → AFTER`
+- Contribution = WHAT I PERSONALLY CHANGED
+- Decisions / Solutions = WHAT I CHOSE
+- Accountability = WHAT I OWNED
+
+`MY INTERVENTION` is superseded as the middle Transformation label. The middle Transformation statement must describe a system, workflow, or user-state change rather than personal ownership. First-person ownership belongs in Contribution.
+
+Contribution remains a standalone section with project-specific ownership depth. Transformation must be its immediate section-level predecessor on every canonical project, with no unrelated section between them. Never move the Transformation flow into Contribution or merge the two sections.
+
+Transformation visual hierarchy is shared across canonical projects: its title precedes the flow, SYSTEM CHANGE is the dominant focal point, BEFORE and AFTER are subordinate context states, and responsive connectors preserve unmistakable forward progression. Mobile uses `BEFORE ↓ SYSTEM CHANGE ↓ AFTER`.
 
 Do not render duplicate Contribution sections.
 

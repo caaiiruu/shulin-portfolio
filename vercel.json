@@ -63,22 +63,83 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/site",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/site/index",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/site/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/site/work",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/site/work.html",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/site/experiments",
+      "destination": "/experiments",
+      "permanent": true
+    },
+    {
+      "source": "/site/experiments.html",
+      "destination": "/experiments",
+      "permanent": true
+    },
+    {
+      "source": "/site/profile",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/site/profile.html",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/site/playground",
+      "destination": "/experiments",
+      "permanent": true
+    },
+    {
+      "source": "/site/work/:projectId",
+      "destination": "/work/:projectId",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
       "destination": "/site/index"
     },
     {
-      "source": "/site",
-      "destination": "/site/index"
+      "source": "/work",
+      "destination": "/site/work"
     },
     {
-      "source": "/site/",
-      "destination": "/site/index"
-    },
-    {
-      "source": "/site/playground",
+      "source": "/experiments",
       "destination": "/site/experiments"
+    },
+    {
+      "source": "/profile",
+      "destination": "/site/profile"
+    },
+    {
+      "source": "/work/:projectId",
+      "destination": "/site/work/:projectId"
     }
   ]
 }

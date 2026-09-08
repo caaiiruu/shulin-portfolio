@@ -114,7 +114,7 @@ html[lang="zh-Hant"] :where(.kicker,.company-context-v132,[class*="label"]){
 .text-cta::after{
   content:"";
   position:absolute;
-  inset:auto 0 var(--dimension-5px);
+  inset:auto 0 0;
   height:var(--dimension-2px);
   border-radius:var(--radius-pill);
   background:var(--text-cta-underline);

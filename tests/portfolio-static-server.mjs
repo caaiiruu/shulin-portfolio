@@ -10,12 +10,14 @@ const types = {
   ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".pdf": "application/pdf",
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
   ".woff2": "font/woff2",
 };
 
+const port=Number(process.env.PORT||3000);
 http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, "http://127.0.0.1").pathname);
   let file = path.resolve(root, `.${pathname}`);
@@ -31,6 +33,6 @@ http.createServer((request, response) => {
     "content-type": types[path.extname(file)] || "application/octet-stream",
   });
   fs.createReadStream(file).pipe(response);
-}).listen(3000, "127.0.0.1", () => {
-  console.log("Portfolio QA server ready at http://127.0.0.1:3000");
+}).listen(port, "127.0.0.1", () => {
+  console.log(`Portfolio QA server ready at http://127.0.0.1:${port}`);
 });

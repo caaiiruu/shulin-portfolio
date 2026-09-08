@@ -13,11 +13,12 @@ const primary=presentation.archetypes.primary;
 const experiment=presentation.archetypes.experiment;
 
 test('owns public IA through two explicit archetype contracts',()=>{
-  assert.deepEqual(primary.canonicalOrder,['hero','overview','complexity','core-insight','decisions','evidence','outcomes','ownership','related-work']);
+  assert.deepEqual(presentation.requiredAdjacencies,[{predecessor:'transformation',predecessorComponent:'KeyInterventionMap',successor:'contribution',successorComponent:'ContributionBlock',scope:'canonical-projects',required:true}]);
+  assert.deepEqual(primary.canonicalOrder,['hero','overview','complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work']);
   assert.deepEqual(experiment.canonicalOrder,['hero','overview','exploration-question','explored-or-built','evidence','learning-or-decision','delivery-state','related-work']);
   assert.equal(primary.projectDefinedOrderAllowed,false);
   assert.equal(experiment.projectDefinedOrderAllowed,false);
-  for(const forbidden of ['contribution','key-problems','critical-problem','business-impact'])assert.ok(primary.forbiddenPublicSlots.includes(forbidden));
+  for(const forbidden of ['key-problems','critical-problem','business-impact'])assert.ok(primary.forbiddenPublicSlots.includes(forbidden));
 });
 
 test('routes every public Primary through one renderer and isolates legacy IA',()=>{
@@ -25,10 +26,12 @@ test('routes every public Primary through one renderer and isolates legacy IA',(
   assert.match(app,/isRecruiterSystemCase=currentDetail\.type==='project'&&DATA\.projects\[currentDetail\.key\]\?\.archetype==='primary'/);
   assert.match(app,/renderSystemCaseParent\(DATA\.projects\[currentDetail\.key\]\)/);
   const canonical=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
-  assert.doesNotMatch(canonical,/ContributionBlock|canonicalSectionId='my-contribution'|keyProblems|criticalProblem/);
+  assert.match(canonical,/ContributionBlock/);
+  assert.doesNotMatch(canonical,/canonicalSectionId='my-contribution'|keyProblems|criticalProblem/);
   assert.match(canonical,/presentationContract\('primary'\)/);
   assert.match(canonical,/overview\.dataset\.projectNavTarget='overview'/);
   assert.match(canonical,/list\(contract\?\.canonicalOrder\)/);
+  assert.match(canonical,/enforceCanonicalAdjacency\(surface\)/);
   assert.doesNotMatch(canonical,/p\.presentation\?\.sectionOrder|p\.section_order/);
 });
 
@@ -73,7 +76,7 @@ test('governs project-detail spans, spacing and semantic variants from the appro
   assert.match(app,/approvedSemanticVariant\(p,'outcomes'\)/);
   const canonical=app.slice(app.indexOf('function renderSystemCaseParent'),app.indexOf('function renderProgrammeParent'));
   assert.doesNotMatch(canonical,/p\.presentation\?\.complexityLayout/);
-  for(const token of ['case-span-headline','case-span-summary','case-span-reading','case-span-full','case-span-focus','case-section-title-content-gap','case-section-canvas-inset','case-overview-summary-grid-gap','case-complexity-item-gap','case-outcome-item-gap']){
+  for(const token of ['project-detail-section-max','project-detail-reading-max','project-detail-narrative-max','project-detail-mobile-inset','project-detail-overview-padding','case-section-title-content-gap','case-section-canvas-inset','case-overview-summary-grid-gap','case-complexity-item-gap','case-outcome-item-gap']){
     assert.match(tokens,new RegExp(`--${token}:`));
     assert.ok(registry.governanceGraph.tokenContracts[token],`${token} must be registered`);
   }

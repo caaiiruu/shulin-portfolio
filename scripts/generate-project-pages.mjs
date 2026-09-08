@@ -19,7 +19,7 @@ function resolveImage(project){
 function replaceHead(html,project,id){
   const title=`${project.title.en} — Shulin Chou`;
   const description=project.atAGlance.en;
-  const canonical=`https://shulinchou.com/site/work/${id}`;
+  const canonical=`https://shulinchou.com/work/${id}`;
   const image=resolveImage(project);
   const metadata=[
     `<title>${escapeHtml(title)}</title>`,
@@ -32,6 +32,8 @@ function replaceHead(html,project,id){
     image?`<meta property="og:image" content="https://shulinchou.com${image}"/>`:""
   ].filter(Boolean).join("\n");
   return html
+    .replace(/<link\s+rel="canonical"\s+href="[^"]+"\s*\/?>/i,"")
+    .replace(/<meta\s+property="og:url"\s+content="[^"]+"\s*\/?>/i,"")
     .replace(/<title>[\s\S]*?<\/title>/i,metadata)
     .replace(/<meta\s+content="[^"]*"\s+name="description"\s*\/>/i,"");
 }

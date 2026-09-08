@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-08-28-r1833b7-payment-human-qa-remediation",
+  "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -100,12 +100,12 @@
       "role_zh": "資深產品設計師",
       "owned": "Evidence synthesis · Cross-channel system framing · Journey strategy · Initiative design · Workshop co-facilitation · Shared taxonomy and state modelling",
       "owned_zh": "證據統整・跨通路系統定義・旅程策略・產品計畫設計・工作坊共同主持・共享分類與狀態模型",
-      "at_glance": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
-      "at_glance_zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。",
+      "at_glance": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that reached ~125K digital redemptions in the final three weeks of 2023, +90.9% digital redemption-share change, ~167% add-to-cart uplift and 7× faster cross-team alignment.",
+      "at_glance_zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 數位兌換占比變化、約 167% 加入購物車提升，並將跨團隊對齊效率提升至 7 倍。",
       "type": "Incentive System",
       "scope": "End-to-end incentive journey",
       "scope_zh": "端到端獎勵旅程",
-      "audience": "Primary: Customers\nSecondary: Voucher operations",
+      "audience": "Primary: Customers\nSecondary: Voucher Operations",
       "audience_zh": "主要：顧客\n次要：優惠券營運人員",
       "timeline": "2022–2025",
       "timeline_zh": "2022–2025",
@@ -125,8 +125,8 @@
             "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
           },
           "atAGlance": {
-            "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
-            "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。"
+            "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that reached ~125K digital redemptions in the final three weeks of 2023, +90.9% digital redemption-share change, ~167% add-to-cart uplift and 7× faster cross-team alignment.",
+            "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 數位兌換占比變化、約 167% 加入購物車提升，並將跨團隊對齊效率提升至 7 倍。"
           },
           "infoGrid": {
             "type": {
@@ -138,7 +138,7 @@
               "zh": "端到端獎勵旅程"
             },
             "audience": {
-              "en": "Primary: Customers\nSecondary: Voucher operations",
+              "en": "Primary: Customers\nSecondary: Voucher Operations",
               "zh": "主要：顧客\n次要：優惠券營運人員"
             },
             "timeline": {
@@ -161,8 +161,8 @@
         },
         "coreSystemInsight": {
           "title": {
-            "en": "Value had to appear in the shopping journey—not outside it",
-            "zh": "優惠價值必須出現在購物旅程中，而不是旅程之外"
+            "en": "Value had to appear in the shopping journey—not outside it.",
+            "zh": "優惠價值必須出現在購物旅程中，而不是旅程之外。"
           },
           "statement": {
             "en": "Customers did not need more Vouchers. They needed value to appear in the right shopping context, with clear eligibility and a trustworthy path to application.",
@@ -192,12 +192,12 @@
           ],
           "contentStatus": "approved",
           "insight": {
-            "en": "Voucher experience could not be solved screen by screen.",
-            "zh": "優惠券體驗無法逐一畫面解決。"
+            "en": "Value had to appear in the shopping journey—not outside it.",
+            "zh": "優惠價值必須出現在購物旅程中，而不是旅程之外。"
           },
           "whatThisChanged": {
-            "en": "Recurring incentive rules, states and behaviours needed reusable foundations across shopping touchpoints.",
-            "zh": "反覆出現的獎勵規則、狀態與行為，需要成為跨購物接觸點可重用的基礎。"
+            "en": "Customers did not need more Vouchers. They needed value to appear in the right shopping context, with clear eligibility and a trustworthy path to application.",
+            "zh": "顧客需要的不是更多優惠券，而是讓價值在正確購物情境中出現，並具備清楚資格與可信任的套用路徑。"
           }
         },
         "evidenceToStrategy": {
@@ -943,7 +943,9 @@
             "Business",
             "Design System"
           ],
-          "contentStatus": "approved"
+          "contentStatus": "approved",
+          "publicVisibility": "parent-visible",
+          "standaloneSection": true
         },
         "relatedProjects": [
           {
@@ -4411,7 +4413,42 @@
             "zh": "系統訊息的內容設計"
           }
         ],
-        "contentStatus": "approved"
+        "contentStatus": "approved",
+        "accountabilityPresentation": {
+          "intro": {
+            "en": "A clear line between the system direction I owned and decisions delivered with partners.",
+            "zh": ""
+          },
+          "owned": {
+            "label": {
+              "en": "I OWNED",
+              "zh": ""
+            },
+            "title": {
+              "en": "End-to-end incentive journey strategy",
+              "zh": ""
+            },
+            "text": {
+              "en": "Research synthesis, system framing, Voucher rules, interaction architecture, reusable component direction and recurring validation.",
+              "zh": ""
+            }
+          },
+          "shared": {
+            "label": {
+              "en": "WITH PARTNERS",
+              "zh": ""
+            },
+            "title": {
+              "en": "Cross-functional delivery and integration",
+              "zh": ""
+            },
+            "text": {
+              "en": "Prioritisation, feasibility, payment integration, Operations mapping and measurement with Product, Engineering, Payment, Marketing and Operations partners.",
+              "zh": ""
+            }
+          },
+          "contentStatus": "human-approved-2026-08-28"
+        }
       },
       "decisionEvidenceMap": {
         "voucher-decision-preloaded-wallet": {
@@ -4611,12 +4648,32 @@
       "whatMadeThisHard": [
         {
           "title": {
-            "en": "Scaling incentives meant aligning different rules, states and behaviours across multiple shopping journeys.",
-            "zh": "擴展獎勵體驗，代表必須對齊多條購物旅程中的不同規則、狀態與行為。"
+            "en": "Cross-channel rule fragmentation",
+            "zh": "跨通路規則分散"
           },
           "description": {
-            "en": "Campaign-specific logic had accumulated across channels, creating repeated interpretation for teams and inconsistent expectations for customers.",
-            "zh": "各通路長期累積活動專屬邏輯，讓團隊必須重複解讀，也使顧客對體驗產生不一致預期。"
+            "en": "Rules evolved separately across online, in-store and supplier-funded journeys, creating inconsistent terminology, states and exceptions.",
+            "zh": "線上、門市與供應商出資旅程各自發展規則，造成用語、狀態與例外處理不一致。"
+          }
+        },
+        {
+          "title": {
+            "en": "Multi-party priorities",
+            "zh": "多方目標並存"
+          },
+          "description": {
+            "en": "Customer value, supplier visibility, campaign goals and operational feasibility had to coexist within the same incentive model.",
+            "zh": "顧客價值、供應商曝光、活動目標與營運可行性，必須共存於同一套獎勵模型。"
+          }
+        },
+        {
+          "title": {
+            "en": "Reuse depended on rule clarity",
+            "zh": "重用仰賴規則清晰"
+          },
+          "description": {
+            "en": "Eligibility, claim, expiry, redemption and sponsorship logic had to be consistently defined before teams could safely reuse product patterns.",
+            "zh": "資格、領取、到期、兌換與出資邏輯必須先被一致定義，團隊才能安全重用產品模式。"
           }
         }
       ],
@@ -4655,8 +4712,8 @@
         "zh": "從分散的優惠券旅程到可重用的獎勵生態系"
       },
       "atAGlance": {
-        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that delivered ~125K digital redemptions in the final three weeks of 2023, +90.9% redemption-share change and ~167% add-to-cart uplift.",
-        "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 兌換占比變化與約 167% 加入購物車提升。"
+        "en": "Led multi-year product design across voucher discovery, qualification and redemption, turning fragmented campaign journeys into reusable incentive capabilities across 2022–2025, within a programme that reached ~125K digital redemptions in the final three weeks of 2023, +90.9% digital redemption-share change, ~167% add-to-cart uplift and 7× faster cross-team alignment.",
+        "zh": "主導 2022–2025 年跨優惠券探索、資格判定與兌換的多年產品設計，將分散的活動旅程轉化為可重用的獎勵能力；該計畫在 2023 年最後三週達到約 12.5 萬次數位兌換、+90.9% 數位兌換占比變化、約 167% 加入購物車提升，並將跨團隊對齊效率提升至 7 倍。"
       },
       "problemTypes": {
         "en": [
@@ -4698,7 +4755,7 @@
           },
           "secondary": {
             "en": [
-              "Voucher operations"
+              "Voucher Operations"
             ],
             "zh": [
               "優惠券營運人員"
@@ -4810,13 +4867,15 @@
       },
       "sectionOrder": [
         "hero",
-        "what-made-this-hard",
-        "my-contribution",
+        "overview",
+        "complexity",
+        "contribution",
         "core-system-insight",
-        "system-coverage-map",
-        "reusable-system",
-        "validated-outcomes",
-        "ownership-and-evidence"
+        "journey-stage-solutions",
+        "programme-research",
+        "outcomes",
+        "my-accountability",
+        "related-work"
       ],
       "heroMetadata": {
         "company": "FairPrice Group",
@@ -4927,8 +4986,8 @@
             },
             {
               "label": {
-                "en": "MY INTERVENTION",
-                "zh": "我的介入"
+                "en": "SYSTEM CHANGE",
+                "zh": "系統改變"
               },
               "text": {
                 "en": "Connected discovery, reward visibility, progress and redemption into one incentive journey, while standardising the shared rules, states and reusable product foundations behind it.",
@@ -5632,8 +5691,8 @@
             {
               "value": "+90.9%",
               "label": {
-                "en": "relative growth in digital redemption share",
-                "zh": "數位兌換占比相對成長"
+                "en": "digital redemption-share change",
+                "zh": "數位兌換占比相對變化"
               },
               "primaryCopy": {
                 "en": "digital redemption share growth after PDP enhancements surfaced eligible Vouchers in context",
@@ -5642,13 +5701,14 @@
               "evidenceNote": {
                 "en": "from 43.9% in the previous SEC campaign to 83.8% during CNY; internal campaign reporting linked the improvement to eligible Voucher swimlanes and Voucher badges on product imagery.",
                 "zh": "由前一次 SEC 活動的 43.9% 提升至 CNY 期間的 83.8%；內部活動報告將此改善連結至適用 Voucher swimlane 與商品圖片上的 Voucher badge。"
-              }
+              },
+              "qualifier": "relative change, not percentage points"
             },
             {
               "value": "+~167%",
               "label": {
-                "en": "approximate increase in observed add-to-cart rate in the Voucher Details flow",
-                "zh": "Voucher Details 流程中觀察到的加入購物車率約略增幅"
+                "en": "approximate add-to-cart uplift",
+                "zh": "約略加入購物車提升"
               },
               "primaryCopy": {
                 "en": "approximate increase in observed add-to-cart rate after eligible products were surfaced in the Voucher Details flow",
@@ -5657,29 +5717,32 @@
               "evidenceNote": {
                 "en": "Observed add-to-cart rate increased approximately from ~1.5% to ~4%. Observational trend, not a controlled causal experiment.",
                 "zh": "觀察到的加入購物車率約由 1.5% 上升至 4%。屬約略增幅與觀察趨勢，非受控因果實驗。"
-              }
+              },
+              "qualifier": "approximate increase"
             },
             {
               "value": "~125K",
               "label": {
-                "en": "digital redemptions during Save Every Day",
-                "zh": "Save Every Day 數位兌換次數"
+                "en": "digital redemptions in the final three weeks",
+                "zh": "最後三週的數位兌換次數"
               },
               "evidenceNote": {
-                "en": "Campaign-scale operational result.",
-                "zh": "活動規模營運成果。"
-              }
+                "en": "Programme-level result from the final three weeks of 2023.",
+                "zh": "2023 年最後三週的計畫層級成果。"
+              },
+              "qualifier": "retain approximate marker and verified 2023 timeframe"
             },
             {
               "value": "7× faster",
               "label": {
-                "en": "campaign setup alignment cycle",
-                "zh": "活動設定對齊週期"
+                "en": "cross-team alignment / recurring decision-cycle improvement",
+                "zh": "跨團隊對齊／重複決策週期改善"
               },
               "evidenceNote": {
                 "en": "Reduced from 2 weeks to 2 days.",
                 "zh": "由 2 週縮短至 2 天。"
-              }
+              },
+              "qualifier": "2 weeks → 2 days is supporting provenance only"
             }
           ],
           "systemChange": {
@@ -5741,28 +5804,6 @@
               }
             },
             {
-              "value": "18",
-              "label": {
-                "en": "participant sessions",
-                "zh": "參與者場次"
-              },
-              "note": {
-                "en": "9 Wallet + 9 Checkout",
-                "zh": "9 Wallet＋9 Checkout"
-              }
-            },
-            {
-              "value": "15",
-              "label": {
-                "en": "participants",
-                "zh": "參與者"
-              },
-              "note": {
-                "en": "Voucher Card information-priority study",
-                "zh": "Voucher Card 資訊優先順序研究"
-              }
-            },
-            {
               "value": "93%",
               "label": {
                 "en": "prioritised discount value",
@@ -5786,10 +5827,41 @@
             }
           ],
           "aggregateParticipantCount": null,
-          "contentStatus": "approved"
+          "contentStatus": "approved",
+          "supportingMetrics": [
+            {
+              "value": "18",
+              "label": {
+                "en": "participant sessions",
+                "zh": "參與者場次"
+              },
+              "note": {
+                "en": "9 Wallet + 9 Checkout",
+                "zh": "9 Wallet＋9 Checkout"
+              },
+              "visibility": "supporting-only"
+            },
+            {
+              "value": "15",
+              "label": {
+                "en": "participants",
+                "zh": "參與者"
+              },
+              "note": {
+                "en": "Voucher Card information-priority study",
+                "zh": "Voucher Card 資訊優先順序研究"
+              },
+              "visibility": "supporting-only"
+            }
+          ],
+          "parentVisibleMetricValues": [
+            "2,857",
+            "93%",
+            "87%"
+          ]
         }
       },
-      "contentStatus": "approved-r182-non-asset"
+      "contentStatus": "HUMAN_TRUTH_CANONICALISED_VISUAL_ACCEPTANCE_PENDING"
     },
     "voucher-center": {
       "context": "FairPrice Group",
@@ -7500,8 +7572,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the product model and interaction design for a multi-game discovery system, replacing a single-campaign destination with a scalable structure for concurrent and changing game availability.",
-        "zh": "主導多遊戲探索系統的產品模型與互動設計，將單一活動目的地轉化為可支援多個同時進行、持續變動遊戲狀態的可擴展架構。"
+        "en": "Led the product model and interaction design for a multi-game discovery system, replacing a single-campaign destination with a scalable structure that reached approximately 50% user completion.",
+        "zh": "主導多遊戲探索系統的產品模型與互動設計，將單一活動目的地轉化為可擴展架構，上線體驗達到約 50% 使用者完成率。"
       },
       "infoGrid": {
         "type": {
@@ -8574,8 +8646,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led problem framing and workflow design for excess and risk operations, separating necessary market variation from a shared decision model validated across six markets.",
-        "zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經六個市場驗證的共用決策模型。"
+        "en": "Led problem framing and workflow design for excess and risk operations, separating necessary market variation from a shared decision model validated across 6 markets.",
+        "zh": "主導超額與風險營運的問題定義與端到端流程設計，將分散的市場作法轉化為經 6 個市場驗證的共用決策模型。"
       },
       "infoGrid": {
         "type": {
@@ -9102,6 +9174,10 @@
           "title": {
             "en": "Outcomes",
             "zh": ""
+          },
+          "headline": {
+            "en": "One shared operating model launched across six markets.",
+            "zh": "一套共享營運模型在六個市場上線。"
           },
           "cards": [
             {
@@ -9756,30 +9832,7 @@
           "en": "Led the research roadmap, evidence synthesis, interaction model, rapid validation and post-launch learning loop.",
           "zh": "主導研究路線圖、證據統整、互動模型、快速驗證與上線後學習循環。"
         },
-        "evidence": [
-          {
-            "title": {
-              "en": "Run delivery and strategy in parallel",
-              "zh": "同步推進交付與策略"
-            },
-            "copy": {
-              "en": "Immediate experience optimisation and future transport integration were developed as two connected tracks.",
-              "zh": "即時體驗優化與未來交通整合以兩條相互連結的路線同步推進。"
-            },
-            "publicAssetId": "booking-evidence-contribution-two-track-process-01"
-          },
-          {
-            "title": {
-              "en": "Align decisions through critique",
-              "zh": "透過設計評圖對齊決策"
-            },
-            "copy": {
-              "en": "Recurring critique connected research, product constraints and cross-functional implementation decisions.",
-              "zh": "持續設計評圖串接研究、產品限制與跨職能實作決策。"
-            },
-            "publicAssetId": "booking-evidence-contribution-design-critique-01"
-          }
-        ]
+        "evidence": []
       },
       "principalPositioning": {
         "portfolioRole": "principal-global-scale-constraint-case",
@@ -9815,8 +9868,8 @@
         ]
       },
       "atAGlance": {
-        "en": "As the team’s sole UX Designer, designed a connected trip timeline across Booking.com touchpoints, reducing fragmentation across the booking journey for a product operating in 40+ countries.",
-        "zh": "作為團隊唯一的 UX Designer，設計串聯 Booking.com 多個接觸點的旅程時間軸，減少預訂旅程中的斷裂，服務涵蓋 40 多個國家的產品。"
+        "en": "As the team’s sole UX Designer, designed a connected trip timeline across Booking.com touchpoints for a product operating in 40+ countries, contributing to approximately +7% desktop conversion and ~150 additional rides per day after launch.",
+        "zh": "作為團隊唯一的 UX Designer，設計串聯 Booking.com 多個接觸點的旅程時間軸，支援 40 多個國家的產品，上線後桌機轉換約提升 7%，每日約新增 150 趟行程。"
       },
       "infoGrid": {
         "type": {
@@ -10069,61 +10122,28 @@
           "semanticHierarchy": {
             "change": {
               "label": {
-                "en": "BUSINESS OUTCOME",
-                "zh": "商業成果"
+                "en": "PRIMARY SIGNAL",
+                "zh": "主要訊號"
               },
               "statement": {
-                "en": "The redesign improved conversion across devices while making the taxi journey easier to compare, confirm and act on across markets.",
-                "zh": "重新設計後，各裝置的轉換表現皆獲改善，也讓旅客在不同市場中更容易比較、確認並採取下一步。"
+                "en": "6 of 7 analysed markets improved",
+                "zh": "七個分析市場中有六個改善"
               }
             },
             "measuredLabel": {
-              "en": "Measured after launch",
-              "zh": "上線後衡量結果"
+              "en": "Supporting measure",
+              "zh": "支持性衡量"
             },
             "measured": [
               {
-                "value": "+~7%",
+                "value": "~6%",
                 "label": {
-                  "en": "desktop conversion rate",
-                  "zh": "桌機轉換率"
+                  "en": "unweighted average reported uplift across the seven analysed markets",
+                  "zh": "七個分析市場的未加權平均回報增幅"
                 },
                 "evidenceNote": {
-                  "en": "Approximate reported increase within the initial two-week measurement window.",
-                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
-                }
-              },
-              {
-                "value": "+~3%",
-                "label": {
-                  "en": "mobile conversion rate",
-                  "zh": "手機轉換率"
-                },
-                "evidenceNote": {
-                  "en": "Approximate reported increase within the initial two-week measurement window.",
-                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
-                }
-              },
-              {
-                "value": "+~10%",
-                "label": {
-                  "en": "tablet conversion rate",
-                  "zh": "平板轉換率"
-                },
-                "evidenceNote": {
-                  "en": "Approximate reported increase within the initial two-week measurement window.",
-                  "zh": "上線後初期兩週衡量期間的約略回報增幅。"
-                }
-              },
-              {
-                "value": "~150",
-                "label": {
-                  "en": "additional rides per day after launch",
-                  "zh": "上線後每日新增行程"
-                },
-                "evidenceNote": {
-                  "en": "Approximate additional daily rides observed during the initial post-launch measurement period.",
-                  "zh": "上線後初期衡量期間觀察到的約略每日新增行程。"
+                  "en": "Approximate, unweighted mean; it is not traffic-weighted and Spain remained the outlier.",
+                  "zh": "此為約略未加權平均，並非依流量加權；西班牙仍是離群市場。"
                 }
               }
             ],
@@ -10131,26 +10151,20 @@
               {
                 "emphasis": true,
                 "text": {
-                  "en": "6 of 7 analysed markets improved, with an unweighted average reported uplift of about ~6%; Spain was the clear outlier and became the focus for follow-up investigation.",
-                  "zh": "七個分析市場中有六個改善，未加權平均回報增幅約為 ~6%；西班牙是明顯離群市場，並成為後續調查焦點。"
+                  "en": "EXCEPTION — Spain was the only analysed market to decline.",
+                  "zh": "例外——西班牙是唯一衰退的分析市場。"
                 }
               },
               {
                 "text": {
-                  "en": "Spain was the only analysed market to decline. Behavioural review surfaced unresolved location, field-entry and pickup-information friction, giving the team a concrete follow-up direction.",
-                  "zh": "西班牙是唯一衰退的分析市場。行為檢視揭示尚未解決的地點、欄位輸入與接送資訊摩擦，為團隊提供具體的後續方向。"
-                }
-              },
-              {
-                "text": {
-                  "en": "Conversion improved, while a higher cancellation rate exposed the next optimisation problem around prefilled-field communication and pickup clarity.",
-                  "zh": "轉換獲得改善，但較高的取消率也揭示下一個優化問題：預填欄位溝通與接送資訊清晰度。"
+                  "en": "NEXT LEARNING — Behavioural review and the higher cancellation rate surfaced unresolved location, field-entry, prefilled-field communication and pickup-information friction.",
+                  "zh": "下一步學習——行為檢視與較高取消率揭示尚未解決的地點、欄位輸入、預填欄位溝通與接送資訊摩擦。"
                 }
               }
             ],
             "closingStatement": {
-              "en": "The work also established a clearer model for reusing trip context and adapting pickup guidance across a service operating in 40+ countries.",
-              "zh": "這項工作也為服務於 40 多個國家的產品，建立更清楚的旅程脈絡重用與接送引導調整模型。"
+              "en": "SYSTEM VALUE — A reusable adaptation model connected known trip context with market-specific pickup guidance across a service operating in 40+ countries.",
+              "zh": "系統價值——一套可重用的調整模型，為服務於 40 多個國家的產品串連已知旅程脈絡與市場特定接送引導。"
             }
           },
           "evidence": [],
@@ -10232,75 +10246,73 @@
           "items": [
             {
               "title": {
-                "en": "Synthesize booking criteria across teams",
-                "zh": "跨團隊統整預訂準則"
+                "en": "E01 — Synthesise decision criteria",
+                "zh": "E01 — 統整決策準則"
               },
               "copy": {
                 "en": "Workshop synthesis made customer needs, product constraints and implementation criteria comparable before the connected-trip direction entered delivery.",
-                "zh": "工作坊統整串接顧客需求、產品限制與實作準則。"
+                "zh": "工作坊統整讓顧客需求、產品限制與實作準則可被並列比較，再進入串連旅程的交付決策。"
               },
               "publicAssetId": "booking-evidence-workshop-phase2-synthesis-01"
             },
             {
               "title": {
-                "en": "Prioritise the dominant usability signal",
-                "zh": "優先處理主要易用性訊號"
+                "en": "E02 — Triangulate behavioural and qualitative signals",
+                "zh": "E02 — 交叉比對行為與質性訊號"
               },
               "copy": {
-                "en": "About 120 of ~155 feedback results concerned ease of use or navigation, prioritising option comparison and a shorter decision path.",
-                "zh": "約 155 筆回饋中，約 120 筆提及易用性或導覽，使團隊聚焦於比較與旅程清晰度。"
+                "en": "Of 155 feedback results reviewed, 122 concerned Ease of Use or Navigation. Combined with behavioural evidence, this prioritised option comparison and a shorter decision path.",
+                "zh": "檢視的 155 筆回饋中，有 122 筆涉及易用性或導覽；再與行為證據交叉比對後，團隊優先改善選項比較與決策路徑。"
               },
               "publicAssetId": "booking-evidence-research-feedback-summary-01"
+            },
+            {
+              "title": {
+                "en": "E03 — Run delivery and future strategy in parallel",
+                "zh": "E03 — 並行推進交付與未來策略"
+              },
+              "copy": {
+                "en": "A dual-track operating model connected immediate taxi-booking optimisation with longer-term transport integration, proving the team could deliver near-term value without losing the system direction.",
+                "zh": "雙軌運作模型把近期計程車預訂優化與長期交通整合串連，證明團隊能在交付近期價值時保留系統方向。"
+              },
+              "publicAssetId": "booking-evidence-contribution-two-track-process-01"
+            },
+            {
+              "title": {
+                "en": "E04 — Align decisions through critique",
+                "zh": "E04 — 透過設計評圖對齊決策"
+              },
+              "copy": {
+                "en": "Recurring critique brought research, product constraints and implementation decisions into one cross-functional review loop, exposing disagreement before handoff.",
+                "zh": "持續設計評圖把研究、產品限制與實作決策帶進同一個跨職能檢視循環，在交付前讓分歧可見。"
+              },
+              "publicAssetId": "booking-evidence-contribution-design-critique-01"
+            },
+            {
+              "title": {
+                "en": "E05 — Turn follow-up behaviour into the next learning",
+                "zh": "E05 — 將後續行為轉化為下一步學習"
+              },
+              "copy": {
+                "en": "Post-launch behavioural review showed travellers revisiting known trip information, focusing the next learning on location, field-entry and pickup-information clarity rather than treating conversion as the end of the work.",
+                "zh": "上線後行為檢視顯示旅客會回頭確認既有旅程資訊，使下一步學習聚焦於地點、欄位輸入與接送資訊清晰度，而非把轉換提升視為工作的終點。"
+              },
+              "publicAssetId": "booking-evidence-decision-02-hotjar-edit-trip-01"
             }
           ],
           "metrics": [
             {
-              "value": "18",
+              "value": "155",
               "label": {
-                "en": "interviews and testing sessions",
-                "zh": "場訪談與測試"
-              }
-            },
-            {
-              "value": "12",
-              "label": {
-                "en": "workshops",
-                "zh": "場工作坊"
-              }
-            },
-            {
-              "value": "14",
-              "label": {
-                "en": "analysis reports",
-                "zh": "份分析報告"
-              }
-            },
-            {
-              "value": "~155",
-              "label": {
-                "en": "feedback results reviewed",
+                "en": "feedback results reviewed and synthesised",
                 "zh": "筆回饋結果完成檢視"
               }
             },
             {
-              "value": "~120",
+              "value": "122",
               "label": {
                 "en": "Ease of Use / Navigation mentions",
                 "zh": "筆易用性／導覽提及"
-              }
-            },
-            {
-              "value": "~944K",
-              "label": {
-                "en": "rides analysed",
-                "zh": "趟行程完成分析"
-              }
-            },
-            {
-              "value": "~65%",
-              "label": {
-                "en": "Standard taxi share",
-                "zh": "Standard taxi 佔比"
               }
             }
           ],
@@ -11294,8 +11306,19 @@
         ]
       },
       "atAGlance": {
-        "en": "Designed the product structure for a guided cross-device practice experience, organizing fragmented activities into a clearer progression across the shipped product.",
-        "zh": "設計具引導性的跨裝置練習產品架構，將分散的活動整理成更清楚的使用進程並落實於已交付產品。"
+        "en": "Shipped a cross-device practice redesign across mobile and tablet, using eight interviews and tests to shape content discovery, sheet-music practice and level-based learning journeys.",
+        "zh": "完成手機與平板跨裝置練習體驗改版上線，透過 8 場訪談與測試，塑造內容探索、樂譜練習與分級學習旅程。"
+      },
+      "atAGlanceEmphasis": {
+        "variant": "inline-metric",
+        "sourceSegments": {
+          "en": [
+            "eight interviews and tests"
+          ],
+          "zh": [
+            "8 場訪談與測試"
+          ]
+        }
       },
       "infoGrid": {
         "type": {
@@ -11667,6 +11690,38 @@
         "zh": "將程度設定、授權內容探索、權限、個人譜庫與樂譜練習串成同一套行動裝置／平板學習系統，而非把功能當成彼此分離的畫面。",
         "contentStatus": "approved"
       },
+      "coreSystemInsight": {
+        "headline": {
+          "en": "Connected level-setting, licensed-content discovery, entitlement, personal libraries and sheet practice into one mobile-and-tablet learning system rather than treating each feature as a separate screen.",
+          "zh": "將程度設定、授權內容探索、權限、個人譜庫與樂譜練習串成同一套行動裝置／平板學習系統，而非把功能當成彼此分離的畫面。"
+        },
+        "contentStatus": "approved-source-projection-r1838f-p34a"
+      },
+      "presentation": {
+        "composition": "recruiter-first-system-case",
+        "visibility": {
+          "problemTypes": false,
+          "coreSystemInsight": true,
+          "evidence": true
+        },
+        "contentRefs": {
+          "whatMadeThisHard": "whatMadeThisHard",
+          "contribution": "valueIBrought",
+          "coreSystemInsight": "coreSystemInsight",
+          "decisions": "decisionNarrative.primaryDecisions",
+          "evidence": "canonicalEvidence",
+          "outcomes": "outcomeEvidenceModel",
+          "accountability": "ownershipModel"
+        },
+        "decisionOptions": {
+          "showVisuals": false,
+          "outcomeField": "outcome",
+          "variant": "featured"
+        },
+        "accountabilityMode": "structured",
+        "complexityLayout": "featured-first",
+        "detailHeroVisual": true
+      },
       "additionalDesignDecisions": [
         {
           "id": "bandzo-decision-core-learning-loop",
@@ -11731,6 +11786,54 @@
           "contentStatus": "approved"
         }
       ],
+      "canonicalEvidence": {
+        "title": {
+          "en": "Evidence",
+          "zh": "證據"
+        },
+        "presentation": "ordered-visual-proofs",
+        "blockOrder": [
+          "bandzo-evidence-five-level-model",
+          "bandzo-evidence-practice-architecture"
+        ],
+        "items": [
+          {
+            "id": "bandzo-evidence-five-level-model",
+            "presentation": "document",
+            "supportingLabel": {
+              "en": "WHAT THIS PROVES",
+              "zh": "這證明了什麼"
+            },
+            "title": {
+              "en": "A specified five-level tablet onboarding model",
+              "zh": "具體規格化的五級平板初始引導"
+            },
+            "copy": {
+              "en": "The first-launch specification connects instrument and interest choices to an explicit Level 1–5 selection. It directly evidences the simplified progression decision and a candidate-authored tablet delivery artefact; it is not mobile or cross-device visual proof.",
+              "zh": "首次啟動規格將樂器與興趣選擇連結到明確的 Level 1–5 程度選擇，直接證明簡化分級決策與由本人主導的平板交付規格；它不構成手機或跨裝置的視覺證明。"
+            },
+            "assetId": "bandzo-shipped-onboarding-five-levels-public-v1"
+          },
+          {
+            "id": "bandzo-evidence-practice-architecture",
+            "presentation": "document",
+            "supportingLabel": {
+              "en": "WHAT THIS PROVES",
+              "zh": "這證明了什麼"
+            },
+            "title": {
+              "en": "Content enters a structured practice experience",
+              "zh": "內容進入具結構的練習體驗"
+            },
+            "copy": {
+              "en": "The tablet specification shows sheet selection inside practice alongside playback, tempo, accompaniment and practice-mode controls. It directly supports the documented content-to-practice relationship and detailed UX delivery.",
+              "zh": "平板規格呈現練習中的樂譜選擇，以及播放、速度、伴奏與練習模式控制，直接支持既有的內容到練習關係與詳細 UX 交付。"
+            },
+            "assetId": "bandzo-shipped-sheet-practice-architecture-public-v1"
+          }
+        ],
+        "contentStatus": "approved-human-source-r1838f-p34"
+      },
       "outcomeEvidence": [
         {
           "id": "bandzo-released-platform",
@@ -11920,7 +12023,54 @@
           },
           "confidentialityNote": null
         },
-        "sectionOrderRef": "projects.bandzo.sectionOrder"
+        "sectionOrderRef": "projects.bandzo.sectionOrder",
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "成果"
+          },
+          "headline": {
+            "en": "A connected learning model reached shipped product scope.",
+            "zh": "一套串連的學習模型進入正式上線範圍。"
+          },
+          "cards": [
+            {
+              "heading": {
+                "en": "Five-level progression shipped",
+                "zh": "五級學習進程正式上線"
+              },
+              "copy": {
+                "en": "The first release used a coherent five-level model instead of depending on unresolved automated recognition.",
+                "zh": "首版採用一致的五級模型，而非依賴尚未解決的自動辨識。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Twelve core flows specified",
+                "zh": "完成 12 項核心流程規格"
+              },
+              "copy": {
+                "en": "Information architecture, interaction flows, wireframes and UX specifications created an implementation-ready delivery basis.",
+                "zh": "資訊架構、互動流程、線框稿與 UX 規格建立可供實作的交付基礎。"
+              }
+            },
+            {
+              "heading": {
+                "en": "Content and practice connected",
+                "zh": "內容與練習完成串連"
+              },
+              "copy": {
+                "en": "Released scope connected content discovery, licensed sheet access, personal libraries and sheet-music practice.",
+                "zh": "上線範圍串連內容探索、授權樂譜存取、個人譜庫與樂譜練習。"
+              }
+            }
+          ],
+          "closing": {
+            "en": "Eight interview and usability-testing sessions informed the work; no user-impact uplift is claimed for learning, bounce, awareness or conversion.",
+            "zh": "此工作由 8 場訪談與可用性測試支持；不主張學習、跳出率、知名度或轉換率的使用者影響提升。"
+          },
+          "contentStatus": "approved-source-projection-r1838f-p34c"
+        }
       },
       "keyInterventionMap": {
         "status": "verified",
@@ -12861,8 +13011,8 @@
           "zh": "一個缺少完整市集服務模型的第三方支付概念。"
         },
         "intervention": {
-          "en": "Co-led user research and system definition, translating buyer/seller behavior into marketplace structure, transaction logic, wireframes and functional specifications.",
-          "zh": "共同主導使用者研究與系統定義，將買賣雙方行為轉化為市集結構、交易邏輯、線框稿與功能規格。"
+          "en": "Marketplace structure, transaction logic, wireframes and functional specifications.",
+          "zh": "市集結構、交易邏輯、線框稿與功能規格。"
         },
         "after": {
           "en": "A shared marketplace definition covering customer journeys, payment/logistics states and implementation guidance.",
@@ -13139,6 +13289,7 @@
               },
               "sourceRef": "30 moderated interviews",
               "assetStatus": "public-safe-active",
+              "presentation": "natural-ratio",
               "assetId": "taishin-marketplace-evidence-research-synthesis-v1"
             },
             {
@@ -13156,6 +13307,7 @@
               },
               "sourceRef": "7 logic-flow sheets",
               "assetStatus": "public-safe-active",
+              "presentation": "framed",
               "assetId": "taishin-marketplace-evidence-transaction-regulation-v1"
             },
             {
@@ -13173,6 +13325,7 @@
               },
               "sourceRef": "Marketplace structure + wireframe specification",
               "assetStatus": "public-safe-active",
+              "presentation": "framed",
               "assetId": "taishin-marketplace-evidence-structure-v1"
             },
             {
@@ -13190,6 +13343,7 @@
               },
               "sourceRef": "Delivery alignment",
               "assetStatus": "public-safe-active",
+              "presentation": "framed",
               "assetId": "taishin-marketplace-evidence-delivery-alignment-v1"
             }
           ],
@@ -13451,8 +13605,31 @@
         ]
       },
       "atAGlance": {
-        "en": "Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across four core tasks.",
-        "zh": "主導內部房貸諮詢系統的使用者體驗改版，將固定平板腳本轉化為情境導向的需求評估與試算流程，透過四項核心任務驗證並交付至已上線的內部應用程式。"
+        "en": "Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across 4 core tasks.",
+        "zh": "主導內部房貸諮詢系統的使用者體驗改版，將固定平板腳本轉化為情境導向的需求評估與試算流程，透過 4 項核心任務驗證並交付至已上線的內部應用程式。"
+      },
+      "keyInterventionMap": {
+        "status": "verified-approved-source-projection",
+        "sectionLabel": {
+          "en": "Where I changed the system",
+          "zh": "我改變系統的位置"
+        },
+        "before": {
+          "en": "The existing app did not match real mortgage conversations and could not organise fragmented departmental inputs into one practical consultation experience.",
+          "zh": "既有工具不符合真實房貸諮詢情境，也無法將分散在不同部門的資訊整理成一套可實際使用的諮詢體驗。"
+        },
+        "intervention": {
+          "en": "A launched scenario-based mortgage consultation flow replaced the rigid tablet sales script.",
+          "zh": "已上線的情境式房貸諮詢流程取代了僵化的平板銷售腳本。"
+        },
+        "after": {
+          "en": "Established and launched a consultation model that connected needs assessment, mortgage estimation, and implementation-ready guidance.",
+          "zh": "建立並上線一套串接需求評估、房貸估算與可實作引導的諮詢模式。"
+        },
+        "supportingCopy": {
+          "en": "The work connected needs assessment, mortgage estimation, a tested four-task interaction model and implementation-ready handoff.",
+          "zh": "這項工作串接需求評估、房貸估算、經四項任務測試的互動模型與可實作交付。"
+        }
       },
       "infoGrid": {
         "type": {
@@ -14652,7 +14829,6 @@
       "atAGlanceEmphasis": {
         "variant": "inline-metric",
         "identities": [
-          "0→1",
           "~190 stores",
           "~228K monthly transactions",
           "98.5% success",
@@ -14660,14 +14836,12 @@
         ],
         "sourceSegments": {
           "en": [
-            "0→1",
             "~190 stores",
             "~228K monthly transactions",
             "98.5% success",
             "19.78 sec to 7.29 sec"
           ],
           "zh": [
-            "0→1",
             "約 190 間門市",
             "每月約 22.8 萬筆交易",
             "98.5%",
@@ -17009,8 +17183,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led product design and target-flow definition for a validated end-to-end account-opening experience, aligning customer progression with stakeholder and implementation constraints.",
-        "zh": "主導端到端開戶目標流程的產品設計與定義，在顧客進程、利害關係人需求與實作限制之間建立一致的經驗證方案。"
+        "en": "Led product design and target-flow definition over two months, delivering an end-to-end account-opening model spanning 6 stages, 4 routes and 3 contexts.",
+        "zh": "在兩個月內主導產品設計與目標流程定義，交付涵蓋 6 個階段、4 條路徑與 3 種情境的端到端開戶模型。"
       },
       "infoGrid": {
         "type": {
@@ -18320,8 +18494,8 @@
         ]
       },
       "atAGlance": {
-        "en": "As Lead Product Designer (independent consultant), I reconstructed review-remediation roles, systems and handoffs into a shared baseline and phased direction over a five-month engagement.",
-        "zh": "身為首席產品設計師（獨立顧問），我主導審件補件營運模型的流程重建與優先排序，並在五個月的合作期間，將分散的營運知識轉化為共享基線與分階段方向。"
+        "en": "As Lead Product Designer (independent consultant), I reconstructed review-remediation roles, systems and handoffs over five months, focusing the shared operating baseline on routine flows representing more than 80% of work.",
+        "zh": "身為首席產品設計師（獨立顧問），我在五個月內重建審件補件的角色、系統與交接，讓共享營運基準聚焦於占工作量 80% 以上的日常流程。"
       },
       "infoGrid": {
         "type": {
@@ -19478,8 +19652,8 @@
           "zh": "審件邏輯、例外與交接分散於個人記憶、截圖、PDF、外部查詢與人工營運做法。"
         },
         "intervention": {
-          "en": "I led workflow interviews, workshop synthesis and process reconstruction to connect roles, systems, decision logic, inputs, handoffs and remediation paths into one verifiable model.",
-          "zh": "我主導流程訪談、工作坊統整與流程重建，將角色、系統、決策邏輯、輸入、交接與補件路徑連結成一套可驗證模型。"
+          "en": "One verifiable operating model connected roles, systems, decision logic, inputs, handoffs and remediation paths.",
+          "zh": "一套可驗證的營運模型，串連角色、系統、決策邏輯、輸入、交接與補件路徑。"
         },
         "after": {
           "en": "The team had a shared five-phase operating baseline, clearer exception visibility and a structured way to separate expected benefit from implementation difficulty.",
@@ -19859,8 +20033,8 @@
         ]
       },
       "atAGlance": {
-        "en": "Led the 0→1 product design of an in-app mortgage application, defining a staged, resumable model for contextual entry, related-party participation and regulated guidance.",
-        "zh": "主導 App 內房貸申請的 0→1 產品設計，將分散資訊重整為可分階段、可續辦的旅程，支援情境式進入、關係人參與與受監管的資訊引導。"
+        "en": "Led the 0→1 product design of an in-app mortgage application, defining one staged, resumable model across 3 entry routes and 3 applicant roles.",
+        "zh": "主導 App 內房貸申請的 0→1 產品設計，定義涵蓋 3 種入口與 3 類申請角色的分階段可續辦模型。"
       },
       "infoGrid": {
         "type": {
@@ -20292,6 +20466,10 @@
           "title": {
             "en": "Outcomes",
             "zh": "成果"
+          },
+          "headline": {
+            "en": "A five-stage, resumable mortgage application model was defined and delivered.",
+            "zh": "一套五階段、可續辦的房貸申請模型完成定義與交付。"
           },
           "cards": [
             {
@@ -21182,6 +21360,29 @@
         "en": "Led nine months of taxi pickup research and strategy, combining traveller, supplier and market evidence to turn an uncertain expansion opportunity into a selected-market Phase 1 experiment recommendation.",
         "zh": "主導九個月的計程車接送研究與策略，整合旅客、供應商與市場證據，將不確定的擴張機會轉化為選定市場的第一階段實驗建議。"
       },
+      "keyInterventionMap": {
+        "status": "verified-approved-recommendation-source",
+        "sectionLabel": {
+          "en": "Where I changed the system",
+          "zh": "我改變系統的位置"
+        },
+        "before": {
+          "en": "Booking.com wanted to expand the audience for taxi pre-booking, but customer demand, supplier feasibility, market readiness and a non-disruptive way to test the opportunity were still unvalidated.",
+          "zh": "Booking.com 希望擴大計程車預約服務的受眾，但顧客需求、供應商可行性、市場成熟度，以及不干擾既有產品的驗證方式都尚未確認。"
+        },
+        "intervention": {
+          "en": "Converted an open-ended growth question into an evidence-led Phase 1 experiment that could test market demand without committing to a full rollout.",
+          "zh": "將開放式成長問題轉化為以證據驅動的第一階段實驗，在不承諾全面上線的前提下驗證市場需求。"
+        },
+        "after": {
+          "en": "Reduced dependency on broad assumptions by giving Product, Commercial and Supplier teams a shared evidence-led framework for deciding whether and where to run Phase 1.",
+          "zh": "透過共用的證據決策框架，降低產品、商務與供應商團隊對廣泛假設的依賴，並支持判斷是否及應在哪些市場執行第一階段實驗。"
+        },
+        "supportingCopy": {
+          "en": "The strategy aligned customer value, supplier feasibility, market readiness and commercial risk without implying implementation, launch or experiment results.",
+          "zh": "這套策略對齊顧客價值、供應商可行性、市場成熟度與商業風險，不暗示實作、上線或實驗成果。"
+        }
+      },
       "infoGrid": {
         "type": {
           "value": "Product Optimisation",
@@ -21890,77 +22091,111 @@
           "items": [],
           "structuredGroups": [
             {
-              "id": "traveller-context",
+              "id": "strategic-question",
               "heading": {
-                "en": "Traveller needs and airport context",
-                "zh": "旅客需求與機場情境"
+                "en": "Strategic question",
+                "zh": "策略問題"
               },
               "summary": {
-                "en": "Traveller behaviour, airport habits, baggage needs, price expectations and comparison with local transport alternatives shaped the demand conditions.",
-                "zh": "旅客行為、機場習慣、行李需求、價格期待及與在地交通替代方案的比較，共同形塑需求條件。"
+                "en": "What kind of taxi proposition was worth pursuing—and what evidence would justify building it?",
+                "zh": "什麼樣的計程車服務主張值得推進？需要哪些證據才能支持投入開發？"
               },
               "decisionLink": {
-                "en": "Set the traveller conditions for market and proposition comparison",
-                "zh": "支持決策一與決策二"
-              },
-              "caption": {
-                "en": "Urgency, late arrivals, luggage, waiting, price and safety showed where the existing proposition warranted improvement; this is qualitative context, not quantified demand.",
-                "zh": "質性研究統整呈現急迫、深夜抵達、行李、等待、不確定性、價格與安全；屬情境證據，並非量化需求。"
+                "en": "Framed the commitment decision before solution definition",
+                "zh": "在定義解法前先界定投入決策"
               }
             },
             {
-              "id": "supplier-readiness",
+              "id": "customer-side",
               "heading": {
-                "en": "Supplier and market readiness",
-                "zh": "供應商與市場成熟度"
+                "en": "Customer side",
+                "zh": "顧客端"
               },
               "summary": {
-                "en": "Supplier feasibility, coverage and local-market constraints informed whether a market could credibly support the proposition.",
-                "zh": "供應商可行性、覆蓋與在地市場限制，決定市場是否能可信地支持該服務主張。"
+                "en": "Traveller behaviour, airport habits, luggage, waiting, price and safety signals defined where pre-booked pickup could be meaningful.",
+                "zh": "旅客行為、機場習慣、行李、等待、價格與安全訊號，界定預約接送可能產生價值的情境。"
+              },
+              "decisionLink": {
+                "en": "Defined demand conditions without claiming quantified demand",
+                "zh": "界定需求條件，但不宣稱量化需求"
+              },
+              "presentation": "framed",
+              "assetId": "booking-taxi-pickup-overview-source-v1",
+              "caption": {
+                "en": "Customer and supplier insight analysis connected two-sided evidence before proposition work; it is qualitative decision support, not proof of launch or demand volume.",
+                "zh": "顧客與供應商洞察分析在定義主張前連結雙邊證據；這是質性決策支持，並非上線或需求量證明。"
+              }
+            },
+            {
+              "id": "supplier-side",
+              "heading": {
+                "en": "Supplier side",
+                "zh": "供應商端"
+              },
+              "summary": {
+                "en": "Supplier feasibility, coverage, operating conditions and market variation bounded which propositions could be credibly supported.",
+                "zh": "供應商可行性、覆蓋、營運條件與市場差異，限制了哪些服務主張能被可信地支持。"
               },
               "decisionLink": {
                 "en": "Bound the recommendation to supportable markets",
-                "zh": "支持決策一"
+                "zh": "將建議限制在可支持的市場"
               }
             },
             {
-              "id": "proposition-definition",
+              "id": "signals-to-service-model",
               "heading": {
-                "en": "Proposition definition",
-                "zh": "服務主張定義"
+                "en": "From signals to service model",
+                "zh": "從訊號到服務模型"
               },
               "summary": {
-                "en": "Price expectations, itinerary context and airport-native baggage language informed a proposition suitable for focused validation.",
-                "zh": "價格期待、行程脈絡與機場熟悉的行李語言，共同支持適合聚焦驗證的服務主張。"
+                "en": "Research and stakeholder questions were synthesised into a comparison of hailing and pre-booking propositions across traveller scenarios.",
+                "zh": "研究與利害關係人問題被統整為旅客情境下路邊攔車與預約接送的服務主張比較。"
               },
               "decisionLink": {
                 "en": "Established the proposition attributes worth testing",
-                "zh": "支持決策二"
+                "zh": "建立值得驗證的主張屬性"
               },
+              "presentation": "framed",
               "assetId": "booking-taxi-strategy-proposition-comparison-public-v1",
               "caption": {
-                "en": "Comparing hailing and pre-booking across traveller scenarios exposed where the existing proposition differed and which attributes were worth testing; it is not an experiment result, shipped pricing or business outcome.",
-                "zh": "依旅客情境與服務主張屬性比較路邊攔車與預約接送；屬主張定義，並非實驗結果、已上線定價或商業成果。"
+                "en": "The comparison is an opportunity model, not shipped pricing, an experiment result or a business outcome.",
+                "zh": "此比較為機會模型，並非已上線定價、實驗結果或商業成果。"
               }
             },
             {
-              "id": "phase-one-recommendation",
+              "id": "decision-workshop",
               "heading": {
-                "en": "Phase 1 experiment recommendation",
-                "zh": "第一階段實驗建議"
+                "en": "Decision workshop",
+                "zh": "決策工作坊"
               },
               "summary": {
-                "en": "The combined evidence supported a selected-market experiment before immediate broad expansion.",
-                "zh": "整合證據支持在立即廣泛擴張前，先進行選定市場實驗。"
+                "en": "Cross-functional discussion aligned the open customer, supplier and market questions that had to be resolved before implementation commitment.",
+                "zh": "跨職能討論對齊了在承諾實作前必須釐清的顧客、供應商與市場問題。"
+              },
+              "decisionLink": {
+                "en": "Made unresolved assumptions visible to stakeholders",
+                "zh": "讓未解假設對利害關係人可見"
+              },
+              "presentation": "document",
+              "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
+              "caption": {
+                "en": "The cross-functional pre-mortem made customer, supplier and market risks discussable before implementation commitment; it does not prove an experiment ran.",
+                "zh": "跨職能預先驗屍讓顧客、供應商與市場風險能在承諾實作前被討論；這不代表實驗已執行。"
+              }
+            },
+            {
+              "id": "recommendation",
+              "heading": {
+                "en": "Recommendation and validation boundary",
+                "zh": "建議與驗證邊界"
+              },
+              "summary": {
+                "en": "The evidence supported a selected-market Phase 1 experiment before broader build or investment.",
+                "zh": "證據支持在擴大開發或投資前，先進行選定市場的第一階段實驗。"
               },
               "decisionLink": {
                 "en": "Bound investment to a lower-risk experiment direction",
-                "zh": "支持決策三"
-              },
-              "assetId": "booking-taxi-strategy-experiment-risk-framing-public-v1",
-              "caption": {
-                "en": "The pre-mortem exposed failure conditions before larger commitment and shaped a bounded experiment direction; it does not prove that an experiment ran or succeeded.",
-                "zh": "在擴大投入前以預先驗屍法辨識實驗風險；僅證明風險框定，不代表實驗已執行或取得成功結果。"
+                "zh": "將投資限制在風險較低的實驗方向"
               }
             }
           ],
@@ -22244,9 +22479,19 @@
   },
   "implementationContracts": {
     "portfolioPresentation": {
-      "schemaVersion": 1,
+      "schemaVersion": 2,
       "publicRuntimeOwner": "assets/js/app.js#resolveProjectSemanticSlot",
       "contentRule": "Verified project truth supplies data. Archetype contracts exclusively own public section order and presence.",
+      "requiredAdjacencies": [
+        {
+          "predecessor": "transformation",
+          "predecessorComponent": "KeyInterventionMap",
+          "successor": "contribution",
+          "successorComponent": "ContributionBlock",
+          "scope": "canonical-projects",
+          "required": true
+        }
+      ],
       "archetypes": {
         "primary": {
           "id": "primary",
@@ -22254,6 +22499,7 @@
             "hero",
             "overview",
             "complexity",
+            "contribution",
             "decisions",
             "outcomes",
             "ownership",
@@ -22267,6 +22513,7 @@
             "hero",
             "overview",
             "complexity",
+            "contribution",
             "core-insight",
             "decisions",
             "evidence",
@@ -22283,7 +22530,6 @@
             "ownership"
           ],
           "forbiddenPublicSlots": [
-            "contribution",
             "key-problems",
             "critical-problem",
             "business-impact",
@@ -22336,6 +22582,49 @@
         }
       },
       "semanticSlots": {
+        "transformation": {
+          "sourcePaths": [
+            "keyInterventionMap"
+          ],
+          "component": "KeyInterventionMap",
+          "visibleLabel": "Transformation",
+          "localizedTitle": {
+            "en": "Transformation",
+            "zh": "轉變"
+          },
+          "visibleLabels": {
+            "before": {
+              "en": "Before",
+              "zh": "原始狀態"
+            },
+            "systemChange": {
+              "en": "System change",
+              "zh": "系統改變"
+            },
+            "after": {
+              "en": "After",
+              "zh": "建立後"
+            }
+          },
+          "semanticRole": "what-changed",
+          "middleField": "intervention",
+          "renderedFields": [
+            "before",
+            "intervention",
+            "after"
+          ],
+          "supportingCopyPresentation": "contribution-only"
+        },
+        "contribution": {
+          "sourcePaths": [
+            "publicContent.contribution",
+            "valueIBrought",
+            "publicContent.myContribution"
+          ],
+          "component": "ContributionBlock",
+          "semanticRole": "what-i-personally-changed",
+          "fallback": null
+        },
         "complexity": {
           "sourcePaths": [
             "whatMadeThisHard",
@@ -22360,6 +22649,7 @@
             "designDecisions"
           ],
           "component": "Decision",
+          "semanticRole": "what-i-chose",
           "fallback": null
         },
         "evidence": {
@@ -22403,6 +22693,7 @@
             "ownership_model"
           ],
           "component": "SharedAccountability",
+          "semanticRole": "what-i-owned",
           "fallback": null
         },
         "exploration-question": {
@@ -22433,6 +22724,48 @@
           ],
           "component": "DeliveryState",
           "fallback": null
+        }
+      },
+      "canonicalContributionConsolidation": {
+        "scope": "canonical-projects-only",
+        "renderExactlyOnce": true,
+        "projects": {
+          "voucher": {
+            "includeLegacySupportingCopy": true
+          },
+          "voucher-center": {
+            "includeOwnershipProof": true
+          },
+          "game-center": {
+            "includeOwnershipProof": true
+          },
+          "booking": {
+            "titleSource": "valueIBrought.supportingStatement",
+            "supportingSource": "keyInterventionMap.supportingCopy",
+            "includeOwnershipProof": true
+          },
+          "bandzo": {
+            "titleSource": "valueIBrought.supportingStatement",
+            "supportingSource": "keyInterventionMap.supportingCopy",
+            "includeOwnershipProof": true
+          },
+          "taishin-p2p-marketplace-platform": {
+            "includeLegacySupportingCopy": true,
+            "includeOwnershipProof": true
+          },
+          "ctbc-mortgage-self-service-app": {
+            "titleSource": "publicContent.myContribution.summary",
+            "includeLegacySupportingCopy": true,
+            "includeOwnershipProof": true
+          },
+          "booking-taxi-pickup-service-strategy": {
+            "titleSource": "publicContent.contribution.transformation.intervention",
+            "includeOwnershipProof": true
+          },
+          "cathay-sit-review-remediation-operations": {
+            "titleSource": "valueIBrought.supportingStatement",
+            "supportingSource": null
+          }
         }
       },
       "componentSelectionPriority": {
@@ -22474,7 +22807,6 @@
         },
         "primaryIA": {
           "forbiddenPublicSlots": [
-            "contribution",
             "key-problems",
             "critical-problem",
             "business-impact"
@@ -23112,7 +23444,14 @@
       "projects": {
         "voucher": {
           "sections": {
-            "my-contribution": {
+            "complexity": {
+              "sourcePaths": [
+                "whatMadeThisHard"
+              ],
+              "presentationType": "shared-complexity",
+              "renderRequired": true
+            },
+            "contribution": {
               "sourcePaths": [
                 "recruiterFirstPopup.contribution"
               ],
@@ -23126,23 +23465,15 @@
               "presentationType": "editorial-statement",
               "renderRequired": true
             },
-            "system-coverage-map": {
+            "journey-stage-solutions": {
               "sourcePaths": [
+                "recruiterFirstPopup.stages",
                 "publicContent.journeyChapters"
               ],
               "presentationType": "journey-with-five-stages",
               "renderRequired": true
             },
-            "reusable-system": {
-              "sourcePaths": [
-                "recruiterFirstPopup.reusableSystem",
-                "publicContent.systemFoundations",
-                "publicContent.futureVision"
-              ],
-              "presentationType": "reusable-system",
-              "renderRequired": true
-            },
-            "validated-outcomes": {
+            "outcomes": {
               "sourcePaths": [
                 "recruiterFirstPopup.outcomes",
                 "impactEvidence"
@@ -23150,16 +23481,35 @@
               "presentationType": "metric-strip",
               "renderRequired": true
             },
-            "ownership-and-evidence": {
+            "programme-research": {
               "sourcePaths": [
-                "recruiterFirstPopup.accountability",
-                "ownershipModel"
+                "recruiterFirstPopup.programmeResearch"
+              ],
+              "presentationType": "research-metrics",
+              "renderRequired": true
+            },
+            "my-accountability": {
+              "sourcePaths": [
+                "ownershipModel.accountabilityPresentation"
               ],
               "presentationType": "accountability",
+              "renderRequired": true
+            },
+            "related-work": {
+              "sourcePaths": [
+                "publicContent.relatedProjects",
+                "publicContent.continueExploring"
+              ],
+              "presentationType": "related-work",
               "renderRequired": true
             }
           },
           "supporting": [
+            {
+              "sourcePath": "publicContent.myContribution",
+              "parentSectionId": "contribution",
+              "presentationType": "ownership-provenance"
+            },
             {
               "sourcePath": "publicContent.evidenceToStrategy",
               "parentSectionId": "core-system-insight",
@@ -23172,17 +23522,17 @@
             },
             {
               "sourcePath": "publicContent.voucherWalletEvidence",
-              "parentSectionId": "reusable-system",
+              "parentSectionId": "journey-stage-solutions",
               "presentationType": "decision-evidence"
             },
             {
               "sourcePath": "programmeResearch",
-              "parentSectionId": "core-system-insight",
+              "parentSectionId": "programme-research",
               "presentationType": "source-evidence"
             },
             {
               "sourcePath": "journeyStageOptimisations",
-              "parentSectionId": "system-coverage-map",
+              "parentSectionId": "journey-stage-solutions",
               "presentationType": "stage-evidence"
             }
           ]
@@ -23304,6 +23654,13 @@
               ],
               "presentationType": "system-model",
               "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
             }
           },
           "supporting": [
@@ -23407,6 +23764,13 @@
               ],
               "presentationType": "launch-proof",
               "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-qualitative-outcomes",
+              "renderRequired": true
             }
           }
         },
@@ -23496,6 +23860,13 @@
               ],
               "presentationType": "launch-proof",
               "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-outcomes",
+              "renderRequired": true
             }
           }
         },
@@ -23570,6 +23941,13 @@
               ],
               "presentationType": "delivery-proof",
               "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-qualitative-outcomes",
+              "renderRequired": true
             }
           }
         },
@@ -23596,6 +23974,13 @@
                 "outcomeEvidenceModel"
               ],
               "presentationType": "delivery-proof",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-qualitative-outcomes",
               "renderRequired": true
             }
           }
@@ -23669,6 +24054,13 @@
                 "projectClosure.deliveryAndMeasurement"
               ],
               "presentationType": "recommendation-proof",
+              "renderRequired": true
+            },
+            "outcomes": {
+              "sourcePaths": [
+                "publicContent.outcomes"
+              ],
+              "presentationType": "shared-qualitative-outcomes",
               "renderRequired": true
             }
           }
@@ -24768,8 +25160,8 @@
           "zh": "使用者體驗設計師"
         },
         "employmentType": {
-          "en": "Full-time",
-          "zh": "全職"
+          "en": "",
+          "zh": ""
         },
         "period": {
           "en": "Dec 2015–Apr 2018",
@@ -24784,7 +25176,7 @@
           "en": "Product and service design across music, fintech, commerce, government and conversational products.",
           "zh": "涵蓋音樂、金融科技、商務、政府與對話式產品的產品及服務設計。"
         },
-        "contentStatus": "approved"
+        "contentStatus": "approved-cv-factual-alignment"
       },
       "booking-2018-2019": {
         "company": {
@@ -24796,15 +25188,15 @@
           "zh": "使用者體驗設計師"
         },
         "employmentType": {
-          "en": "Full-time",
-          "zh": "全職"
+          "en": "",
+          "zh": ""
         },
         "period": {
           "en": "Nov 2018–Dec 2019",
           "zh": "2018 年 11 月至 2019 年 12 月"
         },
         "location": {
-          "en": "United Kingdom",
+          "en": "UK",
           "zh": "英國"
         },
         "keyProjectId": "booking",
@@ -24812,7 +25204,11 @@
           "en": "Global taxi-booking and connected-trip journeys across 40+ countries.",
           "zh": "橫跨 40 多個國家的全球計程車預訂與 Connected Trip 旅程。"
         },
-        "contentStatus": "approved"
+        "contentStatus": "approved-cv-factual-alignment",
+        "linkLabel": {
+          "en": "Global rollout",
+          "zh": "全球上線"
+        }
       },
       "fairprice-payment-2020-2021": {
         "company": {
@@ -24824,8 +25220,8 @@
           "zh": "產品設計師"
         },
         "employmentType": {
-          "en": "Full-time",
-          "zh": "全職"
+          "en": "",
+          "zh": ""
         },
         "period": {
           "en": "Oct 2020–Oct 2021",
@@ -24840,20 +25236,20 @@
           "en": "0→1 retail payment across the FairPrice App, cashier POS and self-checkout.",
           "zh": "橫跨 FairPrice App、收銀 POS 與自助結帳的 0→1 零售支付。"
         },
-        "contentStatus": "approved"
+        "contentStatus": "approved-cv-factual-alignment"
       },
       "dbs-2021-2022": {
         "company": {
-          "en": "DBS",
-          "zh": "DBS"
+          "en": "DBS Bank",
+          "zh": "DBS Bank"
         },
         "title": {
           "en": "Senior Product Designer",
           "zh": "資深產品設計師"
         },
         "employmentType": {
-          "en": "Full-time",
-          "zh": "全職"
+          "en": "",
+          "zh": ""
         },
         "period": {
           "en": "Nov 2021–Oct 2022",
@@ -24868,7 +25264,11 @@
           "en": "Enterprise risk and credit-exception workflows across six markets.",
           "zh": "橫跨六個市場的企業風險與授信例外流程。"
         },
-        "contentStatus": "approved"
+        "contentStatus": "approved-cv-factual-alignment",
+        "linkLabel": {
+          "en": "DBS internal operations",
+          "zh": "DBS 內部營運"
+        }
       },
       "fairprice-voucher-2022-2025": {
         "company": {
@@ -24880,7 +25280,7 @@
           "zh": "資深產品設計師"
         },
         "employmentType": {
-          "en": "Contractor",
+          "en": "Contract",
           "zh": "約聘"
         },
         "period": {
@@ -24888,43 +25288,47 @@
           "zh": "2022 年 11 月至 2025 年 12 月"
         },
         "location": {
-          "en": "Singapore / Remote",
-          "zh": "新加坡／遠端"
+          "en": "Singapore",
+          "zh": "新加坡"
         },
         "keyProjectId": "voucher",
         "focus": {
           "en": "Voucher and Offer ecosystem strategy, reusable incentive systems and shipped customer products.",
           "zh": "優惠券／優惠生態策略、可重用獎勵系統與正式上線顧客產品。"
         },
-        "contentStatus": "approved-latest-user-correction"
+        "contentStatus": "approved-cv-factual-alignment",
+        "linkLabel": {
+          "en": "Voucher ecosystem",
+          "zh": "優惠券生態系統"
+        }
       },
       "freelance-2026-present": {
         "company": {
-          "en": "Independent practice",
-          "zh": "個人工作室"
+          "en": "",
+          "zh": ""
         },
         "title": {
-          "en": "Lead Product Designer",
-          "zh": "產品設計負責人"
+          "en": "Independent Product Designer",
+          "zh": "獨立產品設計師"
         },
         "employmentType": {
-          "en": "Freelance",
-          "zh": "自由接案"
+          "en": "",
+          "zh": ""
         },
         "period": {
-          "en": "2026–Present",
-          "zh": "2026 年至今"
+          "en": "Jan 2026–Present",
+          "zh": "2026 年 1 月至今"
         },
         "location": {
-          "en": "Remote",
-          "zh": "遠端"
+          "en": "Taiwan (Remote)",
+          "zh": "台灣（遠端）"
         },
         "keyProjectId": "ctbc-mortgage-self-service-app",
         "focus": {
           "en": "0→1 product strategy, regulated financial journeys and implementation-ready service models.",
           "zh": "0→1 產品策略、受監管金融旅程與可實作服務模型。"
         },
-        "contentStatus": "approved-latest-user-correction"
+        "contentStatus": "approved-cv-factual-alignment"
       }
     },
     "careerTimelineContract": {
@@ -24950,23 +25354,32 @@
       "explorationType": "Awarded concept",
       "status": "concept",
       "title": {
-        "en": "From scattered ideas to a connected capture-and-filter system",
-        "zh": "From scattered ideas to a connected capture-and-filter system"
+        "en": "Capture Ideas",
+        "zh": "Capture Ideas"
       },
       "summary": {
-        "en": "Designed a physical–digital creativity system connecting idea stimulation, capture and filtering through an Egg device, wireless dock and supporting desktop experience.",
-        "zh": "Designed a physical–digital creativity system connecting idea stimulation, capture and filtering through an Egg device, wireless dock and supporting desktop experience."
+        "en": "An awarded physical–digital concept connecting an Egg capture device, shared surfaces and desktop organisation into one proposed idea-development system.",
+        "zh": "一項獲獎的實體數位概念，將 Egg 捕捉裝置、共享介面與桌面整理工具串成一套構想發展系統。"
       },
       "audience": "Workers who need idea stimulation and expert consultation across meetings, leisure and individual work.",
       "award": "RSA Student Design Awards - Final 7 shortlist",
       "role": {
         "en": "Product Designer",
-        "zh": "Product Designer"
+        "zh": "產品設計師"
       },
       "deliverables": [
-        "Strategy report",
-        "UX",
-        "Physical product"
+        {
+          "en": "Strategy report",
+          "zh": "策略報告"
+        },
+        {
+          "en": "UX",
+          "zh": "UX"
+        },
+        {
+          "en": "Physical product",
+          "zh": "實體產品"
+        }
       ],
       "publicPlacement": "experiments-and-practice",
       "contentStatus": "approved-r181",
@@ -24988,7 +25401,7 @@
           ],
           "zh": [
             "Capture Ideas",
-            "Egg idea recorder"
+            "Egg 想法記錄器"
           ]
         },
         "domainIds": [],
@@ -25002,9 +25415,9 @@
             "collaborative ideation"
           ],
           "zh": [
-            "creativity tools",
-            "physical-digital systems",
-            "collaborative ideation"
+            "創意工具",
+            "實體數位系統",
+            "協作構想"
           ]
         },
         "capabilityTags": {
@@ -25015,8 +25428,8 @@
           ],
           "zh": [
             "實體數位產品",
-            "Product concept",
-            "Service ecosystem"
+            "產品概念",
+            "服務生態系"
           ]
         },
         "systemTags": {
@@ -25066,11 +25479,11 @@
       },
       "category": {
         "en": "Experimental Product · 2015",
-        "zh": "Experimental Product · 2015"
+        "zh": "實驗性產品 · 2015"
       },
       "eyebrow": {
         "en": "Experimental Product · 2015",
-        "zh": "Experimental Product · 2015"
+        "zh": "實驗性產品 · 2015"
       },
       "timeline": {
         "en": "2015",
@@ -25078,44 +25491,44 @@
       },
       "format": {
         "en": "Physical + Digital Product",
-        "zh": "Physical + Digital Product"
+        "zh": "實體＋數位產品"
       },
       "question": {
-        "en": "How could idea generation become a continuous system instead of a disconnected set of activities?",
-        "zh": "How could idea generation become a continuous system instead of a disconnected set of activities?"
+        "en": "How might physical and digital tools make it easier to capture, develop and revisit ideas across everyday contexts?",
+        "zh": "實體與數位工具如何讓人們在日常情境中更容易捕捉、發展並重新檢視想法？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Connect the creativity journey",
-            "zh": "Connect the creativity journey"
+            "zh": "串連創意歷程"
           },
           "body": {
             "en": "Structured the concept around Stimulate Ideas, Note Ideas and Filter Ideas.",
-            "zh": "Structured the concept around Stimulate Ideas, Note Ideas and Filter Ideas."
+            "zh": "以激發想法、記錄想法與篩選想法三個活動組織概念。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Bridge physical and digital interaction",
-            "zh": "Bridge physical and digital interaction"
+            "zh": "連結實體與數位互動"
           },
           "body": {
             "en": "Explored an Egg-shaped capture device, wireless charger and desktop filtering experience as one system.",
-            "zh": "Explored an Egg-shaped capture device, wireless charger and desktop filtering experience as one system."
+            "zh": "將 Egg 造型捕捉裝置、無線充電器與桌面篩選體驗視為同一套系統進行探索。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Test the system as a product proposition",
-            "zh": "Test the system as a product proposition"
+            "zh": "把系統發展為產品命題"
           },
           "body": {
             "en": "Developed the concept far enough to communicate physical-product and interaction behaviour as one integrated proposition.",
-            "zh": "Developed the concept far enough to communicate physical-product and interaction behaviour as one integrated proposition."
+            "zh": "將概念推進到足以把實體產品與互動行為表達為整合命題的程度。"
           }
         }
       ],
@@ -25142,12 +25555,133 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "Recognition is preserved exactly; no efficiency or engagement improvement is claimed.",
-        "zh": "Recognition is preserved exactly; no efficiency or engagement improvement is claimed."
+        "zh": "獎項狀態依據來源如實保留；不主張效率或參與度有所提升。"
       },
       "deliveryBoundary": "CONCEPTUAL",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "assetStatus": "HUMAN_SOURCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ACTIVE",
+      "abstractEvidenceFallback": "RETIRED_R1838E",
+      "maturity": {
+        "en": "Awarded concept",
+        "zh": "獲獎概念"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": {
+        "assetId": "capture-ideas-hero-public-v1",
+        "alt": {
+          "en": "Capture Ideas physical–digital concept showing the Egg device, capture surface and desktop experience.",
+          "zh": "Capture Ideas 實體數位概念，呈現 Egg 裝置、捕捉介面與桌面體驗。"
+        }
+      },
+      "presentationSections": [
+        {
+          "id": "proposed-system",
+          "title": {
+            "en": "Proposed system",
+            "zh": "提議系統"
+          },
+          "body": {
+            "en": "A proposed concept model connected three activities: Stimulate → Capture → Organise / Filter. It describes the intended system, not validated behaviour.",
+            "zh": "提議的概念模型串連三個活動：激發 → 捕捉 → 整理／篩選。這描述的是預期系統，並非已驗證的行為。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "貢獻"
+          },
+          "body": {
+            "en": "As Product Designer, I developed the physical–digital proposition and connected interaction model.",
+            "zh": "擔任產品設計師，我發展實體數位命題與相互連結的互動模型。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "proposed-details",
+          "title": {
+            "en": "Proposed details",
+            "zh": "提議細節"
+          },
+          "body": {
+            "en": "The Egg device, projected capture surface and desktop experience were designed as one connected interaction model. Selected contexts show where the proposition was intended to support individual and shared idea work.",
+            "zh": "Egg 裝置、投影捕捉介面與桌面體驗被設計為一套連貫的互動模型。精選情境呈現此命題預期如何支援個人與共享的構想工作。"
+          },
+          "assetIds": [
+            "capture-ideas-surface-public-v1",
+            "capture-ideas-shared-presentation-public-v1",
+            "capture-ideas-context-public-v1",
+            "capture-ideas-ideation-context-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A capture surface for developing an idea in place.",
+              "zh": "讓使用者就地發展想法的捕捉介面。"
+            },
+            {
+              "en": "A shared presentation context for revisiting captured material.",
+              "zh": "用於重新檢視已捕捉材料的共享展示情境。"
+            },
+            {
+              "en": "Workplace contexts used to frame capture and return moments.",
+              "zh": "用工作情境界定捕捉與回看想法的時機。"
+            },
+            {
+              "en": "A personal ideation context extending the same proposed system.",
+              "zh": "將同一套提議系統延伸到個人構想情境。"
+            }
+          ]
+        },
+        {
+          "id": "recognition",
+          "title": {
+            "en": "Recognition",
+            "zh": "設計肯定"
+          },
+          "body": {
+            "en": "Selected as a Final 7 concept in the RSA Student Design Awards.",
+            "zh": "入選 RSA Student Design Awards 最終七件概念作品。"
+          },
+          "assetIds": [
+            "rsa-student-design-awards-competition-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "RSA Student Design Awards — Final 7 Shortlist.",
+              "zh": "RSA Student Design Awards — 最終七件入選。"
+            }
+          ]
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The concept received external recognition, but no behavioural effectiveness, commercial adoption or shipped-product outcome is proven.",
+            "zh": "此概念獲得外部肯定，但沒有證據證明行為成效、商業採用或正式上線成果。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "next-validation-step",
+          "title": {
+            "en": "Next validation step",
+            "zh": "下一步驗證"
+          },
+          "body": {
+            "en": "Test whether people can capture, retrieve and develop ideas across contexts without losing continuity or control.",
+            "zh": "測試人們能否跨情境捕捉、找回並發展想法，同時維持連續性與掌控感。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "aha-creative-toolbox": {
       "id": "aha-creative-toolbox",
@@ -25159,12 +25693,12 @@
       "explorationType": "Product concept",
       "status": "concept",
       "title": {
-        "en": "From open-ended brainstorming to a structured creative workflow",
-        "zh": "From open-ended brainstorming to a structured creative workflow"
+        "en": "A-Ha! Creative Toolbox",
+        "zh": "A-Ha! Creative Toolbox"
       },
       "summary": {
-        "en": "Designed a collaborative creativity toolkit combining divergent idea generation with convergent evaluation across physical and digital interactions.",
-        "zh": "Designed a collaborative creativity toolkit combining divergent idea generation with convergent evaluation across physical and digital interactions."
+        "en": "A physical and digital creative-tool system taken from concept architecture into tangible prototypes and hands-on workshop evaluation.",
+        "zh": "一套從概念架構推進到實體原型與工作坊動手評估的實體數位創意工具系統。"
       },
       "coreValues": [
         "Speed",
@@ -25173,14 +25707,26 @@
         "Playfulness"
       ],
       "role": {
-        "en": "Research · App & Product Design",
-        "zh": "Research · App & Product Design"
+        "en": "Research, App & Product Design",
+        "zh": "研究、App 與產品設計"
       },
       "deliverables": [
-        "Strategy report",
-        "UX",
-        "Product design",
-        "Physical product"
+        {
+          "en": "Strategy report",
+          "zh": "策略報告"
+        },
+        {
+          "en": "UX",
+          "zh": "UX"
+        },
+        {
+          "en": "Product design",
+          "zh": "產品設計"
+        },
+        {
+          "en": "Physical product",
+          "zh": "實體產品"
+        }
       ],
       "publicPlacement": "experiments-and-practice",
       "contentStatus": "approved-r181",
@@ -25298,62 +25844,62 @@
       },
       "category": {
         "en": "Creative Tool Experiment · 2015",
-        "zh": "Creative Tool Experiment · 2015"
+        "zh": "創意工具實驗 · 2015"
       },
       "eyebrow": {
         "en": "Creative Tool Experiment · 2015",
-        "zh": "Creative Tool Experiment · 2015"
+        "zh": "創意工具實驗 · 2015"
       },
       "timeline": {
         "en": "2015",
         "zh": "2015"
       },
       "format": {
-        "en": "Creative Toolkit",
-        "zh": "Creative Toolkit"
+        "en": "Strategy report · UX · Product design · Physical product",
+        "zh": "策略報告 · UX · 產品設計 · 實體產品"
       },
       "question": {
-        "en": "Could a creativity tool support both generating possibilities and converging on useful directions?",
-        "zh": "Could a creativity tool support both generating possibilities and converging on useful directions?"
+        "en": "How might one toolkit support both divergent idea generation and convergent selection across individual and collaborative contexts?",
+        "zh": "一套工具如何同時支援個人與協作情境中的發散構想與收斂選擇？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Treat creativity as a workflow",
-            "zh": "Treat creativity as a workflow"
+            "zh": "把創意視為一段工作流程"
           },
           "body": {
             "en": "Designed for divergent and convergent thinking rather than idea generation alone.",
-            "zh": "Designed for divergent and convergent thinking rather than idea generation alone."
+            "zh": "同時支援發散與收斂思考，而不只著眼於產生想法。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Make participation more approachable",
-            "zh": "Make participation more approachable"
+            "zh": "讓參與更容易開始"
           },
           "body": {
-            "en": "Used playful interaction to lower participation barriers.",
-            "zh": "Used playful interaction to lower participation barriers."
+            "en": "Explored playful interaction as a prompt for participation.",
+            "zh": "探索以具趣味性的互動作為參與提示。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Explore distributed collaboration",
-            "zh": "Explore distributed collaboration"
+            "zh": "探索分散式協作"
           },
           "body": {
             "en": "Extended the concept through an online application so participation was not restricted to one physical location.",
-            "zh": "Extended the concept through an online application so participation was not restricted to one physical location."
+            "zh": "透過線上應用延伸概念，使參與不受單一實體地點限制。"
           }
         }
       ],
       "learning": {
         "en": "Developed a complete physical–digital creative-tool concept around one coherent design-thinking workflow.",
-        "zh": "Developed a complete physical–digital creative-tool concept around one coherent design-thinking workflow."
+        "zh": "以一致的設計思考流程，發展完整的實體數位創意工具概念。"
       },
       "next": {
         "en": "",
@@ -25374,12 +25920,155 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "No measured creativity or productivity improvement is claimed.",
-        "zh": "No measured creativity or productivity improvement is claimed."
+        "zh": "不主張創意能力或生產力獲得可量測的提升。"
       },
       "deliveryBoundary": "CONCEPTUAL",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "assetStatus": "HUMAN_SOURCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ACTIVE",
+      "abstractEvidenceFallback": "RETIRED_R1838E",
+      "maturity": {
+        "en": "Tested concept / prototype exploration",
+        "zh": "經原型評估的概念探索"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": {
+        "assetId": "aha-toolbox-hero-public-v1",
+        "alt": {
+          "en": "A-Ha Creative Toolbox opened to show the physical kit, cards and activity materials.",
+          "zh": "開啟的 A-Ha Creative Toolbox，呈現實體工具、卡片與活動材料。"
+        }
+      },
+      "presentationSections": [
+        {
+          "id": "system-model",
+          "title": {
+            "en": "System model",
+            "zh": "系統模型"
+          },
+          "body": {
+            "en": "The concept connected public and private project spaces, keyword scanning, idea recording, voting and matching into one workflow. This is concept architecture, not deployed service architecture.",
+            "zh": "此概念把公開與私密專案空間、關鍵字掃描、想法記錄、投票與配對串成一套流程。這是概念架構，不是已部署的服務架構。"
+          },
+          "assetIds": [
+            "aha-function-tree-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Function tree documenting the proposed application and collaboration workflow.",
+              "zh": "功能樹記錄提議的應用程式與協作流程。"
+            }
+          ]
+        },
+        {
+          "id": "physical-digital-proposition",
+          "title": {
+            "en": "Physical + digital proposition",
+            "zh": "實體＋數位命題"
+          },
+          "body": {
+            "en": "The physical toolkit, app concept and shared workflow were designed as one product-system proposition.",
+            "zh": "實體工具組、App 概念與共享流程被設計為一個產品系統命題。"
+          },
+          "assetIds": [
+            "aha-physical-digital-proposition-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "The physical kit and app concept presented together as one system.",
+              "zh": "實體工具與 App 概念共同呈現為一套系統。"
+            }
+          ]
+        },
+        {
+          "id": "prototype",
+          "title": {
+            "en": "Prototype",
+            "zh": "原型"
+          },
+          "body": {
+            "en": "Tangible toolkit components and interaction artifacts made the proposed workflow operable for evaluation.",
+            "zh": "可操作的工具元件與互動成果，讓提議流程可以被實際評估。"
+          },
+          "assetIds": [
+            "aha-prototype-inventory-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Prototype inventory connecting cards, prompts, voting tokens and app wireframes.",
+              "zh": "原型組合串連卡片、提示、投票代幣與 App 線框。"
+            }
+          ]
+        },
+        {
+          "id": "workshop-evaluation",
+          "title": {
+            "en": "Workshop evaluation",
+            "zh": "工作坊評估"
+          },
+          "body": {
+            "en": "The concept was taken beyond presentation into hands-on evaluation of the toolkit and workflow.",
+            "zh": "概念不只停留在展示，而是進一步對工具與流程進行動手評估。"
+          },
+          "assetIds": [
+            "aha-prototype-evaluation-public-v1",
+            "aha-evaluation-sequencing-public-v1",
+            "aha-workshop-evaluation-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A participant records an idea using the prototype materials.",
+              "zh": "參與者使用原型材料記錄想法。"
+            },
+            {
+              "en": "Cards are ordered and assessed during hands-on evaluation.",
+              "zh": "卡片在動手評估過程中被排序與檢視。"
+            },
+            {
+              "en": "A facilitated workshop uses the prototype system; faces remain blurred as supplied.",
+              "zh": "主持工作坊運用原型系統；人物臉部維持來源提供時的模糊處理。"
+            }
+          ]
+        },
+        {
+          "id": "what-evidence-supports",
+          "title": {
+            "en": "What the evidence supports",
+            "zh": "證據能支持什麼"
+          },
+          "body": {
+            "en": "The workshop evidence shows the concept was taken beyond presentation into hands-on evaluation of the toolkit and workflow. It does not provide measured effectiveness results.",
+            "zh": "工作坊證據顯示概念已從展示推進到工具與流程的動手評估；但沒有提供可量測的成效結果。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "I contributed research, app design, physical-product design and prototype evaluation.",
+            "zh": "我參與研究、App 設計、實體產品設計與原型評估。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "This was a product-system exploration supported by prototype and workshop evidence. No commercial launch, measured creativity uplift, productivity improvement or long-term adoption is proven.",
+            "zh": "這是一項由原型與工作坊證據支持的產品系統探索；沒有證據證明商業上市、創意能力提升、生產力改善或長期採用。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "hello-sabau": {
       "id": "hello-sabau",
@@ -25388,23 +26077,32 @@
       "period": "2018",
       "type": "0→1 Product",
       "explorationType": "Cultural product",
-      "status": "launched",
+      "status": "delivered-local-product",
       "title": {
-        "en": "From cultural storytelling to a participatory Rukai experience",
-        "zh": "From cultural storytelling to a participatory Rukai experience"
+        "en": "Hello SABAU!",
+        "zh": "Hello SABAU!"
       },
       "summary": {
-        "en": "Designed a cultural experience spanning play, physical products and local activities to make Rukai hunting culture more approachable beyond the community itself.",
-        "zh": "Designed a cultural experience spanning play, physical products and local activities to make Rukai hunting culture more approachable beyond the community itself."
+        "en": "A locally delivered cultural product and experience spanning Rukai storytelling, physical products, visual identity and tailored activities.",
+        "zh": "一項在地落地的文化產品與體驗，涵蓋魯凱敘事、實體產品、視覺識別與在地活動。"
       },
       "role": {
         "en": "Product Designer",
-        "zh": "Product Designer"
+        "zh": "產品設計師"
       },
       "deliverables": [
-        "Strategy report",
-        "Product design",
-        "Physical product"
+        {
+          "en": "Strategy report",
+          "zh": "策略報告"
+        },
+        {
+          "en": "Product design",
+          "zh": "產品設計"
+        },
+        {
+          "en": "Physical product",
+          "zh": "實體產品"
+        }
       ],
       "pressReference": "https://www.cna.com.tw/postwrite/Detail/163513.aspx#.XtCCnRMzbOQ",
       "historicalClaims": [
@@ -25633,11 +26331,11 @@
       },
       "category": {
         "en": "Cultural Experiment · 2018",
-        "zh": "Cultural Experiment · 2018"
+        "zh": "文化產品 · 2018"
       },
       "eyebrow": {
         "en": "Cultural Experiment · 2018",
-        "zh": "Cultural Experiment · 2018"
+        "zh": "文化產品 · 2018"
       },
       "timeline": {
         "en": "2018",
@@ -25645,11 +26343,11 @@
       },
       "format": {
         "en": "Cultural Experience + Physical Product",
-        "zh": "Cultural Experience + Physical Product"
+        "zh": "文化體驗＋實體產品"
       },
       "question": {
-        "en": "How could cultural knowledge become something people actively experience rather than passively observe?",
-        "zh": "How could cultural knowledge become something people actively experience rather than passively observe?"
+        "en": "How might a physical game make Rukai hunting traditions easier to encounter, understand and discuss without reducing them to a souvenir?",
+        "zh": "如何透過實體遊戲，讓人們更容易接觸、理解並討論魯凱狩獵傳統，同時不把文化簡化成紀念品？"
       },
       "experimentBlocks": [
         {
@@ -25709,12 +26407,176 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "No tourism, economic-growth, quality-of-life or talent-return causality is claimed.",
-        "zh": "No tourism, economic-growth, quality-of-life or talent-return causality is claimed."
+        "zh": "不主張本專案造成觀光、經濟成長、生活品質提升或青年返鄉。"
       },
       "deliveryBoundary": "SHIPPED",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "assetStatus": "HUMAN_EVIDENCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_INTEGRATED",
+      "abstractEvidenceFallback": "INACTIVE",
+      "maturity": {
+        "en": "Delivered cultural product / local experience",
+        "zh": "已落地的文化產品／在地體驗"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": {
+        "assetId": "hello-sabau-hero-game-public-v1",
+        "alt": {
+          "en": "Hello SABAU hunting game board with character pieces and cultural symbols arranged across the physical play surface.",
+          "zh": "Hello SABAU 狩獵遊戲棋盤，實體遊戲表面上配置角色棋子與文化符號。"
+        }
+      },
+      "presentationSections": [
+        {
+          "id": "cultural-context",
+          "title": {
+            "en": "Cultural context",
+            "zh": "文化脈絡"
+          },
+          "body": {
+            "en": "Hello SABAU translated Rukai cultural values and hunting traditions into an educational physical game and a broader cultural-product proposition.",
+            "zh": "Hello SABAU 將魯凱文化價值與狩獵傳統轉譯為教育性的實體遊戲，以及更廣泛的文化產品提案。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "design-question",
+          "title": {
+            "en": "Design question",
+            "zh": "設計問題"
+          },
+          "body": {
+            "en": "How might a physical game make Rukai hunting traditions easier to encounter, understand and discuss without reducing them to a souvenir?",
+            "zh": "如何透過實體遊戲，讓人們更容易接觸、理解並討論魯凱狩獵傳統，同時不把文化簡化成紀念品？"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "product-experience-system",
+          "title": {
+            "en": "Product / experience system",
+            "zh": "產品／體驗系統"
+          },
+          "body": {
+            "en": "The delivered system connected the board, character pieces, tokens, fitted storage and rules into one coherent physical experience.",
+            "zh": "落地系統把棋盤、角色棋子、代幣、定位收納與規則整合成一致的實體體驗。"
+          },
+          "assetIds": [
+            "hello-sabau-product-system-public-v1",
+            "hello-sabau-component-detail-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "The complete game system makes component architecture and storage visible.",
+              "zh": "完整遊戲系統清楚呈現元件架構與收納關係。"
+            },
+            {
+              "en": "A closer view shows component consistency and physical detailing without implying manufacturing ownership.",
+              "zh": "近距離畫面呈現元件一致性與實體細節，但不推論製造責任。"
+            }
+          ]
+        },
+        {
+          "id": "cultural-mechanics",
+          "title": {
+            "en": "How the game encodes culture",
+            "zh": "遊戲如何轉譯文化"
+          },
+          "body": {
+            "en": "Cooperation — teams play together rather than compete individually. Divination — a divination bird determines whether hunters continue. Respect for nature — the clouded leopard represents ancestral spirits and cannot be hunted. Honour — wild-boar hunting is associated with honour, represented by lilies. These mechanics explain design translation; no learning effectiveness is inferred.",
+            "zh": "合作——以團隊協作取代個人競爭。占卜——由占卜鳥決定獵人是否前進。尊重自然——雲豹象徵祖靈，因此不可獵捕。榮譽——獵得山豬與榮譽相連，並以百合花代表。這些機制說明設計轉譯，不推論學習成效。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivered-artefacts",
+          "title": {
+            "en": "Delivered artefacts",
+            "zh": "落地實體成果"
+          },
+          "body": {
+            "en": "The physical board, character system and playable pieces moved the work beyond a rendering into an interaction-ready product.",
+            "zh": "實體棋盤、角色系統與可操作棋子，使作品從視覺呈現進一步成為可互動產品。"
+          },
+          "assetIds": [
+            "hello-sabau-game-interaction-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A player moving a piece proves physical interaction exists; it does not prove usability, engagement or behavioural success.",
+              "zh": "玩家移動棋子證明實體互動存在，但不證明易用性、參與度或行為成效。"
+            }
+          ]
+        },
+        {
+          "id": "local-presentation",
+          "title": {
+            "en": "Local presentation",
+            "zh": "在地公開展示"
+          },
+          "body": {
+            "en": "The finished physical game was presented publicly beyond studio renderings. The image does not establish attendance, adoption, sales or market impact.",
+            "zh": "完成的實體遊戲曾在工作室渲染之外公開展示；此影像不證明觀展人數、採用、銷售或市場影響。"
+          },
+          "assetIds": [
+            "hello-sabau-public-presentation-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Public display provides bounded evidence that the physical artefact existed beyond renderings.",
+              "zh": "公開陳列提供有限但明確的證據：實體成果不只存在於渲染圖中。"
+            }
+          ]
+        },
+        {
+          "id": "recognition",
+          "title": {
+            "en": "Recognition",
+            "zh": "獎項肯定"
+          },
+          "body": {
+            "en": "Red Dot Award — Game Design Winner.",
+            "zh": "紅點設計獎——遊戲設計得主。"
+          },
+          "assetIds": [
+            "red-dot-2016-game-design-winner-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Red Dot Award 2016 — Game Design Winner.",
+              "zh": "2016 紅點獎——遊戲設計得主。"
+            }
+          ]
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "I worked as Product Designer across the cultural experience and physical-product proposition.",
+            "zh": "我以產品設計師身分參與文化體驗與實體產品提案。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The project was delivered as a cultural product and physical experience and later received Red Dot recognition. The available evidence does not establish measurable tourism, economic, quality-of-life or community outcomes.",
+            "zh": "本專案以文化產品與實體體驗形式落地，之後獲得紅點獎肯定。現有證據無法證明可量化的觀光、經濟、生活品質或社群成果。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "matsu-temple-packaging": {
       "id": "matsu-temple-packaging",
@@ -25859,83 +26721,91 @@
   "experiments": {
     "freelance-project-operations-tool": {
       "id": "freelance-project-operations-tool",
-      "scale": "Independent freelance operations tool used across real projects",
+      "publicSlug": "daily-hours",
+      "publicDescriptor": {
+        "en": "AI-assisted freelance project operations tool",
+        "zh": "AI-assisted freelance project operations tool"
+      },
+      "scale": {
+        "en": "Independent freelance operations tool used across real projects",
+        "zh": "用於真實專案的獨立接案營運工具"
+      },
       "audience": "Independent freelance project operations",
       "category": {
         "en": "AI-assisted Operational Product · Independent",
-        "zh": "AI-assisted Operational Product · Independent"
+        "zh": "AI 輔助營運產品 · 獨立專案"
       },
       "eyebrow": {
         "en": "AI-assisted Operational Product · Independent",
-        "zh": "AI-assisted Operational Product · Independent"
+        "zh": "AI 輔助營運產品 · 獨立專案"
       },
       "title": {
-        "en": "From scattered freelance records to a working project-operations system",
-        "zh": "From scattered freelance records to a working project-operations system"
+        "en": "Daily Hours",
+        "zh": "Daily Hours"
       },
       "summary": {
-        "en": "Designed and built a personal freelance operations tool in two days, then iterated it through real project use to connect effort, revisions, deliverables and project closure into one working system.",
-        "zh": "Designed and built a personal freelance operations tool in two days, then iterated it through real project use to connect effort, revisions, deliverables and project closure into one working system."
+        "en": "Designed and built a personal freelance operations tool, then iterated it through real project use to connect effort, revisions, deliverables and project closure.",
+        "zh": "設計並建立個人接案營運工具，再透過真實專案使用持續迭代，串連投入、修改、交付物與專案結案。"
       },
       "role": {
         "en": "Designer & Builder",
-        "zh": "Designer & Builder"
+        "zh": "設計者與建構者"
       },
       "period": "In active use",
       "timeline": {
         "en": "In active use",
-        "zh": "In active use"
+        "zh": "持續使用中"
       },
       "format": {
         "en": "Independent 0→1 Product",
-        "zh": "Independent 0→1 Product"
+        "zh": "獨立 0→1 產品"
       },
       "question": {
         "en": "How could fragmented freelance records become evidence I could actually use for planning and pricing?",
-        "zh": "How could fragmented freelance records become evidence I could actually use for planning and pricing?"
+        "zh": "分散的接案紀錄如何轉化為真正能用於規劃與定價的證據？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Turn project activity into structured evidence",
-            "zh": "Turn project activity into structured evidence"
+            "zh": "把專案活動轉化為結構化證據"
           },
           "body": {
             "en": "Connected project hours, revisions, deliverables and phases to understand what created effort—not only total hours.",
-            "zh": "Connected project hours, revisions, deliverables and phases to understand what created effort—not only total hours."
+            "zh": "串連專案工時、修改、交付物與階段，理解投入由何而來，而不只查看總工時。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Build the smallest system and use it immediately",
-            "zh": "Build the smallest system and use it immediately"
+            "zh": "建立最小系統並立即使用"
           },
           "body": {
-            "en": "Built the first usable version in two days, put it into real freelance use and iterated it from actual workflow behaviour.",
-            "zh": "Built the first usable version in two days, put it into real freelance use and iterated it from actual workflow behaviour."
+            "en": "Put the first usable version into real freelance work and iterated it from actual workflow behaviour.",
+            "zh": "把第一個可用版本投入真實接案工作，再依實際流程行為持續迭代。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Close the loop between delivery and future planning",
-            "zh": "Close the loop between delivery and future planning"
+            "zh": "串起交付與後續規劃"
           },
           "body": {
             "en": "Added a repeatable estimated-versus-actual review so historical work could inform workload planning, pricing and estimation.",
-            "zh": "Added a repeatable estimated-versus-actual review so historical work could inform workload planning, pricing and estimation."
+            "zh": "加入可重複的預估與實際檢視，讓歷史工作能支持工作量規劃、定價與估算。"
           }
         }
       ],
       "learning": {
         "en": "Built a working operational tool and used real project data to improve how future work is estimated. Across three projects, it surfaced approximately 18% of work that had been underestimated.",
-        "zh": "Built a working operational tool and used real project data to improve how future work is estimated. Across three projects, it surfaced approximately 18% of work that had been underestimated."
+        "zh": "建立一套運作中的營運工具，並用真實專案資料檢視未來工作估算。三個專案中出現約 18% 的低估訊號。"
       },
       "next": {
         "en": "Used AI-assisted prototyping and development to move quickly from problem framing to a working tool, while retaining ownership of workflow, product decisions and iteration.",
-        "zh": "Used AI-assisted prototyping and development to move quickly from problem framing to a working tool, while retaining ownership of workflow, product decisions and iteration."
+        "zh": "以 AI 輔助原型與開發，從問題框定快速推進到運作中的工具，同時保有流程、產品決策與迭代的主導權。"
       },
       "problemTypes": {
         "en": [
@@ -25958,12 +26828,12 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "AI assisted construction; AI is not claimed as a core runtime capability. The ~18% figure is an estimation-gap signal, not productivity, revenue or profitability impact.",
-        "zh": "AI assisted construction; AI is not claimed as a core runtime capability. The ~18% figure is an estimation-gap signal, not productivity, revenue or profitability impact."
+        "zh": "AI 僅輔助建構，不被主張為核心執行能力。約 18% 是估算落差訊號，不是生產力、營收或獲利影響。"
       },
       "deliveryBoundary": "SHIPPED",
       "publicPlacement": "experiments-and-practice",
       "contentStatus": "approved-r181",
-      "assetStatus": "HUMAN_ASSET_REQUIRED",
+      "assetStatus": "TEXT_EVIDENCE_ACTIVE",
       "searchIndexV2": {
         "version": "r181",
         "contentType": "exploration",
@@ -26010,11 +26880,113 @@
           "outcomeTags"
         ],
         "contentStatus": "approved"
-      }
+      },
+      "maturity": {
+        "en": "Working prototype / working internal tool",
+        "zh": "運作中的原型／內部工具"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": null,
+      "presentationSections": [
+        {
+          "id": "operating-need",
+          "title": {
+            "en": "Operating need",
+            "zh": "營運需求"
+          },
+          "body": {
+            "en": "Freelance records were fragmented across effort, revisions, deliverables and closure, making estimation patterns difficult to inspect.",
+            "zh": "接案紀錄分散在投入、修改、交付物與結案之間，使估算模式難以被檢視。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "what-i-built",
+          "title": {
+            "en": "What I built",
+            "zh": "我建立了什麼"
+          },
+          "body": {
+            "en": "A working operations tool connected estimated and actual effort, revisions, deliverables and project closure in one workflow. AI assisted construction; it is not a runtime product capability.",
+            "zh": "一套運作中的營運工具，把預估與實際投入、修改、交付物及專案結案串成單一流程。AI 僅輔助建構，不是產品執行能力。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "working-use-signal",
+          "title": {
+            "en": "Working-use signal",
+            "zh": "實際使用訊號"
+          },
+          "body": {
+            "en": "Real data from three projects surfaced an approximately 18% estimation gap.",
+            "zh": "三個真實專案的資料顯示約 18% 的估算落差。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "signal-change",
+          "title": {
+            "en": "What the signal changed",
+            "zh": "訊號帶來的改變"
+          },
+          "body": {
+            "en": "The comparison made under-estimation visible and created a concrete input for reviewing future planning and pricing assumptions.",
+            "zh": "這項比較讓低估情況變得可見，也為檢視後續規劃與定價假設提供具體輸入。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "As Designer & Builder, I owned the workflow framing and construction of the working operations tool.",
+            "zh": "作為設計者與建構者，我負責工作流程框定與這套運作中營運工具的建構。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The ~18% signal reflects estimation gaps across three projects. It does not prove productivity, revenue or profitability improvement, and AI is not a runtime product capability.",
+            "zh": "約 18% 的訊號反映三個專案中的估算落差；它不證明生產力、營收或獲利改善，AI 也不是產品執行能力。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "next-validation-step",
+          "title": {
+            "en": "Next validation step",
+            "zh": "下一步驗證"
+          },
+          "body": {
+            "en": "Compare more completed projects before using the observed gap as a durable planning baseline.",
+            "zh": "在把觀察到的落差作為穩定規劃基準前，先比較更多已完成專案。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "weekly-design-session": {
       "id": "weekly-design-session",
-      "scale": "Recurring cross-functional team practice",
+      "scale": {
+        "en": "Recurring cross-functional team practice",
+        "zh": "持續進行的跨職能團隊實踐"
+      },
       "audience": "Product and engineering teammates at Booking.com",
       "organisation": "Booking.com Transport",
       "period": "Apr–Dec 2019",
@@ -26025,16 +26997,16 @@
       "explorationType": "Team practice",
       "status": "implemented",
       "title": {
-        "en": "From isolated design knowledge to a recurring team learning loop",
-        "zh": "From isolated design knowledge to a recurring team learning loop"
+        "en": "Weekly Design Session",
+        "zh": "Weekly Design Session"
       },
       "summary": {
-        "en": "Initiated and facilitated weekly design sessions at Booking.com to make research, behavioral data and design rationale more visible across product and engineering.",
-        "zh": "Initiated and facilitated weekly design sessions at Booking.com to make research, behavioral data and design rationale more visible across product and engineering."
+        "en": "A recurring cross-functional learning practice that made research, behavioural evidence and design rationale visible earlier in product work.",
+        "zh": "一項持續進行的跨職能學習實踐，讓研究、行為證據與設計理由更早進入產品工作。"
       },
       "role": {
         "en": "Initiator & Facilitator",
-        "zh": "Initiator & Facilitator"
+        "zh": "發起人與主持人"
       },
       "sessionTypes": [
         {
@@ -26051,9 +27023,7 @@
         }
       ],
       "outcomes": [
-        "Improved team cohesion",
-        "Increased information transparency",
-        "Raised UX awareness within Engineering"
+        "Engineering Manager feedback records qualitative engagement with the shared insights; no measured team outcome is claimed."
       ],
       "testimonial": {
         "quote": "It’s a great session and effort you make. I can see the team enjoy seeing all these insights, and engage better.",
@@ -26151,12 +27121,12 @@
         },
         "outcomeTags": {
           "en": [
-            "weekly decision practice",
-            "higher information transparency"
+            "weekly design practice",
+            "recurring knowledge sharing"
           ],
           "zh": [
-            "每週決策實踐",
-            "更高資訊透明度"
+            "每週設計實踐",
+            "持續知識分享"
           ]
         },
         "queryExamples": {
@@ -26195,58 +27165,58 @@
       ],
       "category": {
         "en": "Design Practice Experiment · Booking.com · 2019",
-        "zh": "Design Practice Experiment · Booking.com · 2019"
+        "zh": "設計實踐實驗 · Booking.com · 2019"
       },
       "eyebrow": {
         "en": "Design Practice Experiment · Booking.com · 2019",
-        "zh": "Design Practice Experiment · Booking.com · 2019"
+        "zh": "設計實踐實驗 · Booking.com · 2019"
       },
       "format": {
         "en": "Recurring Team Practice",
-        "zh": "Recurring Team Practice"
+        "zh": "持續團隊實踐"
       },
       "question": {
         "en": "Could recurring design sessions make UX evidence part of the wider product team’s working knowledge?",
-        "zh": "Could recurring design sessions make UX evidence part of the wider product team’s working knowledge?"
+        "zh": "持續進行的設計場次能否讓 UX 證據成為更廣泛產品團隊的工作知識？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Share evidence, not presentations",
-            "zh": "Share evidence, not presentations"
+            "zh": "分享證據，而不是簡報"
           },
           "body": {
             "en": "Sessions incorporated research, analytics, behavioural and conversion tracking, and Hotjar evidence.",
-            "zh": "Sessions incorporated research, analytics, behavioural and conversion tracking, and Hotjar evidence."
+            "zh": "場次納入研究、分析、行為與轉換追蹤，以及 Hotjar 證據。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Turn insight into participation",
-            "zh": "Turn insight into participation"
+            "zh": "把洞察轉化為參與"
           },
           "body": {
             "en": "Used empathy ideation and collaborative exercises.",
-            "zh": "Used empathy ideation and collaborative exercises."
+            "zh": "運用同理發想與協作練習。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Move critique earlier",
-            "zh": "Move critique earlier"
+            "zh": "把評議提前"
           },
           "body": {
             "en": "Used design-breakdown sessions to expose engineering, PO and stakeholder constraints earlier.",
-            "zh": "Used design-breakdown sessions to expose engineering, PO and stakeholder constraints earlier."
+            "zh": "透過設計拆解場次，更早揭露工程、PO 與利害關係人的限制。"
           }
         }
       ],
       "learning": {
         "en": "Engineering Manager feedback documents that the team engaged with the shared insights.",
-        "zh": "Engineering Manager feedback documents that the team engaged with the shared insights."
+        "zh": "工程經理的回饋記錄了團隊對共享洞察的質性參與訊號。"
       },
       "next": {
         "en": "",
@@ -26269,26 +27239,89 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "Qualitative feedback only; no measured efficiency, cohesion or organisational-performance improvement is claimed.",
-        "zh": "Qualitative feedback only; no measured efficiency, cohesion or organisational-performance improvement is claimed."
+        "zh": "僅有質性回饋；不主張效率、凝聚力或組織績效獲得可量測的改善。"
       },
       "deliveryBoundary": "SHIPPED",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
+      "assetStatus": "TEXT_EVIDENCE_ACTIVE",
       "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "abstractEvidenceFallback": "ACTIVE",
+      "maturity": {
+        "en": "Facilitated practice",
+        "zh": "由主持人帶領的實踐"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": null,
+      "presentationSections": [
+        {
+          "id": "practice-model",
+          "title": {
+            "en": "Practice model",
+            "zh": "實踐模型"
+          },
+          "body": {
+            "en": "Near-weekly sessions combined evidence sharing, collaborative exercises and early critique with Product and Engineering.",
+            "zh": "近乎每週的場次，把證據分享、協作練習與早期評議帶進產品與工程合作。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "participant-signal",
+          "title": {
+            "en": "Participant signal",
+            "zh": "參與者訊號"
+          },
+          "body": {
+            "en": "Registered Engineering Manager feedback documents that the team engaged with the shared insights. This is qualitative evidence only.",
+            "zh": "已登錄的工程經理回饋記錄了團隊參與共享洞察的情況；這僅是質性證據。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "I initiated and facilitated the recurring design-session practice.",
+            "zh": "我發起並主持這項持續進行的設計場次實踐。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The recurring practice and testimonial are supported. No measured efficiency, cohesion or organisational-performance improvement is proven.",
+            "zh": "持續實踐與引言均有來源支持；沒有證據證明效率、凝聚力或組織績效獲得可量測的改善。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "food-testing-workshop": {
       "id": "food-testing-workshop",
-      "scale": "Group usability research format",
+      "scale": {
+        "en": "Group usability research format",
+        "zh": "團體易用性研究形式"
+      },
       "audience": "Participants in a facilitated group usability session",
       "organisation": "AJA Creative",
       "status": "completed-internal-experiment",
       "title": {
-        "en": "From individual usability testing to a group-research format",
-        "zh": "From individual usability testing to a group-research format"
+        "en": "Food Testing Workshop",
+        "zh": "Food Testing Workshop"
       },
       "summary": {
-        "en": "Designed and facilitated a group usability experiment combining structured observation, task behavior and before/after reflection into a reusable testing format.",
-        "zh": "Designed and facilitated a group usability experiment combining structured observation, task behavior and before/after reflection into a reusable testing format."
+        "en": "A facilitated research-method experiment that adapted usability-testing phases into a reusable group-testing template.",
+        "zh": "一項由主持人帶領的研究方法實驗，把易用性測試階段整理成可重用的團體測試模板。"
       },
       "outcomes": [
         "Created a reusable AJA group-testing template",
@@ -26435,15 +27468,15 @@
       },
       "category": {
         "en": "Research Experiment · AJA Creative · 2017",
-        "zh": "Research Experiment · AJA Creative · 2017"
+        "zh": "研究實驗 · AJA Creative · 2017"
       },
       "eyebrow": {
         "en": "Research Experiment · AJA Creative · 2017",
-        "zh": "Research Experiment · AJA Creative · 2017"
+        "zh": "研究實驗 · AJA Creative · 2017"
       },
       "role": {
         "en": "Researcher · Planner · Facilitator",
-        "zh": "Researcher · Planner · Facilitator"
+        "zh": "研究者 · 規劃者 · 主持人"
       },
       "timeline": {
         "en": "2017",
@@ -26451,50 +27484,50 @@
       },
       "format": {
         "en": "Research Method Experiment",
-        "zh": "Research Method Experiment"
+        "zh": "研究方法實驗"
       },
       "question": {
-        "en": "Could usability-testing structure be adapted to capture group behavior without losing individual observations?",
-        "zh": "Could usability-testing structure be adapted to capture group behavior without losing individual observations?"
+        "en": "How could a structured group session capture task behaviour, individual reactions and reflection without implying method effectiveness?",
+        "zh": "結構化團體場次如何捕捉任務行為、個人反應與反思，同時不暗示方法本身有效？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Establish a baseline",
-            "zh": "Establish a baseline"
+            "zh": "建立基準"
           },
           "body": {
             "en": "Captured participants’ first impressions and expectations before interaction.",
-            "zh": "Captured participants’ first impressions and expectations before interaction."
+            "zh": "在互動前記錄參與者的第一印象與期待。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Observe behavior through a shared task",
-            "zh": "Observe behavior through a shared task"
+            "zh": "透過共同任務觀察行為"
           },
           "body": {
             "en": "Structured the activity into defined tasks while recording group and individual behavior.",
-            "zh": "Structured the activity into defined tasks while recording group and individual behavior."
+            "zh": "把活動拆成明確任務，同時記錄團體與個人行為。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Compare experience after use",
-            "zh": "Compare experience after use"
+            "zh": "比較使用後體驗"
           },
           "body": {
             "en": "Closed with retrospective questions and before/after emotion scoring.",
-            "zh": "Closed with retrospective questions and before/after emotion scoring."
+            "zh": "以回顧問題與前後情緒評分收尾。"
           }
         }
       ],
       "learning": {
         "en": "Created a reusable template for group-testing sessions.",
-        "zh": "Created a reusable template for group-testing sessions."
+        "zh": "產出可重用的團體測試場次模板。"
       },
       "next": {
         "en": "",
@@ -26517,37 +27550,141 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "Team-building is secondary context; no performance effect is claimed.",
-        "zh": "Team-building is secondary context; no performance effect is claimed."
+        "zh": "團隊活動只是次要情境；不主張任何績效效果。"
       },
       "deliveryBoundary": "SHIPPED",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "assetStatus": "HUMAN_SOURCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ACTIVE",
+      "abstractEvidenceFallback": "RETIRED_R1838E",
+      "maturity": {
+        "en": "Facilitated research-method experiment",
+        "zh": "由主持人帶領的研究方法實驗"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": {
+        "assetId": "food-testing-live-session-hero-public-v1",
+        "alt": {
+          "en": "Participants taking part in a live facilitated food-testing session.",
+          "zh": "參與者正在進行由主持人帶領的現場食物測試。"
+        }
+      },
+      "presentationSections": [
+        {
+          "id": "experiment-setup",
+          "title": {
+            "en": "Experiment setup",
+            "zh": "實驗設定"
+          },
+          "body": {
+            "en": "The method used four supported phases: first impression, task, reflection, and emotion rating / scoring.",
+            "zh": "此方法使用四個有來源支持的階段：第一印象、任務、反思，以及情緒評量／評分。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "live-session-evidence",
+          "title": {
+            "en": "Live session evidence",
+            "zh": "現場場次證據"
+          },
+          "body": {
+            "en": "Selected photographs show rating, observation and group-session activity—not participant counts or outcome measures.",
+            "zh": "精選照片呈現評分、觀察與團體場次活動，而非參與人數或成效指標。"
+          },
+          "assetIds": [
+            "food-testing-rating-evidence-public-v1",
+            "food-testing-observation-evidence-public-v1",
+            "food-testing-artifact-evidence-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A participant records ratings and emotion observations.",
+              "zh": "參與者記錄評分與情緒觀察。"
+            },
+            {
+              "en": "The session is observed and recorded in context.",
+              "zh": "場次在實際情境中被觀察與記錄。"
+            },
+            {
+              "en": "Completed food artifacts provide supporting task evidence.",
+              "zh": "完成的食物成果提供任務執行的輔助證據。"
+            }
+          ]
+        },
+        {
+          "id": "method-output",
+          "title": {
+            "en": "Method output",
+            "zh": "方法產出"
+          },
+          "body": {
+            "en": "The authoritative output is a reusable group-testing template.",
+            "zh": "有權威來源支持的產出是一套可重用的團體測試模板。"
+          },
+          "assetIds": [
+            "food-testing-report-artifact-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Supporting report artifact; no unreadable metrics are transcribed.",
+              "zh": "作為輔助證據的報告成果；不轉錄無法可靠辨讀的數據。"
+            }
+          ]
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "I designed the research structure, planned the session and facilitated the group-testing method.",
+            "zh": "我設計研究結構、規劃場次，並主持團體測試方法。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The available evidence proves that the method was designed and run, and that a reusable testing template was produced. It does not prove improved participant outcomes or superiority over other research methods.",
+            "zh": "現有證據證明此方法已被設計並執行，也產出可重用的測試模板；但不證明參與者成果獲得改善，或此方法優於其他研究方法。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     },
     "aja-creative-workshop": {
       "id": "aja-creative-workshop",
-      "scale": "External workshop experiment",
+      "scale": {
+        "en": "External workshop experiment",
+        "zh": "外部工作坊實驗"
+      },
       "audience": "External workshop participants learning through a design challenge",
       "organisation": "AJA Creative",
       "status": "completed-external-workshop",
       "title": {
-        "en": "From design methodology to a hands-on learning experiment",
-        "zh": "From design methodology to a hands-on learning experiment"
+        "en": "AJA Creative Workshop",
+        "zh": "AJA Creative Workshop"
       },
       "summary": {
-        "en": "Planned, presented and facilitated an external workshop that translated user-insight methodology into a rapid hands-on design exercise.",
-        "zh": "Planned, presented and facilitated an external workshop that translated user-insight methodology into a rapid hands-on design exercise."
+        "en": "A delivered learning-format experiment combining methodology presentation, guided collaborative exercises, synthesis and participant feedback.",
+        "zh": "一項已執行的學習形式實驗，結合方法呈現、引導式協作練習、綜整與參與者回饋。"
       },
       "role": {
         "en": "Planner · Facilitator · Presenter",
-        "zh": "Planner · Facilitator · Presenter"
+        "zh": "規劃者 · 主持人 · 講者"
       },
       "topic": "How can we transfer user insights into design outcomes?",
       "outcomes": [
-        "Shared AJA design methodology externally",
-        "Delivered a practical design-iteration process",
-        "Observed personality and teamwork patterns",
-        "Strengthened company brand awareness"
+        "Delivered an external hands-on methodology workshop",
+        "Collected qualitative participant feedback"
       ],
       "agenda": [
         {
@@ -26724,11 +27861,11 @@
       },
       "category": {
         "en": "Facilitation Experiment · AJA Creative · 2017",
-        "zh": "Facilitation Experiment · AJA Creative · 2017"
+        "zh": "引導實驗 · AJA Creative · 2017"
       },
       "eyebrow": {
         "en": "Facilitation Experiment · AJA Creative · 2017",
-        "zh": "Facilitation Experiment · AJA Creative · 2017"
+        "zh": "引導實驗 · AJA Creative · 2017"
       },
       "timeline": {
         "en": "2017",
@@ -26736,50 +27873,50 @@
       },
       "format": {
         "en": "Workshop Experiment",
-        "zh": "Workshop Experiment"
+        "zh": "工作坊實驗"
       },
       "question": {
-        "en": "How could design methodology become understandable through practice instead of presentation alone?",
-        "zh": "How could design methodology become understandable through practice instead of presentation alone?"
+        "en": "How could design methodology become an active learning format rather than presentation alone?",
+        "zh": "設計方法如何從單向呈現轉化為主動學習形式？"
       },
       "experimentBlocks": [
         {
           "id": "01",
           "title": {
             "en": "Teach through a real design problem",
-            "zh": "Teach through a real design problem"
+            "zh": "透過真實設計問題教學"
           },
           "body": {
             "en": "Combined methodology sharing with an e-commerce service challenge.",
-            "zh": "Combined methodology sharing with an e-commerce service challenge."
+            "zh": "把方法分享與電商服務挑戰結合。"
           }
         },
         {
           "id": "02",
           "title": {
             "en": "Move participants through a complete cycle",
-            "zh": "Move participants through a complete cycle"
+            "zh": "帶領參與者走完完整週期"
           },
           "body": {
             "en": "Compressed interview, synthesis, problem definition, ideation, evaluation, scenario/solution and presentation into one guided journey.",
-            "zh": "Compressed interview, synthesis, problem definition, ideation, evaluation, scenario/solution and presentation into one guided journey."
+            "zh": "把訪談、綜整、問題定義、發想、評估、情境／方案與發表濃縮成一段引導旅程。"
           }
         },
         {
           "id": "03",
           "title": {
             "en": "Observe collaboration behavior",
-            "zh": "Observe collaboration behavior"
+            "zh": "觀察協作行為"
           },
           "body": {
             "en": "Observers recorded collaboration behaviour across differently composed groups.",
-            "zh": "Observers recorded collaboration behaviour across differently composed groups."
+            "zh": "觀察者記錄不同組成團隊的協作行為。"
           }
         }
       ],
       "learning": {
         "en": "Participant feedback provides qualitative evidence that the compressed hands-on format was useful and engaging.",
-        "zh": "Participant feedback provides qualitative evidence that the compressed hands-on format was useful and engaging."
+        "zh": "參與者回饋提供質性訊號，顯示這套濃縮的動手形式具有實用性與參與感。"
       },
       "next": {
         "en": "",
@@ -26802,12 +27939,132 @@
       "problemTypeVisibility": "SEARCH_ONLY",
       "claimBoundary": {
         "en": "No personality-performance causality or measured brand-awareness improvement is claimed.",
-        "zh": "No personality-performance causality or measured brand-awareness improvement is claimed."
+        "zh": "不主張人格與表現之間存在因果，也不主張品牌認知獲得可量測的改善。"
       },
       "deliveryBoundary": "SHIPPED",
-      "assetStatus": "ABSTRACT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE"
+      "assetStatus": "HUMAN_SOURCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ACTIVE",
+      "abstractEvidenceFallback": "RETIRED_R1838E",
+      "maturity": {
+        "en": "Facilitated practice",
+        "zh": "由主持人帶領的實踐"
+      },
+      "releaseEligibility": "READY_PUBLIC",
+      "hero": {
+        "assetId": "aja-workshop-facilitation-hero-public-v1",
+        "alt": {
+          "en": "The designer facilitating a workshop with the audience visible.",
+          "zh": "設計師正在主持工作坊，畫面中可見參與者。"
+        }
+      },
+      "presentationSections": [
+        {
+          "id": "format-design",
+          "title": {
+            "en": "Format design",
+            "zh": "形式設計"
+          },
+          "body": {
+            "en": "The workshop translated a methodology into a guided sequence of framing, ideation, synthesis, evaluation and sharing.",
+            "zh": "工作坊把方法轉化成問題框定、發想、綜整、評估與分享的引導流程。"
+          },
+          "assetIds": [
+            "aja-workshop-format-design-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Preparation artifact used to structure the learning format.",
+              "zh": "用來組織學習形式的準備成果。"
+            }
+          ]
+        },
+        {
+          "id": "live-facilitation",
+          "title": {
+            "en": "Live facilitation",
+            "zh": "現場引導"
+          },
+          "body": {
+            "en": "Turning methodology into an active learning exercise.",
+            "zh": "把方法轉化為主動學習練習。"
+          },
+          "assetIds": [
+            "aja-workshop-guided-exercise-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A facilitated exercise moves participants from explanation into active work.",
+              "zh": "引導式練習讓參與者從聆聽說明進入主動操作。"
+            }
+          ]
+        },
+        {
+          "id": "collaborative-exercise",
+          "title": {
+            "en": "Collaborative exercise",
+            "zh": "協作練習"
+          },
+          "body": {
+            "en": "Selected evidence shows group ideation, discussion and synthesis rather than a decorative event gallery.",
+            "zh": "精選證據呈現團體發想、討論與綜整，而不是裝飾性的活動圖庫。"
+          },
+          "assetIds": [
+            "aja-workshop-collaborative-synthesis-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Participants discuss and synthesize a shared direction.",
+              "zh": "參與者討論並綜整共同方向。"
+            }
+          ]
+        },
+        {
+          "id": "participant-signal",
+          "title": {
+            "en": "Participant signal",
+            "zh": "參與者訊號"
+          },
+          "body": {
+            "en": "Qualitative feedback was collected at the end of the workshop. No numerical learning or brand outcome is inferred.",
+            "zh": "工作坊結束時收集了質性回饋；不據此推論任何數值化學習或品牌成果。"
+          },
+          "assetIds": [
+            "aja-workshop-evaluation-signal-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "A participant completes the workshop evaluation sheet.",
+              "zh": "參與者填寫工作坊評估表。"
+            }
+          ]
+        },
+        {
+          "id": "contribution",
+          "title": {
+            "en": "Contribution",
+            "zh": "個人貢獻"
+          },
+          "body": {
+            "en": "I planned the workshop, presented the methodology and facilitated the hands-on learning format.",
+            "zh": "我規劃工作坊、呈現方法，並引導動手學習形式。"
+          },
+          "assetIds": [],
+          "captions": []
+        },
+        {
+          "id": "delivery-boundary",
+          "title": {
+            "en": "Delivery boundary",
+            "zh": "交付邊界"
+          },
+          "body": {
+            "en": "The workshop was delivered and participant engagement is visually and qualitatively evidenced. No measured learning uplift, brand impact or business outcome is proven.",
+            "zh": "工作坊已執行，且有視覺與質性參與證據；沒有證據證明可量測的學習提升、品牌影響或商業成果。"
+          },
+          "assetIds": [],
+          "captions": []
+        }
+      ]
     }
   },
   "contentDiscovery": {
@@ -29647,8 +30904,8 @@
         "zh": "開啟探索"
       },
       "view-experiment-8788e030": {
-        "en": "View experiment ↗",
-        "zh": "查看實驗 ↗"
+        "en": "View experiment",
+        "zh": "查看實驗"
       },
       "close-all-details-6520d3a1": {
         "en": "Close all details",
@@ -30091,8 +31348,8 @@
         "zh": "方向"
       },
       "view-case-ca67a135": {
-        "en": "View case ↗",
-        "zh": "查看案例 ↗"
+        "en": "View case",
+        "zh": "查看案例"
       },
       "open-initiative-a5308e77": {
         "en": "Open initiative",
@@ -30103,16 +31360,16 @@
         "zh": "優惠券與優惠生態系"
       },
       "open-initiative-4403ec27": {
-        "en": "Open initiative ↗",
-        "zh": "開啟子專案 ↗"
+        "en": "Open initiative",
+        "zh": "開啟子專案"
       },
       "exploration-34bf5b09": {
         "en": "Exploration",
         "zh": "探索"
       },
       "view-exploration-9f45033c": {
-        "en": "View exploration ↗",
-        "zh": "查看探索 ↗"
+        "en": "View exploration",
+        "zh": "查看探索"
       },
       "search-results-updated-63052d26": {
         "en": "Search results updated.",
@@ -30268,6 +31525,18 @@
         "en": "Taishin Bank",
         "zh": "台新銀行"
       },
+      "index.taipei-city-government-3c2a8741": {
+        "en": "Taipei City Government",
+        "zh": "台北市政府"
+      },
+      "index.eslite-58da97c2": {
+        "en": "Eslite",
+        "zh": "誠品"
+      },
+      "index.china-airlines-f702c819": {
+        "en": "China Airlines",
+        "zh": "華航"
+      },
       "index.selected-system-work-08b47275": {
         "en": "Selected system work",
         "zh": "精選系統作品"
@@ -30317,8 +31586,8 @@
         "zh": "建立可跨線上、實體門市與供應商出資旅程重用的能力。"
       },
       "index.view-case-ca67a135": {
-        "en": "View case ↗",
-        "zh": "查看案例 ↗"
+        "en": "View case →",
+        "zh": "查看案例 →"
       },
       "index.representative-incentive-model-acef6026": {
         "en": "Representative incentive model",
@@ -30505,8 +31774,8 @@
         "zh": "由每日小選擇建立的長期回饋系統。"
       },
       "index.view-experiment-8788e030": {
-        "en": "View experiment ↗",
-        "zh": "查看實驗 ↗"
+        "en": "View experiment →",
+        "zh": "查看實驗 →"
       },
       "index.a-compact-daily-conversation-ritual-designed-4e1e0f90": {
         "en": "A compact daily conversation ritual designed to stay sustainable.",
@@ -30965,8 +32234,8 @@
         "zh": "產品設計師 · 首席層級職責"
       },
       "profile.10-years-across-regulated-operations-global--bf93e20f": {
-        "en": "10+ years across regulated operations, global rollout, and 0→1 products—from problem framing through delivery and team adoption.",
-        "zh": "擁有 10+ 年經驗，橫跨受監管營運、全球上線與 0→1 產品，從問題定義一路推進至交付與團隊採用。"
+        "en": "9+ years across regulated operations, global rollout, and 0→1 products—from problem framing through delivery and team adoption.",
+        "zh": "擁有 9+ 年經驗，橫跨受監管營運、全球上線與 0→1 產品，從問題定義一路推進至交付與團隊採用。"
       },
       "profile.open-to-fully-remote-global-roles-980b5167": {
         "en": "Open to fully remote global roles",
@@ -31040,14 +32309,6 @@
         "en": "Experience & collaborations",
         "zh": "經歷與合作"
       },
-      "profile.2022-now-939e8d61": {
-        "en": "2022–Now",
-        "zh": "2022–至今"
-      },
-      "profile.fairprice-group-freelance-a911995e": {
-        "en": "FairPrice Group · Freelance",
-        "zh": "FairPrice Group · 自由接案"
-      },
       "profile.senior-product-designer-f6840e57": {
         "en": "Senior Product Designer",
         "zh": "資深產品設計師"
@@ -31116,10 +32377,6 @@
         "en": "Game & packaging",
         "zh": "遊戲與包裝"
       },
-      "profile.international-recognition-1baafb96": {
-        "en": "International recognition",
-        "zh": "國際肯定"
-      },
       "profile.recognised-in-germany-for-game-and-packaging-3437f849": {
         "en": "Recognised in Germany for game and packaging design.",
         "zh": "遊戲與包裝設計獲德國獎項肯定。"
@@ -31131,10 +32388,6 @@
       "profile.concept-design-23b5344e": {
         "en": "Concept design",
         "zh": "概念設計"
-      },
-      "profile.taiwan-recognition-827a4602": {
-        "en": "Taiwan recognition",
-        "zh": "台灣肯定"
       },
       "profile.recognised-by-taiwan-s-concept-design-progra-48b0981a": {
         "en": "Recognised by Taiwan’s concept design programme.",
@@ -31153,8 +32406,8 @@
         "zh": "入選英國最終七強名單。"
       },
       "profile.view-exploration-9f45033c": {
-        "en": "View exploration ↗",
-        "zh": "查看探索 ↗"
+        "en": "View exploration →",
+        "zh": "查看探索 →"
       },
       "profile.innovative-design-46a64d84": {
         "en": "Innovative design",
@@ -31167,6 +32420,14 @@
       "profile.special-award-03b55ca0": {
         "en": "Special Award",
         "zh": "特別獎"
+      },
+      "profile.rsa-final-seven-summary-r1838f": {
+        "en": "Selected as a Final 7 concept in the RSA Student Design Awards.",
+        "zh": "入選 RSA Student Design Awards 最終七件概念作品。"
+      },
+      "profile.rsa-final-seven-status-r1838f": {
+        "en": "Final 7 Shortlist",
+        "zh": "最終七件入選"
       },
       "profile.outside-product-work-533cc86c": {
         "en": "Outside product work",
@@ -31463,6 +32724,47 @@
           "officialChineseProjectTitleStatus": "translated public label; preserve an existing official title if one is found in the canonical source"
         }
       ],
+      "awardItems": [
+        {
+          "id": "red-dot-2016-game-design-winner",
+          "assetId": "red-dot-2016-game-design-winner-public-v1",
+          "projectId": "hello-sabau",
+          "projectName": {
+            "en": "Hello SABAU",
+            "zh": "Hello SABAU"
+          },
+          "winningDiscipline": {
+            "en": "Game Design",
+            "zh": "遊戲設計"
+          },
+          "result": {
+            "en": "Game Design Winner",
+            "zh": "遊戲設計得主"
+          },
+          "year": "2016",
+          "interaction": "project-linked"
+        },
+        {
+          "id": "red-dot-2016-packaging-design-winner",
+          "assetId": "red-dot-2016-packaging-design-winner-public-v1",
+          "projectId": null,
+          "canonicalWorkId": "matsu-temple-packaging",
+          "projectName": {
+            "en": "Matsu Temple Packaging",
+            "zh": "媽祖廟包裝設計"
+          },
+          "winningDiscipline": {
+            "en": "Packaging Design",
+            "zh": "包裝設計"
+          },
+          "result": {
+            "en": "Packaging Design Winner",
+            "zh": "包裝設計得主"
+          },
+          "year": "2016",
+          "interaction": "non-interactive"
+        }
+      ],
       "publicSummary": {
         "en": "Two winning works recognised in Germany: Hello SABAU for game design and Matsu Temple Packaging for packaging design.",
         "zh": "兩項作品於德國獲獎：Hello SABAU 獲遊戲設計肯定，Matsu Temple Packaging 獲包裝設計肯定。"
@@ -31559,6 +32861,52 @@
         "contentStatus": "approved"
       },
       "contentStatus": "approved"
+    },
+    "rsa-student-design-awards-2015": {
+      "canonicalId": "rsa-student-design-awards-2015",
+      "contentType": "recognition",
+      "assetId": "rsa-student-design-awards-competition-public-v1",
+      "awardName": {
+        "en": "RSA Student Design Awards",
+        "zh": "RSA Student Design Awards"
+      },
+      "awardResultFromCv": {
+        "en": "Final 7 Shortlist",
+        "zh": "Final 7 Shortlist"
+      },
+      "date": {
+        "isoMonth": "2015",
+        "display": {
+          "en": "2015",
+          "zh": "2015"
+        }
+      },
+      "winningWorks": [
+        {
+          "projectId": "capture-ideas",
+          "projectName": {
+            "en": "Capture Ideas",
+            "zh": "Capture Ideas"
+          },
+          "result": {
+            "en": "Final 7 Shortlist",
+            "zh": "Final 7 Shortlist"
+          }
+        }
+      ],
+      "publicSummary": {
+        "en": "Capture Ideas was selected as a Final 7 concept in the RSA Student Design Awards.",
+        "zh": "Capture Ideas 入選 RSA Student Design Awards 最終七件概念作品。"
+      },
+      "source": {
+        "humanAuthority": {
+          "supportedFacts": [
+            "RSA Student Design Awards",
+            "Final 7 Shortlist",
+            "Capture Ideas"
+          ]
+        }
+      }
     }
   },
   "siteMetadata": {
@@ -31719,7 +33067,9 @@
     }
   },
   "experimentArchitecture": {
-    "version": "r181",
+    "version": "r183.8e",
+    "releaseVisibility": "ELIGIBILITY_GATED",
+    "releaseNote": "Each Experiment is projected publicly only when its own releaseEligibility is READY_PUBLIC; unsupported and ineligible records remain non-shipping.",
     "sectionLabel": "Experiments & Practice",
     "primaryCaseCount": 13,
     "experimentCount": 7,
@@ -31737,11 +33087,12 @@
     "navigation": "NO_FLOATING_NAVIGATOR",
     "sections": [
       "Hero",
-      "The Question",
-      "The Experiment",
-      "Evidence",
-      "What This Proved",
-      "Related / Next Experiment"
+      "At a Glance",
+      "Question",
+      "Evidence-led project sections",
+      "Contribution",
+      "Delivery Boundary",
+      "Related Work"
     ],
     "assetPolicy": "REUSE_FIRST_NO_AUTOMATIC_LEGACY_GALLERY_MIGRATION"
   }

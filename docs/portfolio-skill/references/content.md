@@ -9,6 +9,23 @@
 - Delivery Boundary may be used when shipped/validated/scope distinction matters.
 - Never invent metrics or ownership.
 
+## Transformation and ownership semantics
+
+The canonical Transformation sequence is:
+
+`BEFORE → SYSTEM CHANGE → AFTER`
+
+- Transformation answers WHAT CHANGED.
+- Contribution answers WHAT I PERSONALLY CHANGED.
+- Decisions / Solutions answer WHAT I CHOSE.
+- Accountability answers WHAT I OWNED.
+
+`MY INTERVENTION` is superseded as a Transformation label. The SYSTEM CHANGE statement should describe the changed system, workflow, or user state. Preserve a statement that is already system-level. If it primarily uses first-person ownership language such as “I led”, “I defined”, “I drove”, or “I owned”, rewrite only that middle statement into a supported system-level formulation and retain ownership depth in Contribution.
+
+Transformation and Contribution must each render exactly once on every canonical project and must remain separate DOM sections. Transformation is the immediate section-level predecessor of Contribution; no unrelated section may appear between them. Experiments and Explorations do not inherit this canonical-project contract.
+
+The shared visual hierarchy is `BEFORE < SYSTEM CHANGE > AFTER`. Place the Transformation title before the visual flow, keep SYSTEM CHANGE dominant, treat BEFORE and AFTER as subordinate context states, and use explicit forward/downward connectors at responsive widths. Preserve a clear visual boundary before Contribution.
+
 ## Project title writing
 
 Project titles must be recruiter-readable and specific to the project's distinctive product/system problem.

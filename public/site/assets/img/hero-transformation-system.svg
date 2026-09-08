@@ -1,11 +1,11 @@
 <svg width="1419" height="700" viewBox="0 0 1419 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <style>
     .hero-cloud {
-      transform-box: view-box;
-      transform-origin: 600px 360px;
+      transform-box: fill-box;
+      transform-origin: center;
       will-change: transform, opacity;
       animation-duration: 4.2s;
-      animation-delay: .9s;
+      animation-delay: .7s;
       animation-fill-mode: both;
       animation-timing-function: cubic-bezier(.45, .05, .2, 1);
     }
@@ -20,7 +20,7 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-reveal 5.1s cubic-bezier(.22, 1, .36, 1) both;
+      animation: flame-reveal 5.2s cubic-bezier(.22, 1, .36, 1) both;
     }
 
     .hero-grip-reveal { display: none; }
@@ -29,59 +29,44 @@
       transform-box: fill-box;
       transform-origin: 50% 82%;
       will-change: transform, opacity;
-      animation: flame-breathe 3.8s cubic-bezier(.45, 0, .55, 1) 5.1s infinite;
+      animation: flame-breathe 3.8s cubic-bezier(.45, 0, .55, 1) 5.2s infinite;
     }
 
     .hero-flame-static { display: none; }
 
     @keyframes cloud-top-converge {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -6px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-76px, 260px) scale(.2, .16); }
-      88% { opacity: .58; }
+      82% { opacity: 1; transform: translate(-85px, 292px) scale(.12); }
       100% { opacity: 0; transform: translate(-85px, 292px) scale(.08); }
     }
 
     @keyframes cloud-upper-right-converge {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, 5px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-548px, 190px) scale(.2, .16); }
-      88% { opacity: .58; }
+      82% { opacity: 1; transform: translate(-615px, 213px) scale(.12); }
       100% { opacity: 0; transform: translate(-615px, 213px) scale(.08); }
     }
 
     @keyframes cloud-bottom-converge {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -4px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-132px, -171px) scale(.2, .16); }
-      88% { opacity: .58; }
+      82% { opacity: 1; transform: translate(-148px, -192px) scale(.12); }
       100% { opacity: 0; transform: translate(-148px, -192px) scale(.08); }
     }
 
     @keyframes cloud-left-converge {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, 6px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(488px, 13px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(548px, 15px) scale(.08); }
+      82% { opacity: 1; transform: translate(582px, 15px) scale(.12); }
+      100% { opacity: 0; transform: translate(582px, 15px) scale(.08); }
     }
 
     @keyframes cloud-lower-right-converge {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      7.7% { opacity: 1; transform: translate(0, -5px) scale(1); }
-      15.4% { opacity: 1; transform: translate(0, 0) scale(1); }
-      72% { opacity: 1; transform: translate(-701px, -79px) scale(.2, .16); }
-      88% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-787px, -89px) scale(.08); }
+      82% { opacity: 1; transform: translate(-815px, -89px) scale(.12); }
+      100% { opacity: 0; transform: translate(-815px, -89px) scale(.08); }
     }
 
     @keyframes flame-reveal {
-      0%, 82% { opacity: 0; transform: translateY(10px) scale(.9); }
-      94% { opacity: .76; transform: translateY(2px) scale(.98); }
+      0%, 94% { opacity: 0; transform: translateY(10px) scale(.9); }
+      97% { opacity: .76; transform: translateY(2px) scale(.98); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 

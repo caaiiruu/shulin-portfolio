@@ -14,53 +14,27 @@
   overlay.setAttribute('aria-hidden','true');
   const panel=doc.createElement('div');
   panel.className='portfolio-loader-v59__panel';
-  const hand=doc.createElement('span');
-  hand.className='portfolio-loader-v59__hand';
-  hand.setAttribute('aria-hidden','true');
-  const palm=doc.createElement('i');
-  palm.className='portfolio-loader-v59__palm';
-  hand.appendChild(palm);
-  for(let index=0;index<5;index+=1){
-    const finger=doc.createElement('i');
-    finger.className='portfolio-loader-v59__finger';
-    hand.appendChild(finger);
-  }
+  const progress=doc.createElement('span');
+  progress.className='portfolio-loader-v59__progress';
+  progress.setAttribute('aria-hidden','true');
+  const progressBar=doc.createElement('i');
+  progressBar.className='portfolio-loader-v59__progress-bar';
+  progress.appendChild(progressBar);
   const initialLabel=doc.createElement('span');
   initialLabel.className='portfolio-loader-v59__label';
   initialLabel.textContent=runtimeCopy('opening');
-  panel.append(hand,initialLabel);
+  panel.append(progress,initialLabel);
   overlay.appendChild(panel);
   doc.body.appendChild(overlay);
   let shownAt=0;
   let hideTimer=0;
   let safetyTimer=0;
   const label=overlay.querySelector('.portfolio-loader-v59__label');
-  const countSequence=[1,2,3,4,5,4,3,2];
-  let countIndex=0;
-  let countTimer=0;
-  function stopCount(){
-    window.clearInterval(countTimer);
-    countTimer=0;
-  }
-  function startCount(){
-    stopCount();
-    countIndex=0;
-    hand.dataset.count=String(countSequence[countIndex]);
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      hand.dataset.count='5';
-      return;
-    }
-    countTimer=window.setInterval(()=>{
-      countIndex=(countIndex+1)%countSequence.length;
-      hand.dataset.count=String(countSequence[countIndex]);
-    },180);
-  }
   function show(text){
     window.clearTimeout(hideTimer);
     window.clearTimeout(safetyTimer);
     label.textContent=text||runtimeCopy('opening');
     shownAt=performance.now();
-    startCount();
     overlay.classList.add('is-active');
     overlay.setAttribute('aria-hidden','false');
     doc.body.setAttribute('aria-busy','true');
@@ -73,7 +47,6 @@
       overlay.classList.remove('is-active');
       overlay.setAttribute('aria-hidden','true');
       doc.body.removeAttribute('aria-busy');
-      stopCount();
     },remaining);
   }
   doc.addEventListener('click',event=>{

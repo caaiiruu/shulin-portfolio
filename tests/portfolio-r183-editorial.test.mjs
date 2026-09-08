@@ -50,7 +50,8 @@ test("R183 preserves Payment as a four-decision 0→1 transaction product", () =
   assert.match(projectDetailCss, /\.structured-evidence-quotes\{[^}]*width:100%[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)[^}]*align-items:start/);
   assert.match(projectDetailCss, /\.structured-evidence-quote\{[^}]*height:auto/);
   assert.match(projectDetailCss, /\.structured-evidence-quote blockquote\{width:100%;max-width:none;padding:0\}/);
-  assert.match(projectDetailCss, /\.case-reading-wrapper[^}]*margin-inline:var\(--case-content-anchor-inline\)/);
+  assert.match(projectDetailCss, /\.case-reading-wrapper[^}]*var\(--project-detail-reading-max\)[^}]*margin-inline:0/);
+  assert.match(projectDetailCss, /\.case-content-span--full[^}]*width:100%[^}]*margin-inline:0/);
   assert.equal(manifest.items["payment-live-interview-privacy-safe-v1"].derivativeStatus, "privacy-safe-face-blur-v1");
   assert.match(manifest.items["payment-live-interview-privacy-safe-v1"].sourceBoundary, /source is preserved outside the public build/i);
   const liveCheckout = manifest.items["payment-evidence-live-checkout-privacy-safe-v1"];

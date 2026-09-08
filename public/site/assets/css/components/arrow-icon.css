@@ -8,7 +8,7 @@
   background-color:currentColor;
   -webkit-mask:url("/site/assets/img/arrow.svg") center/contain no-repeat;
   mask:url("/site/assets/img/arrow.svg") center/contain no-repeat;
-  transform:rotate(var(--arrow-rotation,var(--arrow-rotate-down)));
+  transform:rotate(var(--arrow-rotation,var(--arrow-rotate-right)));
   transform-origin:center;
   transition:transform var(--motion-fast) var(--ease-standard);
 }
@@ -32,6 +32,9 @@
 .icon-arrow--down-right{--arrow-rotation:var(--arrow-rotate-down-right)}
 .icon-arrow--down-left{--arrow-rotation:var(--arrow-rotate-down-left)}
 .icon-arrow--up-left{--arrow-rotation:var(--arrow-rotate-up-left)}
+[data-cta-semantic="navigation"] .icon-arrow{--arrow-rotation:var(--arrow-rotate-right)}
+[data-cta-semantic="in-page-guide"] .icon-arrow{--arrow-rotation:var(--arrow-rotate-down)}
+[data-cta-semantic="external"] .icon-arrow{--arrow-rotation:var(--arrow-rotate-up-right)}
 :where(a,button):hover:not(:disabled)>.icon-arrow--right{transform:translateX(var(--dimension-2px)) rotate(var(--arrow-rotate-right))}
 :where(a,button):hover:not(:disabled)>.icon-arrow--left{transform:translateX(var(--dimension-neg-2px)) rotate(var(--arrow-rotate-left))}
 :where(a,button):hover:not(:disabled)>.icon-arrow--down{transform:translateY(var(--dimension-2px)) rotate(var(--arrow-rotate-down))}

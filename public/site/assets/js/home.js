@@ -16,6 +16,46 @@ const status=document.getElementById('matcherStatus');
 const queryPanel=document.querySelector('.matcher-query-panel');
 const matcherInput=document.getElementById('matcherInput');
 const suggestions=document.getElementById('matcherSuggestions');
+function mountCompanyWall(){
+ const viewports=[...document.querySelectorAll('.experience-orgs-v44__viewport')];
+ if(!viewports.length)return;
+ const measuredWidths=new WeakMap();
+ const rebuild=(viewport,force=false)=>{
+  const measuredWidth=viewport.clientWidth;
+  if(!force&&measuredWidths.get(viewport)===measuredWidth)return;
+  measuredWidths.set(viewport,measuredWidth);
+  viewport.tabIndex=window.matchMedia('(min-width: 901px)').matches?-1:0;
+  const track=viewport.querySelector('.experience-orgs-v44__track');
+  const primary=track?.querySelector('.experience-orgs-v44__set:not(.experience-orgs-v44__set--clone)');
+  const original=primary?.querySelector('.experience-orgs-v44__list:not([aria-hidden="true"])');
+  if(!track||!primary||!original)return;
+  viewport.classList.remove('is-loop-ready');
+  track.querySelector('.experience-orgs-v44__set--clone')?.remove();
+  primary.querySelectorAll('.experience-orgs-v44__list[aria-hidden="true"]').forEach(node=>node.remove());
+  const sourceWidth=original.scrollWidth;
+  if(!sourceWidth)return;
+  const repeatCount=Math.max(1,Math.ceil(viewport.clientWidth/sourceWidth)+1);
+  for(let index=1;index<repeatCount;index+=1){
+   const duplicate=original.cloneNode(true);
+   duplicate.setAttribute('aria-hidden','true');
+   duplicate.removeAttribute('role');
+   primary.append(duplicate);
+  }
+  const clone=primary.cloneNode(true);
+  clone.classList.add('experience-orgs-v44__set--clone');
+  clone.setAttribute('aria-hidden','true');
+  track.append(clone);
+  viewport.classList.add('is-loop-ready');
+ };
+ const rebuildAll=(force=false)=>requestAnimationFrame(()=>viewports.forEach(viewport=>rebuild(viewport,force)));
+ rebuildAll();
+ if('ResizeObserver' in window){
+  const observer=new ResizeObserver(entries=>entries.forEach(entry=>rebuild(entry.target)));
+  viewports.forEach(viewport=>observer.observe(viewport));
+ }
+ document.addEventListener('portfolio:language',()=>rebuildAll(true));
+}
+mountCompanyWall();
 if(!workspace)return;
 let mode='idle';
 let match='exception';
@@ -86,8 +126,11 @@ function createProjectVisual(key){
 function createProjectCard(key,variant){
  const p=window.adaptPortfolioProject?.(key)||DATA.projects[key];
  if(!p)throw new Error(`Integration Conflict: unresolved project ID "${key}"`);
+ const searchProjection=variant==='search'?window.searchResultCardProjection?.(key):null;
+ if(variant==='search'&&!searchProjection)throw new Error(`SearchResultCard: missing shared approved projection for "${key}".`);
  const card=element('button',`related-project-card related-project-card--${variant} related-project-card-v45`);
  card.type='button';card.dataset.project=key;
+ if(variant==='search')card.dataset.searchCardProjection='approved';
  card.setAttribute('aria-label',`${ui("open-project-9dcdb86a")}: ${projectTitle(p)}`);
  const top=element('div','related-project-card__top-v45');
  top.append(element('strong','related-project-card__company-v135',projectBrand(key)));
@@ -95,20 +138,17 @@ function createProjectCard(key,variant){
  if(context)top.append(element('span','related-project-card__context',context));
  const title=element('h5','related-project-card__title',projectTitle(p));
  const meta=element('dl','related-project-card__meta-v45');
- const rows=variant==='search'
-  ?[
-    [ui("why-it-fits-3421d244"),localize(p.search_relevance_pair)||projectSummary(p)],
-    [ui("evidence-1111eae0"),localize(p.search_evidence_pair)]
-   ]
-  :variant==='domain'
+ const rows=variant==='domain'
    ?[[ui("what-this-proves-bfb1a5d4"),localize(p.what_this_proves)]]
    :[[ui("direction-b41b4458"),localize(p.search_relevance_pair)||projectSummary(p)]];
- rows.forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
- const action=element('span','related-project-card__action',ui("view-case-ca67a135"));
+ if(variant!=='search')rows.forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
+ const action=element('span','related-project-card__action text-cta');
+ action.append(element('span',variant==='search'?'sr-only':'',ui("view-case-ca67a135")),element('span','icon-arrow icon-arrow--right'));
  if(variant==='search'){
   const intro=element('div','related-project-card__intro-v81');
   intro.append(top,title);
-  card.append(intro,meta,action);
+  const signal=element('p',`search-result-card__signal search-result-card__signal--${searchProjection.kind}`,searchProjection.value);
+  card.append(intro,signal,action);
  }else{
   card.classList.add('related-project-card-v45--media-stack');
   const heading=element('div','related-project-card__heading-v1612');
@@ -130,7 +170,9 @@ function createInitiativeCard(parentKey,key){
  const title=element('h5','related-project-card__title',lang()==='zh'?item.title_zh:item.title);
  const meta=element('dl','related-project-card__meta-v45');
  [[ui("why-it-fits-3421d244"),lang()==='zh'?item.strategy_zh:item.strategy],[ui("problem-types-dd6fa301"),(lang()==='zh'?item.problem_types_zh:item.problem_types).join(' · ')]].forEach(([label,value])=>{const row=element('div');row.append(element('dt','',label),element('dd','',value));meta.append(row)});
- card.append(top,title,meta,element('span','related-project-card__action',ui("open-initiative-4403ec27")));
+ const action=element('span','related-project-card__action text-cta',ui("open-initiative-4403ec27"));
+ action.append(element('span','icon-arrow icon-arrow--right'));
+ card.append(top,title,meta,action);
  return card;
 }
 function renderProjectRail(node,keys,variant,initiativeKeys=[]){if(!node)return;const cards=keys.map(k=>createProjectCard(k,variant));initiativeKeys.forEach(([parent,key])=>{const card=createInitiativeCard(parent,key);if(card)cards.push(card)});node.classList.toggle('is-single',cards.length===1);node.dataset.cardVariant=variant;node.replaceChildren(...cards);if(node.matches('[data-rail]'))window.refreshHorizontalRails?.()}
@@ -147,7 +189,9 @@ function createExplorationCard(key){
  const row=element('div');
  row.append(element('dt','',ui("direction-b41b4458")),element('dd','',localize(item.summary||item.description)||''));
  meta.append(row);
- card.append(top,element('h5','related-project-card__title',projectTitle(item)),meta,element('span','related-project-card__action',ui("view-exploration-9f45033c")));
+ const action=element('span','related-project-card__action text-cta',ui("view-exploration-9f45033c"));
+ action.append(element('span','icon-arrow icon-arrow--right'));
+ card.append(top,element('h5','related-project-card__title',projectTitle(item)),meta,action);
  return card;
 }
 
@@ -271,9 +315,9 @@ const domainFloatingNav=document.getElementById('domainFloatingNav');
 let domainFloatingChips=[];
 const compactDomainMedia=window.matchMedia('(max-width: 900px)');
 let domainFloatFrame=0;
-function scrollToDomainStart(event){
+let domainHashPositionFrame=0;
+function positionDomainStart({behavior='auto',updateHistory=false}={}){
  if(!domainSection)return;
- event?.preventDefault();
  domainSelectionActive=true;
  syncDomainSelection({center:compactDomainMedia.matches});
  syncFloatingDomain(domain);
@@ -284,9 +328,23 @@ function scrollToDomainStart(event){
  const targetTop=Math.max(0,contentTop-headerBottom-anchorGap);
  window.scrollTo({
   top:targetTop,
-  behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'
+  behavior
  });
- if(window.location.hash!=='#domains')history.pushState(null,'','#domains');
+ if(updateHistory&&window.location.hash!=='#domains')history.pushState(null,'','#domains');
+}
+function scrollToDomainStart(event){
+ event?.preventDefault();
+ positionDomainStart({
+  behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+  updateHistory:true
+ });
+}
+function scheduleDomainHashPosition(){
+ if(window.location.hash!=='#domains'||domainHashPositionFrame)return;
+ domainHashPositionFrame=requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  domainHashPositionFrame=0;
+  if(window.location.hash==='#domains')positionDomainStart({behavior:'instant'});
+ }));
 }
 document.querySelectorAll('a[href="#domains"]').forEach(link=>
  link.addEventListener('click',scrollToDomainStart)
@@ -540,8 +598,7 @@ if(matcherInput&&lastQuery)matcherInput.value=lastQuery;
 renderDomain(false);
 
 domainFloatingChips.forEach(chip=>chip.addEventListener('click',()=>{
- const original=document.querySelector(`.domain-tab[data-domain="${chip.dataset.domainFloating}"]`);
- original?.click();
+ selectDomain(chip.dataset.domainFloating);
  syncFloatingDomain(chip.dataset.domainFloating);
 }));
 function updateDomainSelectionFromViewport(){
@@ -552,8 +609,8 @@ function updateDomainSelectionFromViewport(){
 window.addEventListener('scroll',()=>{scheduleDomainFloatingNav();updateDomainSelectionFromViewport()},{passive:true});
 window.addEventListener('resize',scheduleDomainFloatingNav,{passive:true});
 compactDomainMedia.addEventListener?.('change',scheduleDomainFloatingNav);
-window.addEventListener('hashchange',()=>{if(window.location.hash==='#domains'){domainSelectionActive=true;syncDomainSelection({center:compactDomainMedia.matches});syncFloatingDomain(domain)}});
-window.addEventListener('pageshow',()=>{if(window.location.hash!=='#domains'&&window.scrollY===0){domainSelectionActive=false;syncDomainSelection();syncFloatingDomain(domain)}});
+window.addEventListener('hashchange',()=>{if(window.location.hash==='#domains'){scheduleDomainHashPosition()}else if(window.scrollY===0){domainSelectionActive=false;syncDomainSelection();syncFloatingDomain(domain)}});
+window.addEventListener('pageshow',()=>{if(window.location.hash==='#domains'){scheduleDomainHashPosition()}else if(window.scrollY===0){domainSelectionActive=false;syncDomainSelection();syncFloatingDomain(domain)}});
 syncDomainSelection();
 syncFloatingDomain(domain);
 updateDomainFloatingNav();

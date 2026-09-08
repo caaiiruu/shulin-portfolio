@@ -38,11 +38,12 @@ test('truth covers every experiment source package',()=>{
   }
 });
 
-test('all absent historical binaries and the freelance screenshot are explicit Human asset requirements',()=>{
-  assert.equal(all['freelance-project-operations-tool'].assetStatus,'HUMAN_ASSET_REQUIRED');
-  for(const id of ids.slice(1)){
-    assert.equal(all[id].sourceAssetStatus,'HUMAN_SOURCE_ASSET_REQUIRED');
-    assert.equal(all[id].abstractEvidenceFallback,'ACTIVE');
+test('R183.8E resolves supplied evidence while preserving text-led projects without invented imagery',()=>{
+  assert.equal(all['freelance-project-operations-tool'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
+  assert.equal(all['weekly-design-session'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
+  for(const id of ['food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox']){
+    assert.equal(all[id].assetStatus,'HUMAN_SOURCE_ACTIVE');
+    assert.ok(all[id].hero?.assetId);
   }
   assert.equal(truth.futureAssetRequirements.filter(item=>item.requestId.startsWith('AR-R181-')).length,7);
 });

@@ -5,7 +5,7 @@ Read this file + `registry.json` before every Work Order.
 1. Truth: latest user → Human screenshot → real GitHub QA → deployment → SSOT → approved architecture → old chat.
 2. SSOT: `public/site/content/portfolio-content.json`
 3. Public IA:
-   Hero → At a Glance + Info Grid → What Made This Hard → Contribution → Core System Insight → Design Decisions → Evidence → Outcomes → My Accountability → Related Work
+   Hero → At a Glance + Info Grid → What Made This Hard → Transformation → Contribution → Core System Insight → Design Decisions → Evidence → Outcomes → My Accountability → Related Work
 4. Public Problem Types are retired; problem terms are search-only metadata.
 5. Fit new projects into DBS/Booking shared architecture before adding capacity.
 6. Evidence ≠ Outcomes. Research counts belong in Evidence.
@@ -21,6 +21,8 @@ Read this file + `registry.json` before every Work Order.
 16. My Accountability uses two equal primary columns—owned outcome and shared decisions—with any partner-owned boundary subordinate below.
 17. Project titles must NOT use the repeated `From X to Y` construction. Express transformation through a concise, recruiter-readable title that identifies the product/problem space and distinctive system or capability signal without a fixed naming formula. Avoid generic `Improving…`, `Redesigning…`, or `Designing…` labels when they merely describe design activity rather than the product problem or system change.
 18. Canonical governance changes must never live only in chat. When a Human-approved rule changes, sync it before the next migration into: `CORE.md` + the relevant `references/*` file + `SKILL.md` + `registry.json` version/state + `CHANGELOG.md`. The latest explicit Human rule supersedes older wording everywhere; contradictory legacy guidance must be removed or marked superseded.
+18a. Canonical Transformation uses `BEFORE → SYSTEM CHANGE → AFTER` and answers WHAT CHANGED. It must render exactly once as the immediate section-level predecessor of the standalone Contribution section on all canonical projects. Contribution answers WHAT I PERSONALLY CHANGED; Decisions / Solutions answer WHAT I CHOSE; Accountability answers WHAT I OWNED. `MY INTERVENTION` is superseded as a Transformation label.
+18b. Canonical Transformation visual hierarchy is `BEFORE < SYSTEM CHANGE > AFTER`: the title precedes the flow, SYSTEM CHANGE is dominant, connectors indicate forward progression, and mobile stacks `BEFORE ↓ SYSTEM CHANGE ↓ AFTER`. Transformation and Contribution remain visually distinct adjacent sections.
 
 ## 19. Public timeline presentation
 

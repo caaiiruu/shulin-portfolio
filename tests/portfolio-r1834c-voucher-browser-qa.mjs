@@ -9,8 +9,8 @@ const browser = await chromium.launch({
   headless: true,
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
 });
-const expectedSections = ["what-made-this-hard", "my-contribution", "core-system-insight", "key-design-decisions", "evidence", "outcomes", "my-accountability", "continue-exploring"];
-const expectedNavigator = ["Overview", "Complexity", "Decisions", "Evidence", "Outcomes", "Ownership"];
+const expectedSections = ["what-made-this-hard", "my-contribution", "core-system-insight", "journey-stage-solutions", "programme-research", "validated-outcomes", "my-accountability", "continue-exploring"];
+const expectedNavigator = ["Overview", "Complexity", "Solutions", "Evidence", "Outcomes", "Ownership"];
 const rejectedCopy = ["Critical problem", "Business impact", "Key Intervention Map", "WHERE I CHANGED THE SYSTEM", "BEFORE\nFragmented voucher journeys"];
 
 for (const viewport of [
@@ -44,26 +44,35 @@ for (const viewport of [
       headings: [...dialog.querySelectorAll("h2,h3")].filter(node => node.getClientRects().length).map(node => node.textContent.trim()),
       text: dialog.innerText,
       decisions: document.querySelectorAll("#systemCaseDecisionsSection .decision-card-v46").length,
-      evidenceImages: [...document.querySelectorAll("#systemCaseEvidenceSection img")].map(image => ({ complete: image.complete, width: image.naturalWidth, assetId: image.dataset.assetId })),
-      outcomes: [...document.querySelectorAll("#systemCaseOutcomesSection .outcome-metric__value")].map(node => node.textContent.trim()),
+      stages: [...document.querySelectorAll("#voucherDecisionsSection [data-stage-card]")].map(node => node.dataset.stageCard.toUpperCase()),
+      outcomes: [...document.querySelectorAll("#voucherImpactSection .outcome-metric__value")].map(node => node.textContent.trim()),
+      research: [...document.querySelectorAll("#voucherEvidenceSection .research-evidence-metric strong")].map(node => node.textContent.trim()),
+      accountability: document.querySelector("#voucherOwnershipSection")?.innerText || "",
       lead: lead ? { src: lead.getAttribute("src"), width: lead.naturalWidth, height: lead.naturalHeight, assetId: lead.closest("figure")?.dataset.assetId } : null,
+      leadGeometry: lead ? (()=>{const figure=lead.closest("figure"),rect=figure.getBoundingClientRect(),style=getComputedStyle(figure),imageStyle=getComputedStyle(lead);return{ratio:rect.width/rect.height,objectFit:imageStyle.objectFit,componentOwner:figure.dataset.componentOwner}})() : null,
       overflow: document.querySelector("#detailDialog .dialog-scroll")?.scrollWidth - document.querySelector("#detailDialog .dialog-scroll")?.clientWidth,
     };
   });
   assert.equal(voucher.title, "Fragmented voucher journeys to a reusable incentive ecosystem");
-  assert.match(voucher.atAGlance, /~125K digital redemptions in the final three weeks of 2023, \+90\.9% redemption-share change and ~167% add-to-cart uplift/);
+  assert.match(voucher.atAGlance, /~125K digital redemptions in the final three weeks of 2023, \+90\.9% digital redemption-share change, ~167% add-to-cart uplift and 7× faster cross-team alignment/);
   assert.match(voucher.timeline, /2022–2025/);
   assert.match(voucher.audience, /Primary: Customers/);
-  assert.match(voucher.audience, /Secondary: Voucher operations/);
+  assert.match(voucher.audience, /Secondary: Voucher Operations/);
   assert.deepEqual(voucher.sections, expectedSections);
   assert.deepEqual(voucher.navigator, expectedNavigator);
-  assert.equal(voucher.decisions, 3);
-  assert.ok(voucher.evidenceImages.length >= 5 && voucher.evidenceImages.every(image => image.complete && image.width > 0));
-  assert.ok(["+90.9%", "+~167%", "~125K"].every(value => voucher.outcomes.includes(value)));
-  assert.deepEqual(voucher.lead, { src: "/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg?v=ed91d8816e0ce03b", width: 1536, height: 691, assetId: "voucher-hero-incentive-journey-public-v1" });
+  assert.equal(voucher.decisions, 0);
+  assert.deepEqual(voucher.stages, ["DISCOVER", "QUALIFY", "ACTIVATE", "REDEEM", "REVIEW"]);
+  assert.deepEqual(voucher.outcomes, ["+90.9%", "+~167%", "~125K", "7× faster"]);
+  assert.deepEqual(voucher.research, ["2,857", "93%", "87%"]);
+  assert.match(voucher.accountability, /A clear line between the system direction I owned and decisions delivered with partners/);
+  assert.match(voucher.accountability, /End-to-end incentive journey strategy/);
+  assert.match(voucher.accountability, /Cross-functional delivery and integration/);
+  assert.deepEqual(voucher.lead, { src: "/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg?v=4a486dc375fb84c6", width: 2048, height: 1152, assetId: "voucher-hero-incentive-journey-public-v1" });
+  assert.ok(Math.abs(voucher.leadGeometry.ratio - 16 / 9) < 0.02);
+  assert.deepEqual([voucher.leadGeometry.objectFit, voucher.leadGeometry.componentOwner], ["contain", "ProjectDetailOverview"]);
   assert.ok(voucher.overflow <= 16);
   for (const copy of rejectedCopy) assert.doesNotMatch(voucher.text, new RegExp(copy, "i"));
-  assert.ok(voucher.headings.includes("Contribution") && voucher.headings.includes("Design decisions") && voucher.headings.includes("My accountability") && voucher.headings.includes("Explore other projects"));
+  assert.ok(voucher.headings.includes("Contribution") && voucher.headings.includes("One journey — five stages") && !voucher.headings.includes("Design decisions") && voucher.headings.includes("My accountability") && voucher.headings.includes("Explore other projects"));
   fs.mkdirSync(outputRoot, { recursive: true });
   await page.locator("#detailDialog .dialog-scroll").screenshot({ path: path.join(outputRoot, `${viewport.name}-voucher-en.png`) });
 
@@ -71,9 +80,9 @@ for (const viewport of [
   await toggle.evaluate(node => node.click());
   const zh = await page.evaluate(() => ({ title: document.querySelector("#detailTitle")?.textContent.trim(), text: document.querySelector("#detailDialog")?.innerText || "" }));
   assert.equal(zh.title, "從分散的優惠券旅程到可重用的獎勵生態系");
-  assert.match(zh.text, /2023 年最後三週達到約 12\.5 萬次數位兌換、\+90\.9% 兌換占比變化與約 167% 加入購物車提升/);
+  assert.match(zh.text, /2023 年最後三週達到約 12\.5 萬次數位兌換、\+90\.9% 數位兌換占比變化、約 167% 加入購物車提升，並將跨團隊對齊效率提升至 7 倍/);
   assert.match(zh.text, /貢獻/);
-  assert.doesNotMatch(zh.text, /Primary: Customers|Secondary: Voucher operations/);
+  assert.doesNotMatch(zh.text, /Primary: Customers|Secondary: Voucher Operations/);
 
   await page.locator("#detailDialog .dialog-scroll").screenshot({ path: path.join(outputRoot, `${viewport.name}-voucher-zh.png`) });
 

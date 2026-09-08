@@ -308,3 +308,13 @@ for (const page of pages) {
 console.log(`Production assets: ${cssFile}, ${jsFile}`);
 
 await import("./generate-project-pages.mjs");
+
+// Repository governance and QA files are build inputs, not public-site output.
+// Vercel builds run in an isolated checkout, so pruning these explicit directories
+// cannot alter the canonical source tree used by local development.
+if (process.env.VERCEL === "1") {
+  for (const directory of ["docs", "qa"]) {
+    fs.rmSync(path.join(root, directory), { recursive: true, force: true });
+  }
+  console.log("Pruned non-public governance and QA files from Vercel output.");
+}

@@ -98,7 +98,7 @@ test("Human-approved geometry uses governed component-intent tokens", () => {
   assert.match(navigator, /padding:var\(--floating-nav-item-padding-block\) var\(--floating-nav-item-padding-inline\)/);
   assert.match(projectCard, /\.related-project-card-v45,\.detail-related-card-v45\{[^}]*overflow:hidden;isolation:isolate/);
   assert.match(overview, /\.quick-view-v51--project \.project-summary-v45\{order:1;padding-top:var\(--space-3\)\}/);
-  assert.match(overview, /\.outcome-semantic-change__title\{[^}]*font-size:var\(--text-lead\)/);
+  assert.match(overview, /\.outcome-semantic-change__title\{[^}]*font-size:var\(--cmp-popup-outcome-metric-size\)/);
 });
 
 test("golden consumers cover every registered structural variant at approved viewports", () => {
@@ -112,7 +112,9 @@ test("golden consumers cover every registered structural variant at approved vie
 
 test("recruiter-first overview governs decision-filter order and lead visual media", () => {
   const contract = registry.governanceGraph.componentContracts.ProjectDetailOverview;
-  assert.deepEqual(contract.compositionOrder, ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content"]);
+  assert.deepEqual(contract.compositionOrder, ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content", "Transformation immediately before Contribution"]);
+  assert.deepEqual(contract.requiredAdjacency,["KeyInterventionMap","ContributionBlock"]);
+  for(const token of ["transformation-flow-gap","transformation-shell-padding","transformation-node-padding","transformation-contribution-gap"])assert.ok(contract.componentIntentTokens.includes(token));
   assert.deepEqual(contract.mediaVariants["Lead Project Visual"], {
     aspectRatio: "16:9",
     fit: "contain",
@@ -121,7 +123,7 @@ test("recruiter-first overview governs decision-filter order and lead visual med
   });
   assert.match(overview, /quick-view-v51--project\{grid-template-columns:minmax\(0,7fr\) minmax\(var\(--dimension-280px\),5fr\)/);
   assert.match(overview, /project-detail-hero-visual\{[^}]*aspect-ratio:16\/9/);
-  assert.match(overview, /project-detail-hero-visual\{[^}]*margin:0 auto/);
+  assert.match(overview, /project-detail-hero-visual\{[^}]*margin:var\(--case-gap-subsection\) auto var\(--case-gap-section\)/);
   assert.match(overview, /project-detail-hero-visual img\{[^}]*object-fit:contain/);
   assert.match(overview, /@media\(max-width:900px\)\{\.quick-view-v51--project\{grid-template-columns:1fr\}/);
   assert.match(overview, /@media\(max-width:600px\)\{\.modal-content-v45[\s\S]*?\.detail-commerce-v45\{[^}]*margin-bottom:var\(--space-5\)/);

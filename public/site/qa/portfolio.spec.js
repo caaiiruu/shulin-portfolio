@@ -556,7 +556,7 @@ for (const width of [1440,900,430,320]) {
     expect(await page.locator('html').evaluate(el=>el.scrollWidth-el.clientWidth)).toBeLessThanOrEqual(1);
     const card=page.locator('.experiment-index-card-v36').first();
     await expect(card.locator('.experiment-index-card-v38__learning small')).toHaveText('Current learning');
-    await expect(card.locator('.experiment-card-action')).toHaveText('View experiment ↗');
+    await expect(card.locator('.experiment-card-action')).toHaveText('View experiment →');
     const before=await card.evaluate(el=>getComputedStyle(el).boxShadow);
     await card.hover();
     const after=await card.evaluate(el=>getComputedStyle(el).boxShadow);

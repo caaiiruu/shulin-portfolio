@@ -52,10 +52,10 @@ test('Production and asset mutation remain unauthorized',()=>{
 
 test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detail slot',()=>{
   const expected={
-    voucher:['voucher-hero-incentive-journey-public-v1','voucher-offer-work-card-primary-01.jpeg','ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409'],
+    voucher:['voucher-hero-incentive-journey-public-v1','voucher-lead-visual-incentive-ecosystem-public-v1.jpg','4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8'],
     'voucher-center':['voucher-center-hero-centralised-discovery-public-v1','voucher-center-lead-visual-claim-journey-public-v1.jpg','0baae930d225c7fa67222e112afbdab562bb8b7511ad1c270bd6bfd92f8f1ec2'],
     'game-center':['gamecenter-hero-shipped-before-after-public-v1','game-center-lead-visual-multi-game-discovery-public-v1.jpg','063b8259d3505d9cb4dfdb9bd2a5995391cf342f1d0f54bb124b010f417ced17'],
-    dbs:['dbs-project-card-primary-01','dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg','79f35586b956d33143655de49f28cce77c2fc8b14c79f76823f50b8d8dc95039'],
+    dbs:['dbs-project-card-primary-01','dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg','c341df41476b09eddaed779e68bc923587d55067482d1d27bf5e3629040067bf'],
     booking:['booking-hero-connected-booking-public-v1','booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg','83a1e6bba227db1c7609d217deae346dcdc3ea419148424986160fb465a71ed6'],
     bandzo:['bandzo-hero-guided-practice-public-v1','bandzo-lead-visual-guided-practice-system-public-v1.jpg','a3262643f2ea3f6447f7a3cd15c786ed2a95388d77fff6a6e9ef6c10c6f5e7af'],
     payment:['payment-hero-unified-checkout-public-v1','payment-lead-visual-app-and-sco-checkout-public-v1.jpg','f68d23dd247f0e85ca1468ca23d01a09951c6d55cd847bd0af6225071dff285f'],
@@ -71,7 +71,7 @@ test('R182.5 binds one approved 16:9 Lead Visual to every Primary card and detai
     const project=content.projects[projectId];
     assert.equal(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId,assetId);
     const asset=manifest.items[assetId];
-    const expectedGeometry=projectId==='voucher'?{aspectRatio:'wide',width:1536,height:691}:{aspectRatio:'16:9',width:2048,height:1152};
+    const expectedGeometry={aspectRatio:'16:9',width:2048,height:1152};
     assert.deepEqual({projectId:asset.projectId,type:asset.type,aspectRatio:asset.aspectRatio,assetStatus:asset.assetStatus,implementationStatus:asset.implementationStatus,placeholderFallbackAssetId:asset.placeholderFallbackAssetId,replacementRequired:asset.replacementRequired,publicBuild:asset.publicBuild,width:asset.width,height:asset.height},{projectId,type:'image/jpeg',...expectedGeometry,assetStatus:'production',implementationStatus:'real-active',placeholderFallbackAssetId:null,replacementRequired:false,publicBuild:true});
     assert.ok(asset.publicPath.endsWith(`/${filename}`));
     assert.equal(asset.sha256,sha256);
@@ -127,7 +127,7 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(payment.publicContent.outcomes.semanticHierarchy.recognition.ctaLabel.en,'View award announcement ↗');
   assert.match(app,/outcome-recognition-proof__cta text-cta/);
   assert.equal(payment.ownershipModel.accountabilityPresentation.owned.title.en,'Defined FairPrice’s 0→1 in-store payment model');
-  assert.deepEqual(payment.atAGlanceEmphasis.identities,['0→1','~190 stores','~228K monthly transactions','98.5% success','19.78 sec → 7.29 sec']);
+  assert.deepEqual(payment.atAGlanceEmphasis.identities,['~190 stores','~228K monthly transactions','98.5% success','19.78 sec → 7.29 sec']);
   assert.equal(payment.relatedProjects[0].projectId,'voucher');
   assert.deepEqual(Object.keys(payment.decisionEvidenceMap),['payment-r1641-decision-01','payment-r1641-decision-02','payment-r1641-decision-03','payment-r1641-decision-04']);
   assert.deepEqual(Object.values(payment.decisionEvidenceMap).map(item=>item.publicAssetId),[
@@ -176,7 +176,7 @@ test('R182.6 restores final Payment semantics and retires stale Payment and Vouc
   assert.equal(Object.values(manifest.items).filter(asset=>asset.projectId==='payment'&&asset.implementationStatus==='placeholder-active').length,0);
 });
 
-test('R183.4C keeps Payment frozen and restores the final Human-approved Voucher presentation',()=>{
+test('R183.4E keeps Payment frozen and canonicalises the latest Human-approved Voucher truth',()=>{
   const paymentFreeze=ledger.lockedProjectBoundaries.find(item=>item.projectId==='payment');
   const paymentApproval=ledger.humanImplementationAuthorizations.find(item=>item.approvalId==='PA-20260828-PAYMENT-HR01');
   assert.deepEqual({content:paymentFreeze.content,visuals:paymentFreeze.visuals,interactions:paymentFreeze.interactions,exactHead:paymentFreeze.exactHead},{content:'FROZEN',visuals:'FROZEN',interactions:'FROZEN',exactHead:'5492fd5d4609c8141b21c496fdafd4422c9eba72'});
@@ -186,26 +186,33 @@ test('R183.4C keeps Payment frozen and restores the final Human-approved Voucher
   const voucher=content.projects.voucher;
   assert.equal(voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
   assert.equal(voucher.title.zh,'從分散的優惠券旅程到可重用的獎勵生態系');
-  assert.match(voucher.atAGlance.en,/~125K digital redemptions in the final three weeks of 2023, \+90\.9% redemption-share change and ~167% add-to-cart uplift/);
-  assert.match(voucher.atAGlance.zh,/約 12\.5 萬次數位兌換、\+90\.9% 兌換占比變化與約 167% 加入購物車提升/);
+  assert.match(voucher.atAGlance.en,/~125K digital redemptions in the final three weeks of 2023, \+90\.9% digital redemption-share change, ~167% add-to-cart uplift and 7× faster cross-team alignment/);
+  assert.match(voucher.atAGlance.zh,/約 12\.5 萬次數位兌換、\+90\.9% 數位兌換占比變化、約 167% 加入購物車提升，並將跨團隊對齊效率提升至 7 倍/);
   assert.deepEqual(voucher.problemTypes.en,['Incentive systems','Voucher lifecycle','Commerce operations']);
-  assert.deepEqual(voucher.infoGrid.audience.secondary.en,['Voucher operations']);
+  assert.deepEqual(voucher.infoGrid.audience.secondary.en,['Voucher Operations']);
   assert.deepEqual(voucher.infoGrid.timeline,{duration:{en:'2022–2025',zh:'2022–2025 年'},dateRange:{en:'2022–2025',zh:'2022–2025 年'},status:'human-approved-r182'});
   assert.deepEqual(voucher.publicContent.hero.infoGrid.timeline,{en:'2022–2025',zh:'2022–2025'});
-  assert.deepEqual(voucher.sectionOrder,['hero','what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence']);
-  assert.equal(voucher.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(voucher.sectionOrder,['hero','overview','complexity','contribution','core-system-insight','journey-stage-solutions','programme-research','outcomes','my-accountability','related-work']);
+  assert.equal(voucher.whatMadeThisHard.length,3);
+  assert.equal(voucher.publicContent.myContribution.standaloneSection,true);
   assert.deepEqual(voucher.publicContent.journeyChapters.slice(1).map(item=>item.visualEvidence.primary.assetId),['voucher-offer-reusable-system-shared-rules-01','voucher-offer-stage-activate-sec-campaign-entry-wallet-flow-shipped-01','voucher-offer-stage-redeem-wallet-applicability-error-recovery-before-shipped-01','voucher-offer-stage-review-payment-voucher-selection-review-shipped-01']);
-  assert.match(voucher.publicContent.coreSystemInsight.insight.en,/could not be solved screen by screen/);
-  assert.match(voucher.publicContent.coreSystemInsight.whatThisChanged.en,/reusable foundations across shopping touchpoints/);
+  assert.equal(voucher.publicContent.coreSystemInsight.insight.en,'Value had to appear in the shopping journey—not outside it.');
+  assert.equal(voucher.publicContent.coreSystemInsight.whatThisChanged.en,'Customers did not need more Vouchers. They needed value to appear in the right shopping context, with clear eligibility and a trustworthy path to application.');
   assert.equal(voucher.whatThisProves.en,'Turning campaign-specific incentive rules into a reusable cross-channel product model.');
+  const voucherApproval=ledger.humanImplementationAuthorizations.find(item=>item.approvalId==='PA-20260828-VOUCHER-SSOT-R1834E');
+  assert.equal(voucherApproval.status,'HUMAN_TRUTH_CANONICALISED');
+  assert.equal(voucherApproval.visualAcceptance,'HUMAN_VISUAL_ACCEPTANCE_PENDING');
+  assert.equal(voucherApproval.productionAuthorized,false);
+  assert.equal(voucherApproval.mergeAuthorized,false);
 
   const lead=manifest.items['voucher-hero-incentive-journey-public-v1'];
-  assert.equal(lead.publicPath,'/site/assets/projects/voucher/voucher-offer-work-card-primary-01.jpeg');
-  assert.deepEqual([lead.aspectRatio,lead.width,lead.height,lead.sha256],['wide',1536,691,'ed91d8816e0ce03b0629c1d9d8f27c84bbbbd5fe235355960c03a2e8c36af409']);
+  assert.equal(lead.publicPath,'/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg');
+  assert.deepEqual([lead.aspectRatio,lead.width,lead.height,lead.sha256],['16:9',2048,1152,'4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8']);
   assert.equal(crypto.createHash('sha256').update(fs.readFileSync(`public${lead.publicPath}`)).digest('hex'),lead.sha256);
-  assert.match(app,/isRecruiterSystemCase=currentDetail\.type==='project'&&DATA\.projects\[currentDetail\.key\]\?\.archetype==='primary'/);
-  assert.doesNotMatch(app,/isApprovedVoucherProgramme/);
-  assert.match(app,/const canonicalOrder=isVoucher\?\['complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work'\]/);
+  assert.match(app,/isApprovedVoucherProgramme=currentDetail\.type==='project'&&currentDetail\.key==='voucher'/);
+  assert.match(app,/isRecruiterSystemCase=currentDetail\.type==='project'&&DATA\.projects\[currentDetail\.key\]\?\.archetype==='primary'&&!isApprovedVoucherProgramme/);
+  assert.match(app,/function renderProgrammeParent/);
+  assert.doesNotMatch(app,/function renderVoucherRecruiterContribution/);
   assert.match(app,/child-stage-navigation__previous/);
   assert.match(app,/child-stage-navigation__next/);
   assert.doesNotMatch(app,/dataset\.stageBack/);

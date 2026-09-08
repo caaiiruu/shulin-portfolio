@@ -1,3 +1,40 @@
+## 2026-08-30 — v3.1
+
+Human-approved canonical Transformation visual refinement:
+
+- Transformation title precedes the flow.
+- SYSTEM CHANGE is the dominant focal point; BEFORE and AFTER are subordinate context states.
+- Desktop preserves left-to-right progression; tablet and mobile use explicit downward connectors.
+- A governed section boundary separates Transformation from its adjacent Contribution.
+- Shared tokens and the ProjectDetailOverview component own the visual system across all 13 canonical projects.
+- Content, ordering, protected project architecture, and Experiments / Explorations remain unchanged.
+- Human-approved: YES.
+
+## 2026-08-30 — v3.0
+
+Human-approved canonical Transformation placement normalization:
+
+- Transformation must render exactly once as the immediate section-level predecessor of Contribution on all 13 canonical projects.
+- Contribution remains a separate standalone section.
+- No unrelated section may appear between Transformation and Contribution.
+- The shared SSOT adjacency contract and canonical renderer paths own the rule; project copy and Experiment / Exploration rendering remain unchanged.
+- Human-approved: YES.
+
+## 2026-08-30 — v2.9
+
+Human-approved shared Transformation semantics update:
+
+- Previous: `BEFORE → MY INTERVENTION → AFTER`
+- Approved: `BEFORE → SYSTEM CHANGE → AFTER`
+- Reason: separate system-level transformation from personal contribution so hiring managers can distinguish WHAT CHANGED from WHAT I PERSONALLY CHANGED.
+- Transformation answers WHAT CHANGED.
+- Contribution remains standalone and answers WHAT I PERSONALLY CHANGED.
+- Decisions / Solutions answer WHAT I CHOSE.
+- Accountability answers WHAT I OWNED.
+- Human-approved: YES.
+
+`MY INTERVENTION` is superseded as a Transformation label. Canonical project content, shared rendering, semantic regression coverage, and design-system composition governance must derive from this rule. Experiments and Explorations remain outside the canonical contract.
+
 ## 2026-08-25-v2.8
 
 - Added the minimum Chat ↔ Work automation control plane with one Verified Project Truth owner and one Execution Ledger owner.

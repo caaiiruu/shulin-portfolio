@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-25-v2.8",
-  "skillVersion": "2026-08-25-v2.8",
+  "version": "2026-08-30-v3.1",
+  "skillVersion": "2026-08-30-v3.1",
   "status": "canonical",
   "canonicalSSOT": "public/site/content/portfolio-content.json",
   "canonicalAssetManifest": "public/site/content/portfolio-asset-manifest.json",
@@ -11,6 +11,7 @@
     "Hero",
     "At a Glance + Info Grid",
     "What Made This Hard",
+    "Transformation",
     "Contribution",
     "Core System Insight",
     "Design Decisions",
@@ -163,6 +164,20 @@
     "semanticLabels": "uppercase",
     "navigatorLabels": "natural-title-case"
   },
+  "transformationSemantics": {
+    "sequence": [
+      "BEFORE",
+      "SYSTEM CHANGE",
+      "AFTER"
+    ],
+    "transformationRole": "what-changed",
+    "contributionRole": "what-i-personally-changed",
+    "decisionsSolutionsRole": "what-i-chose",
+    "accountabilityRole": "what-i-owned",
+    "contributionStandalone": true,
+    "supersededMiddleLabel": "MY INTERVENTION",
+    "humanApproved": true
+  },
   "navigatorQA": {
     "activeItemMustBeFullyVisible": true,
     "centerIntermediateItems": true,
@@ -183,6 +198,7 @@
     "projectCopyOnlyRequiresVersionBump": false
   },
   "superseded": [
+    "MY INTERVENTION as the middle Transformation label",
     "public Problem Types",
     "From X to Y project-title pattern",
     "standalone Why It Mattered",

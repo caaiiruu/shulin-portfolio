@@ -211,7 +211,9 @@
         ...searchIndex,
         canonicalId:id,
         domainIds:[...new Set([...list(searchIndex.domainIds),...matchedDomains.map(domain=>domain.id)])],
-        intentIds:[...new Set([...list(searchIndex.intentIds),...matchedDomains.flatMap(domain=>list(domain.queryIntents))])],
+        intentIds:[...new Set(list(searchIndex.intentIds))],
+        featuredDomainIds:matchedDomains.filter(domain=>list(domain.featuredProjectIds).includes(id)).map(domain=>domain.id),
+        supportingDomainIds:matchedDomains.filter(domain=>list(domain.supportingProjectIds).includes(id)).map(domain=>domain.id),
         problemTags:searchIndex.problemTags||p.problemTypes,
         capabilityTags:searchIndex.capabilityTags||{en:[],zh:[]},
         systemTags:searchIndex.systemTags||{en:[],zh:[]},
@@ -220,8 +222,13 @@
       };
       return [id,project];
     }));
-    const explorations=Object.fromEntries(Object.entries({...(raw.experiments||{}),...(raw.sideProjects||{})})
-      .filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review')));
+    const localCandidateProjection=['localhost','127.0.0.1'].includes(window.location.hostname)&&new URLSearchParams(window.location.search).get('qa-experiments')==='1';
+    const eligibleExplorations=Object.entries({...(raw.experiments||{}),...(raw.sideProjects||{})})
+      .filter(([,item])=>item.releaseEligibility==='READY_PUBLIC'||localCandidateProjection)
+      .filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review'));
+    const explorations=raw.experimentArchitecture?.releaseVisibility==='DEFERRED_NON_SHIPPING'
+      ?{}
+      :Object.fromEntries(eligibleExplorations);
     const intentCatalog=list(raw.contentDiscovery?.queryIntentCatalog);
     const searchContract=raw.contentDiscovery?.searchMatchingContract||{};
     return {
@@ -284,20 +291,40 @@
       :projectId;
   }
   function projectIdFromPath(pathname=window.location.pathname){
-    const match=String(pathname).match(/^\/site\/work\/([^/]+)\/?$/);
+    const match=String(pathname).match(/^\/work\/([^/]+)\/?$/);
     if(!match)return null;
     try{return decodeURIComponent(match[1])}catch{return match[1]}
   }
   function canonicalProjectUrl(projectId,url=new URL(window.location.href)){
-    url.pathname=`/site/work/${encodeURIComponent(canonicalProjectId(projectId))}`;
+    url.pathname=`/work/${encodeURIComponent(canonicalProjectId(projectId))}`;
     url.searchParams.delete('case');
     return url;
   }
+  function experimentKeyFromPublicSlug(slug){
+    if(!slug)return null;
+    if(DATA.experiments?.[slug])return slug;
+    return Object.entries(DATA.experiments||{}).find(([,item])=>item.publicSlug===slug)?.[0]||null;
+  }
+  function experimentPublicSlug(key){return DATA.experiments?.[key]?.publicSlug||key}
+  function canonicalExperimentUrl(key,url=new URL(window.location.href)){
+    url.pathname='/experiments';
+    url.search='';
+    url.searchParams.set('experiment',experimentPublicSlug(key));
+    url.hash='';
+    return url;
+  }
+  function experimentIndexUrl(url=new URL(window.location.href)){
+    url.pathname='/experiments';
+    url.search='';
+    url.hash='';
+    return url;
+  }
   function workIndexUrl(url=new URL(window.location.href)){
-    url.pathname='/site/work.html';
+    url.pathname='/work';
     url.searchParams.delete('case');
     url.searchParams.delete('initiative');
     url.searchParams.delete('stage');
+    url.hash='';
     return url;
   }
   const doc=document;
@@ -307,6 +334,7 @@
   let currentInvoker=null;
   let rootInvoker=null;
   let currentDetail=null;
+  let detailScrollHistoryFrame=0;
   let galleryIndex=0;
   let initiativeGallery=[];
   const detailStack=[];
@@ -380,8 +408,12 @@
     const matches=list(segments).map(segment=>String(segment||'')).filter(Boolean).sort((a,b)=>b.length-a.length);
     if(!matches.length){safeText(node,text);return}
     clear(node);node.dataset.emphasisVariant=variant;
-    const pattern=new RegExp(`(${matches.map(segment=>segment.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})`,'g');
-    text.split(pattern).filter(Boolean).forEach(part=>node.append(matches.includes(part)?element('mark','semantic-inline-emphasis',part):doc.createTextNode(part)));
+    const pattern=new RegExp(`(${matches.map(segment=>segment.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})([.,;:!?…，。；：！？]?)`,'g');
+    text.split(pattern).filter(Boolean).forEach(part=>node.append(matches.some(match=>part===match||part.startsWith(`${match}.`)||part.startsWith(`${match},`)||part.startsWith(`${match};`)||part.startsWith(`${match}:`)||part.startsWith(`${match}!`)||part.startsWith(`${match}?`)||part.startsWith(`${match}…`)||part.startsWith(`${match}，`)||part.startsWith(`${match}。`)||part.startsWith(`${match}；`)||part.startsWith(`${match}：`)||part.startsWith(`${match}！`)||part.startsWith(`${match}？`))?element('mark','semantic-inline-emphasis',part):doc.createTextNode(part)));
+  }
+  function inferredMetricSegments(value){
+    const text=String(localize(value)||'');
+    return text.match(/[+~]?(?:\d+(?:\.\d+)?)(?:K|k|%|×)?(?:\s*(?:–|to|至|縮短至)\s*[+~]?(?:\d+(?:\.\d+)?)(?:K|k|%|×)?)?(?:\s+(?:participants?|markets?|countries|stores|monthly transactions|success|core tasks|core functions|interviews and tests|months?|weeks?|days?|routes|roles|份回覆|個市場|個國家|間門市|每月交易|成功率|項核心任務|項核心功能|場訪談與測試|個月|週|天|種入口|類角色))?/gi)||[];
   }
   function clear(node){while(node&&node.firstChild)node.removeChild(node.firstChild)}
   function decorateArrow(node){
@@ -399,6 +431,21 @@
   }
   const arrowTargets='a,button,[class*="action"],[class*="Action"],.hero__cta-icon';
   function decorateDocumentArrows(){doc.querySelectorAll(arrowTargets).forEach(decorateArrow)}
+  function normalizeNavigationArrow(node){
+    if(!node)return;
+    node.dataset.ctaSemantic='navigation';
+    let icon=node.querySelector('.icon-arrow');
+    if(!icon){icon=doc.createElement('span');node.append(icon)}
+    icon.className='icon-arrow icon-arrow--right';icon.setAttribute('aria-hidden','true');
+  }
+  function enforceNavigationCtaSemantics(scope=doc){
+    const actions='.work-card-v32__action,.evidence-feature__action,.evidence-list__action,.related-project-card__action,.detail-related-action-v46,.experiment-card-action,.poster-action,.timeline-evidence-v34';
+    scope.querySelectorAll?.('[data-project],[data-experiment]').forEach(trigger=>{
+      const card=trigger.closest('.work-card-v32,.evidence-feature,.evidence-list__item,.related-project-card-v45,.detail-related-card-v45,.experiment-feature-card-v32,.experiment-index-card-v36,.poster,.timeline-evidence-v34')||trigger;
+      if(card.matches?.('.timeline-evidence-v34'))normalizeNavigationArrow(card);
+      card.querySelectorAll?.(actions).forEach(normalizeNavigationArrow);
+    });
+  }
   function element(tag,className,text){const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined){safeText(node,text);decorateArrow(node)}return node}
   function appendList(node,items){clear(node);(items||[]).forEach(item=>node.appendChild(element('li','',item)))}
   function directionalValue(value,className=''){
@@ -458,6 +505,7 @@
     if(!(node instanceof Element))return;
     if(node.matches(arrowTargets))decorateArrow(node);
     node.querySelectorAll?.(arrowTargets).forEach(decorateArrow);
+    enforceNavigationCtaSemantics(node.matches('[data-project],[data-experiment]')?node.parentElement||node:node);
   })));
   arrowObserver.observe(doc.body,{childList:true,subtree:true});
   window.getPortfolioLanguage=()=>lang;
@@ -534,14 +582,17 @@
     close.append(element('span','modal-close__icon'));
     const title=element('h2','',ui("what-are-you-trying-to-solve-27f7ebed"));
     title.id='globalSearchTitle';
-    const intro=element('p','global-search-v114__intro',ui("search-by-company-domain-product-problem-o-405a6756"));
     const form=element('form','global-search-v114__form');
     const label=element('label','sr-only',ui("product-challenge-8a385573"));
     label.htmlFor='globalSearchInput';
     const input=element('input','global-search-v114__input');
     input.id='globalSearchInput';input.type='search';input.maxLength=120;input.autocomplete='off';
     input.dataset.focusManaged='true';
-    input.placeholder=ui("try-a-company-domain-or-product-problem-3a452b87");
+    const searchPlaceholder={
+      en:'Search by company, domain, product problem, or design challenge',
+      zh:'搜尋公司、領域、產品問題或設計挑戰'
+    };
+    input.placeholder=localize(searchPlaceholder);
     const clearSearch=element('button','global-search-v114__clear');
     clearSearch.type='button';
     clearSearch.hidden=true;
@@ -555,7 +606,7 @@
     const status=element('div','sr-only');status.setAttribute('aria-live','polite');
     const results=element('section','global-search-v114__results');
     results.hidden=true;results.tabIndex=-1;
-    shell.append(close,title,intro,form,suggestions,status,results);
+    shell.append(close,title,form,suggestions,status,results);
     searchDialog.append(shell);
     doc.body.append(searchDialog);
     body.classList.add('has-global-search');
@@ -563,22 +614,125 @@
     const normalize=value=>String(value||'')
       .toLocaleLowerCase()
       .normalize('NFKC')
+      .replace(/&/g,' and ')
       .replace(/[\u2010-\u2015/／_,.:;!?()[\]{}]+/g,' ')
+      .replace(/\b(payments|workflows|markets|countries|tools|systems)\b/g,word=>({payments:'payment',workflows:'workflow',markets:'market',countries:'country',tools:'tool',systems:'system'}[word]))
       .replace(/\s+/g,' ')
       .trim();
     const allLocalizedList=value=>[...list(value?.en),...list(value?.zh)].filter(Boolean);
     const phraseMatches=(query,value)=>{
       const needle=normalize(value);
       if(!needle)return false;
-      return query.includes(needle)||needle.includes(query);
+      if(query.includes(' ')&&!needle.includes(' ')&&query!==needle)return false;
+      const boundaryMatch=(haystack,phrase)=>` ${haystack} `.includes(` ${phrase} `);
+      return boundaryMatch(query,needle)||boundaryMatch(needle,query);
     };
-    const matchingIntentIds=query=>DATA.search.intentCatalog.filter(intent=>{
-      const candidates=[
-        ...allLocalizedList(intent.aliases),
-        ...allLocalizedList({en:[intent.label?.en],zh:[intent.label?.zh]})
-      ];
-      return candidates.some(candidate=>phraseMatches(query,candidate));
-    }).map(intent=>intent.id);
+    const identityMatches=(query,value)=>{
+      const needle=normalize(value);
+      return !!needle&&(query===needle||` ${query} `.includes(` ${needle} `));
+    };
+    const SEARCH_QUERY_INTENT_ALIASES={
+      'launch-zero-to-one-product':['0→1 product','build a 0→1 product','build a zero to one product','build a new product','launch a new system'],
+      'reduce-operational-friction':['operational workflow','operational workflows','operations tool','internal system','internal tools'],
+      'design-payment-experience':['payments','payment success','transaction system'],
+      'retail-checkout':['checkout','self checkout','improve checkout conversion'],
+      'refund-operations':['refund'],
+      'payment-performance':['payment success'],
+      'handle-exceptions-and-recovery':['exception handling','complex exception handling'],
+      'case-management':['case management'],
+      'align-stakeholders-and-operations':['cross-functional leadership','align stakeholders across markets'],
+      'scale-across-markets':['scale','cross-market','cross market','cross-market consistency','global scale','scale across countries','multiple markets','align stakeholders across markets'],
+      research:['research','use research to define product strategy'],
+      'product-strategy':['product strategy','use research to define product strategy'],
+      'reduce-expansion-risk':['reduce launch risk'],
+      'usability-testing':['usability testing'],
+      experimentation:['experimentation'],
+      strategy:['strategy'],
+      prototyping:['prototyping'],
+      'service-design':['service design'],
+      'information-architecture':['information architecture'],
+      'system-design':['system design'],
+      launched:['launched'],
+      metrics:['metrics'],
+      validation:['validation'],
+      adoption:['adoption']
+    };
+    const SEARCH_PROJECT_INTENT_RELEVANCE={
+      voucher:['research','product-strategy','strategy','system-design','information-architecture','validation','launched'],
+      'voucher-center':['launch-zero-to-one-product','improve-product-discovery','research','usability-testing','prototyping','validation','launched','adoption'],
+      'game-center':['system-design','experimentation','launched','metrics','adoption'],
+      dbs:['case-management','research','product-strategy','prototyping','information-architecture','system-design','cross-functional-leadership','launched','validation'],
+      booking:['research','product-strategy','usability-testing','experimentation','strategy','prototyping','service-design','launched','metrics','validation'],
+      bandzo:['research','usability-testing','prototyping','information-architecture','launched','validation'],
+      'taishin-p2p-marketplace-platform':['research','product-strategy','strategy','service-design','system-design','prototyping'],
+      'cathay-mortgage-assistant':['usability-testing','prototyping','information-architecture','service-design','launched','validation'],
+      payment:['retail-checkout','refund-operations','payment-performance','research','product-strategy','strategy','service-design','system-design','cross-functional-leadership','launched','metrics','validation','adoption'],
+      'cathay-sit-online-account-opening':['case-management','research','prototyping','service-design','information-architecture','system-design','validation'],
+      'cathay-sit-review-remediation-operations':['case-management','research','service-design','cross-functional-leadership','validation'],
+      'ctbc-mortgage-self-service-app':['case-management','prototyping','information-architecture','system-design'],
+      'booking-taxi-pickup-service-strategy':['research','product-strategy','reduce-expansion-risk','experimentation','strategy','service-design','prototyping','validation']
+    };
+    const SEARCH_INTENT_PROJECT_ORDER={
+      'design-payment-experience':['payment','taishin-p2p-marketplace-platform'],
+      'retail-checkout':['payment'],
+      'refund-operations':['payment'],
+      'payment-performance':['payment'],
+      'launch-zero-to-one-product':['payment','ctbc-mortgage-self-service-app','voucher-center','game-center','bandzo'],
+      'reduce-operational-friction':['dbs','cathay-sit-review-remediation-operations','cathay-mortgage-assistant'],
+      'handle-exceptions-and-recovery':['dbs','cathay-sit-review-remediation-operations','payment','taishin-p2p-marketplace-platform','cathay-sit-online-account-opening','ctbc-mortgage-self-service-app'],
+      'case-management':['dbs','cathay-sit-review-remediation-operations','cathay-sit-online-account-opening','ctbc-mortgage-self-service-app'],
+      'scale-across-markets':['dbs','booking'],
+      'align-stakeholders-and-operations':['dbs','payment','cathay-sit-review-remediation-operations','cathay-sit-online-account-opening','cathay-mortgage-assistant','taishin-p2p-marketplace-platform'],
+      research:['booking-taxi-pickup-service-strategy','taishin-p2p-marketplace-platform','dbs','booking','payment','voucher','voucher-center','bandzo','cathay-sit-review-remediation-operations','cathay-sit-online-account-opening'],
+      'product-strategy':['booking-taxi-pickup-service-strategy','voucher','payment','dbs','taishin-p2p-marketplace-platform','booking'],
+      'reduce-expansion-risk':['booking-taxi-pickup-service-strategy'],
+      'usability-testing':['voucher-center','bandzo','dbs','cathay-mortgage-assistant','booking'],
+      experimentation:['booking','booking-taxi-pickup-service-strategy','game-center'],
+      strategy:['booking-taxi-pickup-service-strategy','voucher','payment','dbs','taishin-p2p-marketplace-platform','booking'],
+      prototyping:['voucher-center','dbs','cathay-mortgage-assistant','bandzo','cathay-sit-online-account-opening','booking-taxi-pickup-service-strategy','booking'],
+      'service-design':['taishin-p2p-marketplace-platform','booking-taxi-pickup-service-strategy','payment','cathay-sit-review-remediation-operations','cathay-sit-online-account-opening','booking'],
+      'information-architecture':['dbs','ctbc-mortgage-self-service-app','bandzo','cathay-mortgage-assistant','voucher','cathay-sit-online-account-opening'],
+      'system-design':['payment','dbs','voucher','game-center','taishin-p2p-marketplace-platform','ctbc-mortgage-self-service-app'],
+      launched:['payment','dbs','booking','voucher-center','game-center','bandzo','cathay-mortgage-assistant','voucher'],
+      metrics:['payment','booking','game-center'],
+      validation:['voucher-center','bandzo','dbs','cathay-mortgage-assistant','cathay-sit-online-account-opening','booking-taxi-pickup-service-strategy','booking'],
+      adoption:['payment','game-center','voucher-center']
+    };
+    const SEARCH_DOMAIN_QUERY_ALIASES={
+      'financial-services':['fintech'],
+      'travel-platforms':['mobility'],
+      'growth-incentive-systems':['incentives']
+    };
+    const SEARCH_RECOMMENDED_QUERIES=[
+      {label:{en:'0→1 Product Design',zh:'0→1 產品設計'},query:{en:'0→1 product',zh:'0→1 產品'}},
+      {label:{en:'Payment Experience',zh:'支付體驗'},query:{en:'payment',zh:'支付'}},
+      {label:{en:'Operational Workflows',zh:'營運流程'},query:{en:'operational workflow',zh:'營運流程'}},
+      {label:{en:'Internal Tools',zh:'內部工具'},query:{en:'internal tools',zh:'內部工具'}},
+      {label:{en:'Exception Handling',zh:'例外處理'},query:{en:'exception handling',zh:'例外處理'}},
+      {label:{en:'Onboarding Flows',zh:'開戶流程'},query:{en:'onboarding',zh:'開戶'}},
+      {label:{en:'Cross-Market Products',zh:'跨市場產品'},query:{en:'cross-market',zh:'跨市場'}},
+      {label:{en:'Product Strategy',zh:'產品策略'},query:{en:'product strategy',zh:'產品策略'}}
+    ];
+    const SEARCH_PROJECT_COMPANY_DISPLAY={
+      'cathay-sit-online-account-opening':{en:'國泰投信',zh:'國泰投信'},
+      'cathay-sit-review-remediation-operations':{en:'國泰投信',zh:'國泰投信'}
+    };
+    const intentCandidates=intent=>[
+      ...allLocalizedList(intent.aliases),
+      ...list(SEARCH_QUERY_INTENT_ALIASES[intent.id]),
+      intent.label?.en,
+      intent.label?.zh
+    ].filter(Boolean);
+    const matchingIntentIds=query=>{
+      const matched=DATA.search.intentCatalog.filter(intent=>{
+      return intentCandidates(intent).some(candidate=>identityMatches(query,candidate));
+    }).map(intent=>intent.id).concat(Object.entries(SEARCH_QUERY_INTENT_ALIASES)
+      .filter(([id,aliases])=>!DATA.search.intentCatalog.some(intent=>intent.id===id)&&aliases.some(alias=>identityMatches(query,alias)))
+      .map(([id])=>id));
+      return matched.some(id=>['retail-checkout','refund-operations','payment-performance'].includes(id))
+        ?matched.filter(id=>id!=='design-payment-experience')
+        :matched;
+    };
     const reasonLabel=(kind,value)=>{
       const labels={
         title:['Title match','標題配對'],
@@ -591,6 +745,10 @@
       };
       return `${labels[kind][lang==='zh'?1:0]} · ${value}`;
     };
+    const searchPortfolioOrder=[...new Set([
+      ...list(DATA.workIndex?.principalPortfolioArchitecture?.featuredOrder),
+      ...Object.keys(DATA.projects)
+    ])];
     const rankProject=(key,project,query,matchedIntentIds)=>{
       const index=project.searchIndexV2||{};
       const weights=DATA.search.contract.weights||{};
@@ -602,21 +760,29 @@
         score=Math.max(score,Number(weight)||0);
         matched.slice(0,2).forEach(value=>reasons.push({kind,label:reasonLabel(kind,value)}));
       };
-      register('title',weights.exactTitleOrAlias||100,[
-        ...project.title_pair,
-        ...allLocalizedList(index.aliases)
-      ]);
-      const intentMatches=list(index.intentIds).filter(id=>matchedIntentIds.includes(id));
+      const identityValues=[...project.title_pair,...allLocalizedList(index.aliases)];
+      const identityMatched=identityValues.filter(value=>identityMatches(query,value));
+      if(identityMatched.length){score=Math.max(score,Number(weights.exactTitleOrAlias)||100);identityMatched.slice(0,2).forEach(value=>reasons.push({kind:'title',label:reasonLabel('title',value)}));}
+      const projectIntentIds=[...new Set([...list(index.intentIds),...list(SEARCH_PROJECT_INTENT_RELEVANCE[key])])];
+      const intentMatches=projectIntentIds.filter(id=>matchedIntentIds.includes(id));
       if(intentMatches.length){
         score=Math.max(score,Number(weights.queryIntent)||85);
         intentMatches.forEach(id=>{
           const intent=DATA.search.intentCatalog.find(item=>item.id===id);
-          if(intent)reasons.push({kind:'intentIds',label:reasonLabel('intentIds',localize(intent.label))});
+          const label=intent?localize(intent.label):id.replaceAll('-',' ');
+          reasons.push({kind:'intentIds',label:reasonLabel('intentIds',label)});
         });
       }
       register('problemTags',Number(weights.problemTag)||75,allLocalizedList(index.problemTags));
       register('capabilityTags',Number(weights.capabilityTag)||55,allLocalizedList(index.capabilityTags));
-      register('domainIds',Number(weights.primaryDomain)||65,list(index.domainIds));
+      const matchedDomains=DATA.contentDiscovery.domains.filter(domain=>[
+        domain.id,localize(domain.label),...list(domain.legacyAliases),...list(SEARCH_DOMAIN_QUERY_ALIASES[domain.id])
+      ].some(value=>phraseMatches(query,value)));
+      const featuredDomainMatches=matchedDomains.filter(domain=>list(index.featuredDomainIds).includes(domain.id));
+      const supportingDomainMatches=matchedDomains.filter(domain=>list(index.supportingDomainIds).includes(domain.id));
+      if(featuredDomainMatches.length){score=Math.max(score,Number(weights.primaryDomain)||65);featuredDomainMatches.forEach(domain=>reasons.push({kind:'domainIds',label:reasonLabel('domainIds',localize(domain.label))}));}
+      if(supportingDomainMatches.length){score=Math.max(score,Number(weights.supportingDomain)||45);supportingDomainMatches.forEach(domain=>reasons.push({kind:'domainIds',label:reasonLabel('domainIds',localize(domain.label))}));}
+      register('domainIds',Number(weights.primaryDomain)||65,[...list(index.domainIds).filter(id=>!list(index.featuredDomainIds).includes(id)&&!list(index.supportingDomainIds).includes(id)),localize(project.domain_label||project.domain)]);
       register('systemOrAudienceTags',Number(weights.systemOrAudienceTag)||35,[
         ...allLocalizedList(index.systemTags),
         ...allLocalizedList(index.audienceTags)
@@ -626,6 +792,10 @@
         key,
         score,
         matchCount:new Set(reasons.map(reason=>reason.label)).size,
+        intentRank:intentMatches.length?Math.min(...intentMatches.map(id=>{const order=list(SEARCH_INTENT_PROJECT_ORDER[id]);const position=order.indexOf(key);return position<0?999:position;})):999,
+        domainRank:matchedDomains.length?Math.min(...matchedDomains.map(domain=>{const featured=list(domain.featuredProjectIds).indexOf(key);if(featured>=0)return featured;const supporting=list(domain.supportingProjectIds).indexOf(key);return supporting>=0?100+supporting:999;})):999,
+        portfolioRank:Math.max(0,searchPortfolioOrder.indexOf(key)),
+        matchedIntentIds:intentMatches,
         reasons:reasons.slice(0,DATA.search.contract.resultPresentation?.maxReasons||3)
       };
     };
@@ -641,36 +811,80 @@
       }}));
       return [...projects,...explorations]
         .map(entity=>({...rankProject(entity.key,entity.item,normalized,intentIds),type:entity.type}))
-        .filter(result=>result.score>0)
-        .sort((a,b)=>b.score-a.score||b.matchCount-a.matchCount||(a.type==='project'?-1:1));
+        .filter(result=>result.score>0&&(!intentIds.length||result.matchedIntentIds.length||result.score>=Number(DATA.search.contract.weights?.problemTag||75)))
+        .sort((a,b)=>b.score-a.score||a.intentRank-b.intentRank||b.matchCount-a.matchCount||a.domainRank-b.domainRank||a.portfolioRank-b.portfolioRank||(a.type==='project'?-1:1));
     };
-    const appendProject=(container,key,reasons=[])=>{
+    const SEARCH_RESULT_PROJECT_PROJECTIONS={
+      voucher:{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:2},intentSignals:{'improve-product-discovery':{source:'outcome',index:1},'build-measurement-and-monitoring':{source:'outcome',index:0}}},
+      'voucher-center':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:1}},
+      'game-center':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'completionEvidence'}},
+      dbs:{ownershipEnd:{en:', working with',zh:'；'},defaultSignal:{source:'outcome',index:1},intentSignals:{'align-stakeholders-and-operations':{source:'ownership'},'build-measurement-and-monitoring':{source:'outcome',index:0}}},
+      booking:{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:1},intentSignals:{'improve-product-discovery':{source:'outcome',index:3}}},
+      bandzo:{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:0},intentSignals:{'improve-product-discovery':{source:'outcome',index:1}}},
+      'taishin-p2p-marketplace-platform':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:0},intentSignals:{'align-stakeholders-and-operations':{source:'ownership'}}},
+      'cathay-mortgage-assistant':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:0},intentSignals:{'align-stakeholders-and-operations':{source:'ownership'}}},
+      payment:{ownershipEnd:{en:'. Voucher integration',zh:'。優惠券整合'},defaultSignal:{source:'outcome',index:1},intentSignals:{'launch-zero-to-one-product':{source:'outcome',index:3},'align-stakeholders-and-operations':{source:'ownership'}}},
+      'cathay-sit-online-account-opening':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:0},intentSignals:{'align-stakeholders-and-operations':{source:'ownership'}}},
+      'cathay-sit-review-remediation-operations':{ownershipEnd:{en:';',zh:'；'},defaultSignal:{source:'outcome',index:1},intentSignals:{'reduce-operational-friction':{source:'outcome',index:0},'build-measurement-and-monitoring':{source:'outcome',index:0},'align-stakeholders-and-operations':{source:'ownership'}}},
+      'ctbc-mortgage-self-service-app':{defaultSignal:{source:'outcome',index:0}},
+      'booking-taxi-pickup-service-strategy':{ownershipEnd:{en:', working with',zh:'，並與'},defaultSignal:{source:'outcome',index:0}}
+    };
+    const searchResultProjection=(key,project,{intentIds=[]}={})=>{
+      const contract=SEARCH_RESULT_PROJECT_PROJECTIONS[key];
+      if(!contract)throw new Error(`SearchResultCard: missing approved projection contract for "${key}".`);
+      const ownershipSource=localize(project.ownership_model?.publicSummary).trim();
+      if(!ownershipSource)throw new Error(`SearchResultCard: missing approved ownership source for "${key}".`);
+      const ownershipEnd=contract.ownershipEnd?.[lang];
+      const ownershipEndIndex=ownershipEnd?ownershipSource.indexOf(ownershipEnd):-1;
+      if(ownershipEnd&&ownershipEndIndex<0)throw new Error(`SearchResultCard: approved ownership boundary changed for "${key}".`);
+      const ownership=ownershipEnd?ownershipSource.slice(0,ownershipEndIndex).trim():ownershipSource;
+      const intentSignal=intentIds.map(id=>contract.intentSignals?.[id]).find(Boolean);
+      const signalContract=intentSignal||contract.defaultSignal;
+      if(!signalContract)throw new Error(`SearchResultCard: missing approved signal contract for "${key}".`);
+      if(signalContract.source==='ownership')return {kind:'ownership',value:ownership};
+      let value='';
+      if(signalContract.source==='completionEvidence'){
+        const source=project.publicContent?.completionEvidence;
+        value=[source?.publicValue,localize(source?.label)].filter(Boolean).join(' ');
+      }else{
+        const source=list(project.outcome_evidence_model)[signalContract.index];
+        if(!source||!String(source.publicUse||'').startsWith('approved'))throw new Error(`SearchResultCard: approved signal source changed for "${key}".`);
+        value=localize(source.claim).trim();
+      }
+      if(!value)throw new Error(`SearchResultCard: missing approved signal projection for "${key}".`);
+      return {kind:'evidence',value};
+    };
+    window.searchResultCardProjection=(key,context)=>searchResultProjection(key,DATA.projects[key],context);
+    const appendProject=(container,key,reasons=[],matchedIntentIds=[],score=0)=>{
       const project=DATA.projects[key];if(!project)return;
+      const projection=searchResultProjection(key,project,{intentIds:matchedIntentIds,reasons});
       const card=element('button','related-project-card related-project-card--search related-project-card-v45');
       card.type='button';card.dataset.project=key;
+      card.dataset.searchCardProjection='approved';
+      card.dataset.searchScore=String(score);
+      card.dataset.searchIntents=matchedIntentIds.join(',');
+      card.dataset.searchReasons=reasons.map(reason=>`${reason.kind}:${reason.label}`).join('|');
+      card.setAttribute('aria-label',`${ui("open-project-9dcdb86a")}: ${localize(project.title_pair)}`);
       const intro=element('div','related-project-card__intro-v81');
       const top=element('div','related-project-card__top-v45');
-      top.append(element('strong','related-project-card__company-v135',localize(project.company)));
-      if(project.domain_label)top.append(element('span','related-project-card__context',localize(project.domain_label)));
-      intro.append(top,element('h5','related-project-card__title',localize(project.title_pair)));
-      const meta=element('dl','related-project-card__meta-v45');
-      const why=element('div');
-      why.append(
-        element('dt','',ui("why-it-fits-3421d244")),
-        element('dd','',reasons.length?reasons.map(item=>item.label).join(' · '):localize(project.search_relevance_pair))
-      );
-      const evidence=element('div');
-      evidence.append(
-        element('dt','',ui("evidence-1111eae0")),
-        element('dd','',localize(project.search_evidence_pair))
-      );
-      meta.append(why,evidence);
-      const action=element('span','related-project-card__action');
+      top.append(element('strong','related-project-card__company-v135 company-name-v132',localize(SEARCH_PROJECT_COMPANY_DISPLAY[key]||project.company)));
+      const relevance=localize(project.domain_label||project.domain);
+      if(relevance){
+        const contextGroup=element('span','related-project-card__context-group');
+        contextGroup.append(
+          element('span','company-separator-v159','·'),
+          element('span','related-project-card__context company-context-v132',relevance)
+        );
+        top.append(contextGroup);
+      }
+      intro.append(top,element('h4','related-project-card__title',localize(project.title_pair)));
+      const signal=element('p',`search-result-card__signal search-result-card__signal--${projection.kind}`,projection.value);
+      const action=element('span','related-project-card__action text-cta');
       action.append(
-        element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),
-        element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right')
+        element('span','related-project-card__action-label sr-only',ui("view-case-a62dd0ad")),
+        element('span','related-project-card__action-arrow icon-arrow icon-arrow--right')
       );
-      card.append(intro,meta,action);
+      card.append(intro,signal,action);
       container.append(card);
     };
     const appendExploration=(container,key,reasons=[])=>{
@@ -681,15 +895,12 @@
       const top=element('div','related-project-card__top-v45');
       top.append(element('strong','related-project-card__company-v135',localize(item.category)));
       intro.append(top,element('h5','related-project-card__title',localize(item.title)));
-      const meta=element('dl','related-project-card__meta-v45');
-      const row=element('div');
-      row.append(element('dt','',ui("why-it-fits-3421d244")),element('dd','',reasons.map(reason=>reason.label).join(' · ')));
-      meta.append(row);
-      const action=element('span','related-project-card__action');
-      action.append(element('span','related-project-card__action-label',ui("view-experiment-8788e030")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right'));
-      card.append(intro,meta,action);container.append(card);
+      const signal=element('p','search-result-card__signal search-result-card__signal--evidence',localize(item.summary));
+      const action=element('span','related-project-card__action text-cta');
+      action.append(element('span','related-project-card__action-label sr-only',ui("view-experiment-8788e030")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--right'));
+      card.append(intro,signal,action);container.append(card);
     };
-    const renderResults=query=>{
+    const renderResults=(query)=>{
       clear(results);
       const ranked=searchEntities(query);
       const bestIntent=matchingIntentIds(normalize(query))[0];
@@ -697,12 +908,31 @@
       const heading=element('div','global-search-v114__result-head');
       heading.append(
         element('span','kicker',ranked.length?(ui("most-relevant-direction-7603c296")):(ui("no-exact-match-2688ce0c"))),
-        element('h3','',intent?localize(intent.label):(ranked.length?(ui("relevant-work-for-your-problem-59a01a0d")):(ui("no-matching-public-work-yet-92409723"))))
+        element('h3','',ranked.length?(intent?localize(intent.label):ui("relevant-work-for-your-problem-59a01a0d")):localize({
+          en:'Can’t find what you’re looking for?',
+          zh:'找不到你正在尋找的內容嗎？'
+        }))
       );
       results.append(heading);
+      if(!ranked.length){
+        const empty=element('div','global-search-v114__empty');
+        empty.append(
+          element('p','global-search-v114__answer',localize({
+            en:'If you’re hiring for a product or system problem that isn’t represented here, feel free to get in touch.',
+            zh:'如果你正在招募的產品或系統問題尚未呈現在這裡，歡迎與我聯繫。'
+          }))
+        );
+        const contact=element('a','button button--dark',localize({en:'Contact me',zh:'聯絡我'}));
+        contact.href='mailto:r.c.shulin@gmail.com?subject=Product%20design%20inquiry&body=Problem%3A%0AUsers%3A%0ACurrent%20stage%3A%0AKey%20constraints%3A%0A';
+        empty.append(contact);
+        results.append(empty);
+      }
       const projects=element('div','global-search-v114__projects');
-      const visible=ranked.slice(0,4);
-      visible.forEach(result=>result.type==='project'?appendProject(projects,result.key,result.reasons):appendExploration(projects,result.key,result.reasons));
+      const qaRankingMatrix=['localhost','127.0.0.1'].includes(window.location.hostname)&&new URLSearchParams(window.location.search).get('qa-search-ranking')==='1';
+      const visible=ranked.slice(0,qaRankingMatrix?5:4);
+      visible.forEach((result,index)=>{
+        result.type==='project'?appendProject(projects,result.key,result.reasons,result.matchedIntentIds,result.score):appendExploration(projects,result.key,result.reasons);
+      });
       if(bestIntent==='design-incentive-systems'){
         const initiative=DATA.projects.voucher?.initiatives?.['brand-challenges'];
         if(initiative){
@@ -715,23 +945,17 @@
             element('span','related-project-card__context',ui("initiative-2f35f4be"))
           );
           intro.append(top,element('h5','related-project-card__title',lang==='zh'?initiative.title_zh:initiative.title));
-          const meta=element('dl','related-project-card__meta-v45');
-          const row=element('div');
-          row.append(
-            element('dt','',ui("why-it-fits-3421d244")),
-            element('dd','',lang==='zh'?initiative.strategy_zh:initiative.strategy)
-          );
-          meta.append(row);
-          const action=element('span','related-project-card__action');
+          const signal=element('p','search-result-card__signal search-result-card__signal--evidence',lang==='zh'?initiative.strategy_zh:initiative.strategy);
+          const action=element('span','related-project-card__action text-cta');
           action.append(
-            element('span','related-project-card__action-label',ui("view-initiative-6fde5688")),
-            element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right')
+            element('span','related-project-card__action-label sr-only',ui("view-initiative-6fde5688")),
+            element('span','related-project-card__action-arrow icon-arrow icon-arrow--right')
           );
-          card.append(intro,meta,action);
+          card.append(intro,signal,action);
           projects.append(card);
         }
       }
-      results.append(projects);results.hidden=false;enhanceCompanyNames(results);
+      if(ranked.length)results.append(projects);results.hidden=false;enhanceCompanyNames(results);
       safeText(status,ui("search-results-updated-1833c496"));
       results.focus({preventScroll:true});
       results.scrollIntoView({block:'start',behavior:'auto'});
@@ -750,10 +974,13 @@
     };
     const renderSuggestions=()=>{
       clear(suggestions);
-      DATA.search.suggestions.forEach(item=>{
+      SEARCH_RECOMMENDED_QUERIES.forEach((item,index)=>{
         const chip=element('button','global-search-v114__chip',localize(item.label));
         chip.type='button';
-        chip.addEventListener('click',()=>{input.value=localize(item.query);syncClear();renderResults(input.value)});
+        chip.addEventListener('click',()=>{
+          input.value=localize(item.query);syncClear();
+          renderResults(input.value);
+        });
         suggestions.append(chip);
       });
     };
@@ -772,7 +999,7 @@
     close.addEventListener('click',()=>closeSearch());
     searchDialog.addEventListener('click',event=>{if(event.target===searchDialog)closeSearch()});
     searchDialog.addEventListener('cancel',event=>{event.preventDefault();closeSearch()});
-    form.addEventListener('submit',event=>{event.preventDefault();if(input.value.trim())renderResults(input.value)});
+    form.addEventListener('submit',event=>{event.preventDefault();if(input.value.trim())renderResults(input.value,{emit:true,searchSource:'typed'})});
     results.addEventListener('click',event=>{
       if(event.target.closest('[data-project],[data-initiative]'))closeSearch({restoreFocus:false});
     });
@@ -781,13 +1008,12 @@
       trigger.setAttribute('aria-label',ui("search-entire-site-a8673eed"));
       close.setAttribute('aria-label',ui("close-site-search-376ce6d7"));
       safeText(title,ui("what-are-you-trying-to-solve-27f7ebed"));
-      safeText(intro,ui("search-by-company-domain-product-problem-o-405a6756"));
       safeText(label,ui("product-challenge-8a385573"));
-      input.placeholder=ui("try-a-company-domain-or-product-problem-3a452b87");
+      input.placeholder=localize(searchPlaceholder);
       clearSearch.setAttribute('aria-label',ui("clear-search-20cb7d1c"));
       safeText(submit,ui("search-8fb22e8f"));
       suggestions.setAttribute('aria-label',ui("suggested-problems-221529dc"));
-      const matchedSuggestion=DATA.search.suggestions.find(item=>Object.values(item.query||{}).includes(input.value));
+      const matchedSuggestion=SEARCH_RECOMMENDED_QUERIES.find(item=>Object.values(item.query||{}).includes(input.value));
       if(matchedSuggestion)input.value=localize(matchedSuggestion.query);
       syncClear();
       renderSuggestions();
@@ -825,6 +1051,42 @@
   enhanceCompanyNames();
   doc.addEventListener('portfolio:language',()=>requestAnimationFrame(()=>enhanceCompanyNames()));
 
+  function renderProfileRecognitionAwards(){
+    const mount=doc.querySelector('[data-profile-recognition-registry]');
+    if(!mount)return;
+    const registryId=mount.dataset.profileRecognitionRegistry;
+    const registry=DATA.recognitionRegistry?.[registryId];
+    const rail=mount.parentElement;
+    if(!registry||!rail)return;
+    rail.querySelectorAll(`[data-recognition-record="${registryId}"]`).forEach(node=>node.remove());
+    const cards=list(registry.awardItems).map((item,index)=>{
+      const linked=item.interaction==='project-linked'&&item.projectId;
+      const card=element(linked?'button':'article',`experiment-index-card-v36 recognition-card-v1838f${index%2?' experiment-index-card-v36--cyan':''}`);
+      card.dataset.recognitionRecord=registryId;
+      card.dataset.recognitionItem=item.id;
+      card.dataset.motionReveal='card';
+      if(linked){card.type='button';card.dataset.experiment=item.projectId;card.dataset.pressable='';card.setAttribute('aria-label',`${ui("open-exploration-33b85a78")}: ${localize(item.projectName)}`)}
+      const top=element('div','experiment-index-card-v36__top');
+      top.append(element('span','',localize(item.winningDiscipline)),element('span','',item.year||''));
+      const asset=resolveProjectAsset(item.assetId);
+      const logo=element('div','award-logo-slot award-logo-slot--red-dot');logo.dataset.assetId=item.assetId;
+      const image=doc.createElement('img');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
+      if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;
+      logo.append(image);
+      card.append(top,logo,element('h3','',`${localize(item.result)} — ${localize(item.projectName)}`),element('p','',`${localize(registry.awardName)} · ${item.year||''}`));
+      if(linked){const action=element('span','experiment-card-action text-cta');action.append(element('span','',lang==='zh'?'查看作品':'View experiment'),element('span','icon-arrow icon-arrow--right'));action.lastElementChild.setAttribute('aria-hidden','true');card.append(action)}
+      else card.append(element('span','recognition-card-v1838f__status',lang==='zh'?'獲獎紀錄':'Award record'));
+      return card;
+    });
+    cards.reverse().forEach(card=>mount.after(card));
+    // Registry hydration prepends canonical award records ahead of the legacy
+    // static cards. Reset horizontal scroll anchoring so the first award stays
+    // visible on initial load rather than preserving the former first card.
+    rail.scrollTo({left:0,behavior:'auto'});
+  }
+  renderProfileRecognitionAwards();
+  doc.addEventListener('portfolio:language',()=>requestAnimationFrame(renderProfileRecognitionAwards));
+
   function hydrateCanonicalCardCopy(){
     doc.querySelectorAll('.work-card-v32 [data-project],.evidence-feature [data-project],.evidence-list__item [data-project]').forEach(trigger=>{
       const project=DATA.projects?.[trigger.dataset.project];
@@ -849,12 +1111,14 @@
         if(action)action.before(proof);else trigger.before(proof);
       }
       if(proof)proof.hidden=!proofText;
+      const navigationAction=card.querySelector('.evidence-feature__action,.evidence-list__action,.work-card-v32__action,.related-project-card__action');
+      normalizeNavigationArrow(navigationAction);
       trigger.setAttribute('aria-label',`${ui("open-project-9dcdb86a")}: ${localize(project.title_pair)}`);
     });
     doc.querySelectorAll('.experiment-feature-card-v32[data-experiment],.experiment-index-card-v36[data-experiment],.poster[data-experiment]').forEach(card=>{
       const item=DATA.experiments?.[card.dataset.experiment];
       if(!item)return;
-      if(card.closest('#profileSideRail')){card.setAttribute('aria-label',`${ui("open-exploration-33b85a78")}: ${localize(item.title)}`);return;}
+      if(card.closest('#profileSideRail')){card.setAttribute('aria-label',`${ui("open-exploration-33b85a78")}: ${localize(item.title)}`);normalizeNavigationArrow(card.querySelector('.experiment-card-action,.poster-action'));return;}
       safeText(card.querySelector('h2,h3'),localize(item.title));
       safeText(card.querySelector('p'),localize(item.summary));
       const kicker=card.querySelector('.kicker');
@@ -865,8 +1129,11 @@
         preview.hidden=!learning;
         safeText(preview.querySelector('strong'),learning);
       }
+      const navigationAction=card.querySelector('.experiment-card-action');
+      normalizeNavigationArrow(navigationAction);
       card.setAttribute('aria-label',`${ui("open-exploration-33b85a78")}: ${localize(item.title)}`);
     });
+    enforceNavigationCtaSemantics();
   }
   hydrateCanonicalCardCopy();
   doc.addEventListener('portfolio:language',()=>requestAnimationFrame(hydrateCanonicalCardCopy));
@@ -1000,7 +1267,7 @@
     if(index===0&&domain)top.append(element('span','project-context related-project-card__context',domain));
     const title=element('h2','',localize(project.title_pair));
     const summary=element('p','',localize(project.at_a_glance_pair));
-    const action=element('span','work-card-v32__action related-project-card__action');
+    const action=element('span','work-card-v32__action related-project-card__action text-cta');
     action.append(
       element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),
       element('span','icon-arrow icon-arrow--right')
@@ -1022,9 +1289,40 @@
       moreWork.forEach((id,index)=>workArchiveGrid.append(createWorkCard(id,DATA.projects[id],index+featuredIds.length)));
     }
   }
+  function renderCareerTimeline(){
+    const mount=doc.getElementById('profileCareerTimeline');
+    if(!mount)return;
+    const profile=DATA.profile;
+    const records=profile?.careerTimeline;
+    const order=list(profile?.careerTimelineContract?.renderOrder);
+    clear(mount);
+    order.forEach(id=>{
+      const item=records?.[id];
+      if(!item)throw new Error(`Profile career timeline: missing canonical record ${id}`);
+      const row=element('article');row.dataset.careerId=id;
+      row.append(element('time','',localize(item.period)));
+      const entry=element('div','career-timeline-v34__entry');
+      const meta=element('div','career-timeline-v34__meta');
+      const company=localize(item.company);
+      [company?localize(item.title):'',localize(item.employmentType),localize(item.location)].filter(Boolean).forEach(value=>meta.append(element('span','',value)));
+      entry.append(meta,element('h3','',company||localize(item.title)),element('p','',localize(item.focus)));
+      const project=DATA.projects[item.keyProjectId];
+      if(project){
+        const button=element('button','timeline-evidence-v34');button.type='button';button.dataset.project=item.keyProjectId;button.dataset.pressable='';
+        const copy=element('span','timeline-evidence-v34__copy');
+        copy.append(element('span','',ui('view-case-a62dd0ad')),element('strong','',localize(item.linkLabel)||localize(project.title_pair)));
+        const arrow=element('span','icon-arrow icon-arrow--right');arrow.setAttribute('aria-hidden','true');
+        button.append(copy,arrow);entry.append(button);
+      }
+      row.append(entry);mount.append(row);
+    });
+  }
+  renderCareerTimeline();
+  doc.addEventListener('portfolio:language',renderCareerTimeline);
   const leadership=DATA.profile?.designLeadership;
   const leadershipGrid=doc.getElementById('designLeadershipGrid');
-  if(leadership&&leadershipGrid){
+  function renderDesignLeadership(){
+    if(!leadership||!leadershipGrid)return;
     safeText(doc.getElementById('designLeadershipTitle'),localize(leadership.title));
     clear(leadershipGrid);
     list(leadership.items).forEach((item,index)=>{
@@ -1047,23 +1345,42 @@
         button.type='button';button.dataset.pressable='';
         button.dataset[link.type]=link.id;
         button.setAttribute('aria-label',`${linkTitle}: ${fullTitle}`);
-        button.appendChild(element('span',`icon-arrow ${link.type==='project'?'icon-arrow--right':'icon-arrow--up-right'}`));
+        button.appendChild(element('span','icon-arrow icon-arrow--right'));
         links.appendChild(button);
       });
       if(links.childElementCount)card.appendChild(links);
       leadershipGrid.appendChild(card);
     });
   }
+  renderDesignLeadership();
+  doc.addEventListener('portfolio:language',renderDesignLeadership);
   const explorationRail=doc.getElementById('experimentPageRail');
-  if(explorationRail){
-    clear(explorationRail);
-    Object.entries(DATA.experiments).forEach(([id,item],index)=>{
-      const card=element('button','experiment-index-card-v36');
-      card.type='button';card.dataset.experiment=id;card.dataset.experimentPriority=String(index+1);card.dataset.pressable='';
-      card.append(element('div','kicker',localize(item.category)),element('h3','',localize(item.title)),element('p','',localize(item.question)),element('span','experiment-card-action',ui("view-experiment-8788e030")));
-      explorationRail.append(card);
-    });
+  const homeExplorationRail=doc.getElementById('homeExperimentRail');
+  function createExplorationIndexCard(id,item,index){
+    const card=element('button','experiment-index-card-v36');
+    card.type='button';card.dataset.experiment=id;card.dataset.experimentPriority=String(index+1);card.dataset.pressable='';
+    const top=element('div','experiment-index-card-v36__top');top.append(element('strong','',localize(item.maturity||item.status)));
+    const body=element('div');body.append(element('h3','',localize(item.title)));
+    const action=element('span','experiment-card-action text-cta',ui("view-experiment-8788e030"));
+    action.dataset.ctaSemantic='navigation';
+    action.append(element('span','icon-arrow icon-arrow--right'));
+    card.append(top,body,action);
+    return card;
   }
+  function renderExplorationRail(){
+    const entries=Object.entries(DATA.experiments);
+    for(const rail of [explorationRail,homeExplorationRail].filter(Boolean)){
+      clear(rail);
+      entries.forEach(([id,item],index)=>rail.append(createExplorationIndexCard(id,item,index)));
+    }
+    const experimentIndex=doc.getElementById('experimentIndex');
+    if(experimentIndex)experimentIndex.hidden=!explorationRail?.childElementCount;
+    const homeExperiments=doc.getElementById('homeExperiments');
+    if(homeExperiments)homeExperiments.hidden=!homeExplorationRail?.childElementCount;
+    window.refreshHorizontalRails?.();
+  }
+  renderExplorationRail();
+  doc.addEventListener('portfolio:language',renderExplorationRail);
   if(scalableWorkGallery){
     const allWorkCards=[...scalableWorkGallery.querySelectorAll('[data-feature-rank]')];
     allWorkCards.sort((a,b)=>{
@@ -1102,7 +1419,7 @@
     workFilterButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.workFilter===filter)));
     workCards.forEach(card=>{card.hidden=filter!=='all'&&!card.dataset.workCategories.split(/\s+/).includes(filter)});
     scalableWorkGallery?.classList.toggle('is-filtered',filter!=='all');
-    if(workArchive&&workArchiveGrid){const visible=[...workArchiveGrid.children].some(card=>!card.hidden);workArchive.hidden=filter!=='all'||!visible}
+    if(workArchive&&workArchiveGrid){const visible=[...workArchiveGrid.children].some(card=>!card.hidden);workArchive.hidden=!visible}
   }
   workFilterButtons.forEach(button=>button.addEventListener('click',()=>{
  applyWorkFilter(button.dataset.workFilter);
@@ -1146,7 +1463,7 @@
     evidenceLightboxClose.focus();
   }
   function enableExpandableEvidence(rootNode=doc){
-    rootNode.querySelectorAll('.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img').forEach(image=>{
+    rootNode.querySelectorAll('[data-expandable-evidence] img,.decision-visual-v58 img,.programme-stage-visual img,#sharedGallery img').forEach(image=>{
       if(image.dataset.assetStatus==='placeholder-active')return;
       const invoker=image.closest('[data-expandable-evidence]')||image;
       if(!invoker.getAttribute('aria-label'))invoker.setAttribute('aria-label',image.alt||localize(DATA.implementationContracts?.expandableImageLabels?.expand));
@@ -1219,9 +1536,23 @@
   window.resolveProjectSemanticSlot=resolveProjectSemanticSlot;
   const NAV_LABELS={
     overview:{en:'Overview',zh:'概覽'},complexity:{en:'Complexity',zh:'複雜度'},decisions:{en:'Decisions',zh:'設計決策'},evidence:{en:'Evidence',zh:'證據'},outcomes:{en:'Outcomes',zh:'成果'},ownership:{en:'Ownership',zh:'責任範圍'},
-    'exploration-question':{en:'Question',zh:'探索問題'},'explored-or-built':{en:'Prototype',zh:'探索成果'},'learning-or-decision':{en:'Learning',zh:'學習'},'delivery-state':{en:'Status',zh:'狀態'}
+    proposed:{en:'Proposed',zh:'提案'},recognition:{en:'Recognition',zh:'肯定'}
+  };
+  const EXPERIMENT_NAV_TARGETS={
+    'freelance-project-operations-tool':{proposed:'what-i-built',outcomes:'working-use-signal'},
+    'weekly-design-session':{proposed:'practice-model',outcomes:'participant-signal'},
+    'food-testing-workshop':{proposed:'experiment-setup',outcomes:'method-output'},
+    'aja-creative-workshop':{proposed:'format-design',outcomes:'participant-signal'},
+    'capture-ideas':{proposed:'proposed-system',recognition:'recognition'},
+    'aha-creative-toolbox':{proposed:'system-model',outcomes:'workshop-evaluation'},
+    'hello-sabau':{proposed:'product-experience-system',recognition:'recognition'}
   };
   function canonicalProjectNavItems(){
+    if(currentDetail?.type==='experiment'){
+      const targets=EXPERIMENT_NAV_TARGETS[currentDetail.key]||{};
+      const finalKey=targets.recognition?'recognition':'outcomes';
+      return ['overview','proposed',finalKey].map(key=>{const labels=pair(NAV_LABELS[key]);return[key,'',labels[0],labels[1]]});
+    }
     const archetype=currentDetail?.type==='experiment'?'experiment':'primary';
     const contract=presentationContract(archetype);
     return list(contract?.navigatorSlots).map(key=>{
@@ -1236,10 +1567,17 @@
     if(isRendered(configuredTarget))return configuredTarget;
     return semanticTargets.find(isRendered)||configuredTarget||semanticTargets[0]||null;
   }
-  function closeProjectSectionMenu(){
-    projectSectionNav?.classList.remove('is-open');
-    projectSectionNavToggle?.setAttribute('aria-expanded','false');
+  function setProjectSectionMenuState(open){
+    projectSectionNav?.classList.toggle('is-open',open);
+    projectSectionNavToggle?.setAttribute('aria-expanded',String(open));
+    if(projectSectionNavToggle){
+      projectSectionNavToggle.dataset.ctaSemantic='disclosure';
+      const arrow=projectSectionNavToggle.querySelector('.icon-arrow');
+      arrow?.classList.toggle('icon-arrow--down',!open);
+      arrow?.classList.toggle('icon-arrow--up',open);
+    }
   }
+  function closeProjectSectionMenu(){setProjectSectionMenuState(false)}
   function projectSectionInset(){
     if(!dialogScrollRoot)return 0;
     const rootTop=dialogScrollRoot.getBoundingClientRect().top;
@@ -1315,7 +1653,7 @@
     }else window.requestAnimationFrame(()=>animateProjectSectionNavigation(token));
   }
   function restoreProjectSectionHash(){
-    if(currentDetail?.type!=='project'||!dialogScrollRoot||!window.location.hash)return;
+    if(!['project','experiment'].includes(currentDetail?.type)||!dialogScrollRoot||!window.location.hash)return;
     const target=doc.getElementById(decodeURIComponent(window.location.hash.slice(1)));
     const link=target&&projectSectionNavLinks?.querySelector(`a[href="#${CSS.escape(target.id)}"]`);
     if(!target||!link)return;
@@ -1354,7 +1692,8 @@
     if(projectSectionNav.hidden)return;
     items.forEach(([key,id,en,zh])=>{
       const target=projectNavTarget(key,id);
-      const link=element('a','pd-section-nav__link floating-navigator__item',lang==='zh'?zh:en);
+      const voucherStageLabel=currentDetail?.type==='project'&&currentDetail.key==='voucher'&&key==='decisions';
+      const link=element('a','pd-section-nav__link floating-navigator__item',voucherStageLabel?(lang==='zh'?'解決方案':'Solutions'):(lang==='zh'?zh:en));
       link.href=`#${target.id||id}`;
       link.addEventListener('focus',()=>positionActiveProjectNavItem(link));
       const activate=event=>{
@@ -1369,13 +1708,18 @@
     updateProjectSectionLocation();
   }
   projectSectionNavToggle?.addEventListener('click',()=>{
-    const open=projectSectionNav?.classList.toggle('is-open');
-    projectSectionNavToggle.setAttribute('aria-expanded',String(Boolean(open)));
+    setProjectSectionMenuState(!projectSectionNav?.classList.contains('is-open'));
   });
   dialogScrollRoot?.addEventListener('scroll',()=>{
     if(dialogScrollRoot.scrollLeft!==0)dialogScrollRoot.scrollLeft=0;
     if(projectSectionNavigation)return;
     updateProjectSectionLocation();
+    if(currentDetail&&!detailScrollHistoryFrame){
+      detailScrollHistoryFrame=requestAnimationFrame(()=>{
+        detailScrollHistoryFrame=0;
+        history.replaceState({...history.state,detail:{...currentDetail},scrollTop:dialogScrollRoot.scrollTop},'',window.location.href);
+      });
+    }
   },{passive:true});
   dialogScrollRoot?.addEventListener('wheel',cancelProjectSectionNavigation,{passive:true});
   dialogScrollRoot?.addEventListener('touchstart',cancelProjectSectionNavigation,{passive:true});
@@ -1454,13 +1798,18 @@
     const syncHistory=options?.syncHistory!==false;
     if(!dialog?.open)return;
     dialog.classList.add('is-closing');
-    const finish=()=>{dialog.classList.remove('is-closing');dialog.close();setDialogOpenState(false);safeText(dialogStatus,ui("details-closed-8df67313"));rootInvoker?.focus();detailStack.length=0;rootInvoker=null;currentInvoker=null;currentDetail=null;if(syncHistory)history.replaceState({},'',workIndexUrl());updateCloseControl()};
+    const finish=()=>{const closingType=currentDetail?.type;dialog.classList.remove('is-closing');dialog.close();setDialogOpenState(false);safeText(dialogStatus,ui("details-closed-8df67313"));rootInvoker?.focus();detailStack.length=0;rootInvoker=null;currentInvoker=null;currentDetail=null;if(syncHistory)history.replaceState({},'',closingType==='experiment'?experimentIndexUrl():workIndexUrl());updateCloseControl()};
     if(prefersReduced.matches)finish();else window.setTimeout(finish,140);
   }
   dialogClose?.addEventListener('click',closeDialog);
   dialogBack?.addEventListener('click',returnToPreviousDetail);
   dialog?.addEventListener('click',event=>{if(event.target===dialog)closeDialog()});
   dialog?.addEventListener('cancel',event=>{event.preventDefault();closeDialog()});
+  doc.addEventListener('keydown',event=>{
+    if(event.key!=='Escape'||event.defaultPrevented||!dialog?.open||evidenceLightbox.open)return;
+    event.preventDefault();
+    closeDialog();
+  });
 
   function renderArtifact(labels,assetId=''){
     const art=doc.getElementById('galleryArt');clear(art);art.dataset.frameRole='supporting-evidence';
@@ -1603,7 +1952,15 @@
   }
   function renderTags(tags){const node=doc.getElementById('detailTags');clear(node);tags.forEach(tag=>node.appendChild(element('span','modal-tag',tag)))}
   function renderDeliveryStatus(value){
-    const row=doc.getElementById('detailStatus');
+    const statusRows=[...(detailDialog?.querySelectorAll('.detail-status')||[])];
+    let row=doc.getElementById('detailStatus')||doc.getElementById('experimentDeliveryStateSection')||statusRows[0];
+    statusRows.filter(candidate=>candidate!==row).forEach(candidate=>candidate.remove());
+    if(!row&&dialogTitle){
+      row=element('div','detail-status detail-status-v45');
+      dialogTitle.after(row);
+    }
+    if(!row)return;
+    row.id='detailStatus';
     clear(row);
     const raw=String(value||'').trim();
     const text=raw?formatStatus(raw):'';
@@ -2302,13 +2659,22 @@
     host.hidden=!host.childElementCount;
   }
   function caseStudySection(node,id,surface='canvas'){if(!node)return null;node.classList.remove('case-study-section--canvas','case-study-section--soft','case-study-section--emphasis');node.classList.add('case-study-section',`case-study-section--${surface}`);node.dataset.caseStudySection=id;return node}
+  function enforceCanonicalAdjacency(container){
+    if(!container)return;
+    list(DATA.implementationContracts?.portfolioPresentation?.requiredAdjacencies).filter(rule=>rule?.required&&rule.scope==='canonical-projects').forEach(rule=>{
+      const predecessor=doc.querySelector(`[data-component-owner="${rule.predecessorComponent}"]`);
+      const successor=container.querySelector(`[data-component-owner="${rule.successorComponent}"]`);
+      if(predecessor&&!predecessor.hidden&&successor)successor.before(predecessor);
+    });
+  }
   function caseStudyHeader(node,index=''){if(!node)return;const governed=node.matches('.case-study-section__header')?node:node.querySelector(':scope > .case-study-section__header');if(governed){const eyebrow=governed.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);return}const existing=node.matches('.section-heading-v45')?node:node.querySelector(':scope > .section-heading-v45');const header=existing||node.querySelector(':scope > h2, :scope > h3, :scope > h4')||node.querySelector('h2, h3, h4');if(!header)return;if(existing){existing.classList.add('case-study-section__header');const eyebrow=existing.querySelector('.case-study-section__eyebrow');if(index&&eyebrow)safeText(eyebrow,index);else if(index)existing.prepend(element('span','case-study-section__eyebrow',index));const title=existing.querySelector('h3, h4');if(title){const h2=element('h2',title.className,title.textContent);for(const attr of title.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);title.replaceWith(h2)}return}if(header.matches('h3, h4')){const h2=element('h2',header.className,header.textContent);for(const attr of header.attributes)if(attr.name!=='class')h2.setAttribute(attr.name,attr.value);header.replaceWith(h2)}const title=node.querySelector(':scope > h2')||node.querySelector('h2');if(!title)return;const wrapper=element('div','case-study-section__header');if(index)wrapper.appendChild(element('span','case-study-section__eyebrow',index));node.prepend(wrapper);wrapper.appendChild(title)}
-  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;overview.dataset.projectNavTarget='overview';complexity.dataset.projectNavTarget='complexity';decisions.dataset.projectNavTarget='decisions';gallery.dataset.projectNavTarget='evidence';impact.dataset.projectNavTarget='outcomes';ownership.dataset.projectNavTarget='ownership';caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden&&supplemental[0]){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention';supplemental[0].appendChild(intervention)}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=[...new Set(project.section_order||[])];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;node.dataset.contentBlockIds=contentPresentationSources(project,sectionId).join('|');ordered.push(node);mapped.push(sectionId);appended.add(node)}if(impactEvidence&&!appended.has(impact)){impact.hidden=false;impact.dataset.recruiterSectionId='outcomes';const ownershipIndex=ordered.indexOf(ownership);if(ownershipIndex>=0)ordered.splice(ownershipIndex,0,impact);else ordered.push(impact);appended.add(impact)}ordered.forEach(node=>evidence.appendChild(node));evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>{if(!ordered.includes(node))delete node.dataset.canonicalSectionId});ordered.filter(node=>!node.hidden).forEach(node=>caseStudyHeader(node,''));if(appended.has(impact)){const outcomeTitle=impact.querySelector(':scope > .case-study-section__header h2');if(outcomeTitle)safeText(outcomeTitle,lang==='zh'?'成果':'Outcomes');if(impactCopy&&!impactCopy.querySelector(':scope > .case-study-impact-copy__label'))impactCopy.prepend(element('span','case-study-impact-copy__label',lang==='zh'?'商業影響':'Business impact'));impact.dataset.recruiterOutcomeSection='visible'}caseStudyHeader(value,'');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');const cleanupDirectRouteCanonical=()=>{const directSurface=doc.getElementById('programmeSurface');if(evidence.closest('[hidden]')&&directSurface&&!directSurface.hidden&&directSurface.getClientRects().length)evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>delete node.dataset.canonicalSectionId)};cleanupDirectRouteCanonical();requestAnimationFrame(cleanupDirectRouteCanonical)}
+  function applyCaseStudySectionSystem(project){const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),value=doc.querySelector('.project-value-v207');const context=overview?.querySelector('.project-context-v45--overview');const problem=context?.querySelector('article:first-child')||doc.querySelector('.case-study-problem');const impactCopy=context?.querySelector('article:nth-child(2)')||doc.querySelector('.case-study-impact-copy');const complexity=doc.getElementById('projectComplexitySection'),intervention=doc.getElementById('projectKeyIntervention'),decisions=doc.getElementById('projectDecisionsSection'),impact=doc.getElementById('projectImpactSection'),ownership=doc.querySelector('.ownership-section-v45'),delivery=doc.querySelector('.delivery-grid-v45'),related=doc.getElementById('detailRelated'),gallery=doc.getElementById('sharedGallery');if(!evidence||!overview)return;overview.dataset.projectNavTarget='overview';complexity.dataset.projectNavTarget='complexity';decisions.dataset.projectNavTarget='decisions';gallery.dataset.projectNavTarget='evidence';impact.dataset.projectNavTarget='outcomes';ownership.dataset.projectNavTarget='ownership';caseStudySection(value,'value-i-brought');caseStudySection(overview,'overview','soft');if(problem){problem.classList.add('case-study-problem');caseStudySection(problem,'critical-problem')}if(impactCopy){impactCopy.classList.add('case-study-impact-copy');impact?.prepend(impactCopy)}const impactEvidence=doc.querySelector('.impact-evidence-v147');if(impactEvidence)impact?.appendChild(impactEvidence);caseStudySection(complexity,'what-made-this-hard');caseStudySection(decisions,'key-decisions','soft');caseStudySection(gallery,'evidence','soft');caseStudySection(impact,'impact','soft');caseStudySection(ownership,'ownership');caseStudySection(delivery,'delivery');caseStudySection(related,'related','soft');const supplemental=[...doc.querySelectorAll('#projectSupplementalSections > [data-project-section]')];supplemental.forEach(section=>caseStudySection(section,section.dataset.projectSection,CASE_STUDY_SECTION_REGISTRY[section.dataset.projectSection]?.surface||'canvas'));if(intervention&&!intervention.hidden){intervention.classList.remove('case-study-section','case-study-section--soft');intervention.dataset.caseStudyComponent='key-intervention'}const owners={problem,complexity,decisions,impact,ownership,delivery,related,evidence:gallery},candidates=[problem,complexity,...supplemental,decisions,gallery,impact,ownership,delivery,related].filter(Boolean),renderable=new Set(candidates.filter(node=>!node.hidden)),appended=new Set(),ordered=[],mapped=[];candidates.forEach(node=>{node.hidden=true;delete node.dataset.canonicalSectionId});const canonicalOrder=[...new Set(project.section_order||[])];const canonicalOwners=new Set(canonicalOrder.map(sectionId=>CASE_STUDY_SECTION_REGISTRY[sectionId]?.owner).filter(Boolean));for(const owner of new Set(Object.values(CASE_STUDY_SECTION_REGISTRY).filter(contract=>contract.required&&!['hero','value','overview'].includes(contract.owner)).map(contract=>contract.owner))){if(!canonicalOwners.has(owner))console.warn(`[CaseStudySection] Required owner "${owner}" is missing from canonical sectionOrder.`)}for(const sectionId of canonicalOrder){const contract=CASE_STUDY_SECTION_REGISTRY[sectionId];if(!contract){console.warn(`[CaseStudySection] Unknown canonical section "${sectionId}"; no implicit renderer was used.`);continue}if(['hero','value','overview'].includes(contract.owner))continue;let node;if(contract.owner==='supplemental')node=supplemental.find(item=>item.dataset.projectSection===sectionId);else node=owners[contract.owner];if(!node||!renderable.has(node)||appended.has(node))continue;node.hidden=false;node.dataset.canonicalSectionId=sectionId;node.dataset.contentBlockIds=contentPresentationSources(project,sectionId).join('|');ordered.push(node);mapped.push(sectionId);appended.add(node)}if(impactEvidence&&!appended.has(impact)){impact.hidden=false;impact.dataset.recruiterSectionId='outcomes';const ownershipIndex=ordered.indexOf(ownership);if(ownershipIndex>=0)ordered.splice(ownershipIndex,0,impact);else ordered.push(impact);appended.add(impact)}ordered.forEach(node=>evidence.appendChild(node));enforceCanonicalAdjacency(evidence);evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>{if(!ordered.includes(node)&&node!==intervention)delete node.dataset.canonicalSectionId});ordered.filter(node=>!node.hidden).forEach(node=>caseStudyHeader(node,''));if(appended.has(impact)){const outcomeTitle=impact.querySelector(':scope > .case-study-section__header h2');if(outcomeTitle)safeText(outcomeTitle,lang==='zh'?'成果':'Outcomes');if(impactCopy&&!impactCopy.querySelector(':scope > .case-study-impact-copy__label'))impactCopy.prepend(element('span','case-study-impact-copy__label',lang==='zh'?'商業影響':'Business impact'));impact.dataset.recruiterOutcomeSection='visible'}caseStudyHeader(value,'');const summary=overview.querySelector('.project-summary-v45');if(summary)caseStudyHeader(summary,'');evidence.dataset.canonicalSectionOrder=canonicalOrder.join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');const cleanupDirectRouteCanonical=()=>{const directSurface=doc.getElementById('programmeSurface');if(evidence.closest('[hidden]')&&directSurface&&!directSurface.hidden&&directSurface.getClientRects().length)evidence.querySelectorAll('[data-canonical-section-id]').forEach(node=>delete node.dataset.canonicalSectionId)};cleanupDirectRouteCanonical();requestAnimationFrame(cleanupDirectRouteCanonical)}
   function renderKeyInterventionMap(project){
     const section=doc.getElementById('projectKeyIntervention');
     const flow=doc.getElementById('projectKeyInterventionFlow');
     const supporting=doc.getElementById('projectKeyInterventionSupporting');
     if(!section||!flow||!supporting)return;
+    section.dataset.componentOwner='KeyInterventionMap';
     clear(flow);
     const map=project.key_intervention_map;
     const status=String(map?.status||'');
@@ -2316,11 +2682,13 @@
     const isVerified=status.startsWith('verified')&&fields.every(value=>String(localize(value)||'').trim());
     section.hidden=!isVerified;
     if(!isVerified){safeText(supporting,'');return}
-    safeText(section.querySelector('.key-intervention-map__title'),lang==='zh'?'系統轉變關鍵':localize(map.sectionLabel));
+    const contract=semanticSlotContract('transformation');
+    safeText(section.querySelector('.key-intervention-map__title'),localize(contract.localizedTitle)||contract.visibleLabel);
+    const labels=contract.visibleLabels;
     const stages=[
-      [{en:'Before',zh:'原始狀態'},map.before,'is-before'],
-      [{en:'Key intervention',zh:'關鍵介入'},map.intervention,'is-intervention'],
-      [{en:'After',zh:'建立後'},map.after,'is-after']
+      [labels.before,map.before,'is-before'],
+      [labels.systemChange,map.intervention,'is-intervention'],
+      [labels.after,map.after,'is-after']
     ];
     stages.forEach(([label,value,variant],index)=>{
       const item=element('article',`key-intervention-map__node ${variant}`);
@@ -2335,7 +2703,8 @@
         flow.appendChild(connector);
       }
     });
-    safeText(supporting,localize(map.supportingCopy));
+    safeText(supporting,'');
+    supporting.hidden=true;
   }
   const TEAM_IMPACT_LABELS={
     dbs:[['Alignment','團隊對齊'],['Delivery','交付'],['Operations','營運']],
@@ -2624,7 +2993,7 @@
       const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus='real-active';figure.dataset.assetId=heroAsset.assetId;
       const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='lazy';image.decoding='async';
       if(heroAsset.width)image.width=heroAsset.width;if(heroAsset.height)image.height=heroAsset.height;
-      figure.append(image);doc.querySelector('#projectOverviewSection .detail-commerce-v45__summary')?.after(figure);
+      figure.append(image);doc.getElementById('projectOverviewSection')?.after(figure);
     }
     renderDeliveryStatus('');
     const recruiterContract=recruiterFirstPresentationContract(p);
@@ -2636,7 +3005,8 @@
     renderProjectValue(p.valueIBrought||localizedField(p,'value_i_bring'));
     const atGlanceNode=doc.getElementById('projectAtGlance');
     const emphasis=p.atAGlanceEmphasis;
-    if(emphasis?.variant==='inline-metric')renderInlineEmphasis(atGlanceNode,p.atAGlance,emphasis.sourceSegments?.[lang==='zh'?'zh':'en'],emphasis.variant);
+    const metricSegments=emphasis?.sourceSegments?.[lang==='zh'?'zh':'en']||[];
+    if(metricSegments.length)renderInlineEmphasis(atGlanceNode,p.atAGlance,metricSegments,emphasis?.variant||'inline-metric');
     else safeText(atGlanceNode,localize(p.atAGlance));
     const confidentiality=doc.getElementById('confidentialityNote');
     const confidentialityText=localize([p.confidentiality_note,p.confidentiality_note_zh]);
@@ -2770,6 +3140,14 @@
     doc.getElementById('projectEvidence')?.before(surface);
     return surface;
   }
+  function resetProgrammeSurface(){
+    const surface=programmeSurface();
+    const decisions=surface.querySelector('#projectDecisions');
+    const decisionSection=doc.getElementById('projectDecisionsSection');
+    if(decisions&&decisionSection&&!decisionSection.contains(decisions))decisionSection.append(decisions);
+    clear(surface);
+    return surface;
+  }
   function positionProjectContext(asInitiative=false){
     const context=doc.querySelector('#projectView .project-context-v45, #programmeSurface > .project-context-v45');
     const signals=doc.getElementById('projectSignals');
@@ -2791,7 +3169,12 @@
     const text=sourceText.replace(/[A-Za-z]/,character=>character.toUpperCase());
     const root=element('span','info-tooltip');
     const id=`info-tooltip-${Math.random().toString(36).slice(2)}`;
-    const trigger=element('button','info-tooltip__trigger','i');
+    const trigger=element('button','info-tooltip__trigger');
+    const glyph=doc.createElementNS('http://www.w3.org/2000/svg','svg');glyph.classList.add('info-tooltip__glyph');glyph.setAttribute('viewBox','0 0 24 24');glyph.setAttribute('aria-hidden','true');
+    const circle=doc.createElementNS('http://www.w3.org/2000/svg','circle');circle.setAttribute('cx','12');circle.setAttribute('cy','12');circle.setAttribute('r','9');
+    const stem=doc.createElementNS('http://www.w3.org/2000/svg','path');stem.setAttribute('d','M12 11v5');
+    const dot=doc.createElementNS('http://www.w3.org/2000/svg','path');dot.setAttribute('d','M12 8h.01');
+    glyph.append(circle,stem,dot);trigger.append(glyph);
     trigger.type='button';trigger.setAttribute('aria-label',label);trigger.setAttribute('aria-controls',id);trigger.setAttribute('aria-expanded','false');
     const panel=element('span','info-tooltip__panel',text);panel.id=id;panel.setAttribute('role','tooltip');panel.hidden=true;
     const position=()=>{if(panel.hidden)return;const r=trigger.getBoundingClientRect(),gap=8,gutter=Math.max(16,parseFloat(getComputedStyle(doc.documentElement).getPropertyValue('--page-gutter'))||16),width=panel.offsetWidth,height=panel.offsetHeight;let left=Math.min(Math.max(r.left+r.width/2-width/2,gutter),window.innerWidth-gutter-width);let top=r.top-gap-height;if(top<gutter)top=Math.min(window.innerHeight-gutter-height,r.bottom+gap);panel.style.left=`${Math.round(left)}px`;panel.style.top=`${Math.round(Math.max(gutter,top))}px`};
@@ -2820,7 +3203,7 @@
     const heading=element('header','voucher-r149-heading case-study-section__header case-content-span case-content-span--headline');
     if(eyebrow)heading.append(element('span','voucher-r149-eyebrow',eyebrow));
     if(title)heading.append(element('h2','',title));
-    if(lead)heading.append(element('p','voucher-r149-lead case-content-span case-content-span--focus',lead));
+    if(lead)heading.append(element('p','voucher-r149-lead case-content-span case-content-span--reading',lead));
     if(copy)heading.append(element('p','voucher-r149-intro case-content-span case-content-span--reading',copy));
     node.append(heading);
     return node;
@@ -2840,7 +3223,7 @@
     article.append(listNode);
   }
   function appendContributionFlow(section,transformation){
-    const flow=element('div','voucher-r149-flow case-reading-wrapper');
+    const flow=element('div','voucher-r149-flow');
     list(transformation).forEach((item,index)=>{
       const article=element('article',index===1?'contribution-block__intervention':'');
       article.append(element('span','voucher-r149-eyebrow',localize(item.label)),element('p','',localize(item.text)));
@@ -2853,6 +3236,37 @@
     section.append(flow);
     return flow;
   }
+  function createEvidenceFrame(assetIds,{caption='',presentation='framed',translate=localize,className=''}={}){
+    const governedVariant={
+      'default':'framed',
+      'raw':'framed',
+      'framed':'framed',
+      'natural-ratio':'natural',
+      'natural':'natural',
+      'document':'document',
+      'editorial-pair':'paired',
+      'paired':'paired',
+      'editorial-composite':'dominant',
+      'dominant':'dominant'
+    }[presentation]||'framed';
+    const figure=element('figure',`evidence-frame evidence-frame--${governedVariant}${className?` ${className}`:''}`);
+    figure.dataset.componentOwner='EvidenceFrame';
+    figure.dataset.evidenceVariant=governedVariant;
+    const media=element('button',`evidence-frame__media evidence-frame__media--${governedVariant}`);
+    media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
+    list(assetIds).filter(Boolean).forEach(assetId=>{
+      const resolved=resolveProjectAsset(assetId),image=doc.createElement('img');
+      image.className='portfolio-media';image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
+      image.dataset.assetId=resolved.assetId;image.dataset.assetStatus=resolved.isPlaceholder?'placeholder-active':'real-active';
+      if(resolved.width&&resolved.height){image.width=resolved.width;image.height=resolved.height}
+      media.append(image);
+    });
+    const mediaLabel=[...media.querySelectorAll('img')].map(image=>image.alt).filter(Boolean).join(' · ');
+    media.setAttribute('aria-label',mediaLabel||((lang==='zh')?'放大證據':'Expand evidence'));
+    figure.append(media);
+    if(translate(caption))figure.append(element('figcaption','evidence-frame__caption',translate(caption)));
+    return figure;
+  }
   function appendVisualEvidenceModules(section,items,{translate=localize}={}){
     const evidenceItems=list(items);
     if(!evidenceItems.length)return null;
@@ -2862,13 +3276,12 @@
       const card=element('article',`voucher-r149-foundation${presentation==='natural-ratio'?' voucher-r149-foundation--natural-ratio':''}${presentation==='editorial-pair'?' voucher-r149-foundation--editorial-pair':''}${presentation==='editorial-composite'?' voucher-r149-foundation--editorial-composite':''}`);
       card.dataset.evidencePresentation=item.presentation||'default';
       if(item.id)card.dataset.evidenceBlockId=item.id;
-      const media=element('div',`voucher-r149-foundation__media${presentation==='editorial-pair'?' voucher-r149-foundation__media--group':''}`);
       const caption=element('div','voucher-r149-foundation__caption');
       const assetIds=list(item.assetIds).length?list(item.assetIds):[item.publicAssetId||item.assetId||'project-visual-placeholder-wide-v1'];
-      assetIds.forEach(assetId=>{const resolved=resolveProjectAsset(assetId),image=doc.createElement('img');image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image)});
+      const frame=createEvidenceFrame(assetIds,{presentation,translate,className:`voucher-r149-foundation__media${presentation==='editorial-pair'?' voucher-r149-foundation__media--group':''}`});
       if(translate(item.supportingLabel))caption.append(element('span','voucher-r149-eyebrow',translate(item.supportingLabel)));caption.append(element('h3','',translate(item.title||item.label)),element('p','',translate(item.copy||item.text)));
       if(list(item.supportingFacts).length){const facts=element('ul','structured-evidence-v223__supporting-facts');list(item.supportingFacts).forEach(fact=>facts.append(element('li','',`${fact.value} ${translate(fact.label)}`)));caption.append(facts)}
-      card.append(media,caption);grid.append(card);
+      card.append(frame,caption);grid.append(card);
     });
     section.append(grid);return grid;
   }
@@ -2892,8 +3305,8 @@
   function appendOutcomeSemanticHierarchy(section,source,{translate=localize,measuredLabelInHeader=false}={}){
     const change=source?.change;
     if(change){
-      const block=element('article','outcome-semantic-change');
-      block.append(element('span','voucher-r149-eyebrow',translate(change.label)));
+      const block=element('article','outcome-semantic-change outcome-semantic-change--headline');
+      block.dataset.outcomeRole='headline';
       block.append(element('h3','outcome-semantic-change__title',translate(change.statement)));
       section.append(block);
     }
@@ -2925,19 +3338,19 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer'}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer';owner.dataset.navigationTarget='external';owner.setAttribute('aria-label',translate(source.recognition.ctaLabel)||translate(source.recognition.title))}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
-  function appendSharedAccountability(section,source,{translate=localize}={}){
+  function appendSharedAccountability(section,source,{translate=localize,useSourceLabels=false}={}){
     const primary=[
-      {item:source?.owned,role:lang==='zh'?'我負責的工作':'WHAT I OWNED',sourceRole:'I LED'},
-      {item:source?.shared,role:lang==='zh'?'共同決策':'SHARED DECISIONS',sourceRole:'I CO-DECIDED'}
+      {item:source?.owned,role:lang==='zh'?'我負責的工作':'WHAT I OWNED',sourceLabel:useSourceLabels?translate(source?.owned?.label):'',sourceRole:'I LED'},
+      {item:source?.shared,role:lang==='zh'?'共同決策':'SHARED DECISIONS',sourceLabel:useSourceLabels?translate(source?.shared?.label):'',sourceRole:'I CO-DECIDED'}
     ].filter(group=>group.item);
     const grid=element('div','voucher-r149-accountability');
-    primary.forEach(({item,role,sourceRole})=>{
+    primary.forEach(({item,role,sourceLabel,sourceRole})=>{
       const article=element('article','voucher-r149-accountability__primary');article.dataset.accountabilitySource=sourceRole;
-      article.append(element('span','voucher-r149-eyebrow',role));
+      article.append(element('span','voucher-r149-eyebrow',sourceLabel||role));
       if(translate(item.title))article.append(element('h3','',translate(item.title)));
       if(list(item.items).length){const details=element('ul','voucher-r149-accountability__list');list(item.items).forEach(entry=>details.append(element('li','',translate(entry))));article.append(details)}
       else if(translate(item.text))article.append(element('p','',translate(item.text)));
@@ -2976,28 +3389,72 @@
     const items=list(source).filter(hasSemanticContent);
     return {title:{en:'Outcomes',zh:'成果'},cards:items.map(item=>typeof item==='object'?item:{text:{en:String(item),zh:String(item)}})};
   }
-  function renderVoucherRecruiterContribution(project){
-    const source=project?.valueIBrought;
+  function normalizeContributionSource(project){
+    const approvedOrder=list(project.section_order);
+    if(!approvedOrder.includes('contribution'))return null;
+    const contribution=project.publicContent?.contribution||{};
+    const value=project.valueIBrought||{};
+    const approved=project.publicContent?.myContribution||{};
+    const profile=DATA.implementationContracts?.portfolioPresentation?.canonicalContributionConsolidation?.projects?.[project.project_id]||{};
+    const configuredTitle=profile.titleSource?valueAtPath(project,profile.titleSource):null;
+    const configuredSupporting=typeof profile.supportingSource==='string'?valueAtPath(project,profile.supportingSource):undefined;
+    const title=configuredTitle||contribution.headline||value.headline||approved.summary;
+    const supporting=configuredSupporting===undefined?value.supportingStatement:configuredSupporting;
+    const additionalCopy=[];
+    if(profile.includeLegacySupportingCopy)additionalCopy.push(project.keyInterventionMap?.supportingCopy);
+    const seen=new Set([localize(title),localize(supporting)].map(item=>String(item||'').trim()).filter(Boolean));
+    const uniqueAdditionalCopy=additionalCopy.filter(item=>{const text=String(localize(item)||'').trim();if(!text||seen.has(text))return false;seen.add(text);return true});
+    const source={
+      title,
+      supporting,
+      additionalCopy:uniqueAdditionalCopy,
+      evidence:value.evidence,
+      proof:approved.proof,
+      ownershipEvidence:profile.includeOwnershipProof?project.ownershipModel?.ledByMe:[]
+    };
+    return hasSemanticContent(source)?source:null;
+  }
+  function createContributionBlock(project,{translate=localize}={}){
+    const source=normalizeContributionSource(project);
     if(!source)return null;
-    const contribution=createRecruiterSection('',lang==='zh'?'貢獻':'Contribution',localize(source.supportingStatement),localize(source.headline));
+    const contribution=createRecruiterSection('',lang==='zh'?'貢獻':'Contribution',translate(source.supporting),translate(source.title));
     contribution.classList.add('contribution-block');
     contribution.dataset.componentOwner='ContributionBlock';
-    contribution.dataset.canonicalSectionId='my-contribution';
+    contribution.dataset.canonicalSectionId='contribution';
+    contribution.dataset.semanticSource='valueIBrought|publicContent.contribution|publicContent.myContribution|keyInterventionMap.supportingCopy|ownershipModel.ledByMe';
+    list(source.additionalCopy).forEach(item=>contribution.append(element('p','voucher-r149-intro case-content-span case-content-span--reading',translate(item))));
+    if(list(source.evidence).length)appendVisualEvidenceModules(contribution,source.evidence,{translate});
+    if(list(source.proof).length){
+      const proof=element('div','voucher-r149-rows contribution-block__proof');
+      list(source.proof).forEach(item=>{const row=element('div');row.append(element('strong','',translate(item.label)),element('p','',translate(item.content)));proof.append(row)});
+      contribution.append(proof);
+    }
+    if(list(source.ownershipEvidence).length){
+      const evidence=element('ul','contribution-block__ownership-evidence');
+      list(source.ownershipEvidence).forEach(item=>evidence.append(element('li','',translate(item))));
+      contribution.append(evidence);
+    }
     return contribution;
   }
   function renderSystemCaseParent(p){
+    const surface=resetProgrammeSurface();surface.classList.add('recruiter-system-case');
     const decisionListNode=doc.getElementById('projectDecisions');
-    const surface=programmeSurface();clear(surface);surface.classList.add('recruiter-system-case');
     const contract=presentationContract('primary');
     const t=value=>localize(value);
     const isVoucher=p.project_id==='voucher';
     const overview=doc.getElementById('projectOverviewSection');
-    if(overview){overview.dataset.archetype='primary';overview.dataset.presentationContract='portfolioPresentation.primary';overview.dataset.projectNavTarget='overview';overview.classList.add('case-content-span','case-content-span--full')}
+    if(overview){overview.dataset.archetype='primary';overview.dataset.presentationContract='portfolioPresentation.primary';overview.dataset.projectNavTarget='overview'}
     const projectSummary=overview?.querySelector('.project-summary-v45');projectSummary?.classList.add('case-content-span','case-content-span--summary');
-    const projectSignals=doc.getElementById('projectSignals');projectSignals?.classList.add('info-grid-v45--frameless','case-content-span','case-content-span--full');
+    const projectSignals=doc.getElementById('projectSignals');projectSignals?.classList.remove('case-content-span--full','case-content-span--reading');projectSignals?.classList.add('info-grid-v45--frameless','case-content-span');
     const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.hidden=true;
     const overviewContext=doc.querySelector('.project-context-v45--overview');if(overviewContext)overviewContext.hidden=true;
-    const legacyIntervention=doc.getElementById('projectKeyIntervention');if(legacyIntervention)legacyIntervention.hidden=true;
+    const legacyIntervention=doc.getElementById('projectKeyIntervention');
+    if(legacyIntervention){
+      legacyIntervention.hidden=!String(p.key_intervention_map?.status||'').startsWith('verified');
+      legacyIntervention.dataset.componentOwner='KeyInterventionMap';
+      legacyIntervention.dataset.canonicalSectionId='transformation';
+      legacyIntervention.classList.add('case-content-span','case-content-span--full');
+    }
     const legacyOwnership=doc.querySelector('.ownership-section-v45');if(legacyOwnership)legacyOwnership.hidden=true;
 
     const hardResolution=resolveProjectSemanticSlot(p,'complexity');
@@ -3011,13 +3468,13 @@
     list(hardItems).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});
     hard.append(hardRows);
 
-    const contribution=isVoucher?renderVoucherRecruiterContribution(p):null;
+    const contribution=createContributionBlock(p,{translate:t});
 
     const insightResolution=resolveProjectSemanticSlot(p,'core-insight');
     const insightSource=insightResolution.value;
-    const semanticInsight=Boolean(insightSource?.insight||insightSource?.whatThisChanged);
-    const insightTitle=insightSource?.insight||insightSource?.headline;
-    const insightCopy=insightSource?.whatThisChanged||insightSource?.supportingCopy;
+    const semanticInsight=Boolean(insightSource?.insight||insightSource?.whatThisChanged||insightSource?.title||insightSource?.statement);
+    const insightTitle=insightSource?.insight||insightSource?.headline||insightSource?.title;
+    const insightCopy=insightSource?.whatThisChanged||insightSource?.supportingCopy||insightSource?.statement;
     const insight=insightSource
       ?createRecruiterSection(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightTitle),semanticInsight?'':t(insightSource?.supportingCopy)):null;
     if(insight){
@@ -3065,18 +3522,23 @@
         if(source.validationSignals){const summary=source.validationSignals,validation=element('section','structured-evidence-v223__validation-summary');validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant='validation-summary';validation.append(element('h4','structured-evidence-v223__validation-title',t(summary.title)));if(t(summary.intro))validation.append(element('p','structured-evidence-v223__validation-intro',t(summary.intro)));const summaryGrid=element('div','structured-evidence-v223__validation-summary-metrics');list(summary.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-summary-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label');safeText(label,t(item.label));body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);summaryGrid.append(card)});validation.append(summaryGrid);insights.append(validation)}
         evidence.append(insights);
       }
-      const visibleEvidenceItems=orderedVisualProofs?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean):evidenceSource.items;
+      const structuredGroupsOwnMedia=list(evidenceSource.structuredGroups).some(item=>item.assetId);
+      const visibleEvidenceItems=orderedVisualProofs
+        ?list(evidenceSource.blockOrder).map(id=>list(evidenceSource.items).find(item=>item.id===id)).filter(Boolean)
+        :(structuredGroupsOwnMedia?[]:evidenceSource.items);
       appendVisualEvidenceModules(evidence,visibleEvidenceItems,{translate:t});
       if(!orderedVisualProofs&&list(evidenceSource.quotes).length){const voiceFamily=element('section','structured-evidence-voice-family'),voices=element('div','structured-evidence-quotes');voiceFamily.dataset.componentOwner='StructuredEvidence';voiceFamily.dataset.evidenceVariant='editorial-quotation';voices.dataset.componentOwner='StructuredEvidence';list(evidenceSource.quotes).forEach(item=>{const quote=element('figure','structured-evidence-quote');quote.append(element('blockquote','',t(item.quote)),element('figcaption','voucher-r149-eyebrow',t(item.role)));voices.append(quote)});voiceFamily.append(voices);if(t(evidenceSource.quotesCaption))voiceFamily.append(element('p','structured-evidence-quotes__caption',t(evidenceSource.quotesCaption)));evidence.append(voiceFamily)}
-      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const resolved=resolveProjectAsset(source.assetId),media=element('figure','structured-evidence-v223__validation-media'),image=doc.createElement('img');image.src=resolved.src;image.alt=t(resolved.alt);image.loading='lazy';image.decoding='async';if(resolved.width)image.width=resolved.width;if(resolved.height)image.height=resolved.height;if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';media.append(image);validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
+      if(!orderedVisualProofs&&evidenceSource.validationLayer){const source=evidenceSource.validationLayer,validation=element('section',`structured-evidence-v223__validation${source.presentation==='image-text'?' structured-evidence-v223__validation--image-text':''}`);validation.dataset.componentOwner='StructuredEvidence';validation.dataset.evidenceVariant=source.presentation||'metrics';const copy=element('div','structured-evidence-v223__validation-copy');copy.append(element('h3','structured-evidence-v223__validation-title',t(source.title)));if(t(source.intro))copy.append(element('p','structured-evidence-v223__validation-intro',t(source.intro)));if(source.presentation==='image-text'){const media=createEvidenceFrame([source.assetId],{presentation:'framed',translate:t,className:'structured-evidence-v223__validation-media'});validation.append(media,copy);const facts=element('ul','structured-evidence-v223__supporting-facts');list(source.metrics).forEach(item=>facts.append(element('li','',`${item.value} ${t(item.label)}`)));copy.append(facts)}else{validation.append(copy);const grid=element('div','structured-evidence-v223__validation-metrics');list(source.metrics).forEach(item=>{const card=element('article','structured-evidence-v223__validation-metric'),body=element('div','structured-evidence-v223__validation-body'),label=element('span','structured-evidence-v223__validation-label'),tip=createInfoTooltip(t(item.evidenceNote),lang==='zh'?'查看研究證據':'View research evidence',[t(item.label),t(item.supportingCopy)]);appendInlineEndTooltip(label,t(item.label),tip);body.append(label);if(t(item.supportingCopy))body.append(element('p','structured-evidence-v223__validation-supporting',t(item.supportingCopy)));card.append(directionalValue(item.value,'structured-evidence-v223__validation-value'),body);grid.append(card)});validation.append(grid)}evidence.append(validation)}
       if(!orderedVisualProofs&&t(evidenceSource.mappingTitle))evidence.append(element('h3','structured-evidence-v223__mapping-title',t(evidenceSource.mappingTitle)));
       if(!orderedVisualProofs&&list(evidenceSource.structuredGroups).length){
         const decisionSupport=evidenceSource.presentation==='decision-support';
         const groups=element('div',`structured-evidence-v223 structured-evidence-v223__groups${decisionSupport?' structured-evidence-v223__groups--decision-support':''}`);
         groups.dataset.componentOwner='StructuredEvidence';
-        if(list(evidenceSource.structuredGroups).some(item=>item.assetId))groups.classList.add('structured-evidence-v223__groups--with-media');
+        const mediaGroupCount=list(evidenceSource.structuredGroups).filter(item=>item.assetId).length;
+        if(mediaGroupCount)groups.classList.add('structured-evidence-v223__groups--with-media');
+        if(mediaGroupCount&&mediaGroupCount<list(evidenceSource.structuredGroups).length)groups.classList.add('structured-evidence-v223__groups--mixed-media');
         list(evidenceSource.structuredGroups).forEach(item=>{
-          const group=element('article','structured-evidence-v223__group');
+          const group=element('article',`structured-evidence-v223__group${item.assetId?' structured-evidence-v223__group--with-media':''}${item.presentation?` structured-evidence-v223__group--media-${item.presentation}`:''}`);
           if(t(item.supportingLabel))group.append(element('span','voucher-r149-eyebrow',t(item.supportingLabel)));
           group.append(element('h4','',naturalContentTitle(t(item.heading))));
           if(t(item.summary))group.append(element('p','structured-evidence-v223__summary',t(item.summary)));
@@ -3086,14 +3548,9 @@
             group.append(bullets);
           }
           if(item.assetId){
-            const asset=resolveProjectAsset(item.assetId);
-            const figure=element('figure','structured-evidence-v223__media');
-            const image=doc.createElement('img');
-            image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
-            image.dataset.assetId=asset.assetId;image.dataset.assetStatus=asset.isPlaceholder?'placeholder-active':'real-active';
-            if(asset.width&&asset.height){image.width=asset.width;image.height=asset.height}
-            figure.append(image);
-            if(t(item.caption))figure.append(element('figcaption','',t(item.caption)));
+            const presentation=item.presentation||'natural-ratio';
+            const figure=createEvidenceFrame([item.assetId],{caption:item.caption,presentation,translate:t,className:`structured-evidence-v223__media structured-evidence-v223__media--${presentation}`});
+            figure.dataset.evidencePresentation=presentation;
             group.append(figure);
           }
           // decisionLink remains SSOT/test metadata; recruiter-first evidence renders only the evidence role.
@@ -3119,16 +3576,20 @@
     decisions.id='systemCaseDecisionsSection';decisions.dataset.projectNavTarget='decisions';decisions.dataset.canonicalSectionId='key-design-decisions';
     if(decisionListNode)decisions.append(decisionListNode);
 
-    const outcomesResolution=resolveProjectSemanticSlot(p,'outcomes');
+    const outcomesContract=contentPresentationSection(p,'outcomes');
+    const outcomesEligible=outcomesContract?.renderRequired===true&&contentPresentationSources(p,'outcomes').some(path=>hasSemanticContent(valueAtPath(p,path)));
+    const outcomesResolution=outcomesEligible?resolveProjectSemanticSlot(p,'outcomes'):null;
     const voucherOutcomes=p.recruiterFirstPopup?.outcomes;
-    const outcomesSource=isVoucher&&voucherOutcomes?{title:voucherOutcomes.title,cards:voucherOutcomes.metrics,closing:voucherOutcomes.systemChange}:normalizeOutcomeResolution(outcomesResolution);
+    const outcomesSource=outcomesEligible?(isVoucher&&voucherOutcomes?{title:voucherOutcomes.title,cards:voucherOutcomes.metrics,closing:voucherOutcomes.systemChange}:normalizeOutcomeResolution(outcomesResolution)):null;
     const outcomeVariant=approvedSemanticVariant(p,'outcomes')||'system-operating';
     const outcomesHierarchy=outcomesSource?.semanticHierarchy||(outcomesSource?.change?outcomesSource:null);
     const outcomesIntro=outcomesHierarchy&&!outcomesHierarchy.change?t(outcomesHierarchy.measuredLabel):'';
-    const outcomes=createRecruiterSection('',t(outcomesSource?.title),outcomesIntro);
-    outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner=outcomeVariant==='quantified'?'OutcomeMetric':'OutcomeStatement';outcomes.dataset.outcomeSemantic=outcomeVariant;
-    if(outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
-    else{
+    const outcomes=outcomesSource?createRecruiterSection('',t(outcomesSource.title),outcomesIntro):null;
+    if(outcomes){
+      outcomes.id='systemCaseOutcomesSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.canonicalSectionId='outcomes';outcomes.dataset.componentOwner=outcomeVariant==='quantified'?'OutcomeMetric':'OutcomeStatement';outcomes.dataset.outcomeSemantic=outcomeVariant;
+    }
+    if(outcomes&&outcomesHierarchy)appendOutcomeSemanticHierarchy(outcomes,outcomesHierarchy,{translate:t,measuredLabelInHeader:Boolean(outcomesIntro)});
+    else if(outcomes){
       const qualitative=element('div',`outcome-qualitative-hierarchy outcome-qualitative-hierarchy--${outcomeVariant}`);
       if(t(outcomesSource?.headline)){
         const headline=element('article','outcome-semantic-change outcome-semantic-change--qualitative');
@@ -3140,11 +3601,12 @@
       if(t(outcomesSource?.closing))qualitative.append(element('p','outcome-semantic-closing',t(outcomesSource.closing)));
       outcomes.append(qualitative);
     }
-    if(outcomesSource?.evidence)appendVisualEvidenceModules(outcomes,outcomesSource.evidence,{translate:t});
+    if(outcomes&&outcomesSource.evidence)appendVisualEvidenceModules(outcomes,outcomesSource.evidence,{translate:t});
 
     const ownershipResolution=resolveProjectSemanticSlot(p,'ownership');
     const voucherOwnership=isVoucher?{
       publicSummary:p.ownershipModel?.publicSummary,
+      accountabilityPresentation:lang==='en'?p.ownershipModel?.accountabilityPresentation:null,
       owned:{title:{en:'What I led',zh:'我主導的工作'},items:p.ownershipModel?.ledByMe},
       shared:{title:{en:'What I decided with partners',zh:'與夥伴共同決策'},items:p.ownershipModel?.coDecided},
       partnerOwned:{title:{en:'Partner-owned delivery',zh:'合作夥伴負責的交付'},items:p.ownershipModel?.partnerOwned}
@@ -3168,19 +3630,21 @@
       'ownership':accountability,
       'related-work':related
     };
-    const canonicalOrder=isVoucher?['complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work']:list(contract?.canonicalOrder);
+    const canonicalOrder=isVoucher?['complexity','core-insight','decisions','evidence','outcomes','ownership','related-work']:list(contract?.canonicalOrder);
     canonicalOrder.map(key=>systemCaseSections[key]).filter(Boolean).forEach(node=>surface.append(node));
+    enforceCanonicalAdjacency(surface);
     surface.dataset.archetype='primary';
     surface.dataset.presentationContract='portfolioPresentation.primary';
   }
   function renderProgrammeParent(key,p){
- const surface=programmeSurface();clear(surface);surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+ const surface=resetProgrammeSurface();surface.classList.remove('recruiter-system-case');const c=p.recruiterFirstPopup||{},t=x=>localize(x);doc.getElementById('projectSignals')?.classList.add('info-grid-v45--frameless');
+ const legacyContext=doc.querySelector('.project-context-v45--overview');if(legacyContext)legacyContext.hidden=true;const legacyIntervention=doc.getElementById('projectKeyIntervention');if(legacyIntervention){legacyIntervention.hidden=!String(p.key_intervention_map?.status||'').startsWith('verified');legacyIntervention.dataset.componentOwner='KeyInterventionMap';legacyIntervention.dataset.canonicalSectionId='transformation';legacyIntervention.classList.add('case-content-span','case-content-span--full')}
  const legacyValue=doc.querySelector('.project-value-v207');if(legacyValue)legacyValue.remove();doc.querySelectorAll('.impact-evidence-v147__metrics').forEach(grid=>{const values=[...grid.querySelectorAll('strong')].map(node=>node.textContent.trim());if(values.length===2&&values.includes('18')&&values.includes('15'))grid.closest('.case-study-section,.impact-evidence-v147')?.remove()});
  const overview=doc.getElementById('projectOverviewSection');if(overview)overview.dataset.projectNavTarget='overview';
  const section=createRecruiterSection;
- const hard=section('',lang==='zh'?'困難之處':'What made this hard',t(c.whatMadeThisHard?.description),t(c.whatMadeThisHard?.title));hard.id='voucherComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';hard.querySelector('.voucher-r149-heading')?.classList.add('case-reading-wrapper');
- const contribution=section('',lang==='zh'?'貢獻':'Contribution','',t(c.contribution?.title));contribution.querySelector('.voucher-r149-heading')?.classList.add('case-reading-wrapper');contribution.classList.add('contribution-block');contribution.dataset.componentOwner='ContributionBlock';const flow=appendContributionFlow(contribution,c.contribution?.transformation);const teams=element('div','voucher-r149-rows voucher-r149-rows--teams');teams.append(element('h3','',lang==='zh'?'跨團隊啟用':'Enabled across teams'));list(c.contribution?.teams).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));teams.append(r)});contribution.append(teams);
- const insight=section(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(c.coreInsight?.title),t(c.coreInsight?.statement));insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';
+ const hard=section('',lang==='zh'?'困難之處':'What made this hard');hard.id='voucherComplexitySection';hard.dataset.projectNavTarget='complexity';hard.dataset.canonicalSectionId='what-made-this-hard';const hardRows=element('div','recruiter-complexity-grid');list(p.whatMadeThisHard).forEach(item=>{const article=element('article','recruiter-complexity-card');article.append(element('h3','',t(item.title)),element('p','',t(item.description)));hardRows.append(article)});hard.append(hardRows);
+ const contribution=createContributionBlock(p,{translate:t});const teams=element('div','voucher-r149-rows voucher-r149-rows--teams');teams.append(element('h3','',lang==='zh'?'跨團隊啟用':'Enabled across teams'));list(c.contribution?.teams).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.text)));teams.append(r)});contribution?.append(teams);
+ const insightSource=p.publicContent?.coreSystemInsight||{};const insight=section(lang==='zh'?'核心系統洞察':'CORE SYSTEM INSIGHT',t(insightSource.insight),t(insightSource.whatThisChanged));insight.classList.add('voucher-r149-insight','case-study-cloud-emphasis','core-system-insight-section');insight.dataset.componentOwner='CoreSystemInsightSection';
  const journey=section('',lang==='zh'?'一條旅程——五個階段':'One journey — five stages'),ol=element('ol','voucher-r149-stages');
  list(c.stages).forEach((s,i)=>{
    const li=element('li','voucher-r149-stage programme-stage-case');li.dataset.stageCard=s.id;
@@ -3194,14 +3658,14 @@
  const reusable=section('',t(c.reusableSystem?.title));reusable.classList.add('voucher-r149-system');appendVisualEvidenceModules(reusable,c.reusableSystem?.foundations,{translate:t});
  const voucherCard=c.reusableSystem?.voucherCard||{};
  const future=element('section','voucher-r149-subsection voucher-r149-future-integrated');future.append(element('h3','',t(c.reusableSystem?.future?.headline)),element('p','voucher-r149-intro',t(c.reusableSystem?.future?.thesis)));const fr=element('div','voucher-r149-rows');list(c.reusableSystem?.future?.items).forEach(x=>{const r=element('div');r.append(element('strong','',t(x.label)),element('p','',t(x.content)));fr.append(r)});future.append(fr);reusable.append(future);
- const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.id='voucherEvidenceSection';programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';programmeResearchSection.dataset.projectNavTarget='evidence';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence',[t(x.label)]);appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
+ const programmeResearchSection=section('',t(c.programmeResearch?.title),t(c.programmeResearch?.summary));programmeResearchSection.id='voucherEvidenceSection';programmeResearchSection.dataset.componentOwner='ResearchEvidenceMetric';programmeResearchSection.dataset.projectNavTarget='evidence';programmeResearchSection.dataset.canonicalSectionId='programme-research';const rm=element('div','research-evidence-metrics');const visibleResearchValues=new Set(['2,857','93%','87%']);list(c.programmeResearch?.metrics).filter(x=>visibleResearchValues.has(String(x.value).trim())).forEach(x=>{const m=element('article','research-evidence-metric'),label=element('span','research-evidence-metric__label'),tip=createInfoTooltip(t(x.note),lang==='zh'?'查看研究證據':'View research evidence',[t(x.label)]);appendInlineEndTooltip(label,t(x.label),tip);m.append(element('strong','',x.value),label);rm.append(m)});programmeResearchSection.append(rm,element('p','voucher-r149-research__bridge',t(voucherCard.bridge)));const outcomes=section('',lang==='zh'?'成果':'Outcomes','',t(c.outcomes?.title)),metrics=element('div','voucher-r149-metrics outcome-metric-grid');outcomes.id='voucherImpactSection';outcomes.dataset.projectNavTarget='outcomes';outcomes.dataset.componentOwner='OutcomeMetric';appendOutcomeCards(metrics,c.outcomes?.metrics,{metric:true,translate:t});outcomes.append(metrics,element('p','voucher-r149-system-change',t(c.outcomes?.systemChange)));
  contribution.dataset.canonicalSectionId='my-contribution';contribution.dataset.contentBlockIds='recruiterFirstPopup.contribution';
  insight.dataset.canonicalSectionId='core-system-insight';insight.dataset.contentBlockIds='publicContent.coreSystemInsight';
- journey.dataset.canonicalSectionId='system-coverage-map';journey.dataset.contentBlockIds='publicContent.journeyChapters';
+ journey.dataset.canonicalSectionId='journey-stage-solutions';journey.dataset.contentBlockIds='recruiterFirstPopup.stages|publicContent.journeyChapters';
  reusable.dataset.canonicalSectionId='reusable-system';reusable.dataset.contentBlockIds='recruiterFirstPopup.reusableSystem|publicContent.systemFoundations|publicContent.futureVision';
  outcomes.dataset.canonicalSectionId='validated-outcomes';outcomes.dataset.contentBlockIds='recruiterFirstPopup.outcomes|impactEvidence';
- const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(c.accountability?.intro));account.id='voucherOwnershipSection';appendSharedAccountability(account,c.accountability,{translate:t});account.dataset.projectNavTarget='ownership';account.dataset.canonicalSectionId='ownership-and-evidence';account.dataset.contentBlockIds='recruiterFirstPopup.accountability|ownershipModel';
- const related=doc.getElementById('detailRelated');if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring';related.dataset.contentBlockIds='relatedProjects'}[hard,contribution,insight,journey,programmeResearchSection,reusable,outcomes,account,related].filter(Boolean).forEach(n=>surface.append(n));const auditOrder=['what-made-this-hard','my-contribution','core-system-insight','system-coverage-map','reusable-system','validated-outcomes','ownership-and-evidence','continue-exploring'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
+ const accountability=p.ownershipModel?.accountabilityPresentation||c.accountability;const account=section('',lang==='zh'?'我的責任範圍':'My accountability',t(accountability?.intro));account.id='voucherOwnershipSection';appendSharedAccountability(account,accountability,{translate:t,useSourceLabels:true});account.dataset.projectNavTarget='ownership';account.dataset.canonicalSectionId='my-accountability';account.dataset.contentBlockIds='ownershipModel.accountabilityPresentation';
+ const related=doc.getElementById('detailRelated');if(related){related.hidden=false;caseStudySection(related,'related','soft');caseStudyHeader(related);related.dataset.canonicalSectionId='continue-exploring';related.dataset.contentBlockIds='relatedProjects'}[hard,contribution,insight,journey,programmeResearchSection,outcomes,account,related].filter(Boolean).forEach(n=>surface.append(n));enforceCanonicalAdjacency(surface);const auditOrder=['what-made-this-hard','transformation','my-contribution','core-system-insight','journey-stage-solutions','programme-research','validated-outcomes','my-accountability','continue-exploring'];const auditOwner=doc.querySelector('[data-canonical-section-order]');if(auditOwner)auditOwner.dataset.mappedCanonicalSectionOrder=auditOrder.join(' ');
 }
   function renderInitiative(parentKey,initiativeKey){
     const parent=DATA.projects[parentKey];const item=parent?.initiatives?.[initiativeKey];if(!item)return;
@@ -3224,7 +3688,7 @@
     safeText(doc.getElementById('projectImpact'),localizedField(item,'impact'));
     doc.getElementById('confidentialityNote').hidden=false;
 
-    const surface=programmeSurface();clear(surface);
+    const surface=resetProgrammeSurface();
     positionProjectContext(true);
     const stageNumber=parent.journey_stages?.findIndex(stage=>stage.id===item.parentStageId)+1;
     const stageEntry=parent.initiative_map?.find(entry=>(entry.primary_stage||entry.range?.[0])===stageNumber&&(!entry.initiative_id||entry.initiative_id===initiativeKey));
@@ -3277,6 +3741,56 @@
     contribution.append(element('p','programme-contribution-v103__statement',localizedField(item,'system_contribution')));
     surface.append(stageFocus,signals,journey,contribution);
   }
+  function renderExperimentStory(e){
+    doc.querySelector('.experiment-hero-v1838e')?.remove();
+    doc.getElementById('experimentStory')?.remove();
+    const overview=doc.getElementById('projectOverviewSection');
+    const summary=overview?.querySelector('.detail-commerce-v45__summary');
+    let hero=null;
+    if(e.hero?.assetId&&overview){
+      const asset=resolveProjectAsset(e.hero.assetId);
+      const figure=element('figure','experiment-hero-v1838e');
+      const image=element('img');
+      image.src=asset.src;image.alt=localize(e.hero.alt)||localize(asset.alt);image.loading='eager';image.decoding='async';
+      if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;
+      figure.append(image);overview.prepend(figure);
+      hero=figure;
+    }
+    const sections=list(e.presentationSections);
+    const experimentTargets=EXPERIMENT_NAV_TARGETS[currentDetail?.key]||{};
+    if(!sections.length||!summary)return;
+    const story=element('section','experiment-story-v1838e');story.id='experimentStory';story.dataset.componentOwner='ExperimentEvidence';
+    sections.forEach((source,index)=>{
+      const assetIds=list(source.assetIds);
+      const isRecognition=source.id==='recognition';
+      const section=element('section',`experiment-story-v1838e__section ${assetIds.length?'experiment-story-v1838e__section--with-media':'experiment-story-v1838e__section--text-only'}${isRecognition?' experiment-story-v1838e__section--recognition':''}`);
+      section.dataset.experimentSection=source.id||String(index+1);
+      section.dataset.projectNavTarget=source.id||`evidence-${index+1}`;
+      if(source.id===experimentTargets.proposed){section.dataset.projectNavTarget='proposed';section.id='experimentProposedSection'}
+      if(source.id===experimentTargets.recognition){section.dataset.projectNavTarget='recognition';section.id='experimentRecognitionSection'}
+      if(source.id===experimentTargets.outcomes){section.dataset.projectNavTarget='outcomes';section.id='experimentOutcomesSection'}
+      const header=element('div',isRecognition?'experiment-story-v1838e__header outcome-recognition-proof__copy':'experiment-story-v1838e__header');
+      header.append(element('h3','',localize(source.title)),element('p','',localize(source.body)));
+      section.append(header);
+      if(assetIds.length){
+        const media=element('div',`${isRecognition?'outcome-recognition-proof__media':'experiment-story-v1838e__media'}${!isRecognition&&assetIds.length===1?' experiment-story-v1838e__media--single':''}`);
+        assetIds.forEach((assetId,assetIndex)=>{
+          const asset=resolveProjectAsset(assetId);const figure=element('figure',isRecognition?'experiment-story-v1838e__figure':'evidence-frame experiment-story-v1838e__figure');
+          const mediaFrame=element('button','evidence-frame__media experiment-story-v1838e__media-frame');mediaFrame.type='button';mediaFrame.dataset.expandableEvidence='true';mediaFrame.dataset.frameRole=assetIds.length===1?'primary-evidence':'supporting-evidence';
+          const image=element('img','portfolio-media');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
+          if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;
+          mediaFrame.append(image);figure.append(mediaFrame);
+          const caption=localize(list(source.captions)[assetIndex]);if(caption)figure.append(element('figcaption','evidence-frame__caption',caption));
+          media.append(figure);
+        });
+        section.append(media);
+      }
+      if(isRecognition){section.classList.add('outcome-recognition-proof');section.dataset.componentOwner='RecognitionProof'}
+      story.append(section);
+    });
+    overview.after(story);
+    if(hero){overview.after(hero);hero.after(story)}
+  }
   function renderExperiment(key){
     const e=DATA.experiments[key];
     const classification=doc.getElementById('detailClassification');
@@ -3285,23 +3799,23 @@
     const valueSection=doc.querySelector('.project-value-v207');
     if(valueSection)valueSection.hidden=true;
     safeText(doc.getElementById('gallerySectionTitle'),lang==='zh'?'實驗':'The Experiment');
-    safeText(doc.getElementById('detailContext'),localize(e.category));
+    safeText(doc.getElementById('detailContext'),localize(e.publicDescriptor||e.category));
     safeText(doc.getElementById('detailPeriod'),'');
     safeText(dialogTitle,localize(e.title));
-    const fullStatus=localize(e.status);const stage=String(fullStatus).split(' · ')[0];
-    renderDeliveryStatus(fullStatus);
+    renderDeliveryStatus('');
 
     renderTags([]);
     const questionText=localize(e.question);
     const prototypeText=localize(e.prototype);
     const learningText=localize(e.learning);
     const nextText=localize(e.next);
+    const deliverableText=list(e.deliverables).map(localize).filter(Boolean).join(' · ')||localize(e.scale||e.format);
     safeText(doc.getElementById('experimentQuestion'),questionText);safeText(doc.getElementById('experimentSummary'),localize(e.summary));
     safeText(doc.querySelector('.experiment-overview-v45__question>span'),lang==='zh'?'實驗問題':'The Question');
     renderInfoGrid('detailInfoExperiment',[
+      [lang==='zh'?'成熟度':'Maturity',localize(e.maturity||e.status)],
       [lang==='zh'?'角色':'Role',localize(e.role)],
-      [lang==='zh'?'規模':'Scale',localize(e.scale||e.format)],
-      [lang==='zh'?'對象':'Audience',localize(e.audience)],
+      [lang==='zh'?'產出':'Deliverables',deliverableText],
       [lang==='zh'?'時間':'Timeline',localize(e.timeline)]
     ]);
     safeText(doc.getElementById('experimentPrototype'),prototypeText);safeText(doc.getElementById('experimentLearning'),learningText);safeText(doc.getElementById('experimentNext'),nextText);
@@ -3315,16 +3829,23 @@
     doc.getElementById('experimentNext')?.closest('article')?.classList.add('outcome-metric','outcome-metric--qualitative');
     const overview=doc.getElementById('experimentView');
     const question=doc.getElementById('experimentQuestion')?.closest('.experiment-overview-v45__question');
+    const info=doc.getElementById('detailInfoExperiment');
     const built=doc.getElementById('experimentPrototype')?.closest('.experiment-overview-v45__build');
     const evidence=doc.getElementById('sharedGallery');
     const learning=doc.getElementById('experimentEvidence');
     const delivery=doc.getElementById('detailStatus');
+    const hasStory=list(e.presentationSections).length>0;
+    if(question&&info)question.after(info);
+    renderExperimentStory(e);
+    if(evidence)evidence.hidden=hasStory;
+    if(learning)learning.hidden=hasStory;
+    if(built)built.hidden=hasStory;
     if(overview){overview.dataset.archetype='experiment';overview.dataset.presentationContract='portfolioPresentation.experiment';overview.dataset.projectNavTarget='overview'}
     if(question){question.id='experimentQuestionSection';question.dataset.projectNavTarget='exploration-question'}
     if(built){built.id='experimentBuiltSection';built.dataset.projectNavTarget='explored-or-built'}
     if(evidence&&!evidence.hidden)evidence.dataset.projectNavTarget='evidence';
     if(learning&&!learning.hidden){learning.id='experimentLearningSection';learning.dataset.projectNavTarget='learning-or-decision'}
-    if(delivery&&!delivery.hidden){delivery.id='experimentDeliveryStateSection';delivery.dataset.projectNavTarget='delivery-state'}
+    if(delivery)delivery.hidden=true
   }
   const RELATED_PROJECTS={
     voucher:['voucher-center','game-center','dbs'],
@@ -3378,13 +3899,14 @@
     const context=type==='project'?localize(item.company):localize(item.category);
     const title=type==='project'?localize(item.cardTitle)||localize(item.title_pair):localize(item.title);
     if(type==='experiment'){
-      const learning=element('div','detail-experiment-card-v101__learning');
-      learning.append(element('small','',ui("current-learning-112d6ab4")),element('strong','',localize(item.learning)));
-      card.append(element('span','detail-related-card-v45__context',context),element('h3','',title),element('p','detail-experiment-card-v101__question',localize(item.question)),learning,element('span','experiment-card-action',ui("view-experiment-8788e030")));
+      const action=element('span','experiment-card-action text-cta',ui("view-experiment-8788e030"));
+      action.append(element('span','icon-arrow icon-arrow--right'));
+      card.append(element('h3','',title),action);
       return card;
     }
     const action=element('span','detail-related-action-v46');
-    action.append(element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--up-right'));
+    action.classList.add('text-cta');
+    action.append(element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--right'));
     card.append(
       element('span','detail-related-card-v45__context',context),
       element('h3','',title),
@@ -3394,7 +3916,12 @@
   }
   function renderRelated(){
     if(!currentDetail)return;const type=currentDetail.type;const nested=type==='initiative'||type==='stage';const relatedType=nested?'project':type;const relatedKey=nested?currentDetail.parentKey:currentDetail.key;const keys=(relatedType==='project'?RELATED_PROJECTS[relatedKey]:RELATED_EXPERIMENTS[relatedKey])||[];
-    const rail=doc.getElementById('detailRelatedRail');clear(rail);keys.forEach(key=>rail.appendChild(relatedCard(relatedType,key)));enhanceCompanyNames(rail);
+    const collection=relatedType==='project'?DATA.projects:DATA.experiments;
+    const visibleKeys=keys.filter(key=>collection[key]);
+    const rail=doc.getElementById('detailRelatedRail');clear(rail);visibleKeys.forEach((key,index)=>{
+      const card=relatedCard(relatedType,key);
+      rail.appendChild(card);
+    });enhanceCompanyNames(rail);
     doc.querySelector('#detailRelated .kicker')?.remove();
     safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'&&relatedKey==='voucher'?(lang==='zh'?'探索其他專案':'Explore other projects'):ui("related-work-9e3ba8e3"));
     safeText(doc.getElementById('detailRelatedCopy'),'');
@@ -3406,7 +3933,8 @@
     const overviewContext=doc.querySelector('.project-context-v45--overview');
     if(overviewContext)overviewContext.hidden=!isProject;
     if(currentDetail.type!=='project')doc.getElementById('projectKeyIntervention').hidden=true;
-    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.archetype==='primary';
+    const isApprovedVoucherProgramme=currentDetail.type==='project'&&currentDetail.key==='voucher'&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
+    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.archetype==='primary'&&!isApprovedVoucherProgramme;
     const isProgramme=currentDetail.type==='project'&&!isRecruiterSystemCase&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
     doc.getElementById('projectEvidence').hidden=!isProject||isInitiative||isStage||isProgramme||isRecruiterSystemCase;
     doc.getElementById('experimentEvidence').hidden=isProject;
@@ -3426,7 +3954,7 @@
     dialog?.classList.toggle('is-experiment',!isProject);dialog?.classList.toggle('is-project',isProject);dialog?.classList.toggle('is-programme',isProgramme||isRecruiterSystemCase);dialog?.classList.toggle('is-initiative',isInitiative);dialog?.classList.toggle('is-stage',isStage);
     if(!isInitiative)positionProjectContext(false);
     if(isStage){
-      const parent=DATA.projects[currentDetail.parentKey];clear(programmeSurface());
+      const parent=DATA.projects[currentDetail.parentKey];resetProgrammeSurface();
       const stageIndex=parent.journey_stages.findIndex(item=>item.id===currentDetail.key);
       const stage=parent.journey_stages[stageIndex];
       const stageProjection=parent.recruiterFirstPopup?.stages?.find(entry=>entry.id===currentDetail.key);
@@ -3469,13 +3997,13 @@
     else renderExperiment(currentDetail.key);
     if(isStage&&sharedRelated)sharedRelated.hidden=true;else if(isInitiative&&sharedRelated){sharedRelated.hidden=false;sharedProgrammeSurface.append(sharedRelated)}
     renderProjectSectionNav();
-    if(currentDetail.type==='experiment')renderGallery();
+    if(currentDetail.type==='experiment'&&!list(DATA.experiments[currentDetail.key]?.presentationSections).length)renderGallery();
     renderRelated();
     enableExpandableEvidence(dialog);
     dialog.querySelectorAll('h4').forEach(heading=>{heading.setAttribute('role','heading');heading.setAttribute('aria-level','3')});
     if(dialogScrollRoot){dialogScrollRoot.scrollLeft=0;}
   }
-  function openDetail(type,key,invoker,parentKey){
+  function openDetail(type,key,invoker,parentKey,{restoreHistory=false,restoreScrollTop=null}={}){
     if(type==='project')key=canonicalProjectId(key);
     if(parentKey)parentKey=canonicalProjectId(parentKey);
     const source=type==='project'?DATA.projects[key]:type==='initiative'?DATA.projects[parentKey]?.initiatives?.[key]:type==='stage'?DATA.projects[parentKey]?.journey_stages?.find(item=>item.id===key):DATA.experiments[key];if(!dialog||!source)return;
@@ -3503,10 +4031,14 @@
     }
     updateCloseControl();
     if(!dialog.open){setDialogOpenState(true);dialog.classList.add('is-opening');dialog.showModal()}
-    requestAnimationFrame(()=>{dialog.classList.remove('is-opening');
-      if(dialogScroll){dialogScroll.scrollTo({top:0,left:0,behavior:'auto'});restoreProjectSectionHash();}
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{dialog.classList.remove('is-opening');
+      if(dialogScroll){
+        if(restoreHistory&&Number.isFinite(restoreScrollTop))dialogScroll.scrollTo({top:Math.max(0,restoreScrollTop),left:0,behavior:'auto'});
+        else if(restoreHistory)restoreProjectSectionHash();
+        else dialogScroll.scrollTo({top:0,left:0,behavior:'auto'});
+      }
       doc.dispatchEvent(new CustomEvent('portfolio:detail-ready'));
-    });
+    }));
     safeText(dialogStatus,ui("details-opened-c2398239"));
   }
   doc.addEventListener('keydown',event=>{
@@ -3527,11 +4059,18 @@
       event.preventDefault();
       const key=canonicalProjectId(project.dataset.project);
       openDetail('project',key,project);
-      history.pushState({detail:{type:'project',key}},'',canonicalProjectUrl(key));
+      const nextProjectUrl=canonicalProjectUrl(key);nextProjectUrl.hash='';
+      history.pushState({detail:{type:'project',key},scrollTop:0},'',nextProjectUrl);
       return;
     }
     const experiment=event.target.closest('[data-experiment]');
-    if(experiment){event.preventDefault();openDetail('experiment',experiment.dataset.experiment,experiment)}
+    if(experiment){
+      event.preventDefault();
+      const key=experiment.dataset.experiment;
+      openDetail('experiment',key,experiment);
+      const url=canonicalExperimentUrl(key);
+      history.pushState({detail:{type:'experiment',key},scrollTop:0},'',url);
+    }
   });
   function openInitiative(parentKey,key,invoker,direct=false){
     const item=DATA.projects[parentKey]?.initiatives?.[key];if(!item)return;
@@ -3545,9 +4084,16 @@
   }
   const requestedDeepLinkedCase=new URLSearchParams(window.location.search).get('case')||projectIdFromPath();
   const deepLinkedCase=canonicalProjectId(requestedDeepLinkedCase);
+  const requestedDeepLinkedExperiment=new URLSearchParams(window.location.search).get('experiment');
+  const deepLinkedExperiment=experimentKeyFromPublicSlug(requestedDeepLinkedExperiment);
   const deepLinkedInitiative=new URLSearchParams(window.location.search).get('initiative');
   const deepLinkedStage=new URLSearchParams(window.location.search).get('stage');
-  if(deepLinkedCase&&DATA.projects[deepLinkedCase]){
+  if(deepLinkedExperiment&&DATA.experiments[deepLinkedExperiment]){
+    if(requestedDeepLinkedExperiment!==experimentPublicSlug(deepLinkedExperiment)){
+      history.replaceState({detail:{type:'experiment',key:deepLinkedExperiment},scrollTop:0},'',canonicalExperimentUrl(deepLinkedExperiment));
+    }
+    window.requestAnimationFrame(()=>openDetail('experiment',deepLinkedExperiment,doc.querySelector(`[data-experiment="${deepLinkedExperiment}"]`)));
+  }else if(deepLinkedCase&&DATA.projects[deepLinkedCase]){
     if(requestedDeepLinkedCase!==deepLinkedCase){
       const canonicalUrl=new URL(window.location.href);
       canonicalProjectUrl(deepLinkedCase,canonicalUrl);
@@ -3564,8 +4110,16 @@
       }
     });
   }
-  window.addEventListener('popstate',()=>{
+  window.addEventListener('popstate',event=>{
+    const restoreOptions={restoreHistory:true,restoreScrollTop:Number.isFinite(event.state?.scrollTop)?event.state.scrollTop:null};
     const params=new URLSearchParams(window.location.search);
+    const requestedExperiment=params.get('experiment');
+    const experiment=experimentKeyFromPublicSlug(requestedExperiment);
+    if(experiment&&DATA.experiments[experiment]){
+      if(requestedExperiment!==experimentPublicSlug(experiment))history.replaceState({...event.state,detail:{type:'experiment',key:experiment}},'',canonicalExperimentUrl(experiment));
+      if(currentDetail?.type!=='experiment'||currentDetail.key!==experiment)openDetail('experiment',experiment,doc.querySelector(`[data-experiment="${experiment}"]`),undefined,restoreOptions);
+      return;
+    }
     const requestedParent=params.get('case')||projectIdFromPath();
     const parent=canonicalProjectId(requestedParent);
     if(!parent||!DATA.projects[parent]){
@@ -3573,15 +4127,15 @@
       return;
     }
     if(!dialog?.open){
-      openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`));
+      openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`),undefined,restoreOptions);
       return;
     }
     const initiative=params.get('initiative');
     const stage=params.get('stage');
-    if(stage&&(currentDetail?.type!=='stage'||currentDetail.key!==stage))openDetail('stage',stage,currentInvoker,parent);
-    else if(initiative&&currentDetail?.type!=='initiative')openDetail('initiative',initiative,currentInvoker,parent);
+    if(stage&&(currentDetail?.type!=='stage'||currentDetail.key!==stage))openDetail('stage',stage,currentInvoker,parent,restoreOptions);
+    else if(initiative&&currentDetail?.type!=='initiative')openDetail('initiative',initiative,currentInvoker,parent,restoreOptions);
     else if(!stage&&!initiative&&(currentDetail?.type==='initiative'||currentDetail?.type==='stage')){suppressHistorySync=true;returnToPreviousDetail();suppressHistorySync=false}
-    else if(!stage&&!initiative&&(currentDetail?.type!=='project'||currentDetail.key!==parent))openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`));
+    else if(!stage&&!initiative&&(currentDetail?.type!=='project'||currentDetail.key!==parent))openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`),undefined,restoreOptions);
   });
   doc.addEventListener('keydown',event=>{if(!dialog?.open)return;if(event.key==='ArrowLeft'){event.preventDefault();doc.getElementById('galleryPrev').click()}if(event.key==='ArrowRight'){event.preventDefault();doc.getElementById('galleryNext').click()}});
   doc.querySelectorAll('img').forEach(image=>{

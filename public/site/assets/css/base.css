@@ -18,7 +18,7 @@ button:active:not(:disabled),.button:active,.text-button:active{transform:transl
 ::placeholder{color:var(--color-text-muted);opacity:1}
 .button,.text-button{display:inline-flex;align-items:center;justify-content:center;min-height:var(--control-height);font-weight:var(--sys-weight-bold);transition:background-color var(--motion-fast) var(--ease-standard),color var(--motion-fast) var(--ease-standard),border-color var(--motion-fast) var(--ease-standard),box-shadow var(--motion-base) var(--ease-standard),transform var(--motion-fast) var(--ease-standard)}
 :where(.button){padding-inline:var(--space-4);border-radius:var(--radius-pill);text-decoration:none}
-.button--dark{background:var(--color-action-bg);color:var(--color-text-inverse)}
+.button--dark{border:0;background:var(--color-action-bg);color:var(--color-text-inverse)}
 .button--dark:hover{background:var(--color-action-bg-hover);box-shadow:var(--shadow-sm)}
 .button--quiet{border:var(--dimension-1px) solid var(--color-border);background:var(--color-surface)}
 .button--quiet:hover{border-color:var(--color-border-strong);background:var(--color-surface-subtle)}

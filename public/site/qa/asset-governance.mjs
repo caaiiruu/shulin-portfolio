@@ -43,7 +43,7 @@ function deriveSlots(value, projectId, location = []) {
     const next = [...location, key];
     if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") {
       slots.push({ projectId, slotId: next.join("."), assetId: child });
-    } else if (key === "assetIds" && value.presentation === "editorial-pair" && Array.isArray(child)) {
+    } else if (key === "assetIds" && (value.presentation === "editorial-pair" || location.includes("presentationSections")) && Array.isArray(child)) {
       child.forEach((assetId, index) => {
         if (typeof assetId === "string") slots.push({ projectId, slotId: [...next, index].join("."), assetId });
       });
@@ -51,6 +51,8 @@ function deriveSlots(value, projectId, location = []) {
   }
 }
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
+for (const [projectId, project] of Object.entries({...(content.experiments||{}),...(content.sideProjects||{})})) deriveSlots(project, projectId);
+deriveSlots(content.recognitionRegistry, "profile", ["recognitionRegistry"]);
 const derivativeLineageIds = new Set(itemEntries.flatMap(([, record]) => Array.isArray(record.derivedFromAssetIds) ? record.derivedFromAssetIds : []));
 for (const id of derivativeLineageIds) fail(Boolean(items[id]), `Derivative lineage references missing asset ${id}`);
 const governedAssetIds = new Set([...slots.map((slot) => slot.assetId), ...derivativeLineageIds]);
