@@ -248,26 +248,25 @@
   window.PORTFOLIO_RUNTIME_DATA=DATA;
   window.adaptPortfolioProject=(id)=>DATA.projects?.[id]||null;
   const ASSET_MANIFEST=window.PORTFOLIO_ASSET_MANIFEST?.items||{};
-  function resolveProjectAsset(assetId){
+  function resolveProjectAsset(assetId,projectId){
     if(!assetId)return null;
     const record=ASSET_MANIFEST[assetId];
-    if(!record)throw new Error(`Asset governance: unknown runtime asset ${assetId}`);
-    if(record.assetStatus==='production'&&record.implementationStatus==='real-active'){
-      const publicPath=record.productionUrl||record.publicPath;
-      if(!publicPath||!publicPath.startsWith('/site/'))throw new Error(`Asset governance: invalid public production path for ${assetId}`);
-      const version=String(record.sha256||record.blobSha||'').slice(0,16);
-      const src=version?`${publicPath}?v=${version}`:publicPath;
-      return {assetId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
-    }
-    if(record.assetStatus==='awaiting-user-asset'&&record.placeholderFallbackAssetId){
-      const fallback=ASSET_MANIFEST[record.placeholderFallbackAssetId];
-      if(!fallback?.publicPath?.startsWith('/site/'))throw new Error(`Asset governance: invalid placeholder fallback for ${assetId}`);
-      return {assetId,src:fallback.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:/video/i.test(record.type||''),alt:['Project visual pending.','專案視覺素材待補。'],width:Number(fallback.width)||null,height:Number(fallback.height)||null,aspectRatio:fallback.aspectRatio||null,projectCardFocalPosition:fallback.projectCardFocalPosition||null};
-    }
-    if(record.assetStatus==='placeholder'&&record.publicPath?.startsWith('/site/')){
-      return {assetId,src:record.publicPath,status:'placeholder-active',isPlaceholder:true,isVideo:false,alt:['Project visual pending.','專案視覺素材待補。'],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
-    }
-    throw new Error(`Asset governance: public runtime asset has no real file or placeholder: ${assetId}`);
+    // Missing or unapproved media is absent, never borrowed from another record.
+    if(!record||!projectId||record.id!==assetId||record.publicBuild!==true)return null;
+    if(record.projectId!==projectId&&!record.sharedWith?.includes(projectId))return null;
+    if(record.assetStatus!=='production'||record.implementationStatus!=='real-active')return null;
+    const publicPath=record.productionUrl||record.publicPath;
+    if(!publicPath||!publicPath.startsWith('/site/'))throw new Error(`Asset governance: invalid public production path for ${assetId}`);
+    const version=String(record.sha256||record.blobSha||'').slice(0,16);
+    const src=version?`${publicPath}?v=${version}`:publicPath;
+    return {assetId,projectId:record.projectId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
+  }
+  function clearDetailMedia(){
+    closeEvidenceLightbox();
+    evidenceLightboxImage.removeAttribute('src');
+    // These nodes live outside the per-type containers in the reused dialog.
+    dialog.querySelectorAll('#projectDetailHeroVisual,.experiment-hero-v1838e,#experimentStory').forEach(node=>node.remove());
+    clear(doc.getElementById('galleryArt'));
   }
   window.resolveProjectAsset=resolveProjectAsset;
   function projectAssetRatio(asset){
@@ -1068,11 +1067,11 @@
       if(linked){card.type='button';card.dataset.experiment=item.projectId;card.dataset.pressable='';card.setAttribute('aria-label',`${ui("open-exploration-33b85a78")}: ${localize(item.projectName)}`)}
       const top=element('div','experiment-index-card-v36__top');
       top.append(element('span','',localize(item.winningDiscipline)),element('span','',item.year||''));
-      const asset=resolveProjectAsset(item.assetId);
+      const asset=resolveProjectAsset(item.assetId,'profile');
       const logo=element('div','award-logo-slot award-logo-slot--red-dot');logo.dataset.assetId=item.assetId;
-      const image=doc.createElement('img');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
+      if(asset){const image=doc.createElement('img');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
       if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;
-      logo.append(image);
+      logo.append(image);}
       card.append(top,logo,element('h3','',`${localize(item.result)} — ${localize(item.projectName)}`),element('p','',`${localize(registry.awardName)} · ${item.year||''}`));
       if(linked){const action=element('span','experiment-card-action text-cta');action.append(element('span','',lang==='zh'?'查看作品':'View experiment'),element('span','icon-arrow icon-arrow--right'));action.lastElementChild.setAttribute('aria-hidden','true');card.append(action)}
       else card.append(element('span','recognition-card-v1838f__status',lang==='zh'?'獲獎紀錄':'Award record'));
@@ -1241,7 +1240,7 @@
     const button=element('button','work-card-v32__button');
     button.type='button';button.dataset.project=id;button.dataset.pressable='';
     const coverAssetId=id==='voucher'?'voucher-hero-incentive-journey-public-v1':(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId);
-    const coverAsset=coverAssetId?resolveProjectAsset(coverAssetId):null;
+    const coverAsset=coverAssetId?resolveProjectAsset(coverAssetId,id):null;
     const visual=element('div',coverAsset?'work-artifact work-card-v32__visual-v225':`work-artifact work-artifact--${id}`);
     visual.dataset.frameRole='project-cover';
     if(coverAsset){
@@ -1256,7 +1255,7 @@
       visual.style.setProperty('--project-card-media-focal-position',mediaPresentation.focalPosition);
       visual.dataset.assetStatus=image.dataset.assetStatus;
       visual.append(image);
-    }else{
+    }else if(!coverAssetId){
       visual.setAttribute('aria-hidden','true');
       appendArtifactContents(visual,projectArtifactLabels(id));
     }
@@ -1450,6 +1449,7 @@
   function closeEvidenceLightbox(){
     if(!evidenceLightbox.open)return;
     evidenceLightbox.close();
+    evidenceLightboxImage.removeAttribute('src');
     evidenceLightboxInvoker?.focus({preventScroll:true});
     evidenceLightboxInvoker=null;
   }
@@ -1797,6 +1797,7 @@
   function closeDialog(options={}){
     const syncHistory=options?.syncHistory!==false;
     if(!dialog?.open)return;
+    closeEvidenceLightbox();
     dialog.classList.add('is-closing');
     const finish=()=>{const closingType=currentDetail?.type;dialog.classList.remove('is-closing');dialog.close();setDialogOpenState(false);safeText(dialogStatus,ui("details-closed-8df67313"));rootInvoker?.focus();detailStack.length=0;rootInvoker=null;currentInvoker=null;currentDetail=null;if(syncHistory)history.replaceState({},'',closingType==='experiment'?experimentIndexUrl():workIndexUrl());updateCloseControl()};
     if(prefersReduced.matches)finish();else window.setTimeout(finish,140);
@@ -1813,7 +1814,7 @@
 
   function renderArtifact(labels,assetId=''){
     const art=doc.getElementById('galleryArt');clear(art);art.dataset.frameRole='supporting-evidence';
-    const resolved=assetId?resolveProjectAsset(assetId):null;
+    const resolved=assetId?resolveProjectAsset(assetId,currentDetail.parentKey||currentDetail.key):null;
     if(resolved){
       const image=doc.createElement('img');
       image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
@@ -1821,27 +1822,29 @@
       if(resolved.isPlaceholder){image.dataset.assetStatus='placeholder-active';image.setAttribute('aria-label',localize(resolved.alt));}
       art.append(image);return;
     }
-    appendArtifactContents(art,labels);
+    if(!assetId)appendArtifactContents(art,labels);
   }
   function renderGalleryMedia(item){
     const art=doc.getElementById('galleryArt');clear(art);art.dataset.frameRole='supporting-evidence';
-    const resolved=item.assetId?resolveProjectAsset(item.assetId):null;
-    if(resolved){
+    const assetId=item.assetId||Object.keys(ASSET_MANIFEST).find(id=>ASSET_MANIFEST[id].publicPath===(item.video||item.src));
+    const resolved=resolveProjectAsset(assetId,currentDetail.parentKey||currentDetail.key);
+    if(!resolved)return;
+    if(!resolved.isVideo){
       const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';
       if(resolved.isPlaceholder){image.dataset.assetStatus='placeholder-active';image.setAttribute('aria-label',localize(resolved.alt));}
       art.append(image);return;
     }
-    if(item.video){
+    if(resolved.isVideo){
       const video=doc.createElement('video');
       video.className='portfolio-media portfolio-media--video';
-      video.poster=item.poster;video.preload='none';video.muted=true;video.playsInline=true;
+      const posterId=Object.keys(ASSET_MANIFEST).find(id=>ASSET_MANIFEST[id].publicPath===item.poster);const poster=resolveProjectAsset(posterId,currentDetail.parentKey||currentDetail.key);if(poster)video.poster=poster.src;video.preload='none';video.muted=true;video.playsInline=true;
       video.setAttribute('aria-label',localize(item.alt));
       if(!prefersReduced.matches){
         const play=element('button','portfolio-media__play',ui("play-interaction-1503d44b"));
         play.type='button';
         play.addEventListener('click',()=>{
           if(!video.querySelector('source')){
-            const source=doc.createElement('source');source.src=item.video;video.append(source);video.load();
+            const source=doc.createElement('source');source.src=resolved.src;video.append(source);video.load();
           }
           video.play();play.hidden=true;
         });
@@ -1851,11 +1854,6 @@
       }else art.append(video);
       return;
     }
-    const image=doc.createElement('img');
-    image.className='portfolio-media';
-    image.src=item.src;image.alt=localize(item.alt);image.loading='lazy';image.decoding='async';
-    image.sizes='(max-width: 720px) 92vw, 56vw';
-    art.append(image);
   }
   function appendArtifactContents(node,labels){
     const top=element('div','window-top');for(let i=0;i<3;i++)top.appendChild(element('i'));
@@ -2765,7 +2763,7 @@
       }
       card.append(number,body);
       if(showVisual&&projectKey){
-        const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
+        const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId,projectKey):null;
         if(resolved){
           const visual=element('figure','decision-visual-v58 evidence-frame voucher-stage-evidence');
           const media=element('button','decision-visual-v67__crop evidence-frame__media voucher-stage-evidence__media');
@@ -2853,13 +2851,13 @@
     if(showVisual&&projectKey){
       const visual=element('figure','decision-visual-v58 evidence-frame');
       const visualArt=element('div','decision-visual-v67__crop evidence-frame__media');
-      const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId):null;
+      const resolved=decision.evidenceAssetId?resolveProjectAsset(decision.evidenceAssetId,projectKey):null;
       let visualAlt=ui("cropped-detail-from-the-project-gallery-ab-15414e5c");
       if(resolved){
         const image=doc.createElement('img');image.className='portfolio-media';image.src=resolved.src;image.alt=localize(resolved.alt);image.loading='lazy';image.decoding='async';visualAlt=image.alt||visualAlt;
         if(resolved.isPlaceholder)image.dataset.assetStatus='placeholder-active';
         visualArt.append(image);
-      }else appendArtifactContents(visualArt,projectArtifactLabels(projectKey));
+      }else if(!decision.evidenceAssetId)appendArtifactContents(visualArt,projectArtifactLabels(projectKey));
       visual.append(visualArt);
       card.append(visual);
     }
@@ -2988,7 +2986,7 @@
     safeText(dialogTitle,recruiterFirstDisplayTitle(p));
     const existingHeroVisual=doc.getElementById('projectDetailHeroVisual');
     if(existingHeroVisual)existingHeroVisual.remove();
-    const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId);
+    const heroAsset=resolveProjectAsset(p.hero_visual_brief?.assetId||p.heroVisualBrief?.assetId,key);
     if(heroAsset&&!heroAsset.isPlaceholder){
       const figure=element('figure','project-detail-hero-visual');figure.id='projectDetailHeroVisual';figure.dataset.componentOwner='ProjectDetailOverview';figure.dataset.mediaVariant='Lead Project Visual';figure.dataset.assetStatus='real-active';figure.dataset.assetId=heroAsset.assetId;
       const image=doc.createElement('img');image.src=heroAsset.src;image.alt=localize(heroAsset.alt);image.loading='lazy';image.decoding='async';
@@ -3255,7 +3253,7 @@
     const media=element('button',`evidence-frame__media evidence-frame__media--${governedVariant}`);
     media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
     list(assetIds).filter(Boolean).forEach(assetId=>{
-      const resolved=resolveProjectAsset(assetId),image=doc.createElement('img');
+      const resolved=resolveProjectAsset(assetId,currentDetail.parentKey||currentDetail.key);if(!resolved)return;const image=doc.createElement('img');
       image.className='portfolio-media';image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
       image.dataset.assetId=resolved.assetId;image.dataset.assetStatus=resolved.isPlaceholder?'placeholder-active':'real-active';
       if(resolved.width&&resolved.height){image.width=resolved.width;image.height=resolved.height}
@@ -3338,7 +3336,7 @@
       });
       section.append(support);
     }
-    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer';owner.dataset.navigationTarget='external';owner.setAttribute('aria-label',translate(source.recognition.ctaLabel)||translate(source.recognition.title))}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
+    if(source?.recognition){const proof=element('aside',`outcome-recognition-proof${source.recognition.presentation==='direct'?' outcome-recognition-proof--direct':''}`);proof.dataset.componentOwner='RecognitionProof';const owner=source.recognition.href?element('a','outcome-recognition-proof__link'):element('div','outcome-recognition-proof__link');if(source.recognition.href){owner.href=source.recognition.href;owner.target='_blank';owner.rel='noopener noreferrer';owner.dataset.navigationTarget='external';owner.setAttribute('aria-label',translate(source.recognition.ctaLabel)||translate(source.recognition.title))}const copy=element('div','outcome-recognition-proof__copy');copy.append(element('span','voucher-r149-eyebrow',translate(source.recognition.label)),element('h3','outcome-recognition-proof__title',translate(source.recognition.title)),element('p','outcome-recognition-proof__programme',translate(source.recognition.programme)));if(translate(source.recognition.attribution))copy.append(element('p','outcome-recognition-proof__attribution',translate(source.recognition.attribution)));if(source.recognition.href&&translate(source.recognition.ctaLabel)){const label=translate(source.recognition.ctaLabel),cta=element('span','outcome-recognition-proof__cta text-cta'),match=label.match(/\s*(↗)\s*$/);cta.append(element('span','',match?label.slice(0,match.index).trimEnd():label));if(match){const arrow=element('span','outcome-recognition-proof__cta-arrow',match[1]);arrow.setAttribute('aria-hidden','true');cta.append(arrow)}copy.append(cta)}const asset=resolveProjectAsset(source.recognition.assetId,currentDetail.parentKey||currentDetail.key);if(asset){const media=element('figure','outcome-recognition-proof__media'),image=doc.createElement('img');image.src=asset.src;image.alt=asset.alt[lang==='zh'?1:0]||'';image.loading='lazy';image.decoding='async';if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;media.append(image);owner.append(media)}owner.append(copy);proof.append(owner);section.append(proof)}
     if(source?.note)section.append(element('p','outcome-semantic-note',translate(source.note)));
     if(source?.closingStatement)section.append(element('p','outcome-semantic-closing',translate(source.closingStatement)));
   }
@@ -3747,8 +3745,9 @@
     const overview=doc.getElementById('projectOverviewSection');
     const summary=overview?.querySelector('.detail-commerce-v45__summary');
     let hero=null;
-    if(e.hero?.assetId&&overview){
-      const asset=resolveProjectAsset(e.hero.assetId);
+    const heroAsset=resolveProjectAsset(e.hero?.assetId,currentDetail.key);
+    if(heroAsset&&overview){
+      const asset=heroAsset;
       const figure=element('figure','experiment-hero-v1838e');
       const image=element('img');
       image.src=asset.src;image.alt=localize(e.hero.alt)||localize(asset.alt);image.loading='eager';image.decoding='async';
@@ -3775,7 +3774,7 @@
       if(assetIds.length){
         const media=element('div',`${isRecognition?'outcome-recognition-proof__media':'experiment-story-v1838e__media'}${!isRecognition&&assetIds.length===1?' experiment-story-v1838e__media--single':''}`);
         assetIds.forEach((assetId,assetIndex)=>{
-          const asset=resolveProjectAsset(assetId);const figure=element('figure',isRecognition?'experiment-story-v1838e__figure':'evidence-frame experiment-story-v1838e__figure');
+          const asset=resolveProjectAsset(assetId,currentDetail.key);if(!asset)return;const figure=element('figure',isRecognition?'experiment-story-v1838e__figure':'evidence-frame experiment-story-v1838e__figure');
           const mediaFrame=element('button','evidence-frame__media experiment-story-v1838e__media-frame');mediaFrame.type='button';mediaFrame.dataset.expandableEvidence='true';mediaFrame.dataset.frameRole=assetIds.length===1?'primary-evidence':'supporting-evidence';
           const image=element('img','portfolio-media');image.src=asset.src;image.alt=localize(asset.alt);image.loading='lazy';image.decoding='async';
           if(asset.width)image.width=asset.width;if(asset.height)image.height=asset.height;
@@ -3928,7 +3927,7 @@
     window.refreshHorizontalRails?.();
   }
   function renderDetail(){
-    if(!currentDetail)return;const isStage=currentDetail.type==='stage';const isProject=currentDetail.type==='project'||currentDetail.type==='initiative'||isStage;const isInitiative=currentDetail.type==='initiative';projectView.hidden=!isProject;experimentView.hidden=isProject;
+    if(!currentDetail)return;clearDetailMedia();const isStage=currentDetail.type==='stage';const isProject=currentDetail.type==='project'||currentDetail.type==='initiative'||isStage;const isInitiative=currentDetail.type==='initiative';projectView.hidden=!isProject;experimentView.hidden=isProject;
     const detailCommerce=doc.querySelector('.detail-commerce-v45');if(detailCommerce)detailCommerce.hidden=isStage;const projectValue=doc.querySelector('.project-value-v207');if(projectValue)projectValue.hidden=isStage;
     const overviewContext=doc.querySelector('.project-context-v45--overview');
     if(overviewContext)overviewContext.hidden=!isProject;

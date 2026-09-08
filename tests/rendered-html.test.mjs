@@ -1468,7 +1468,7 @@ test("closes the final P1 case-study runtime contracts", () => {
   assert.match(overview, /\.decision-card-v46\{[^}]*border-radius:0;[^}]*background:transparent/);
   assert.match(app, /stage-focus-v148__statement/);
   assert.match(home, /image\.dataset\.assetStatus=asset\.isPlaceholder\?'placeholder-active':'real-active'/);
-  assert.match(home, /window\.resolveProjectAsset\?\.\(assetId\)/);
+  assert.match(home, /window\.resolveProjectAsset\?\.\(assetId,key\)/);
   assert.match(home, /visual\.dataset\.mediaAspect='16 \/ 9'/);
   assert.doesNotMatch(domain, /\.domain-project-list-v30 \.related-project-card__visual-v45\{/);
   const real = Object.values(manifest.items).filter(item=>item.assetStatus==='production'&&item.implementationStatus==='real-active');
@@ -1597,7 +1597,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   assert.equal(asset.implementationStatus,"real-active");
   assert.doesNotMatch(work,/work-artifact--voucher/);
   assert.match(work,/data-frame-role="project-cover"/);
-  assert.match(app,/resolveProjectAsset\(coverAssetId\)/);
+  assert.match(app,/resolveProjectAsset\(coverAssetId,id\)/);
   assert.match(app,/image\.dataset\.assetId=coverAsset\.assetId/);
   assert.match(css,/\.work-card-v32__image-v225\{[^}]*object-fit:contain/);
 });

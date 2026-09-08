@@ -106,7 +106,7 @@ function createProjectVisual(key){
  const visual=element('div','related-project-card__visual-v45');visual.dataset.frameRole='project-cover';
  const project=window.adaptPortfolioProject?.(key)||DATA.projects[key];
  const assetId=key==='voucher'?'voucher-hero-incentive-journey-public-v1':(project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId);
- const asset=assetId?window.resolveProjectAsset?.(assetId):null;
+ const asset=assetId?window.resolveProjectAsset?.(assetId,key):null;
  if(asset?.src){
   const image=element('img','related-project-card__image-v148');
   image.dataset.frameRole='project-cover';image.src=asset.src;image.loading='lazy';image.decoding='async';
@@ -117,6 +117,7 @@ function createProjectVisual(key){
   if(presentation){visual.dataset.mediaFormat=presentation.format;visual.style.setProperty('--project-card-media-focal-position',presentation.focalPosition)}
   visual.dataset.assetStatus=image.dataset.assetStatus;visual.append(image);return visual;
  }
+ if(assetId)return visual;
  visual.setAttribute('aria-hidden','true');
  const brand=element('span','related-project-card__brand-v45',projectBrand(key));
  const flow=element('div','related-project-card__flow-v45');

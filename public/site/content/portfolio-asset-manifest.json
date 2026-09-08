@@ -13,6 +13,7 @@
   "items": {
     "red-dot-2016-game-design-winner-public-v1": {
       "id": "red-dot-2016-game-design-winner-public-v1",
+      "sharedWith": ["profile"],
       "projectId": "hello-sabau",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-game-design-winner-public-v1.jpg",
@@ -37,6 +38,7 @@
     },
     "red-dot-2016-packaging-design-winner-public-v1": {
       "id": "red-dot-2016-packaging-design-winner-public-v1",
+      "sharedWith": ["profile"],
       "projectId": "matsu-temple-packaging",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-packaging-design-winner-public-v1.jpg",
@@ -965,6 +967,7 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
+      "byteSize": 800684,
       "width": 865,
       "height": 502,
       "sha256": "84ea0a580e59b77ecf8298d1f3336982f1ebaffb6e9b5deac4130ba719ecea1f",
@@ -1602,6 +1605,7 @@
     },
     "rsa-student-design-awards-competition-public-v1": {
       "id": "rsa-student-design-awards-competition-public-v1",
+      "sharedWith": ["profile"],
       "projectId": "capture-ideas",
       "type": "image/jpeg",
       "publicPath": "/site/assets/experiments/capture-ideas/rsa-student-design-awards-competition-public-v1.jpg",

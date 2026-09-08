@@ -1,4 +1,4 @@
-const VISUAL_REFERENCE_KEYS = new Set(["assetId", "publicAssetId", "beforeAssetId", "shippedAssetId"]);
+const VISUAL_REFERENCE_KEYS = new Set(["assetId", "publicAssetId", "beforeAssetId", "shippedAssetId", "evidenceAssetId"]);
 
 export function deriveRuntimeVisualSlots(content) {
   const slots = [];
@@ -8,10 +8,16 @@ export function deriveRuntimeVisualSlots(content) {
       return;
     }
     if (!value || typeof value !== "object") return;
+    // These provenance-only records cite archived source documents, not media
+    // passed to the renderer. Public journey visuals and recruiter projections
+    // remain covered by the same recursive traversal.
+    if (["programmeResearch", "productEvolution", "publicContent.evidenceToStrategy", "publicContent.modelEvolution"].includes(location.join("."))) return;
     for (const [key, child] of Object.entries(value)) {
       const next = [...location, key];
       if (VISUAL_REFERENCE_KEYS.has(key) && typeof child === "string") {
         slots.push({ projectId, slotId: next.join("."), assetId: child });
+      } else if (key === "assetIds" && Array.isArray(child)) {
+        child.forEach((assetId, index) => { if (assetId) slots.push({projectId, slotId: [...next,index].join("."), assetId}); });
       } else if (key !== "sourceArchives") {
         visit(child, projectId, next);
       }
@@ -19,6 +25,10 @@ export function deriveRuntimeVisualSlots(content) {
   }
   for (const [projectId, project] of Object.entries(content.projects || {})) {
     visit(project, projectId);
+  }
+  const experiments = {...content.experiments, ...content.sideProjects};
+  for (const projectId of content.experimentArchitecture?.displayOrder || Object.keys(experiments)) {
+    visit(experiments[projectId], projectId, ["experiment"]);
   }
   return slots;
 }
@@ -36,6 +46,13 @@ export function validateRuntimeVisualAssets({ slots, assetManifest, publicAssetE
     throw new Error("Asset Manifest items must be an object");
   }
 
+  const identities = new Map();
+  for (const [key, record] of Object.entries(items)) {
+    if (identities.has(record.id)) throw new Error(`Duplicate asset ID with conflicting ownership: ${record.id}`);
+    identities.set(record.id, record.projectId);
+    if (key !== record.id) throw new Error(`Asset Manifest identity mismatch: ${key}`);
+    if (!record.projectId) throw new Error(`Asset Manifest owner missing: ${key}`);
+  }
   const slotOwners = new Set();
   const activePublicPaths = new Map();
   for (const slot of slots) {
@@ -55,6 +72,9 @@ export function validateRuntimeVisualAssets({ slots, assetManifest, publicAssetE
     if (record.id !== assetId) throw new Error(`Asset Manifest identity mismatch: ${assetId}`);
     if (record.publicBuild !== true) throw new Error(`Runtime asset is not approved for public build: ${assetId}`);
 
+    if (record.projectId !== projectId && !record.sharedWith?.includes(projectId)) {
+      throw new Error(`Wrong project media: ${slotOwner} -> ${assetId} belongs to ${record.projectId}`);
+    }
     let resolvedPath;
     if (record.assetStatus === "production") {
       requireSitePath(record.publicPath, `Production asset ${assetId}`);
@@ -65,13 +85,8 @@ export function validateRuntimeVisualAssets({ slots, assetManifest, publicAssetE
       }
       activePublicPaths.set(resolvedPath, assetId);
     } else {
-      const fallbackId = typeof record.placeholderFallbackAssetId === "string"
-        ? record.placeholderFallbackAssetId.trim()
-        : "";
-      const fallback = fallbackId ? items[fallbackId] : null;
-      if (!fallback) throw new Error(`Non-production runtime asset has no approved fallback: ${assetId}`);
-      requireSitePath(fallback.publicPath, `Fallback asset ${fallbackId}`);
-      resolvedPath = fallback.publicPath;
+      // Pending media is intentionally absent. No image fallback is permitted.
+      continue;
     }
 
     if (!publicAssetExists(resolvedPath)) {

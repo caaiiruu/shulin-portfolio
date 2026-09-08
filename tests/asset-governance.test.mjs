@@ -1,157 +1,29 @@
-import assert from "node:assert/strict";
-import fs from "node:fs";
-import test from "node:test";
-import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "../scripts/visual-asset-governance.mjs";
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import crypto from 'node:crypto';
+import test from 'node:test';
+import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from '../scripts/visual-asset-governance.mjs';
+const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json'));
+const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json'));
+const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
+const slots=deriveRuntimeVisualSlots(content);
+const resolve=vm.runInNewContext(app.slice(app.indexOf('  function resolveProjectAsset('),app.indexOf('  function clearDetailMedia('))+';resolveProjectAsset',{ASSET_MANIFEST:manifest.items});
+const validate=(assetManifest=manifest, selected=slots, exists=p=>fs.existsSync('public'+p))=>validateRuntimeVisualAssets({slots:selected,assetManifest,publicAssetExists:exists});
+const one=(id,owner)=>[{projectId:owner,slotId:'evidence',assetId:id}];
+const asset=(id,owner,path='/site/test.png')=>({id,projectId:owner,assetStatus:'production',implementationStatus:'real-active',publicBuild:true,publicPath:path});
+test('all professional and Experiment references are owned and exist',()=>{assert.equal(Object.keys(content.projects).length,13);assert.equal(content.experimentArchitecture.displayOrder.length,7);assert.ok(slots.some(s=>s.slotId.includes('presentationSections')));assert.equal(validate().slotCount,slots.length);for(const s of slots){const r=resolve(s.assetId,s.projectId);assert.ok(r,s.assetId);assert.equal(r.projectId,s.projectId);}});
+test('Experiment section asset arrays are covered, including unknown IDs',()=>{const derived=deriveRuntimeVisualSlots({experiments:{sample:{presentationSections:[{assetIds:['missing']}]}}});assert.equal(derived.length,1);assert.throws(()=>validate(manifest,derived),/unknown asset/);});
+test('every current asset is rejected for every foreign project or Experiment',()=>{for(const owner of [...Object.keys(content.projects),...content.experimentArchitecture.displayOrder])for(const [id,a]of Object.entries(manifest.items)){if(a.projectId===owner||a.sharedWith?.includes(owner))continue;assert.equal(resolve(id,owner),null,`${owner}/${id}`);assert.throws(()=>validate(manifest,one(id,owner)),/Wrong project media/);}});
+test('Hello SABAU and all mortgage/banking owners reject each others media',()=>{const hello=slots.filter(s=>s.projectId==='hello-sabau');for(const owner of ['ctbc-mortgage-self-service-app','cathay-mortgage-assistant','dbs','payment']){for(const s of hello)assert.equal(resolve(s.assetId,owner),null);for(const s of slots.filter(s=>s.projectId===owner))assert.equal(resolve(s.assetId,'hello-sabau'),null);}});
+test('missing and pending assets never resolve generic or previous media',()=>{assert.equal(resolve('', 'hello-sabau'),null);assert.equal(resolve('unregistered','hello-sabau'),null);assert.equal(resolve(slots[0].assetId),null);const id='pending';manifest.items[id]={...asset(id,'hello-sabau'),assetStatus:'awaiting-user-asset',placeholderFallbackAssetId:slots[0].assetId};try{assert.equal(resolve(id,'hello-sabau'),null);assert.equal(validate(manifest,one(id,'hello-sabau')).slotCount,1);}finally{delete manifest.items[id];}});
+test('shared media requires explicit sharing with the rendering surface',()=>{for(const id of ['red-dot-2016-game-design-winner-public-v1','red-dot-2016-packaging-design-winner-public-v1','rsa-student-design-awards-competition-public-v1']){assert.ok(resolve(id,'profile'));assert.equal(resolve(id,'unapproved-surface'),null);}});
+test('conflicting duplicate IDs and mismatched dictionary keys fail',()=>{assert.throws(()=>validate({items:{a:asset('a','one'),b:asset('a','two')}},[]),/Duplicate asset ID/);assert.throws(()=>validate({items:{a:asset('b','one')}},[]),/identity mismatch/);});
+test('duplicate paths, unsafe paths and missing files fail',()=>{assert.throws(()=>validate({items:{a:asset('a','one'),b:asset('b','one')}},[...one('a','one'),{...one('b','one')[0],slotId:'other'}],()=>true),/Duplicate active semantic asset path/);assert.throws(()=>validate({items:{a:asset('a','one','https://elsewhere/image.png')}},one('a','one')),/allowed \/site/);assert.throws(()=>validate({items:{a:asset('a','one')}},one('a','one'),()=>false),/file is missing/);});
+test('canonical public media bytes match their registered SHA-256',()=>{for(const [id,a]of Object.entries(manifest.items)){if(a.assetStatus!=='production'||!a.sha256)continue;assert.equal(crypto.createHash('sha256').update(fs.readFileSync('public'+a.publicPath)).digest('hex'),a.sha256,id);}});
+test('a detail render clears both previous-type sibling media and gallery',()=>{const removed=[];let galleryCleared=false;const doc={getElementById:id=>({id})};const dialog={querySelectorAll:selector=>{assert.equal(selector,'#projectDetailHeroVisual,.experiment-hero-v1838e,#experimentStory');return ['professional','experiment-hero','experiment-story'].map(kind=>({remove:()=>removed.push(kind)}));}};const clear=node=>{assert.equal(node.id,'galleryArt');galleryCleared=true;};const code=app.slice(app.indexOf('  function clearDetailMedia('),app.indexOf('  window.resolveProjectAsset='));vm.runInNewContext(code+';clearDetailMedia()',{dialog,doc,clear,closeEvidenceLightbox:()=>removed.push('lightbox'),evidenceLightboxImage:{removeAttribute:name=>assert.equal(name,'src')}});assert.equal(removed.length,4);assert.ok(galleryCleared);assert.match(app,/function renderDetail\(\)\{\s*if\(!currentDetail\)return;clearDetailMedia\(\);/);});
 
-const manifest = JSON.parse(fs.readFileSync("public/site/content/portfolio-asset-manifest.json", "utf8"));
-const content = JSON.parse(fs.readFileSync("public/site/content/portfolio-content.json", "utf8"));
-const app = fs.readFileSync("public/site/assets/js/app.js", "utf8");
-const items = manifest.items;
-const slots = [];
-function derive(value, projectId, location = []) {
-  if (Array.isArray(value)) return value.forEach((entry, index) => derive(entry, projectId, [...location, index]));
-  if (!value || typeof value !== "object") return;
-  for (const [key, child] of Object.entries(value)) {
-    const next = [...location, key];
-    if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") slots.push({ projectId, slotId: next.join("."), assetId: child });
-    else if (key !== "sourceArchives") derive(child, projectId, next);
-  }
-}
-for (const [projectId, project] of Object.entries(content.projects)) derive(project, projectId);
-const resolve = (assetId) => {
-  const record = items[assetId];
-  if (!record) throw new Error("unknown runtime asset");
-  if (record.assetStatus === "production" && record.implementationStatus === "real-active") return { src: record.publicPath, placeholder: false };
-  const fallback = items[record.placeholderFallbackAssetId];
-  if (record.assetStatus === "awaiting-user-asset" && fallback?.publicPath) return { src: fallback.publicPath, placeholder: true };
-  throw new Error("no real file or placeholder");
-};
+test('historical assets remain absent from the public runtime manifest',()=>{assert.equal(Object.values(manifest.items).filter(entry=>/historical|hidden-from-runtime/i.test([entry.assetStatus,entry.implementationStatus].join(' '))).length,0);});
+test('legacy auction assets retain canonical Taishin identity',()=>{assert.equal(Object.values(manifest.items).filter(entry=>entry.projectId==='online-auction-payment-platform').length,0);assert.ok(slots.some(slot=>slot.projectId==='taishin-p2p-marketplace-platform'));});
 
-test("real production asset wins over placeholder metadata", () => {
-  const fixture = { assetStatus: "production", implementationStatus: "real-active", publicPath: "/site/real.png", placeholderFallbackAssetId: "project-visual-placeholder-wide-v1" };
-  assert.equal(fixture.assetStatus === "production" ? fixture.publicPath : items[fixture.placeholderFallbackAssetId].publicPath, "/site/real.png");
-});
-
-test("missing real runtime assets resolve to shared placeholders", () => {
-  const slot = slots.find(slot=>items[slot.assetId]?.assetStatus==="awaiting-user-asset");
-  assert.equal(resolve(slot.assetId).placeholder, true);
-});
-
-test("historical assets are absent from the public runtime manifest", () => {
-  assert.equal(Object.values(items).filter((entry) => /historical|hidden-from-runtime/i.test(JSON.stringify(entry))).length, 0);
-});
-
-test("video placeholders are inert images, not playable media", () => {
-  const video = slots.map((slot) => items[slot.assetId]).find((entry) => entry.type === "video");
-  assert.equal(video.placeholderFallbackAssetId, "project-video-placeholder-wide-v1");
-  assert.match(app, /if\(resolved\)\{\s*const image=doc\.createElement\('img'\)/);
-});
-
-test("public missing assets without fallback fail resolution", () => {
-  assert.throws(() => resolve("not-registered"), /unknown runtime asset/);
-});
-
-test("legacy auction runtime ownership uses canonical Taishin identity", () => {
-  assert.equal(Object.values(items).filter((entry) => entry.projectId === "online-auction-payment-platform").length, 0);
-  assert.ok(slots.some((slot) => slot.projectId === "taishin-p2p-marketplace-platform"));
-});
-
-test("all 13 projects own unique visual slots with no broken src assignment", () => {
-  assert.equal(Object.keys(content.projects).length, 13);
-  assert.ok(slots.length > 0);
-  assert.equal(new Set(slots.map((slot) => `${slot.projectId}/${slot.slotId}`)).size, slots.length);
-  assert.doesNotMatch(app, /\.src\s*=\s*(?:''|null|undefined)/);
-});
-
-test("Chinese placeholder label has no English fallback", () => {
-  assert.match(app, /專案視覺素材待補/);
-});
-
-test("structural governance accepts legitimate canonical inventory growth", () => {
-  const derived = deriveRuntimeVisualSlots(content);
-  const result = validateRuntimeVisualAssets({
-    slots: derived,
-    assetManifest: manifest,
-    publicAssetExists: () => true,
-  });
-  assert.equal(result.slotCount, derived.length);
-  assert.equal(result.uniqueAssetCount, new Set(derived.map((slot) => slot.assetId)).size);
-});
-
-test("structural governance rejects unknown and malformed runtime references", () => {
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [{ projectId: "dbs", slotId: "decisionEvidenceMap.0", assetId: "missing-asset" }],
-      assetManifest: manifest,
-    }),
-    /unknown asset/
-  );
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [{ projectId: "dbs", slotId: "", assetId: "dbs-decision-01-eod-operating-model-01" }],
-      assetManifest: manifest,
-    }),
-    /projectId, slotId and assetId/
-  );
-});
-
-test("structural governance rejects unsafe fallbacks and public paths", () => {
-  const unsafeFallbackManifest = {
-    items: {
-      pending: { id: "pending", assetStatus: "awaiting-user-asset", publicBuild: true, placeholderFallbackAssetId: null },
-    },
-  };
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "pending" }],
-      assetManifest: unsafeFallbackManifest,
-    }),
-    /no approved fallback/
-  );
-
-  const outsidePathManifest = {
-    items: {
-      unsafe: { id: "unsafe", assetStatus: "production", publicBuild: true, publicPath: "https://private.example/asset.jpg" },
-    },
-  };
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "unsafe" }],
-      assetManifest: outsidePathManifest,
-    }),
-    /allowed \/site\/ public path/
-  );
-});
-
-test("structural governance rejects dangling files and duplicate active mappings", () => {
-  const dangling = {
-    items: {
-      asset: { id: "asset", assetStatus: "production", publicBuild: true, publicPath: "/site/missing.jpg" },
-    },
-  };
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [{ projectId: "dbs", slotId: "evidence.0", assetId: "asset" }],
-      assetManifest: dangling,
-      publicAssetExists: () => false,
-    }),
-    /file is missing/
-  );
-
-  const duplicated = {
-    items: {
-      first: { id: "first", assetStatus: "production", publicBuild: true, publicPath: "/site/shared.jpg" },
-      second: { id: "second", assetStatus: "production", publicBuild: true, publicPath: "/site/shared.jpg" },
-    },
-  };
-  assert.throws(
-    () => validateRuntimeVisualAssets({
-      slots: [
-        { projectId: "dbs", slotId: "evidence.0", assetId: "first" },
-        { projectId: "dbs", slotId: "evidence.1", assetId: "second" },
-      ],
-      assetManifest: duplicated,
-    }),
-    /Duplicate active semantic asset path/
-  );
-});
+test('closing the parent dialog closes the evidence lightbox',()=>{const close=app.slice(app.indexOf('  function closeDialog('),app.indexOf("  dialogClose?.addEventListener"));assert.match(close,/closeEvidenceLightbox\(\);/);const lightbox=app.slice(app.indexOf('  function closeEvidenceLightbox('),app.indexOf('  function openEvidenceLightbox('));assert.match(lightbox,/evidenceLightboxImage\.removeAttribute\('src'\)/);});
