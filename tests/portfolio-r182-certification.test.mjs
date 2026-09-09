@@ -12,7 +12,7 @@ const projectDetailCss=fs.readFileSync('public/site/assets/css/components/projec
 const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review')&&x.releaseEligibility!=='PROMOTED_PRIMARY');
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
-  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)|daily-hours-primary-preview/);
+  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)|daily-hours-(?:primary|visual-evidence)-preview/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
   assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');

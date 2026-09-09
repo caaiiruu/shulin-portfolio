@@ -41,7 +41,7 @@ function deriveSlots(value, projectId, location = []) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
     const next = [...location, key];
-    if (["assetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") {
+    if (["assetId","posterAssetId","publicAssetId","beforeAssetId","shippedAssetId"].includes(key) && typeof child === "string") {
       slots.push({ projectId, slotId: next.join("."), assetId: child });
     } else if (key === "assetIds" && (value.presentation === "editorial-pair" || location.includes("presentationSections")) && Array.isArray(child)) {
       child.forEach((assetId, index) => {

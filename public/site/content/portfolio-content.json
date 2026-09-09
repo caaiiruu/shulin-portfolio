@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-09-09-daily-hours-primary-preview",
+  "contentVersion": "2026-09-09-daily-hours-visual-evidence-preview",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -226,9 +226,17 @@
             "en": "Product video / product proof",
             "zh": "Product video / product proof"
           },
-          "assetStatus": "REQUIRES_HUMAN_SELECTION",
+          "assetStatus": "CANDIDATE_REVIEW",
           "assetRole": "Primary fast proof: product video",
           "targetDuration": "20–30 seconds",
+          "assetId": "daily-hours-overview-28s-preview-v1",
+          "posterAssetId": "daily-hours-overview-video-poster-preview-v1",
+          "alt": {
+            "en": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions.",
+            "zh": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions."
+          },
+          "autoplayOnView": true,
+          "loop": false,
           "sequence": [
             "Start Work",
             "Active project state",
@@ -299,28 +307,57 @@
               "sequence": "Raw hours / activity → project economics / project-health interpretation",
               "purpose": "Prove that time data becomes decision information.",
               "preferredFormat": "Static comparison or short product motion.",
-              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+              "assetStatus": "CANDIDATE_REVIEW",
+              "assetId": "daily-hours-decision-01-project-economics-preview-v1",
+              "alt": {
+                "en": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework.",
+                "zh": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework."
+              }
             },
             {
               "decision": "Decision 2",
               "sequence": "Multiple projects → one or more Attention states → reason / popup / ranked priority",
               "purpose": "Prove information prioritisation.",
               "preferredFormat": "5–8 second product video or interaction capture.",
-              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+              "assetStatus": "CANDIDATE_REVIEW",
+              "assetId": "daily-hours-decision-02-ranked-attention-preview-v1",
+              "posterAssetId": "daily-hours-decision-02-ranked-attention-poster-preview-v1",
+              "alt": {
+                "en": "Daily Hours ranks multiple projects by effective rate and rework so the work needing attention becomes visible.",
+                "zh": "Daily Hours ranks multiple projects by effective rate and rework so the work needing attention becomes visible."
+              },
+              "autoplayOnView": true,
+              "loop": true
             },
             {
               "decision": "Decision 3",
               "sequence": "Active / Forecast → Completed / Final",
               "purpose": "Prove lifecycle/state modeling.",
               "preferredFormat": "Short transition video.",
-              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+              "assetStatus": "CANDIDATE_REVIEW",
+              "assetId": "daily-hours-decision-03-lifecycle-states-preview-v1",
+              "posterAssetId": "daily-hours-decision-03-lifecycle-states-poster-preview-v1",
+              "alt": {
+                "en": "Daily Hours overview presents completed final outcomes beside active forecast signals in the same project-economic model.",
+                "zh": "Daily Hours overview presents completed final outcomes beside active forecast signals in the same project-economic model."
+              },
+              "autoplayOnView": true,
+              "loop": true
             },
             {
               "decision": "Decision 4",
               "sequence": "Start Work → Manual Entry / record → project context → Report",
               "purpose": "Prove connected data/model consistency.",
               "preferredFormat": "Short sequence video.",
-              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+              "assetStatus": "CANDIDATE_REVIEW",
+              "assetId": "daily-hours-decision-04-connected-model-preview-v1",
+              "posterAssetId": "daily-hours-decision-04-connected-model-poster-preview-v1",
+              "alt": {
+                "en": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record.",
+                "zh": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record."
+              },
+              "autoplayOnView": true,
+              "loop": true
             }
           ],
           "renderVariant": "evidence-slots"

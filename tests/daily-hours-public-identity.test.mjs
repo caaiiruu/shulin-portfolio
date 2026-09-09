@@ -15,7 +15,10 @@ test('Daily Hours is one canonical Primary Project with archived experiment prov
   assert.equal(project.company.en,'0→1 Independent Product');
   assert.equal(project.decisionNarrative.primaryDecisions.length,4);
   assert.equal(project.mediaAssetStatus,'REQUIRES_HUMAN_SELECTION');
-  assert.equal(project.publicContent.productVideo.assetStatus,'REQUIRES_HUMAN_SELECTION');
+  assert.equal(project.publicContent.productVideo.assetStatus,'CANDIDATE_REVIEW');
+  assert.equal(project.publicContent.productVideo.assetId,'daily-hours-overview-28s-preview-v1');
+  assert.deepEqual(project.publicContent.productInteractionEvidence.items.map(item=>item.assetStatus),Array(4).fill('CANDIDATE_REVIEW'));
+  assert.equal(new Set(project.publicContent.productInteractionEvidence.items.map(item=>item.assetId)).size,4);
   assert.equal(legacy.promotionStatus,'PROMOTED_TO_PRIMARY_PROJECT');
   assert.equal(legacy.promotedProjectId,'daily-hours');
   assert.equal(legacy.releaseEligibility,'PROMOTED_PRIMARY');
