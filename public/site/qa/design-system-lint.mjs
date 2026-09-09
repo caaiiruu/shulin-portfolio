@@ -22,6 +22,16 @@ const homepageEvidence = fs.readFileSync(path.join(root, "assets/css/components/
 const selectedEvidence = fs.readFileSync(path.join(root, "assets/css/components/selected-evidence.css"), "utf8");
 const homeRuntime = fs.readFileSync(path.join(root, "assets/js/home.js"), "utf8");
 const portfolioContent = JSON.parse(fs.readFileSync(path.join(root, "content/portfolio-content.json"), "utf8"));
+const designRegistry = JSON.parse(fs.readFileSync(path.join(root, "docs/design-system/registry.json"), "utf8"));
+const caseStudyExplorerDocs = fs.readFileSync(path.join(root, "docs/design-system/components/case-study-explorers.md"), "utf8");
+
+const dailyHoursV2 = portfolioContent.projects["daily-hours"];
+if (dailyHoursV2?.presentation?.composition !== "case-study-v2") errors.push("CaseStudyV2: Daily Hours must explicitly opt into the v2 composition");
+if (Object.entries(portfolioContent.projects).some(([id, project]) => id !== "daily-hours" && project.presentation?.composition === "case-study-v2")) errors.push("CaseStudyV2: the Phase 2 pilot must not change any non-Daily-Hours project");
+if (!designRegistry.governanceGraph?.componentContracts?.EvidenceExplorer || !designRegistry.components?.some(component => component.component === "EvidenceExplorer")) errors.push("EvidenceExplorer: registry component and governance contract are required");
+for (const marker of ["function renderCaseStudyV2", "function createDecisionExplorer", "function createEvidenceExplorer", "function createManagedEvidenceVideo"]) if (!app.includes(marker)) errors.push(`CaseStudyV2: missing runtime owner ${marker}`);
+for (const marker of ["Decision Explorer", "single-open accordion", "Primary Proof", "Evidence Explorer"]) if (!caseStudyExplorerDocs.includes(marker)) errors.push(`CaseStudyV2 docs: missing ${marker}`);
+if (!projectDetail.includes(".decision-explorer") || !projectDetail.includes(".evidence-explorer") || !projectDetail.includes("@media(max-width:430px)")) errors.push("CaseStudyV2: shared explorer and compact responsive CSS are required");
 
 if (!tokens.includes("--color-selection-surface") || !tokens.includes("--color-selection-text")) {
   errors.push("Foundation: text selection must use the canonical semantic selection tokens");

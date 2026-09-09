@@ -17,7 +17,7 @@ const recruiterFirstPrimaryIds=new Set(['voucher-center','game-center','dbs','bo
 const portfolioContent=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const portfolioManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
 const recruiterFirstRealLeadIds=new Set([...recruiterFirstPrimaryIds].filter(projectId=>{const project=portfolioContent.projects[projectId],assetId=project?.hero_visual_brief?.assetId||project?.heroVisualBrief?.assetId,asset=portfolioManifest.items[assetId];return asset?.assetStatus==='production'&&asset?.implementationStatus==='real-active'}));
-const routes = ["/site/", "/site/work", "/site/experiments", ...primaryIds.map(id=>`/site/work/${id}`)];
+const routes = ["/site/", "/site/work", "/site/experiments", "/work/daily-hours", ...primaryIds.map(id=>`/site/work/${id}`)];
 const failures = [];
 const report = { baseUrl, viewports: {} };
 const browser = await chromium.launch({ headless: true });
@@ -92,7 +92,18 @@ for (const viewport of viewports) {
     if(metrics.a11y.h1!==1||metrics.a11y.main!==1||metrics.a11y.headingSkip||metrics.a11y.unnamed||metrics.a11y.imagesWithoutAlt)failures.push(`${viewport.name} ${route} automated accessibility failed: ${JSON.stringify(metrics.a11y)}`);
     if(metrics.a11y.smallTargets)failures.push(`${viewport.name} ${route} deterministic touch targets below 24px: ${metrics.a11y.smallTargets}`);
     if(metrics.performance.score<80||metrics.performance.cls>.1||metrics.performance.jsBytes>2500000||metrics.performance.cssBytes>1000000||metrics.performance.belowFoldEager)failures.push(`${viewport.name} ${route} non-asset performance budget failed: ${JSON.stringify(metrics.performance)}`);
-    const projectId=route.match(/^\/site\/work\/([^/]+)$/)?.[1];
+    const projectId=route.match(/^\/(?:site\/)?work\/([^/]+)$/)?.[1];
+    if(projectId==='daily-hours'){
+      const pilot=await page.evaluate(()=>({
+        presentation:document.querySelector('#projectEvidence')?.dataset.presentationContract,
+        labels:[...document.querySelectorAll('.decision-explorer__tab')].map(node=>node.textContent.trim()),
+        selected:document.querySelectorAll('.decision-explorer__tab[aria-selected="true"]').length,
+        visibleStories:[...document.querySelectorAll('.decision-explorer__story')].filter(node=>!node.hidden&&node.getClientRects().length).length,
+        primaryProof:Boolean(document.querySelector('.decision-explorer__story:not([hidden]) .decision-explorer__primary-proof .evidence-frame')),
+        evidenceTrigger:Boolean(document.querySelector('.decision-explorer__story:not([hidden]) .evidence-explorer__trigger'))
+      }));
+      if(pilot.presentation!=='case-study-v2'||JSON.stringify(pilot.labels)!==JSON.stringify(['Project health','Attention','Lifecycle'])||pilot.selected!==1||pilot.visibleStories!==1||!pilot.primaryProof||!pilot.evidenceTrigger)failures.push(`${viewport.name} daily-hours Case Study v2 contract mismatch: ${JSON.stringify(pilot)}`);
+    }
     if(projectId&&primaryIds.includes(projectId)){
       const semantic=metrics.semanticSeparation;
       if(semantic.transformationCount!==1||JSON.stringify(semantic.labels)!==JSON.stringify(["BEFORE","SYSTEM CHANGE","AFTER"])||semantic.labels.includes("MY INTERVENTION"))failures.push(`${viewport.name} ${projectId} canonical Transformation semantics failed: ${JSON.stringify(semantic)}`);

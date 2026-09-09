@@ -145,82 +145,153 @@
         "primaryDecisions": [
           {
             "id": "daily-hours-decision-01",
+            "label": "Project health",
+            "question": "Is this project still worth the effort?",
             "title": {
-              "en": "From tracking hours to understanding project economics",
-              "zh": "From tracking hours to understanding project economics"
-            },
-            "whatIDecided": {
-              "en": "Treat time as an input to project decisions rather than the primary product outcome, connecting recorded work with project state, profitability, workload, and effort patterns.",
-              "zh": "Treat time as an input to project decisions rather than the primary product outcome, connecting recorded work with project state, profitability, workload, and effort patterns."
+              "en": "From tracked hours to project health.",
+              "zh": "From tracked hours to project health."
             },
             "whyThisChoice": {
               "en": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future.",
               "zh": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future."
-            }
+            },
+            "primaryProof": {
+              "assetId": "daily-hours-decision-01-project-economics-preview-v1",
+              "mediaType": "image/jpeg",
+              "alt": {
+                "en": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework.",
+                "zh": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework."
+              },
+              "caption": "Tracked work becomes a project-health view across effort, rate, margin, and rework.",
+              "proof": "The monitor connects time with project economics so health can be judged while work is still active.",
+              "mediaRole": "project-health",
+              "presentationIntent": "wide"
+            },
+            "supportingEvidence": [
+              {
+                "id": "daily-hours-working-product-overview",
+                "title": "Working product overview",
+                "assetId": "daily-hours-overview-28s-preview-v1",
+                "posterAssetId": "daily-hours-overview-video-poster-preview-v1",
+                "mediaType": "video/mp4",
+                "alt": {
+                  "en": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions.",
+                  "zh": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions."
+                },
+                "caption": "A short walkthrough of the working product from active work to project-economic decisions.",
+                "proof": "The live product carries everyday work data into monitoring, comparison, capacity, and final project review.",
+                "mediaRole": "working-product-overview",
+                "presentationIntent": "cinematic",
+                "autoplayOnView": true,
+                "loop": false
+              }
+            ]
           },
           {
             "id": "daily-hours-decision-02",
+            "label": "Attention",
+            "question": "What needs action first?",
             "title": {
-              "en": "From reporting everything to surfacing what needs attention",
-              "zh": "From reporting everything to surfacing what needs attention"
-            },
-            "whatIDecided": {
-              "en": "Prioritise comparative and ranked signals — including Attention states, Top 3 views, ranked bars, and selectable metrics — instead of presenting every project as equally important.",
-              "zh": "Prioritise comparative and ranked signals — including Attention states, Top 3 views, ranked bars, and selectable metrics — instead of presenting every project as equally important."
+              "en": "From reporting everything to showing what needs attention.",
+              "zh": "From reporting everything to showing what needs attention."
             },
             "whyThisChoice": {
               "en": "The useful question was not simply “what happened?” but “what deserves my attention first?”",
               "zh": "The useful question was not simply “what happened?” but “what deserves my attention first?”"
-            }
+            },
+            "primaryProof": {
+              "assetId": "daily-hours-decision-02-ranked-attention-preview-v1",
+              "posterAssetId": "daily-hours-decision-02-ranked-attention-poster-preview-v1",
+              "mediaType": "video/mp4",
+              "alt": {
+                "en": "Daily Hours ranks multiple projects by effective rate and rework so the work needing attention becomes visible.",
+                "zh": "Daily Hours ranks multiple projects by effective rate and rework so the work needing attention becomes visible."
+              },
+              "caption": "Ranked comparisons make projects needing attention visible first.",
+              "proof": "Attention states, Top 3 views, ranked bars, and selectable metrics turn reporting into prioritisation.",
+              "mediaRole": "attention-ranking",
+              "presentationIntent": "interactive",
+              "autoplayOnView": true,
+              "loop": true
+            },
+            "supportingEvidence": []
           },
           {
             "id": "daily-hours-decision-03",
+            "label": "Lifecycle",
+            "question": "Can I still change the outcome—or am I learning from it?",
             "title": {
-              "en": "From static totals to lifecycle-aware project states",
-              "zh": "From static totals to lifecycle-aware project states"
-            },
-            "whatIDecided": {
-              "en": "Separate active projects from completed projects so the same data can represent forecast signals while work is ongoing and final outcomes once the project ends.",
-              "zh": "Separate active projects from completed projects so the same data can represent forecast signals while work is ongoing and final outcomes once the project ends."
+              "en": "From active work to final judgment.",
+              "zh": "From active work to final judgment."
             },
             "whyThisChoice": {
               "en": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort.",
               "zh": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort."
             },
-            "optionalBlock": {
-              "type": "RISK MANAGED",
-              "content": {
-                "en": "Locking completed-project behavior reduces the risk of unintentionally treating final project records as still-active work.",
-                "zh": "Locking completed-project behavior reduces the risk of unintentionally treating final project records as still-active work."
+            "primaryProof": {
+              "assetId": "daily-hours-decision-03-lifecycle-states-preview-v1",
+              "posterAssetId": "daily-hours-decision-03-lifecycle-states-poster-preview-v1",
+              "mediaType": "video/mp4",
+              "alt": {
+                "en": "Daily Hours overview presents completed final outcomes beside active forecast signals in the same project-economic model.",
+                "zh": "Daily Hours overview presents completed final outcomes beside active forecast signals in the same project-economic model."
+              },
+              "caption": "Active projects retain forecast signals; completed projects preserve final outcomes.",
+              "proof": "Lifecycle-aware states distinguish intervention while work is active from retrospective judgment after completion.",
+              "mediaRole": "lifecycle-state",
+              "presentationIntent": "cinematic",
+              "autoplayOnView": true,
+              "loop": true
+            },
+            "supportingEvidence": [
+              {
+                "id": "daily-hours-connected-project-model",
+                "title": "Connected project model",
+                "assetId": "daily-hours-decision-04-connected-model-preview-v1",
+                "posterAssetId": "daily-hours-decision-04-connected-model-poster-preview-v1",
+                "mediaType": "video/mp4",
+                "alt": {
+                  "en": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record.",
+                  "zh": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record."
+                },
+                "caption": "Start Work → recorded work → same project context → reporting.",
+                "proof": "One project and work classification model preserves Active and Completed continuity from Start Work through recorded work and reporting.",
+                "mediaRole": "connected-project-model",
+                "presentationIntent": "interactive",
+                "autoplayOnView": true,
+                "loop": true
               }
-            }
-          },
-          {
-            "id": "daily-hours-decision-04",
-            "title": {
-              "en": "From separate work records to one connected project model",
-              "zh": "From separate work records to one connected project model"
-            },
-            "whatIDecided": {
-              "en": "Use a shared project and work classification model across active work, manual records, reminders, calendar context, and reporting.",
-              "zh": "Use a shared project and work classification model across active work, manual records, reminders, calendar context, and reporting."
-            },
-            "whyThisChoice": {
-              "en": "If activity was recorded differently across different parts of the product, downstream project comparisons and economic signals would become unreliable.",
-              "zh": "If activity was recorded differently across different parts of the product, downstream project comparisons and economic signals would become unreliable."
-            },
-            "optionalBlock": {
-              "type": "WHAT THIS REQUIRED",
-              "content": {
-                "en": "The product needed consistent project, work-type, status, and missing-value rules before reports could be trusted as decision support.",
-                "zh": "The product needed consistent project, work-type, status, and missing-value rules before reports could be trusted as decision support."
-              }
-            }
+            ]
           }
         ],
         "contentStatus": "approved-daily-hours-primary-draft"
       },
       "publicContent": {
+        "firstQuestion": {
+          "title": {
+            "en": "The first question",
+            "zh": "The first question"
+          },
+          "lines": [
+            "I knew how many hours I worked.",
+            "I still didn’t know if the work was worth it."
+          ],
+          "facts": [
+            {
+              "label": "Hours",
+              "value": "≠ health"
+            },
+            {
+              "label": "Numbers",
+              "value": "were disconnected"
+            },
+            {
+              "label": "Capacity",
+              "value": "stayed invisible"
+            }
+          ],
+          "renderVariant": "story-question"
+        },
         "productVideo": {
           "title": {
             "en": "Product video / product proof",
@@ -264,17 +335,15 @@
             "zh": "Product reframing"
           },
           "statement": {
-            "en": "Time is an input. The product is the decision.",
-            "zh": "Time is an input. The product is the decision."
+            "en": "Time is an input.\nThe decision is the product.",
+            "zh": "Time is an input.\nThe decision is the product."
           },
           "flow": [
-            "Work activity",
-            "project context",
-            "effort/time data",
-            "project state",
-            "economic + workload signals",
-            "attention / reports",
-            "decision"
+            "Work",
+            "Project",
+            "Economics",
+            "Attention",
+            "Decision"
           ],
           "renderVariant": "decision-flow"
         },
@@ -369,19 +438,40 @@
           },
           "items": [
             {
-              "observed": "Work sometimes needed to be recorded after the session had already happened.",
-              "changed": "Added Manual Entry while preserving the same project / work classification model."
+              "observed": "Couldn’t always record work live.",
+              "changed": "Added Manual Entry without breaking the shared project model."
             },
             {
-              "observed": "Completed projects should no longer behave like active work.",
-              "changed": "Introduced completed-project guards and distinct completed-state behavior."
+              "observed": "Completed work still behaved like active work.",
+              "changed": "Added completed-state logic and guards."
             },
             {
-              "observed": "Reports became harder to scan when more dimensions needed comparison.",
-              "changed": "Introduced stronger ranking, Top 3 visibility, and selectable primary / secondary metrics to improve decision priority."
+              "observed": "More reporting created more noise.",
+              "changed": "Added ranking, Top 3, and selectable primary / secondary metrics."
             }
           ],
           "renderVariant": "observed-changed"
+        },
+        "outcomes": {
+          "title": {
+            "en": "Outcomes",
+            "zh": "Outcomes"
+          },
+          "items": [
+            {
+              "title": "Working product",
+              "body": "A live product used in my own freelance practice."
+            },
+            {
+              "title": "~2 days",
+              "body": "The first usable version moved from question to working software in roughly two days."
+            },
+            {
+              "title": "Continuous iteration",
+              "body": "Real use continues to reshape the product and the decisions it supports."
+            }
+          ],
+          "renderVariant": "qualitative-outcomes"
         },
         "shorteningTheLearningLoop": {
           "title": {
@@ -422,16 +512,15 @@
         },
         "workingProductCta": {
           "title": {
-            "en": "Explore the working product",
-            "zh": "Explore the working product"
+            "en": "Try the working product",
+            "zh": "Try the working product"
           },
           "accessTitle": {
             "en": "Try the working product",
             "zh": "Try the working product"
           },
           "body": [
-            "Daily Hours is a live product I use in my own freelance practice and continue to iterate through real usage.",
-            "The working demo is available by request."
+            "Daily Hours is a live product I use in my own freelance practice."
           ],
           "cta": {
             "label": "Request demo access",
@@ -443,15 +532,11 @@
       "sectionOrder": [
         "hero",
         "overview",
-        "product-video",
-        "operating-problem",
+        "first-question",
         "product-reframing",
-        "product-model",
         "key-design-decisions",
-        "product-interaction-evidence",
         "real-usage-changed-product",
-        "shortening-the-learning-loop",
-        "what-i-would-test-next",
+        "outcomes",
         "working-product-cta",
         "related-work"
       ],
@@ -511,7 +596,8 @@
         "boundary": "This is a real-usage operating outcome; no revenue, productivity, or profitability uplift is claimed."
       },
       "presentation": {
-        "composition": "project-defined-case-study",
+        "composition": "case-study-v2",
+        "caseStudyVersion": 2,
         "projectDefinedOrderAllowed": true,
         "preserveTitlePrefix": true,
         "overviewLabels": {
@@ -23956,18 +24042,11 @@
       "projects": {
         "daily-hours": {
           "sections": {
-            "product-video": {
+            "first-question": {
               "sourcePaths": [
-                "publicContent.productVideo"
+                "publicContent.firstQuestion"
               ],
-              "presentationType": "shared-media-slot",
-              "renderRequired": true
-            },
-            "operating-problem": {
-              "sourcePaths": [
-                "publicContent.operatingProblem"
-              ],
-              "presentationType": "shared-editorial-copy",
+              "presentationType": "case-study-v2-first-question",
               "renderRequired": true
             },
             "product-reframing": {
@@ -23977,25 +24056,11 @@
               "presentationType": "shared-decision-flow",
               "renderRequired": true
             },
-            "product-model": {
-              "sourcePaths": [
-                "publicContent.productModel"
-              ],
-              "presentationType": "shared-decision-flow",
-              "renderRequired": true
-            },
             "key-design-decisions": {
               "sourcePaths": [
                 "decisionNarrative.primaryDecisions"
               ],
-              "presentationType": "shared-design-decisions",
-              "renderRequired": true
-            },
-            "product-interaction-evidence": {
-              "sourcePaths": [
-                "publicContent.productInteractionEvidence"
-              ],
-              "presentationType": "shared-evidence-slots",
+              "presentationType": "case-study-v2-decision-explorer",
               "renderRequired": true
             },
             "real-usage-changed-product": {
@@ -24005,18 +24070,11 @@
               "presentationType": "shared-observed-changed",
               "renderRequired": true
             },
-            "shortening-the-learning-loop": {
+            "outcomes": {
               "sourcePaths": [
-                "publicContent.shorteningTheLearningLoop"
+                "publicContent.outcomes"
               ],
-              "presentationType": "shared-learning-loop",
-              "renderRequired": true
-            },
-            "what-i-would-test-next": {
-              "sourcePaths": [
-                "publicContent.whatIWouldTestNext"
-              ],
-              "presentationType": "shared-hypotheses",
+              "presentationType": "shared-qualitative-outcomes",
               "renderRequired": true
             },
             "working-product-cta": {
@@ -24026,7 +24084,39 @@
               "presentationType": "shared-controlled-access",
               "renderRequired": true
             }
-          }
+          },
+          "supporting": [
+            {
+              "sourcePath": "publicContent.productVideo",
+              "parentSectionId": "key-design-decisions",
+              "presentationType": "evidence-source-record"
+            },
+            {
+              "sourcePath": "publicContent.operatingProblem",
+              "parentSectionId": "first-question",
+              "presentationType": "narrative-source-record"
+            },
+            {
+              "sourcePath": "publicContent.productModel",
+              "parentSectionId": "product-reframing",
+              "presentationType": "model-source-record"
+            },
+            {
+              "sourcePath": "publicContent.productInteractionEvidence",
+              "parentSectionId": "key-design-decisions",
+              "presentationType": "evidence-source-record"
+            },
+            {
+              "sourcePath": "publicContent.shorteningTheLearningLoop",
+              "parentSectionId": "outcomes",
+              "presentationType": "outcome-source-record"
+            },
+            {
+              "sourcePath": "publicContent.whatIWouldTestNext",
+              "parentSectionId": "outcomes",
+              "presentationType": "future-hypothesis-source-record"
+            }
+          ]
         },
         "voucher": {
           "sections": {

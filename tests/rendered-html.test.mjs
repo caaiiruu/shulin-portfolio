@@ -2332,3 +2332,21 @@ test("R183.8F P3.4B keeps outcomes, framed evidence and history-aware project-op
   assert.deepEqual(ssot.projects["taishin-p2p-marketplace-platform"].publicContent.decisionEvidence.structuredGroups.map(item=>item.presentation),['natural-ratio','framed','framed','framed']);
   assert.match(app,/const metricSegments=emphasis\?\.sourceSegments\?\.\[lang==='zh'\?'zh':'en'\]\|\|\[\]/);
 });
+
+test("Case Study v2 renders through shared owners without changing the canonical default",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const app=read("assets/js/app.js");
+  const css=read("assets/css/components/project-detail-overview.css");
+  const pilot=ssot.projects['daily-hours'];
+  assert.equal(pilot.presentation.composition,'case-study-v2');
+  assert.deepEqual(pilot.decisionNarrative.primaryDecisions.map(item=>item.label),['Project health','Attention','Lifecycle']);
+  assert.match(app,/else if\(isCaseStudyV2\)renderCaseStudyV2/);
+  assert.match(app,/figure\.dataset\.componentOwner='EvidenceFrame'/);
+  assert.match(app,/explorer\.dataset\.componentOwner='EvidenceExplorer'/);
+  assert.match(app,/video\.muted=true;video\.playsInline=true;video\.controls=true;video\.preload='metadata'/);
+  assert.match(app,/if\(value\.autoplayOnView===true&&!prefersReduced\.matches\)/);
+  assert.match(app,/else video\.pause\(\)/);
+  assert.match(css,/\.decision-explorer__tab\[aria-selected="true"\]::after/);
+  assert.match(css,/\.evidence-explorer__accordion-button\[aria-expanded="true"\]/);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.presentation?.composition==='case-study-v2').length,1);
+});

@@ -13,7 +13,10 @@ test('Daily Hours is one canonical Primary Project with archived experiment prov
   assert.equal(project.legacyExperimentId,internalId);
   assert.deepEqual(project.cardTitle,{en:'Daily Hours',zh:'Daily Hours'});
   assert.equal(project.company.en,'0→1 Independent Product');
-  assert.equal(project.decisionNarrative.primaryDecisions.length,4);
+  assert.equal(project.decisionNarrative.primaryDecisions.length,3);
+  assert.deepEqual(project.decisionNarrative.primaryDecisions.map(decision=>decision.label),['Project health','Attention','Lifecycle']);
+  assert.equal(project.decisionNarrative.primaryDecisions[2].supportingEvidence[0].assetId,'daily-hours-decision-04-connected-model-preview-v1');
+  assert.match(project.decisionNarrative.primaryDecisions[2].supportingEvidence[0].proof,/Active and Completed continuity/);
   assert.equal(project.mediaAssetStatus,'REQUIRES_HUMAN_SELECTION');
   assert.equal(project.publicContent.productVideo.assetStatus,'CANDIDATE_REVIEW');
   assert.equal(project.publicContent.productVideo.assetId,'daily-hours-overview-28s-preview-v1');
@@ -30,8 +33,23 @@ test('Daily Hours uses the canonical project route and controlled demo access',(
   assert.ok(content.workIndex.workFilters.find(filter=>filter.id==='zero').projectIds.includes('daily-hours'));
   assert.equal(project.publicContent.workingProductCta.cta.href.startsWith('mailto:'),true);
   assert.doesNotMatch(JSON.stringify(project),/https?:\/\/[^\s"]*daily-hours/i);
-  assert.match(runtime,/isProjectDefinedCase/);
-  assert.match(runtime,/renderProjectDefinedCaseStudy/);
+  assert.equal(project.presentation.composition,'case-study-v2');
+  assert.deepEqual(project.sectionOrder,['hero','overview','first-question','product-reframing','key-design-decisions','real-usage-changed-product','outcomes','working-product-cta','related-work']);
+  assert.match(runtime,/isCaseStudyV2/);
+  assert.match(runtime,/renderCaseStudyV2/);
+});
+
+test('Daily Hours v2 decisions and proof use the governed schema',()=>{
+  const decisions=content.projects['daily-hours'].decisionNarrative.primaryDecisions;
+  const requiredDecision=['id','label','question','title','whyThisChoice','primaryProof','supportingEvidence'];
+  const requiredProof=['assetId','mediaType','alt','caption','proof','mediaRole','presentationIntent'];
+  for(const decision of decisions){
+    for(const field of requiredDecision)assert.ok(field in decision,`${decision.id} missing ${field}`);
+    for(const field of requiredProof)assert.ok(field in decision.primaryProof,`${decision.id} primary proof missing ${field}`);
+    for(const proof of decision.supportingEvidence)for(const field of requiredProof)assert.ok(field in proof,`${proof.id} missing ${field}`);
+  }
+  assert.deepEqual(content.projects['daily-hours'].publicContent.firstQuestion.lines,['I knew how many hours I worked.','I still didn’t know if the work was worth it.']);
+  assert.deepEqual(content.projects['daily-hours'].publicContent.productReframing.flow,['Work','Project','Economics','Attention','Decision']);
 });
 
 test('no public experiment title retains the retired descriptive name',()=>{

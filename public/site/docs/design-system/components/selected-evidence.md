@@ -1,6 +1,6 @@
 # Component: SelectedEvidence
 
-Status: Live / Current Production
+Status: Retired from homepage
 
 HTML Source: `index.html`
 
@@ -10,16 +10,16 @@ Token Dependencies: evidence section gap, content gap, item gap, copy measure, t
 
 Variants: Featured, Supporting
 
-Usage Scope: Homepage Selected Evidence only
+Usage Scope: None. This retired homepage pattern is not an owner or dependency of Case Study Presentation System v2.
 
 Figma Source: Not mapped; code is the verified production source until a user-approved Figma node is supplied.
 
 Code Connect Status: Not connected
 
-Allowed Modifications: responsive composition, evidence visual replacement, token-governed density adjustments, accessibility improvements
+Allowed Modifications: retirement documentation and removal after dependency verification
 
 Forbidden Modifications: page-level overrides, raw colour or spacing values, duplicate CSS owner, equal-weight card grid, content changes outside the project SSOT
 
 Accessibility: whole-item button target, visible keyboard focus inherited from InteractionFoundation, readable text contrast, no motion dependency
 
-Responsive Contract: featured evidence changes from split layout to one column below tablet; supporting evidence becomes one-column editorial rows; metadata never becomes a narrow three-column grid.
+Responsive Contract: Not applicable while retired. Case-study progressive disclosure belongs to the separate EvidenceExplorer owner.

@@ -214,6 +214,10 @@
       "domainNavigation": {
         "surface": "Homepage domain navigation",
         "discoveryMarkers": ["updateDomainFloatingNav"]
+      },
+      "caseStudyV2Pilot": {
+        "surface": "Opt-in Case Study Presentation System v2 pilot",
+        "discoveryMarkers": ["renderCaseStudyV2"]
       }
     },
     "regressionProfiles": {
@@ -228,6 +232,10 @@
       "floatingNavigatorInteraction": {
         "viewports": [1419, 871, 430],
         "checks": ["Domain navigation", "Project Detail navigation", "smooth forward navigation", "smooth reverse navigation", "deep links", "reduced motion", "wheel interruption", "touch interruption", "active state"]
+      },
+      "caseStudyV2Interaction": {
+        "viewports": [1419, 871, 430],
+        "checks": ["Daily Hours only opt-in", "three decision labels", "keyboard decision selection", "primary proof visibility", "supporting evidence disclosure", "mobile single-open accordion", "managed video lifecycle", "visible focus", "no horizontal overflow"]
       }
     },
     "componentContracts": {
@@ -250,15 +258,15 @@
         "renderOwners": ["assets/js/app.js"],
         "tokenDependencies": ["panel-padding", "section-heading-content-gap", "project-detail-section-max", "project-detail-reading-max", "project-detail-narrative-max", "project-detail-mobile-inset", "project-detail-overview-padding", "radius-lg", "color-surface-subtle", "project-media-radius", "project-editorial-composite-aspect", "inline-metric-emphasis-surface", "transformation-flow-gap", "transformation-shell-padding", "transformation-node-padding", "transformation-contribution-gap"],
         "componentIntentTokens": ["project-detail-section-max", "project-detail-reading-max", "project-detail-narrative-max", "project-detail-mobile-inset", "project-detail-overview-padding", "project-media-radius", "project-editorial-composite-aspect", "inline-metric-emphasis-surface", "transformation-flow-gap", "transformation-shell-padding", "transformation-node-padding", "transformation-contribution-gap"],
-        "variants": ["Recruiter-first Primary", "Experiment detail", "Transformation map", "Inline metric emphasis"],
-        "variantConsumers": {"Recruiter-first Primary": ["primaryDetails"], "Experiment detail": ["experimentDetails"], "Transformation map": ["primaryDetails"], "Inline metric emphasis": ["primaryDetails"]},
-        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "variants": ["Recruiter-first Primary", "Experiment detail", "Transformation map", "Inline metric emphasis", "Case Study v2 pilot"],
+        "variantConsumers": {"Recruiter-first Primary": ["primaryDetails"], "Experiment detail": ["experimentDetails"], "Transformation map": ["primaryDetails"], "Inline metric emphasis": ["primaryDetails"], "Case Study v2 pilot": ["caseStudyV2Pilot"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails", "caseStudyV2Pilot"],
         "compositionOrder": ["Project context / title", "At a Glance + Info Grid", "Lead Project Visual when approved real media exists", "Complexity / remaining case content", "Transformation immediately before Contribution"],
         "requiredAdjacency": ["KeyInterventionMap", "ContributionBlock"],
         "mediaVariants": {"Lead Project Visual": {"aspectRatio": "16:9", "fit": "contain", "placeholderPolicy": "pending or placeholder media does not render in recruiter-facing Primary details", "consumerGroups": ["primaryDetails"]}},
         "discoveryMarkers": ["renderSystemCaseParent", "renderKeyInterventionMap", "renderExperiment", "projectDetailHeroVisual", "key-intervention-map", "semantic-inline-emphasis"],
-        "regressionProfiles": ["projectDetailStructure", "floatingNavigatorInteraction"],
-        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+        "regressionProfiles": ["projectDetailStructure", "floatingNavigatorInteraction", "caseStudyV2Interaction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs", "tests/case-study-v2-browser-qa.mjs"]
       },
       "InfoGrid": {
         "registryComponent": "ProjectDetailOverview",
@@ -305,19 +313,19 @@
         "semanticRole": "Governed evidence media frame and expansion primitive",
         "acceptedContentTypes": ["shipped-ui", "research-synthesis", "prototype", "workshop-artifact", "framework", "document"],
         "requiredData": ["authoritative public asset"],
-        "optionalData": ["caption", "paired asset"],
+        "optionalData": ["caption", "paired asset", "posterAssetId", "mediaRole", "presentationIntent", "autoplayOnView", "loop"],
         "allowedArchetypes": ["primary", "experiment"],
-        "variants": ["framed", "dominant", "paired", "document", "natural"],
-        "variantConsumers": {"framed": ["primaryDetails", "experimentDetails"], "dominant": ["primaryDetails", "experimentDetails"], "paired": ["primaryDetails", "experimentDetails"], "document": ["primaryDetails", "experimentDetails"], "natural": ["primaryDetails"]},
-        "consumerGroups": ["primaryDetails", "experimentDetails"],
+        "variants": ["framed", "dominant", "paired", "document", "natural", "wide", "interactive", "cinematic", "device"],
+        "variantConsumers": {"framed": ["primaryDetails", "experimentDetails"], "dominant": ["primaryDetails", "experimentDetails"], "paired": ["primaryDetails", "experimentDetails"], "document": ["primaryDetails", "experimentDetails"], "natural": ["primaryDetails"], "wide": ["caseStudyV2Pilot"], "interactive": ["caseStudyV2Pilot"], "cinematic": ["caseStudyV2Pilot"], "device": ["caseStudyV2Pilot"]},
+        "consumerGroups": ["primaryDetails", "experimentDetails", "caseStudyV2Pilot"],
         "discoveryMarkers": ["evidence-frame", "createEvidenceFrame"],
-        "regressionProfiles": ["projectDetailStructure"],
-        "regressionContracts": ["tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"],
+        "regressionProfiles": ["projectDetailStructure", "caseStudyV2Interaction"],
+        "regressionContracts": ["tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs", "tests/case-study-v2-browser-qa.mjs"],
         "tokenDependencies": ["project-media-radius", "color-surface-subtle", "dimension-68ch"],
         "componentIntentTokens": [],
         "usageScope": ["StructuredEvidence media", "FeaturedDecision media", "Experiment evidence"],
         "forbiddenUsage": ["Synthetic proof", "raw confidential detail", "arbitrary project-specific ratio", "blank media frame"],
-        "protectedBehavior": ["Object-fit contain", "Governed ratio variants", "Keyboard-operable expansion", "Legible caption", "Mobile stacking"],
+        "protectedBehavior": ["Object-fit contain", "Governed ratio variants", "Keyboard-operable image expansion", "Native video controls", "Visible poster before playback", "Autoplay only while in view", "Pause when offscreen", "Reduced-motion suppression", "Legible caption", "Mobile stacking"],
         "figmaMapping": null
       },
       "StructuredEvidence": {
@@ -350,13 +358,64 @@
         "renderOwners": ["assets/js/app.js"],
         "tokenDependencies": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
         "componentIntentTokens": ["decision-card-gap", "decision-card-padding-block", "decision-card-padding-block-mobile", "decision-field-gap"],
-        "variants": ["Canonical", "Featured"],
-        "variantConsumers": {"Canonical": ["primaryDetails"], "Featured": ["primaryDetails"]},
+        "variants": ["Canonical", "Featured", "Explorer"],
+        "variantConsumers": {"Canonical": ["primaryDetails"], "Featured": ["primaryDetails"], "Explorer": ["caseStudyV2Pilot"]},
         "optionalContentBlocks": ["CONSTRAINT MANAGED", "TRADE-OFF ACCEPTED", "WHAT THIS REQUIRED"],
-        "consumerGroups": ["primaryDetails"],
+        "consumerGroups": ["primaryDetails", "caseStudyV2Pilot"],
         "discoveryMarkers": ["decision-card-v46", "createFeaturedDecisionGroup"],
-        "regressionProfiles": ["projectDetailStructure"],
-        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs"]
+        "regressionProfiles": ["projectDetailStructure", "caseStudyV2Interaction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/rendered-html.test.mjs", "tests/portfolio-browser-qa.mjs", "tests/case-study-v2-browser-qa.mjs"]
+      },
+      "EvidenceExplorer": {
+        "registryComponent": "EvidenceExplorer",
+        "status": "Live / Current Production",
+        "renderOwners": ["assets/js/app.js#createEvidenceExplorer"],
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "semanticRole": "Progressive disclosure for supporting evidence linked to a selected decision",
+        "acceptedContentTypes": ["shipped-ui", "prototype", "framework", "document"],
+        "requiredData": ["id", "title", "assetId", "proof", "mediaRole", "presentationIntent"],
+        "optionalData": ["posterAssetId", "mediaType", "caption", "autoplayOnView", "loop"],
+        "allowedArchetypes": ["primary"],
+        "tokenDependencies": ["evidence-content-gap", "evidence-item-gap", "project-media-radius", "control-height", "color-focus", "motion-fast"],
+        "componentIntentTokens": [],
+        "variants": ["Indexed stage", "Single-open accordion"],
+        "variantConsumers": {"Indexed stage": ["caseStudyV2Pilot"], "Single-open accordion": ["caseStudyV2Pilot"]},
+        "consumerGroups": ["caseStudyV2Pilot"],
+        "discoveryMarkers": ["evidence-explorer", "createEvidenceExplorer"],
+        "regressionProfiles": ["caseStudyV2Interaction"],
+        "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/case-study-v2-browser-qa.mjs"],
+        "usageScope": ["Case Study v2 supporting evidence"],
+        "forbiddenUsage": ["Primary proof replacement", "Always-open evidence dump", "Multiple open mobile panels", "Project-specific implementation"],
+        "protectedBehavior": ["Collapsed until requested", "Index above stage at tablet", "Single-open mobile accordion", "Title then media then proof", "Keyboard-operable disclosure and selection"],
+        "figmaMapping": null
+      },
+      "ChangeSequence": {
+        "registryComponent": "ProjectDetailOverview",
+        "status": "Live / Current Production",
+        "renderOwners": ["assets/js/app.js#renderCaseStudyV2"],
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "tokenDependencies": ["case-section-title-content-gap", "case-outcome-item-gap"],
+        "componentIntentTokens": [],
+        "variants": ["Observed then changed"],
+        "variantConsumers": {"Observed then changed": ["caseStudyV2Pilot"]},
+        "consumerGroups": ["caseStudyV2Pilot"],
+        "discoveryMarkers": ["change-sequence"],
+        "regressionProfiles": ["caseStudyV2Interaction"],
+        "regressionContracts": ["tests/case-study-v2-browser-qa.mjs"]
+      },
+      "ProjectCTA": {
+        "registryComponent": "ProjectDetailOverview",
+        "status": "Live / Current Production",
+        "renderOwners": ["assets/js/app.js#renderCaseStudyV2"],
+        "cssOwner": "assets/css/components/project-detail-overview.css",
+        "tokenDependencies": ["control-height", "color-focus", "case-section-title-content-gap"],
+        "componentIntentTokens": [],
+        "variants": ["Working product"],
+        "variantConsumers": {"Working product": ["caseStudyV2Pilot"]},
+        "consumerGroups": ["caseStudyV2Pilot"],
+        "discoveryMarkers": ["project-cta-v2"],
+        "regressionProfiles": ["caseStudyV2Interaction"],
+        "regressionContracts": ["tests/case-study-v2-browser-qa.mjs"]
       },
       "OutcomeMetric": {
         "registryComponent": "ProjectDetailOverview",
@@ -401,6 +460,7 @@
     "goldenConsumers": {
       "viewports": [1419, 871, 430],
       "primaryProjectDetail": {"projectId": "payment", "covers": ["InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]},
+      "caseStudyV2Pilot": {"projectId": "daily-hours", "covers": ["ProjectDetailOverview", "Decision", "EvidenceFrame", "EvidenceExplorer", "ChangeSequence", "OutcomeStatement", "ProjectCTA"]},
       "experimentProjectDetail": {"projectId": "freelance-project-operations-tool", "covers": ["InfoGrid", "OutcomeMetric"]},
       "projectCards": [
         {"variant": "Primary", "surface": "Work"},
@@ -775,6 +835,36 @@
         "delegatedCoverOwner": "assets/css/components/domain-selector.css#related-project-card__visual-v45",
         "freeze": "After Step 6A only source, crop, object-position, safe area and justified mobile-specific source may change"
       }
+    },
+    {
+      "component": "EvidenceExplorer",
+      "status": "Live / Current Production",
+      "renderSource": "assets/js/app.js#createEvidenceExplorer",
+      "contentOwner": "content/portfolio-content.json",
+      "cssOwner": "assets/css/components/project-detail-overview.css",
+      "tokenDependencies": [
+        "evidence-content-gap",
+        "evidence-item-gap",
+        "project-media-radius",
+        "control-height",
+        "color-focus",
+        "motion-fast"
+      ],
+      "variants": [
+        "Indexed stage",
+        "Single-open accordion"
+      ],
+      "usageScope": [
+        "Opt-in Case Study Presentation System v2 supporting evidence"
+      ],
+      "interactionContract": [
+        "Supporting evidence remains collapsed until explicitly requested.",
+        "Desktop and tablet present an evidence index with one selected stage; mobile uses a single-open accordion that starts fully collapsed.",
+        "Every opened evidence item reads title, governed EvidenceFrame media, then proof.",
+        "Video evidence delegates controls, poster, in-view playback, offscreen pause and reduced-motion behavior to EvidenceFrame."
+      ],
+      "exclusiveOwner": false,
+      "figmaMapping": null
     },
     {
       "component": "DomainSelector",

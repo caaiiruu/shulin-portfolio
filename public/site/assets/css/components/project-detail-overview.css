@@ -1011,3 +1011,67 @@
 .structured-evidence-quote figcaption{order:initial}
 @media(max-width:600px){.voucher-r149-foundation__media--group,.structured-evidence-v223__validation-summary-metrics{grid-template-columns:1fr}.voucher-r149-foundation__media--group img{max-height:none}.structured-evidence-v223__validation-summary-metric{grid-template-columns:1fr}}
 .core-system-insight-section :is(.voucher-r149-heading,.voucher-r149-heading h2,.core-system-insight-section__statement){width:min(100%,var(--project-detail-narrative-max));max-width:var(--project-detail-narrative-max)}
+
+/* Case Study Presentation System v2: shared opt-in composition and explorers. */
+[data-presentation-contract="case-study-v2"]{display:grid;gap:var(--case-gap-section)}
+[data-presentation-contract="case-study-v2"]>[data-case-study-v2-generated]{width:min(100%,var(--project-detail-section-max));max-width:var(--project-detail-section-max);margin-inline:0}
+.case-study-v2-question{display:grid;gap:var(--space-3);max-width:var(--project-detail-narrative-max)}
+.case-study-v2-question__line{margin:0;font-size:var(--cmp-popup-value-headline-size);font-weight:var(--sys-weight-heavy);line-height:var(--leading-heading);text-wrap:balance}
+.case-study-v2-question__line+ .case-study-v2-question__line{color:var(--color-text-secondary)}
+.case-study-v2-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);margin:var(--space-7) 0 0;padding:0}
+.case-study-v2-facts__item{display:grid;gap:var(--space-2);min-width:0;padding-top:var(--space-4);border-top:var(--dimension-1px) solid var(--color-border)}
+.case-study-v2-facts dt{color:var(--color-text-secondary);font-size:var(--cmp-popup-label-size);font-weight:var(--sys-weight-bold)}
+.case-study-v2-facts dd{margin:0;line-height:var(--leading-body)}
+.project-defined-section--decision-flow .project-defined-section__statement{max-width:var(--project-detail-narrative-max);white-space:pre-line;font-size:var(--cmp-popup-value-headline-size);font-weight:var(--sys-weight-heavy);line-height:var(--leading-heading);text-wrap:balance}
+.case-study-v2-decision-section{display:grid;gap:var(--case-section-title-content-gap)}
+.decision-explorer{display:grid;grid-template-columns:minmax(var(--dimension-240px),.34fr) minmax(0,1fr);gap:var(--space-7);align-items:start}
+.decision-explorer__selector{display:grid;gap:var(--space-2);position:sticky;top:var(--section-anchor-offset)}
+.decision-explorer__tab,.evidence-explorer__index-item,.evidence-explorer__trigger,.evidence-explorer__accordion-button{box-sizing:border-box;min-height:var(--control-height);padding:var(--space-3) var(--space-4);border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface);color:var(--color-text-primary);font:inherit;font-weight:var(--sys-weight-bold);text-align:left;cursor:pointer;transition:border-color var(--motion-fast) var(--ease-standard),background var(--motion-fast) var(--ease-standard)}
+.decision-explorer__tab[aria-selected="true"],.evidence-explorer__index-item[aria-selected="true"]{border-color:var(--color-border-strong);background:var(--color-surface-subtle)}
+.decision-explorer__tab[aria-selected="true"]::after,.evidence-explorer__index-item[aria-selected="true"]::after{content:"✓";float:right;color:var(--color-text-primary)}
+.decision-explorer__tab:focus-visible,.evidence-explorer__index-item:focus-visible,.evidence-explorer__trigger:focus-visible,.evidence-explorer__accordion-button:focus-visible{outline:var(--dimension-2px) solid var(--color-focus);outline-offset:var(--dimension-2px)}
+.decision-explorer__panels,.decision-explorer__story{min-width:0}
+.decision-explorer__story{display:grid;gap:var(--decision-card-gap)}
+.decision-explorer__story[hidden],.evidence-explorer [hidden]{display:none}
+.decision-explorer__question{margin:0;color:var(--color-text-accent);font-weight:var(--sys-weight-bold)}
+.decision-explorer__title{max-width:var(--project-detail-narrative-max);margin:0;font-size:var(--cmp-popup-value-headline-size);line-height:var(--leading-heading);text-wrap:balance}
+.decision-explorer__rationale,.decision-explorer__proof,.evidence-explorer__proof{max-width:var(--project-detail-reading-max);margin:0;color:var(--color-text-secondary);line-height:var(--leading-body)}
+.decision-explorer__primary-proof{display:grid;gap:var(--decision-field-gap);padding-top:var(--space-3)}
+.decision-explorer__primary-proof>h4{margin:0;color:var(--color-text-secondary);font-size:var(--cmp-popup-label-size);letter-spacing:var(--sys-tracking-label);text-transform:uppercase}
+.evidence-frame__media--wide,.evidence-frame__media--interactive,.evidence-frame__media--cinematic{aspect-ratio:16/9}
+.evidence-frame__media--device{aspect-ratio:auto;max-width:var(--dimension-420px);margin-inline:auto}
+.evidence-frame__media:is(.evidence-frame__media--wide,.evidence-frame__media--interactive,.evidence-frame__media--cinematic,.evidence-frame__media--device){overflow:hidden;border-radius:var(--project-media-radius);background:var(--color-surface-subtle)}
+.evidence-frame__media:is(.evidence-frame__media--wide,.evidence-frame__media--interactive,.evidence-frame__media--cinematic,.evidence-frame__media--device) .portfolio-media{display:block;width:100%;height:100%;object-fit:contain}
+.evidence-frame__video{background:var(--color-surface-dark)}
+.evidence-explorer{display:grid;gap:var(--space-4);padding-top:var(--space-5);border-top:var(--dimension-1px) solid var(--color-border)}
+.evidence-explorer__trigger{justify-self:start}
+.evidence-explorer__trigger::after{content:" +"}
+.evidence-explorer__trigger[aria-expanded="true"]::after{content:" −"}
+.evidence-explorer__body{padding-top:var(--space-3)}
+.evidence-explorer__indexed{display:grid;grid-template-columns:minmax(var(--dimension-240px),.3fr) minmax(0,1fr);gap:var(--evidence-content-gap);align-items:start}
+.evidence-explorer__index{display:grid;gap:var(--space-2)}
+.evidence-explorer__stage,.evidence-explorer__panel{min-width:0}
+.evidence-explorer__panel{display:grid;gap:var(--evidence-item-gap)}
+.evidence-explorer__title{margin:0;font-size:var(--cmp-popup-card-title-size)}
+.evidence-explorer__accordion{display:grid;gap:var(--space-3)}
+.evidence-explorer__accordion-heading{margin:0}
+.evidence-explorer__accordion-button{width:100%}
+.evidence-explorer__accordion-button[aria-expanded="true"]{border-color:var(--color-border-strong);background:var(--color-surface-subtle)}
+.evidence-explorer__accordion-panel{display:grid;gap:var(--space-4);padding:var(--space-4) 0 var(--space-5)}
+.case-study-v2-outcomes__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.project-defined-section--observed-changed{display:grid}.project-defined-section--observed-changed .observed-changed-grid{display:grid;gap:var(--case-outcome-item-gap)}
+.project-defined-section--controlled-access{display:grid}.project-defined-section--controlled-access .controlled-access-panel{max-width:var(--project-detail-reading-max)}
+
+@media(max-width:871px){
+  .case-study-v2-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .decision-explorer,.evidence-explorer__indexed{grid-template-columns:1fr}
+  .decision-explorer__selector{position:static;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .evidence-explorer__index{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){
+  .case-study-v2-facts,.case-study-v2-outcomes__grid{grid-template-columns:1fr}
+  .decision-explorer__selector{gap:var(--space-2)}
+  .decision-explorer__tab{padding-inline:var(--space-2);text-align:center}
+  .decision-explorer__tab[aria-selected="true"]::after{float:none;margin-inline-start:var(--space-1)}
+}
+@media(prefers-reduced-motion:reduce){.decision-explorer__tab,.evidence-explorer__index-item,.evidence-explorer__trigger,.evidence-explorer__accordion-button{transition:none}}

@@ -144,6 +144,18 @@ if (projectIds.length !== 14 || new Set(projectIds).size !== 14) {
 if (projectIds.some((id, index) => id !== expectedProjectIds[index])) {
   throw new Error("The active Content SSOT project roster or order does not match the approved r146 contract");
 }
+const caseStudyV2Projects=Object.entries(content.projects||{}).filter(([,project])=>project.presentation?.composition==="case-study-v2");
+if(caseStudyV2Projects.length!==1||caseStudyV2Projects[0][0]!=="daily-hours")throw new Error("Case Study Presentation System v2 must remain an explicit Daily Hours-only pilot");
+const approvedPresentationIntents=new Set(["wide","interactive","cinematic","device"]);
+const dailyHoursDecisions=caseStudyV2Projects[0][1].decisionNarrative?.primaryDecisions||[];
+if(dailyHoursDecisions.length!==3||dailyHoursDecisions.map(decision=>decision.label).join("|")!=="Project health|Attention|Lifecycle")throw new Error("Daily Hours v2 must expose exactly the three approved decision labels");
+for(const decision of dailyHoursDecisions){
+  for(const field of ["id","label","question","title","whyThisChoice","primaryProof","supportingEvidence"])if(!(field in decision))throw new Error(`Daily Hours decision ${decision.id||"unknown"} is missing ${field}`);
+  for(const proof of [decision.primaryProof,...(decision.supportingEvidence||[])]){
+    for(const field of ["assetId","mediaType","alt","caption","proof","mediaRole","presentationIntent"])if(!(field in proof))throw new Error(`Daily Hours proof ${proof.assetId||"unknown"} is missing ${field}`);
+    if(!approvedPresentationIntents.has(proof.presentationIntent))throw new Error(`Daily Hours proof ${proof.assetId} has an unapproved presentationIntent`);
+  }
+}
 for (const [projectId, project] of Object.entries(content.projects)) {
   const type = project.infoGrid?.type?.value;
   const problemTypes = project.problemTypes;

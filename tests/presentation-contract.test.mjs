@@ -12,6 +12,21 @@ const presentation=ssot.implementationContracts.portfolioPresentation;
 const primary=presentation.archetypes.primary;
 const experiment=presentation.archetypes.experiment;
 
+test('Case Study v2 remains an explicit Daily Hours-only extension',()=>{
+  const pilot=ssot.projects['daily-hours'];
+  assert.equal(pilot.presentation.composition,'case-study-v2');
+  assert.equal(pilot.presentation.caseStudyVersion,2);
+  assert.deepEqual(Object.entries(ssot.projects).filter(([,project])=>project.presentation?.composition==='case-study-v2').map(([id])=>id),['daily-hours']);
+  assert.deepEqual(pilot.decisionNarrative.primaryDecisions.map(decision=>decision.label),['Project health','Attention','Lifecycle']);
+  assert.ok(registry.governanceGraph.componentContracts.EvidenceExplorer);
+  assert.ok(registry.governanceGraph.componentContracts.Decision.variants.includes('Explorer'));
+  assert.deepEqual(registry.governanceGraph.goldenConsumers.caseStudyV2Pilot.covers,['ProjectDetailOverview','Decision','EvidenceFrame','EvidenceExplorer','ChangeSequence','OutcomeStatement','ProjectCTA']);
+  assert.match(app,/function renderCaseStudyV2\(project\)/);
+  assert.match(app,/function createEvidenceExplorer\(items,decisionId\)/);
+  assert.match(css,/@media\(max-width:871px\)\{[\s\S]*\.decision-explorer,.evidence-explorer__indexed\{grid-template-columns:1fr\}/);
+  assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.case-study-v2-facts,.case-study-v2-outcomes__grid\{grid-template-columns:1fr\}/);
+});
+
 test('owns public IA through two explicit archetype contracts',()=>{
   assert.deepEqual(presentation.requiredAdjacencies,[{predecessor:'transformation',predecessorComponent:'KeyInterventionMap',successor:'contribution',successorComponent:'ContributionBlock',scope:'canonical-projects',required:true}]);
   assert.deepEqual(primary.canonicalOrder,['hero','overview','complexity','contribution','core-insight','decisions','evidence','outcomes','ownership','related-work']);

@@ -263,11 +263,17 @@
     const src=version?`${publicPath}?v=${version}`:publicPath;
     return {assetId,projectId:record.projectId,src,status:'production',isPlaceholder:false,isVideo:/video/i.test(record.type||''),alt:[record.alt||'',record.alt_zh||''],width:Number(record.width)||null,height:Number(record.height)||null,aspectRatio:record.aspectRatio||null,projectCardFocalPosition:record.projectCardFocalPosition||null};
   }
+  const managedEvidenceObservers=new Set();
   function clearDetailMedia(){
+    if(typeof managedEvidenceObservers!=='undefined'){
+      managedEvidenceObservers.forEach(observer=>observer.disconnect());
+      managedEvidenceObservers.clear();
+    }
     closeEvidenceLightbox();
     evidenceLightboxImage.removeAttribute('src');
     // These nodes live outside the per-type containers in the reused dialog.
     dialog.querySelectorAll('#projectDetailHeroVisual,.experiment-hero-v1838e,#experimentStory').forEach(node=>node.remove());
+    if(dialog?.matches?.('dialog'))dialog.querySelectorAll('video').forEach(video=>video.pause());
     clear(doc.getElementById('galleryArt'));
   }
   window.resolveProjectAsset=resolveProjectAsset;
@@ -2594,6 +2600,22 @@
     grid.appendChild(next);
     section.appendChild(grid);return section;
   }
+  function createManagedEvidenceVideo(resolved,value={},projectId=currentDetail?.parentKey||currentDetail?.key){
+    const video=doc.createElement('video');
+    video.muted=true;video.playsInline=true;video.controls=true;video.preload='metadata';video.loop=value.loop===true;
+    video.setAttribute('aria-label',localize(value.alt)||localize(resolved.alt)||'Product evidence video');
+    if(resolved.width&&resolved.height){video.width=resolved.width;video.height=resolved.height}
+    const poster=value.posterAssetId?resolveProjectAsset(value.posterAssetId,projectId):null;
+    if(poster)video.poster=poster.src;
+    const source=doc.createElement('source');source.src=resolved.src;source.type=value.mediaType||'video/mp4';video.appendChild(source);
+    if(value.autoplayOnView===true&&!prefersReduced.matches){
+      const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+        if(entry.isIntersecting){if(video.ended)video.currentTime=0;video.play().catch(()=>{})}else video.pause();
+      }),{threshold:.35});
+      managedEvidenceObservers.add(observer);observer.observe(video);
+    }
+    return video;
+  }
   function appendProjectDefinedMedia(host,value){
     const projectId=currentDetail?.parentKey||currentDetail?.key;
     const resolved=resolveProjectAsset(value?.assetId,projectId);
@@ -2607,30 +2629,28 @@
       if(resolved.width&&resolved.height){image.width=resolved.width;image.height=resolved.height}
       host.appendChild(image);return true;
     }
-    const video=doc.createElement('video');
-    video.className='project-evidence-media project-evidence-media--video';video.muted=true;video.playsInline=true;video.controls=true;video.preload='metadata';video.loop=value.loop===true;
-    video.setAttribute('aria-label',localize(value.alt)||localize(resolved.alt));
-    if(resolved.width&&resolved.height){video.width=resolved.width;video.height=resolved.height}
-    const poster=value.posterAssetId?resolveProjectAsset(value.posterAssetId,projectId):null;
-    if(poster)video.poster=poster.src;
-    const source=doc.createElement('source');source.src=resolved.src;source.type='video/mp4';video.appendChild(source);
+    const video=createManagedEvidenceVideo(resolved,value,projectId);
+    video.classList.add('project-evidence-media','project-evidence-media--video');
     host.appendChild(video);
-    if(value.autoplayOnView===true&&!prefersReduced.matches){
-      const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
-        if(entry.isIntersecting){if(video.ended)video.currentTime=0;video.play().catch(()=>{})}else video.pause();
-      }),{threshold:.35});
-      observer.observe(video);
-    }
     return true;
   }
   function renderProjectDefinedSection(sectionId,value){
     if(!value||typeof value!=='object')return null;
-    const section=element('section',`project-section-v81 project-defined-section project-defined-section--${value.renderVariant||'default'}`);
-    section.dataset.projectSection=sectionId;
-    section.dataset.componentOwner='ProjectDefinedEvidenceSection';
-    section.appendChild(element('h3','',localize(value.title)||localize(SECTION_LABELS[sectionId])));
     const variant=value.renderVariant;
-    if(variant==='media-slot'){
+    const section=element('section',`project-section-v81 project-defined-section project-defined-section--${value.renderVariant||'default'}`);
+    if(variant==='observed-changed')section.classList.add('change-sequence');
+    if(variant==='controlled-access')section.classList.add('project-cta-v2');
+    section.dataset.projectSection=sectionId;
+    section.dataset.componentOwner=variantOwner(value.renderVariant);
+    section.appendChild(element('h3','',localize(value.title)||localize(SECTION_LABELS[sectionId])));
+    if(variant==='story-question'){
+      const lines=element('div','case-study-v2-question');
+      list(value.lines).forEach(copy=>lines.appendChild(element('p','case-study-v2-question__line',localize(copy))));
+      section.appendChild(lines);
+      const facts=element('dl','case-study-v2-facts');
+      list(value.facts).forEach(item=>{const row=element('div','case-study-v2-facts__item');row.append(element('dt','',localize(item.label)),element('dd','',localize(item.value)));facts.appendChild(row)});
+      section.appendChild(facts);
+    }else if(variant==='media-slot'){
       const slot=element('div','project-media-slot');
       slot.dataset.assetStatus=value.assetStatus||'REQUIRES_HUMAN_SELECTION';
       slot.dataset.assetRole=value.assetRole||'';
@@ -2679,7 +2699,7 @@
       appendTextList(section,value.hypotheses,'project-hypothesis-list');
     }else if(variant==='controlled-access'){
       const panel=element('div','controlled-access-panel');
-      panel.appendChild(element('h4','',localize(value.accessTitle)));
+      if(localize(value.accessTitle)!==localize(value.title))panel.appendChild(element('h4','',localize(value.accessTitle)));
       list(value.body).forEach(copy=>panel.appendChild(element('p','',localize(copy))));
       if(value.cta?.href&&String(value.cta.href).startsWith('mailto:')){
         const action=element('a','button button--dark controlled-access-panel__action',localize(value.cta.label));action.href=value.cta.href;action.dataset.pressable='';panel.appendChild(action);
@@ -2688,6 +2708,7 @@
     }
     return section.childElementCount>1?section:null;
   }
+  function variantOwner(variant){return variant==='observed-changed'?'ChangeSequence':variant==='controlled-access'?'ProjectCTA':'ProjectDetailOverview'}
   function renderRegisteredProjectSections(project){
     const host=doc.getElementById('projectSupplementalSections');
     if(!host)return;
@@ -2832,6 +2853,102 @@
     });
     const video=nodes.get('product-video');if(video){video.id='dailyHoursProductVideo';video.dataset.projectNavTarget='evidence'}
     if(decisions){decisions.id='dailyHoursDecisions';decisions.dataset.projectNavTarget='decisions'}
+    evidence.dataset.canonicalSectionOrder=list(project.section_order).join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');
+  }
+  function createProofFrame(proof){
+    return createEvidenceFrame([proof?.assetId],{
+      caption:proof?.caption,
+      presentation:proof?.presentationIntent,
+      alt:proof?.alt,
+      posterAssetId:proof?.posterAssetId,
+      mediaType:proof?.mediaType,
+      mediaRole:proof?.mediaRole,
+      autoplayOnView:proof?.autoplayOnView===true,
+      loop:proof?.loop===true
+    });
+  }
+  function createEvidenceExplorer(items,decisionId){
+    const evidenceItems=list(items).filter(item=>item?.assetId);
+    if(!evidenceItems.length)return null;
+    const explorer=element('section','evidence-explorer');explorer.dataset.componentOwner='EvidenceExplorer';
+    const triggerId=`${decisionId}-evidence-trigger`,bodyId=`${decisionId}-evidence-body`;
+    const trigger=element('button','evidence-explorer__trigger',lang==='zh'?'Supporting evidence':'Supporting evidence');
+    trigger.type='button';trigger.id=triggerId;trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',bodyId);
+    const body=element('div','evidence-explorer__body');body.id=bodyId;body.hidden=true;
+    const desktop=element('div','evidence-explorer__indexed');
+    const index=element('div','evidence-explorer__index');index.setAttribute('role','tablist');index.setAttribute('aria-label',lang==='zh'?'Supporting evidence':'Supporting evidence');
+    const stage=element('div','evidence-explorer__stage');
+    const tabs=[],panels=[];
+    evidenceItems.forEach((item,itemIndex)=>{
+      const tab=element('button','evidence-explorer__index-item',localize(item.title));tab.type='button';tab.id=`${decisionId}-evidence-tab-${itemIndex}`;tab.setAttribute('role','tab');tab.setAttribute('aria-selected',itemIndex===0?'true':'false');tab.setAttribute('aria-controls',`${decisionId}-evidence-panel-${itemIndex}`);tab.tabIndex=itemIndex===0?0:-1;
+      const panel=element('article','evidence-explorer__panel');panel.id=`${decisionId}-evidence-panel-${itemIndex}`;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',tab.id);panel.hidden=itemIndex!==0;
+      panel.append(element('h4','evidence-explorer__title',localize(item.title)),createProofFrame(item),element('p','evidence-explorer__proof',localize(item.proof)));
+      tabs.push(tab);panels.push(panel);index.append(tab);stage.append(panel);
+    });
+    const selectEvidence=itemIndex=>{tabs.forEach((tab,indexValue)=>{const selected=indexValue===itemIndex;tab.setAttribute('aria-selected',selected?'true':'false');tab.tabIndex=selected?0:-1;panels[indexValue].hidden=!selected})};
+    tabs.forEach((tab,itemIndex)=>{tab.addEventListener('click',()=>selectEvidence(itemIndex));tab.addEventListener('keydown',event=>{const keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];if(!keys.includes(event.key))return;event.preventDefault();let next=itemIndex;if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else next=(itemIndex+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1)+tabs.length)%tabs.length;tabs[next].focus()})});
+    desktop.append(index,stage);
+    const mobile=element('div','evidence-explorer__accordion');mobile.hidden=true;
+    const accordionButtons=[];
+    evidenceItems.forEach((item,itemIndex)=>{
+      const heading=element('h4','evidence-explorer__accordion-heading');
+      const button=element('button','evidence-explorer__accordion-button',localize(item.title));button.type='button';button.id=`${decisionId}-accordion-button-${itemIndex}`;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',`${decisionId}-accordion-panel-${itemIndex}`);
+      const panel=element('div','evidence-explorer__accordion-panel');panel.id=`${decisionId}-accordion-panel-${itemIndex}`;panel.setAttribute('role','region');panel.setAttribute('aria-labelledby',button.id);panel.hidden=true;panel.append(createProofFrame(item),element('p','evidence-explorer__proof',localize(item.proof)));
+      button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';accordionButtons.forEach(entry=>{entry.button.setAttribute('aria-expanded','false');entry.panel.hidden=true});if(!open){button.setAttribute('aria-expanded','true');panel.hidden=false}});
+      accordionButtons.push({button,panel});heading.append(button);mobile.append(heading,panel);
+    });
+    desktop.append(index,stage);body.append(desktop,mobile);explorer.append(trigger,body);
+    trigger.addEventListener('click',()=>{const open=trigger.getAttribute('aria-expanded')==='true';trigger.setAttribute('aria-expanded',open?'false':'true');body.hidden=open});
+    const mobileQuery=window.matchMedia('(max-width:430px)');
+    const syncMode=()=>{desktop.hidden=mobileQuery.matches;mobile.hidden=!mobileQuery.matches};syncMode();
+    mobileQuery.addEventListener?.('change',syncMode);
+    return explorer;
+  }
+  function createDecisionExplorer(project){
+    const decisions=list(project.decisionNarrative?.primaryDecisions);
+    const section=element('section','project-section-v81 case-study-v2-decision-section');section.id='dailyHoursDecisionExplorer';section.dataset.projectSection='key-design-decisions';section.dataset.componentOwner='Decision';section.dataset.projectNavTarget='decisions';
+    section.appendChild(element('h3','',lang==='zh'?'Decision Explorer':'Decision Explorer'));
+    const explorer=element('div','decision-explorer');
+    const selector=element('div','decision-explorer__selector');selector.setAttribute('role','tablist');selector.setAttribute('aria-label','Case study decisions');
+    const panels=element('div','decision-explorer__panels');
+    const tabs=[],stories=[];
+    decisions.forEach((decision,index)=>{
+      const tab=element('button','decision-explorer__tab',localize(decision.label));tab.type='button';tab.id=`${decision.id}-tab`;tab.setAttribute('role','tab');tab.setAttribute('aria-selected',index===0?'true':'false');tab.setAttribute('aria-controls',`${decision.id}-panel`);tab.tabIndex=index===0?0:-1;
+      const story=element('article','decision-explorer__story');story.id=`${decision.id}-panel`;story.setAttribute('role','tabpanel');story.setAttribute('aria-labelledby',tab.id);story.hidden=index!==0;
+      const question=element('p','decision-explorer__question',localize(decision.question));
+      const title=element('h3','decision-explorer__title',localize(decision.title));
+      const rationale=element('p','decision-explorer__rationale',localize(decision.whyThisChoice));
+      const primary=element('section','decision-explorer__primary-proof');primary.append(element('h4','',lang==='zh'?'Primary proof':'Primary proof'),createProofFrame(decision.primaryProof),element('p','decision-explorer__proof',localize(decision.primaryProof?.proof)));
+      story.append(question,title,rationale,primary);
+      const supporting=createEvidenceExplorer(decision.supportingEvidence,decision.id);if(supporting)story.append(supporting);
+      tabs.push(tab);stories.push(story);selector.append(tab);panels.append(story);
+    });
+    const selectDecision=index=>{tabs.forEach((tab,itemIndex)=>{const selected=itemIndex===index;tab.setAttribute('aria-selected',selected?'true':'false');tab.tabIndex=selected?0:-1;stories[itemIndex].hidden=!selected})};
+    tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>selectDecision(index));tab.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDecision(index);return}const keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];if(!keys.includes(event.key))return;event.preventDefault();let next=index;if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else next=(index+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1)+tabs.length)%tabs.length;tabs[next].focus()})});
+    explorer.append(selector,panels);section.append(explorer);return section;
+  }
+  function createCaseStudyV2Outcomes(value){
+    const section=element('section','project-section-v81 case-study-v2-outcomes');section.id='dailyHoursOutcomes';section.dataset.projectSection='outcomes';section.dataset.componentOwner='OutcomeStatement';section.dataset.projectNavTarget='outcomes';section.appendChild(element('h3','',localize(value?.title)||'Outcomes'));
+    const grid=element('div','outcome-metric-grid case-study-v2-outcomes__grid');
+    appendOutcomeCards(grid,list(value?.items).map(item=>({heading:item.title,copy:item.body})));section.append(grid);return section;
+  }
+  function renderCaseStudyV2(project){
+    const evidence=doc.getElementById('projectEvidence'),overview=doc.getElementById('projectOverviewSection'),related=doc.getElementById('detailRelated');
+    if(!evidence||!overview)return;
+    evidence.querySelectorAll('[data-case-study-v2-generated]').forEach(node=>node.remove());
+    evidence.hidden=false;evidence.dataset.presentationContract='case-study-v2';overview.dataset.presentationContract='case-study-v2';overview.dataset.projectNavTarget='overview';
+    const hiddenOwners=[doc.querySelector('.project-value-v207'),doc.getElementById('projectKeyIntervention'),doc.getElementById('projectComplexitySection'),doc.getElementById('projectDecisionsSection'),doc.getElementById('projectImpactSection'),doc.querySelector('.ownership-section-v45'),doc.querySelector('.delivery-grid-v45'),doc.getElementById('sharedGallery'),doc.getElementById('projectSupplementalSections')];
+    hiddenOwners.filter(Boolean).forEach(node=>node.hidden=true);
+    const scenes=[
+      renderProjectDefinedSection('first-question',project.publicContent?.firstQuestion),
+      renderProjectDefinedSection('product-reframing',project.publicContent?.productReframing),
+      createDecisionExplorer(project),
+      renderProjectDefinedSection('real-usage-changed-product',project.publicContent?.realUsageChangedProduct),
+      createCaseStudyV2Outcomes(project.publicContent?.outcomes),
+      renderProjectDefinedSection('working-product-cta',project.publicContent?.workingProductCta)
+    ].filter(Boolean);
+    const mapped=[];scenes.forEach(scene=>{scene.dataset.caseStudyV2Generated='true';scene.dataset.canonicalSectionId=scene.dataset.projectSection;scene.dataset.contentBlockIds=contentPresentationSources(project,scene.dataset.projectSection).join('|');caseStudySection(scene,scene.dataset.projectSection,scene.dataset.projectSection==='key-design-decisions'||scene.dataset.projectSection==='outcomes'?'soft':'canvas');caseStudyHeader(scene);evidence.append(scene);mapped.push(scene.dataset.projectSection)});
+    if(related){related.hidden=false;caseStudySection(related,'related-work','soft');evidence.append(related)}
     evidence.dataset.canonicalSectionOrder=list(project.section_order).join(' ');evidence.dataset.mappedCanonicalSectionOrder=mapped.join(' ');
   }
   function renderKeyInterventionMap(project){
@@ -3403,7 +3520,7 @@
     section.append(flow);
     return flow;
   }
-  function createEvidenceFrame(assetIds,{caption='',presentation='framed',translate=localize,className=''}={}){
+  function createEvidenceFrame(assetIds,{caption='',presentation='framed',translate=localize,className='',alt='',posterAssetId='',mediaType='',mediaRole='primary-evidence',autoplayOnView=false,loop=false}={}){
     const governedVariant={
       'default':'framed',
       'raw':'framed',
@@ -3414,22 +3531,34 @@
       'editorial-pair':'paired',
       'paired':'paired',
       'editorial-composite':'dominant',
-      'dominant':'dominant'
+      'dominant':'dominant',
+      'wide':'wide',
+      'interactive':'interactive',
+      'cinematic':'cinematic',
+      'device':'device'
     }[presentation]||'framed';
     const figure=element('figure',`evidence-frame evidence-frame--${governedVariant}${className?` ${className}`:''}`);
     figure.dataset.componentOwner='EvidenceFrame';
     figure.dataset.evidenceVariant=governedVariant;
-    const media=element('button',`evidence-frame__media evidence-frame__media--${governedVariant}`);
-    media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence';
-    list(assetIds).filter(Boolean).forEach(assetId=>{
-      const resolved=resolveProjectAsset(assetId,currentDetail.parentKey||currentDetail.key);if(!resolved)return;const image=doc.createElement('img');
-      image.className='portfolio-media';image.src=resolved.src;image.alt=translate(resolved.alt);image.loading='lazy';image.decoding='async';
+    figure.dataset.mediaRole=mediaRole;
+    const projectId=currentDetail.parentKey||currentDetail.key;
+    const resolvedAssets=list(assetIds).filter(Boolean).map(assetId=>resolveProjectAsset(assetId,projectId)).filter(Boolean);
+    figure.dataset.assetCount=String(resolvedAssets.length);
+    const hasVideo=resolvedAssets.some(asset=>asset.isVideo);
+    const media=element(hasVideo?'div':'button',`evidence-frame__media evidence-frame__media--${governedVariant}`);
+    if(!hasVideo){media.type='button';media.dataset.expandableEvidence='true';media.dataset.frameRole='primary-evidence'}
+    resolvedAssets.forEach((resolved,index)=>{
+      if(resolved.isVideo){
+        const video=createManagedEvidenceVideo(resolved,{alt:index===0?alt:'',posterAssetId,mediaType,autoplayOnView,loop},projectId);
+        video.className='portfolio-media evidence-frame__video';video.dataset.assetId=resolved.assetId;video.dataset.assetStatus='real-active';media.append(video);return;
+      }
+      const image=doc.createElement('img');
+      image.className='portfolio-media';image.src=resolved.src;image.alt=index===0&&translate(alt)?translate(alt):translate(resolved.alt);image.loading='lazy';image.decoding='async';
       image.dataset.assetId=resolved.assetId;image.dataset.assetStatus=resolved.isPlaceholder?'placeholder-active':'real-active';
       if(resolved.width&&resolved.height){image.width=resolved.width;image.height=resolved.height}
       media.append(image);
     });
-    const mediaLabel=[...media.querySelectorAll('img')].map(image=>image.alt).filter(Boolean).join(' · ');
-    media.setAttribute('aria-label',mediaLabel||((lang==='zh')?'放大證據':'Expand evidence'));
+    if(!hasVideo){const mediaLabel=[...media.querySelectorAll('img')].map(image=>image.alt).filter(Boolean).join(' · ');media.setAttribute('aria-label',mediaLabel||((lang==='zh')?'放大證據':'Expand evidence'))}
     figure.append(media);
     if(translate(caption))figure.append(element('figcaption','evidence-frame__caption',translate(caption)));
     return figure;
@@ -4108,7 +4237,8 @@
     if(currentDetail.type!=='project')doc.getElementById('projectKeyIntervention').hidden=true;
     const isApprovedVoucherProgramme=currentDetail.type==='project'&&currentDetail.key==='voucher'&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
     const isProjectDefinedCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.presentation?.composition==='project-defined-case-study';
-    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.archetype==='primary'&&!isApprovedVoucherProgramme&&!isProjectDefinedCase;
+    const isCaseStudyV2=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.presentation?.composition==='case-study-v2';
+    const isRecruiterSystemCase=currentDetail.type==='project'&&DATA.projects[currentDetail.key]?.archetype==='primary'&&!isApprovedVoucherProgramme&&!isProjectDefinedCase&&!isCaseStudyV2;
     const isProgramme=currentDetail.type==='project'&&!isRecruiterSystemCase&&DATA.projects[currentDetail.key]?.project_model==='programme-case-with-child-evidence';
     doc.getElementById('projectEvidence').hidden=!isProject||isInitiative||isStage||isProgramme||isRecruiterSystemCase;
     doc.getElementById('experimentEvidence').hidden=isProject;
@@ -4167,7 +4297,7 @@
       }
       programmeSurface().append(hero,surface,navigation);
     }else if(isInitiative)renderInitiative(currentDetail.parentKey,currentDetail.key);
-    else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key]);else if(isRecruiterSystemCase)renderSystemCaseParent(DATA.projects[currentDetail.key]);else if(isProjectDefinedCase)renderProjectDefinedCaseStudy(DATA.projects[currentDetail.key])}
+    else if(isProject){renderProject(currentDetail.key);if(isProgramme)renderProgrammeParent(currentDetail.key,DATA.projects[currentDetail.key]);else if(isRecruiterSystemCase)renderSystemCaseParent(DATA.projects[currentDetail.key]);else if(isProjectDefinedCase)renderProjectDefinedCaseStudy(DATA.projects[currentDetail.key]);else if(isCaseStudyV2)renderCaseStudyV2(DATA.projects[currentDetail.key])}
     else renderExperiment(currentDetail.key);
     if(isStage&&sharedRelated)sharedRelated.hidden=true;else if(isInitiative&&sharedRelated){sharedRelated.hidden=false;sharedProgrammeSurface.append(sharedRelated)}
     renderProjectSectionNav();

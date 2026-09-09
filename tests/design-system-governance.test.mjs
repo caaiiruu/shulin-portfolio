@@ -15,7 +15,7 @@ const app = fs.readFileSync("public/site/assets/js/app.js", "utf8");
 test("registry maps canonical components through variants to discoverable consumers and regressions", () => {
   const graph = registry.governanceGraph;
   assert.equal(graph.consumerDiscoveryOwner, "qa/design-system-impact.mjs");
-  for (const name of ["ProjectCard", "ProjectDetailOverview", "InfoGrid", "Decision", "OutcomeMetric", "FloatingNavigator"]) {
+  for (const name of ["ProjectCard", "ProjectDetailOverview", "InfoGrid", "Decision", "EvidenceExplorer", "OutcomeMetric", "FloatingNavigator"]) {
     const contract = graph.componentContracts[name];
     assert.ok(contract.cssOwner);
     assert.ok(contract.variants.length);
@@ -49,6 +49,8 @@ test("consumer, regression, and golden references resolve to registered contract
   }
   graph.goldenConsumers.projectCards.forEach(({variant}) => assert.ok(graph.componentContracts.ProjectCard.variants.includes(variant)));
   assert.deepEqual(graph.componentContracts.Decision.optionalContentBlocks, ["CONSTRAINT MANAGED", "TRADE-OFF ACCEPTED", "WHAT THIS REQUIRED"]);
+  assert.deepEqual(graph.regressionProfiles.caseStudyV2Interaction.viewports,[1419,871,430]);
+  assert.equal(graph.goldenConsumers.caseStudyV2Pilot.projectId,'daily-hours');
 });
 
 test("impact validation rejects broken graph references and duplicate intent ownership", () => {
