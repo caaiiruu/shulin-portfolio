@@ -38,6 +38,13 @@
         ]
       },
       {
+        "id": "daily-hours",
+        "score": 85,
+        "intents": [
+          "launch-zero-to-one-product"
+        ]
+      },
+      {
         "id": "capture-ideas",
         "score": 85,
         "intents": [
@@ -57,11 +64,6 @@
         "intents": [
           "launch-zero-to-one-product"
         ]
-      },
-      {
-        "id": "freelance-project-operations-tool",
-        "score": 75,
-        "intents": []
       }
     ],
     "payment": [
@@ -124,11 +126,6 @@
         "intents": [
           "reduce-operational-friction"
         ]
-      },
-      {
-        "id": "freelance-project-operations-tool",
-        "score": 75,
-        "intents": []
       }
     ],
     "exception handling": [

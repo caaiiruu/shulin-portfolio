@@ -12,7 +12,7 @@ const slots=ssot.implementationContracts.portfolioPresentation.semanticSlots;
 const hash=value=>crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
 
 test("R183.9D owns the canonical four-role semantic model",()=>{
-  assert.equal(ids.length,13);
+  assert.equal(ids.length,14);
   assert.deepEqual(slots.transformation.visibleLabels,{before:{en:"Before",zh:"原始狀態"},systemChange:{en:"System change",zh:"系統改變"},after:{en:"After",zh:"建立後"}});
   assert.equal(slots.transformation.semanticRole,"what-changed");
   assert.equal(slots.contribution.semanticRole,"what-i-personally-changed");

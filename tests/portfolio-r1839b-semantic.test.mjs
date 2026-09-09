@@ -12,8 +12,8 @@ const presentation=ssot.implementationContracts.portfolioPresentation;
 const contribution=presentation.canonicalContributionConsolidation;
 const hash=value=>crypto.createHash("sha256").update(typeof value==="string"?value:JSON.stringify(value)).digest("hex");
 
-test("R183.9B makes Transformation and Contribution canonical for all 13 projects",()=>{
-  assert.equal(ids.length,13);
+test("R183.9B keeps Transformation and Contribution canonical across 14 projects",()=>{
+  assert.equal(ids.length,14);
   assert.ok(presentation.archetypes.primary.requiredSlots.includes("contribution"));
   assert.equal(presentation.semanticSlots.transformation.visibleLabel,"Transformation");
   assert.deepEqual(presentation.semanticSlots.transformation.renderedFields,["before","intervention","after"]);

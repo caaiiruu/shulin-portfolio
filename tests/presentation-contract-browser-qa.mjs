@@ -10,7 +10,7 @@ const contracts=content.implementationContracts.portfolioPresentation;
 const primaryIds=Object.keys(content.projects);
 const experimentRecords={...(content.experiments||{}),...(content.sideProjects||{})};
 const experimentIds=Object.entries(experimentRecords)
-  .filter(([,record])=>!String(record.contentStatus||"").includes("standalone-card-review"))
+  .filter(([,record])=>!String(record.contentStatus||"").includes("standalone-card-review")&&record.releaseEligibility!=="PROMOTED_PRIMARY")
   .map(([id])=>id);
 const viewports=[
   {name:"1419",width:1419,height:900},
@@ -108,7 +108,7 @@ await browser.close();
 
 fs.mkdirSync(evidenceRoot,{recursive:true});
 fs.writeFileSync(path.join(evidenceRoot,"report.json"),JSON.stringify(report,null,2));
-assert.deepEqual(experimentIds.length,7,"Exactly seven public Experiment records must be contract-audited");
+assert.deepEqual(experimentIds.length,6,"Exactly six public Experiment records must be contract-audited");
 assert.deepEqual(failures,[],failures.join("\n"));
 console.log(`R183.3A browser contract QA passed: ${primaryIds.length} Primary + ${experimentIds.length} Experiment records at 1419/871/430.`);
 console.log(`Evidence: ${evidenceRoot}`);

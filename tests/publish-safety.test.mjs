@@ -52,7 +52,7 @@ test("four shared placeholders exist", () => assert.equal(Object.values(items).f
 test("public tree has no historical registry", () => assert.equal(fs.existsSync("public/site/content/historical-asset-registry.json"), false));
 test("canonical Taishin owner is public", () => assert.equal(slots.filter((slot) => slot.projectId === "online-auction-payment-platform").length, 0));
 test("R183.8F RELEASE-01E.1 Content hash is locked", () => assert.equal(createHash("sha256").update(contentBytes).digest("hex"), "f31bac1ae5adef7bbc78a5b6833e553f9f812a8df9477bbc621dc59c71d1b3a2"));
-test("canonical project roster remains 13", () => assert.equal(Object.keys(content.projects).length, 13));
+test("canonical project roster includes the promoted Daily Hours project", () => assert.equal(Object.keys(content.projects).length, 14));
 test("Chinese mode does not render English engineering status", () => assert.doesNotMatch(app, /localize\([^)]*placeholder-active/));
 test("HTML has no empty or undefined src", () => assert.doesNotMatch(html, /src=["'](?:|undefined|null)["']/));
 test("resolver has no dependency on historical metadata", () => assert.doesNotMatch(app.slice(app.indexOf("function resolveProjectAsset"), app.indexOf("window.resolveProjectAsset")), /historical-source|hidden-from-runtime/));

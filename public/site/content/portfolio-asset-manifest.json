@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
+  "contentVersion": "2026-09-09-daily-hours-primary-preview",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [

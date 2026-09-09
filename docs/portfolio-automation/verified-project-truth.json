@@ -93,9 +93,9 @@
       "status": "APPROVED"
     },
     {
-      "projectId": "freelance-project-operations-tool",
+      "projectId": "daily-hours",
       "status": "APPROVED",
-      "portfolioLayer": "EXPERIMENTS_AND_PRACTICE"
+      "portfolioLayer": "PRIMARY_PROJECT"
     },
     {
       "projectId": "weekly-design-session",
@@ -373,9 +373,9 @@
     },
     {
       "sourceId": "SRC-R181-FREELANCE-PROJECT-OPERATIONS-TOOL",
-      "projectId": "freelance-project-operations-tool",
+      "projectId": "daily-hours",
       "kind": "HUMAN_CORRECTION",
-      "location": "human:r181#freelance-project-operations-tool",
+      "location": "human:r181#daily-hours-legacy-evidence",
       "contentHash": "sha256:human-approved-r181-instruction",
       "authority": "LATEST_HUMAN_CORRECTION",
       "confidence": "HIGH",
@@ -1825,10 +1825,10 @@
     },
     {
       "factId": "FACT-R181-FREELANCE-PROJECT-OPERATIONS-TOOL-CONTENT-BOUNDARY",
-      "projectId": "freelance-project-operations-tool",
+      "projectId": "daily-hours",
       "field": "compactExperimentPackage",
       "value": {
-        "identity": "freelance-project-operations-tool",
+        "identity": "daily-hours",
         "title": "From scattered freelance records to a working project-operations system",
         "period": "In active use",
         "role": "Designer & Builder",
@@ -2484,7 +2484,7 @@
       ]
     },
     {
-      "projectId": "freelance-project-operations-tool",
+      "projectId": "daily-hours",
       "factIds": [
         "FACT-R181-FREELANCE-PROJECT-OPERATIONS-TOOL-CONTENT-BOUNDARY"
       ],
@@ -2492,9 +2492,9 @@
         "SRC-R181-FREELANCE-PROJECT-OPERATIONS-TOOL"
       ],
       "existingPublicClaims": [
-        "experiments.freelance-project-operations-tool.title",
-        "experiments.freelance-project-operations-tool.summary",
-        "experiments.freelance-project-operations-tool.question"
+        "projects.daily-hours.title",
+        "projects.daily-hours.atAGlance",
+        "projects.daily-hours.whyItMattered"
       ],
       "difference": "NORMALIZATION_REQUIRED",
       "chatOptimizationTargets": []
@@ -2935,7 +2935,7 @@
   "futureAssetRequirements": [
     {
       "requestId": "AR-R181-FREELANCE-OPERATIONS-SCREENSHOT",
-      "projectId": "freelance-project-operations-tool",
+      "projectId": "daily-hours",
       "status": "HUMAN_ASSET_REQUIRED",
       "requiredFor": "Replace governed abstract evidence with one truthful working-product screenshot",
       "mustNotImply": "AI is a runtime capability or the 18% gap is a productivity/profit/revenue outcome"

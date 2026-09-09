@@ -9,7 +9,7 @@ const app=read("assets/js/app.js");
 const presentation=ssot.implementationContracts.portfolioPresentation;
 
 test("R183.9E owns canonical Transformation to Contribution adjacency in the SSOT",()=>{
-  assert.equal(Object.keys(ssot.projects).length,13);
+  assert.equal(Object.keys(ssot.projects).length,14);
   assert.deepEqual(presentation.requiredAdjacencies,[{
     predecessor:"transformation",
     predecessorComponent:"KeyInterventionMap",

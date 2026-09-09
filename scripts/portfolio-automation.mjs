@@ -116,10 +116,10 @@ export function validateAutomation({ truth, ledger, content, manifest, workOrder
   }
   const canonicalProjectIds = Object.keys(content.projects || {});
   const canonicalExperimentIds = Object.entries({ ...(content.experiments || {}), ...(content.sideProjects || {}) })
-    .filter(([, item]) => !String(item.contentStatus || '').includes('standalone-card-review'))
+    .filter(([, item]) => !String(item.contentStatus || '').includes('standalone-card-review') && item.releaseEligibility !== 'PROMOTED_PRIMARY')
     .map(([id]) => id);
-  if (canonicalProjectIds.length !== 13 || canonicalProjectIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 13 canonical primary projects");
-  if (canonicalExperimentIds.length !== 7 || canonicalExperimentIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 7 canonical Experiments & Practice records");
+  if (canonicalProjectIds.length !== 14 || canonicalProjectIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 14 canonical primary projects");
+  if (canonicalExperimentIds.length !== 6 || canonicalExperimentIds.some((id) => !projectIds.has(id))) errors.push("Verified Project Truth must cover all 6 canonical Experiments & Practice records");
   for (const item of truth.lifecycleHistory || []) {
     if (!lifecycleTransitions.has(`${item.from}>${item.to}`)) errors.push(`${item.recordId}: invalid lifecycle transition ${item.from}>${item.to}`);
     if (item.to === "APPROVED" && item.actor !== "HUMAN") errors.push(`${item.recordId}: only Human can approve truth`);

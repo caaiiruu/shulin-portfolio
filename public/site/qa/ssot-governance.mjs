@@ -137,6 +137,7 @@ const removeApprovedZhCardTerms = (value) => approvedZhCardTerms.reduce(
   String(value || ""),
 );
 for (const [projectId, project] of Object.entries(content.projects || {})) {
+  const humanZhFallback = project.localizationStatus === "EN_APPROVED_ZH_FALLBACK_REQUIRES_HUMAN";
   const zhCardFields = {
     title: project.title?.zh,
     summary: project.atAGlance?.zh,
@@ -148,7 +149,7 @@ for (const [projectId, project] of Object.entries(content.projects || {})) {
       continue;
     }
     const nonAllowlisted = removeApprovedZhCardTerms(value).match(/[A-Za-z]{2,}(?:[- ][A-Za-z]{2,})*/g) || [];
-    if (nonAllowlisted.length) {
+    if (!humanZhFallback && nonAllowlisted.length) {
       failures.push(`localization: non-allowlisted English in projects.${projectId}.${field}.zh: ${nonAllowlisted.join(", ")}`);
     }
   }
@@ -157,7 +158,7 @@ for (const [projectId, project] of Object.entries(content.projects || {})) {
   } else {
     problemTypes.forEach((value, index) => {
       const nonAllowlisted = removeApprovedZhCardTerms(value).match(/[A-Za-z]{2,}(?:[- ][A-Za-z]{2,})*/g) || [];
-      if (nonAllowlisted.length) {
+      if (!humanZhFallback && nonAllowlisted.length) {
         failures.push(`localization: non-allowlisted English in projects.${projectId}.problemTypes_zh.${index}: ${nonAllowlisted.join(", ")}`);
       }
     });
@@ -177,7 +178,7 @@ for (const [projectId, project] of Object.entries(content.projects || {})) {
       continue;
     }
     const nonAllowlisted = removeApprovedZhCardTerms(value).match(/[A-Za-z]{2,}(?:[- ][A-Za-z]{2,})*/g) || [];
-    if (nonAllowlisted.length) {
+    if (!humanZhFallback && nonAllowlisted.length) {
       failures.push(`localization: non-allowlisted English in projects.${projectId}.${field}.zh: ${nonAllowlisted.join(", ")}`);
     }
   }

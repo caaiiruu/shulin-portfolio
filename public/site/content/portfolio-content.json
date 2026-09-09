@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
+  "contentVersion": "2026-09-09-daily-hours-primary-preview",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -69,6 +69,481 @@
     ]
   },
   "projects": {
+    "daily-hours": {
+      "id": "daily-hours",
+      "legacyExperimentId": "freelance-project-operations-tool",
+      "company": {
+        "en": "0→1 Independent Product",
+        "zh": "0→1 Independent Product"
+      },
+      "domain": {
+        "en": "Freelance project economics",
+        "zh": "Freelance project economics"
+      },
+      "cardTitle": {
+        "en": "Daily Hours",
+        "zh": "Daily Hours"
+      },
+      "cardDescription": {
+        "en": "A freelance project-economics and capacity decision workspace that turns everyday work data into clearer profitability, workload, and attention decisions.",
+        "zh": "A freelance project-economics and capacity decision workspace that turns everyday work data into clearer profitability, workload, and attention decisions."
+      },
+      "title": {
+        "en": "From tracking work to making better project-economic decisions",
+        "zh": "From tracking work to making better project-economic decisions"
+      },
+      "problemTypes": {
+        "en": [
+          "Project profitability",
+          "Capacity planning",
+          "Freelance operations"
+        ],
+        "zh": [
+          "Project profitability",
+          "Capacity planning",
+          "Freelance operations"
+        ]
+      },
+      "atAGlance": {
+        "en": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions.",
+        "zh": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions."
+      },
+      "infoGrid": {
+        "type": {
+          "value": "0→1 Product",
+          "visibility": "info-grid-only"
+        },
+        "scope": {
+          "en": "End-to-end freelance project economics and capacity management",
+          "zh": "End-to-end freelance project economics and capacity management"
+        },
+        "audience": {
+          "primary": {
+            "en": "Independent freelance practice",
+            "zh": "Independent freelance practice"
+          },
+          "secondary": {
+            "en": [],
+            "zh": []
+          }
+        },
+        "schemaVersion": "2026-09-09-daily-hours-primary"
+      },
+      "whyItMattered": {
+        "en": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth.",
+        "zh": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth."
+      },
+      "criticalProblem": {
+        "en": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth.",
+        "zh": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth."
+      },
+      "businessImpact": {
+        "en": "Established a repeatable way to evaluate freelance work through project economics and capacity signals instead of relying on hours worked or intuition alone.",
+        "zh": "Established a repeatable way to evaluate freelance work through project economics and capacity signals instead of relying on hours worked or intuition alone."
+      },
+      "decisionNarrative": {
+        "primaryDecisions": [
+          {
+            "id": "daily-hours-decision-01",
+            "title": {
+              "en": "From tracking hours to understanding project economics",
+              "zh": "From tracking hours to understanding project economics"
+            },
+            "whatIDecided": {
+              "en": "Treat time as an input to project decisions rather than the primary product outcome, connecting recorded work with project state, profitability, workload, and effort patterns.",
+              "zh": "Treat time as an input to project decisions rather than the primary product outcome, connecting recorded work with project state, profitability, workload, and effort patterns."
+            },
+            "whyThisChoice": {
+              "en": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future.",
+              "zh": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future."
+            }
+          },
+          {
+            "id": "daily-hours-decision-02",
+            "title": {
+              "en": "From reporting everything to surfacing what needs attention",
+              "zh": "From reporting everything to surfacing what needs attention"
+            },
+            "whatIDecided": {
+              "en": "Prioritise comparative and ranked signals — including Attention states, Top 3 views, ranked bars, and selectable metrics — instead of presenting every project as equally important.",
+              "zh": "Prioritise comparative and ranked signals — including Attention states, Top 3 views, ranked bars, and selectable metrics — instead of presenting every project as equally important."
+            },
+            "whyThisChoice": {
+              "en": "The useful question was not simply “what happened?” but “what deserves my attention first?”",
+              "zh": "The useful question was not simply “what happened?” but “what deserves my attention first?”"
+            }
+          },
+          {
+            "id": "daily-hours-decision-03",
+            "title": {
+              "en": "From static totals to lifecycle-aware project states",
+              "zh": "From static totals to lifecycle-aware project states"
+            },
+            "whatIDecided": {
+              "en": "Separate active projects from completed projects so the same data can represent forecast signals while work is ongoing and final outcomes once the project ends.",
+              "zh": "Separate active projects from completed projects so the same data can represent forecast signals while work is ongoing and final outcomes once the project ends."
+            },
+            "whyThisChoice": {
+              "en": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort.",
+              "zh": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort."
+            },
+            "optionalBlock": {
+              "type": "RISK MANAGED",
+              "content": {
+                "en": "Locking completed-project behavior reduces the risk of unintentionally treating final project records as still-active work.",
+                "zh": "Locking completed-project behavior reduces the risk of unintentionally treating final project records as still-active work."
+              }
+            }
+          },
+          {
+            "id": "daily-hours-decision-04",
+            "title": {
+              "en": "From separate work records to one connected project model",
+              "zh": "From separate work records to one connected project model"
+            },
+            "whatIDecided": {
+              "en": "Use a shared project and work classification model across active work, manual records, reminders, calendar context, and reporting.",
+              "zh": "Use a shared project and work classification model across active work, manual records, reminders, calendar context, and reporting."
+            },
+            "whyThisChoice": {
+              "en": "If activity was recorded differently across different parts of the product, downstream project comparisons and economic signals would become unreliable.",
+              "zh": "If activity was recorded differently across different parts of the product, downstream project comparisons and economic signals would become unreliable."
+            },
+            "optionalBlock": {
+              "type": "WHAT THIS REQUIRED",
+              "content": {
+                "en": "The product needed consistent project, work-type, status, and missing-value rules before reports could be trusted as decision support.",
+                "zh": "The product needed consistent project, work-type, status, and missing-value rules before reports could be trusted as decision support."
+              }
+            }
+          }
+        ],
+        "contentStatus": "approved-daily-hours-primary-draft"
+      },
+      "publicContent": {
+        "productVideo": {
+          "title": {
+            "en": "Product video / product proof",
+            "zh": "Product video / product proof"
+          },
+          "assetStatus": "REQUIRES_HUMAN_SELECTION",
+          "assetRole": "Primary fast proof: product video",
+          "targetDuration": "20–30 seconds",
+          "sequence": [
+            "Start Work",
+            "Active project state",
+            "Attention / project-health signal",
+            "Reports / ranked comparison",
+            "Completed project state",
+            "Final project-economic view"
+          ],
+          "renderVariant": "media-slot"
+        },
+        "operatingProblem": {
+          "title": {
+            "en": "The operating problem",
+            "zh": "The operating problem"
+          },
+          "body": {
+            "en": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth.",
+            "zh": "Freelance work requires constant decisions about scope, effort, margin, and available capacity. The tools I tried could record parts of that work, but none helped me judge whether a project was still economically healthy or consuming more effort than it was worth."
+          },
+          "renderVariant": "editorial-copy"
+        },
+        "productReframing": {
+          "title": {
+            "en": "Product reframing",
+            "zh": "Product reframing"
+          },
+          "statement": {
+            "en": "Time is an input. The product is the decision.",
+            "zh": "Time is an input. The product is the decision."
+          },
+          "flow": [
+            "Work activity",
+            "project context",
+            "effort/time data",
+            "project state",
+            "economic + workload signals",
+            "attention / reports",
+            "decision"
+          ],
+          "renderVariant": "decision-flow"
+        },
+        "productModel": {
+          "title": {
+            "en": "Product model",
+            "zh": "Product model"
+          },
+          "flow": [
+            "Project",
+            "Work",
+            "Time records",
+            "Reminders / calendar context",
+            "Status",
+            "Project state",
+            "Economic + workload signals",
+            "Attention / Reports",
+            "Decision"
+          ],
+          "renderVariant": "decision-flow"
+        },
+        "productInteractionEvidence": {
+          "title": {
+            "en": "Product interaction evidence",
+            "zh": "Product interaction evidence"
+          },
+          "items": [
+            {
+              "decision": "Decision 1",
+              "sequence": "Raw hours / activity → project economics / project-health interpretation",
+              "purpose": "Prove that time data becomes decision information.",
+              "preferredFormat": "Static comparison or short product motion.",
+              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+            },
+            {
+              "decision": "Decision 2",
+              "sequence": "Multiple projects → one or more Attention states → reason / popup / ranked priority",
+              "purpose": "Prove information prioritisation.",
+              "preferredFormat": "5–8 second product video or interaction capture.",
+              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+            },
+            {
+              "decision": "Decision 3",
+              "sequence": "Active / Forecast → Completed / Final",
+              "purpose": "Prove lifecycle/state modeling.",
+              "preferredFormat": "Short transition video.",
+              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+            },
+            {
+              "decision": "Decision 4",
+              "sequence": "Start Work → Manual Entry / record → project context → Report",
+              "purpose": "Prove connected data/model consistency.",
+              "preferredFormat": "Short sequence video.",
+              "assetStatus": "REQUIRES_HUMAN_SELECTION"
+            }
+          ],
+          "renderVariant": "evidence-slots"
+        },
+        "realUsageChangedProduct": {
+          "title": {
+            "en": "Real usage changed the product",
+            "zh": "Real usage changed the product"
+          },
+          "items": [
+            {
+              "observed": "Work sometimes needed to be recorded after the session had already happened.",
+              "changed": "Added Manual Entry while preserving the same project / work classification model."
+            },
+            {
+              "observed": "Completed projects should no longer behave like active work.",
+              "changed": "Introduced completed-project guards and distinct completed-state behavior."
+            },
+            {
+              "observed": "Reports became harder to scan when more dimensions needed comparison.",
+              "changed": "Introduced stronger ranking, Top 3 visibility, and selectable primary / secondary metrics to improve decision priority."
+            }
+          ],
+          "renderVariant": "observed-changed"
+        },
+        "shorteningTheLearningLoop": {
+          "title": {
+            "en": "Shortening the learning loop",
+            "zh": "Shortening the learning loop"
+          },
+          "message": {
+            "en": "AI helped compress implementation time, allowing me to move from a product question to a working change, use it in real freelance work, and learn from the result much faster.",
+            "zh": "AI helped compress implementation time, allowing me to move from a product question to a working change, use it in real freelance work, and learn from the result much faster."
+          },
+          "supportingFact": {
+            "en": "The first usable version came together in roughly two days.",
+            "zh": "The first usable version came together in roughly two days."
+          },
+          "flow": [
+            "Problem observed",
+            "Product decision",
+            "Implement",
+            "Use in live work",
+            "Learn",
+            "repeat"
+          ],
+          "acceleratedStep": "Implement",
+          "renderVariant": "learning-loop"
+        },
+        "whatIWouldTestNext": {
+          "title": {
+            "en": "What I would test next",
+            "zh": "What I would test next"
+          },
+          "hypotheses": [
+            "Which signals are most predictive of project health?",
+            "Should capacity reflect hours alone, or commitments and deadlines as well?",
+            "How should profitability differ across fixed-fee and time-based work?",
+            "When should Attention proactively intervene rather than simply surface a signal?"
+          ],
+          "renderVariant": "hypotheses"
+        },
+        "workingProductCta": {
+          "title": {
+            "en": "Explore the working product",
+            "zh": "Explore the working product"
+          },
+          "accessTitle": {
+            "en": "Try the working product",
+            "zh": "Try the working product"
+          },
+          "body": [
+            "Daily Hours is a live product I use in my own freelance practice and continue to iterate through real usage.",
+            "The working demo is available by request."
+          ],
+          "cta": {
+            "label": "Request demo access",
+            "href": "mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request"
+          },
+          "renderVariant": "controlled-access"
+        }
+      },
+      "sectionOrder": [
+        "hero",
+        "overview",
+        "product-video",
+        "operating-problem",
+        "product-reframing",
+        "product-model",
+        "key-design-decisions",
+        "product-interaction-evidence",
+        "real-usage-changed-product",
+        "shortening-the-learning-loop",
+        "what-i-would-test-next",
+        "working-product-cta",
+        "related-work"
+      ],
+      "valueIBrought": {
+        "headline": {
+          "en": "Turned everyday work data into project-profitability, workload, and capacity signals for real freelance decisions.",
+          "zh": "Turned everyday work data into project-profitability, workload, and capacity signals for real freelance decisions."
+        },
+        "supportingStatement": {
+          "en": "Defined, designed, built, and continue to iterate the product through use in my own freelance practice.",
+          "zh": "Defined, designed, built, and continue to iterate the product through use in my own freelance practice."
+        },
+        "evidence": []
+      },
+      "keyInterventionMap": {
+        "status": "verified-human-approved-brief",
+        "before": {
+          "en": "Scattered records and hours without a clear view of project health",
+          "zh": "Scattered records and hours without a clear view of project health"
+        },
+        "intervention": {
+          "en": "One connected model for work, project state, economics, workload signals, and attention",
+          "zh": "One connected model for work, project state, economics, workload signals, and attention"
+        },
+        "after": {
+          "en": "A repeatable way to make project-profitability and capacity decisions",
+          "zh": "A repeatable way to make project-profitability and capacity decisions"
+        },
+        "supportingCopy": {
+          "en": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions.",
+          "zh": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions."
+        },
+        "sectionLabel": {
+          "en": "Product reframing",
+          "zh": "Product reframing"
+        }
+      },
+      "ownershipModel": {
+        "publicSummary": {
+          "en": "Independent 0→1 product; I defined, designed, built, and continue to iterate it through real usage.",
+          "zh": "Independent 0→1 product; I defined, designed, built, and continue to iterate it through real usage."
+        },
+        "ledByMe": [],
+        "coDecided": [],
+        "partnerOwned": [],
+        "contentStatus": "approved-daily-hours-primary-draft"
+      },
+      "whatThisProves": {
+        "en": "A self-authored product can turn operational work data into actionable project-economic and capacity signals.",
+        "zh": "A self-authored product can turn operational work data into actionable project-economic and capacity signals."
+      },
+      "impactEvidence": {
+        "variant": "operating-model-outcome",
+        "primaryMetrics": [],
+        "supportingMetrics": [],
+        "recommendedHeadline": "Established a repeatable way to evaluate freelance work through project economics and capacity signals instead of relying on hours worked or intuition alone.",
+        "boundary": "This is a real-usage operating outcome; no revenue, productivity, or profitability uplift is claimed."
+      },
+      "presentation": {
+        "composition": "project-defined-case-study",
+        "projectDefinedOrderAllowed": true,
+        "preserveTitlePrefix": true,
+        "overviewLabels": {
+          "why": {
+            "en": "Why it mattered",
+            "zh": "Why it mattered"
+          },
+          "impact": {
+            "en": "Business impact",
+            "zh": "Business impact"
+          }
+        },
+        "heroMetadata": [
+          "company"
+        ],
+        "visibility": {
+          "problemTypes": true
+        },
+        "decisionOptions": {
+          "showVisuals": false
+        }
+      },
+      "mediaAssetStatus": "REQUIRES_HUMAN_SELECTION",
+      "localizationStatus": "EN_APPROVED_ZH_FALLBACK_REQUIRES_HUMAN",
+      "searchIndexV2": {
+        "version": "2026-09-09-daily-hours-primary",
+        "contentType": "project",
+        "canonicalId": "daily-hours",
+        "aliases": {
+          "en": [
+            "Daily Hours",
+            "freelance project economics",
+            "capacity decision workspace"
+          ],
+          "zh": [
+            "Daily Hours"
+          ]
+        },
+        "intentIds": [
+          "launch-zero-to-one-product"
+        ],
+        "problemTags": {
+          "en": [
+            "project profitability",
+            "capacity planning",
+            "freelance operations"
+          ],
+          "zh": [
+            "project profitability",
+            "capacity planning",
+            "freelance operations"
+          ]
+        },
+        "capabilityTags": {
+          "en": [
+            "0→1 product",
+            "project economics",
+            "decision support"
+          ],
+          "zh": [
+            "0→1 product",
+            "project economics",
+            "decision support"
+          ]
+        },
+        "contentStatus": "approved-daily-hours-primary-draft"
+      },
+      "contentStatus": "approved-daily-hours-primary-draft"
+    },
     "voucher": {
       "valueIBrought": {
         "headline": {
@@ -23442,6 +23917,80 @@
         ]
       },
       "projects": {
+        "daily-hours": {
+          "sections": {
+            "product-video": {
+              "sourcePaths": [
+                "publicContent.productVideo"
+              ],
+              "presentationType": "shared-media-slot",
+              "renderRequired": true
+            },
+            "operating-problem": {
+              "sourcePaths": [
+                "publicContent.operatingProblem"
+              ],
+              "presentationType": "shared-editorial-copy",
+              "renderRequired": true
+            },
+            "product-reframing": {
+              "sourcePaths": [
+                "publicContent.productReframing"
+              ],
+              "presentationType": "shared-decision-flow",
+              "renderRequired": true
+            },
+            "product-model": {
+              "sourcePaths": [
+                "publicContent.productModel"
+              ],
+              "presentationType": "shared-decision-flow",
+              "renderRequired": true
+            },
+            "key-design-decisions": {
+              "sourcePaths": [
+                "decisionNarrative.primaryDecisions"
+              ],
+              "presentationType": "shared-design-decisions",
+              "renderRequired": true
+            },
+            "product-interaction-evidence": {
+              "sourcePaths": [
+                "publicContent.productInteractionEvidence"
+              ],
+              "presentationType": "shared-evidence-slots",
+              "renderRequired": true
+            },
+            "real-usage-changed-product": {
+              "sourcePaths": [
+                "publicContent.realUsageChangedProduct"
+              ],
+              "presentationType": "shared-observed-changed",
+              "renderRequired": true
+            },
+            "shortening-the-learning-loop": {
+              "sourcePaths": [
+                "publicContent.shorteningTheLearningLoop"
+              ],
+              "presentationType": "shared-learning-loop",
+              "renderRequired": true
+            },
+            "what-i-would-test-next": {
+              "sourcePaths": [
+                "publicContent.whatIWouldTestNext"
+              ],
+              "presentationType": "shared-hypotheses",
+              "renderRequired": true
+            },
+            "working-product-cta": {
+              "sourcePaths": [
+                "publicContent.workingProductCta"
+              ],
+              "presentationType": "shared-controlled-access",
+              "renderRequired": true
+            }
+          }
+        },
         "voucher": {
           "sections": {
             "complexity": {
@@ -24321,6 +24870,7 @@
           "zh": "全部"
         },
         "projectIds": [
+          "daily-hours",
           "voucher",
           "voucher-center",
           "game-center",
@@ -24383,6 +24933,7 @@
           "zh": "0→1 產品"
         },
         "projectIds": [
+          "daily-hours",
           "payment",
           "game-center",
           "ctbc-mortgage-self-service-app",
@@ -24431,12 +24982,14 @@
         "voucher",
         "payment",
         "dbs",
+        "daily-hours",
         "booking",
         "game-center",
         "voucher-center",
         "cathay-sit-online-account-opening"
       ],
       "caseRoles": {
+        "daily-hours": "0→1 independent product for freelance project economics and capacity decisions",
         "voucher": "Flagship programme and organisation-level system strategy",
         "dbs": "Enterprise internal credit-exception system spanning six-market research, role-based workbenches, cross-role routing and regulated decision controls",
         "game-center": "0→1 configurable engagement platform",
@@ -24771,7 +25324,8 @@
       "primaryFeaturedOrder": [
         "voucher",
         "payment",
-        "dbs"
+        "dbs",
+        "daily-hours"
       ],
       "supportingFeaturedOrder": [
         "booking",
@@ -26885,7 +27439,9 @@
         "en": "Working prototype / working internal tool",
         "zh": "運作中的原型／內部工具"
       },
-      "releaseEligibility": "READY_PUBLIC",
+      "promotionStatus": "PROMOTED_TO_PRIMARY_PROJECT",
+      "promotedProjectId": "daily-hours",
+      "releaseEligibility": "PROMOTED_PRIMARY",
       "hero": null,
       "presentationSections": [
         {
@@ -29933,6 +30489,12 @@
     }
   },
   "projectDecisionRefs": {
+    "daily-hours": [
+      "daily-hours-decision-01",
+      "daily-hours-decision-02",
+      "daily-hours-decision-03",
+      "daily-hours-decision-04"
+    ],
     "voucher": [
       "voucher-decision-preloaded-wallet",
       "voucher-decision-error-recovery",
@@ -33071,10 +33633,9 @@
     "releaseVisibility": "ELIGIBILITY_GATED",
     "releaseNote": "Each Experiment is projected publicly only when its own releaseEligibility is READY_PUBLIC; unsupported and ineligible records remain non-shipping.",
     "sectionLabel": "Experiments & Practice",
-    "primaryCaseCount": 13,
-    "experimentCount": 7,
+    "primaryCaseCount": 14,
+    "experimentCount": 6,
     "displayOrder": [
-      "freelance-project-operations-tool",
       "weekly-design-session",
       "food-testing-workshop",
       "aja-creative-workshop",

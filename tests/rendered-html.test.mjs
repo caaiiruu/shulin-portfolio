@@ -31,7 +31,7 @@ test("loads one fingerprinted stylesheet and runtime on every page", () => {
     assert.match(html, /id="detailDialog"/);
   }
   const ssot = JSON.parse(read("content/portfolio-content.json"));
-  assert.equal(Object.keys(ssot.projects).length, 13);
+  assert.equal(Object.keys(ssot.projects).length, 14);
   for (const [id, project] of Object.entries(ssot.projects)) {
     const html = read(`work/${id}.html`);
     assert.ok(html.includes(`<title>${project.title.en} — Shulin Chou</title>`));
@@ -116,7 +116,7 @@ test("keeps Voucher Center evidence and listing boundaries canonical", () => {
   }
 });
 
-test("keeps every rendered project overview bilingual without English fallback in Chinese mode", () => {
+test("keeps translated overviews bilingual and preserves the explicit Daily Hours Human-translation gate", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const unresolvedTimelineProjects = [];
   for (const [id, project] of Object.entries(ssot.projects)) {
@@ -126,10 +126,11 @@ test("keeps every rendered project overview bilingual without English fallback i
     assert.ok(info.audience.primary.en && info.audience.primary.zh, `${id}: bilingual primary audience is required`);
     assert.equal(info.audience.secondary.zh.length, info.audience.secondary.en.length, `${id}: audience secondary translations must align`);
     const timeline = info.timeline;
-    if (!timeline.duration?.en) unresolvedTimelineProjects.push(id);
+    if (!timeline?.duration?.en) unresolvedTimelineProjects.push(id);
     else assert.ok(timeline.duration.zh, `${id}: timeline.duration.zh is required`);
   }
-  assert.deepEqual(unresolvedTimelineProjects, []);
+  assert.deepEqual(unresolvedTimelineProjects, ["daily-hours"]);
+  assert.equal(ssot.projects["daily-hours"].localizationStatus,"EN_APPROVED_ZH_FALLBACK_REQUIRES_HUMAN");
   const app = read("assets/js/app.js");
   const home = read("assets/js/home.js");
   assert.match(app, /value\.secondary\?\.zh/);
@@ -336,7 +337,7 @@ test("keeps complete project decision content in the SSOT renderer", () => {
   }
   const manifest = JSON.parse(read("content/portfolio-asset-manifest.json"));
   assert.equal(ssot.contentVersion, manifest.contentVersion);
-  assert.equal(Object.keys(ssot.projects).length, 13);
+  assert.equal(Object.keys(ssot.projects).length, 14);
   for (const projectId of ["voucher", "dbs", "booking", "bandzo", "payment"]) {
     const value = ssot.projects[projectId].valueIBrought;
     assert.ok(value?.headline?.en && value?.headline?.zh, `${projectId} value headline`);
@@ -364,12 +365,13 @@ test("keeps complete project decision content in the SSOT renderer", () => {
 test("renders the r85 hiring-evidence model through canonical shared components", () => {
   const ssot = JSON.parse(read("content/portfolio-content.json"));
   const app = read("assets/js/app.js");
-  assert.equal(Object.keys(ssot.projects).length, 13);
-  assert.equal(Object.keys(ssot.projectDecisionRefs).length, 13);
+  assert.equal(Object.keys(ssot.projects).length, 14);
+  assert.equal(Object.keys(ssot.projectDecisionRefs).length, 14);
   for (const [id, project] of Object.entries(ssot.projects)) {
     assert.ok(project.ownershipModel, `${id}: ownershipModel`);
     if (project.outcomeEvidenceModel) assert.ok(Array.isArray(project.outcomeEvidenceModel) || typeof project.outcomeEvidenceModel === "object", `${id}: outcomeEvidenceModel`);
-    assert.ok(project.heroVisualBrief, `${id}: heroVisualBrief`);
+    if(id==='daily-hours')assert.equal(project.mediaAssetStatus,'REQUIRES_HUMAN_SELECTION');
+    else assert.ok(project.heroVisualBrief, `${id}: heroVisualBrief`);
     assert.ok(project.decisionNarrative?.primaryDecisions?.length, `${id}: canonical decisions`);
   }
   assert.equal(ssot.projectDecisionRefs.voucher.length, 11);
@@ -608,7 +610,7 @@ test("supports the recruiter-first Voucher programme without replacing sibling p
   const voucher = data.projects.voucher;
   assert.equal(voucher.projectModel.renderVariant, "programme-case-with-stage-evidence");
   assert.ok(voucher.programmeInitiatives);
-  assert.equal(Object.keys(data.projects).length, 13);
+  assert.equal(Object.keys(data.projects).length, 14);
   assert.match(app, /function renderProgrammeParent/);
   assert.match(app, /'View solution details'/);
   assert.match(app, /'查看解決方案細節'/);
@@ -640,10 +642,10 @@ test("preserves search interaction while using r85 as the active inventory", () 
   assert.doesNotMatch(home, /p\.card_outcome|p\.domain_proof/);
   for (const contract of ["matcherSuggestions", "match-project-grid"]) assert.ok(html.includes(contract), contract);
   assert.ok(Object.values(content.localizationRegistry.staticPageCopy).some(value=>value.en==='Most relevant projects'));
-  assert.equal(Object.keys(content.projects).length, 13);
+  assert.equal(Object.keys(content.projects).length, 14);
   const publicExplorations = [...Object.values(content.sideProjects), ...Object.values(content.experiments)]
-    .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review"));
-  assert.equal(publicExplorations.length, 7);
+    .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review") && item.releaseEligibility !== "PROMOTED_PRIMARY");
+  assert.equal(publicExplorations.length, 6);
   const app = read("assets/js/app.js");
   assert.match(app, /const intentCatalog=list\(raw\.contentDiscovery\?\.queryIntentCatalog\)/);
   assert.match(app, /searchIndexV2:p\.searchIndexV2\|\|\{\}/);
@@ -888,7 +890,7 @@ test("uses the SSOT-owned many-to-many Work filter mapping", () => {
   allProjects.forEach((id) => assert.ok(allOnly.has(id) || filters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id)), id));
   assert.deepEqual(
     new Set(filters.find((filter) => filter.id === "zero").projectIds),
-    new Set(["payment", "game-center", "ctbc-mortgage-self-service-app", "bandzo", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant"]),
+    new Set(["daily-hours", "payment", "game-center", "ctbc-mortgage-self-service-app", "bandzo", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant"]),
   );
   assert.match(app, /workFilterIdsForProject/);
   assert.match(app, /dataset\.workCategories/);
@@ -907,10 +909,9 @@ test("projects only individually eligible Experiments into public discovery", ()
   assert.doesNotMatch(base, /(?:^|[\s>+~,#:])\.(?:experiment(?:-|\b)|poster(?:-|\b)|playground-hero(?:-|\b)|play-shape(?:-|\b)|play-line\b|shape-(?:circle|pill|small)\b)/m);
   const content=JSON.parse(read("content/portfolio-content.json"));
   assert.equal(content.experimentArchitecture.releaseVisibility,"ELIGIBILITY_GATED");
-  const eligible=Object.values({...content.experiments,...content.sideProjects}).filter(item=>item.releaseEligibility);
+  const eligible=Object.values({...content.experiments,...content.sideProjects}).filter(item=>item.releaseEligibility&&item.releaseEligibility!=='PROMOTED_PRIMARY');
   assert.ok(eligible.every(item=>['READY_PUBLIC','DEFERRED_NON_SHIPPING','HUMAN_INPUT_REQUIRED'].includes(item.releaseEligibility)));
   assert.deepEqual(eligible.filter(item=>item.releaseEligibility==='READY_PUBLIC').map(item=>item.id),[
-    'freelance-project-operations-tool',
     'weekly-design-session',
     'food-testing-workshop',
     'aja-creative-workshop',
@@ -942,7 +943,7 @@ test("projects only individually eligible Experiments into public discovery", ()
   assert.doesNotMatch(app, /\?'期間':'Period'/);
   assert.doesNotMatch(app, /\?'形式':'Format'/);
   assert.match(app,/if\(delivery\)delivery\.hidden=true/);
-  assert.match(app,/card\.append\(element\('h3','',title\),action\)/);
+  assert.match(app,/content\.append\(top,body,action\);card\.append\(visual,content\)/);
   assert.match(app, /if\(classification\)classification\.hidden=true/);
   for (const contract of [".detail-experiment-card-v101{", ".detail-experiment-card-v101 h3", ".detail-experiment-card-v101:is(:hover,:focus-visible) .experiment-card-action", "--experiment-card-cta-hover-inverse"]) assert.ok(experiment.includes(contract), contract);
   assert.match(experiment, /\.motion-ready \[data-motion-reveal\]\.is-inview\.poster:nth-child\(odd\)[\s\S]*?transform:var\(--experiment-card-rest-odd\)/);
@@ -1424,8 +1425,8 @@ test("renders governed Stage visual evidence from canonical Voucher journey cont
       assert.equal(manifest.items[visual.assetId].replacementRequired, false);
     }
   }
-  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,13);
-  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,13);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.whatThisProves?.en&&project.whatThisProves?.zh).length,14);
+  assert.equal(Object.values(ssot.projects).filter(project=>project.impactEvidence?.variant).length,14);
   assert.doesNotMatch(read("content/portfolio-content.json"),/NTUC FairPrice(?: Group)?/);
   assert.match(app, /localizedField\(stageProjection\|\|stage,'whatChanged'\)/);
   assert.match(app, /source\.evidence\?\.assetId/);
@@ -1617,7 +1618,7 @@ test("keeps Search Mapping independent from recruiter-first Hero presentation", 
   const contract=ssot.implementationContracts.recruiterFirstPresentation;
   assert.equal(contract.heroTaxonomy.publicOwner,"none");
   assert.deepEqual(contract.heroTaxonomy.forbiddenFallbacks,["problemTypes","keyProblems","searchIndexV2"]);
-  assert.match(app, /const showProblemTypes=!recruiterContract/);
+  assert.match(app, /const showProblemTypes=p\.presentation\?\.visibility\?\.problemTypes\?\?!recruiterContract/);
   assert.doesNotMatch(app, /renderTags\([^\n]*(?:searchIndexV2|keyProblems)/);
   assert.doesNotMatch(app, /key===['"](?:dbs|voucher)['"]\?\[\]/);
 });
@@ -2300,7 +2301,8 @@ test("R183.8F P3.4C renders Outcomes for every approved standard-project contrac
   const app=read("assets/js/app.js");
   const contracts=ssot.implementationContracts.contentPresentationContract.projects;
   assert.equal(contracts.bandzo.sections.outcomes.renderRequired,true);
-  assert.ok(Object.keys(ssot.projects).every(projectId=>contracts[projectId]?.sections?.outcomes?.renderRequired===true));
+  const standardIds=Object.entries(ssot.projects).filter(([,project])=>project.presentation?.composition!=='project-defined-case-study').map(([projectId])=>projectId);
+  assert.ok(standardIds.every(projectId=>contracts[projectId]?.sections?.outcomes?.renderRequired===true));
   assert.equal(contracts.voucher.sections.outcomes.renderRequired,true);
   assert.equal(contracts.payment.sections.outcomes.renderRequired,true);
   assert.match(app,/const outcomesContract=contentPresentationSection\(p,'outcomes'\)/);

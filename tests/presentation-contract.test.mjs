@@ -124,9 +124,9 @@ test('keeps section intros concise and Domain experience in hiring-signal order'
   assert.equal(ssot.contentDiscovery.section.title.en,'Domain experience');
 });
 
-test('keeps all seven Experiments inside the optional Experiment contract',()=>{
-  const records=Object.fromEntries(Object.entries({...ssot.experiments,...ssot.sideProjects}).filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review')));
-  assert.equal(Object.keys(records).length,7);
+test('keeps all six active Experiments inside the optional Experiment contract',()=>{
+  const records=Object.fromEntries(Object.entries({...ssot.experiments,...ssot.sideProjects}).filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review')&&item.releaseEligibility!=='PROMOTED_PRIMARY'));
+  assert.equal(Object.keys(records).length,6);
   assert.match(app,/archetype:'experiment'/);
   assert.match(app,/presentationContract='portfolioPresentation\.experiment'/);
   assert.match(app,/toggleAttribute\('hidden',!prototypeText\)/);

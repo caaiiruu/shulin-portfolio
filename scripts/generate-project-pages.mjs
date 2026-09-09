@@ -7,7 +7,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,"content/portfolio-asse
 const work=fs.readFileSync(path.join(root,"work.html"),"utf8");
 const outDir=path.join(root,"work");
 fs.mkdirSync(outDir,{recursive:true});
-const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const escapeHtml=value=>String((value&&typeof value==="object"?value.en:value)??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const metaEscape=value=>escapeHtml(value).replace(/\n/g," ");
 function resolveImage(project){
   const id=project.heroVisualBrief?.assetId;

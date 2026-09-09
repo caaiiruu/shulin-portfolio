@@ -6,28 +6,29 @@ const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.
 const runtime=fs.readFileSync('public/site/assets/js/app.js','utf8');
 const internalId='freelance-project-operations-tool';
 
-test('Daily Hours keeps one governed internal record and a separate public identity',()=>{
-  const matches=Object.entries(content.experiments).filter(([key,item])=>key===internalId||item.publicSlug==='daily-hours');
-  assert.equal(matches.length,1);
-  const [key,item]=matches[0];
-  assert.equal(key,internalId);
-  assert.equal(item.id,internalId);
-  assert.equal(item.searchIndexV2.canonicalId,internalId);
-  assert.equal(item.publicSlug,'daily-hours');
-  assert.deepEqual(item.title,{en:'Daily Hours',zh:'Daily Hours'});
-  assert.equal(item.publicDescriptor.en,'AI-assisted freelance project operations tool');
-  assert.match(item.claimBoundary.en,/AI assisted construction; AI is not claimed as a core runtime capability/);
+test('Daily Hours is one canonical Primary Project with archived experiment provenance',()=>{
+  const project=content.projects['daily-hours'];
+  const legacy=content.experiments[internalId];
+  assert.equal(project.id,'daily-hours');
+  assert.equal(project.legacyExperimentId,internalId);
+  assert.deepEqual(project.cardTitle,{en:'Daily Hours',zh:'Daily Hours'});
+  assert.equal(project.company.en,'0→1 Independent Product');
+  assert.equal(project.decisionNarrative.primaryDecisions.length,4);
+  assert.equal(project.mediaAssetStatus,'REQUIRES_HUMAN_SELECTION');
+  assert.equal(project.publicContent.productVideo.assetStatus,'REQUIRES_HUMAN_SELECTION');
+  assert.equal(legacy.promotionStatus,'PROMOTED_TO_PRIMARY_PROJECT');
+  assert.equal(legacy.promotedProjectId,'daily-hours');
+  assert.equal(legacy.releaseEligibility,'PROMOTED_PRIMARY');
 });
 
-test('experiment URLs resolve public slugs while preserving the internal lookup key',()=>{
-  assert.match(runtime,/function experimentKeyFromPublicSlug\(slug\)/);
-  assert.match(runtime,/DATA\.experiments\?\.\[slug\]/);
-  assert.match(runtime,/item\.publicSlug===slug/);
-  assert.match(runtime,/function experimentPublicSlug\(key\)\{return DATA\.experiments\?\.\[key\]\?\.publicSlug\|\|key\}/);
-  assert.match(runtime,/url\.pathname='\/experiments'/);
-  assert.match(runtime,/url\.searchParams\.set\('experiment',experimentPublicSlug\(key\)\)/);
-  assert.match(runtime,/history\.replaceState\(\{detail:\{type:'experiment',key:deepLinkedExperiment\},scrollTop:0\},'',canonicalExperimentUrl\(deepLinkedExperiment\)\)/);
-  assert.match(runtime,/history\.pushState\(\{detail:\{type:'experiment',key\},scrollTop:0\},'',url\)/);
+test('Daily Hours uses the canonical project route and controlled demo access',()=>{
+  const project=content.projects['daily-hours'];
+  assert.ok(content.workIndex.workFilters.find(filter=>filter.id==='all').projectIds.includes('daily-hours'));
+  assert.ok(content.workIndex.workFilters.find(filter=>filter.id==='zero').projectIds.includes('daily-hours'));
+  assert.equal(project.publicContent.workingProductCta.cta.href.startsWith('mailto:'),true);
+  assert.doesNotMatch(JSON.stringify(project),/https?:\/\/[^\s"]*daily-hours/i);
+  assert.match(runtime,/isProjectDefinedCase/);
+  assert.match(runtime,/renderProjectDefinedCaseStudy/);
 });
 
 test('no public experiment title retains the retired descriptive name',()=>{

@@ -5,11 +5,11 @@ import fs from 'node:fs';
 const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-project-truth.json','utf8'));
 const all={...(content.experiments||{}),...(content.sideProjects||{})};
-const ids=['freelance-project-operations-tool','weekly-design-session','food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox','hello-sabau'];
+const ids=['weekly-design-session','food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox','hello-sabau'];
 
-test('R181 registers exactly seven public Experiments & Practice records',()=>{
-  const publicIds=Object.entries(all).filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review')).map(([id])=>id);
-  assert.equal(publicIds.length,7);
+test('Daily Hours promotion leaves exactly six public Experiments & Practice records',()=>{
+  const publicIds=Object.entries(all).filter(([,item])=>!String(item.contentStatus||'').includes('standalone-card-review')&&item.releaseEligibility!=='PROMOTED_PRIMARY').map(([id])=>id);
+  assert.equal(publicIds.length,6);
   assert.deepEqual(publicIds,ids);
 });
 
@@ -26,8 +26,8 @@ test('all experiments use the compact shared IA and hidden problem metadata',()=
 test('claim boundaries reject prohibited causal or AI-runtime inflation',()=>{
   assert.match(all['hello-sabau'].claimBoundary.en,/No tourism/);
   assert.match(all['aja-creative-workshop'].claimBoundary.en,/No personality-performance/);
-  assert.match(all['freelance-project-operations-tool'].claimBoundary.en,/not claimed as a core runtime capability/);
-  assert.match(all['freelance-project-operations-tool'].learning.en,/approximately 18%/);
+  assert.equal(all['freelance-project-operations-tool'].promotionStatus,'PROMOTED_TO_PRIMARY_PROJECT');
+  assert.equal(all['freelance-project-operations-tool'].promotedProjectId,'daily-hours');
 });
 
 test('truth covers every experiment source package',()=>{
@@ -39,7 +39,6 @@ test('truth covers every experiment source package',()=>{
 });
 
 test('R183.8E resolves supplied evidence while preserving text-led projects without invented imagery',()=>{
-  assert.equal(all['freelance-project-operations-tool'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
   assert.equal(all['weekly-design-session'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
   for(const id of ['food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox']){
     assert.equal(all[id].assetStatus,'HUMAN_SOURCE_ACTIVE');

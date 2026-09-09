@@ -20,7 +20,7 @@ const placeholderIds = [
 ];
 
 fail(typeof content.contentVersion === "string" && content.contentVersion.trim().length > 0, "Content contentVersion must exist and be non-empty");
-fail(projectIds.length === 13, "Canonical project roster changed");
+fail(projectIds.length === 14, "Canonical project roster changed");
 fail(manifest.packageVersion === "r45" && manifest.contentVersion === content.contentVersion, "Manifest must preserve package contract and match the active Content contentVersion");
 const lockedReusableImages = {
   "voucher-offer-reusable-system-shared-rules-01.jpg": "ea25dc84274b4b9575911e273ef8ed7f0a80e0223dcd2001b5dbd3ef6db0b333",
@@ -58,7 +58,7 @@ for (const id of derivativeLineageIds) fail(Boolean(items[id]), `Derivative line
 const governedAssetIds = new Set([...slots.map((slot) => slot.assetId), ...derivativeLineageIds]);
 fail(itemEntries.length === governedAssetIds.size + placeholderIds.length, "Manifest contains non-runtime or non-lineage records");
 fail(slots.length > 0, "Runtime visual slots must not be empty");
-fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id)), "Every canonical project needs a visual slot");
+fail(projectIds.every((id) => slots.some((slot) => slot.projectId === id) || content.projects[id]?.mediaAssetStatus === "REQUIRES_HUMAN_SELECTION"), "Every canonical project needs a visual slot or an explicit Human-selection gate");
 
 const slotKeys = new Set();
 for (const slot of slots) {

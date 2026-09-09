@@ -5,7 +5,7 @@ import fs from 'node:fs';
 const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
 const all={...(content.experiments||{}),...(content.sideProjects||{})};
-const ids=['freelance-project-operations-tool','weekly-design-session','food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox','hello-sabau'];
+const ids=['weekly-design-session','food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox','hello-sabau'];
 const text=value=>JSON.stringify(value);
 
 test('R183.8E gives each exploration an explicit maturity, evidence sequence and independent release gate',()=>{
@@ -73,11 +73,10 @@ test('evidence maturity and claim boundaries remain source-bounded',()=>{
   assert.doesNotMatch(text({summary:all['hello-sabau'].summary,sections:all['hello-sabau'].presentationSections}),/successfully increased tourism|increased revenue|caused talent return/i);
 });
 
-test('Freelance and Weekly remain text-led and do not invent imagery or outcomes',()=>{
-  for(const id of ['freelance-project-operations-tool','weekly-design-session']){
-    assert.equal(all[id].hero,null);
-    assert.equal(all[id].presentationSections.flatMap(section=>section.assetIds||[]).length,0);
-  }
+test('Weekly remains text-led and the promoted Daily Hours record keeps its source boundary',()=>{
+  assert.equal(all['weekly-design-session'].hero,null);
+  assert.equal(all['weekly-design-session'].presentationSections.flatMap(section=>section.assetIds||[]).length,0);
+  assert.equal(all['freelance-project-operations-tool'].releaseEligibility,'PROMOTED_PRIMARY');
   assert.match(text(all['freelance-project-operations-tool']),/18%/);
   assert.doesNotMatch(all['freelance-project-operations-tool'].summary.en,/two-day/i);
   const freelanceBoundary=all['freelance-project-operations-tool'].presentationSections.find(section=>section.id==='delivery-boundary');

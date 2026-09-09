@@ -57,7 +57,7 @@ test("R183.4C restores the latest Human-approved Voucher asset boundary", () => 
 
 test("all canonical primary cases and experiments have exactly one source pack", () => {
   const experimentIds = Object.entries({ ...(content.experiments || {}), ...(content.sideProjects || {}) })
-    .filter(([, item]) => !String(item.contentStatus || "").includes("standalone-card-review"))
+    .filter(([, item]) => !String(item.contentStatus || "").includes("standalone-card-review") && item.releaseEligibility !== "PROMOTED_PRIMARY")
     .map(([id]) => id);
   const canonicalIds = [...Object.keys(content.projects), ...experimentIds];
   assert.equal(truth.projects.length, 20);

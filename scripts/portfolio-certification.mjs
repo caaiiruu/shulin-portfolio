@@ -14,9 +14,9 @@ const failures=[];const warnings=[];
 const fail=(m)=>failures.push(m);
 const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8',maxBuffer:32*1024*1024}).split('\0').filter(Boolean);
 
-const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
-if(Object.keys(content.projects).length!==13)fail('Primary project count must be 13');
-if(experiments.length!==7)fail('Experiment count must be 7');
+const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review')&&x.releaseEligibility!=='PROMOTED_PRIMARY');
+if(Object.keys(content.projects).length!==14)fail('Primary project count must be 14');
+if(experiments.length!==6)fail('Experiment count must be 6');
 if(truth.projects.length!==20||truth.projectSourcePacks.length!==20)fail('Truth must govern all 20 entities');
 if(content.contentVersion!==manifest.contentVersion)fail('Content/Asset Manifest atomic version mismatch');
 
@@ -78,6 +78,7 @@ if(metadataFindings.length)fail(`Sensitive image metadata: ${metadataFindings.jo
 const primaryLeadAssets=[];
 for(const [projectId,project] of Object.entries(content.projects)){
   const assetId=project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId;
+  if(!assetId&&project.mediaAssetStatus==='REQUIRES_HUMAN_SELECTION')continue;
   const asset=manifest.items[assetId];
   if(!asset)fail(`${projectId}: missing Primary Lead Visual manifest record`);
   else primaryLeadAssets.push({projectId,assetId,...asset});
@@ -124,7 +125,7 @@ const result={
   performanceFinal:failures.length?'ASSET_PERFORMANCE_BLOCKER':'ASSET_DEPENDENT_PERFORMANCE_PASS',
   assetSecurity:failures.length?'ASSET_SECURITY_BLOCKER':'ASSET_SECURITY_RECHECK_PASS',
   primaryLeadVisuals:{count:primaryLeadAssets.length,totalBytes:leadAssetBytes,maximumBytes:Math.max(...primaryLeadAssets.map(asset=>{const localPath=asset.publicPath&&path.join(root,'public',asset.publicPath);return localPath&&fs.existsSync(localPath)?fs.statSync(localPath).size:0}))},
-  counts:{primary:13,experiments:7,truthProjects:truth.projects.length,publicAssets:publicAssetFiles.length},
+  counts:{primary:14,experiments:6,truthProjects:truth.projects.length,publicAssets:publicAssetFiles.length},
   thirdPartyDomains:[...thirdParty].sort(),warnings,failures
 };
 console.log(JSON.stringify(result,null,2));

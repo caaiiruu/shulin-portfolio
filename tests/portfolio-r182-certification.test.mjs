@@ -9,10 +9,10 @@ const ledger=JSON.parse(fs.readFileSync('docs/portfolio-automation/execution-led
 const truth=JSON.parse(fs.readFileSync('docs/portfolio-automation/verified-project-truth.json','utf8'));
 const app=fs.readFileSync('public/site/assets/js/app.js','utf8');
 const projectDetailCss=fs.readFileSync('public/site/assets/css/components/project-detail-overview.css','utf8');
-const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review'));
+const experiments=Object.entries({...content.experiments,...content.sideProjects}).filter(([,x])=>!String(x.contentStatus||'').includes('standalone-card-review')&&x.releaseEligibility!=='PROMOTED_PRIMARY');
 
 test('R182 applies the Human-approved Primary content package atomically',()=>{
-  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);
+  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)|daily-hours-primary-preview/);
   assert.equal(manifest.contentVersion,content.contentVersion);
   assert.equal(ledger.approvedDeltas.find(x=>x.deltaId==='DELTA-R1801-APPROVED-CONTENT-PACKAGE').implementationStatus,'APPLIED_ON_R182_BRANCH');
   assert.equal(content.projects.voucher.title.en,'Fragmented voucher journeys to a reusable incentive ecosystem');
@@ -20,9 +20,9 @@ test('R182 applies the Human-approved Primary content package atomically',()=>{
   assert.equal(content.projects.bandzo.infoGrid.timeline.dateRange.en,'Sep 2016–Jan 2017');
 });
 
-test('R182 governs 13 Primary Cases and 7 subordinate Experiments',()=>{
-  assert.equal(Object.keys(content.projects).length,13);
-  assert.equal(experiments.length,7);
+test('the promoted roster governs 14 Primary Cases and 6 subordinate Experiments',()=>{
+  assert.equal(Object.keys(content.projects).length,14);
+  assert.equal(experiments.length,6);
   assert.equal(truth.projects.length,20);
   for(const [,item] of experiments)assert.equal(item.problemTypeVisibility,'SEARCH_ONLY');
 });

@@ -117,6 +117,7 @@ for (const component of live.filter((entry) => entry.contentOwner)) {
 const content = JSON.parse(fs.readFileSync(path.join(root, contentOwner), "utf8"));
 const assetManifest = JSON.parse(fs.readFileSync(path.join(root, assetManifestOwner), "utf8"));
 const expectedProjectIds = [
+  "daily-hours",
   "voucher",
   "voucher-center",
   "game-center",
@@ -137,8 +138,8 @@ if (typeof content.contentVersion !== "string" || !content.contentVersion.trim()
 if (!content.canonicalProjectSchema) throw new Error("The active Content SSOT must define canonicalProjectSchema");
 if (!content.projectHeroContentContract) throw new Error("The active Content SSOT must define projectHeroContentContract");
 const projectIds = Object.keys(content.projects || {});
-if (projectIds.length !== 13 || new Set(projectIds).size !== 13) {
-  throw new Error("The active Content SSOT must contain 13 unique projects");
+if (projectIds.length !== 14 || new Set(projectIds).size !== 14) {
+  throw new Error("The active Content SSOT must contain 14 unique projects");
 }
 if (projectIds.some((id, index) => id !== expectedProjectIds[index])) {
   throw new Error("The active Content SSOT project roster or order does not match the approved r146 contract");
@@ -155,9 +156,9 @@ for (const [projectId, project] of Object.entries(content.projects)) {
   }
 }
 const publicExplorations = [...Object.values(content.sideProjects || {}), ...Object.values(content.experiments || {})]
-  .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review"));
-if (publicExplorations.length !== 7) {
-  throw new Error("The active Content SSOT must contain 7 Experiments & Practice records");
+  .filter((item) => !String(item.contentStatus || "").includes("standalone-card-review") && item.releaseEligibility !== "PROMOTED_PRIMARY");
+if (publicExplorations.length !== 6) {
+  throw new Error("The active Content SSOT must contain 6 Experiments & Practice records");
 }
 if (assetManifest.packageVersion !== "r45") {
   throw new Error("The active Asset Manifest must use the canonical r45 package contract");
