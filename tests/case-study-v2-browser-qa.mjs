@@ -9,9 +9,9 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const baseUrl=process.env.BASE_URL||'http://127.0.0.1:3000';
 const evidenceDir=process.env.EVIDENCE_DIR||'/tmp/case-study-v2-browser-qa';
 const viewports=[
-  {name:'desktop-1419',width:1419,height:900},
+  {name:'mobile-430',width:430,height:932},
   {name:'tablet-871',width:871,height:1024},
-  {name:'mobile-430',width:430,height:932}
+  {name:'desktop-1419',width:1419,height:900}
 ];
 const failures=[];
 const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});
@@ -39,6 +39,8 @@ for(const viewport of viewports){
       visibleStories:stories.filter(visible).length,
       primaryProofVisible:Boolean(document.querySelector('.decision-explorer__story:not([hidden]) .decision-explorer__primary-proof .evidence-frame')),
       explorerTriggers:[...document.querySelectorAll('.decision-explorer__story:not([hidden]) .evidence-explorer__trigger')].filter(visible).length,
+      openingMedia:Boolean(document.querySelector('.case-study-v2-opening .evidence-frame video')),
+      supportCounts:[...document.querySelectorAll('.decision-explorer__story')].map(story=>story.querySelectorAll('.evidence-explorer__index-item').length),
       selectorLeftOfStory:Boolean(selector&&selected&&selector.right<=selected.left),
       selectorAboveStory:Boolean(selector&&selected&&selector.bottom<=selected.top),
       overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,
@@ -51,6 +53,7 @@ for(const viewport of viewports){
   try{
     assert.deepEqual(result.labels,['Project health','Attention','Lifecycle']);
     assert.equal(result.selectedTabs,1);assert.equal(result.visibleStories,1);assert.equal(result.primaryProofVisible,true);assert.equal(result.explorerTriggers,1);
+    assert.equal(result.openingMedia,true);assert.deepEqual(result.supportCounts,[3,4,3]);
     assert.equal(result.presentation,'case-study-v2');assert.match(result.sectionOrder,/first-question.*product-reframing.*key-design-decisions.*real-usage-changed-product.*outcomes.*working-product-cta/);
     assert.equal(result.overflow,false);assert.ok(result.owners.includes('Decision'));assert.ok(result.owners.includes('ChangeSequence'));assert.ok(result.owners.includes('ProjectCTA'));
     if(viewport.width===1419)assert.equal(result.selectorLeftOfStory,true);else assert.equal(result.selectorAboveStory,true);
@@ -62,12 +65,30 @@ for(const viewport of viewports){
       const trigger=page.locator('.decision-explorer__story:not([hidden]) .evidence-explorer__trigger');await trigger.click();
       const accordionButtons=page.locator('.decision-explorer__story:not([hidden]) .evidence-explorer__accordion-button');
       assert.equal(await accordionButtons.evaluateAll(nodes=>nodes.every(node=>node.getAttribute('aria-expanded')==='false')),true);
+      assert.deepEqual(await accordionButtons.evaluateAll(nodes=>nodes.map(node=>node.querySelector('.evidence-explorer__number')?.textContent)),['01','02','03']);
       await accordionButtons.first().click();
       assert.equal(await accordionButtons.evaluateAll(nodes=>nodes.filter(node=>node.getAttribute('aria-expanded')==='true').length),1);
     }
   }catch(error){failures.push(`${viewport.name}: ${error.message}\n${JSON.stringify(result)}`)}
   if(runtimeErrors.length)failures.push(`${viewport.name}: runtime errors ${runtimeErrors.join(' | ')}`);
-  fs.mkdirSync(evidenceDir,{recursive:true});await page.screenshot({path:path.join(evidenceDir,`${viewport.name}.png`),fullPage:true});
+  fs.mkdirSync(evidenceDir,{recursive:true});
+  const capture=async(name,locator)=>{await locator.scrollIntoViewIfNeeded();await locator.screenshot({path:path.join(evidenceDir,viewport.name,name)});};
+  fs.mkdirSync(path.join(evidenceDir,viewport.name),{recursive:true});
+  await capture('01-opening.png',page.locator('.case-study-v2-opening'));
+  await capture('02-first-question.png',page.locator('[data-project-section="first-question"]'));
+  await capture('03-reframe.png',page.locator('[data-project-section="product-reframing"]'));
+  await capture('04-decision-selector.png',page.locator('.decision-explorer__selector'));
+  for(const [index,name] of ['project-health','attention','lifecycle'].entries()){
+    await page.locator('.decision-explorer__tab').nth(index).click();
+    await capture(`${String(5+index*2).padStart(2,'0')}-${name}.png`,page.locator('.decision-explorer__story:not([hidden])'));
+    const trigger=page.locator('.decision-explorer__story:not([hidden]) .evidence-explorer__trigger');if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
+    if(viewport.width===430){const firstEvidence=page.locator('.decision-explorer__story:not([hidden]) .evidence-explorer__accordion-button').first();if(await firstEvidence.getAttribute('aria-expanded')!=='true')await firstEvidence.click()}
+    await capture(`${String(6+index*2).padStart(2,'0')}-${name}-evidence.png`,page.locator('.decision-explorer__story:not([hidden]) .evidence-explorer'));
+  }
+  await capture('11-what-changed.png',page.locator('.case-study-v2-change-sequence'));
+  await capture('12-outcomes.png',page.locator('.case-study-v2-outcomes'));
+  await capture('13-cta.png',page.locator('.case-study-v2-cta'));
+  await capture('14-overall-page.png',page.locator('.modal-content-v45'));
   await context.close();
 }
 
@@ -75,8 +96,7 @@ const reducedContext=await browser.newContext({viewport:{width:871,height:1024},
 const reducedPage=await reducedContext.newPage();
 await reducedPage.goto(`${baseUrl}/work/daily-hours`,{waitUntil:'networkidle'});
 await reducedPage.locator('.decision-explorer').waitFor({state:'visible'});
-await reducedPage.locator('.decision-explorer__story:not([hidden]) .evidence-explorer__trigger').click();
-const reducedVideos=await reducedPage.locator('.decision-explorer__story:not([hidden]) video').evaluateAll(videos=>videos.map(video=>({paused:video.paused,controls:video.controls,poster:Boolean(video.poster)})));
+const reducedVideos=await reducedPage.locator('.case-study-v2-opening video,.decision-explorer video').evaluateAll(videos=>videos.map(video=>({paused:video.paused,controls:video.controls,poster:Boolean(video.poster)})));
 if(!reducedVideos.length||reducedVideos.some(video=>!video.paused||!video.controls||!video.poster))failures.push(`reduced-motion: managed video contract failed ${JSON.stringify(reducedVideos)}`);
 await reducedContext.close();
 

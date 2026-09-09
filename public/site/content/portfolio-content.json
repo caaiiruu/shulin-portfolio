@@ -85,28 +85,28 @@
         "zh": "Daily Hours"
       },
       "cardDescription": {
-        "en": "A freelance project-economics and capacity decision workspace that turns everyday work data into clearer profitability, workload, and attention decisions.",
-        "zh": "A freelance project-economics and capacity decision workspace that turns everyday work data into clearer profitability, workload, and attention decisions."
+        "en": "Daily Hours connects project setup, live work, billing, revenue and capacity so I can see whether freelance work is healthy while I can still act on it.",
+        "zh": "Daily Hours connects project setup, live work, billing, revenue and capacity so I can see whether freelance work is healthy while I can still act on it."
       },
       "title": {
-        "en": "From tracking work to making better project-economic decisions",
-        "zh": "From tracking work to making better project-economic decisions"
+        "en": "From tracking hours to managing project economics across the full freelance lifecycle.",
+        "zh": "From tracking hours to managing project economics across the full freelance lifecycle."
       },
       "problemTypes": {
         "en": [
-          "Project profitability",
+          "Project economics",
           "Capacity planning",
           "Freelance operations"
         ],
         "zh": [
-          "Project profitability",
+          "Project economics",
           "Capacity planning",
           "Freelance operations"
         ]
       },
       "atAGlance": {
-        "en": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions.",
-        "zh": "Defined, designed, and built a 0→1 product for my own freelance practice, turning everyday work data into project-profitability, workload, and capacity signals I could use in real decisions."
+        "en": "Designed and built a 0→1 freelance operating workspace that connects project setup, work tracking, billing, revenue and capacity into one decision model I use in my own practice.",
+        "zh": "Designed and built a 0→1 freelance operating workspace that connects project setup, work tracking, billing, revenue and capacity into one decision model I use in my own practice."
       },
       "infoGrid": {
         "type": {
@@ -148,12 +148,12 @@
             "label": "Project health",
             "question": "Is this project still worth the effort?",
             "title": {
-              "en": "From tracked hours to project health.",
-              "zh": "From tracked hours to project health."
+              "en": "From a quoted rate to a live view of project health.",
+              "zh": "From a quoted rate to a live view of project health."
             },
             "whyThisChoice": {
-              "en": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future.",
-              "zh": "Knowing how many hours I had worked did not tell me whether a project was healthy, consuming disproportionate effort, or worth similar commitments in the future."
+              "en": "Each project starts with its commercial assumptions, then updates as real hours, rework, billing and workload accumulate.",
+              "zh": "Each project starts with its commercial assumptions, then updates as real hours, rework, billing and workload accumulate."
             },
             "primaryProof": {
               "assetId": "daily-hours-decision-01-project-economics-preview-v1",
@@ -169,35 +169,57 @@
             },
             "supportingEvidence": [
               {
-                "id": "daily-hours-working-product-overview",
-                "title": "Working product overview",
-                "assetId": "daily-hours-overview-28s-preview-v1",
-                "posterAssetId": "daily-hours-overview-video-poster-preview-v1",
-                "mediaType": "video/mp4",
+                "id": "daily-hours-commercial-assumptions",
+                "title": "Commercial assumptions",
                 "alt": {
-                  "en": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions.",
-                  "zh": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions."
+                  "en": "Reserved evidence container for agreed rate and target rate in Daily Hours.",
+                  "zh": "Reserved evidence container for agreed rate and target rate in Daily Hours."
                 },
-                "caption": "A short walkthrough of the working product from active work to project-economic decisions.",
-                "proof": "The live product carries everyday work data into monitoring, comparison, capacity, and final project review.",
-                "mediaRole": "working-product-overview",
-                "presentationIntent": "cinematic",
-                "autoplayOnView": true,
-                "loop": false
+                "proof": "Agreed rate and target rate serve different decisions.",
+                "mediaRole": "commercial-assumptions",
+                "presentationIntent": "wide",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-project-type-benchmark",
+                "title": "Project type changes the benchmark",
+                "alt": {
+                  "en": "Reserved evidence container for project-type benchmarks in Daily Hours.",
+                  "zh": "Reserved evidence container for project-type benchmarks in Daily Hours."
+                },
+                "proof": "Different work types carry different revenue, effort and margin expectations.",
+                "mediaRole": "project-type-benchmark",
+                "presentationIntent": "interactive",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-health-with-real-work",
+                "title": "Health changes with real work",
+                "assetId": "daily-hours-decision-01-project-economics-preview-v1",
+                "mediaType": "image/jpeg",
+                "alt": {
+                  "en": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework.",
+                  "zh": "A real Daily Hours Project Monitor connects tracked and target hours with revenue, effective rate, forecast margin, and rework."
+                },
+                "caption": "Current governed Project Monitor proof.",
+                "proof": "Project Monitor updates efficiency, hours, rework and margin risk as work accumulates.",
+                "mediaRole": "project-health-change",
+                "presentationIntent": "wide",
+                "mediaStatus": "interim-governed"
               }
             ]
           },
           {
             "id": "daily-hours-decision-02",
             "label": "Attention",
-            "question": "What needs action first?",
+            "question": "What needs action now?",
             "title": {
-              "en": "From reporting everything to showing what needs attention.",
-              "zh": "From reporting everything to showing what needs attention."
+              "en": "From monitoring the project to knowing when to intervene.",
+              "zh": "From monitoring the project to knowing when to intervene."
             },
             "whyThisChoice": {
-              "en": "The useful question was not simply “what happened?” but “what deserves my attention first?”",
-              "zh": "The useful question was not simply “what happened?” but “what deserves my attention first?”"
+              "en": "Daily Hours turns changes in margin, billing, schedule and workload into signals I can act on before the project is finished.",
+              "zh": "Daily Hours turns changes in margin, billing, schedule and workload into signals I can act on before the project is finished."
             },
             "primaryProof": {
               "assetId": "daily-hours-decision-02-ranked-attention-preview-v1",
@@ -214,19 +236,68 @@
               "autoplayOnView": true,
               "loop": true
             },
-            "supportingEvidence": []
+            "supportingEvidence": [
+              {
+                "id": "daily-hours-billing-active-signal",
+                "title": "Billing is an active signal",
+                "alt": {
+                  "en": "Reserved evidence container for billing progress in Daily Hours.",
+                  "zh": "Reserved evidence container for billing progress in Daily Hours."
+                },
+                "proof": "Billed hours and money stay visible against the project so I know when another client billing action is due.",
+                "mediaRole": "billing-progress",
+                "presentationIntent": "wide",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-risk-changes-plan",
+                "title": "Risk can change the plan",
+                "alt": {
+                  "en": "Reserved evidence container for project-risk reclassification in Daily Hours.",
+                  "zh": "Reserved evidence container for project-risk reclassification in Daily Hours."
+                },
+                "proof": "If predicted margin moves into risk, I can reclassify the project instead of treating the original assumption as permanent.",
+                "mediaRole": "risk-reclassification",
+                "presentationIntent": "interactive",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-work-evolves",
+                "title": "Work evolves mid-project",
+                "alt": {
+                  "en": "Reserved evidence container for adding meetings and work categories in Daily Hours.",
+                  "zh": "Reserved evidence container for adding meetings and work categories in Daily Hours."
+                },
+                "proof": "Meetings and new work categories can be added without breaking the same project record.",
+                "mediaRole": "evolving-work-record",
+                "presentationIntent": "interactive",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-upcoming-work",
+                "title": "Upcoming work becomes actionable",
+                "alt": {
+                  "en": "Reserved evidence container for upcoming-work notifications in Daily Hours.",
+                  "zh": "Reserved evidence container for upcoming-work notifications in Daily Hours."
+                },
+                "proof": "Schedules surface through notifications instead of relying on memory.",
+                "mediaRole": "upcoming-work-notification",
+                "presentationIntent": "device",
+                "mediaStatus": "awaiting-final-demo"
+              }
+            ]
           },
           {
             "id": "daily-hours-decision-03",
             "label": "Lifecycle",
             "question": "Can I still change the outcome—or am I learning from it?",
             "title": {
-              "en": "From active work to final judgment.",
-              "zh": "From active work to final judgment."
+              "en": "From active work to financial closure and the next decision.",
+              "zh": "From active work to financial closure and the next decision."
             },
             "whyThisChoice": {
-              "en": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort.",
-              "zh": "An active project and a completed project require different interpretation: one supports intervention while there is still time to act; the other supports retrospective judgment about whether the work was worth the effort."
+              "en": "A project can be finished before it is fully billed or paid, so work status and financial status remain separate through closeout.",
+              "zh": "A project can be finished before it is fully billed or paid, so work status and financial status remain separate through closeout."
             },
             "primaryProof": {
               "assetId": "daily-hours-decision-03-lifecycle-states-preview-v1",
@@ -245,8 +316,32 @@
             },
             "supportingEvidence": [
               {
+                "id": "daily-hours-completion-financial-record",
+                "title": "Completion does not close the financial record",
+                "alt": {
+                  "en": "Reserved evidence container for completed work with open billing in Daily Hours.",
+                  "zh": "Reserved evidence container for completed work with open billing in Daily Hours."
+                },
+                "proof": "A completed project can stay open for billing until the full amount has been invoiced.",
+                "mediaRole": "completion-billing-separation",
+                "presentationIntent": "wide",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
+                "id": "daily-hours-revenue-state",
+                "title": "Revenue has its own state",
+                "alt": {
+                  "en": "Reserved evidence container for unreceived and received revenue states in Daily Hours.",
+                  "zh": "Reserved evidence container for unreceived and received revenue states in Daily Hours."
+                },
+                "proof": "Unreceived income remains visible until payment arrives, including the date it was actually received.",
+                "mediaRole": "received-revenue-state",
+                "presentationIntent": "cinematic",
+                "mediaStatus": "awaiting-final-demo"
+              },
+              {
                 "id": "daily-hours-connected-project-model",
-                "title": "Connected project model",
+                "title": "One project record survives the whole lifecycle",
                 "assetId": "daily-hours-decision-04-connected-model-preview-v1",
                 "posterAssetId": "daily-hours-decision-04-connected-model-poster-preview-v1",
                 "mediaType": "video/mp4",
@@ -254,19 +349,44 @@
                   "en": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record.",
                   "zh": "A Daily Hours work session keeps its project context as tracked activity becomes a client-ready reported record."
                 },
-                "caption": "Start Work → recorded work → same project context → reporting.",
-                "proof": "One project and work classification model preserves Active and Completed continuity from Start Work through recorded work and reporting.",
+                "caption": "Connected project model",
+                "proof": "The same project connects setup, work, monitoring, billing, completion and revenue instead of breaking into separate tools.",
                 "mediaRole": "connected-project-model",
                 "presentationIntent": "interactive",
                 "autoplayOnView": true,
                 "loop": true
               }
-            ]
+            ],
+            "consequence": {
+              "label": "After the project",
+              "title": "Project-level truth → freelance-business planning",
+              "body": "Received revenue feeds Reports, capacity and annual target planning; unavailable dates stay outside client capacity."
+            }
           }
         ],
         "contentStatus": "approved-daily-hours-primary-draft"
       },
       "publicContent": {
+        "opening": {
+          "lead": {
+            "en": "Daily Hours connects project setup, live work, billing, revenue and capacity so I can see whether freelance work is healthy while I can still act on it.",
+            "zh": "Daily Hours connects project setup, live work, billing, revenue and capacity so I can see whether freelance work is healthy while I can still act on it."
+          },
+          "media": {
+            "assetId": "daily-hours-overview-28s-preview-v1",
+            "posterAssetId": "daily-hours-overview-video-poster-preview-v1",
+            "mediaType": "video/mp4",
+            "mediaRole": "working-product-overview",
+            "presentationIntent": "wide",
+            "autoplayOnView": true,
+            "loop": false,
+            "alt": {
+              "en": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions.",
+              "zh": "Daily Hours product overview moving from active work through project monitoring, ranked reports, reporting, capacity, and project-health decisions."
+            },
+            "caption": "Working product overview"
+          }
+        },
         "firstQuestion": {
           "title": {
             "en": "The first question",
@@ -278,16 +398,19 @@
           ],
           "facts": [
             {
-              "label": "Hours",
-              "value": "≠ health"
+              "index": "01",
+              "label": "Hours ≠ project health",
+              "value": "Knowing the time spent did not tell me whether the rate, margin or workload was still healthy."
             },
             {
-              "label": "Numbers",
-              "value": "were disconnected"
+              "index": "02",
+              "label": "The project changed while I was working",
+              "value": "Scope, work type, billed amount and risk could all change before the project was done."
             },
             {
-              "label": "Capacity",
-              "value": "stayed invisible"
+              "index": "03",
+              "label": "Completion ≠ getting paid",
+              "value": "Finishing the work did not mean billing, receiving income or capacity planning was finished."
             }
           ],
           "renderVariant": "story-question"
@@ -339,11 +462,11 @@
             "zh": "Time is an input.\nThe decision is the product."
           },
           "flow": [
+            "Plan",
             "Work",
-            "Project",
-            "Economics",
-            "Attention",
-            "Decision"
+            "Monitor",
+            "Settle",
+            "Learn"
           ],
           "renderVariant": "decision-flow"
         },
@@ -438,16 +561,16 @@
           },
           "items": [
             {
-              "observed": "Couldn’t always record work live.",
-              "changed": "Added Manual Entry without breaking the shared project model."
+              "observed": "Real work did not always begin with a timer.",
+              "changed": "Manual Entry and flexible categories kept unexpected work inside the same project model."
             },
             {
-              "observed": "Completed work still behaved like active work.",
-              "changed": "Added completed-state logic and guards."
+              "observed": "Finishing the work did not mean the money was settled.",
+              "changed": "Completion, billing and received revenue became separate states."
             },
             {
-              "observed": "More reporting created more noise.",
-              "changed": "Added ranking, Top 3, and selectable primary / secondary metrics."
+              "observed": "A static project assumption became inaccurate as work evolved.",
+              "changed": "Project type, thresholds and health signals became adjustable during the project."
             }
           ],
           "renderVariant": "observed-changed"
@@ -459,16 +582,16 @@
           },
           "items": [
             {
-              "title": "Working product",
-              "body": "A live product used in my own freelance practice."
+              "title": "Working operating system",
+              "body": "Used in my actual freelance practice from project setup through revenue tracking."
             },
             {
-              "title": "~2 days",
-              "body": "The first usable version moved from question to working software in roughly two days."
+              "title": "Faster learning loop",
+              "body": "Built the first usable version quickly, then changed the system through real project use."
             },
             {
-              "title": "Continuous iteration",
-              "body": "Real use continues to reshape the product and the decisions it supports."
+              "title": "One connected project record",
+              "body": "Commercial assumptions, work, billing and received revenue remain connected across the lifecycle."
             }
           ],
           "renderVariant": "qualitative-outcomes"
@@ -522,6 +645,7 @@
           "body": [
             "Daily Hours is a live product I use in my own freelance practice."
           ],
+          "nextQuestion": "How early can project signals predict whether I should change the work—or stop taking similar work next time?",
           "cta": {
             "label": "Request demo access",
             "href": "mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request"

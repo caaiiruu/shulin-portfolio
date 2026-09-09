@@ -24,7 +24,7 @@ test('Case Study v2 remains an explicit Daily Hours-only extension',()=>{
   assert.match(app,/function renderCaseStudyV2\(project\)/);
   assert.match(app,/function createEvidenceExplorer\(items,decisionId\)/);
   assert.match(css,/@media\(max-width:871px\)\{[\s\S]*\.decision-explorer,.evidence-explorer__indexed\{grid-template-columns:1fr\}/);
-  assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.case-study-v2-facts,.case-study-v2-outcomes__grid\{grid-template-columns:1fr\}/);
+  assert.match(css,/@media\(max-width:430px\)\{[\s\S]*\.decision-explorer__selector\{display:flex;[\s\S]*\.evidence-explorer__indexed\{display:none\}/);
 });
 
 test('owns public IA through two explicit archetype contracts',()=>{

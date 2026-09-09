@@ -152,8 +152,10 @@ if(dailyHoursDecisions.length!==3||dailyHoursDecisions.map(decision=>decision.la
 for(const decision of dailyHoursDecisions){
   for(const field of ["id","label","question","title","whyThisChoice","primaryProof","supportingEvidence"])if(!(field in decision))throw new Error(`Daily Hours decision ${decision.id||"unknown"} is missing ${field}`);
   for(const proof of [decision.primaryProof,...(decision.supportingEvidence||[])]){
-    for(const field of ["assetId","mediaType","alt","caption","proof","mediaRole","presentationIntent"])if(!(field in proof))throw new Error(`Daily Hours proof ${proof.assetId||"unknown"} is missing ${field}`);
-    if(!approvedPresentationIntents.has(proof.presentationIntent))throw new Error(`Daily Hours proof ${proof.assetId} has an unapproved presentationIntent`);
+    for(const field of ["alt","proof","mediaRole","presentationIntent"])if(!(field in proof))throw new Error(`Daily Hours proof ${proof.id||proof.assetId||"unknown"} is missing ${field}`);
+    const isReserved=proof.mediaStatus==="awaiting-final-demo"&&!proof.assetId;
+    if(!isReserved)for(const field of ["assetId","mediaType","caption"])if(!(field in proof))throw new Error(`Daily Hours proof ${proof.id||proof.assetId||"unknown"} is missing ${field}`);
+    if(!approvedPresentationIntents.has(proof.presentationIntent))throw new Error(`Daily Hours proof ${proof.id||proof.assetId} has an unapproved presentationIntent`);
   }
 }
 for (const [projectId, project] of Object.entries(content.projects)) {

@@ -368,13 +368,13 @@
       },
       "EvidenceExplorer": {
         "registryComponent": "EvidenceExplorer",
-        "status": "Live / Current Production",
+        "status": "Preview pilot / Awaiting Human visual approval",
         "renderOwners": ["assets/js/app.js#createEvidenceExplorer"],
         "cssOwner": "assets/css/components/project-detail-overview.css",
         "semanticRole": "Progressive disclosure for supporting evidence linked to a selected decision",
         "acceptedContentTypes": ["shipped-ui", "prototype", "framework", "document"],
-        "requiredData": ["id", "title", "assetId", "proof", "mediaRole", "presentationIntent"],
-        "optionalData": ["posterAssetId", "mediaType", "caption", "autoplayOnView", "loop"],
+        "requiredData": ["id", "title", "proof", "mediaRole", "presentationIntent"],
+        "optionalData": ["assetId", "posterAssetId", "mediaType", "caption", "autoplayOnView", "loop", "mediaStatus"],
         "allowedArchetypes": ["primary"],
         "tokenDependencies": ["evidence-content-gap", "evidence-item-gap", "project-media-radius", "control-height", "color-focus", "motion-fast"],
         "componentIntentTokens": [],
@@ -386,7 +386,7 @@
         "regressionContracts": ["tests/design-system-governance.test.mjs", "tests/case-study-v2-browser-qa.mjs"],
         "usageScope": ["Case Study v2 supporting evidence"],
         "forbiddenUsage": ["Primary proof replacement", "Always-open evidence dump", "Multiple open mobile panels", "Project-specific implementation"],
-        "protectedBehavior": ["Collapsed until requested", "Index above stage at tablet", "Single-open mobile accordion", "Title then media then proof", "Keyboard-operable disclosure and selection"],
+        "protectedBehavior": ["Collapsed until requested", "Index above stage at tablet", "Single-open mobile accordion", "Title then media then proof", "Keyboard-operable disclosure and selection", "Neutral reserved container when final demo media is pending"],
         "figmaMapping": null
       },
       "ChangeSequence": {

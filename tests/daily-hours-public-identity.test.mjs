@@ -15,8 +15,8 @@ test('Daily Hours is one canonical Primary Project with archived experiment prov
   assert.equal(project.company.en,'0→1 Independent Product');
   assert.equal(project.decisionNarrative.primaryDecisions.length,3);
   assert.deepEqual(project.decisionNarrative.primaryDecisions.map(decision=>decision.label),['Project health','Attention','Lifecycle']);
-  assert.equal(project.decisionNarrative.primaryDecisions[2].supportingEvidence[0].assetId,'daily-hours-decision-04-connected-model-preview-v1');
-  assert.match(project.decisionNarrative.primaryDecisions[2].supportingEvidence[0].proof,/Active and Completed continuity/);
+  assert.equal(project.decisionNarrative.primaryDecisions[2].supportingEvidence[2].assetId,'daily-hours-decision-04-connected-model-preview-v1');
+  assert.match(project.decisionNarrative.primaryDecisions[2].supportingEvidence[2].proof,/same project connects setup, work, monitoring, billing, completion and revenue/);
   assert.equal(project.mediaAssetStatus,'REQUIRES_HUMAN_SELECTION');
   assert.equal(project.publicContent.productVideo.assetStatus,'CANDIDATE_REVIEW');
   assert.equal(project.publicContent.productVideo.assetId,'daily-hours-overview-28s-preview-v1');
@@ -42,14 +42,19 @@ test('Daily Hours uses the canonical project route and controlled demo access',(
 test('Daily Hours v2 decisions and proof use the governed schema',()=>{
   const decisions=content.projects['daily-hours'].decisionNarrative.primaryDecisions;
   const requiredDecision=['id','label','question','title','whyThisChoice','primaryProof','supportingEvidence'];
-  const requiredProof=['assetId','mediaType','alt','caption','proof','mediaRole','presentationIntent'];
+  const requiredProof=['alt','proof','mediaRole','presentationIntent'];
   for(const decision of decisions){
     for(const field of requiredDecision)assert.ok(field in decision,`${decision.id} missing ${field}`);
     for(const field of requiredProof)assert.ok(field in decision.primaryProof,`${decision.id} primary proof missing ${field}`);
-    for(const proof of decision.supportingEvidence)for(const field of requiredProof)assert.ok(field in proof,`${proof.id} missing ${field}`);
+    for(const proof of decision.supportingEvidence){
+      for(const field of requiredProof)assert.ok(field in proof,`${proof.id} missing ${field}`);
+      if(!proof.assetId)assert.equal(proof.mediaStatus,'awaiting-final-demo');
+    }
   }
   assert.deepEqual(content.projects['daily-hours'].publicContent.firstQuestion.lines,['I knew how many hours I worked.','I still didn’t know if the work was worth it.']);
-  assert.deepEqual(content.projects['daily-hours'].publicContent.productReframing.flow,['Work','Project','Economics','Attention','Decision']);
+  assert.deepEqual(content.projects['daily-hours'].publicContent.productReframing.flow,['Plan','Work','Monitor','Settle','Learn']);
+  assert.deepEqual(decisions.map(decision=>decision.supportingEvidence.length),[3,4,3]);
+  assert.equal(decisions[2].supportingEvidence[2].id,'daily-hours-connected-project-model');
 });
 
 test('no public experiment title retains the retired descriptive name',()=>{

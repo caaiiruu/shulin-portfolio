@@ -1,6 +1,6 @@
 # Case Study Presentation System v2 explorers
 
-Status: Live / Current Production — Daily Hours opt-in pilot
+Status: Preview pilot — awaiting Human visual approval
 
 Runtime Owner: `assets/js/app.js`
 
@@ -20,13 +20,13 @@ Required decision fields: `id`, `label`, `question`, `title`, `whyThisChoice`, `
 
 EvidenceExplorer is the only new shared primitive in v2. It progressively discloses evidence that supports—but never replaces—the selected decision's primary proof. Desktop and tablet use an index plus one stage. At 871px the index moves above the stage. At 430px it becomes a single-open accordion and starts fully collapsed. Each item reads title, media, then proof.
 
-Required proof fields: `assetId`, `mediaType`, `alt`, `caption`, `proof`, `mediaRole`, and `presentationIntent`. Optional video fields are `posterAssetId`, `autoplayOnView`, and `loop`. Approved presentation intents are `wide`, `interactive`, `cinematic`, and `device`.
+Required proof fields are `alt`, `proof`, `mediaRole`, and `presentationIntent`. Governed media also requires `assetId`, `mediaType`, and `caption`. A reserved final-demo slot instead requires `mediaStatus: awaiting-final-demo` and renders a neutral container rather than synthetic product UI. Optional video fields are `posterAssetId`, `autoplayOnView`, and `loop`. Approved presentation intents are `wide`, `interactive`, `cinematic`, and `device`.
 
 Video media delegates to EvidenceFrame for native controls, visible poster, muted inline playback, in-view autoplay only when explicitly enabled, offscreen pause, reduced-motion suppression, and no forced loop unless explicitly enabled.
 
 ## Shared v2 composition
 
-The opt-in scene order is Opening, First Question, Reframe, Decision Explorer, Primary Proof, Evidence Explorer, What Changed, Outcomes, CTA, and Related. `ChangeSequence` and `ProjectCTA` remain extensions of ProjectDetailOverview; they are not new primitives.
+The opt-in scene order is Opening, At a Glance / Info Grid, First Question, Reframe, Decision Explorer, Primary Proof, Evidence Explorer, What Changed, Outcomes, CTA, and Related. The full-page rhythm follows the approved v4 reference while the complete Decision Showcase follows v7. All production selectors remain inside the Case Study v2 namespace; generic prototype selectors are forbidden. `ChangeSequence` and `ProjectCTA` remain extensions of ProjectDetailOverview; they are not new primitives.
 
 Allowed modifications: shared variant extensions, accessibility fixes, responsive refinements at existing breakpoints, and new opt-in consumers with complete governed content.
 

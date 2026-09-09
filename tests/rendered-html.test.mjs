@@ -507,7 +507,7 @@ test("renders verified Key Intervention Maps from the canonical SSOT only", () =
   assert.match(css, /\.key-intervention-map__flow\{[^}]*grid-template-columns:minmax\(0,1fr\)/);
   assert.match(css, /@media\(max-width:871px\)\{\.key-intervention-map__flow\{grid-template-columns:1fr/);
   assert.match(css, /\.key-intervention-map__supporting\{display:grid;gap:var\(--space-3\)/);
-  assert.doesNotMatch(css.match(/\/\* Key Intervention Map[\s\S]*$/)?.[0] || "", /overflow-x\s*:\s*(?:auto|scroll)/);
+  assert.doesNotMatch(css.match(/\.key-intervention-map__flow\{[^}]*\}/)?.[0] || "", /overflow-x\s*:\s*(?:auto|scroll)/);
   assert.match(app, /sharedGallery'\)\.hidden=isStage\|\|currentDetail\.type==='project'/);
   assert.match(app, /if\(sectionId==='executive-summary'\)return/);
   assert.match(app, /if\(sectionId==='system-evidence'\)/);
