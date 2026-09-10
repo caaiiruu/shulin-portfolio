@@ -18,6 +18,16 @@
   const contentRail = document.getElementById('domainContentRail');
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
 
+  let viewportSyncFrame = 0;
+  const syncViewportWidth = () => {
+    section.style.setProperty('--domain-viewport-width', `${window.innerWidth}px`);
+  };
+  syncViewportWidth();
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(viewportSyncFrame);
+    viewportSyncFrame = requestAnimationFrame(syncViewportWidth);
+  });
+
   const localize = (value) => {
     if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
     if (value && typeof value === 'object' && ('en' in value || 'zh' in value)) {
