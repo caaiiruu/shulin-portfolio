@@ -17,11 +17,15 @@
   const stage = document.getElementById('domainStage');
   const contentRail = document.getElementById('domainContentRail');
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
+
   const localize = (value) => {
     if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
-    if (value && typeof value === 'object' && ('en' in value || 'zh' in value)) return language() === 'zh' ? (value.zh ?? value.en ?? '') : (value.en ?? value.zh ?? '');
+    if (value && typeof value === 'object' && ('en' in value || 'zh' in value)) {
+      return language() === 'zh' ? (value.zh ?? value.en ?? '') : (value.en ?? value.zh ?? '');
+    }
     return value ?? '';
   };
+
   const scalarText = (value, depth = 0) => {
     if (value == null || depth > 4) return '';
     const localized = localize(value);
@@ -42,6 +46,32 @@
     }
     return '';
   };
+
+  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
+
+  const tabIcon = {
+    finance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 3 3 8h18L12 3Z"/></svg>',
+    operations: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><rect x="15" y="15" width="6" height="6"/><path d="M9 6h6M6 9v6M18 9v6M9 18h6"/></svg>',
+    growth: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16v12H4zM12 9v12M3 9h18M7 9c-2.5 0-3.5-1.5-3.5-3S5 3.5 6.5 4.5L12 9M17 9c2.5 0 3.5-1.5 3.5-3S19 3.5 17.5 4.5L12 9"/></svg>',
+    travel: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg>',
+    commerce: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>',
+    learning: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1 6-.5 9 1.5v13c-3-2-6-2.5-9-1.5v-13ZM21 5.5c-3-1-6-.5-9 1.5v13c3-2 6-2.5 9-1.5v-13Z"/></svg>'
+  };
+
+  const enhanceTabs = () => {
+    section.querySelectorAll('.domain-tab').forEach((tab) => {
+      if (tab.querySelector('.domain-tab__icon')) return;
+      const number = tab.querySelector(':scope > span');
+      if (number) number.classList.add('domain-tab__number');
+      const strong = tab.querySelector('strong');
+      if (strong) strong.classList.add('domain-tab__label');
+      const icon = document.createElement('span');
+      icon.className = 'domain-tab__icon';
+      icon.innerHTML = tabIcon[tab.dataset.domain] || tabIcon.operations;
+      tab.insertBefore(icon, strong || tab.firstChild);
+    });
+  };
+  enhanceTabs();
 
   const projectPanel = related?.closest('.domain-panel-v30--projects');
   const problemsPanel = document.getElementById('domainProblems')?.closest('.domain-panel-v30');
@@ -76,9 +106,9 @@
   let activeIndex = 0;
   let cards = [];
   let pointerStartX = null;
+  let pointerStartY = null;
   let rebuilding = false;
 
-  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
   const readYear = (rawProject, adaptedProject, source) => {
     const raw = firstText(
       rawProject?.year,
@@ -94,9 +124,9 @@
     );
     const match = raw.match(/(?:19|20)\d{2}/);
     if (match) return match[0];
-    const sourceText = source?.textContent || '';
-    return sourceText.match(/(?:19|20)\d{2}/)?.[0] || raw;
+    return source?.textContent.match(/(?:19|20)\d{2}/)?.[0] || raw;
   };
+
   const readType = (rawProject, adaptedProject, source) => firstText(
     rawProject?.type,
     rawProject?.infoGrid?.type,
@@ -113,6 +143,24 @@
     source?.querySelector('[class*="context"]')?.textContent
   );
 
+  const conciseMetricLabel = (label) => {
+    const text = String(label || '').trim();
+    const normalized = text.toLowerCase();
+    const zh = language() === 'zh';
+    if (/programme|program/.test(normalized)) return zh ? '計畫' : 'programme';
+    if (/digital.*share|share.*digital|redemption share|campaign.*share/.test(normalized)) return zh ? '數位佔比' : 'digital share';
+    if (/redemption/.test(normalized)) return zh ? '兌換' : 'redemptions';
+    if (/market|countr/.test(normalized)) return zh ? '市場' : 'markets';
+    if (/workflow/.test(normalized)) return zh ? '工作流' : 'workflow';
+    if (/decision/.test(normalized)) return zh ? '決策模型' : 'decision model';
+    if (/success/.test(normalized)) return zh ? '成功率' : 'success rate';
+    if (/time|second|minute|hour/.test(normalized)) return zh ? '處理時間' : 'time';
+    if (/user/.test(normalized)) return zh ? '使用者' : 'users';
+    if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.slice(0, 2).join(' ');
+  };
+
   const collectMetrics = (rawProject, adaptedProject) => {
     const sources = [
       rawProject?.cardMetrics,
@@ -126,8 +174,6 @@
       rawProject?.impact_evidence?.primary_metrics,
       rawProject?.publicContent?.impactEvidence?.primaryMetrics,
       rawProject?.publicContent?.impact_evidence?.primary_metrics,
-      rawProject?.businessImpact?.primaryMetrics,
-      rawProject?.business_impact?.primary_metrics,
       adaptedProject?.cardMetrics,
       adaptedProject?.card_metrics,
       adaptedProject?.primaryMetrics,
@@ -145,17 +191,38 @@
       for (const item of source) {
         if (!item || typeof item !== 'object') continue;
         const value = firstText(item.value, item.metric, item.amount);
-        const label = firstText(item.label, item.name, item.description);
-        const period = firstText(item.period, item.window);
+        const label = conciseMetricLabel(firstText(item.label, item.name, item.description));
         if (!value || !label) continue;
         const key = `${value}|${label}`;
         if (seen.has(key)) continue;
         seen.add(key);
-        result.push({ value, label: period ? `${label} · ${period}` : label });
+        result.push({ value, label });
         if (result.length === 3) return result;
       }
     }
     return result;
+  };
+
+  const tintPalette = [
+    'rgb(223 235 246)',
+    'rgb(231 229 249)',
+    'rgb(248 225 214)',
+    'rgb(224 241 233)',
+    'rgb(245 235 210)',
+    'rgb(230 238 225)'
+  ];
+  const tintForProject = (key) => {
+    const known = {
+      voucher: 'rgb(218 233 247)',
+      payment: 'rgb(223 240 233)',
+      dbs: 'rgb(225 229 250)',
+      booking: 'rgb(235 229 250)',
+      'game-center': 'rgb(247 226 214)',
+      bandzo: 'rgb(242 234 210)'
+    };
+    if (known[key]) return known[key];
+    const hash = [...key].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return tintPalette[hash % tintPalette.length];
   };
 
   const buildVisual = (source, rawProject, adaptedProject, key) => {
@@ -165,7 +232,7 @@
     if (image) {
       const clone = image.cloneNode(true);
       clone.className = 'domain-project-card-v2__image';
-      clone.loading = 'lazy';
+      clone.loading = 'eager';
       clone.decoding = 'async';
       visual.append(clone);
       return visual;
@@ -178,9 +245,12 @@
       img.className = 'domain-project-card-v2__image';
       img.src = asset.src;
       img.alt = scalarText(asset.alt);
-      img.loading = 'lazy';
+      img.loading = 'eager';
       img.decoding = 'async';
-      if (asset.width && asset.height) { img.width = asset.width; img.height = asset.height; }
+      if (asset.width && asset.height) {
+        img.width = asset.width;
+        img.height = asset.height;
+      }
       visual.append(img);
       return visual;
     }
@@ -199,7 +269,10 @@
     const article = document.createElement('article');
     article.className = 'domain-project-card-v2 domain-project-card-v2--large';
     article.dataset.projectCardVariant = 'large';
-    if (key) article.dataset.project = key;
+    article.dataset.project = key;
+    article.style.setProperty('--project-card-tint', tintForProject(key));
+    article.setAttribute('role', 'link');
+    article.setAttribute('aria-label', `${language() === 'zh' ? '開啟' : 'Open'} ${firstText(rawProject?.transformation, rawProject?.title, key)}`);
     if (source.dataset.experiment) article.dataset.experiment = source.dataset.experiment;
 
     const body = document.createElement('div');
@@ -240,36 +313,25 @@
       source.querySelector('[class*="title"]')?.textContent
     );
 
-    const supportText = firstText(
-      rawProject?.what_this_proves,
-      rawProject?.whatThisProves,
-      adaptedProject?.what_this_proves,
-      adaptedProject?.whatThisProves
-    );
-    const support = document.createElement('p');
-    support.className = 'domain-project-card-v2__support';
-    support.textContent = supportText;
-
     const metrics = collectMetrics(rawProject, adaptedProject);
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
-    metrics.forEach(({ value }) => {
+    metrics.forEach(({ value, label }) => {
+      const item = document.createElement('div');
+      item.className = 'domain-project-card-v2__metric';
       const dt = document.createElement('dt');
       dt.className = 'domain-project-card-v2__metric-value';
       dt.textContent = value;
-      metricList.append(dt);
-    });
-    metrics.forEach(({ label }) => {
       const dd = document.createElement('dd');
       dd.className = 'domain-project-card-v2__metric-label';
       dd.textContent = label;
-      metricList.append(dd);
+      item.append(dt, dd);
+      metricList.append(item);
     });
 
-    const cta = document.createElement('a');
+    const cta = document.createElement('div');
     cta.className = 'domain-project-card-v2__cta';
-    cta.href = key ? `/work/${key}` : '#';
     const ctaLabel = document.createElement('span');
     ctaLabel.textContent = language() === 'zh' ? '查看案例' : 'View case';
     const arrow = document.createElement('span');
@@ -278,7 +340,6 @@
     cta.append(ctaLabel, arrow);
 
     body.append(meta, title);
-    if (supportText) body.append(support);
     if (metrics.length) body.append(metricList);
     body.append(cta);
     article.append(body, buildVisual(source, rawProject, adaptedProject, key));
@@ -310,24 +371,40 @@
   };
   const step = (delta) => setActive(activeIndex + delta);
 
+  const navigateCard = (card) => {
+    const key = card?.dataset.project;
+    if (key) window.location.href = `/work/${key}`;
+  };
+
   const buildControls = () => {
     let controls = projectPanel?.querySelector('.domain-wheel-v2__controls');
     if (controls) return controls;
     controls = document.createElement('div');
     controls.className = 'domain-wheel-v2__controls';
     controls.setAttribute('aria-label', language() === 'zh' ? '專案輪播控制' : 'Project wheel controls');
+
     const previous = document.createElement('button');
     previous.type = 'button';
     previous.className = 'domain-wheel-v2__control domain-wheel-v2__control--previous';
     previous.setAttribute('aria-label', language() === 'zh' ? '上一個專案' : 'Previous project');
     previous.innerHTML = '<span class="icon-arrow icon-arrow--left" aria-hidden="true"></span>';
+
     const next = document.createElement('button');
     next.type = 'button';
     next.className = 'domain-wheel-v2__control domain-wheel-v2__control--next';
     next.setAttribute('aria-label', language() === 'zh' ? '下一個專案' : 'Next project');
     next.innerHTML = '<span class="icon-arrow icon-arrow--right" aria-hidden="true"></span>';
-    previous.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(-1); });
-    next.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(1); });
+
+    previous.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      step(-1);
+    });
+    next.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      step(1);
+    });
     controls.append(previous, next);
     projectPanel?.append(controls);
     return controls;
@@ -341,7 +418,7 @@
     cards = sourceCards.map(buildCard);
     activeIndex = 0;
     related.replaceChildren(...cards);
-    related.className = `${related.className.replace(/\bdomain-experience__rail\b/g, '').trim()} domain-wheel-v2`;
+    related.classList.add('domain-wheel-v2');
     related.removeAttribute('data-rail');
     related.removeAttribute('data-card-variant');
     buildControls();
@@ -355,29 +432,46 @@
     if (!card) return;
     const index = cards.indexOf(card);
     if (index < 0) return;
+    event.preventDefault();
     if (index !== activeIndex) {
-      event.preventDefault();
-      event.stopPropagation();
       setActive(index);
+      return;
     }
-  }, true);
+    navigateCard(card);
+  });
 
   related?.addEventListener('keydown', (event) => {
-    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-    event.preventDefault();
-    step(event.key === 'ArrowRight' ? 1 : -1);
-    cards[activeIndex]?.focus({ preventScroll: true });
+    const card = event.target.closest('.domain-project-card-v2');
+    if (!card) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      step(event.key === 'ArrowRight' ? 1 : -1);
+      cards[activeIndex]?.focus({ preventScroll: true });
+      return;
+    }
+    if ((event.key === 'Enter' || event.key === ' ') && cards.indexOf(card) === activeIndex) {
+      event.preventDefault();
+      navigateCard(card);
+    }
   });
 
-  related?.addEventListener('pointerdown', (event) => { pointerStartX = event.clientX; });
-  related?.addEventListener('pointerup', (event) => {
-    if (pointerStartX === null) return;
-    const delta = event.clientX - pointerStartX;
-    pointerStartX = null;
-    if (Math.abs(delta) < 36) return;
-    step(delta < 0 ? 1 : -1);
+  related?.addEventListener('pointerdown', (event) => {
+    pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
   });
-  related?.addEventListener('pointercancel', () => { pointerStartX = null; });
+  related?.addEventListener('pointerup', (event) => {
+    if (pointerStartX === null || pointerStartY === null) return;
+    const deltaX = event.clientX - pointerStartX;
+    const deltaY = event.clientY - pointerStartY;
+    pointerStartX = null;
+    pointerStartY = null;
+    if (Math.abs(deltaX) < 36 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    step(deltaX < 0 ? 1 : -1);
+  });
+  related?.addEventListener('pointercancel', () => {
+    pointerStartX = null;
+    pointerStartY = null;
+  });
 
   if (related) {
     new MutationObserver(() => {
@@ -393,9 +487,10 @@
 
   document.addEventListener('portfolio:language', () => {
     resetDisclosures();
+    enhanceTabs();
     requestAnimationFrame(rebuildFromCanonicalCards);
   });
 
-  if (stage) stage.dataset.styleBDomainStage = 'golden-reference';
+  if (stage) stage.dataset.styleBDomainStage = 'featured-wheel-v2';
   requestAnimationFrame(rebuildFromCanonicalCards);
 })();
