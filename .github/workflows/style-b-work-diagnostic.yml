@@ -1,0 +1,75 @@
+name: Style B Work Proof Diagnostic
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install and build
+        run: |
+          npm run install:ci
+          npm run build
+      - name: Install browser
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Start server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-diag-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/work-diag-server.log
+          exit 1
+      - name: Capture Work DOM diagnostic
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/work-proof-diagnostic');
+          fs.mkdirSync(out,{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:1419,height:1100}});
+          const errors=[];
+          page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+          page.on('pageerror',e=>errors.push(e.message));
+          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
+          await page.waitForSelector('.work-index',{timeout:10000});
+          const data=await page.evaluate(()=>({
+            rendered:[...document.querySelectorAll('.work-index-card')].map(card=>({
+              project:card.dataset.workIndexProject,
+              variant:[...card.classList].find(c=>c.startsWith('work-index-card--'))||'',
+              proofs:card.querySelectorAll('.work-index-card__proofs > li').length,
+              proofText:[...card.querySelectorAll('.work-index-card__proofs > li')].map(li=>li.textContent.trim())
+            })),
+            source:[...document.querySelectorAll('#workGallery > article')].map(card=>({
+              project:card.querySelector('[data-project]')?.dataset.project||'',
+              proofs:card.querySelectorAll('.work-card-signals-v44 > div').length,
+              proofText:[...card.querySelectorAll('.work-card-signals-v44 > div')].map(row=>row.textContent.trim())
+            })),
+            workIndexVisible:!!document.querySelector('.work-index'),
+            sourceHidden:document.querySelector('.work-library-v32')?.hasAttribute('hidden')||false,
+            errors
+          }));
+          fs.writeFileSync(path.join(out,'work-diagnostic.json'),JSON.stringify(data,null,2));
+          await page.locator('.work-index').screenshot({path:path.join(out,'work-1419-diagnostic.png')});
+          await browser.close();
+          console.log(JSON.stringify(data,null,2));
+          NODE
+      - name: Upload diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: style-b-work-proof-diagnostic
+          path: artifacts/work-proof-diagnostic
+          retention-days: 1
