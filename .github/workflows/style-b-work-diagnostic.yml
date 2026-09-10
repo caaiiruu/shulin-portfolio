@@ -30,7 +30,7 @@ jobs:
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0; sleep 1; done
           cat /tmp/work-diag-server.log
           exit 1
-      - name: Capture Work DOM diagnostic
+      - name: Capture canonical Work projection fields
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
@@ -46,26 +46,50 @@ jobs:
           page.on('pageerror',e=>errors.push(e.message));
           await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
           await page.waitForSelector('.work-index',{timeout:10000});
-          const data=await page.evaluate(()=>({
-            rendered:[...document.querySelectorAll('.work-index-card')].map(card=>({
-              project:card.dataset.workIndexProject,
-              variant:[...card.classList].find(c=>c.startsWith('work-index-card--'))||'',
-              proofs:card.querySelectorAll('.work-index-card__proofs > li').length,
-              proofText:[...card.querySelectorAll('.work-index-card__proofs > li')].map(li=>li.textContent.trim())
-            })),
-            source:[...document.querySelectorAll('#workGallery > article')].map(card=>({
-              project:card.querySelector('[data-project]')?.dataset.project||'',
-              proofs:card.querySelectorAll('.work-card-signals-v44 > div').length,
-              proofText:[...card.querySelectorAll('.work-card-signals-v44 > div')].map(row=>row.textContent.trim())
-            })),
-            workIndexVisible:!!document.querySelector('.work-index'),
-            sourceHidden:document.querySelector('.work-library-v32')?.hasAttribute('hidden')||false
-          }));
+          const data=await page.evaluate(()=>{
+            const ids=['voucher','payment','dbs','booking','game-center'];
+            const DATA=window.PORTFOLIO_RUNTIME_DATA||window.PORTFOLIO_DATA||{};
+            const pick=(obj)=>({
+              keys:Object.keys(obj||{}).sort(),
+              company:obj?.company,
+              title:obj?.title,
+              transformation:obj?.transformation,
+              transformation_zh:obj?.transformation_zh,
+              atAGlance:obj?.atAGlance,
+              at_a_glance_pair:obj?.at_a_glance_pair,
+              whatThisProves:obj?.whatThisProves,
+              what_this_proves:obj?.what_this_proves,
+              infoGrid:obj?.infoGrid,
+              role:obj?.role,
+              scope:obj?.scope,
+              audience:obj?.audience,
+              timeline:obj?.timeline,
+              businessImpact:obj?.businessImpact,
+              business_impact:obj?.business_impact,
+              impactEvidence:obj?.impactEvidence,
+              impact_evidence:obj?.impact_evidence,
+              metrics:obj?.metrics,
+              primaryMetrics:obj?.primaryMetrics,
+              primary_metrics:obj?.primary_metrics,
+              heroVisualBrief:obj?.heroVisualBrief,
+              hero_visual_brief:obj?.hero_visual_brief,
+              domain_label:obj?.domain_label,
+              cardTitle:obj?.cardTitle
+            });
+            return {
+              projects:Object.fromEntries(ids.map(id=>[id,{raw:pick(DATA.projects?.[id]),adapted:pick(window.adaptPortfolioProject?.(id)||{})}])),
+              source:[...document.querySelectorAll('#workGallery > article')].map(card=>({
+                project:card.querySelector('[data-project]')?.dataset.project||'',
+                directClasses:[...card.children].map(node=>node.className),
+                buttonChildren:[...card.querySelector('[data-project]')?.children||[]].map(node=>node.className),
+                images:[...card.querySelectorAll('img')].map(img=>({src:img.getAttribute('src'),assetId:img.dataset.assetId||'',className:img.className}))
+              }))
+            };
+          });
           data.errors=errors;
-          fs.writeFileSync(path.join(out,'work-diagnostic.json'),JSON.stringify(data,null,2));
+          fs.writeFileSync(path.join(out,'work-projection-fields.json'),JSON.stringify(data,null,2));
           await page.locator('.work-index').screenshot({path:path.join(out,'work-1419-diagnostic.png')});
           await browser.close();
-          console.log(JSON.stringify(data,null,2));
           NODE
       - name: Upload diagnostic
         uses: actions/upload-artifact@v4
