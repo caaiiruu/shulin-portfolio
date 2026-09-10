@@ -177,6 +177,7 @@
   let rendering = false;
   let renderFrame = 0;
   let pendingRenderTab = null;
+  let tabRenderGeneration = 0;
 
   const readYear = (project) => {
     const raw = firstText(project?.year, project?.period, project?.heroMetadata?.year, project?.heroMetadata?.period, project?.timeline_pair, project?.timeline);
@@ -446,15 +447,22 @@
 
   if (related) {
     new MutationObserver(() => {
-      if (rendering) return;
+      if (rendering || pendingRenderTab) return;
       if (related.querySelector(':scope > .related-project-card-v45')) scheduleRender();
     }).observe(related, { childList: true });
   }
 
   section.querySelectorAll('.domain-tab').forEach((tab) => tab.addEventListener('click', () => {
     resetDisclosures();
-    renderSelectedDomain(tab);
-    scheduleRender(tab);
+    const generation = ++tabRenderGeneration;
+    pendingRenderTab = tab;
+    related?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]').forEach((card) => card.removeAttribute('data-wheel-offset'));
+    setTimeout(() => {
+      if (generation !== tabRenderGeneration) return;
+      cancelAnimationFrame(renderFrame);
+      renderFrame = 0;
+      renderSelectedDomain(tab);
+    }, 0);
   }));
   document.addEventListener('portfolio:language', () => {
     resetDisclosures(); enhanceTabs(); scheduleRender();
