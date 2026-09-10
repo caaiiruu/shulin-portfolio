@@ -1,4 +1,4 @@
-name: Style B Domain Golden Reference QA
+name: Style B Domain Work Golden Reference QA
 
 on:
   push:
@@ -57,7 +57,7 @@ jobs:
           cat /tmp/style-b-server.log
           exit 1
 
-      - name: Run Domain golden-reference browser QA
+      - name: Run final Domain and Work browser QA
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
@@ -65,12 +65,12 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
 
-          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-golden');
+          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-work-final');
           fs.mkdirSync(out, { recursive: true });
           const base = 'http://127.0.0.1:4173';
           const widths = [1419, 871, 430];
           const browser = await chromium.launch({ headless: true });
-          const report = { viewports: {}, routes: {}, consoleErrors: [] };
+          const report = { domain: {}, work: {}, routes: {}, consoleErrors: [] };
           const assert = (condition, message) => { if (!condition) throw new Error(message); };
           const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
           const near = (actual, expected, tolerance, message) => assert(Math.abs(actual - expected) <= tolerance, `${message}: ${actual} vs ${expected}`);
@@ -82,7 +82,7 @@ jobs:
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ width, url: page.url(), text: msg.text() }); });
               page.on('pageerror', error => report.consoleErrors.push({ width, url: page.url(), text: error.message }));
 
-              const response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+              let response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Home ${width}: HTTP ${response?.status()}`);
               const domain = page.locator('#domains');
               await domain.scrollIntoViewIfNeeded();
@@ -126,6 +126,9 @@ jobs:
                   width:r.width,height:r.height,
                   content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom,innerWidth:(content?.width || 0)-paddingInline,paddingInline},
                   visual:{left:visual?.left,top:visual?.top,width:visual?.width,height:visual?.height},
+                  type:tidy(card.querySelector('.domain-project-card-v2__type')?.textContent),
+                  company:tidy(card.querySelector('.domain-project-card-v2__company')?.textContent),
+                  year:tidy(card.querySelector('.domain-project-card-v2__year')?.textContent),
                   title:tidy(card.querySelector('.domain-project-card-v2__title')?.textContent),
                   support:tidy(card.querySelector('.domain-project-card-v2__support')?.textContent),
                   metricCount:Number(card.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount || 0),
@@ -134,11 +137,14 @@ jobs:
                 };
               });
 
-              report.viewports[width] = { ...state, tabLabels };
-              await domain.screenshot({ path: path.join(out, `domain-golden-${width}.png`) });
+              report.domain[width] = { ...state, tabLabels };
+              await domain.screenshot({ path: path.join(out, `domain-${width}.png`) });
 
-              assert(state.title.length > 8, `Home ${width}: transformation title missing`);
-              assert(state.support.length > 8, `Home ${width}: whatThisProves missing`);
+              assert(state.type.length > 2 && state.type !== '[object Object]', `Home ${width}: invalid Type projection ${JSON.stringify(state.type)}`);
+              assert(state.company.length > 1, `Home ${width}: company missing`);
+              assert(state.year.length === 4, `Home ${width}: year missing`);
+              assert(state.title.length > 8 && state.title !== '[object Object]', `Home ${width}: transformation title missing`);
+              assert(state.support.length > 8 && state.support !== '[object Object]', `Home ${width}: whatThisProves missing`);
               if (state.metricCount === 3) assert(state.metricChildren === 6, `Home ${width}: 3-metric projection must have 6 direct children`);
               assert(state.cta.width >= state.content.innerWidth - 2, `Home ${width}: CTA must span content inner width`);
 
@@ -158,6 +164,7 @@ jobs:
               } else {
                 assert(state.width >= 330 && state.width <= 340, `430 active-card width ${state.width}`);
                 near(state.height, 640, 2, '430 active-card height');
+                near(state.content.paddingInline, 40, 2, '430 content horizontal padding');
                 assert(state.visual.top >= state.content.bottom - 2, '430 visual must follow content');
                 assert(state.metricCount !== 3 || state.metricChildren === 6, '430 metrics must remain 3-column two-row grammar');
               }
@@ -175,9 +182,53 @@ jobs:
               await tabs.nth(1).click();
               await page.waitForFunction(() => document.querySelector('#domains .domain-tab:nth-child(2)')?.getAttribute('aria-selected') === 'true');
               await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
-              const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-              assert(overflow <= 1, `Home ${width}: horizontal overflow ${overflow}`);
-              report.viewports[width].overflow = overflow;
+              const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+              assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}`);
+              report.domain[width].overflow = homeOverflow;
+
+              response = await page.goto(`${base}/work`, { waitUntil: 'networkidle' });
+              assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
+              await page.waitForSelector('.work-index', { timeout: 10000 });
+              const work = page.locator('.work-index');
+              const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
+              assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
+
+              const row1 = work.locator('.work-index__featured > .work-index-card');
+              const row2 = work.locator('.work-index__featured-secondary-row > .work-index-card');
+              assert(await row1.count() === 2, `Work ${width}: row 1 requires 2 cards`);
+              assert(await row2.count() === 2, `Work ${width}: row 2 requires 2 cards`);
+              const featured = work.locator('.work-index__featured .work-index-card');
+              assert(await featured.count() === 4, `Work ${width}: featured requires 4 cards`);
+              const expectedProofs = [3,2,2,2];
+              for (let i=0;i<4;i++) {
+                assert(await featured.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: featured ${i+1} missing visual`);
+                assert(await featured.nth(i).locator('.work-index-card__proofs li').count() === expectedProofs[i], `Work ${width}: featured ${i+1} proof density mismatch`);
+                assert(await featured.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: featured ${i+1} missing CTA`);
+              }
+              const moreCards = work.locator('.work-index__more-grid .work-index-card');
+              assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
+              for (let i=0;i<await moreCards.count();i++) {
+                assert(await moreCards.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: More Work ${i+1} missing visual`);
+                assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
+                assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
+              }
+              if (width <= 1100) {
+                for (let i=0;i<4;i++) {
+                  const geometry = await featured.nth(i).evaluate(card => {
+                    const content = card.querySelector('.work-index-card__content')?.getBoundingClientRect();
+                    const visual = card.querySelector('.work-index-card__visual')?.getBoundingClientRect();
+                    return { contentBottom: content?.bottom, visualTop: visual?.top };
+                  });
+                  assert(geometry.visualTop >= geometry.contentBottom - 2, `Work ${width}: featured ${i+1} must stack content above visual`);
+                }
+              }
+              await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
+              assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count() >= 1, `Work ${width}: Operations filter returned no work`);
+              await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
+              const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+              assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}`);
+              report.work[width] = { filters, moreWorkCards: await moreCards.count(), overflow: workOverflow };
+              await work.screenshot({ path: path.join(out, `work-${width}.png`) });
               await context.close();
             }
 
@@ -203,10 +254,10 @@ jobs:
           }
           NODE
 
-      - name: Upload Domain golden-reference evidence
+      - name: Upload final review evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-domain-golden-qa
-          path: artifacts/style-b-domain-golden
+          name: style-b-domain-work-final-qa
+          path: artifacts/style-b-domain-work-final
           retention-days: 3
