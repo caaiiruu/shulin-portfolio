@@ -20,7 +20,7 @@
 
   let viewportSyncFrame = 0;
   const syncViewportWidth = () => {
-    section.style.setProperty('--domain-viewport-width', `${window.innerWidth}px`);
+    section.style.setProperty('--domain-viewport-width', `${document.documentElement.clientWidth}px`);
   };
   syncViewportWidth();
   window.addEventListener('resize', () => {
@@ -56,8 +56,8 @@
     }
     return '';
   };
-
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
+  const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
   const tabIcon = {
     finance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 3 3 8h18L12 3Z"/></svg>',
@@ -70,11 +70,11 @@
 
   const enhanceTabs = () => {
     section.querySelectorAll('.domain-tab').forEach((tab) => {
-      if (tab.querySelector('.domain-tab__icon')) return;
-      const number = tab.querySelector(':scope > span');
+      const number = tab.querySelector(':scope > span:not(.domain-tab__icon)');
       if (number) number.classList.add('domain-tab__number');
       const strong = tab.querySelector('strong');
       if (strong) strong.classList.add('domain-tab__label');
+      if (tab.querySelector('.domain-tab__icon')) return;
       const icon = document.createElement('span');
       icon.className = 'domain-tab__icon';
       icon.innerHTML = tabIcon[tab.dataset.domain] || tabIcon.operations;
@@ -113,58 +113,46 @@
   const legacyHeading = projectPanel?.querySelector('.rail-heading');
   if (legacyHeading) legacyHeading.classList.add('domain-experience__project-heading');
 
+  const DOMAIN_ALIASES = {
+    operations: ['enterprise-operations', 'operations', 'operational'],
+    finance: ['financial-services', 'finance', 'financial'],
+    commerce: ['retail-commerce', 'retail-and-commerce', 'commerce', 'retail'],
+    travel: ['travel-platforms', 'travel', 'mobility'],
+    growth: ['growth-incentive-systems', 'rewards-incentives', 'incentive', 'rewards', 'growth'],
+    learning: ['learning-platforms', 'learning', 'education']
+  };
+
+  const canonicalDomains = () => asList(DATA.contentDiscovery?.domains);
+  const normalize = (value) => String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const resolveDomain = (tab) => {
+    const key = tab?.dataset.domain || '';
+    const aliases = DOMAIN_ALIASES[key] || [key];
+    const domains = canonicalDomains();
+    return domains.find((domain) => aliases.includes(normalize(domain.id))) ||
+      domains.find((domain) => {
+        const searchable = [domain.id, localize(domain.label), ...asList(domain.legacyAliases)].map(normalize).join(' ');
+        return aliases.some((alias) => searchable.includes(normalize(alias)));
+      }) || null;
+  };
+  const selectedTab = () => section.querySelector('.domain-tab[aria-selected="true"]') || section.querySelector('.domain-tab');
+  const projectIdsForDomain = (domain) => {
+    if (!domain) return [];
+    return [...new Set([...asList(domain.featuredProjectIds), ...asList(domain.supportingProjectIds)])]
+      .filter((key) => DATA.projects?.[key]);
+  };
+
   let activeIndex = 0;
   let cards = [];
   let pointerStartX = null;
   let pointerStartY = null;
-  let rebuilding = false;
+  let rendering = false;
+  let renderFrame = 0;
 
-  const readYear = (rawProject, adaptedProject, source) => {
-    const raw = firstText(
-      rawProject?.year,
-      rawProject?.period,
-      rawProject?.heroMetadata?.year,
-      rawProject?.heroMetadata?.period,
-      adaptedProject?.year,
-      adaptedProject?.period,
-      adaptedProject?.heroMetadata?.year,
-      adaptedProject?.heroMetadata?.period,
-      rawProject?.timeline,
-      adaptedProject?.timeline
-    );
-    const match = raw.match(/(?:19|20)\d{2}/);
-    if (match) return match[0];
-    return source?.textContent.match(/(?:19|20)\d{2}/)?.[0] || raw;
+  const readYear = (project) => {
+    const raw = firstText(project?.year, project?.period, project?.heroMetadata?.year, project?.heroMetadata?.period, project?.timeline_pair, project?.timeline);
+    return raw.match(/(?:19|20)\d{2}/)?.[0] || raw;
   };
-
-  const readType = (rawProject, adaptedProject, source) => firstText(
-    rawProject?.type,
-    rawProject?.infoGrid?.type,
-    rawProject?.projectType,
-    rawProject?.project_type,
-    adaptedProject?.type,
-    adaptedProject?.infoGrid?.type,
-    adaptedProject?.projectType,
-    adaptedProject?.project_type,
-    rawProject?.systemClassification?.publicLabel,
-    adaptedProject?.systemClassification?.publicLabel,
-    rawProject?.systemClassification?.label,
-    adaptedProject?.systemClassification?.label,
-    source?.querySelector('[class*="context"]')?.textContent
-  );
-
-  const readSupport = (rawProject, adaptedProject) => firstText(
-    language() === 'zh' ? rawProject?.whatThisProves_zh : rawProject?.whatThisProves,
-    rawProject?.whatThisProves,
-    rawProject?.what_this_proves,
-    rawProject?.publicContent?.whatThisProves,
-    rawProject?.publicContent?.what_this_proves,
-    language() === 'zh' ? adaptedProject?.whatThisProves_zh : adaptedProject?.whatThisProves,
-    adaptedProject?.whatThisProves,
-    adaptedProject?.what_this_proves,
-    adaptedProject?.publicContent?.whatThisProves,
-    adaptedProject?.publicContent?.what_this_proves
-  );
+  const readType = (project) => firstText(project?.type, project?.infoGrid?.type, project?.type_pair, project?.projectType, project?.project_type, project?.systemClassification?.publicLabel, project?.systemClassification?.label);
 
   const conciseMetricLabel = (label) => {
     const text = String(label || '').trim();
@@ -180,42 +168,17 @@
     if (/time|second|minute|hour/.test(normalized)) return zh ? '處理時間' : 'time';
     if (/user/.test(normalized)) return zh ? '使用者' : 'users';
     if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
-    const words = text.split(/\s+/).filter(Boolean);
-    return words.slice(0, 2).join(' ');
+    return text.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
   };
 
-  const collectMetrics = (rawProject, adaptedProject) => {
+  const collectMetrics = (project) => {
     const sources = [
-      rawProject?.cardMetrics,
-      rawProject?.card_metrics,
-      rawProject?.primaryMetrics,
-      rawProject?.primary_metrics,
-      rawProject?.metrics,
-      rawProject?.impactEvidence?.primaryMetrics,
-      rawProject?.impactEvidence?.primary_metrics,
-      rawProject?.impact_evidence?.primaryMetrics,
-      rawProject?.impact_evidence?.primary_metrics,
-      rawProject?.publicContent?.impactEvidence?.primaryMetrics,
-      rawProject?.publicContent?.impact_evidence?.primary_metrics,
-      adaptedProject?.cardMetrics,
-      adaptedProject?.card_metrics,
-      adaptedProject?.primaryMetrics,
-      adaptedProject?.primary_metrics,
-      adaptedProject?.metrics,
-      adaptedProject?.impactEvidence?.primaryMetrics,
-      adaptedProject?.impactEvidence?.primary_metrics,
-      adaptedProject?.impact_evidence?.primaryMetrics,
-      adaptedProject?.impact_evidence?.primary_metrics,
-      rawProject?.impactEvidence?.supportingMetrics,
-      rawProject?.impactEvidence?.supporting_metrics,
-      rawProject?.impact_evidence?.supportingMetrics,
-      rawProject?.impact_evidence?.supporting_metrics,
-      rawProject?.publicContent?.impactEvidence?.supportingMetrics,
-      rawProject?.publicContent?.impact_evidence?.supporting_metrics,
-      adaptedProject?.impactEvidence?.supportingMetrics,
-      adaptedProject?.impactEvidence?.supporting_metrics,
-      adaptedProject?.impact_evidence?.supportingMetrics,
-      adaptedProject?.impact_evidence?.supporting_metrics
+      project?.cardMetrics, project?.card_metrics, project?.primaryMetrics, project?.primary_metrics, project?.metrics,
+      project?.impactEvidence?.primaryMetrics, project?.impactEvidence?.primary_metrics,
+      project?.impact_evidence?.primaryMetrics, project?.impact_evidence?.primary_metrics,
+      project?.publicContent?.impactEvidence?.primaryMetrics, project?.publicContent?.impact_evidence?.primary_metrics,
+      project?.impactEvidence?.supportingMetrics, project?.impactEvidence?.supporting_metrics,
+      project?.impact_evidence?.supportingMetrics, project?.impact_evidence?.supporting_metrics
     ];
     const result = [];
     const seen = new Set();
@@ -226,9 +189,9 @@
         const value = firstText(item.value, item.metric, item.amount);
         const label = conciseMetricLabel(firstText(item.label, item.name, item.description));
         if (!value || !label) continue;
-        const key = `${value}|${label}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
+        const fingerprint = `${value}|${label}`;
+        if (seen.has(fingerprint)) continue;
+        seen.add(fingerprint);
         result.push({ value, label });
         if (result.length === 3) return result;
       }
@@ -236,42 +199,18 @@
     return result;
   };
 
-  const tintPalette = [
-    'rgb(223 235 246)',
-    'rgb(231 229 249)',
-    'rgb(248 225 214)',
-    'rgb(224 241 233)',
-    'rgb(245 235 210)',
-    'rgb(230 238 225)'
-  ];
+  const tintPalette = ['rgb(223 235 246)', 'rgb(231 229 249)', 'rgb(248 225 214)', 'rgb(224 241 233)', 'rgb(245 235 210)', 'rgb(230 238 225)'];
   const tintForProject = (key) => {
-    const known = {
-      voucher: 'rgb(218 233 247)',
-      payment: 'rgb(223 240 233)',
-      dbs: 'rgb(225 229 250)',
-      booking: 'rgb(235 229 250)',
-      'game-center': 'rgb(247 226 214)',
-      bandzo: 'rgb(242 234 210)'
-    };
+    const known = { voucher: 'rgb(218 233 247)', payment: 'rgb(223 240 233)', dbs: 'rgb(225 229 250)', booking: 'rgb(235 229 250)', 'game-center': 'rgb(247 226 214)', bandzo: 'rgb(242 234 210)' };
     if (known[key]) return known[key];
     const hash = [...key].reduce((sum, char) => sum + char.charCodeAt(0), 0);
     return tintPalette[hash % tintPalette.length];
   };
 
-  const buildVisual = (source, rawProject, adaptedProject, key) => {
+  const buildVisual = (project, key) => {
     const visual = document.createElement('div');
     visual.className = 'domain-project-card-v2__visual';
-    const image = source?.querySelector('img');
-    if (image) {
-      const clone = image.cloneNode(true);
-      clone.className = 'domain-project-card-v2__image';
-      clone.loading = 'eager';
-      clone.decoding = 'async';
-      visual.append(clone);
-      return visual;
-    }
-
-    const assetId = rawProject?.hero_visual_brief?.assetId || rawProject?.heroVisualBrief?.assetId || adaptedProject?.hero_visual_brief?.assetId || adaptedProject?.heroVisualBrief?.assetId;
+    const assetId = project?.hero_visual_brief?.assetId || project?.heroVisualBrief?.assetId;
     const asset = assetId ? window.resolveProjectAsset?.(assetId, key) : null;
     if (asset?.src) {
       const img = document.createElement('img');
@@ -280,54 +219,42 @@
       img.alt = scalarText(asset.alt);
       img.loading = 'eager';
       img.decoding = 'async';
-      if (asset.width && asset.height) {
-        img.width = asset.width;
-        img.height = asset.height;
-      }
+      if (asset.width && asset.height) { img.width = asset.width; img.height = asset.height; }
       visual.append(img);
       return visual;
     }
-
     const fallback = document.createElement('span');
     fallback.className = 'domain-project-card-v2__visual-fallback';
-    fallback.textContent = firstText(rawProject?.company, adaptedProject?.company, source?.querySelector('[class*="company"]')?.textContent);
+    fallback.textContent = firstText(project?.company);
     visual.append(fallback);
     return visual;
   };
 
-  const buildCard = (source) => {
-    const key = source.dataset.project || '';
-    const rawProject = key ? (DATA.projects?.[key] || {}) : {};
-    const adaptedProject = key ? (window.adaptPortfolioProject?.(key) || {}) : {};
+  const buildCard = (key) => {
+    const project = DATA.projects?.[key] || {};
     const article = document.createElement('article');
     article.className = 'domain-project-card-v2 domain-project-card-v2--large';
     article.dataset.projectCardVariant = 'large';
     article.dataset.project = key;
     article.style.setProperty('--project-card-tint', tintForProject(key));
-    if (source.dataset.experiment) article.dataset.experiment = source.dataset.experiment;
 
     const body = document.createElement('div');
     body.className = 'domain-project-card-v2__content';
-
     const meta = document.createElement('div');
     meta.className = 'domain-project-card-v2__meta';
     const type = document.createElement('span');
     type.className = 'domain-project-card-v2__type';
-    type.textContent = readType(rawProject, adaptedProject, source);
+    type.textContent = readType(project);
     const identity = document.createElement('span');
     identity.className = 'domain-project-card-v2__identity';
     const company = document.createElement('strong');
     company.className = 'domain-project-card-v2__company';
-    company.textContent = firstText(rawProject?.company, adaptedProject?.company, source.querySelector('[class*="company"]')?.textContent);
-    const year = readYear(rawProject, adaptedProject, source);
+    company.textContent = firstText(project?.company);
     identity.append(company);
+    const year = readYear(project);
     if (year) {
-      const dot = document.createElement('span');
-      dot.setAttribute('aria-hidden', 'true');
-      dot.textContent = '·';
-      const yearNode = document.createElement('span');
-      yearNode.className = 'domain-project-card-v2__year';
-      yearNode.textContent = year;
+      const dot = document.createElement('span'); dot.setAttribute('aria-hidden', 'true'); dot.textContent = '·';
+      const yearNode = document.createElement('span'); yearNode.className = 'domain-project-card-v2__year'; yearNode.textContent = year;
       identity.append(dot, yearNode);
     }
     if (type.textContent) meta.append(type);
@@ -335,52 +262,26 @@
 
     const title = document.createElement('h3');
     title.className = 'domain-project-card-v2__title';
-    title.textContent = firstText(
-      language() === 'zh' ? rawProject?.transformation_zh : rawProject?.transformation,
-      rawProject?.transformation,
-      adaptedProject?.transformation,
-      rawProject?.title,
-      adaptedProject?.title,
-      source.querySelector('[class*="title"]')?.textContent
-    );
+    title.textContent = firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);
 
-    const supportText = readSupport(rawProject, adaptedProject);
-    const support = document.createElement('p');
-    support.className = 'domain-project-card-v2__support';
-    support.textContent = supportText;
-
-    const metrics = collectMetrics(rawProject, adaptedProject);
+    const metrics = collectMetrics(project);
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
-    metrics.forEach(({ value }) => {
-      const dt = document.createElement('dt');
-      dt.className = 'domain-project-card-v2__metric-value';
-      dt.textContent = value;
-      metricList.append(dt);
-    });
-    metrics.forEach(({ label }) => {
-      const dd = document.createElement('dd');
-      dd.className = 'domain-project-card-v2__metric-label';
-      dd.textContent = label;
-      metricList.append(dd);
-    });
+    metrics.forEach(({ value }) => { const dt = document.createElement('dt'); dt.className = 'domain-project-card-v2__metric-value'; dt.textContent = value; metricList.append(dt); });
+    metrics.forEach(({ label }) => { const dd = document.createElement('dd'); dd.className = 'domain-project-card-v2__metric-label'; dd.textContent = label; metricList.append(dd); });
 
     const cta = document.createElement('a');
     cta.className = 'domain-project-card-v2__cta';
     cta.href = `/work/${key}`;
-    const ctaLabel = document.createElement('span');
-    ctaLabel.textContent = language() === 'zh' ? '查看案例' : 'View case';
-    const arrow = document.createElement('span');
-    arrow.className = 'domain-project-card-v2__cta-arrow icon-arrow icon-arrow--right';
-    arrow.setAttribute('aria-hidden', 'true');
+    const ctaLabel = document.createElement('span'); ctaLabel.textContent = language() === 'zh' ? '查看案例' : 'View case';
+    const arrow = document.createElement('span'); arrow.className = 'domain-project-card-v2__cta-arrow icon-arrow icon-arrow--right'; arrow.setAttribute('aria-hidden', 'true');
     cta.append(ctaLabel, arrow);
 
     body.append(meta, title);
-    if (supportText) body.append(support);
     if (metrics.length) body.append(metricList);
     body.append(cta);
-    article.append(body, buildVisual(source, rawProject, adaptedProject, key));
+    article.append(body, buildVisual(project, key));
     return article;
   };
 
@@ -390,7 +291,6 @@
     if (offset < -total / 2) offset += total;
     return offset;
   };
-
   const syncWheel = () => {
     const total = cards.length;
     cards.forEach((card, index) => {
@@ -401,18 +301,13 @@
       card.tabIndex = Math.abs(offset) <= 1 ? 0 : -1;
     });
   };
-
   const setActive = (index) => {
     if (!cards.length) return;
     activeIndex = (index + cards.length) % cards.length;
     syncWheel();
   };
   const step = (delta) => setActive(activeIndex + delta);
-
-  const navigateCard = (card) => {
-    const key = card?.dataset.project;
-    if (key) window.location.href = `/work/${key}`;
-  };
+  const navigateCard = (card) => { const key = card?.dataset.project; if (key) window.location.href = `/work/${key}`; };
 
   const buildControls = () => {
     let controls = projectPanel?.querySelector('.domain-wheel-v2__controls');
@@ -420,41 +315,26 @@
     controls = document.createElement('div');
     controls.className = 'domain-wheel-v2__controls';
     controls.setAttribute('aria-label', language() === 'zh' ? '專案輪播控制' : 'Project wheel controls');
-
     const previous = document.createElement('button');
-    previous.type = 'button';
-    previous.className = 'domain-wheel-v2__control domain-wheel-v2__control--previous';
-    previous.setAttribute('aria-label', language() === 'zh' ? '上一個專案' : 'Previous project');
-    previous.innerHTML = '<span class="icon-arrow icon-arrow--left" aria-hidden="true"></span>';
-
+    previous.type = 'button'; previous.className = 'domain-wheel-v2__control domain-wheel-v2__control--previous'; previous.setAttribute('aria-label', language() === 'zh' ? '上一個專案' : 'Previous project'); previous.innerHTML = '<span class="icon-arrow icon-arrow--left" aria-hidden="true"></span>';
     const next = document.createElement('button');
-    next.type = 'button';
-    next.className = 'domain-wheel-v2__control domain-wheel-v2__control--next';
-    next.setAttribute('aria-label', language() === 'zh' ? '下一個專案' : 'Next project');
-    next.innerHTML = '<span class="icon-arrow icon-arrow--right" aria-hidden="true"></span>';
-
-    previous.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      step(-1);
-    });
-    next.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      step(1);
-    });
+    next.type = 'button'; next.className = 'domain-wheel-v2__control domain-wheel-v2__control--next'; next.setAttribute('aria-label', language() === 'zh' ? '下一個專案' : 'Next project'); next.innerHTML = '<span class="icon-arrow icon-arrow--right" aria-hidden="true"></span>';
+    previous.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(-1); });
+    next.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(1); });
     controls.append(previous, next);
     projectPanel?.append(controls);
     return controls;
   };
 
-  const rebuildFromCanonicalCards = () => {
-    if (!related || rebuilding) return;
-    const sourceCards = [...related.children].filter((node) => node.matches('.related-project-card-v45'));
-    if (!sourceCards.length) return;
-    rebuilding = true;
-    cards = sourceCards.map(buildCard);
+  const renderSelectedDomain = () => {
+    if (!related || rendering) return;
+    const tab = selectedTab();
+    const domain = resolveDomain(tab);
+    const ids = projectIdsForDomain(domain);
+    if (!ids.length) return;
+    rendering = true;
     activeIndex = 0;
+    cards = ids.map(buildCard);
     related.replaceChildren(...cards);
     related.classList.add('domain-wheel-v2');
     related.removeAttribute('data-rail');
@@ -462,7 +342,12 @@
     buildControls();
     syncWheel();
     resetDisclosures();
-    rebuilding = false;
+    related.dataset.domainPresentationId = domain?.id || tab?.dataset.domain || '';
+    rendering = false;
+  };
+  const scheduleRender = () => {
+    cancelAnimationFrame(renderFrame);
+    renderFrame = requestAnimationFrame(() => requestAnimationFrame(renderSelectedDomain));
   };
 
   related?.addEventListener('click', (event) => {
@@ -470,67 +355,44 @@
     if (!card) return;
     const index = cards.indexOf(card);
     if (index < 0) return;
-    if (index !== activeIndex) {
-      event.preventDefault();
-      setActive(index);
-      return;
-    }
+    if (index !== activeIndex) { event.preventDefault(); setActive(index); return; }
     if (event.target.closest('.domain-project-card-v2__cta')) return;
-    event.preventDefault();
-    navigateCard(card);
+    event.preventDefault(); navigateCard(card);
   });
-
   related?.addEventListener('keydown', (event) => {
     const card = event.target.closest('.domain-project-card-v2');
     if (!card || event.target.closest('.domain-project-card-v2__cta')) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      step(event.key === 'ArrowRight' ? 1 : -1);
-      cards[activeIndex]?.focus({ preventScroll: true });
-      return;
+      event.preventDefault(); step(event.key === 'ArrowRight' ? 1 : -1); cards[activeIndex]?.focus({ preventScroll: true }); return;
     }
-    if ((event.key === 'Enter' || event.key === ' ') && cards.indexOf(card) === activeIndex) {
-      event.preventDefault();
-      navigateCard(card);
-    }
+    if ((event.key === 'Enter' || event.key === ' ') && cards.indexOf(card) === activeIndex) { event.preventDefault(); navigateCard(card); }
   });
-
-  related?.addEventListener('pointerdown', (event) => {
-    pointerStartX = event.clientX;
-    pointerStartY = event.clientY;
-  });
+  related?.addEventListener('pointerdown', (event) => { pointerStartX = event.clientX; pointerStartY = event.clientY; });
   related?.addEventListener('pointerup', (event) => {
     if (pointerStartX === null || pointerStartY === null) return;
     const deltaX = event.clientX - pointerStartX;
     const deltaY = event.clientY - pointerStartY;
-    pointerStartX = null;
-    pointerStartY = null;
+    pointerStartX = null; pointerStartY = null;
     if (Math.abs(deltaX) < 36 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
     step(deltaX < 0 ? 1 : -1);
   });
-  related?.addEventListener('pointercancel', () => {
-    pointerStartX = null;
-    pointerStartY = null;
-  });
+  related?.addEventListener('pointercancel', () => { pointerStartX = null; pointerStartY = null; });
 
   if (related) {
     new MutationObserver(() => {
-      if (rebuilding) return;
-      if (related.querySelector(':scope > .related-project-card-v45')) requestAnimationFrame(rebuildFromCanonicalCards);
+      if (rendering) return;
+      if (related.querySelector(':scope > .related-project-card-v45')) scheduleRender();
     }).observe(related, { childList: true });
   }
 
   section.querySelectorAll('.domain-tab').forEach((tab) => tab.addEventListener('click', () => {
     resetDisclosures();
-    activeIndex = 0;
+    scheduleRender();
   }));
-
   document.addEventListener('portfolio:language', () => {
-    resetDisclosures();
-    enhanceTabs();
-    requestAnimationFrame(rebuildFromCanonicalCards);
+    resetDisclosures(); enhanceTabs(); scheduleRender();
   });
 
   if (stage) stage.dataset.styleBDomainStage = 'featured-wheel-v2';
-  requestAnimationFrame(rebuildFromCanonicalCards);
+  scheduleRender();
 })();
