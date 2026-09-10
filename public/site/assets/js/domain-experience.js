@@ -153,6 +153,19 @@
     source?.querySelector('[class*="context"]')?.textContent
   );
 
+  const readSupport = (rawProject, adaptedProject) => firstText(
+    language() === 'zh' ? rawProject?.whatThisProves_zh : rawProject?.whatThisProves,
+    rawProject?.whatThisProves,
+    rawProject?.what_this_proves,
+    rawProject?.publicContent?.whatThisProves,
+    rawProject?.publicContent?.what_this_proves,
+    language() === 'zh' ? adaptedProject?.whatThisProves_zh : adaptedProject?.whatThisProves,
+    adaptedProject?.whatThisProves,
+    adaptedProject?.what_this_proves,
+    adaptedProject?.publicContent?.whatThisProves,
+    adaptedProject?.publicContent?.what_this_proves
+  );
+
   const conciseMetricLabel = (label) => {
     const text = String(label || '').trim();
     const normalized = text.toLowerCase();
@@ -192,7 +205,17 @@
       adaptedProject?.impactEvidence?.primaryMetrics,
       adaptedProject?.impactEvidence?.primary_metrics,
       adaptedProject?.impact_evidence?.primaryMetrics,
-      adaptedProject?.impact_evidence?.primary_metrics
+      adaptedProject?.impact_evidence?.primary_metrics,
+      rawProject?.impactEvidence?.supportingMetrics,
+      rawProject?.impactEvidence?.supporting_metrics,
+      rawProject?.impact_evidence?.supportingMetrics,
+      rawProject?.impact_evidence?.supporting_metrics,
+      rawProject?.publicContent?.impactEvidence?.supportingMetrics,
+      rawProject?.publicContent?.impact_evidence?.supporting_metrics,
+      adaptedProject?.impactEvidence?.supportingMetrics,
+      adaptedProject?.impactEvidence?.supporting_metrics,
+      adaptedProject?.impact_evidence?.supportingMetrics,
+      adaptedProject?.impact_evidence?.supporting_metrics
     ];
     const result = [];
     const seen = new Set();
@@ -281,8 +304,6 @@
     article.dataset.projectCardVariant = 'large';
     article.dataset.project = key;
     article.style.setProperty('--project-card-tint', tintForProject(key));
-    article.setAttribute('role', 'link');
-    article.setAttribute('aria-label', `${language() === 'zh' ? '開啟' : 'Open'} ${firstText(rawProject?.transformation, rawProject?.title, key)}`);
     if (source.dataset.experiment) article.dataset.experiment = source.dataset.experiment;
 
     const body = document.createElement('div');
@@ -323,25 +344,31 @@
       source.querySelector('[class*="title"]')?.textContent
     );
 
+    const supportText = readSupport(rawProject, adaptedProject);
+    const support = document.createElement('p');
+    support.className = 'domain-project-card-v2__support';
+    support.textContent = supportText;
+
     const metrics = collectMetrics(rawProject, adaptedProject);
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
-    metrics.forEach(({ value, label }) => {
-      const item = document.createElement('div');
-      item.className = 'domain-project-card-v2__metric';
+    metrics.forEach(({ value }) => {
       const dt = document.createElement('dt');
       dt.className = 'domain-project-card-v2__metric-value';
       dt.textContent = value;
+      metricList.append(dt);
+    });
+    metrics.forEach(({ label }) => {
       const dd = document.createElement('dd');
       dd.className = 'domain-project-card-v2__metric-label';
       dd.textContent = label;
-      item.append(dt, dd);
-      metricList.append(item);
+      metricList.append(dd);
     });
 
-    const cta = document.createElement('div');
+    const cta = document.createElement('a');
     cta.className = 'domain-project-card-v2__cta';
+    cta.href = `/work/${key}`;
     const ctaLabel = document.createElement('span');
     ctaLabel.textContent = language() === 'zh' ? '查看案例' : 'View case';
     const arrow = document.createElement('span');
@@ -350,6 +377,7 @@
     cta.append(ctaLabel, arrow);
 
     body.append(meta, title);
+    if (supportText) body.append(support);
     if (metrics.length) body.append(metricList);
     body.append(cta);
     article.append(body, buildVisual(source, rawProject, adaptedProject, key));
@@ -442,17 +470,19 @@
     if (!card) return;
     const index = cards.indexOf(card);
     if (index < 0) return;
-    event.preventDefault();
     if (index !== activeIndex) {
+      event.preventDefault();
       setActive(index);
       return;
     }
+    if (event.target.closest('.domain-project-card-v2__cta')) return;
+    event.preventDefault();
     navigateCard(card);
   });
 
   related?.addEventListener('keydown', (event) => {
     const card = event.target.closest('.domain-project-card-v2');
-    if (!card) return;
+    if (!card || event.target.closest('.domain-project-card-v2__cta')) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
       step(event.key === 'ArrowRight' ? 1 : -1);
