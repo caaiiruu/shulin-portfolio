@@ -16,7 +16,6 @@
   const related = document.getElementById('relatedProjects');
   const stage = document.getElementById('domainStage');
   const contentRail = document.getElementById('domainContentRail');
-  const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
   const localize = (value) => {
     if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
@@ -60,39 +59,64 @@
   let rebuilding = false;
 
   const firstText = (...values) => values.map(localize).map((v) => String(v || '').trim()).find(Boolean) || '';
-  const readYear = (project, source) => {
-    const raw = firstText(project?.year, project?.period, project?.heroMetadata?.year, project?.heroMetadata?.period, project?.timeline);
+  const readYear = (rawProject, adaptedProject, source) => {
+    const raw = firstText(
+      rawProject?.year,
+      rawProject?.period,
+      rawProject?.heroMetadata?.year,
+      rawProject?.heroMetadata?.period,
+      adaptedProject?.year,
+      adaptedProject?.period,
+      adaptedProject?.heroMetadata?.year,
+      adaptedProject?.heroMetadata?.period,
+      rawProject?.timeline,
+      adaptedProject?.timeline
+    );
     const match = raw.match(/(?:19|20)\d{2}/);
     if (match) return match[0];
     const sourceText = source?.textContent || '';
     return sourceText.match(/(?:19|20)\d{2}/)?.[0] || raw;
   };
-  const readType = (project, source) => firstText(
-    project?.type,
-    project?.projectType,
-    project?.project_type,
-    project?.systemClassification?.type,
-    project?.systemClassification?.label,
-    project?.system_classification?.type,
-    project?.heroMetadata?.type,
+  const readType = (rawProject, adaptedProject, source) => firstText(
+    rawProject?.type,
+    rawProject?.infoGrid?.type,
+    rawProject?.projectType,
+    rawProject?.project_type,
+    adaptedProject?.type,
+    adaptedProject?.infoGrid?.type,
+    adaptedProject?.projectType,
+    adaptedProject?.project_type,
+    rawProject?.systemClassification?.publicLabel,
+    adaptedProject?.systemClassification?.publicLabel,
+    rawProject?.systemClassification?.label,
+    adaptedProject?.systemClassification?.label,
     source?.querySelector('[class*="context"]')?.textContent
   );
 
-  const collectMetrics = (project) => {
+  const collectMetrics = (rawProject, adaptedProject) => {
     const sources = [
-      project?.cardMetrics,
-      project?.card_metrics,
-      project?.primaryMetrics,
-      project?.primary_metrics,
-      project?.metrics,
-      project?.impactEvidence?.primaryMetrics,
-      project?.impactEvidence?.primary_metrics,
-      project?.impact_evidence?.primaryMetrics,
-      project?.impact_evidence?.primary_metrics,
-      project?.publicContent?.impactEvidence?.primaryMetrics,
-      project?.publicContent?.impact_evidence?.primary_metrics,
-      project?.businessImpact?.primaryMetrics,
-      project?.business_impact?.primary_metrics
+      rawProject?.cardMetrics,
+      rawProject?.card_metrics,
+      rawProject?.primaryMetrics,
+      rawProject?.primary_metrics,
+      rawProject?.metrics,
+      rawProject?.impactEvidence?.primaryMetrics,
+      rawProject?.impactEvidence?.primary_metrics,
+      rawProject?.impact_evidence?.primaryMetrics,
+      rawProject?.impact_evidence?.primary_metrics,
+      rawProject?.publicContent?.impactEvidence?.primaryMetrics,
+      rawProject?.publicContent?.impact_evidence?.primary_metrics,
+      rawProject?.businessImpact?.primaryMetrics,
+      rawProject?.business_impact?.primary_metrics,
+      adaptedProject?.cardMetrics,
+      adaptedProject?.card_metrics,
+      adaptedProject?.primaryMetrics,
+      adaptedProject?.primary_metrics,
+      adaptedProject?.metrics,
+      adaptedProject?.impactEvidence?.primaryMetrics,
+      adaptedProject?.impactEvidence?.primary_metrics,
+      adaptedProject?.impact_evidence?.primaryMetrics,
+      adaptedProject?.impact_evidence?.primary_metrics
     ];
     const result = [];
     const seen = new Set();
@@ -114,7 +138,7 @@
     return result;
   };
 
-  const buildVisual = (source, project, key) => {
+  const buildVisual = (source, rawProject, adaptedProject, key) => {
     const visual = document.createElement('div');
     visual.className = 'domain-project-card-v2__visual';
     const image = source?.querySelector('img');
@@ -127,7 +151,7 @@
       return visual;
     }
 
-    const assetId = project?.hero_visual_brief?.assetId || project?.heroVisualBrief?.assetId;
+    const assetId = rawProject?.hero_visual_brief?.assetId || rawProject?.heroVisualBrief?.assetId || adaptedProject?.hero_visual_brief?.assetId || adaptedProject?.heroVisualBrief?.assetId;
     const asset = assetId ? window.resolveProjectAsset?.(assetId, key) : null;
     if (asset?.src) {
       const img = document.createElement('img');
@@ -143,14 +167,15 @@
 
     const fallback = document.createElement('span');
     fallback.className = 'domain-project-card-v2__visual-fallback';
-    fallback.textContent = firstText(project?.company, source?.querySelector('[class*="company"]')?.textContent);
+    fallback.textContent = firstText(rawProject?.company, adaptedProject?.company, source?.querySelector('[class*="company"]')?.textContent);
     visual.append(fallback);
     return visual;
   };
 
   const buildCard = (source) => {
     const key = source.dataset.project || '';
-    const project = key ? (window.adaptPortfolioProject?.(key) || DATA.projects?.[key] || {}) : {};
+    const rawProject = key ? (DATA.projects?.[key] || {}) : {};
+    const adaptedProject = key ? (window.adaptPortfolioProject?.(key) || {}) : {};
     const article = document.createElement('article');
     article.className = 'domain-project-card-v2 domain-project-card-v2--large';
     article.dataset.projectCardVariant = 'large';
@@ -164,13 +189,13 @@
     meta.className = 'domain-project-card-v2__meta';
     const type = document.createElement('span');
     type.className = 'domain-project-card-v2__type';
-    type.textContent = readType(project, source);
+    type.textContent = readType(rawProject, adaptedProject, source);
     const identity = document.createElement('span');
     identity.className = 'domain-project-card-v2__identity';
     const company = document.createElement('strong');
     company.className = 'domain-project-card-v2__company';
-    company.textContent = firstText(project?.company, source.querySelector('[class*="company"]')?.textContent);
-    const year = readYear(project, source);
+    company.textContent = firstText(rawProject?.company, adaptedProject?.company, source.querySelector('[class*="company"]')?.textContent);
+    const year = readYear(rawProject, adaptedProject, source);
     identity.append(company);
     if (year) {
       const dot = document.createElement('span');
@@ -186,14 +211,26 @@
 
     const title = document.createElement('h3');
     title.className = 'domain-project-card-v2__title';
-    title.textContent = firstText(project?.title, source.querySelector('[class*="title"]')?.textContent);
+    title.textContent = firstText(
+      language() === 'zh' ? rawProject?.transformation_zh : rawProject?.transformation,
+      rawProject?.transformation,
+      adaptedProject?.transformation,
+      rawProject?.title,
+      adaptedProject?.title,
+      source.querySelector('[class*="title"]')?.textContent
+    );
 
-    const supportText = firstText(project?.what_this_proves, project?.whatThisProves);
+    const supportText = firstText(
+      rawProject?.what_this_proves,
+      rawProject?.whatThisProves,
+      adaptedProject?.what_this_proves,
+      adaptedProject?.whatThisProves
+    );
     const support = document.createElement('p');
     support.className = 'domain-project-card-v2__support';
     support.textContent = supportText;
 
-    const metrics = collectMetrics(project);
+    const metrics = collectMetrics(rawProject, adaptedProject);
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
@@ -224,7 +261,7 @@
     if (supportText) body.append(support);
     if (metrics.length) body.append(metricList);
     body.append(cta);
-    article.append(body, buildVisual(source, project, key));
+    article.append(body, buildVisual(source, rawProject, adaptedProject, key));
     return article;
   };
 
