@@ -176,6 +176,7 @@
   let suppressClickUntil = 0;
   let rendering = false;
   let renderFrame = 0;
+  let pendingRenderTab = null;
 
   const readYear = (project) => {
     const raw = firstText(project?.year, project?.period, project?.heroMetadata?.year, project?.heroMetadata?.period, project?.timeline_pair, project?.timeline);
@@ -363,9 +364,9 @@
     return controls;
   };
 
-  const renderSelectedDomain = () => {
+  const renderSelectedDomain = (explicitTab = null) => {
     if (!related || rendering) return;
-    const tab = selectedTab();
+    const tab = explicitTab || pendingRenderTab || selectedTab();
     const domain = resolveDomain(tab);
     const ids = projectIdsForDomain(domain);
     if (!ids.length) return;
@@ -380,11 +381,13 @@
     syncWheel();
     resetDisclosures();
     related.dataset.domainPresentationId = domain?.id || tab?.dataset.domain || '';
+    pendingRenderTab = null;
     rendering = false;
   };
-  const scheduleRender = () => {
+  const scheduleRender = (tab = null) => {
+    if (tab) pendingRenderTab = tab;
     cancelAnimationFrame(renderFrame);
-    renderFrame = requestAnimationFrame(() => requestAnimationFrame(renderSelectedDomain));
+    renderFrame = requestAnimationFrame(() => requestAnimationFrame(() => renderSelectedDomain(pendingRenderTab)));
   };
 
   related?.addEventListener('click', (event) => {
@@ -450,7 +453,8 @@
 
   section.querySelectorAll('.domain-tab').forEach((tab) => tab.addEventListener('click', () => {
     resetDisclosures();
-    scheduleRender();
+    renderSelectedDomain(tab);
+    scheduleRender(tab);
   }));
   document.addEventListener('portfolio:language', () => {
     resetDisclosures(); enhanceTabs(); scheduleRender();
