@@ -265,10 +265,18 @@
   };
 
   build();
-  const hydrationObserver = new MutationObserver(() => {
-    if (!document.querySelector('.work-index')) build();
-  });
-  hydrationObserver.observe(sourceGallery, { childList: true, subtree: true, characterData: true });
+  let allVisualsHydrated = sourceCards().length >= 5 && sourceCards().every((card) => card.image);
+  if (!allVisualsHydrated) {
+    const hydrationObserver = new MutationObserver(() => {
+      const cards = sourceCards();
+      const ready = cards.length >= 5 && cards.every((card) => card.image);
+      if (!ready) return;
+      allVisualsHydrated = true;
+      build();
+      hydrationObserver.disconnect();
+    });
+    hydrationObserver.observe(sourceGallery, { childList: true, subtree: true, characterData: true, attributes: true });
+  }
 
   document.addEventListener('portfolio:language', () => requestAnimationFrame(() => requestAnimationFrame(build)));
 })();
