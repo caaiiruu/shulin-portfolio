@@ -59,9 +59,9 @@ jobs:
               proofText:[...card.querySelectorAll('.work-card-signals-v44 > div')].map(row=>row.textContent.trim())
             })),
             workIndexVisible:!!document.querySelector('.work-index'),
-            sourceHidden:document.querySelector('.work-library-v32')?.hasAttribute('hidden')||false,
-            errors
+            sourceHidden:document.querySelector('.work-library-v32')?.hasAttribute('hidden')||false
           }));
+          data.errors=errors;
           fs.writeFileSync(path.join(out,'work-diagnostic.json'),JSON.stringify(data,null,2));
           await page.locator('.work-index').screenshot({path:path.join(out,'work-1419-diagnostic.png')});
           await browser.close();
