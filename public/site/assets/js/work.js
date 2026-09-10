@@ -140,7 +140,7 @@
     if (source.image) {
       const image = source.image.cloneNode(true);
       image.className = 'work-index-card__image';
-      image.loading = 'lazy';
+      image.loading = 'eager';
       image.decoding = 'async';
       visual.append(image);
       return visual;
@@ -152,7 +152,7 @@
       image.className = 'work-index-card__image';
       image.src = asset.src;
       image.alt = scalarText(asset.alt);
-      image.loading = 'lazy';
+      image.loading = 'eager';
       image.decoding = 'async';
       if (asset.width && asset.height) { image.width = asset.width; image.height = asset.height; }
       visual.append(image);
