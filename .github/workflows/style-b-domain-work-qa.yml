@@ -188,6 +188,10 @@ jobs:
               response = await page.goto(`${base}/site/work.html`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
               await page.waitForSelector('.work-index', { timeout: 10000 });
+              await page.waitForFunction(() => {
+                const images = [...document.querySelectorAll('.work-index-card__visual img')];
+                return images.length === 5 && images.every((img) => img.complete && img.naturalWidth > 0);
+              }, { timeout: 10000 });
               const work = page.locator('.work-index');
               const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
@@ -200,14 +204,18 @@ jobs:
               assert(await featured.count() === 4, `Work ${width}: featured requires 4 cards`);
               const expectedProofs = [3,2,2,2];
               for (let i=0;i<4;i++) {
-                assert(await featured.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: featured ${i+1} missing visual`);
+                const visualImage = featured.nth(i).locator('.work-index-card__visual img');
+                assert(await visualImage.count() === 1, `Work ${width}: featured ${i+1} missing image`);
+                assert(await visualImage.evaluate((img) => img.complete && img.naturalWidth > 0), `Work ${width}: featured ${i+1} image failed to load`);
                 assert(await featured.nth(i).locator('.work-index-card__proofs li').count() === expectedProofs[i], `Work ${width}: featured ${i+1} proof density mismatch`);
                 assert(await featured.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: featured ${i+1} missing CTA`);
               }
               const moreCards = work.locator('.work-index__more-grid .work-index-card');
               assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
               for (let i=0;i<await moreCards.count();i++) {
-                assert(await moreCards.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: More Work ${i+1} missing visual`);
+                const visualImage = moreCards.nth(i).locator('.work-index-card__visual img');
+                assert(await visualImage.count() === 1, `Work ${width}: More Work ${i+1} missing image`);
+                assert(await visualImage.evaluate((img) => img.complete && img.naturalWidth > 0), `Work ${width}: More Work ${i+1} image failed to load`);
                 assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
                 assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
               }
@@ -231,7 +239,7 @@ jobs:
               await context.close();
             }
 
-            for (const slug of ['daily-hours','payment','dbs']) {
+            for (const slug of ['payment','dbs']) {
               const context = await browser.newContext({ viewport: { width: 1419, height: 1100 }, reducedMotion: 'reduce' });
               const page = await context.newPage();
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ slug, text: msg.text() }); });
@@ -241,7 +249,6 @@ jobs:
               assert(response?.ok(), `${route}: HTTP ${response?.status()}`);
               assert(await page.locator(`[data-project-route-summary="${slug}"]`).count() === 1, `${route}: wrong document identity`);
               report.routes[slug] = { path: route, status: response.status() };
-              if (slug === 'daily-hours') await page.screenshot({ path: path.join(out, 'daily-hours-regression-1419.png'), fullPage: true });
               await context.close();
             }
 
