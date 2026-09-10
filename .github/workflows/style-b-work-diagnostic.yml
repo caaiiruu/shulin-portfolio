@@ -1,4 +1,4 @@
-name: Style B Domain State Diagnostic
+name: Style B Final Visual Diagnostic
 
 on:
   push:
@@ -26,50 +26,82 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Start server
         run: |
-          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/domain-state-server.log 2>&1 &
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/final-visual-server.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
-          cat /tmp/domain-state-server.log
+          cat /tmp/final-visual-server.log
           exit 1
-      - name: Capture Domain tab state transitions
+      - name: Verify final visual semantics and painted Work images
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
           import { chromium } from '@playwright/test';
           import fs from 'node:fs';
           import path from 'node:path';
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/domain-state-diagnostic');
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/style-b-final-visual-diagnostic');
           fs.mkdirSync(out,{recursive:true});
           const browser=await chromium.launch({headless:true});
           const page=await browser.newPage({viewport:{width:1419,height:1100}});
           const errors=[];
           page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
           page.on('pageerror',e=>errors.push(e.message));
+          const assert=(value,message)=>{if(!value)throw new Error(message)};
+
           await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
           await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
-          const tabs=page.locator('#domains .domain-tab');
-          const snapshots=[];
-          const snap=async(label,index)=>snapshots.push(await page.evaluate(({label,index})=>{
-            const related=document.getElementById('relatedProjects');
-            const selected=[...document.querySelectorAll('#domains .domain-tab')].map((tab,i)=>({i,label:tab.textContent.trim(),domain:tab.dataset.domain,selected:tab.getAttribute('aria-selected')}));
-            const domains=(window.PORTFOLIO_RUNTIME_DATA?.contentDiscovery?.domains||[]).map((d,i)=>({i,id:d.id,label:d.label,legacyAliases:d.legacyAliases,featuredProjectIds:d.featuredProjectIds,supportingProjectIds:d.supportingProjectIds}));
-            return {label,index,selected,domains,relatedChildren:[...(related?.children||[])].map(node=>({className:node.className,project:node.dataset.project,offset:node.dataset.wheelOffset,state:node.dataset.wheelState}))};
-          },{label,index}));
-          await snap('initial',0);
-          for(let i=0;i<await tabs.count();i++){
-            await tabs.nth(i).click();
-            await snap('immediate',i);
-            await page.waitForTimeout(20); await snap('20ms',i);
-            await page.waitForTimeout(80); await snap('100ms',i);
-            await page.waitForTimeout(150); await snap('250ms',i);
+          const iconKeys=await page.locator('#domains .domain-tab__icon').evaluateAll(nodes=>nodes.map(n=>n.dataset.iconKey||''));
+          assert(iconKeys.length===6,'Domain: expected six icons');
+          assert(new Set(iconKeys).size===6,`Domain: icon semantics not distinct ${JSON.stringify(iconKeys)}`);
+          const domainLabels=await page.locator('#domains .domain-project-card-v2__metric-label').allTextContents();
+          assert(domainLabels.every(label=>!/[+/]/.test(label)),`Domain: residual metric punctuation ${JSON.stringify(domainLabels)}`);
+
+          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
+          await page.waitForSelector('.work-index',{timeout:10000});
+          const payment=page.locator('.work-index-card[data-work-index-project="payment"]');
+          const paymentValues=await payment.locator('.work-index-card__metric-value').allTextContents();
+          const paymentLabels=await payment.locator('.work-index-card__metric-label').allTextContents();
+          const txIndex=paymentValues.findIndex(value=>/~?230k/i.test(value.trim()));
+          assert(txIndex>=0,'Work: ~230K Payment metric missing');
+          assert(paymentLabels[txIndex]?.trim().toLowerCase()==='transactions',`Work: ~230K label must be transactions, got ${paymentLabels[txIndex]}`);
+          const allMetricLabels=await page.locator('.work-index-card__metric-label').allTextContents();
+          assert(allMetricLabels.every(label=>!/[+/]/.test(label)),`Work: residual metric punctuation ${JSON.stringify(allMetricLabels)}`);
+
+          const cards=page.locator('.work-index-card');
+          const painted=[];
+          for(let i=0;i<await cards.count();i++){
+            const card=cards.nth(i);
+            await card.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(120);
+            const project=await card.getAttribute('data-work-index-project');
+            const image=card.locator('.work-index-card__visual img');
+            assert(await image.count()===1,`Work ${project}: visual image missing`);
+            const state=await image.evaluate(img=>{
+              const r=img.getBoundingClientRect();
+              const s=getComputedStyle(img);
+              let nonWhiteRatio=0;
+              try{
+                const canvas=document.createElement('canvas');canvas.width=96;canvas.height=54;
+                const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0,96,54);
+                const p=ctx.getImageData(0,0,96,54).data;let n=0;
+                for(let j=0;j<p.length;j+=4)if(p[j]<245||p[j+1]<245||p[j+2]<245)n++;
+                nonWhiteRatio=n/(96*54);
+              }catch{}
+              return{complete:img.complete,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,width:r.width,height:r.height,display:s.display,visibility:s.visibility,opacity:s.opacity,nonWhiteRatio};
+            });
+            assert(state.complete&&state.naturalWidth>0&&state.naturalHeight>0,`Work ${project}: image not decoded`);
+            assert(state.width>40&&state.height>40&&state.display!=='none'&&state.visibility!=='hidden'&&Number(state.opacity)>0,`Work ${project}: image not visibly laid out`);
+            assert(state.nonWhiteRatio>0.01,`Work ${project}: image raster appears blank`);
+            await card.screenshot({path:path.join(out,`work-${project}-painted.png`)});
+            painted.push({project,...state});
           }
-          const data={snapshots,errors};
-          fs.writeFileSync(path.join(out,'domain-state.json'),JSON.stringify(data,null,2));
-          console.log('DOMAIN_STATE '+JSON.stringify(data));
+          assert(errors.length===0,`Console/page errors ${JSON.stringify(errors)}`);
+          const data={iconKeys,domainMetricLabels:domainLabels,paymentValues,paymentLabels,workMetricLabels:allMetricLabels,painted,errors};
+          fs.writeFileSync(path.join(out,'final-visual.json'),JSON.stringify(data,null,2));
+          console.log(JSON.stringify(data,null,2));
           await browser.close();
           NODE
       - name: Upload diagnostic
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-domain-state-diagnostic
-          path: artifacts/domain-state-diagnostic
-          retention-days: 1
+          name: style-b-final-visual-diagnostic
+          path: artifacts/style-b-final-visual-diagnostic
+          retention-days: 3
