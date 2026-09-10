@@ -138,15 +138,21 @@
     if (/programme|program/.test(normalized)) return zh ? '計畫' : 'programme';
     if (/digital.*share|share.*digital|redemption share|campaign.*share/.test(normalized)) return zh ? '數位佔比' : 'digital share';
     if (/redemption/.test(normalized)) return zh ? '兌換' : 'redemptions';
+    if (/interview/.test(normalized)) return zh ? '訪談' : 'interviews';
+    if (/participant|respondent/.test(normalized)) return zh ? '參與者' : 'participants';
+    if (/core.*function|function|flow/.test(normalized)) return zh ? '功能' : 'functions';
     if (/market|countr/.test(normalized)) return zh ? '市場' : 'markets';
     if (/workflow/.test(normalized)) return zh ? '工作流' : 'workflow';
     if (/decision/.test(normalized)) return zh ? '決策模型' : 'decision model';
     if (/success/.test(normalized)) return zh ? '成功率' : 'success rate';
-    if (/time|second|minute|hour/.test(normalized)) return zh ? '處理時間' : 'time';
+    if (/month|week|day|timeline|duration/.test(normalized)) return zh ? '期間' : 'timeline';
+    if (/time|second|minute|hour/.test(normalized)) return zh ? '時間' : 'time';
+    if (/conversion/.test(normalized)) return zh ? '轉換率' : 'conversion';
     if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
+    if (/store/.test(normalized)) return zh ? '門市' : 'stores';
     if (/user/.test(normalized)) return zh ? '使用者' : 'users';
-    const words = text.split(/\s+/).filter(Boolean);
-    return words.slice(0, 2).join(' ');
+    const cleaned = text.replace(/[+/]/g, ' ').replace(/[^\p{L}\p{N}%×~.-]+/gu, ' ').trim();
+    return cleaned.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
   };
 
   const evidenceRows = (raw, adapted, count) => {
