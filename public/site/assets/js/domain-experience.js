@@ -94,6 +94,7 @@
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'domain-experience-card';
+    card.dataset.pressable = '';
     if (source.dataset.project) card.dataset.project = source.dataset.project;
     if (source.dataset.experiment) card.dataset.experiment = source.dataset.experiment;
     const label = source.getAttribute('aria-label');
@@ -132,8 +133,6 @@
     if (proof.textContent) contentNode.append(proof);
     contentNode.append(cta);
     card.append(contentNode, ownVisual(source));
-
-    card.addEventListener('click', () => source.click());
     return card;
   };
 
@@ -151,7 +150,6 @@
     related.classList.add('domain-experience__rail');
     related.removeAttribute('data-card-variant');
     related.removeAttribute('data-rail');
-    window.refreshHorizontalRails?.();
     transforming = false;
     resetDisclosures();
   };
