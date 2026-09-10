@@ -68,14 +68,19 @@
       visual.append(clone);
       return visual;
     }
+
     const brand = source.querySelector('[class*="brand"]')?.textContent.trim();
-    const labels = [...source.querySelectorAll('[class*="flow"] b')].map((node) => node.textContent.trim()).filter(Boolean);
+    const labels = [...source.querySelectorAll('[class*="flow"] b')]
+      .map((node) => node.textContent.trim())
+      .filter(Boolean);
+
     if (brand) {
       const brandNode = document.createElement('span');
       brandNode.className = 'domain-experience-card__visual-brand';
       brandNode.textContent = brand;
       visual.append(brandNode);
     }
+
     if (labels.length) {
       const flow = document.createElement('div');
       flow.className = 'domain-experience-card__visual-flow';
@@ -87,14 +92,32 @@
       });
       visual.append(flow);
     }
+
     return visual;
+  };
+
+  const readProofs = (source) => {
+    const values = [];
+    const seen = new Set();
+
+    source.querySelectorAll('dd').forEach((valueNode) => {
+      const value = valueNode.textContent.trim();
+      if (!value || seen.has(value)) return;
+      const row = valueNode.closest('div, li, article');
+      const label = row?.querySelector('dt, small, [class*="label"]')?.textContent.trim() || '';
+      seen.add(value);
+      values.push({ label, value });
+    });
+
+    return values.slice(0, 3);
   };
 
   const ownCard = (source) => {
     const card = document.createElement('button');
     card.type = 'button';
-    card.className = 'domain-experience-card';
+    card.className = 'domain-experience-card domain-experience-card--large';
     card.dataset.pressable = '';
+    card.dataset.projectCardVariant = 'large';
     if (source.dataset.project) card.dataset.project = source.dataset.project;
     if (source.dataset.experiment) card.dataset.experiment = source.dataset.experiment;
     const label = source.getAttribute('aria-label');
@@ -117,20 +140,35 @@
     title.className = 'domain-experience-card__title';
     title.textContent = source.querySelector('[class*="title"]')?.textContent.trim() || '';
 
-    const proof = document.createElement('p');
-    proof.className = 'domain-experience-card__proof';
-    proof.textContent = source.querySelector('dd')?.textContent.trim() || '';
+    const proofs = readProofs(source);
+    const proofList = document.createElement('dl');
+    proofList.className = 'domain-experience-card__proofs';
+    proofs.forEach(({ label: proofLabel, value }, index) => {
+      const row = document.createElement('div');
+      row.className = `domain-experience-card__proof-row${index === 0 ? ' is-primary' : ''}`;
+      if (proofLabel) {
+        const dt = document.createElement('dt');
+        dt.textContent = proofLabel;
+        row.append(dt);
+      }
+      const dd = document.createElement('dd');
+      dd.textContent = value;
+      row.append(dd);
+      proofList.append(row);
+    });
 
     const cta = document.createElement('span');
     cta.className = 'domain-experience-card__cta';
-    cta.textContent = source.querySelector('[class*="action"]')?.textContent.trim() || (document.documentElement.lang.startsWith('zh') ? '查看案例' : 'View case');
+    const sourceAction = source.querySelector('[class*="action"]')?.textContent.trim();
+    cta.append(document.createTextNode(sourceAction || (document.documentElement.lang.startsWith('zh') ? '查看案例' : 'View case')));
     const arrow = document.createElement('span');
     arrow.className = 'icon-arrow icon-arrow--right';
     arrow.setAttribute('aria-hidden', 'true');
     cta.append(arrow);
 
-    contentNode.append(meta, title);
-    if (proof.textContent) contentNode.append(proof);
+    if (meta.childElementCount) contentNode.append(meta);
+    contentNode.append(title);
+    if (proofList.childElementCount) contentNode.append(proofList);
     contentNode.append(cta);
     card.append(contentNode, ownVisual(source));
     return card;
@@ -144,6 +182,7 @@
       resetDisclosures();
       return;
     }
+
     transforming = true;
     const owned = sharedCards.map(ownCard);
     related.replaceChildren(...owned);
