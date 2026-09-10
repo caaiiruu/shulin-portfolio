@@ -145,10 +145,10 @@
     if (/workflow/.test(normalized)) return zh ? '工作流' : 'workflow';
     if (/decision/.test(normalized)) return zh ? '決策模型' : 'decision model';
     if (/success/.test(normalized)) return zh ? '成功率' : 'success rate';
+    if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
     if (/month|week|day|timeline|duration/.test(normalized)) return zh ? '期間' : 'timeline';
     if (/time|second|minute|hour/.test(normalized)) return zh ? '時間' : 'time';
     if (/conversion/.test(normalized)) return zh ? '轉換率' : 'conversion';
-    if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
     if (/store/.test(normalized)) return zh ? '門市' : 'stores';
     if (/user/.test(normalized)) return zh ? '使用者' : 'users';
     const cleaned = text.replace(/[+/]/g, ' ').replace(/[^\p{L}\p{N}%×~.-]+/gu, ' ').trim();
