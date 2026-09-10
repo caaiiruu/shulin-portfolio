@@ -1,4 +1,4 @@
-name: Style B Work Proof Diagnostic
+name: Style B Domain Geometry Diagnostic
 
 on:
   push:
@@ -26,71 +26,56 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Start server
         run: |
-          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-diag-server.log 2>&1 &
-          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0; sleep 1; done
-          cat /tmp/work-diag-server.log
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/domain-diag-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/domain-diag-server.log
           exit 1
-      - name: Capture Work image raster paint
+      - name: Capture Domain geometry
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
           import { chromium } from '@playwright/test';
           import fs from 'node:fs';
           import path from 'node:path';
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/work-proof-diagnostic');
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/domain-geometry-diagnostic');
           fs.mkdirSync(out,{recursive:true});
           const browser=await chromium.launch({headless:true});
           const page=await browser.newPage({viewport:{width:1419,height:1100}});
           const errors=[];
           page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
           page.on('pageerror',e=>errors.push(e.message));
-          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
-          await page.waitForSelector('.work-index',{timeout:10000});
-          await page.waitForFunction(()=>{
-            const images=[...document.querySelectorAll('.work-index-card__visual img')];
-            return images.length===5&&images.every(img=>img.complete&&img.naturalWidth>0);
-          },{timeout:10000});
-          const data=await page.evaluate(()=>({
-            rendered:[...document.querySelectorAll('.work-index-card')].map(card=>{
-              const visual=card.querySelector('.work-index-card__visual');
-              const img=visual?.querySelector('img');
-              const vr=visual?.getBoundingClientRect();
-              const ir=img?.getBoundingClientRect();
-              const vs=visual?getComputedStyle(visual):null;
-              const is=img?getComputedStyle(img):null;
-              let nonWhiteRatio=0;
-              if(img){
-                const canvas=document.createElement('canvas');
-                canvas.width=128; canvas.height=72;
-                const ctx=canvas.getContext('2d',{willReadFrequently:true});
-                ctx.drawImage(img,0,0,128,72);
-                const px=ctx.getImageData(0,0,128,72).data;
-                let nonWhite=0;
-                for(let i=0;i<px.length;i+=4){
-                  if(px[i]<245||px[i+1]<245||px[i+2]<245) nonWhite++;
-                }
-                nonWhiteRatio=nonWhite/(128*72);
-              }
-              return {
-                project:card.dataset.workIndexProject||'',
-                visual:{width:vr?.width||0,height:vr?.height||0,display:vs?.display,visibility:vs?.visibility,opacity:vs?.opacity,overflow:vs?.overflow},
-                image:img?{src:img.currentSrc||img.src,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,width:ir?.width||0,height:ir?.height||0,display:is?.display,visibility:is?.visibility,opacity:is?.opacity,objectFit:is?.objectFit,position:is?.position,filter:is?.filter,mixBlendMode:is?.mixBlendMode,clipPath:is?.clipPath,nonWhiteRatio}:null
-              };
-            })
-          }));
+          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
+          await page.locator('#domains').scrollIntoViewIfNeeded();
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+          const data=await page.evaluate(()=>{
+            const inspect=(el)=>{
+              if(!el)return null;
+              const r=el.getBoundingClientRect();
+              const s=getComputedStyle(el);
+              return {tag:el.tagName,id:el.id,className:typeof el.className==='string'?el.className:'',rect:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right},computedWidth:s.width,display:s.display,position:s.position,transform:s.transform,transformOrigin:s.transformOrigin,zoom:s.zoom,maxWidth:s.maxWidth,minWidth:s.minWidth,boxSizing:s.boxSizing,paddingLeft:s.paddingLeft,paddingRight:s.paddingRight,marginLeft:s.marginLeft,marginRight:s.marginRight,overflowX:s.overflowX};
+            };
+            const wheel=document.querySelector('#domains .domain-wheel-v2');
+            const panel=wheel?.closest('.domain-panel-v30--projects');
+            const section=document.querySelector('#domains');
+            const ancestors=[];
+            let el=wheel;
+            while(el){ ancestors.push(inspect(el)); el=el.parentElement; }
+            return {
+              viewport:{innerWidth:window.innerWidth,clientWidth:document.documentElement.clientWidth,dpr:window.devicePixelRatio,visualViewportWidth:window.visualViewport?.width||null},
+              cssVar:getComputedStyle(section).getPropertyValue('--domain-viewport-width').trim(),
+              wheel:inspect(wheel),panel:inspect(panel),section:inspect(section),body:inspect(document.body),html:inspect(document.documentElement),ancestors
+            };
+          });
           data.errors=errors;
-          fs.writeFileSync(path.join(out,'work-image-raster.json'),JSON.stringify(data,null,2));
-          for(const item of data.rendered){
-            const locator=page.locator(`.work-index-card[data-work-index-project="${item.project}"] .work-index-card__visual img`);
-            await locator.screenshot({path:path.join(out,`${item.project}-img.png`)});
-          }
-          await page.locator('.work-index').screenshot({path:path.join(out,'work-1419-diagnostic.png')});
+          fs.writeFileSync(path.join(out,'domain-geometry.json'),JSON.stringify(data,null,2));
+          await page.locator('#domains').screenshot({path:path.join(out,'domain-1419-diagnostic.png')});
+          console.log('DOMAIN_GEOMETRY '+JSON.stringify(data));
           await browser.close();
-          console.log(JSON.stringify(data,null,2));
           NODE
       - name: Upload diagnostic
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-work-proof-diagnostic
-          path: artifacts/work-proof-diagnostic
+          name: style-b-domain-geometry-diagnostic
+          path: artifacts/domain-geometry-diagnostic
           retention-days: 1
