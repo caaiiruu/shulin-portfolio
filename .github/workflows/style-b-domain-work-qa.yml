@@ -95,10 +95,11 @@ jobs:
               const tabLabels = (await domain.locator('.domain-tab__label').allTextContents()).map(clean);
               assert(tabLabels.length === 6 && tabLabels.every(label => label.length > 2), `Home ${width}: Domain labels missing`);
 
+              const layoutViewportWidth = await page.evaluate(() => document.documentElement.clientWidth);
               const wheel = domain.locator('.domain-wheel-v2');
               const wheelBox = await wheel.boundingBox();
-              assert(wheelBox && Math.abs(wheelBox.width - width) <= 2, `Home ${width}: wheel must span viewport (${wheelBox?.width})`);
-              assert(Math.abs(wheelBox.x) <= 2, `Home ${width}: wheel must begin at viewport edge (${wheelBox.x})`);
+              assert(wheelBox && Math.abs(wheelBox.width - layoutViewportWidth) <= 2, `Home ${width}: wheel must span layout viewport (${wheelBox?.width} vs ${layoutViewportWidth})`);
+              assert(Math.abs(wheelBox.x) <= 2, `Home ${width}: wheel must begin at layout viewport edge (${wheelBox?.x})`);
 
               const disclosures = domain.locator('details.domain-experience-disclosure');
               assert(await disclosures.count() === 2, `Home ${width}: expected 2 disclosures`);
@@ -120,22 +121,32 @@ jobs:
               assert(metricLabels.every(label => label.split(/\s+/).filter(Boolean).length <= 2), `Home ${width}: metric labels must be concise ${JSON.stringify(metricLabels)}`);
               for (const group of await metricGroups.all()) assert(await group.locator(':scope > dt').count() === 1 && await group.locator(':scope > dd').count() === 1, `Home ${width}: each metric requires value + label`);
 
-              const colorState = await active.evaluate(card => ({
-                content: getComputedStyle(card.querySelector('.domain-project-card-v2__content')).backgroundColor,
-                visual: getComputedStyle(card.querySelector('.domain-project-card-v2__visual')).backgroundColor,
-                titleSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__title')).fontSize),
-                valueSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-value')).fontSize),
-                labelSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-label')).fontSize)
-              }));
-              assert(!colorIsWhite(colorState.content), `Home ${width}: card content panel must use project tint`);
-              assert(colorState.valueSize > colorState.labelSize, `Home ${width}: metric value must be larger than label`);
+              const domainState = await active.evaluate(card => {
+                const content = card.querySelector('.domain-project-card-v2__content');
+                const visual = card.querySelector('.domain-project-card-v2__visual');
+                const c = content.getBoundingClientRect();
+                const v = visual.getBoundingClientRect();
+                return {
+                  contentBg: getComputedStyle(content).backgroundColor,
+                  valueSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-value')).fontSize),
+                  labelSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-label')).fontSize),
+                  contentRight: c.right,
+                  contentBottom: c.bottom,
+                  visualLeft: v.left,
+                  visualTop: v.top
+                };
+              });
+              assert(!colorIsWhite(domainState.contentBg), `Home ${width}: card content panel must use project tint`);
+              assert(domainState.valueSize > domainState.labelSize, `Home ${width}: metric value must be larger than label`);
+              if (width === 1419) {
+                assert(Math.abs(domainState.visualLeft - domainState.contentRight) <= 2, `Home ${width}: Large card must stay horizontal`);
+              }
 
               const controls = domain.locator('.domain-wheel-v2__control');
               const controlBoxes = await controls.evaluateAll(nodes => nodes.map(node => { const r = node.getBoundingClientRect(); return { w:r.width,h:r.height }; }));
               assert(controlBoxes.length === 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: controls below 44x44`);
 
               const image = active.locator('.domain-project-card-v2__image');
-              const arrow = active.locator('.domain-project-card-v2__cta-arrow');
               const beforeHover = await active.evaluate(card => ({
                 image: getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,
                 arrow: getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform
@@ -159,9 +170,9 @@ jobs:
               const keyboardKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
               assert(keyboardKey === beforeKey, `Home ${width}: keyboard did not rotate wheel back`);
 
-              report.domain[width] = { wheelWidth: wheelBox.width, wheelX: wheelBox.x, metricLabels, ...colorState };
+              report.domain[width] = { layoutViewportWidth, wheelWidth: wheelBox.width, wheelX: wheelBox.x, metricLabels, ...domainState };
               await domain.screenshot({ path: path.join(out, `domain-${width}.png`) });
-              const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+              const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
               assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}`);
 
               response = await page.goto(`${base}/site/work.html`, { waitUntil: 'networkidle' });
@@ -219,10 +230,7 @@ jobs:
               const moreCards = work.locator('.work-index__more-grid .work-index-card');
               assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
               for (let i = 0; i < await moreCards.count(); i++) {
-                const card = moreCards.nth(i);
-                assert(await card.locator('.work-index-card__metric').count() === 1, `Work ${width}: More Work metric count mismatch`);
-                const metricTops = await card.locator('.work-index-card__metric').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
-                assert(metricTops.length === 1, `Work ${width}: More Work metric missing`);
+                assert(await moreCards.nth(i).locator('.work-index-card__metric').count() === 1, `Work ${width}: More Work metric count mismatch`);
               }
 
               if (width <= 1100) {
@@ -239,7 +247,7 @@ jobs:
               await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
               assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count() >= 1, `Work ${width}: Operations filter returned no work`);
               await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
-              const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+              const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
               assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}`);
               report.work[width] = { filters, overflow: workOverflow };
               await work.screenshot({ path: path.join(out, `work-${width}.png`) });
