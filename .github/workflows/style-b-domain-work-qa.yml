@@ -1,0 +1,160 @@
+name: Style B Domain Work QA
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify isolated baseline and denylist
+        run: |
+          set -euo pipefail
+          test "$(git merge-base 05291a4ba071d00d0098f227ea08069c774cb422 HEAD)" = "05291a4ba071d00d0098f227ea08069c774cb422"
+          git diff --check 05291a4ba071d00d0098f227ea08069c774cb422...HEAD
+          git diff --name-only 05291a4ba071d00d0098f227ea08069c774cb422...HEAD | tee /tmp/changed.txt
+          ! grep -Fxq 'public/site/assets/js/app.js' /tmp/changed.txt
+          ! grep -Fxq 'public/site/content/portfolio-content.json' /tmp/changed.txt
+          ! grep -Fxq 'public/site/assets/css/components/project-card.css' /tmp/changed.txt
+          ! grep -Fxq 'scripts/build-production-assets.mjs' /tmp/changed.txt
+          ! grep -Fxq 'scripts/generate-project-pages.mjs' /tmp/changed.txt
+          ! grep -E '^public/site/assets/projects/daily-hours/' /tmp/changed.txt
+          ! grep -Fxq 'public/site/assets/css/components/project-detail-overview.css' /tmp/changed.txt
+
+      - name: Install root dependencies
+        run: npm run install:ci
+
+      - name: Run full validation suite
+        run: npm test
+
+      - name: Install browser QA dependencies
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start static QA server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs > /tmp/style-b-server.log 2>&1 &
+          echo $! > /tmp/style-b-server.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/style-b-server.log
+          exit 1
+
+      - name: Run Style B browser QA and capture screenshots
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-work');
+          fs.mkdirSync(out, { recursive: true });
+          const base = 'http://127.0.0.1:4173';
+          const widths = [1419, 871, 430];
+          const browser = await chromium.launch({ headless: true });
+          const report = { viewports: {}, routes: {}, consoleErrors: [] };
+
+          const assert = (condition, message) => { if (!condition) throw new Error(message); };
+          const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+
+          for (const width of widths) {
+            const context = await browser.newContext({ viewport: { width, height: 1100 }, reducedMotion: 'reduce' });
+            const page = await context.newPage();
+            page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ width, url: page.url(), text: msg.text() }); });
+            page.on('pageerror', error => report.consoleErrors.push({ width, url: page.url(), text: error.message }));
+
+            let response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+            assert(response?.ok(), `Home ${width}: HTTP ${response?.status()}`);
+            await page.locator('#domains').scrollIntoViewIfNeeded();
+            await page.waitForFunction(() => document.querySelector('#domains')?.dataset.styleBMounted === 'true');
+            const domain = page.locator('#domains');
+            const tabs = domain.locator('.domain-tab');
+            assert(await tabs.count() === 6, `Home ${width}: expected 6 domain tabs`);
+            const tabLabels = (await tabs.allTextContents()).map(clean);
+            assert(!tabLabels.some(label => /^all$/i.test(label)), `Home ${width}: unexpected All tab`);
+            assert(await domain.locator('details.domain-disclosure').count() === 2, `Home ${width}: expected 2 disclosures`);
+            for (const details of await domain.locator('details.domain-disclosure').all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
+            const controlBoxes = await domain.locator('.domain-wheel-controls .rail-button').evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
+            assert(controlBoxes.length >= 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: controls below 44x44`);
+            const cardState = await domain.locator('.domain-project-list-v30 .related-project-card-v45').first().evaluate(card => {
+              const r=card.getBoundingClientRect();
+              const content=card.querySelector('.related-project-card__content-v1612')?.getBoundingClientRect();
+              const visual=card.querySelector('.related-project-card__visual-v45')?.getBoundingClientRect();
+              return {width:r.width,contentTop:content?.top,contentBottom:content?.bottom,visualTop:visual?.top,visualLeft:visual?.left,contentLeft:content?.left};
+            });
+            if (cardState.width <= 724) assert(cardState.visualTop >= cardState.contentBottom - 2, `Home ${width}: narrow card did not stack`);
+            const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}px`);
+            await domain.screenshot({ path: path.join(out, `home-domain-${width}.png`) });
+
+            response = await page.goto(`${base}/work`, { waitUntil: 'networkidle' });
+            assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
+            await page.waitForSelector('.work-index');
+            const work = page.locator('.work-index');
+            const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
+            assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
+            assert(await work.locator('.work-index__featured > .work-index-card').count() === 2, `Work ${width}: row 1 hierarchy mismatch`);
+            assert(await work.locator('.work-index__featured-secondary-row > .work-index-card').count() === 2, `Work ${width}: row 2 hierarchy mismatch`);
+            const featured = work.locator('.work-index__featured .work-index-card');
+            const expectedProofs = [3,2,2,2];
+            for (let i=0;i<4;i++) {
+              assert(await featured.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: featured ${i+1} missing visual`);
+              assert(await featured.nth(i).locator('.work-index-card__proofs li').count() === expectedProofs[i], `Work ${width}: featured ${i+1} proof density mismatch`);
+              assert(await featured.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: featured ${i+1} missing CTA`);
+            }
+            const moreCards = work.locator('.work-index__more-grid .work-index-card');
+            assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
+            for (let i=0;i<await moreCards.count();i++) {
+              assert(await moreCards.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: More Work ${i+1} missing visual`);
+              assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
+              assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
+            }
+            const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}px`);
+            await work.screenshot({ path: path.join(out, `work-${width}.png`) });
+
+            report.viewports[width] = { homeOverflow, workOverflow, domainCard: cardState, filters, moreWorkCards: await moreCards.count() };
+            await context.close();
+          }
+
+          const regressionRoutes = ['/work/daily-hours','/work/payment','/work/dbs'];
+          for (const route of regressionRoutes) {
+            const context = await browser.newContext({ viewport: { width: 1419, height: 1100 }, reducedMotion: 'reduce' });
+            const page = await context.newPage();
+            page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ route, text: msg.text() }); });
+            page.on('pageerror', error => report.consoleErrors.push({ route, text: error.message }));
+            const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+            assert(response?.ok(), `${route}: HTTP ${response?.status()}`);
+            report.routes[route] = response.status();
+            if (route === '/work/daily-hours') await page.screenshot({ path: path.join(out, 'daily-hours-regression-1419.png'), fullPage: true });
+            await context.close();
+          }
+
+          assert(report.consoleErrors.length === 0, `Console/page errors: ${JSON.stringify(report.consoleErrors)}`);
+          fs.writeFileSync(path.join(out, 'qa-report.json'), JSON.stringify(report, null, 2));
+          await browser.close();
+          NODE
+
+      - name: Upload QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: style-b-domain-work-qa
+          path: artifacts/style-b-domain-work
+          retention-days: 3
