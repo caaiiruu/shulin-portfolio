@@ -414,6 +414,7 @@
   });
   related?.addEventListener('pointerdown', (event) => {
     if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    if (event.target.closest('.domain-wheel-v2__control, .domain-project-card-v2__cta')) return;
     pointerStartX = event.clientX;
     pointerStartY = event.clientY;
     activePointerId = event.pointerId;
