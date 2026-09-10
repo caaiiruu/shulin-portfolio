@@ -113,7 +113,7 @@
       meta.append(item);
     });
 
-    const title = document.createElement('h4');
+    const title = document.createElement('h3');
     title.className = 'domain-experience-card__title';
     title.textContent = source.querySelector('[class*="title"]')?.textContent.trim() || '';
 
