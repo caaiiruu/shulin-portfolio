@@ -114,12 +114,17 @@ jobs:
               const state = await active.evaluate(card => {
                 const tidy = (value) => String(value || '').replace(/\s+/g, ' ').trim();
                 const r = card.getBoundingClientRect();
-                const content = card.querySelector('.domain-project-card-v2__content')?.getBoundingClientRect();
-                const visual = card.querySelector('.domain-project-card-v2__visual')?.getBoundingClientRect();
-                const cta = card.querySelector('.domain-project-card-v2__cta')?.getBoundingClientRect();
+                const contentNode = card.querySelector('.domain-project-card-v2__content');
+                const visualNode = card.querySelector('.domain-project-card-v2__visual');
+                const ctaNode = card.querySelector('.domain-project-card-v2__cta');
+                const content = contentNode?.getBoundingClientRect();
+                const visual = visualNode?.getBoundingClientRect();
+                const cta = ctaNode?.getBoundingClientRect();
+                const contentStyle = contentNode ? getComputedStyle(contentNode) : null;
+                const paddingInline = contentStyle ? parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight) : 0;
                 return {
                   width:r.width,height:r.height,
-                  content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom},
+                  content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom,innerWidth:(content?.width || 0)-paddingInline,paddingInline},
                   visual:{left:visual?.left,top:visual?.top,width:visual?.width,height:visual?.height},
                   title:tidy(card.querySelector('.domain-project-card-v2__title')?.textContent),
                   support:tidy(card.querySelector('.domain-project-card-v2__support')?.textContent),
@@ -129,10 +134,13 @@ jobs:
                 };
               });
 
+              report.viewports[width] = { ...state, tabLabels };
+              await domain.screenshot({ path: path.join(out, `domain-golden-${width}.png`) });
+
               assert(state.title.length > 8, `Home ${width}: transformation title missing`);
               assert(state.support.length > 8, `Home ${width}: whatThisProves missing`);
               if (state.metricCount === 3) assert(state.metricChildren === 6, `Home ${width}: 3-metric projection must have 6 direct children`);
-              assert(state.cta.width >= state.content.width - 2, `Home ${width}: CTA must span content width`);
+              assert(state.cta.width >= state.content.innerWidth - 2, `Home ${width}: CTA must span content inner width`);
 
               if (width === 1419) {
                 near(state.width, 1120, 3, '1419 active-card width');
@@ -169,9 +177,7 @@ jobs:
               await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
               const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
               assert(overflow <= 1, `Home ${width}: horizontal overflow ${overflow}`);
-
-              await domain.screenshot({ path: path.join(out, `domain-golden-${width}.png`) });
-              report.viewports[width] = { ...state, overflow, tabLabels };
+              report.viewports[width].overflow = overflow;
               await context.close();
             }
 
