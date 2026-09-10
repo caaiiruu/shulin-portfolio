@@ -106,9 +106,10 @@
     const meta = element('div', 'work-index-card__meta');
     meta.append(element('span', 'work-index-card__type', typeMap[source.projectId]?.[language() === 'zh' ? 1 : 0] || 'Work'));
     const contextText = source.context?.textContent.trim() || '';
-    if (contextText) {
+    const companyText = contextText.split('·')[0]?.trim() || contextText;
+    if (companyText) {
       meta.append(element('span', 'work-index-card__meta-separator', '·'));
-      meta.append(element('span', 'work-index-card__company', contextText));
+      meta.append(element('span', 'work-index-card__company', companyText));
     }
     const year = source.date.slice(0, 4);
     if (year) {
