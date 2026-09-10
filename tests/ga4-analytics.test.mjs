@@ -20,15 +20,17 @@ test("GA4 has one canonical runtime owner and one initialization path", () => {
   assert.match(analytics, /catch\{\}/);
 });
 
-test("Production CSP grants only the required GA4 script and collection origins", () => {
+test("Production CSP grants the required non-advertising GA4 origins", () => {
   const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
   const csp = config.headers[0].headers.find((header) => header.key === "Content-Security-Policy")?.value;
 
   assert.ok(csp);
   assert.match(csp, /script-src 'self' https:\/\/www\.googletagmanager\.com/);
-  assert.match(csp, /connect-src 'self' https:\/\/www\.google-analytics\.com https:\/\/region1\.google-analytics\.com/);
+  assert.match(csp, /img-src 'self' data: blob: https:\/\/\*\.google-analytics\.com https:\/\/www\.googletagmanager\.com/);
+  assert.match(csp, /connect-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.analytics\.google\.com https:\/\/www\.googletagmanager\.com/);
   assert.doesNotMatch(csp, /'unsafe-inline'/);
   assert.doesNotMatch(csp, /(?:^|;\s)(?:script-src|connect-src)[^;]*(?:\s\*|https:)\s*(?:;|$)/);
+  assert.doesNotMatch(csp, /doubleclick|googlesyndication|googleadservices/);
 });
 
 test("Generated pages share one fingerprinted bundle containing one GA4 config", () => {
