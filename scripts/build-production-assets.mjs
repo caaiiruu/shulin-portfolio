@@ -33,6 +33,7 @@ const componentCssSources = [
   "assets/css/components/homepage-evidence.css",
 ];
 const jsSources = [
+  "assets/js/analytics.js",
   "assets/js/app.js",
   "assets/js/home.js",
   "assets/js/work.js",
