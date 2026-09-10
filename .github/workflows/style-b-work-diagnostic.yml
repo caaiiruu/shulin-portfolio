@@ -1,4 +1,4 @@
-name: Style B Domain Geometry Diagnostic
+name: Style B Work Hover Diagnostic
 
 on:
   push:
@@ -26,56 +26,57 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Start server
         run: |
-          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/domain-diag-server.log 2>&1 &
-          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
-          cat /tmp/domain-diag-server.log
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-hover-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/work-hover-server.log
           exit 1
-      - name: Capture Domain geometry
+      - name: Capture Work hover cascade
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
           import { chromium } from '@playwright/test';
           import fs from 'node:fs';
           import path from 'node:path';
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/domain-geometry-diagnostic');
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/work-hover-diagnostic');
           fs.mkdirSync(out,{recursive:true});
           const browser=await chromium.launch({headless:true});
-          const page=await browser.newPage({viewport:{width:1419,height:1100}});
+          const page=await browser.newPage({viewport:{width:871,height:1100}});
           const errors=[];
           page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
           page.on('pageerror',e=>errors.push(e.message));
-          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
-          await page.locator('#domains').scrollIntoViewIfNeeded();
-          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
-          await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
-          const data=await page.evaluate(()=>{
-            const inspect=(el)=>{
-              if(!el)return null;
-              const r=el.getBoundingClientRect();
-              const s=getComputedStyle(el);
-              return {tag:el.tagName,id:el.id,className:typeof el.className==='string'?el.className:'',rect:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right},computedWidth:s.width,display:s.display,position:s.position,transform:s.transform,transformOrigin:s.transformOrigin,zoom:s.zoom,maxWidth:s.maxWidth,minWidth:s.minWidth,boxSizing:s.boxSizing,paddingLeft:s.paddingLeft,paddingRight:s.paddingRight,marginLeft:s.marginLeft,marginRight:s.marginRight,overflowX:s.overflowX};
-            };
-            const wheel=document.querySelector('#domains .domain-wheel-v2');
-            const panel=wheel?.closest('.domain-panel-v30--projects');
-            const section=document.querySelector('#domains');
-            const ancestors=[];
-            let el=wheel;
-            while(el){ ancestors.push(inspect(el)); el=el.parentElement; }
-            return {
-              viewport:{innerWidth:window.innerWidth,clientWidth:document.documentElement.clientWidth,dpr:window.devicePixelRatio,visualViewportWidth:window.visualViewport?.width||null},
-              cssVar:getComputedStyle(section).getPropertyValue('--domain-viewport-width').trim(),
-              wheel:inspect(wheel),panel:inspect(panel),section:inspect(section),body:inspect(document.body),html:inspect(document.documentElement),ancestors
-            };
+          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
+          await page.waitForSelector('.work-index');
+          await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(img=>img.complete&&img.naturalWidth>0)});
+          const card=page.locator('.work-index__featured .work-index-card').first();
+          const before=await card.evaluate(node=>{
+            const img=node.querySelector('.work-index-card__image');
+            const s=getComputedStyle(img);
+            return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter,inlineStyle:img.getAttribute('style'),hoverMedia:matchMedia('(hover:hover)').matches,pointerFine:matchMedia('(pointer:fine)').matches};
           });
-          data.errors=errors;
-          fs.writeFileSync(path.join(out,'domain-geometry.json'),JSON.stringify(data,null,2));
-          await page.locator('#domains').screenshot({path:path.join(out,'domain-1419-diagnostic.png')});
-          console.log('DOMAIN_GEOMETRY '+JSON.stringify(data));
+          await card.hover();
+          await page.waitForTimeout(80);
+          const mid=await card.evaluate(node=>{const img=node.querySelector('.work-index-card__image');const s=getComputedStyle(img);return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter};});
+          await page.waitForTimeout(320);
+          const after=await card.evaluate(node=>{
+            const img=node.querySelector('.work-index-card__image');
+            const s=getComputedStyle(img);
+            const matching=[];
+            for(const sheet of [...document.styleSheets]){
+              let rules;try{rules=sheet.cssRules}catch{continue}
+              const walk=(list,media='')=>{for(const rule of [...list]){if(rule.type===CSSRule.STYLE_RULE&&rule.selectorText?.includes('work-index-card')&&rule.selectorText?.includes('image')){let matches=false;try{matches=img.matches(rule.selectorText)}catch{}matching.push({selector:rule.selectorText,cssText:rule.style.cssText,matches,media});}else if(rule.cssRules){walk(rule.cssRules,rule.conditionText||media)}}};
+              walk(rules);
+            }
+            return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter,matching};
+          });
+          const data={before,mid,after,errors};
+          fs.writeFileSync(path.join(out,'work-hover-871.json'),JSON.stringify(data,null,2));
+          await page.locator('.work-index').screenshot({path:path.join(out,'work-871-hover.png')});
+          console.log('WORK_HOVER_871 '+JSON.stringify(data));
           await browser.close();
           NODE
       - name: Upload diagnostic
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-domain-geometry-diagnostic
-          path: artifacts/domain-geometry-diagnostic
+          name: style-b-work-hover-diagnostic
+          path: artifacts/work-hover-diagnostic
           retention-days: 1
