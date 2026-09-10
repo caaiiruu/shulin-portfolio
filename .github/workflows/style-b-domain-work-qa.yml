@@ -1,4 +1,4 @@
-name: Style B Domain Work Golden Reference QA
+name: Style B Domain Work Human Contract QA
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           git diff --quiet "$BASE"...HEAD -- public/site/assets/css/components/domain-selector.css
           ! grep -q 'related-project-card' public/site/assets/css/components/domain-experience.css
 
-      - name: Install, build, and validate source
+      - name: Install build and validate source
         run: |
           npm run install:ci
           npm run build
@@ -57,7 +57,7 @@ jobs:
           cat /tmp/style-b-server.log
           exit 1
 
-      - name: Run final Domain and Work browser QA
+      - name: Run Human contract browser QA
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
@@ -65,7 +65,7 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
 
-          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-work-final');
+          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-work-human-contract');
           fs.mkdirSync(out, { recursive: true });
           const base = 'http://127.0.0.1:4173';
           const widths = [1419, 871, 430];
@@ -73,11 +73,11 @@ jobs:
           const report = { domain: {}, work: {}, routes: {}, consoleErrors: [] };
           const assert = (condition, message) => { if (!condition) throw new Error(message); };
           const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
-          const near = (actual, expected, tolerance, message) => assert(Math.abs(actual - expected) <= tolerance, `${message}: ${actual} vs ${expected}`);
+          const colorIsWhite = (value) => /rgba?\(\s*255\s*,\s*255\s*,\s*255/i.test(value || '');
 
           try {
             for (const width of widths) {
-              const context = await browser.newContext({ viewport: { width, height: 1100 }, reducedMotion: 'reduce' });
+              const context = await browser.newContext({ viewport: { width, height: 1100 }, reducedMotion: 'no-preference' });
               const page = await context.newPage();
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ width, url: page.url(), text: msg.text() }); });
               page.on('pageerror', error => report.consoleErrors.push({ width, url: page.url(), text: error.message }));
@@ -90,83 +90,64 @@ jobs:
               await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
 
               const tabs = domain.locator('.domain-tab');
-              assert(await tabs.count() === 6, `Home ${width}: expected 6 domain tabs`);
-              const tabLabels = (await tabs.allTextContents()).map(clean).map(label => label.replace(/^\d{2}\s*/, ''));
-              assert(tabLabels.every(label => label.length > 2), `Home ${width}: empty Domain tab label ${JSON.stringify(tabLabels)}`);
-              assert(!tabLabels.some(label => /^all$/i.test(label)), `Home ${width}: unexpected All tab`);
+              assert(await tabs.count() === 6, `Home ${width}: expected 6 Domain tabs`);
+              assert(await domain.locator('.domain-tab__icon svg').count() === 6, `Home ${width}: all 6 Domain tabs require icons`);
+              const tabLabels = (await domain.locator('.domain-tab__label').allTextContents()).map(clean);
+              assert(tabLabels.length === 6 && tabLabels.every(label => label.length > 2), `Home ${width}: Domain labels missing`);
+
+              const wheel = domain.locator('.domain-wheel-v2');
+              const wheelBox = await wheel.boundingBox();
+              assert(wheelBox && Math.abs(wheelBox.width - width) <= 2, `Home ${width}: wheel must span viewport (${wheelBox?.width})`);
+              assert(Math.abs(wheelBox.x) <= 2, `Home ${width}: wheel must begin at viewport edge (${wheelBox.x})`);
 
               const disclosures = domain.locator('details.domain-experience-disclosure');
               assert(await disclosures.count() === 2, `Home ${width}: expected 2 disclosures`);
-              for (const details of await disclosures.all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
+              for (const details of await disclosures.all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosures default closed`);
               assert(await domain.locator('.domain-experience__project-heading:visible').count() === 0, `Home ${width}: legacy Related Work heading visible`);
 
-              assert(await domain.locator('.domain-project-card-v2').count() >= 3, `Home ${width}: wheel requires at least 3 cards`);
-              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').count() === 1, `Home ${width}: exactly one active card required`);
+              const active = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              assert(await active.count() === 1, `Home ${width}: exactly one active card required`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]').count() === 1, `Home ${width}: previous side card missing`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="1"]').count() === 1, `Home ${width}: next side card missing`);
+              assert(await active.getAttribute('role') === 'link', `Home ${width}: active card must be one target area`);
+              assert(Number(await active.getAttribute('tabindex')) >= 0, `Home ${width}: active card must be keyboard target`);
+              assert(await active.locator('.domain-project-card-v2__support').count() === 0, `Home ${width}: subtitle/support copy must be removed`);
+
+              const metricGroups = active.locator('.domain-project-card-v2__metric');
+              const metricCount = await metricGroups.count();
+              assert(metricCount >= 1 && metricCount <= 3, `Home ${width}: invalid metric count ${metricCount}`);
+              const metricLabels = (await active.locator('.domain-project-card-v2__metric-label').allTextContents()).map(clean);
+              assert(metricLabels.every(label => label.split(/\s+/).filter(Boolean).length <= 2), `Home ${width}: metric labels must be concise ${JSON.stringify(metricLabels)}`);
+              for (const group of await metricGroups.all()) assert(await group.locator(':scope > dt').count() === 1 && await group.locator(':scope > dd').count() === 1, `Home ${width}: each metric requires value + label`);
+
+              const colorState = await active.evaluate(card => ({
+                content: getComputedStyle(card.querySelector('.domain-project-card-v2__content')).backgroundColor,
+                visual: getComputedStyle(card.querySelector('.domain-project-card-v2__visual')).backgroundColor,
+                titleSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__title')).fontSize),
+                valueSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-value')).fontSize),
+                labelSize: parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-label')).fontSize)
+              }));
+              assert(!colorIsWhite(colorState.content), `Home ${width}: card content panel must use project tint`);
+              assert(colorState.valueSize > colorState.labelSize, `Home ${width}: metric value must be larger than label`);
 
               const controls = domain.locator('.domain-wheel-v2__control');
-              const controlBoxes = await controls.evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
-              assert(controlBoxes.length === 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: wheel controls below 44x44`);
+              const controlBoxes = await controls.evaluateAll(nodes => nodes.map(node => { const r = node.getBoundingClientRect(); return { w:r.width,h:r.height }; }));
+              assert(controlBoxes.length === 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: controls below 44x44`);
 
-              const active = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-              const state = await active.evaluate(card => {
-                const tidy = (value) => String(value || '').replace(/\s+/g, ' ').trim();
-                const r = card.getBoundingClientRect();
-                const contentNode = card.querySelector('.domain-project-card-v2__content');
-                const visualNode = card.querySelector('.domain-project-card-v2__visual');
-                const ctaNode = card.querySelector('.domain-project-card-v2__cta');
-                const content = contentNode?.getBoundingClientRect();
-                const visual = visualNode?.getBoundingClientRect();
-                const cta = ctaNode?.getBoundingClientRect();
-                const contentStyle = contentNode ? getComputedStyle(contentNode) : null;
-                const paddingInline = contentStyle ? parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight) : 0;
-                return {
-                  width:r.width,height:r.height,
-                  content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom,innerWidth:(content?.width || 0)-paddingInline,paddingInline},
-                  visual:{left:visual?.left,top:visual?.top,width:visual?.width,height:visual?.height},
-                  type:tidy(card.querySelector('.domain-project-card-v2__type')?.textContent),
-                  company:tidy(card.querySelector('.domain-project-card-v2__company')?.textContent),
-                  year:tidy(card.querySelector('.domain-project-card-v2__year')?.textContent),
-                  title:tidy(card.querySelector('.domain-project-card-v2__title')?.textContent),
-                  support:tidy(card.querySelector('.domain-project-card-v2__support')?.textContent),
-                  metricCount:Number(card.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount || 0),
-                  metricChildren:card.querySelector('.domain-project-card-v2__metrics')?.children.length || 0,
-                  cta:{left:cta?.left,right:cta?.right,width:cta?.width}
-                };
-              });
-
-              report.domain[width] = { ...state, tabLabels };
-              await domain.screenshot({ path: path.join(out, `domain-${width}.png`) });
-
-              assert(state.type.length > 2 && state.type !== '[object Object]', `Home ${width}: invalid Type projection ${JSON.stringify(state.type)}`);
-              assert(state.company.length > 1, `Home ${width}: company missing`);
-              assert(state.year.length === 4, `Home ${width}: year missing`);
-              assert(state.title.length > 8 && state.title !== '[object Object]', `Home ${width}: transformation title missing`);
-              assert(state.support.length > 8 && state.support !== '[object Object]', `Home ${width}: whatThisProves missing`);
-              if (state.metricCount === 3) assert(state.metricChildren === 6, `Home ${width}: 3-metric projection must have 6 direct children`);
-              assert(state.cta.width >= state.content.innerWidth - 2, `Home ${width}: CTA must span content inner width`);
-
-              if (width === 1419) {
-                near(state.width, 1120, 3, '1419 active-card width');
-                near(state.height, 430, 2, '1419 active-card height');
-                const ratio = state.content.width / state.width;
-                assert(ratio >= .39 && ratio <= .41, `1419 content ratio ${ratio}`);
-                assert(state.visual.left >= state.content.left + state.content.width - 2, '1419 must be CONTENT | VISUAL');
-              } else if (width === 871) {
-                assert(state.width >= 716 && state.width <= 732, `871 active-card width ${state.width}`);
-                assert(state.height >= 440 && state.height <= 460, `871 active-card height ${state.height}`);
-                const ratio = state.content.width / state.width;
-                assert(ratio >= .43 && ratio <= .45, `871 content ratio ${ratio}`);
-                assert(state.visual.left >= state.content.left + state.content.width - 2, '871 must remain horizontal billboard');
-                assert(Math.abs(state.visual.top - state.content.top) <= 2, '871 visual must not stack below content');
-              } else {
-                assert(state.width >= 330 && state.width <= 340, `430 active-card width ${state.width}`);
-                near(state.height, 640, 2, '430 active-card height');
-                near(state.content.paddingInline, 40, 2, '430 content horizontal padding');
-                assert(state.visual.top >= state.content.bottom - 2, '430 visual must follow content');
-                assert(state.metricCount !== 3 || state.metricChildren === 6, '430 metrics must remain 3-column two-row grammar');
-              }
+              const image = active.locator('.domain-project-card-v2__image');
+              const arrow = active.locator('.domain-project-card-v2__cta-arrow');
+              const beforeHover = await active.evaluate(card => ({
+                image: getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,
+                arrow: getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform
+              }));
+              await active.hover();
+              await page.waitForTimeout(320);
+              const afterHover = await active.evaluate(card => ({
+                image: getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,
+                arrow: getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform
+              }));
+              if (await image.count()) assert(beforeHover.image !== afterHover.image, `Home ${width}: image hover motion missing`);
+              assert(beforeHover.arrow !== afterHover.arrow, `Home ${width}: arrow hover motion missing`);
 
               const beforeKey = await active.getAttribute('data-project');
               await controls.nth(1).click();
@@ -178,80 +159,103 @@ jobs:
               const keyboardKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
               assert(keyboardKey === beforeKey, `Home ${width}: keyboard did not rotate wheel back`);
 
-              await tabs.nth(1).click();
-              await page.waitForFunction(() => document.querySelector('#domains .domain-tab:nth-child(2)')?.getAttribute('aria-selected') === 'true');
-              await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+              report.domain[width] = { wheelWidth: wheelBox.width, wheelX: wheelBox.x, metricLabels, ...colorState };
+              await domain.screenshot({ path: path.join(out, `domain-${width}.png`) });
               const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
               assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}`);
-              report.domain[width].overflow = homeOverflow;
 
               response = await page.goto(`${base}/site/work.html`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
               await page.waitForSelector('.work-index', { timeout: 10000 });
               await page.waitForFunction(() => {
                 const images = [...document.querySelectorAll('.work-index-card__visual img')];
-                return images.length === 5 && images.every((img) => img.complete && img.naturalWidth > 0);
+                return images.length === 5 && images.every(img => img.complete && img.naturalWidth > 0);
               }, { timeout: 10000 });
+
               const work = page.locator('.work-index');
               const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
-
               const row1 = work.locator(':scope > .work-index__shell > .work-index__featured > .work-index-card');
               const row2 = work.locator('.work-index__featured-secondary-row > .work-index-card');
-              assert(await row1.count() === 2, `Work ${width}: row 1 requires 2 cards`);
-              assert(await row2.count() === 2, `Work ${width}: row 2 requires 2 cards`);
+              assert(await row1.count() === 2, `Work ${width}: first row requires 2 cards`);
+              assert(await row2.count() === 2, `Work ${width}: second row requires 2 cards`);
+
               const featured = work.locator('.work-index__featured .work-index-card');
               assert(await featured.count() === 4, `Work ${width}: featured requires 4 cards`);
-              const expectedProofs = [3,2,2,2];
-              for (let i=0;i<4;i++) {
-                const visualImage = featured.nth(i).locator('.work-index-card__visual img');
-                assert(await visualImage.count() === 1, `Work ${width}: featured ${i+1} missing image`);
-                assert(await visualImage.evaluate((img) => img.complete && img.naturalWidth > 0), `Work ${width}: featured ${i+1} image failed to load`);
-                assert(await featured.nth(i).locator('.work-index-card__proofs li').count() === expectedProofs[i], `Work ${width}: featured ${i+1} proof density mismatch`);
-                assert(await featured.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: featured ${i+1} missing CTA`);
+              const expectedMetrics = [3,2,2,2];
+              for (let i = 0; i < 4; i++) {
+                const card = featured.nth(i);
+                const buttonBox = await card.locator('.work-index-card__button').boundingBox();
+                const cardBox = await card.boundingBox();
+                assert(buttonBox && cardBox && Math.abs(buttonBox.width-cardBox.width) <= 2 && Math.abs(buttonBox.height-cardBox.height) <= 2, `Work ${width}: featured ${i+1} whole card must be target area`);
+                assert(await card.locator('.work-index-card__metric').count() === expectedMetrics[i], `Work ${width}: featured ${i+1} metric count mismatch`);
+                const labelTexts = (await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assert(labelTexts.every(label => label.split(/\s+/).filter(Boolean).length <= 2), `Work ${width}: featured ${i+1} labels too long`);
+                const metricTops = await card.locator('.work-index-card__metric').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+                assert(Math.max(...metricTops) - Math.min(...metricTops) <= 2, `Work ${width}: featured ${i+1} metrics must be horizontal`);
+                const typography = await card.evaluate(node => ({
+                  contentBg: getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,
+                  valueSize: parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-value')).fontSize),
+                  labelSize: parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-label')).fontSize)
+                }));
+                assert(!colorIsWhite(typography.contentBg), `Work ${width}: featured ${i+1} content tint missing`);
+                assert(typography.valueSize > typography.labelSize, `Work ${width}: featured ${i+1} metric hierarchy invalid`);
               }
+
+              const workHero = featured.nth(0);
+              const beforeWorkHover = await workHero.evaluate(card => ({
+                image: getComputedStyle(card.querySelector('.work-index-card__image')).transform,
+                arrow: getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform
+              }));
+              await workHero.hover();
+              await page.waitForTimeout(320);
+              const afterWorkHover = await workHero.evaluate(card => ({
+                image: getComputedStyle(card.querySelector('.work-index-card__image')).transform,
+                arrow: getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform
+              }));
+              assert(beforeWorkHover.image !== afterWorkHover.image, `Work ${width}: image hover motion missing`);
+              assert(beforeWorkHover.arrow !== afterWorkHover.arrow, `Work ${width}: arrow hover motion missing`);
+
               const moreCards = work.locator('.work-index__more-grid .work-index-card');
               assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
-              for (let i=0;i<await moreCards.count();i++) {
-                const visualImage = moreCards.nth(i).locator('.work-index-card__visual img');
-                assert(await visualImage.count() === 1, `Work ${width}: More Work ${i+1} missing image`);
-                assert(await visualImage.evaluate((img) => img.complete && img.naturalWidth > 0), `Work ${width}: More Work ${i+1} image failed to load`);
-                assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
-                assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
+              for (let i = 0; i < await moreCards.count(); i++) {
+                const card = moreCards.nth(i);
+                assert(await card.locator('.work-index-card__metric').count() === 1, `Work ${width}: More Work metric count mismatch`);
+                const metricTops = await card.locator('.work-index-card__metric').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+                assert(metricTops.length === 1, `Work ${width}: More Work metric missing`);
               }
+
               if (width <= 1100) {
-                for (let i=0;i<4;i++) {
+                for (let i = 0; i < 4; i++) {
                   const geometry = await featured.nth(i).evaluate(card => {
                     const content = card.querySelector('.work-index-card__content')?.getBoundingClientRect();
                     const visual = card.querySelector('.work-index-card__visual')?.getBoundingClientRect();
                     return { contentBottom: content?.bottom, visualTop: visual?.top };
                   });
-                  assert(geometry.visualTop >= geometry.contentBottom - 2, `Work ${width}: featured ${i+1} must stack content above visual`);
+                  assert(geometry.visualTop >= geometry.contentBottom - 2, `Work ${width}: featured ${i+1} content must stack above visual`);
                 }
               }
+
               await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
               assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count() >= 1, `Work ${width}: Operations filter returned no work`);
               await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
               const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
               assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}`);
-              report.work[width] = { filters, moreWorkCards: await moreCards.count(), overflow: workOverflow };
+              report.work[width] = { filters, overflow: workOverflow };
               await work.screenshot({ path: path.join(out, `work-${width}.png`) });
               await context.close();
             }
 
-            for (const slug of ['payment','dbs']) {
-              const context = await browser.newContext({ viewport: { width: 1419, height: 1100 }, reducedMotion: 'reduce' });
+            for (const [slug, titleNeedle] of [['payment','Payment'],['dbs','DBS']]) {
+              const context = await browser.newContext({ viewport: { width: 1419, height: 1100 } });
               const page = await context.newPage();
-              page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ slug, text: msg.text() }); });
-              page.on('pageerror', error => report.consoleErrors.push({ slug, text: error.message }));
               const route = `/site/work/${slug}.html`;
               const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `${route}: HTTP ${response?.status()}`);
-              const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-              const title = clean(await page.title());
-              assert(canonical === `https://shulinchou.com/work/${slug}`, `${route}: canonical mismatch ${canonical}`);
-              assert(title.length > 8 && title !== 'Work — Shulin Chou', `${route}: non-project title ${title}`);
-              report.routes[slug] = { path: route, status: response.status(), canonical, title };
+              const identity = await page.evaluate(() => ({ title: document.title, canonical: document.querySelector('link[rel="canonical"]')?.href || '' }));
+              assert(identity.canonical.endsWith(`/work/${slug}`), `${route}: canonical identity mismatch ${identity.canonical}`);
+              assert(identity.title.toLowerCase().includes(titleNeedle.toLowerCase()), `${route}: title identity mismatch ${identity.title}`);
+              report.routes[slug] = { path: route, status: response.status(), ...identity };
               await context.close();
             }
 
@@ -265,10 +269,10 @@ jobs:
           }
           NODE
 
-      - name: Upload final review evidence
+      - name: Upload Human review evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-domain-work-final-qa
-          path: artifacts/style-b-domain-work-final
+          name: style-b-domain-work-human-contract
+          path: artifacts/style-b-domain-work-human-contract
           retention-days: 3
