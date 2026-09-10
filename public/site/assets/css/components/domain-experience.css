@@ -90,7 +90,7 @@
   .domain-experience .domain-project-card-v2__title{max-width:var(--dimension-17ch);margin-top:var(--space-3);font-size:var(--sys-type-heading-3)}
   .domain-experience .domain-project-card-v2__support{margin-top:var(--space-2);font-size:var(--text-sm);line-height:1.4}
   .domain-experience .domain-project-card-v2__metrics{padding-top:var(--space-3)}
-  .domain-experience .domain-project-card-v2__metric-value{font-size:var(--sys-type-body-lg)}
+  .domain-experience .domain-project-card-v2__metric-value{font-size:var(--sys-type-heading-3)}
   .domain-experience .domain-wheel-v2__controls{left:var(--space-2);right:var(--space-2)}
   .domain-experience-disclosure{grid-column:1}
 }
