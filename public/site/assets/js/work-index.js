@@ -44,6 +44,13 @@
     return node;
   };
 
+  const cloneCopy = (tag, className, source, fallback = '') => {
+    const node = element(tag, className, source?.textContent.trim() || fallback);
+    const key = source?.dataset?.copyKey;
+    if (key) node.dataset.copyKey = key;
+    return node;
+  };
+
   const sourceCards = () => [...sourceGallery.querySelectorAll(':scope > article')].map((article) => ({
     article,
     button: article.querySelector('[data-project]'),
@@ -78,14 +85,8 @@
     return visual;
   };
 
-  const cleanProof = (row) => {
-    const label = row.querySelector('dt')?.textContent.trim() || '';
-    const value = row.querySelector('dd')?.textContent.trim() || '';
-    return { label, value };
-  };
-
   const proofRows = (source, count) => {
-    const candidates = source.proofs.map(cleanProof).filter((proof) => proof.value);
+    const candidates = source.proofs;
     if (count === 1) return candidates.slice(-1);
     if (count === 2) return candidates.slice(-2);
     return candidates.slice(0, 3);
@@ -107,9 +108,10 @@
     meta.append(element('span', 'work-index-card__type', typeMap[source.projectId]?.[language() === 'zh' ? 1 : 0] || 'Work'));
     const contextText = source.context?.textContent.trim() || '';
     const companyText = contextText.split('·')[0]?.trim() || contextText;
-    if (companyText) {
+    const company = cloneCopy('span', 'work-index-card__company', source.context, companyText);
+    if (company.textContent || company.dataset.copyKey) {
       meta.append(element('span', 'work-index-card__meta-separator', '·'));
-      meta.append(element('span', 'work-index-card__company', companyText));
+      meta.append(company);
     }
     const year = source.date.slice(0, 4);
     if (year) {
@@ -117,16 +119,15 @@
       meta.append(element('span', 'work-index-card__year', year));
     }
 
-    const title = element('h2', 'work-index-card__title', source.title?.textContent.trim() || '');
+    const title = cloneCopy('h2', 'work-index-card__title', source.title);
     const proofs = element('ul', 'work-index-card__proofs');
-    proofRows(source, proofCount).forEach(({ label, value }) => {
+    proofRows(source, proofCount).forEach((row) => {
       const item = element('li');
-      if (label) item.append(element('strong', '', label));
-      item.append(element('span', '', value));
+      item.append(cloneCopy('strong', '', row.querySelector('dt')), cloneCopy('span', '', row.querySelector('dd')));
       proofs.append(item);
     });
     const cta = element('span', 'work-index-card__cta');
-    cta.append(element('span', '', source.cta?.textContent.trim() || copy('View case', '查看案例')));
+    cta.append(cloneCopy('span', '', source.cta, copy('View case', '查看案例')));
     const arrow = element('span', 'icon-arrow icon-arrow--right');
     arrow.setAttribute('aria-hidden', 'true');
     cta.append(arrow);
@@ -148,7 +149,7 @@
 
   const build = () => {
     const cards = sourceCards();
-    if (cards.length < 5 || !hasHydratedCopy()) return false;
+    if (cards.length < 5) return false;
     document.querySelector('.work-index')?.remove();
 
     const root = element('section', 'work-index');
@@ -197,17 +198,15 @@
     return true;
   };
 
-  let mounted = false;
-  const attemptMount = () => {
-    if (mounted || !hasHydratedCopy()) return;
-    mounted = build();
-    if (mounted) hydrationObserver.disconnect();
-  };
-
-  const hydrationObserver = new MutationObserver(attemptMount);
+  let hydrated = hasHydratedCopy();
+  build();
+  const hydrationObserver = new MutationObserver(() => {
+    if (hydrated || !hasHydratedCopy()) return;
+    hydrated = true;
+    build();
+    hydrationObserver.disconnect();
+  });
   hydrationObserver.observe(sourceGallery, { childList: true, subtree: true, characterData: true });
-  attemptMount();
-  document.addEventListener('portfolio:language', () => requestAnimationFrame(() => requestAnimationFrame(() => {
-    mounted = build();
-  })));
+
+  document.addEventListener('portfolio:language', () => requestAnimationFrame(() => requestAnimationFrame(build)));
 })();
