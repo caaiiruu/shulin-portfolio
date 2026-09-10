@@ -91,6 +91,8 @@ jobs:
               const tabs=domain.locator('.domain-tab');
               assert(await tabs.count()===6,`Home ${width}: expected 6 Domain tabs`);
               assert(await domain.locator('.domain-tab__icon svg').count()===6,`Home ${width}: all Domain tabs require icons`);
+              const iconStates=await domain.locator('.domain-tab__icon').evaluateAll(nodes=>nodes.map(n=>{const s=getComputedStyle(n);return{display:s.display,visibility:s.visibility,opacity:Number(s.opacity),w:n.getBoundingClientRect().width,h:n.getBoundingClientRect().height}}));
+              assert(iconStates.every(x=>x.display!=='none'&&x.visibility!=='hidden'&&x.opacity>0&&x.w>0&&x.h>0),`Home ${width}: Domain icons not rendered ${JSON.stringify(iconStates)}`);
               const tabLabels=(await domain.locator('.domain-tab__label').allTextContents()).map(clean);
               assert(tabLabels.length===6&&tabLabels.every(Boolean),`Home ${width}: Domain labels missing`);
               assert(!tabLabels.some(x=>/^all$/i.test(x)),`Home ${width}: unexpected All tab`);
@@ -133,12 +135,22 @@ jobs:
                   const cta=card.querySelector('.domain-project-card-v2__cta');
                   const value=card.querySelector('.domain-project-card-v2__metric-value');
                   const metricLabel=card.querySelector('.domain-project-card-v2__metric-label');
-                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect();
-                  return{bg:getComputedStyle(content).backgroundColor,valueSize:parseFloat(getComputedStyle(value).fontSize),labelSize:parseFloat(getComputedStyle(metricLabel).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,ctaLeft:tr.left,ctaRight:tr.right};
+                  const meta=card.querySelector('.domain-project-card-v2__meta');
+                  const metrics=card.querySelector('.domain-project-card-v2__metrics');
+                  const title=card.querySelector('.domain-project-card-v2__title');
+                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),mr=metrics.getBoundingClientRect(),tir=title.getBoundingClientRect();
+                  const ms=getComputedStyle(metrics),vs=getComputedStyle(visual);
+                  return{bg:getComputedStyle(content).backgroundColor,valueSize:parseFloat(getComputedStyle(value).fontSize),labelSize:parseFloat(getComputedStyle(metricLabel).fontSize),metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr.top,titleBottom:tir.bottom,metricBorderTop:parseFloat(ms.borderTopWidth)||0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
                 });
                 assert(!isWhite(state.bg),`${label}: project tint missing`);
                 assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
                 assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
+                if(width===430){
+                  assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
+                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
+                  assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
+                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
+                }
                 return {active,state};
               };
 
@@ -150,26 +162,45 @@ jobs:
               const box=await active.boundingBox();
               if(width===1419){assert(Math.abs(box.width-1120)<=3&&Math.abs(box.height-430)<=3,`Home 1419: card geometry ${box.width}x${box.height}`)}
               else if(width===871){assert(box.width>=716&&box.width<=734&&box.height>=440&&box.height<=460,`Home 871: card geometry ${box.width}x${box.height}`)}
-              else{assert(box.width>=330&&box.width<=338&&Math.abs(box.height-640)<=3,`Home 430: card geometry ${box.width}x${box.height}`)}
+              else{assert(box.width>=330&&box.width<=338&&Math.abs(box.height-576)<=3,`Home 430: card geometry ${box.width}x${box.height}`)}
               if(width===1419||width===871)assert(Math.abs(state.visualLeft-state.contentRight)<=2,`Home ${width}: horizontal billboard regressed`);
               else assert(Math.abs(state.visualTop-state.contentBottom)<=2,`Home 430: visual must follow content`);
 
               const controls=domain.locator('.domain-wheel-v2__control');
-              const controlBoxes=await controls.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{w:r.width,h:r.height}}));
-              assert(controlBoxes.length===2&&controlBoxes.every(b=>b.w>=44&&b.h>=44),`Home ${width}: controls below 44x44`);
+              if(width>600){
+                const controlBoxes=await controls.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,cx:r.left+r.width/2}}));
+                assert(controlBoxes.length===2&&controlBoxes.every(b=>b.w>=44&&b.h>=44),`Home ${width}: controls below 44x44`);
+                const cardCenter=box.x+box.width/2;
+                const leftDistance=cardCenter-controlBoxes[0].cx;
+                const rightDistance=controlBoxes[1].cx-cardCenter;
+                assert(Math.abs(leftDistance-rightDistance)<=3,`Home ${width}: controls asymmetric ${leftDistance}/${rightDistance}`);
+              }else{
+                assert(await domain.locator('.domain-wheel-v2__control:visible').count()===0,`Home 430: wheel controls must be hidden`);
+              }
 
               await page.mouse.move(1,1);await page.waitForTimeout(50);
-              const before=await active.evaluate(card=>({image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform}));
+              const before=await active.evaluate(card=>{const image=getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform;const arrow=getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform;const m=new DOMMatrix(arrow==='none'?undefined:arrow);return{image,arrow,m11:m.m11,m12:m.m12,m21:m.m21,m22:m.m22,x:m.m41,y:m.m42}});
               await active.hover();await page.waitForTimeout(320);
-              const after=await active.evaluate(card=>({image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform}));
-              assert(before.image!==after.image&&before.arrow!==after.arrow,`Home ${width}: hover motion missing`);
+              const after=await active.evaluate(card=>{const image=getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform;const arrow=getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform;const m=new DOMMatrix(arrow==='none'?undefined:arrow);return{image,arrow,m11:m.m11,m12:m.m12,m21:m.m21,m22:m.m22,x:m.m41,y:m.m42}});
+              assert(before.image!==after.image,`Home ${width}: image hover motion missing`);
+              assert(after.x>before.x+1&&Math.abs(after.y-before.y)<1,`Home ${width}: CTA arrow must move right only ${before.x},${before.y} -> ${after.x},${after.y}`);
+              assert(Math.abs(after.m11-before.m11)<0.02&&Math.abs(after.m12-before.m12)<0.02&&Math.abs(after.m21-before.m21)<0.02&&Math.abs(after.m22-before.m22)<0.02,`Home ${width}: CTA arrow direction changed on hover`);
 
               const firstProject=await active.getAttribute('data-project');
-              await controls.nth(1).click();
-              const moved=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-              assert(await moved.getAttribute('data-project')!==firstProject,`Home ${width}: next control failed`);
-              await moved.focus();await page.keyboard.press('ArrowLeft');
-              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')===firstProject,`Home ${width}: keyboard failed`);
+              if(width>600){
+                await controls.nth(1).click();
+                const moved=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                assert(await moved.getAttribute('data-project')!==firstProject,`Home ${width}: next control failed`);
+                await moved.focus();await page.keyboard.press('ArrowLeft');
+                assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')===firstProject,`Home ${width}: keyboard failed`);
+              }else{
+                const wheelBoxForDrag=await wheel.boundingBox();
+                const cy=wheelBoxForDrag.y+Math.min(wheelBoxForDrag.height/2,300);
+                const startX=wheelBoxForDrag.x+wheelBoxForDrag.width*.68;
+                const endX=wheelBoxForDrag.x+wheelBoxForDrag.width*.32;
+                await page.mouse.move(startX,cy);await page.mouse.down();await page.mouse.move(endX,cy,{steps:6});await page.mouse.up();
+                assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==firstProject,`Home 430: swipe failed`);
+              }
 
               for(let i=0;i<await tabs.count();i++){
                 await tabs.nth(i).click();
