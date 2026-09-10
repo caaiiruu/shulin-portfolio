@@ -82,7 +82,7 @@ jobs:
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ width, url: page.url(), text: msg.text() }); });
               page.on('pageerror', error => report.consoleErrors.push({ width, url: page.url(), text: error.message }));
 
-              let response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+              let response = await page.goto(`${base}/site/index.html`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Home ${width}: HTTP ${response?.status()}`);
               const domain = page.locator('#domains');
               await domain.scrollIntoViewIfNeeded();
@@ -100,8 +100,7 @@ jobs:
               for (const details of await disclosures.all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
               assert(await domain.locator('.domain-experience__project-heading:visible').count() === 0, `Home ${width}: legacy Related Work heading visible`);
 
-              const cards = domain.locator('.domain-project-card-v2');
-              assert(await cards.count() >= 3, `Home ${width}: wheel requires at least 3 cards`);
+              assert(await domain.locator('.domain-project-card-v2').count() >= 3, `Home ${width}: wheel requires at least 3 cards`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').count() === 1, `Home ${width}: exactly one active card required`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]').count() === 1, `Home ${width}: previous side card missing`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="1"]').count() === 1, `Home ${width}: next side card missing`);
@@ -186,14 +185,14 @@ jobs:
               assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}`);
               report.domain[width].overflow = homeOverflow;
 
-              response = await page.goto(`${base}/work`, { waitUntil: 'networkidle' });
+              response = await page.goto(`${base}/site/work.html`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
               await page.waitForSelector('.work-index', { timeout: 10000 });
               const work = page.locator('.work-index');
               const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
 
-              const row1 = work.locator('.work-index__featured > .work-index-card');
+              const row1 = work.locator(':scope > .work-index__shell > .work-index__featured > .work-index-card');
               const row2 = work.locator('.work-index__featured-secondary-row > .work-index-card');
               assert(await row1.count() === 2, `Work ${width}: row 1 requires 2 cards`);
               assert(await row2.count() === 2, `Work ${width}: row 2 requires 2 cards`);
@@ -232,15 +231,17 @@ jobs:
               await context.close();
             }
 
-            for (const route of ['/work/daily-hours','/work/payment','/work/dbs']) {
+            for (const slug of ['daily-hours','payment','dbs']) {
               const context = await browser.newContext({ viewport: { width: 1419, height: 1100 }, reducedMotion: 'reduce' });
               const page = await context.newPage();
-              page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ route, text: msg.text() }); });
-              page.on('pageerror', error => report.consoleErrors.push({ route, text: error.message }));
+              page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ slug, text: msg.text() }); });
+              page.on('pageerror', error => report.consoleErrors.push({ slug, text: error.message }));
+              const route = `/site/work/${slug}.html`;
               const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `${route}: HTTP ${response?.status()}`);
-              report.routes[route] = response.status();
-              if (route === '/work/daily-hours') await page.screenshot({ path: path.join(out, 'daily-hours-regression-1419.png'), fullPage: true });
+              assert(await page.locator(`[data-project-route-summary="${slug}"]`).count() === 1, `${route}: wrong document identity`);
+              report.routes[slug] = { path: route, status: response.status() };
+              if (slug === 'daily-hours') await page.screenshot({ path: path.join(out, 'daily-hours-regression-1419.png'), fullPage: true });
               await context.close();
             }
 
