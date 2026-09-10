@@ -48,7 +48,7 @@
 .domain-experience .domain-project-card-v2__identity{display:inline-flex;align-items:center;justify-content:flex-end;gap:var(--space-1);min-width:0;text-align:right;white-space:nowrap}
 .domain-experience .domain-project-card-v2__company{color:var(--sys-color-text-primary);font-weight:var(--sys-weight-bold)}
 .domain-experience .domain-project-card-v2__title{max-width:var(--dimension-17ch);margin:var(--space-4) 0 0;font-size:var(--sys-type-heading-2);line-height:1.08;letter-spacing:var(--sys-tracking-heading);text-wrap:balance;text-transform:none}
-.domain-experience .domain-project-card-v2__support{max-width:var(--dimension-40ch);margin:var(--space-3) 0 0;color:var(--sys-color-text-secondary);font-size:var(--sys-type-body);line-height:1.5;text-wrap:pretty}
+.domain-experience .domain-project-card-v2__support{max-width:var(--dimension-38ch);margin:var(--space-3) 0 0;color:var(--sys-color-text-secondary);font-size:var(--sys-type-body);line-height:1.5;text-wrap:pretty}
 .domain-experience .domain-project-card-v2__metrics{align-self:end;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(var(--space-6),auto) minmax(var(--control-height),auto);column-gap:var(--space-3);row-gap:var(--space-1);width:100%;margin:var(--space-4) 0 0;padding:0}
 .domain-experience .domain-project-card-v2__metric-value{grid-row:1;align-self:end;margin:0;color:var(--sys-color-text-primary);font-size:var(--sys-type-heading-3);font-weight:var(--sys-weight-heavy);line-height:1.05}
 .domain-experience .domain-project-card-v2__metric-label{grid-row:2;align-self:start;margin:0;color:var(--sys-color-text-muted);font-size:var(--sys-type-label);line-height:1.35}
