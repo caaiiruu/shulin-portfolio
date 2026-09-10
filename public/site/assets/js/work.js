@@ -102,7 +102,33 @@
     const text = firstText(raw?.year, raw?.period, raw?.timeline, raw?.infoGrid?.timeline?.dateRange, adapted?.year, adapted?.period, adapted?.timeline, source.date);
     return text.match(/(?:19|20)\d{2}/)?.[0] || source.date.slice(0, 4);
   };
-  const projectTitle = (raw, adapted, source) => firstText(raw?.cardTitle, adapted?.cardTitle, source.title?.textContent, raw?.title, adapted?.title, source.projectId);
+  const projectTitle = (raw, adapted, source) => firstText(
+    language() === 'zh' ? raw?.transformation_zh : raw?.transformation,
+    raw?.transformation,
+    adapted?.transformation,
+    raw?.title,
+    adapted?.title,
+    source.title?.textContent,
+    source.projectId
+  );
+
+  const conciseMetricLabel = (label) => {
+    const text = String(label || '').trim();
+    const normalized = text.toLowerCase();
+    const zh = language() === 'zh';
+    if (/programme|program/.test(normalized)) return zh ? '計畫' : 'programme';
+    if (/digital.*share|share.*digital|redemption share|campaign.*share/.test(normalized)) return zh ? '數位佔比' : 'digital share';
+    if (/redemption/.test(normalized)) return zh ? '兌換' : 'redemptions';
+    if (/market|countr/.test(normalized)) return zh ? '市場' : 'markets';
+    if (/workflow/.test(normalized)) return zh ? '工作流' : 'workflow';
+    if (/decision/.test(normalized)) return zh ? '決策模型' : 'decision model';
+    if (/success/.test(normalized)) return zh ? '成功率' : 'success rate';
+    if (/time|second|minute|hour/.test(normalized)) return zh ? '處理時間' : 'time';
+    if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
+    if (/user/.test(normalized)) return zh ? '使用者' : 'users';
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.slice(0, 2).join(' ');
+  };
 
   const evidenceRows = (raw, adapted, count) => {
     const sources = [
@@ -122,7 +148,7 @@
       for (const item of items) {
         if (!item || typeof item !== 'object') continue;
         const value = firstText(item.value, item.metric, item.amount);
-        const label = firstText(item.label, item.name, item.description);
+        const label = conciseMetricLabel(firstText(item.label, item.name, item.description));
         if (!value || !label) continue;
         const key = `${value}|${label}`;
         if (seen.has(key)) continue;
@@ -132,6 +158,26 @@
       }
     }
     return rows;
+  };
+
+  const tintPalette = [
+    'rgb(223 235 246)',
+    'rgb(231 229 249)',
+    'rgb(248 225 214)',
+    'rgb(224 241 233)',
+    'rgb(245 235 210)'
+  ];
+  const tintForProject = (key) => {
+    const known = {
+      voucher: 'rgb(218 233 247)',
+      payment: 'rgb(223 240 233)',
+      dbs: 'rgb(225 229 250)',
+      booking: 'rgb(235 229 250)',
+      'game-center': 'rgb(247 226 214)'
+    };
+    if (known[key]) return known[key];
+    const hash = [...key].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return tintPalette[hash % tintPalette.length];
   };
 
   const buildVisual = (source, raw, adapted) => {
@@ -154,7 +200,10 @@
       image.alt = scalarText(asset.alt);
       image.loading = 'eager';
       image.decoding = 'async';
-      if (asset.width && asset.height) { image.width = asset.width; image.height = asset.height; }
+      if (asset.width && asset.height) {
+        image.width = asset.width;
+        image.height = asset.height;
+      }
       visual.append(image);
     }
     return visual;
@@ -166,6 +215,7 @@
     const article = element('article', `work-index-card work-index-card--${variant}`);
     article.dataset.workIndexProject = source.projectId;
     article.dataset.workCategories = (categoryMap[source.projectId] || []).join(' ');
+    article.style.setProperty('--project-card-tint', tintForProject(source.projectId));
 
     const button = element('button', 'work-index-card__button');
     button.type = 'button';
@@ -176,32 +226,36 @@
     const content = element('div', 'work-index-card__content');
     const meta = element('div', 'work-index-card__meta');
     meta.append(element('span', 'work-index-card__type', projectType(raw, adapted)));
+    const identity = element('span', 'work-index-card__identity');
     const company = projectCompany(raw, adapted);
-    if (company) {
-      meta.append(element('span', 'work-index-card__meta-separator', '·'));
-      meta.append(element('span', 'work-index-card__company', company));
-    }
+    if (company) identity.append(element('strong', 'work-index-card__company', company));
     const year = projectYear(raw, adapted, source);
     if (year) {
-      meta.append(element('span', 'work-index-card__meta-separator', '·'));
-      meta.append(element('span', 'work-index-card__year', year));
+      identity.append(element('span', 'work-index-card__meta-separator', '·'));
+      identity.append(element('span', 'work-index-card__year', year));
     }
+    meta.append(identity);
 
     const title = element('h2', 'work-index-card__title', projectTitle(raw, adapted, source));
-    const proofs = element('ul', 'work-index-card__proofs');
-    evidenceRows(raw, adapted, proofCount).forEach(({ value, label }) => {
-      const item = element('li');
-      item.append(element('strong', '', value), element('span', '', label));
-      proofs.append(item);
+    const metricRows = evidenceRows(raw, adapted, proofCount);
+    const metrics = element('dl', 'work-index-card__metrics');
+    metrics.style.setProperty('--work-metric-count', String(Math.max(metricRows.length, 1)));
+    metricRows.forEach(({ value, label }) => {
+      const item = element('div', 'work-index-card__metric');
+      item.append(element('dt', 'work-index-card__metric-value', value));
+      item.append(element('dd', 'work-index-card__metric-label', label));
+      metrics.append(item);
     });
 
     const cta = element('span', 'work-index-card__cta');
     cta.append(element('span', '', source.cta?.textContent.trim() || copy('View case', '查看案例')));
-    const arrow = element('span', 'icon-arrow icon-arrow--right');
+    const arrow = element('span', 'work-index-card__cta-arrow icon-arrow icon-arrow--right');
     arrow.setAttribute('aria-hidden', 'true');
     cta.append(arrow);
 
-    content.append(meta, title, proofs, cta);
+    content.append(meta, title);
+    if (metricRows.length) content.append(metrics);
+    content.append(cta);
     button.append(content, buildVisual(source, raw, adapted));
     article.append(button);
     return article;
@@ -237,7 +291,10 @@
       button.type = 'button';
       button.dataset.workIndexFilter = id;
       button.setAttribute('aria-pressed', String(id === activeFilter));
-      button.addEventListener('click', () => { activeFilter = id; applyFilter(root); });
+      button.addEventListener('click', () => {
+        activeFilter = id;
+        applyFilter(root);
+      });
       filters.append(button);
     });
 
