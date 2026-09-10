@@ -21,9 +21,10 @@ jobs:
       - name: Verify isolated baseline and denylist
         run: |
           set -euo pipefail
-          test "$(git merge-base 05291a4ba071d00d0098f227ea08069c774cb422 HEAD)" = "05291a4ba071d00d0098f227ea08069c774cb422"
-          git diff --check 05291a4ba071d00d0098f227ea08069c774cb422...HEAD
-          git diff --name-only 05291a4ba071d00d0098f227ea08069c774cb422...HEAD | tee /tmp/changed.txt
+          BASE=05291a4ba071d00d0098f227ea08069c774cb422
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          git diff --check "$BASE"...HEAD
+          git diff --name-only "$BASE"...HEAD | tee /tmp/changed.txt
           ! grep -Fxq 'public/site/assets/js/app.js' /tmp/changed.txt
           ! grep -Fxq 'public/site/content/portfolio-content.json' /tmp/changed.txt
           ! grep -Fxq 'public/site/assets/css/components/project-card.css' /tmp/changed.txt
@@ -31,6 +32,8 @@ jobs:
           ! grep -Fxq 'scripts/generate-project-pages.mjs' /tmp/changed.txt
           ! grep -E '^public/site/assets/projects/daily-hours/' /tmp/changed.txt
           ! grep -Fxq 'public/site/assets/css/components/project-detail-overview.css' /tmp/changed.txt
+          git diff --quiet "$BASE"...HEAD -- public/site/assets/css/components/domain-selector.css
+          ! grep -q 'related-project-card' public/site/assets/css/components/domain-experience.css
 
       - name: Install root dependencies
         run: npm run install:ci
@@ -50,7 +53,6 @@ jobs:
       - name: Start static QA server
         run: |
           PORT=4173 node tests/portfolio-static-server.mjs > /tmp/style-b-server.log 2>&1 &
-          echo $! > /tmp/style-b-server.pid
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null; then exit 0; fi
             sleep 1
@@ -72,7 +74,6 @@ jobs:
           const widths = [1419, 871, 430];
           const browser = await chromium.launch({ headless: true });
           const report = { viewports: {}, routes: {}, consoleErrors: [] };
-
           const assert = (condition, message) => { if (!condition) throw new Error(message); };
           const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
 
@@ -86,22 +87,42 @@ jobs:
             assert(response?.ok(), `Home ${width}: HTTP ${response?.status()}`);
             await page.locator('#domains').scrollIntoViewIfNeeded();
             await page.waitForFunction(() => document.querySelector('#domains')?.dataset.styleBMounted === 'true');
+            await page.waitForSelector('#domains .domain-experience-card');
             const domain = page.locator('#domains');
             const tabs = domain.locator('.domain-tab');
             assert(await tabs.count() === 6, `Home ${width}: expected 6 domain tabs`);
             const tabLabels = (await tabs.allTextContents()).map(clean);
             assert(!tabLabels.some(label => /^all$/i.test(label)), `Home ${width}: unexpected All tab`);
-            assert(await domain.locator('details.domain-disclosure').count() === 2, `Home ${width}: expected 2 disclosures`);
-            for (const details of await domain.locator('details.domain-disclosure').all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
-            const controlBoxes = await domain.locator('.domain-wheel-controls .rail-button').evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
+            assert(await domain.locator('details.domain-experience-disclosure').count() === 2, `Home ${width}: expected 2 disclosures`);
+            for (const details of await domain.locator('details.domain-experience-disclosure').all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
+            assert(await domain.locator('.domain-panel-v30--projects h4:visible').count() === 0, `Home ${width}: Related Work heading must be hidden`);
+
+            const controlBoxes = await domain.locator('.domain-experience__controls .rail-button').evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
             assert(controlBoxes.length >= 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: controls below 44x44`);
-            const cardState = await domain.locator('.domain-project-list-v30 .related-project-card-v45').first().evaluate(card => {
+
+            const cardState = await domain.locator('.domain-experience-card').first().evaluate(card => {
               const r=card.getBoundingClientRect();
-              const content=card.querySelector('.related-project-card__content-v1612')?.getBoundingClientRect();
-              const visual=card.querySelector('.related-project-card__visual-v45')?.getBoundingClientRect();
+              const content=card.querySelector('.domain-experience-card__content')?.getBoundingClientRect();
+              const visual=card.querySelector('.domain-experience-card__visual')?.getBoundingClientRect();
               return {width:r.width,contentTop:content?.top,contentBottom:content?.bottom,visualTop:visual?.top,visualLeft:visual?.left,contentLeft:content?.left};
             });
-            if (cardState.width <= 724) assert(cardState.visualTop >= cardState.contentBottom - 2, `Home ${width}: narrow card did not stack`);
+            if (cardState.width < 1040) assert(cardState.visualTop >= cardState.contentBottom - 2, `Home ${width}: narrow card did not stack`);
+            if (width === 1419 && cardState.width >= 1040) assert(cardState.visualLeft > cardState.contentLeft, `Home ${width}: wide card did not preserve CONTENT | VISUAL`);
+
+            const domainCardsBefore = await domain.locator('.domain-experience-card').count();
+            await tabs.nth(1).click();
+            await page.waitForFunction(() => document.querySelector('#domains .domain-tab:nth-child(2)')?.getAttribute('aria-selected') === 'true');
+            await page.waitForSelector('#domains .domain-experience-card');
+            const domainCardsAfter = await domain.locator('.domain-experience-card').count();
+            assert(domainCardsBefore > 0 && domainCardsAfter > 0, `Home ${width}: domain project wheel failed after tab change`);
+
+            const firstProject = domain.locator('.domain-experience-card[data-project]').first();
+            if (await firstProject.count()) {
+              await firstProject.click();
+              await page.waitForSelector('#detailDialog[open]');
+              await page.locator('#detailClose').click();
+            }
+
             const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
             assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}px`);
             await domain.screenshot({ path: path.join(out, `home-domain-${width}.png`) });
@@ -128,6 +149,9 @@ jobs:
               assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
               assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
             }
+            await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
+            assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count() >= 1, `Work ${width}: Operations filter returned no work`);
+            await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
             const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
             assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}px`);
             await work.screenshot({ path: path.join(out, `work-${width}.png`) });
