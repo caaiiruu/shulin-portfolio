@@ -100,7 +100,7 @@
     --domain-card-width:86%;
     --domain-card-height:var(--dimension-640px);
     --domain-wheel-height:var(--dimension-640px);
-    --domain-card-content-padding:var(--space-5);
+    --domain-card-content-padding:var(--dimension-20px);
     --domain-card-visual-padding:var(--space-2);
     --domain-side-shift:102%;
     --domain-side-scale:1;
