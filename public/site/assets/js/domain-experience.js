@@ -22,6 +22,26 @@
     if (value && typeof value === 'object' && ('en' in value || 'zh' in value)) return language() === 'zh' ? (value.zh ?? value.en ?? '') : (value.en ?? value.zh ?? '');
     return value ?? '';
   };
+  const scalarText = (value, depth = 0) => {
+    if (value == null || depth > 4) return '';
+    const localized = localize(value);
+    if (localized == null) return '';
+    if (typeof localized === 'string' || typeof localized === 'number') return String(localized).trim();
+    if (Array.isArray(localized)) {
+      for (const item of localized) {
+        const text = scalarText(item, depth + 1);
+        if (text) return text;
+      }
+      return '';
+    }
+    if (typeof localized === 'object') {
+      for (const key of ['value', 'label', 'text', 'publicLabel', 'title', 'name']) {
+        const text = scalarText(localized[key], depth + 1);
+        if (text) return text;
+      }
+    }
+    return '';
+  };
 
   const projectPanel = related?.closest('.domain-panel-v30--projects');
   const problemsPanel = document.getElementById('domainProblems')?.closest('.domain-panel-v30');
@@ -58,7 +78,7 @@
   let pointerStartX = null;
   let rebuilding = false;
 
-  const firstText = (...values) => values.map(localize).map((v) => String(v || '').trim()).find(Boolean) || '';
+  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
   const readYear = (rawProject, adaptedProject, source) => {
     const raw = firstText(
       rawProject?.year,
@@ -157,7 +177,7 @@
       const img = document.createElement('img');
       img.className = 'domain-project-card-v2__image';
       img.src = asset.src;
-      img.alt = localize(asset.alt);
+      img.alt = scalarText(asset.alt);
       img.loading = 'lazy';
       img.decoding = 'async';
       if (asset.width && asset.height) { img.width = asset.width; img.height = asset.height; }
