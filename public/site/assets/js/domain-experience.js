@@ -67,6 +67,26 @@
     commerce: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>',
     learning: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1 6-.5 9 1.5v13c-3-2-6-2.5-9-1.5v-13ZM21 5.5c-3-1-6-.5-9 1.5v13c3-2 6-2.5 9-1.5v-13Z"/></svg>'
   };
+  const ICON_KEY_BY_DOMAIN = {
+    operations:'operations','enterprise-operations':'operations',operational:'operations',
+    finance:'finance','financial-services':'finance',financial:'finance',
+    commerce:'commerce','retail-commerce':'commerce','retail-and-commerce':'commerce',retail:'commerce',
+    travel:'travel','travel-platforms':'travel',mobility:'travel',
+    growth:'growth','growth-incentive-systems':'growth','rewards-incentives':'growth',rewards:'growth',incentive:'growth',
+    learning:'learning','learning-platforms':'learning',education:'learning'
+  };
+  const normalizeDomainKey = (value) => String(value || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const iconKeyForTab = (tab) => {
+    const direct = normalizeDomainKey(tab?.dataset.domain);
+    if (ICON_KEY_BY_DOMAIN[direct]) return ICON_KEY_BY_DOMAIN[direct];
+    const label = normalizeDomainKey(tab?.querySelector('strong')?.textContent);
+    if (label.includes('financial')) return 'finance';
+    if (label.includes('retail') || label.includes('commerce')) return 'commerce';
+    if (label.includes('travel')) return 'travel';
+    if (label.includes('reward') || label.includes('incentive')) return 'growth';
+    if (label.includes('learning')) return 'learning';
+    return 'operations';
+  };
 
   const enhanceTabs = () => {
     section.querySelectorAll('.domain-tab').forEach((tab) => {
@@ -74,10 +94,17 @@
       if (number) number.classList.add('domain-tab__number');
       const strong = tab.querySelector('strong');
       if (strong) strong.classList.add('domain-tab__label');
-      if (tab.querySelector('.domain-tab__icon')) return;
+      const existing = tab.querySelector('.domain-tab__icon');
+      const iconKey = iconKeyForTab(tab);
+      if (existing) {
+        if (existing.dataset.iconKey !== iconKey) existing.innerHTML = tabIcon[iconKey];
+        existing.dataset.iconKey = iconKey;
+        return;
+      }
       const icon = document.createElement('span');
       icon.className = 'domain-tab__icon';
-      icon.innerHTML = tabIcon[tab.dataset.domain] || tabIcon.operations;
+      icon.dataset.iconKey = iconKey;
+      icon.innerHTML = tabIcon[iconKey];
       tab.prepend(icon);
     });
   };
@@ -161,14 +188,21 @@
     if (/programme|program/.test(normalized)) return zh ? '計畫' : 'programme';
     if (/digital.*share|share.*digital|redemption share|campaign.*share/.test(normalized)) return zh ? '數位佔比' : 'digital share';
     if (/redemption/.test(normalized)) return zh ? '兌換' : 'redemptions';
+    if (/interview/.test(normalized)) return zh ? '訪談' : 'interviews';
+    if (/participant|respondent/.test(normalized)) return zh ? '參與者' : 'participants';
+    if (/core.*function|function|flow/.test(normalized)) return zh ? '功能' : 'functions';
     if (/market|countr/.test(normalized)) return zh ? '市場' : 'markets';
     if (/workflow/.test(normalized)) return zh ? '工作流' : 'workflow';
     if (/decision/.test(normalized)) return zh ? '決策模型' : 'decision model';
     if (/success/.test(normalized)) return zh ? '成功率' : 'success rate';
-    if (/time|second|minute|hour/.test(normalized)) return zh ? '處理時間' : 'time';
+    if (/month|week|day|timeline|duration/.test(normalized)) return zh ? '期間' : 'timeline';
+    if (/time|second|minute|hour/.test(normalized)) return zh ? '時間' : 'time';
+    if (/conversion/.test(normalized)) return zh ? '轉換率' : 'conversion';
     if (/user/.test(normalized)) return zh ? '使用者' : 'users';
     if (/transaction/.test(normalized)) return zh ? '交易' : 'transactions';
-    return text.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
+    if (/store/.test(normalized)) return zh ? '門市' : 'stores';
+    const cleaned = text.replace(/[+/]/g, ' ').replace(/[^\p{L}\p{N}%×~.-]+/gu, ' ').trim();
+    return cleaned.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
   };
 
   const collectMetrics = (project) => {
