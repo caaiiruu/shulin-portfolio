@@ -35,14 +35,11 @@ jobs:
           git diff --quiet "$BASE"...HEAD -- public/site/assets/css/components/domain-selector.css
           ! grep -q 'related-project-card' public/site/assets/css/components/domain-experience.css
 
-      - name: Install root dependencies
-        run: npm run install:ci
-
-      - name: Build generated public source
-        run: npm run build
-
-      - name: Run full validation suite
-        run: npm test
+      - name: Install, build, and validate source
+        run: |
+          npm run install:ci
+          npm run build
+          npm test
 
       - name: Install browser QA dependencies
         working-directory: public/site/qa
@@ -105,9 +102,9 @@ jobs:
 
               const cards = domain.locator('.domain-project-card-v2');
               assert(await cards.count() >= 3, `Home ${width}: wheel requires at least 3 cards`);
-              assert(await cards.locator('[data-wheel-offset="0"]').count() === 1, `Home ${width}: exactly one active card required`);
-              assert(await cards.locator('[data-wheel-offset="-1"]').count() === 1, `Home ${width}: previous side card missing`);
-              assert(await cards.locator('[data-wheel-offset="1"]').count() === 1, `Home ${width}: next side card missing`);
+              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').count() === 1, `Home ${width}: exactly one active card required`);
+              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]').count() === 1, `Home ${width}: previous side card missing`);
+              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="1"]').count() === 1, `Home ${width}: next side card missing`);
 
               const controls = domain.locator('.domain-wheel-v2__control');
               const controlBoxes = await controls.evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
@@ -115,19 +112,19 @@ jobs:
 
               const active = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
               const state = await active.evaluate(card => {
+                const tidy = (value) => String(value || '').replace(/\s+/g, ' ').trim();
                 const r = card.getBoundingClientRect();
                 const content = card.querySelector('.domain-project-card-v2__content')?.getBoundingClientRect();
                 const visual = card.querySelector('.domain-project-card-v2__visual')?.getBoundingClientRect();
-                const title = clean(card.querySelector('.domain-project-card-v2__title')?.textContent);
-                const support = clean(card.querySelector('.domain-project-card-v2__support')?.textContent);
-                const metricCount = Number(card.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount || 0);
-                const metricChildren = card.querySelector('.domain-project-card-v2__metrics')?.children.length || 0;
                 const cta = card.querySelector('.domain-project-card-v2__cta')?.getBoundingClientRect();
                 return {
                   width:r.width,height:r.height,
                   content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom},
                   visual:{left:visual?.left,top:visual?.top,width:visual?.width,height:visual?.height},
-                  title,support,metricCount,metricChildren,
+                  title:tidy(card.querySelector('.domain-project-card-v2__title')?.textContent),
+                  support:tidy(card.querySelector('.domain-project-card-v2__support')?.textContent),
+                  metricCount:Number(card.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount || 0),
+                  metricChildren:card.querySelector('.domain-project-card-v2__metrics')?.children.length || 0,
                   cta:{left:cta?.left,right:cta?.right,width:cta?.width}
                 };
               });
@@ -140,19 +137,17 @@ jobs:
               if (width === 1419) {
                 near(state.width, 1120, 3, '1419 active-card width');
                 near(state.height, 430, 2, '1419 active-card height');
-                const contentRatio = state.content.width / state.width;
-                assert(contentRatio >= .39 && contentRatio <= .41, `1419 content ratio ${contentRatio}`);
+                const ratio = state.content.width / state.width;
+                assert(ratio >= .39 && ratio <= .41, `1419 content ratio ${ratio}`);
                 assert(state.visual.left >= state.content.left + state.content.width - 2, '1419 must be CONTENT | VISUAL');
-              }
-              if (width === 871) {
+              } else if (width === 871) {
                 assert(state.width >= 716 && state.width <= 732, `871 active-card width ${state.width}`);
                 assert(state.height >= 440 && state.height <= 460, `871 active-card height ${state.height}`);
-                const contentRatio = state.content.width / state.width;
-                assert(contentRatio >= .43 && contentRatio <= .45, `871 content ratio ${contentRatio}`);
+                const ratio = state.content.width / state.width;
+                assert(ratio >= .43 && ratio <= .45, `871 content ratio ${ratio}`);
                 assert(state.visual.left >= state.content.left + state.content.width - 2, '871 must remain horizontal billboard');
                 assert(Math.abs(state.visual.top - state.content.top) <= 2, '871 visual must not stack below content');
-              }
-              if (width === 430) {
+              } else {
                 assert(state.width >= 330 && state.width <= 340, `430 active-card width ${state.width}`);
                 near(state.height, 640, 2, '430 active-card height');
                 assert(state.visual.top >= state.content.bottom - 2, '430 visual must follow content');
@@ -161,8 +156,10 @@ jobs:
 
               const beforeKey = await active.getAttribute('data-project');
               await controls.nth(1).click();
-              const afterKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
+              const activeAfter = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const afterKey = await activeAfter.getAttribute('data-project');
               assert(beforeKey !== afterKey, `Home ${width}: next control did not rotate wheel`);
+              await activeAfter.focus();
               await page.keyboard.press('ArrowLeft');
               const keyboardKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
               assert(keyboardKey === beforeKey, `Home ${width}: keyboard did not rotate wheel back`);
@@ -170,9 +167,9 @@ jobs:
               await tabs.nth(1).click();
               await page.waitForFunction(() => document.querySelector('#domains .domain-tab:nth-child(2)')?.getAttribute('aria-selected') === 'true');
               await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
-
               const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
               assert(overflow <= 1, `Home ${width}: horizontal overflow ${overflow}`);
+
               await domain.screenshot({ path: path.join(out, `domain-golden-${width}.png`) });
               report.viewports[width] = { ...state, overflow, tabLabels };
               await context.close();
