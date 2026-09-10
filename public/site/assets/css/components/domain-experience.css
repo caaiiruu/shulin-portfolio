@@ -17,7 +17,7 @@
 .domain-experience .domain-synthesis{max-width:var(--dimension-62ch);margin:0;color:var(--sys-color-text-secondary);font-size:var(--sys-type-body-lg);text-align:center;text-wrap:balance}
 .domain-experience .domain-content-v41{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4) var(--space-5);margin:0}
 .domain-experience .domain-panel-v30--projects{grid-column:1/-1;display:grid;gap:var(--space-3);order:-1}
-.domain-experience__project-heading{position:absolute;width:var(--dimension-1px);height:var(--dimension-1px);padding:0;margin:calc(var(--dimension-1px) * -1);overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.domain-experience__project-heading{display:none}
 .domain-experience__rail{display:grid;grid-auto-flow:column;grid-auto-columns:100%;gap:var(--space-4);width:100%;max-width:100%;padding:var(--space-1);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--space-1);overscroll-behavior-inline:contain}
 .domain-experience-card{display:flex;flex-wrap:wrap;min-width:0;min-height:var(--dimension-420px);padding:0;overflow:hidden;scroll-snap-align:center;border:var(--dimension-1px) solid var(--sys-color-border);border-radius:var(--radius-lg);background:var(--sys-color-surface);color:var(--sys-color-text-primary);text-align:left;cursor:pointer;box-shadow:var(--sys-elevation-rest)}
 .domain-experience-card__content{order:1;display:grid;align-content:start;flex:1 1 var(--dimension-520px);min-width:0;gap:var(--space-4);padding:var(--panel-padding)}
