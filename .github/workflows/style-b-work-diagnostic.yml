@@ -1,4 +1,4 @@
-name: Style B Work Hover Diagnostic
+name: Style B Work Visual Diagnostic
 
 on:
   push:
@@ -12,71 +12,26 @@ permissions:
 jobs:
   diagnostic:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - name: Install and build
+      - name: Collect candidate visual assets
         run: |
-          npm run install:ci
-          npm run build
-      - name: Install browser
-        working-directory: public/site/qa
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
-      - name: Start server
-        run: |
-          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-hover-server.log 2>&1 &
-          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0; sleep 1; done
-          cat /tmp/work-hover-server.log
-          exit 1
-      - name: Capture Work hover cascade
-        working-directory: public/site/qa
-        run: |
-          node --input-type=module <<'NODE'
-          import { chromium } from '@playwright/test';
-          import fs from 'node:fs';
-          import path from 'node:path';
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/work-hover-diagnostic');
-          fs.mkdirSync(out,{recursive:true});
-          const browser=await chromium.launch({headless:true});
-          const page=await browser.newPage({viewport:{width:871,height:1100}});
-          const errors=[];
-          page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
-          page.on('pageerror',e=>errors.push(e.message));
-          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
-          await page.waitForSelector('.work-index');
-          await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(img=>img.complete&&img.naturalWidth>0)});
-          const card=page.locator('.work-index__featured .work-index-card').first();
-          const before=await card.evaluate(node=>{
-            const img=node.querySelector('.work-index-card__image');
-            const s=getComputedStyle(img);
-            return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter,inlineStyle:img.getAttribute('style'),hoverMedia:matchMedia('(hover:hover)').matches,pointerFine:matchMedia('(pointer:fine)').matches};
-          });
-          await card.hover();
-          await page.waitForTimeout(80);
-          const mid=await card.evaluate(node=>{const img=node.querySelector('.work-index-card__image');const s=getComputedStyle(img);return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter};});
-          await page.waitForTimeout(320);
-          const after=await card.evaluate(node=>{
-            const img=node.querySelector('.work-index-card__image');
-            const s=getComputedStyle(img);
-            const matching=[];
-            for(const sheet of [...document.styleSheets]){
-              let rules;try{rules=sheet.cssRules}catch{continue}
-              const walk=(list,media='')=>{for(const rule of [...list]){if(rule.type===CSSRule.STYLE_RULE&&rule.selectorText?.includes('work-index-card')&&rule.selectorText?.includes('image')){let matches=false;try{matches=img.matches(rule.selectorText)}catch{}matching.push({selector:rule.selectorText,cssText:rule.style.cssText,matches,media});}else if(rule.cssRules){walk(rule.cssRules,rule.conditionText||media)}}};
-              walk(rules);
-            }
-            return {cardHover:node.matches(':hover'),imageTransform:s.transform,transition:s.transition,filter:s.filter,matching};
-          });
-          const data={before,mid,after,errors};
-          fs.writeFileSync(path.join(out,'work-hover-871.json'),JSON.stringify(data,null,2));
-          await page.locator('.work-index').screenshot({path:path.join(out,'work-871-hover.png')});
-          console.log('WORK_HOVER_871 '+JSON.stringify(data));
-          await browser.close();
-          NODE
-      - name: Upload diagnostic
+          set -euo pipefail
+          OUT=artifacts/work-visual-candidates
+          mkdir -p "$OUT"
+          cp public/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg "$OUT/dbs-lead.jpg"
+          cp public/site/assets/projects/dbs/dbs-decision-03-cross-role-architecture-01.jpeg "$OUT/dbs-cross-role.jpeg"
+          cp public/site/assets/projects/dbs/dbs-decision-02-report-to-workbench-01.jpeg "$OUT/dbs-workbench.jpeg"
+          cp public/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg "$OUT/booking-lead.jpg"
+          cp public/site/assets/projects/booking/booking-evidence-decision-02-hotjar-edit-trip-01.jpg "$OUT/booking-hotjar.jpg"
+          cp public/site/assets/projects/booking/booking-evidence-decision-03-baggage-language-01.jpg "$OUT/booking-baggage.jpg"
+          cp public/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg "$OUT/game-center-lead.jpg"
+          cp public/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg "$OUT/payment-lead.jpg"
+          find "$OUT" -type f -maxdepth 1 -print -exec sha256sum {} \;
+      - name: Upload visual candidates
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-work-hover-diagnostic
-          path: artifacts/work-hover-diagnostic
+          name: style-b-work-visual-candidates
+          path: artifacts/work-visual-candidates
           retention-days: 1
