@@ -84,7 +84,7 @@
   .domain-experience .domain-project-card-v2{grid-template-columns:1fr;grid-template-rows:max-content minmax(var(--dimension-240px),1fr)}
   .domain-experience .domain-project-card-v2[data-wheel-offset="-2"],.domain-experience .domain-project-card-v2[data-wheel-offset="2"]{opacity:0;pointer-events:none}
   .domain-experience .domain-project-card-v2__content{grid-row:1;height:auto;min-height:0;padding:var(--domain-card-content-padding)}
-  .domain-experience .domain-project-card-v2__title{max-width:var(--dimension-20ch);margin-top:var(--space-4);font-size:var(--sys-type-heading-3)}
+  .domain-experience .domain-project-card-v2__title{max-width:var(--dimension-17ch);margin-top:var(--space-4);font-size:var(--sys-type-heading-3)}
   .domain-experience .domain-project-card-v2__metrics{margin-top:var(--space-5)}
   .domain-experience .domain-project-card-v2__visual{grid-row:2;height:auto;min-height:0;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
   .domain-experience-disclosure{grid-column:1}
