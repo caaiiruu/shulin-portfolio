@@ -356,7 +356,7 @@
     previous.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(-1); });
     next.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); step(1); });
     controls.append(previous, next);
-    projectPanel?.append(controls);
+    related?.append(controls);
     return controls;
   };
 
