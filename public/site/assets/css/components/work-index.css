@@ -1,5 +1,5 @@
 /* Style B Work Index — isolated presentation owner. */
-.work-index{--work-index-gap:var(--space-6);--work-index-card-padding:clamp(var(--space-5),2.2vw,var(--space-7));--work-index-media-surface:var(--sys-color-surface-soft);display:block;padding:clamp(var(--space-7),7vw,var(--space-10)) 0 var(--space-10)}
+.work-index{--work-index-gap:var(--space-6);--work-index-card-padding:clamp(var(--space-5),var(--dimension-2-2vw),var(--space-7));--work-index-media-surface:var(--sys-color-surface-soft);display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
 .work-index__shell{display:grid;gap:var(--space-7)}
 .work-index__intro{display:grid;gap:var(--space-2);max-width:var(--dimension-52ch)}
 .work-index__eyebrow{font-size:var(--sys-type-label);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase;color:var(--sys-color-text-accent)}
@@ -28,7 +28,7 @@
 .work-index-card__visual{display:grid;place-items:center;min-width:0;overflow:hidden;background:var(--work-index-media-surface)}
 .work-index-card__visual>*{max-width:100%}
 .work-index-card__image{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
-.work-index-card--hero .work-index-card__button{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);grid-template-areas:"content visual"}
+.work-index-card--hero .work-index-card__button{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);grid-template-areas:"content visual"}
 .work-index-card--hero .work-index-card__content{grid-area:content}
 .work-index-card--hero .work-index-card__visual{grid-area:visual;min-height:var(--dimension-420px)}
 .work-index-card--hero .work-index-card__title{font-size:var(--type-section-title)}
