@@ -1,4 +1,4 @@
-name: Style B Work Visual Diagnostic
+name: Style B Domain State Diagnostic
 
 on:
   push:
@@ -12,26 +12,64 @@ permissions:
 jobs:
   diagnostic:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Collect candidate visual assets
+      - name: Install and build
         run: |
-          set -euo pipefail
-          OUT=artifacts/work-visual-candidates
-          mkdir -p "$OUT"
-          cp public/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg "$OUT/dbs-lead.jpg"
-          cp public/site/assets/projects/dbs/dbs-decision-03-cross-role-architecture-01.jpeg "$OUT/dbs-cross-role.jpeg"
-          cp public/site/assets/projects/dbs/dbs-decision-02-report-to-workbench-01.jpeg "$OUT/dbs-workbench.jpeg"
-          cp public/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg "$OUT/booking-lead.jpg"
-          cp public/site/assets/projects/booking/booking-evidence-decision-02-hotjar-edit-trip-01.jpg "$OUT/booking-hotjar.jpg"
-          cp public/site/assets/projects/booking/booking-evidence-decision-03-baggage-language-01.jpg "$OUT/booking-baggage.jpg"
-          cp public/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg "$OUT/game-center-lead.jpg"
-          cp public/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg "$OUT/payment-lead.jpg"
-          find "$OUT" -type f -maxdepth 1 -print -exec sha256sum {} \;
-      - name: Upload visual candidates
+          npm run install:ci
+          npm run build
+      - name: Install browser
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Start server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/domain-state-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/domain-state-server.log
+          exit 1
+      - name: Capture Domain tab state transitions
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/domain-state-diagnostic');
+          fs.mkdirSync(out,{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:1419,height:1100}});
+          const errors=[];
+          page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+          page.on('pageerror',e=>errors.push(e.message));
+          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          const tabs=page.locator('#domains .domain-tab');
+          const snapshots=[];
+          const snap=async(label,index)=>snapshots.push(await page.evaluate(({label,index})=>{
+            const related=document.getElementById('relatedProjects');
+            const selected=[...document.querySelectorAll('#domains .domain-tab')].map((tab,i)=>({i,label:tab.textContent.trim(),domain:tab.dataset.domain,selected:tab.getAttribute('aria-selected')}));
+            const domains=(window.PORTFOLIO_RUNTIME_DATA?.contentDiscovery?.domains||[]).map((d,i)=>({i,id:d.id,label:d.label,legacyAliases:d.legacyAliases,featuredProjectIds:d.featuredProjectIds,supportingProjectIds:d.supportingProjectIds}));
+            return {label,index,selected,domains,relatedChildren:[...(related?.children||[])].map(node=>({className:node.className,project:node.dataset.project,offset:node.dataset.wheelOffset,state:node.dataset.wheelState}))};
+          },{label,index}));
+          await snap('initial',0);
+          for(let i=0;i<await tabs.count();i++){
+            await tabs.nth(i).click();
+            await snap('immediate',i);
+            await page.waitForTimeout(20); await snap('20ms',i);
+            await page.waitForTimeout(80); await snap('100ms',i);
+            await page.waitForTimeout(150); await snap('250ms',i);
+          }
+          const data={snapshots,errors};
+          fs.writeFileSync(path.join(out,'domain-state.json'),JSON.stringify(data,null,2));
+          console.log('DOMAIN_STATE '+JSON.stringify(data));
+          await browser.close();
+          NODE
+      - name: Upload diagnostic
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-work-visual-candidates
-          path: artifacts/work-visual-candidates
+          name: style-b-domain-state-diagnostic
+          path: artifacts/domain-state-diagnostic
           retention-days: 1
