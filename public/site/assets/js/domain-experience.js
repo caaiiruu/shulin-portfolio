@@ -6,6 +6,12 @@
   section.dataset.styleBMounted = 'true';
   section.classList.add('domain-experience');
 
+  const style = document.createElement('link');
+  style.rel = 'stylesheet';
+  style.href = '/site/assets/css/components/domain-experience.css';
+  style.dataset.styleBOwner = 'domain-experience';
+  document.head.append(style);
+
   const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const related = document.getElementById('relatedProjects');
   const stage = document.getElementById('domainStage');
@@ -14,10 +20,10 @@
   const makeDisclosure = (panel) => {
     if (!panel || panel.matches('details')) return panel;
     const details = document.createElement('details');
-    details.className = `${panel.className} domain-disclosure`;
+    details.className = `${panel.className} domain-experience-disclosure`;
     details.open = false;
     const summary = document.createElement('summary');
-    summary.className = 'domain-disclosure__summary';
+    summary.className = 'domain-experience-disclosure__summary';
     const heading = panel.querySelector('h4');
     if (heading) summary.append(heading);
     while (panel.firstChild) details.append(panel.firstChild);
@@ -36,10 +42,10 @@
 
   const projectHeading = projectPanel?.querySelector('.rail-heading');
   const controls = projectHeading?.querySelector('.rail-controls');
-  if (projectHeading) projectHeading.classList.add('domain-project-heading--visually-hidden');
+  if (projectHeading) projectHeading.classList.add('domain-experience__project-heading');
   if (projectPanel && controls) {
     const controlRow = document.createElement('div');
-    controlRow.className = 'domain-wheel-controls';
+    controlRow.className = 'domain-experience__controls';
     controlRow.setAttribute('aria-label', document.documentElement.lang.startsWith('zh') ? '專案瀏覽控制' : 'Project browsing controls');
     controlRow.append(controls);
     projectPanel.append(controlRow);
@@ -50,32 +56,119 @@
     if (solutionDisclosure) solutionDisclosure.open = false;
   };
 
-  const decorateCards = () => {
-    if (!related) return;
-    [...related.children].forEach((card) => {
-      card.classList.add('domain-experience-card');
-      const visual = card.querySelector('.related-project-card__visual-v45');
-      const cardContent = card.querySelector('.related-project-card__content-v1612');
-      if (visual) visual.classList.add('domain-experience-card__visual');
-      if (cardContent) cardContent.classList.add('domain-experience-card__content');
+  const ownVisual = (source) => {
+    const visual = document.createElement('div');
+    visual.className = 'domain-experience-card__visual';
+    const image = source.querySelector('img');
+    if (image) {
+      const clone = image.cloneNode(true);
+      clone.className = 'domain-experience-card__image';
+      clone.loading = 'lazy';
+      clone.decoding = 'async';
+      visual.append(clone);
+      return visual;
+    }
+    const brand = source.querySelector('[class*="brand"]')?.textContent.trim();
+    const labels = [...source.querySelectorAll('[class*="flow"] b')].map((node) => node.textContent.trim()).filter(Boolean);
+    if (brand) {
+      const brandNode = document.createElement('span');
+      brandNode.className = 'domain-experience-card__visual-brand';
+      brandNode.textContent = brand;
+      visual.append(brandNode);
+    }
+    if (labels.length) {
+      const flow = document.createElement('div');
+      flow.className = 'domain-experience-card__visual-flow';
+      labels.forEach((label, index) => {
+        const item = document.createElement('span');
+        item.textContent = label;
+        if (index === 1) item.classList.add('is-core');
+        flow.append(item);
+      });
+      visual.append(flow);
+    }
+    return visual;
+  };
+
+  const ownCard = (source) => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'domain-experience-card';
+    if (source.dataset.project) card.dataset.project = source.dataset.project;
+    if (source.dataset.experiment) card.dataset.experiment = source.dataset.experiment;
+    const label = source.getAttribute('aria-label');
+    if (label) card.setAttribute('aria-label', label);
+
+    const contentNode = document.createElement('div');
+    contentNode.className = 'domain-experience-card__content';
+
+    const meta = document.createElement('div');
+    meta.className = 'domain-experience-card__meta';
+    const company = source.querySelector('[class*="company"]')?.textContent.trim();
+    const context = source.querySelector('[class*="context"]')?.textContent.trim();
+    [company, context].filter(Boolean).forEach((text) => {
+      const item = document.createElement('span');
+      item.textContent = text;
+      meta.append(item);
     });
+
+    const title = document.createElement('h4');
+    title.className = 'domain-experience-card__title';
+    title.textContent = source.querySelector('[class*="title"]')?.textContent.trim() || '';
+
+    const proof = document.createElement('p');
+    proof.className = 'domain-experience-card__proof';
+    proof.textContent = source.querySelector('dd')?.textContent.trim() || '';
+
+    const cta = document.createElement('span');
+    cta.className = 'domain-experience-card__cta';
+    cta.textContent = source.querySelector('[class*="action"]')?.textContent.trim() || (document.documentElement.lang.startsWith('zh') ? '查看案例' : 'View case');
+    const arrow = document.createElement('span');
+    arrow.className = 'icon-arrow icon-arrow--right';
+    arrow.setAttribute('aria-hidden', 'true');
+    cta.append(arrow);
+
+    contentNode.append(meta, title);
+    if (proof.textContent) contentNode.append(proof);
+    contentNode.append(cta);
+    card.append(contentNode, ownVisual(source));
+
+    card.addEventListener('click', () => source.click());
+    return card;
+  };
+
+  let transforming = false;
+  const transformCards = () => {
+    if (!related || transforming) return;
+    const sharedCards = [...related.children].filter((node) => node.matches('.related-project-card-v45'));
+    if (!sharedCards.length) {
+      resetDisclosures();
+      return;
+    }
+    transforming = true;
+    const owned = sharedCards.map(ownCard);
+    related.replaceChildren(...owned);
+    related.classList.add('domain-experience__rail');
+    related.removeAttribute('data-card-variant');
+    related.removeAttribute('data-rail');
+    window.refreshHorizontalRails?.();
+    transforming = false;
     resetDisclosures();
   };
 
-  decorateCards();
+  transformCards();
   if (related) {
-    new MutationObserver(() => requestAnimationFrame(decorateCards)).observe(related, { childList: true });
+    new MutationObserver(() => requestAnimationFrame(transformCards)).observe(related, { childList: true });
   }
 
   document.addEventListener('portfolio:language', () => {
-    const row = section.querySelector('.domain-wheel-controls');
+    const row = section.querySelector('.domain-experience__controls');
     if (row) row.setAttribute('aria-label', document.documentElement.lang.startsWith('zh') ? '專案瀏覽控制' : 'Project browsing controls');
     resetDisclosures();
+    requestAnimationFrame(transformCards);
   });
 
-  section.querySelectorAll('.domain-tab').forEach((tab) => {
-    tab.addEventListener('click', resetDisclosures);
-  });
+  section.querySelectorAll('.domain-tab').forEach((tab) => tab.addEventListener('click', resetDisclosures));
 
   related?.addEventListener('keydown', (event) => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
