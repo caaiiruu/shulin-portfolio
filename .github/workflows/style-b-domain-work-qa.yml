@@ -247,8 +247,11 @@ jobs:
               const route = `/site/work/${slug}.html`;
               const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `${route}: HTTP ${response?.status()}`);
-              assert(await page.locator(`[data-project-route-summary="${slug}"]`).count() === 1, `${route}: wrong document identity`);
-              report.routes[slug] = { path: route, status: response.status() };
+              const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+              const title = clean(await page.title());
+              assert(canonical === `https://shulinchou.com/work/${slug}`, `${route}: canonical mismatch ${canonical}`);
+              assert(title.length > 8 && title !== 'Work — Shulin Chou', `${route}: non-project title ${title}`);
+              report.routes[slug] = { path: route, status: response.status(), canonical, title };
               await context.close();
             }
 
