@@ -172,6 +172,8 @@
   let cards = [];
   let pointerStartX = null;
   let pointerStartY = null;
+  let activePointerId = null;
+  let suppressClickUntil = 0;
   let rendering = false;
   let renderFrame = 0;
 
@@ -253,6 +255,7 @@
       img.alt = scalarText(asset.alt);
       img.loading = 'eager';
       img.decoding = 'async';
+      img.draggable = false;
       if (asset.width && asset.height) { img.width = asset.width; img.height = asset.height; }
       visual.append(img);
       return visual;
@@ -385,6 +388,11 @@
   };
 
   related?.addEventListener('click', (event) => {
+    if (performance.now() < suppressClickUntil) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     const card = event.target.closest('.domain-project-card-v2');
     if (!card) return;
     const index = cards.indexOf(card);
@@ -401,16 +409,36 @@
     }
     if ((event.key === 'Enter' || event.key === ' ') && cards.indexOf(card) === activeIndex) { event.preventDefault(); navigateCard(card); }
   });
-  related?.addEventListener('pointerdown', (event) => { pointerStartX = event.clientX; pointerStartY = event.clientY; });
+  related?.addEventListener('dragstart', (event) => {
+    if (event.target.closest('.domain-project-card-v2__image')) event.preventDefault();
+  });
+  related?.addEventListener('pointerdown', (event) => {
+    if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
+    activePointerId = event.pointerId;
+    try { related.setPointerCapture?.(event.pointerId); } catch {}
+  });
   related?.addEventListener('pointerup', (event) => {
-    if (pointerStartX === null || pointerStartY === null) return;
+    if (activePointerId === null || event.pointerId !== activePointerId || pointerStartX === null || pointerStartY === null) return;
     const deltaX = event.clientX - pointerStartX;
     const deltaY = event.clientY - pointerStartY;
-    pointerStartX = null; pointerStartY = null;
+    try { if (related.hasPointerCapture?.(event.pointerId)) related.releasePointerCapture(event.pointerId); } catch {}
+    pointerStartX = null;
+    pointerStartY = null;
+    activePointerId = null;
     if (Math.abs(deltaX) < 36 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    suppressClickUntil = performance.now() + 250;
     step(deltaX < 0 ? 1 : -1);
   });
-  related?.addEventListener('pointercancel', () => { pointerStartX = null; pointerStartY = null; });
+  related?.addEventListener('pointercancel', (event) => {
+    if (activePointerId !== null && event.pointerId === activePointerId) {
+      try { if (related.hasPointerCapture?.(event.pointerId)) related.releasePointerCapture(event.pointerId); } catch {}
+    }
+    pointerStartX = null;
+    pointerStartY = null;
+    activePointerId = null;
+  });
 
   if (related) {
     new MutationObserver(() => {
