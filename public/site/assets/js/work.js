@@ -74,6 +74,25 @@
     'game-center': ['incentives', 'zero']
   };
 
+  const leadVisuals = {
+    payment: {
+      src: '/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg',
+      alt: ['FairPrice app and self-checkout payment experience.', 'FairPrice App 與自助結帳付款體驗。']
+    },
+    dbs: {
+      src: '/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg',
+      alt: ['DBS exception and risk workbench.', 'DBS 例外與風險工作台。']
+    },
+    booking: {
+      src: '/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg',
+      alt: ['Booking.com connected-trip timeline experience.', 'Booking.com 串接旅程時間軸體驗。']
+    },
+    'game-center': {
+      src: '/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg',
+      alt: ['Multi-game discovery experience.', '多遊戲探索體驗。']
+    }
+  };
+
   const element = (tag, className, text) => {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -180,9 +199,28 @@
     return tintPalette[hash % tintPalette.length];
   };
 
+  const appendImage = (visual, src, alt, width, height) => {
+    const image = document.createElement('img');
+    image.className = 'work-index-card__image';
+    image.src = src;
+    image.alt = alt || '';
+    image.loading = 'eager';
+    image.decoding = 'async';
+    if (width && height) {
+      image.width = width;
+      image.height = height;
+    }
+    visual.append(image);
+    return visual;
+  };
+
   const buildVisual = (source, raw, adapted) => {
     const visual = element('div', 'work-index-card__visual');
     visual.dataset.projectVisual = source.projectId;
+
+    const lead = leadVisuals[source.projectId];
+    if (lead) return appendImage(visual, lead.src, lead.alt[language() === 'zh' ? 1 : 0]);
+
     if (source.image) {
       const image = source.image.cloneNode(true);
       image.className = 'work-index-card__image';
@@ -191,21 +229,10 @@
       visual.append(image);
       return visual;
     }
+
     const assetId = raw?.heroVisualBrief?.assetId || raw?.hero_visual_brief?.assetId || adapted?.heroVisualBrief?.assetId || adapted?.hero_visual_brief?.assetId;
     const asset = assetId ? window.resolveProjectAsset?.(assetId, source.projectId) : null;
-    if (asset?.src) {
-      const image = document.createElement('img');
-      image.className = 'work-index-card__image';
-      image.src = asset.src;
-      image.alt = scalarText(asset.alt);
-      image.loading = 'eager';
-      image.decoding = 'async';
-      if (asset.width && asset.height) {
-        image.width = asset.width;
-        image.height = asset.height;
-      }
-      visual.append(image);
-    }
+    if (asset?.src) return appendImage(visual, asset.src, scalarText(asset.alt), asset.width, asset.height);
     return visual;
   };
 
