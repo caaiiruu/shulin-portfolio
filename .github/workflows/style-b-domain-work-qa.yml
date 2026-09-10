@@ -49,7 +49,10 @@ jobs:
       - name: Start static QA server
         run: |
           PORT=4173 node tests/portfolio-static-server.mjs >/tmp/style-b-server.log 2>&1 &
-          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0
+            sleep 1
+          done
           cat /tmp/style-b-server.log
           exit 1
 
@@ -61,119 +64,177 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
 
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/style-b-domain-work-human-contract');
+          const out = path.join(process.env.GITHUB_WORKSPACE,'artifacts/style-b-domain-work-human-contract');
           fs.mkdirSync(out,{recursive:true});
-          const base='http://127.0.0.1:4173';
-          const widths=[1419,871,430];
-          const browser=await chromium.launch({headless:true});
-          const report={domain:{},work:{},routes:{},consoleErrors:[]};
-          const assert=(v,m)=>{if(!v)throw new Error(m)};
-          const clean=v=>String(v||'').replace(/\s+/g,' ').trim();
-          const white=v=>/rgba?\(\s*255\s*,\s*255\s*,\s*255/i.test(v||'');
+          const base = 'http://127.0.0.1:4173';
+          const widths = [1419,871,430];
+          const browser = await chromium.launch({headless:true});
+          const report = {domain:{},work:{},routes:{},consoleErrors:[]};
+          const assert = (value,message) => { if(!value) throw new Error(message); };
+          const clean = value => String(value||'').replace(/\s+/g,' ').trim();
+          const isWhite = value => /rgba?\(\s*255\s*,\s*255\s*,\s*255/i.test(value||'');
 
-          try{
-            for(const width of widths){
-              const context=await browser.newContext({viewport:{width,height:1100},reducedMotion:'no-preference'});
-              const page=await context.newPage();
-              page.on('console',m=>{if(m.type()==='error')report.consoleErrors.push({width,url:page.url(),text:m.text()})});
+          try {
+            for (const width of widths) {
+              const context = await browser.newContext({viewport:{width,height:1100},reducedMotion:'no-preference'});
+              const page = await context.newPage();
+              page.on('console',m=>{ if(m.type()==='error') report.consoleErrors.push({width,url:page.url(),text:m.text()}); });
               page.on('pageerror',e=>report.consoleErrors.push({width,url:page.url(),text:e.message}));
 
-              let response=await page.goto(`${base}/site/index.html`,{waitUntil:'networkidle'});
+              let response = await page.goto(`${base}/site/index.html`,{waitUntil:'networkidle'});
               assert(response?.ok(),`Home ${width}: HTTP ${response?.status()}`);
-              const domain=page.locator('#domains');
+              const domain = page.locator('#domains');
               await domain.scrollIntoViewIfNeeded();
               await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
               await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
-              const tabs=domain.locator('.domain-tab');
+
+              const tabs = domain.locator('.domain-tab');
               assert(await tabs.count()===6,`Home ${width}: expected 6 Domain tabs`);
-              assert(await domain.locator('.domain-tab__icon svg').count()===6,`Home ${width}: all 6 Domain tabs require icons`);
-              const tabLabels=(await domain.locator('.domain-tab__label').allTextContents()).map(clean);
-              assert(tabLabels.length===6&&tabLabels.every(x=>x.length>2),`Home ${width}: Domain labels missing`);
+              assert(await domain.locator('.domain-tab__icon svg').count()===6,`Home ${width}: all Domain tabs require icons`);
+              const tabLabels = (await domain.locator('.domain-tab__label').allTextContents()).map(clean);
+              assert(tabLabels.length===6 && tabLabels.every(x=>x.length>2),`Home ${width}: Domain labels missing`);
+              assert(!tabLabels.some(x=>/^all$/i.test(x)),`Home ${width}: unexpected All Domain tab`);
 
-              const layoutViewportWidth=await page.evaluate(()=>document.documentElement.clientWidth);
-              const wheel=domain.locator('.domain-wheel-v2');
-              const wheelBox=await wheel.boundingBox();
-              assert(wheelBox&&Math.abs(wheelBox.width-layoutViewportWidth)<=2,`Home ${width}: wheel must span layout viewport (${wheelBox?.width} vs ${layoutViewportWidth})`);
-              assert(Math.abs(wheelBox.x)<=2,`Home ${width}: wheel must start at viewport edge (${wheelBox?.x})`);
-              const disclosures=domain.locator('details.domain-experience-disclosure');
-              assert(await disclosures.count()===2,`Home ${width}: expected 2 disclosures`);
-              for(const d of await disclosures.all())assert(!(await d.getAttribute('open')),`Home ${width}: disclosures default closed`);
-              assert(await domain.locator('.domain-experience__project-heading:visible').count()===0,`Home ${width}: legacy Related Work heading visible`);
+              const layoutViewportWidth = await page.evaluate(()=>document.documentElement.clientWidth);
+              const wheel = domain.locator('.domain-wheel-v2');
+              const wheelBox = await wheel.boundingBox();
+              assert(wheelBox && Math.abs(wheelBox.width-layoutViewportWidth)<=2,`Home ${width}: wheel not full bleed (${wheelBox?.width} vs ${layoutViewportWidth})`);
+              assert(Math.abs(wheelBox.x)<=2,`Home ${width}: wheel not aligned to viewport edge (${wheelBox?.x})`);
 
-              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-              assert(await active.count()===1,`Home ${width}: exactly one active card`);
+              const disclosures = domain.locator('details.domain-experience-disclosure');
+              assert(await disclosures.count()===2,`Home ${width}: expected two disclosures`);
+              for (const d of await disclosures.all()) assert(!(await d.getAttribute('open')),`Home ${width}: disclosures must default closed`);
+              assert(await domain.locator('.domain-experience__project-heading:visible').count()===0,`Home ${width}: Related Work heading visible`);
+
+              const active = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              assert(await active.count()===1,`Home ${width}: exactly one active card required`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]').count()===1,`Home ${width}: previous side card missing`);
               assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="1"]').count()===1,`Home ${width}: next side card missing`);
-              assert(await active.getAttribute('role')==='link',`Home ${width}: active card must be one target`);
-              assert(Number(await active.getAttribute('tabindex'))>=0,`Home ${width}: active card keyboard target missing`);
-              assert(await active.locator('.domain-project-card-v2__support').count()===0,`Home ${width}: support copy must be removed`);
-              const metrics=active.locator('.domain-project-card-v2__metric');
-              const mc=await metrics.count();
-              assert(mc>=1&&mc<=3,`Home ${width}: invalid metric count ${mc}`);
-              const labels=(await active.locator('.domain-project-card-v2__metric-label').allTextContents()).map(clean);
+              assert(await active.getAttribute('role')==='link',`Home ${width}: whole card target missing`);
+              assert(Number(await active.getAttribute('tabindex'))>=0,`Home ${width}: keyboard target missing`);
+              assert(await active.locator('.domain-project-card-v2__support').count()===0,`Home ${width}: support paragraph must be removed`);
+
+              const metrics = active.locator('.domain-project-card-v2__metric');
+              const metricCount = await metrics.count();
+              assert(metricCount>=1 && metricCount<=3,`Home ${width}: invalid metric count ${metricCount}`);
+              const labels = (await active.locator('.domain-project-card-v2__metric-label').allTextContents()).map(clean);
               assert(labels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Home ${width}: metric labels too long ${JSON.stringify(labels)}`);
-              for(const g of await metrics.all())assert(await g.locator(':scope > dt').count()===1&&await g.locator(':scope > dd').count()===1,`Home ${width}: metric value/label pair invalid`);
+              for (const group of await metrics.all()) {
+                assert(await group.locator(':scope > dt').count()===1 && await group.locator(':scope > dd').count()===1,`Home ${width}: metric value/label pair invalid`);
+              }
 
-              const ds=await active.evaluate(card=>{const c=card.querySelector('.domain-project-card-v2__content');const v=card.querySelector('.domain-project-card-v2__visual');const cr=c.getBoundingClientRect();const vr=v.getBoundingClientRect();return{bg:getComputedStyle(c).backgroundColor,value:parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-value')).fontSize),label:parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-label')).fontSize),contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top}});
-              assert(!white(ds.bg),`Home ${width}: project tint missing`);
-              assert(ds.value>ds.label,`Home ${width}: metric hierarchy invalid`);
-              if(width===1419)assert(Math.abs(ds.visualLeft-ds.contentRight)<=2,`Home ${width}: Large card must stay horizontal`);
-              else assert(ds.visualTop>=ds.contentBottom-2,`Home ${width}: narrow Large must use stacked Medium-like layout`);
+              const domainState = await active.evaluate(card=>{
+                const content=card.querySelector('.domain-project-card-v2__content');
+                const visual=card.querySelector('.domain-project-card-v2__visual');
+                const cr=content.getBoundingClientRect();
+                const vr=visual.getBoundingClientRect();
+                return {
+                  bg:getComputedStyle(content).backgroundColor,
+                  valueSize:parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-value')).fontSize),
+                  labelSize:parseFloat(getComputedStyle(card.querySelector('.domain-project-card-v2__metric-label')).fontSize),
+                  contentRight:cr.right,
+                  contentBottom:cr.bottom,
+                  visualLeft:vr.left,
+                  visualTop:vr.top
+                };
+              });
+              assert(!isWhite(domainState.bg),`Home ${width}: project tint missing`);
+              assert(domainState.valueSize>domainState.labelSize,`Home ${width}: metric hierarchy invalid`);
+              if(width===1419) assert(Math.abs(domainState.visualLeft-domainState.contentRight)<=2,`Home ${width}: Large card must remain horizontal`);
+              else assert(domainState.visualTop>=domainState.contentBottom-2,`Home ${width}: narrow Large must stack like Medium`);
 
-              const controls=domain.locator('.domain-wheel-v2__control');
-              const boxes=await controls.evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return{w:r.width,h:r.height}}));
-              assert(boxes.length===2&&boxes.every(b=>b.w>=44&&b.h>=44),`Home ${width}: controls below 44x44`);
-              await page.mouse.move(1,1);
-              await page.waitForTimeout(50);
-              const before=await active.evaluate(card=>({image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform}));
+              const controls = domain.locator('.domain-wheel-v2__control');
+              const boxes = await controls.evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect();return{w:r.width,h:r.height};}));
+              assert(boxes.length===2 && boxes.every(b=>b.w>=44&&b.h>=44),`Home ${width}: wheel controls below 44x44`);
+
+              await page.mouse.move(1,1); await page.waitForTimeout(50);
+              const beforeHover = await active.evaluate(card=>({
+                image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,
+                arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform
+              }));
               await active.hover(); await page.waitForTimeout(320);
-              const after=await active.evaluate(card=>({image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform}));
-              assert(before.image!==after.image,`Home ${width}: image hover motion missing`);
-              assert(before.arrow!==after.arrow,`Home ${width}: arrow hover motion missing`);
-              const beforeKey=await active.getAttribute('data-project');
+              const afterHover = await active.evaluate(card=>({
+                image:getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform,
+                arrow:getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform
+              }));
+              assert(beforeHover.image!==afterHover.image,`Home ${width}: image hover motion missing`);
+              assert(beforeHover.arrow!==afterHover.arrow,`Home ${width}: arrow hover motion missing`);
+
+              const beforeKey = await active.getAttribute('data-project');
               await controls.nth(1).click();
-              const activeAfter=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-              const afterKey=await activeAfter.getAttribute('data-project');
-              assert(beforeKey!==afterKey,`Home ${width}: wheel next failed`);
+              const activeAfter = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const afterKey = await activeAfter.getAttribute('data-project');
+              assert(beforeKey!==afterKey,`Home ${width}: next control failed`);
               await activeAfter.focus(); await page.keyboard.press('ArrowLeft');
-              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')===beforeKey,`Home ${width}: keyboard wheel failed`);
+              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')===beforeKey,`Home ${width}: keyboard wheel navigation failed`);
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Home ${width}: horizontal overflow`);
-              report.domain[width]={layoutViewportWidth,wheelWidth:wheelBox.width,wheelX:wheelBox.x,labels,...ds};
+              report.domain[width]={layoutViewportWidth,wheelWidth:wheelBox.width,wheelX:wheelBox.x,labels,...domainState};
               await domain.screenshot({path:path.join(out,`domain-${width}.png`)});
 
-              response=await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
+              response = await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
               assert(response?.ok(),`Work ${width}: HTTP ${response?.status()}`);
               await page.waitForSelector('.work-index',{timeout:10000});
-              await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(i=>i.complete&&i.naturalWidth>0)},{timeout:10000});
-              const work=page.locator('.work-index');
-              const filters=(await work.locator('.work-index-filter').allTextContents()).map(clean);
+              await page.waitForFunction(()=>{
+                const imgs=[...document.querySelectorAll('.work-index-card__visual img')];
+                return imgs.length===5 && imgs.every(img=>img.complete&&img.naturalWidth>0);
+              },{timeout:10000});
+
+              const work = page.locator('.work-index');
+              const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters)===JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']),`Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
-              assert(await work.locator(':scope > .work-index__shell > .work-index__featured > .work-index-card').count()===2,`Work ${width}: row1 requires 2 cards`);
-              assert(await work.locator('.work-index__featured-secondary-row > .work-index-card').count()===2,`Work ${width}: row2 requires 2 cards`);
-              const featured=work.locator('.work-index__featured .work-index-card');
-              assert(await featured.count()===4,`Work ${width}: featured requires 4 cards`);
-              const expected=[3,2,2,2];
+              assert(await work.locator(':scope > .work-index__shell > .work-index__featured > .work-index-card').count()===2,`Work ${width}: first featured row requires two cards`);
+              assert(await work.locator('.work-index__featured-secondary-row > .work-index-card').count()===2,`Work ${width}: second featured row requires two cards`);
+
+              const featured = work.locator('.work-index__featured .work-index-card');
+              assert(await featured.count()===4,`Work ${width}: expected four featured cards`);
+              const expectedMetrics=[3,2,2,2];
               for(let i=0;i<4;i++){
-                const card=featured.nth(i);const bb=await card.locator('.work-index-card__button').boundingBox();const cb=await card.boundingBox();
-                assert(bb&&cb&&Math.abs(bb.width-cb.width)<=2&&Math.abs(bb.height-cb.height)<=2,`Work ${width}: featured ${i+1} whole-card target failed`);
-                assert(await card.locator('.work-index-card__metric').count()===expected[i],`Work ${width}: featured ${i+1} metric count mismatch`);
-                const ls=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assert(ls.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Work ${width}: featured ${i+1} metric labels too long`);
-                const tops=await card.locator('.work-index-card__metric').evaluateAll(ns=>ns.map(n=>n.getBoundingClientRect().top));
-                assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: featured ${i+1} metrics must be horizontal`);
-                const ts=await card.evaluate(n=>({bg:getComputedStyle(n.querySelector('.work-index-card__content')).backgroundColor,value:parseFloat(getComputedStyle(n.querySelector('.work-index-card__metric-value')).fontSize),label:parseFloat(getComputedStyle(n.querySelector('.work-index-card__metric-label')).fontSize)}));
-                assert(!white(ts.bg),`Work ${width}: featured ${i+1} tint missing`);assert(ts.value>ts.label,`Work ${width}: featured ${i+1} metric hierarchy invalid`);
-                if(width<=1100){const g=await card.evaluate(n=>{const c=n.querySelector('.work-index-card__content').getBoundingClientRect();const v=n.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(g.vt>=g.cb-2,`Work ${width}: featured ${i+1} must stack content above visual`)}
+                const card=featured.nth(i);
+                const buttonBox=await card.locator('.work-index-card__button').boundingBox();
+                const cardBox=await card.boundingBox();
+                assert(buttonBox&&cardBox&&Math.abs(buttonBox.width-cardBox.width)<=2&&Math.abs(buttonBox.height-cardBox.height)<=2,`Work ${width}: featured ${i+1} whole-card target failed`);
+                assert(await card.locator('.work-index-card__visual img').count()===1,`Work ${width}: featured ${i+1} image missing`);
+                assert(await card.locator('.work-index-card__metric').count()===expectedMetrics[i],`Work ${width}: featured ${i+1} metric count mismatch`);
+                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assert(metricLabels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Work ${width}: featured ${i+1} metric labels too long`);
+                const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().top));
+                assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: featured ${i+1} metrics must stay horizontal`);
+                const typography=await card.evaluate(node=>({
+                  bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,
+                  valueSize:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-value')).fontSize),
+                  labelSize:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-label')).fontSize)
+                }));
+                assert(!isWhite(typography.bg),`Work ${width}: featured ${i+1} tint missing`);
+                assert(typography.valueSize>typography.labelSize,`Work ${width}: featured ${i+1} metric hierarchy invalid`);
+                if(width<=1100){
+                  const geometry=await card.evaluate(node=>{
+                    const c=node.querySelector('.work-index-card__content').getBoundingClientRect();
+                    const v=node.querySelector('.work-index-card__visual').getBoundingClientRect();
+                    return{contentBottom:c.bottom,visualTop:v.top};
+                  });
+                  assert(geometry.visualTop>=geometry.contentBottom-2,`Work ${width}: featured ${i+1} must stack content above visual`);
+                }
               }
+
               await page.mouse.move(1,1); await page.waitForTimeout(50);
-              const wh=featured.nth(0);
-              const wb=await wh.evaluate(c=>({image:getComputedStyle(c.querySelector('.work-index-card__image')).transform,arrow:getComputedStyle(c.querySelector('.work-index-card__cta-arrow')).transform}));
-              await wh.hover(); await page.waitForTimeout(320);
-              const wa=await wh.evaluate(c=>({image:getComputedStyle(c.querySelector('.work-index-card__image')).transform,arrow:getComputedStyle(c.querySelector('.work-index-card__cta-arrow')).transform}));
-              assert(wb.image!==wa.image,`Work ${width}: image hover motion missing`);assert(wb.arrow!==wa.arrow,`Work ${width}: arrow hover motion missing`);
+              const workHero=featured.nth(0);
+              const workBefore=await workHero.evaluate(card=>({
+                image:getComputedStyle(card.querySelector('.work-index-card__image')).transform,
+                arrow:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform
+              }));
+              await workHero.hover(); await page.waitForTimeout(320);
+              const workAfter=await workHero.evaluate(card=>({
+                image:getComputedStyle(card.querySelector('.work-index-card__image')).transform,
+                arrow:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform
+              }));
+              assert(workBefore.image!==workAfter.image,`Work ${width}: image hover motion missing`);
+              assert(workBefore.arrow!==workAfter.arrow,`Work ${width}: arrow hover motion missing`);
+
               const more=work.locator('.work-index__more-grid .work-index-card');
               assert(await more.count()>=1,`Work ${width}: More Work empty`);
-              for(let i=0;i<await more.count();i++)assert(await more.nth(i).locator('.work-index-card__metric').count()===1,`Work ${width}: More Work metric count mismatch`);
+              for(let i=0;i<await more.count();i++){
+                assert(await more.nth(i).locator('.work-index-card__metric').count()===1,`Work ${width}: More Work ${i+1} metric count mismatch`);
+              }
               await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
               assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count()>=1,`Work ${width}: Operations filter empty`);
               await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
@@ -183,11 +244,43 @@ jobs:
               await context.close();
             }
 
-            for(const [slug,needle] of [['daily-hours','Daily'],['payment','Payment'],['dbs','DBS']]){
-              const context=await browser.newContext({viewport:{width:1419,height:1100}});const page=await context.newPage();const route=`/site/work/${slug}.html`;const r=await page.goto(`${base}${route}`,{waitUntil:'networkidle'});assert(r?.ok(),`${route}: HTTP ${r?.status()}`);const id=await page.evaluate(()=>({title:document.title,canonical:document.querySelector('link[rel="canonical"]')?.href||''}));assert(id.canonical.endsWith(`/work/${slug}`),`${route}: canonical mismatch`);assert(id.title.toLowerCase().includes(needle.toLowerCase()),`${route}: title mismatch ${id.title}`);report.routes[slug]={status:r.status(),...id};await context.close();
+            // Daily Hours is governed as an Experiment with publicSlug=daily-hours.
+            // Its public deep link is /experiments?experiment=daily-hours, not /work/daily-hours.
+            {
+              const context=await browser.newContext({viewport:{width:1419,height:1100}});
+              const page=await context.newPage();
+              const response=await page.goto(`${base}/site/experiments.html?experiment=daily-hours`,{waitUntil:'networkidle'});
+              assert(response?.ok(),`Daily Hours experiment: HTTP ${response?.status()}`);
+              await page.waitForFunction(()=>location.pathname==='/experiments' && new URLSearchParams(location.search).get('experiment')==='daily-hours');
+              const identity=await page.evaluate(()=>({pathname:location.pathname,search:location.search,title:document.title,body:document.body.innerText}));
+              assert(identity.pathname==='/experiments',`Daily Hours: wrong public pathname ${identity.pathname}`);
+              assert(new URLSearchParams(identity.search).get('experiment')==='daily-hours',`Daily Hours: public slug missing`);
+              assert(identity.body.includes('Daily Hours'),`Daily Hours: public identity not rendered`);
+              report.routes['daily-hours']={status:response.status(),pathname:identity.pathname,search:identity.search};
+              await context.close();
             }
+
+            for(const [slug,needle] of [['payment','Payment'],['dbs','DBS']]){
+              const context=await browser.newContext({viewport:{width:1419,height:1100}});
+              const page=await context.newPage();
+              const route=`/site/work/${slug}.html`;
+              const response=await page.goto(`${base}${route}`,{waitUntil:'networkidle'});
+              assert(response?.ok(),`${route}: HTTP ${response?.status()}`);
+              const identity=await page.evaluate(()=>({title:document.title,canonical:document.querySelector('link[rel="canonical"]')?.href||''}));
+              assert(identity.canonical.endsWith(`/work/${slug}`),`${route}: canonical mismatch ${identity.canonical}`);
+              assert(identity.title.toLowerCase().includes(needle.toLowerCase()),`${route}: title mismatch ${identity.title}`);
+              report.routes[slug]={status:response.status(),...identity};
+              await context.close();
+            }
+
             assert(report.consoleErrors.length===0,`Console/page errors: ${JSON.stringify(report.consoleErrors)}`);
-          }catch(error){report.failure={message:error.message,stack:error.stack};throw error}finally{fs.writeFileSync(path.join(out,'qa-report.json'),JSON.stringify(report,null,2));await browser.close()}
+          } catch(error) {
+            report.failure={message:error.message,stack:error.stack};
+            throw error;
+          } finally {
+            fs.writeFileSync(path.join(out,'qa-report.json'),JSON.stringify(report,null,2));
+            await browser.close();
+          }
           NODE
 
       - name: Upload Human review evidence
