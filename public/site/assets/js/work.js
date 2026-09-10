@@ -28,8 +28,36 @@
 
   loadStyle('/site/assets/css/components/work-index.css', 'work-index');
 
+  const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};
   const language = () => window.getPortfolioLanguage?.() || (document.documentElement.lang.startsWith('zh') ? 'zh' : 'en');
   const copy = (en, zh) => language() === 'zh' ? zh : en;
+  const localize = (value) => {
+    if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
+    if (value && typeof value === 'object' && ('en' in value || 'zh' in value)) return language() === 'zh' ? (value.zh ?? value.en ?? '') : (value.en ?? value.zh ?? '');
+    return value ?? '';
+  };
+  const scalarText = (value, depth = 0) => {
+    if (value == null || depth > 4) return '';
+    const localized = localize(value);
+    if (localized == null) return '';
+    if (typeof localized === 'string' || typeof localized === 'number') return String(localized).trim();
+    if (Array.isArray(localized)) {
+      for (const item of localized) {
+        const text = scalarText(item, depth + 1);
+        if (text) return text;
+      }
+      return '';
+    }
+    if (typeof localized === 'object') {
+      for (const key of ['value', 'label', 'text', 'publicLabel', 'title', 'name']) {
+        const text = scalarText(localized[key], depth + 1);
+        if (text) return text;
+      }
+    }
+    return '';
+  };
+  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
+
   const taxonomy = [
     ['all', 'All', '全部'],
     ['transactions', 'Transactions', '交易'],
@@ -40,17 +68,10 @@
   ];
   const categoryMap = {
     voucher: ['incentives'],
+    payment: ['transactions', 'zero'],
     dbs: ['operations'],
     booking: ['connected'],
-    payment: ['transactions', 'zero'],
-    bandzo: ['connected']
-  };
-  const typeMap = {
-    voucher: ['Incentives', '激勵系統'],
-    dbs: ['Operations', '營運系統'],
-    booking: ['Connected journeys', '跨接旅程'],
-    payment: ['Transactions · 0→1', '交易 · 0→1'],
-    bandzo: ['Connected journeys', '跨接旅程']
+    'game-center': ['incentives', 'zero']
   };
 
   const element = (tag, className, text) => {
@@ -60,55 +81,88 @@
     return node;
   };
 
-  const cloneCopy = (tag, className, source, fallback = '') => {
-    const node = element(tag, className, source?.textContent.trim() || fallback);
-    const key = source?.dataset?.copyKey;
-    if (key) node.dataset.copyKey = key;
-    return node;
+  const sourceCards = () => [...sourceGallery.querySelectorAll(':scope > article')].map((article) => {
+    const button = article.querySelector('[data-project]');
+    return {
+      article,
+      button,
+      projectId: button?.dataset.project || '',
+      title: article.querySelector('.work-card-v32__content h2'),
+      cta: article.querySelector('.work-card-v32__action'),
+      image: button?.querySelector('img') || null,
+      date: article.dataset.projectDate || ''
+    };
+  }).filter((item) => item.projectId && item.button);
+
+  const rawProject = (projectId) => DATA.projects?.[projectId] || {};
+  const adaptedProject = (projectId) => window.adaptPortfolioProject?.(projectId) || {};
+  const projectType = (raw, adapted) => firstText(raw?.infoGrid?.type, raw?.type, adapted?.infoGrid?.type, adapted?.type, 'Work');
+  const projectCompany = (raw, adapted) => firstText(raw?.company, adapted?.company);
+  const projectYear = (raw, adapted, source) => {
+    const text = firstText(raw?.year, raw?.period, raw?.timeline, raw?.infoGrid?.timeline?.dateRange, adapted?.year, adapted?.period, adapted?.timeline, source.date);
+    return text.match(/(?:19|20)\d{2}/)?.[0] || source.date.slice(0, 4);
+  };
+  const projectTitle = (raw, adapted, source) => firstText(raw?.cardTitle, adapted?.cardTitle, source.title?.textContent, raw?.title, adapted?.title, source.projectId);
+
+  const evidenceRows = (raw, adapted, count) => {
+    const sources = [
+      raw?.impactEvidence?.primaryMetrics,
+      raw?.impact_evidence?.primaryMetrics,
+      adapted?.impactEvidence?.primaryMetrics,
+      adapted?.impact_evidence?.primaryMetrics,
+      raw?.impactEvidence?.supportingMetrics,
+      raw?.impact_evidence?.supportingMetrics,
+      adapted?.impactEvidence?.supportingMetrics,
+      adapted?.impact_evidence?.supportingMetrics
+    ];
+    const rows = [];
+    const seen = new Set();
+    for (const items of sources) {
+      if (!Array.isArray(items)) continue;
+      for (const item of items) {
+        if (!item || typeof item !== 'object') continue;
+        const value = firstText(item.value, item.metric, item.amount);
+        const label = firstText(item.label, item.name, item.description);
+        if (!value || !label) continue;
+        const key = `${value}|${label}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        rows.push({ value, label });
+        if (rows.length === count) return rows;
+      }
+    }
+    return rows;
   };
 
-  const sourceCards = () => [...sourceGallery.querySelectorAll(':scope > article')].map((article) => ({
-    article,
-    button: article.querySelector('[data-project]'),
-    projectId: article.querySelector('[data-project]')?.dataset.project || '',
-    title: article.querySelector('.work-card-v32__content h2'),
-    context: article.querySelector('.project-context'),
-    proofs: [...article.querySelectorAll('.work-card-signals-v44 > div')],
-    cta: article.querySelector('.work-card-v32__action'),
-    visual: article.querySelector('.work-artifact'),
-    date: article.dataset.projectDate || ''
-  })).filter((item) => item.projectId && item.button);
-
-  const hasHydratedCopy = () => {
-    const cards = sourceCards();
-    return cards.length >= 5 && cards.slice(0, 4).every((card) => card.title?.textContent.trim());
-  };
-
-  const cloneVisual = (source, projectId) => {
+  const buildVisual = (source, raw, adapted) => {
     const visual = element('div', 'work-index-card__visual');
-    visual.dataset.projectVisual = projectId;
-    if (!source) return visual;
-    const image = source.querySelector('img');
-    if (image) {
-      const clonedImage = image.cloneNode(true);
-      clonedImage.className = 'work-index-card__image';
-      clonedImage.loading = 'lazy';
-      clonedImage.decoding = 'async';
-      visual.append(clonedImage);
+    visual.dataset.projectVisual = source.projectId;
+    if (source.image) {
+      const image = source.image.cloneNode(true);
+      image.className = 'work-index-card__image';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      visual.append(image);
       return visual;
     }
-    [...source.childNodes].forEach((child) => visual.append(child.cloneNode(true)));
+    const assetId = raw?.heroVisualBrief?.assetId || raw?.hero_visual_brief?.assetId || adapted?.heroVisualBrief?.assetId || adapted?.hero_visual_brief?.assetId;
+    const asset = assetId ? window.resolveProjectAsset?.(assetId, source.projectId) : null;
+    if (asset?.src) {
+      const image = document.createElement('img');
+      image.className = 'work-index-card__image';
+      image.src = asset.src;
+      image.alt = scalarText(asset.alt);
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      if (asset.width && asset.height) { image.width = asset.width; image.height = asset.height; }
+      visual.append(image);
+    }
     return visual;
   };
 
-  const proofRows = (source, count) => {
-    const candidates = source.proofs;
-    if (count === 1) return candidates.slice(-1);
-    if (count === 2) return candidates.slice(-2);
-    return candidates.slice(0, 3);
-  };
-
   const createCard = (source, variant, proofCount) => {
+    const raw = rawProject(source.projectId);
+    const adapted = adaptedProject(source.projectId);
     const article = element('article', `work-index-card work-index-card--${variant}`);
     article.dataset.workIndexProject = source.projectId;
     article.dataset.workCategories = (categoryMap[source.projectId] || []).join(' ');
@@ -116,40 +170,39 @@
     const button = element('button', 'work-index-card__button');
     button.type = 'button';
     button.dataset.projectProxy = source.projectId;
-    button.setAttribute('aria-label', `${copy('Open', '開啟')} ${source.title?.textContent.trim() || source.projectId}`);
+    button.setAttribute('aria-label', `${copy('Open', '開啟')} ${projectTitle(raw, adapted, source)}`);
     button.addEventListener('click', () => source.button.click());
 
     const content = element('div', 'work-index-card__content');
     const meta = element('div', 'work-index-card__meta');
-    meta.append(element('span', 'work-index-card__type', typeMap[source.projectId]?.[language() === 'zh' ? 1 : 0] || 'Work'));
-    const contextText = source.context?.textContent.trim() || '';
-    const companyText = contextText.split('·')[0]?.trim() || contextText;
-    const company = cloneCopy('span', 'work-index-card__company', source.context, companyText);
-    if (company.textContent || company.dataset.copyKey) {
+    meta.append(element('span', 'work-index-card__type', projectType(raw, adapted)));
+    const company = projectCompany(raw, adapted);
+    if (company) {
       meta.append(element('span', 'work-index-card__meta-separator', '·'));
-      meta.append(company);
+      meta.append(element('span', 'work-index-card__company', company));
     }
-    const year = source.date.slice(0, 4);
+    const year = projectYear(raw, adapted, source);
     if (year) {
       meta.append(element('span', 'work-index-card__meta-separator', '·'));
       meta.append(element('span', 'work-index-card__year', year));
     }
 
-    const title = cloneCopy('h2', 'work-index-card__title', source.title);
+    const title = element('h2', 'work-index-card__title', projectTitle(raw, adapted, source));
     const proofs = element('ul', 'work-index-card__proofs');
-    proofRows(source, proofCount).forEach((row) => {
+    evidenceRows(raw, adapted, proofCount).forEach(({ value, label }) => {
       const item = element('li');
-      item.append(cloneCopy('strong', '', row.querySelector('dt')), cloneCopy('span', '', row.querySelector('dd')));
+      item.append(element('strong', '', value), element('span', '', label));
       proofs.append(item);
     });
+
     const cta = element('span', 'work-index-card__cta');
-    cta.append(cloneCopy('span', '', source.cta, copy('View case', '查看案例')));
+    cta.append(element('span', '', source.cta?.textContent.trim() || copy('View case', '查看案例')));
     const arrow = element('span', 'icon-arrow icon-arrow--right');
     arrow.setAttribute('aria-hidden', 'true');
     cta.append(arrow);
 
     content.append(meta, title, proofs, cta);
-    button.append(content, cloneVisual(source.visual, source.projectId));
+    button.append(content, buildVisual(source, raw, adapted));
     article.append(button);
     return article;
   };
@@ -184,10 +237,7 @@
       button.type = 'button';
       button.dataset.workIndexFilter = id;
       button.setAttribute('aria-pressed', String(id === activeFilter));
-      button.addEventListener('click', () => {
-        activeFilter = id;
-        applyFilter(root);
-      });
+      button.addEventListener('click', () => { activeFilter = id; applyFilter(root); });
       filters.append(button);
     });
 
@@ -214,13 +264,9 @@
     return true;
   };
 
-  let hydrated = hasHydratedCopy();
   build();
   const hydrationObserver = new MutationObserver(() => {
-    if (hydrated || !hasHydratedCopy()) return;
-    hydrated = true;
-    build();
-    hydrationObserver.disconnect();
+    if (!document.querySelector('.work-index')) build();
   });
   hydrationObserver.observe(sourceGallery, { childList: true, subtree: true, characterData: true });
 
