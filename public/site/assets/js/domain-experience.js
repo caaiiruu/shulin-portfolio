@@ -78,7 +78,7 @@
       const icon = document.createElement('span');
       icon.className = 'domain-tab__icon';
       icon.innerHTML = tabIcon[tab.dataset.domain] || tabIcon.operations;
-      tab.insertBefore(icon, strong || tab.firstChild);
+      tab.prepend(icon);
     });
   };
   enhanceTabs();
