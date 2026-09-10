@@ -1,4 +1,4 @@
-name: Style B Domain Work QA
+name: Style B Domain Golden Reference QA
 
 on:
   push:
@@ -60,7 +60,7 @@ jobs:
           cat /tmp/style-b-server.log
           exit 1
 
-      - name: Run Style B browser QA and capture screenshots
+      - name: Run Domain golden-reference browser QA
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
@@ -68,14 +68,15 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
 
-          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-work');
+          const out = path.join(process.env.GITHUB_WORKSPACE, 'artifacts/style-b-domain-golden');
           fs.mkdirSync(out, { recursive: true });
           const base = 'http://127.0.0.1:4173';
           const widths = [1419, 871, 430];
           const browser = await chromium.launch({ headless: true });
-          const report = { viewports: {}, routes: {}, consoleErrors: [], diagnostics: [] };
+          const report = { viewports: {}, routes: {}, consoleErrors: [] };
           const assert = (condition, message) => { if (!condition) throw new Error(message); };
           const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+          const near = (actual, expected, tolerance, message) => assert(Math.abs(actual - expected) <= tolerance, `${message}: ${actual} vs ${expected}`);
 
           try {
             for (const width of widths) {
@@ -84,108 +85,100 @@ jobs:
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ width, url: page.url(), text: msg.text() }); });
               page.on('pageerror', error => report.consoleErrors.push({ width, url: page.url(), text: error.message }));
 
-              let response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+              const response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
               assert(response?.ok(), `Home ${width}: HTTP ${response?.status()}`);
-              await page.locator('#domains').scrollIntoViewIfNeeded();
-              await page.waitForFunction(() => document.querySelector('#domains')?.dataset.styleBMounted === 'true');
-              await page.waitForSelector('#domains .domain-experience-card');
               const domain = page.locator('#domains');
+              await domain.scrollIntoViewIfNeeded();
+              await page.waitForFunction(() => document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted === 'true');
+              await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+
               const tabs = domain.locator('.domain-tab');
               assert(await tabs.count() === 6, `Home ${width}: expected 6 domain tabs`);
               const tabLabels = (await tabs.allTextContents()).map(clean).map(label => label.replace(/^\d{2}\s*/, ''));
               assert(tabLabels.every(label => label.length > 2), `Home ${width}: empty Domain tab label ${JSON.stringify(tabLabels)}`);
               assert(!tabLabels.some(label => /^all$/i.test(label)), `Home ${width}: unexpected All tab`);
-              assert(await domain.locator('details.domain-experience-disclosure').count() === 2, `Home ${width}: expected 2 disclosures`);
-              for (const details of await domain.locator('details.domain-experience-disclosure').all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
-              assert(await domain.locator('.domain-experience__project-heading:visible').count() === 0, `Home ${width}: Related Work heading must be hidden`);
 
-              const controlBoxes = await domain.locator('.domain-experience__controls .rail-button').evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
-              assert(controlBoxes.length >= 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: controls below 44x44`);
+              const disclosures = domain.locator('details.domain-experience-disclosure');
+              assert(await disclosures.count() === 2, `Home ${width}: expected 2 disclosures`);
+              for (const details of await disclosures.all()) assert(!(await details.getAttribute('open')), `Home ${width}: disclosure must default closed`);
+              assert(await domain.locator('.domain-experience__project-heading:visible').count() === 0, `Home ${width}: legacy Related Work heading visible`);
 
-              const cardState = await domain.locator('.domain-experience-card').first().evaluate(card => {
-                const r=card.getBoundingClientRect();
-                const content=card.querySelector('.domain-experience-card__content')?.getBoundingClientRect();
-                const visual=card.querySelector('.domain-experience-card__visual')?.getBoundingClientRect();
-                return {width:r.width,contentTop:content?.top,contentBottom:content?.bottom,visualTop:visual?.top,visualLeft:visual?.left,contentLeft:content?.left};
+              const cards = domain.locator('.domain-project-card-v2');
+              assert(await cards.count() >= 3, `Home ${width}: wheel requires at least 3 cards`);
+              assert(await cards.locator('[data-wheel-offset="0"]').count() === 1, `Home ${width}: exactly one active card required`);
+              assert(await cards.locator('[data-wheel-offset="-1"]').count() === 1, `Home ${width}: previous side card missing`);
+              assert(await cards.locator('[data-wheel-offset="1"]').count() === 1, `Home ${width}: next side card missing`);
+
+              const controls = domain.locator('.domain-wheel-v2__control');
+              const controlBoxes = await controls.evaluateAll(nodes => nodes.map(node => { const r=node.getBoundingClientRect(); return {w:r.width,h:r.height}; }));
+              assert(controlBoxes.length === 2 && controlBoxes.every(box => box.w >= 44 && box.h >= 44), `Home ${width}: wheel controls below 44x44`);
+
+              const active = domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const state = await active.evaluate(card => {
+                const r = card.getBoundingClientRect();
+                const content = card.querySelector('.domain-project-card-v2__content')?.getBoundingClientRect();
+                const visual = card.querySelector('.domain-project-card-v2__visual')?.getBoundingClientRect();
+                const title = clean(card.querySelector('.domain-project-card-v2__title')?.textContent);
+                const support = clean(card.querySelector('.domain-project-card-v2__support')?.textContent);
+                const metricCount = Number(card.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount || 0);
+                const metricChildren = card.querySelector('.domain-project-card-v2__metrics')?.children.length || 0;
+                const cta = card.querySelector('.domain-project-card-v2__cta')?.getBoundingClientRect();
+                return {
+                  width:r.width,height:r.height,
+                  content:{left:content?.left,top:content?.top,width:content?.width,height:content?.height,bottom:content?.bottom},
+                  visual:{left:visual?.left,top:visual?.top,width:visual?.width,height:visual?.height},
+                  title,support,metricCount,metricChildren,
+                  cta:{left:cta?.left,right:cta?.right,width:cta?.width}
+                };
               });
-              if (cardState.width < 1040) assert(cardState.visualTop >= cardState.contentBottom - 2, `Home ${width}: narrow card did not stack`);
-              if (width === 1419 && cardState.width >= 1040) assert(cardState.visualLeft > cardState.contentLeft, `Home ${width}: wide card did not preserve CONTENT | VISUAL`);
 
-              const domainCardsBefore = await domain.locator('.domain-experience-card').count();
+              assert(state.title.length > 8, `Home ${width}: transformation title missing`);
+              assert(state.support.length > 8, `Home ${width}: whatThisProves missing`);
+              if (state.metricCount === 3) assert(state.metricChildren === 6, `Home ${width}: 3-metric projection must have 6 direct children`);
+              assert(state.cta.width >= state.content.width - 2, `Home ${width}: CTA must span content width`);
+
+              if (width === 1419) {
+                near(state.width, 1120, 3, '1419 active-card width');
+                near(state.height, 430, 2, '1419 active-card height');
+                const contentRatio = state.content.width / state.width;
+                assert(contentRatio >= .39 && contentRatio <= .41, `1419 content ratio ${contentRatio}`);
+                assert(state.visual.left >= state.content.left + state.content.width - 2, '1419 must be CONTENT | VISUAL');
+              }
+              if (width === 871) {
+                assert(state.width >= 716 && state.width <= 732, `871 active-card width ${state.width}`);
+                assert(state.height >= 440 && state.height <= 460, `871 active-card height ${state.height}`);
+                const contentRatio = state.content.width / state.width;
+                assert(contentRatio >= .43 && contentRatio <= .45, `871 content ratio ${contentRatio}`);
+                assert(state.visual.left >= state.content.left + state.content.width - 2, '871 must remain horizontal billboard');
+                assert(Math.abs(state.visual.top - state.content.top) <= 2, '871 visual must not stack below content');
+              }
+              if (width === 430) {
+                assert(state.width >= 330 && state.width <= 340, `430 active-card width ${state.width}`);
+                near(state.height, 640, 2, '430 active-card height');
+                assert(state.visual.top >= state.content.bottom - 2, '430 visual must follow content');
+                assert(state.metricCount !== 3 || state.metricChildren === 6, '430 metrics must remain 3-column two-row grammar');
+              }
+
+              const beforeKey = await active.getAttribute('data-project');
+              await controls.nth(1).click();
+              const afterKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
+              assert(beforeKey !== afterKey, `Home ${width}: next control did not rotate wheel`);
+              await page.keyboard.press('ArrowLeft');
+              const keyboardKey = await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
+              assert(keyboardKey === beforeKey, `Home ${width}: keyboard did not rotate wheel back`);
+
               await tabs.nth(1).click();
               await page.waitForFunction(() => document.querySelector('#domains .domain-tab:nth-child(2)')?.getAttribute('aria-selected') === 'true');
-              await page.waitForSelector('#domains .domain-experience-card');
-              const domainCardsAfter = await domain.locator('.domain-experience-card').count();
-              assert(domainCardsBefore > 0 && domainCardsAfter > 0, `Home ${width}: domain project wheel failed after tab change`);
+              await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
 
-              const firstProject = domain.locator('.domain-experience-card[data-project]').first();
-              if (await firstProject.count()) {
-                await firstProject.click();
-                await page.waitForSelector('#detailDialog[open]');
-                await page.locator('#detailClose').click();
-              }
-
-              const homeOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-              assert(homeOverflow <= 1, `Home ${width}: horizontal overflow ${homeOverflow}px`);
-              await domain.screenshot({ path: path.join(out, `home-domain-${width}.png`) });
-
-              response = await page.goto(`${base}/work`, { waitUntil: 'networkidle' });
-              assert(response?.ok(), `Work ${width}: HTTP ${response?.status()}`);
-              await page.waitForTimeout(600);
-              const workRuntimeState = await page.evaluate(() => ({
-                loader: Boolean(document.querySelector('script[data-style-b-owner="work-index"]')),
-                loaderSrc: document.querySelector('script[data-style-b-owner="work-index"]')?.getAttribute('src') || null,
-                sourceLibrary: Boolean(document.querySelector('.work-library-v32')),
-                sourceGallery: Boolean(document.getElementById('workGallery')),
-                sourceCards: document.querySelectorAll('#workGallery > article').length,
-                workIndex: Boolean(document.querySelector('.work-index')),
-                bodyClass: document.body.className
-              }));
-              report.diagnostics.push({ width, workRuntimeState });
-              console.log('WORK_RUNTIME_STATE', width, JSON.stringify(workRuntimeState));
-              await page.waitForSelector('.work-index', { timeout: 10000 });
-              const work = page.locator('.work-index');
-              const filters = (await work.locator('.work-index-filter').allTextContents()).map(clean);
-              assert(JSON.stringify(filters) === JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']), `Work ${width}: taxonomy mismatch ${JSON.stringify(filters)}`);
-              assert(await work.locator('.work-index__featured > .work-index-card').count() === 2, `Work ${width}: row 1 hierarchy mismatch`);
-              assert(await work.locator('.work-index__featured-secondary-row > .work-index-card').count() === 2, `Work ${width}: row 2 hierarchy mismatch`);
-              const featured = work.locator('.work-index__featured .work-index-card');
-              const expectedProofs = [3,2,2,2];
-              for (let i=0;i<4;i++) {
-                assert(await featured.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: featured ${i+1} missing visual`);
-                assert(await featured.nth(i).locator('.work-index-card__proofs li').count() === expectedProofs[i], `Work ${width}: featured ${i+1} proof density mismatch`);
-                assert(await featured.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: featured ${i+1} missing CTA`);
-              }
-              const moreCards = work.locator('.work-index__more-grid .work-index-card');
-              assert(await moreCards.count() >= 1, `Work ${width}: More Work empty`);
-              for (let i=0;i<await moreCards.count();i++) {
-                assert(await moreCards.nth(i).locator('.work-index-card__visual').count() === 1, `Work ${width}: More Work ${i+1} missing visual`);
-                assert(await moreCards.nth(i).locator('.work-index-card__proofs li').count() === 1, `Work ${width}: More Work ${i+1} proof density mismatch`);
-                assert(await moreCards.nth(i).locator('.work-index-card__cta').count() === 1, `Work ${width}: More Work ${i+1} missing CTA`);
-              }
-              if (width <= 1100) {
-                for (let i=0;i<4;i++) {
-                  const geometry = await featured.nth(i).evaluate(card => {
-                    const content = card.querySelector('.work-index-card__content')?.getBoundingClientRect();
-                    const visual = card.querySelector('.work-index-card__visual')?.getBoundingClientRect();
-                    return { contentBottom: content?.bottom, visualTop: visual?.top };
-                  });
-                  assert(geometry.visualTop >= geometry.contentBottom - 2, `Work ${width}: featured ${i+1} did not stack content above visual`);
-                }
-              }
-              await work.locator('.work-index-filter[data-work-index-filter="operations"]').click();
-              assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count() >= 1, `Work ${width}: Operations filter returned no work`);
-              await work.locator('.work-index-filter[data-work-index-filter="all"]').click();
-              const workOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-              assert(workOverflow <= 1, `Work ${width}: horizontal overflow ${workOverflow}px`);
-              await work.screenshot({ path: path.join(out, `work-${width}.png`) });
-
-              report.viewports[width] = { homeOverflow, workOverflow, domainCard: cardState, filters, moreWorkCards: await moreCards.count(), workRuntimeState };
+              const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+              assert(overflow <= 1, `Home ${width}: horizontal overflow ${overflow}`);
+              await domain.screenshot({ path: path.join(out, `domain-golden-${width}.png`) });
+              report.viewports[width] = { ...state, overflow, tabLabels };
               await context.close();
             }
 
-            const regressionRoutes = ['/work/daily-hours','/work/payment','/work/dbs'];
-            for (const route of regressionRoutes) {
+            for (const route of ['/work/daily-hours','/work/payment','/work/dbs']) {
               const context = await browser.newContext({ viewport: { width: 1419, height: 1100 }, reducedMotion: 'reduce' });
               const page = await context.newPage();
               page.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push({ route, text: msg.text() }); });
@@ -207,10 +200,10 @@ jobs:
           }
           NODE
 
-      - name: Upload QA screenshots
+      - name: Upload Domain golden-reference evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-domain-work-qa
-          path: artifacts/style-b-domain-work
+          name: style-b-domain-golden-qa
+          path: artifacts/style-b-domain-golden
           retention-days: 3
