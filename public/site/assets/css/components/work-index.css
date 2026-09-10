@@ -43,6 +43,8 @@
 .work-index-card--hero .work-index-card__metric-value{font-size:var(--sys-type-heading-3)}
 .work-index-card--secondary .work-index-card__button{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);grid-template-areas:"content visual";min-height:var(--dimension-430px)}
 .work-index-card--secondary .work-index-card__content{grid-area:content;padding:var(--space-5)}
+.work-index-card--secondary .work-index-card__meta{flex-wrap:wrap;row-gap:var(--space-1)}
+.work-index-card--secondary .work-index-card__identity{margin-left:auto}
 .work-index-card--secondary .work-index-card__visual{grid-area:visual;min-height:var(--dimension-430px)}
 .work-index-card--secondary .work-index-card__title{font-size:var(--sys-type-heading-3)}
 .work-index-card--secondary .work-index-card__metric-value{font-size:var(--sys-type-body-lg)}
