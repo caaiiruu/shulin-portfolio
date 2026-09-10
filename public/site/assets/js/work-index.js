@@ -147,9 +147,9 @@
   };
 
   const build = () => {
-    document.querySelector('.work-index')?.remove();
     const cards = sourceCards();
-    if (cards.length < 5) return;
+    if (cards.length < 5 || !hasHydratedCopy()) return false;
+    document.querySelector('.work-index')?.remove();
 
     const root = element('section', 'work-index');
     const shell = element('div', 'page-shell work-index__shell');
@@ -194,17 +194,20 @@
     sourceHero?.setAttribute('hidden', '');
     sourceLibrary.setAttribute('hidden', '');
     applyFilter(root);
+    return true;
   };
 
-  const mountWhenReady = (attempt = 0) => {
-    if (hasHydratedCopy()) {
-      build();
-      return;
-    }
-    if (attempt > 120) return;
-    requestAnimationFrame(() => mountWhenReady(attempt + 1));
+  let mounted = false;
+  const attemptMount = () => {
+    if (mounted || !hasHydratedCopy()) return;
+    mounted = build();
+    if (mounted) hydrationObserver.disconnect();
   };
 
-  mountWhenReady();
-  document.addEventListener('portfolio:language', () => requestAnimationFrame(() => requestAnimationFrame(build)));
+  const hydrationObserver = new MutationObserver(attemptMount);
+  hydrationObserver.observe(sourceGallery, { childList: true, subtree: true, characterData: true });
+  attemptMount();
+  document.addEventListener('portfolio:language', () => requestAnimationFrame(() => requestAnimationFrame(() => {
+    mounted = build();
+  })));
 })();
