@@ -18,17 +18,6 @@
   const contentRail = document.getElementById('domainContentRail');
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
 
-  const CARD_PRESENTATION_COPY = {
-    'cathay-mortgage-assistant': {
-      en: { company: 'Cathay Life', title: 'Rigid scripts to flexible mortgage consultation' },
-      zh: { company: '國泰人壽', title: '從制式腳本到彈性房貸諮詢' }
-    },
-    'cathay-sit-review-remediation-operations': {
-      en: { company: 'Cathay Investment Trust', title: 'Interface issues to prioritised remediation' },
-      zh: { company: '國泰投信', title: '從介面問題到優先修復模型' }
-    }
-  };
-  const presentationCopy = (key) => CARD_PRESENTATION_COPY[key]?.[language()] || {};
 
   let viewportSyncFrame = 0;
   const syncViewportWidth = () => {
@@ -283,7 +272,6 @@
 
   const buildCard = (key) => {
     const project = DATA.projects?.[key] || {};
-    const compact = presentationCopy(key);
     const article = document.createElement('article');
     article.className = 'domain-project-card-v2 domain-project-card-v2--large';
     article.dataset.projectCardVariant = 'large';
@@ -301,7 +289,7 @@
     identity.className = 'domain-project-card-v2__identity';
     const company = document.createElement('strong');
     company.className = 'domain-project-card-v2__company';
-    company.textContent = compact.company || firstText(project?.company);
+    company.textContent = firstText(project?.company);
     identity.append(company);
     const year = readYear(project);
     if (year) {
@@ -314,7 +302,7 @@
 
     const title = document.createElement('h3');
     title.className = 'domain-project-card-v2__title';
-    title.textContent = compact.title || firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);
+    title.textContent = firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);
 
     const metrics = collectMetrics(project);
     const metricList = document.createElement('dl');
