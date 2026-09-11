@@ -3,7 +3,8 @@ name: Temporary Style B Proof QA Contract Patch
 on:
   push:
     branches: [migration/style-b-domain-work-v1]
-    paths: [.github/workflows/tmp-style-b-proof-qa-contract.yml]
+    paths:
+      - .github/workflows/tmp-style-b-proof-qa-contract.yml
 
 permissions:
   contents: write
@@ -18,146 +19,8 @@ jobs:
           ref: migration/style-b-domain-work-v1
       - name: Patch Human contract for proof quality
         run: |
-          python <<'PY'
-          from pathlib import Path
-          p=Path('.github/workflows/style-b-domain-work-qa.yml')
-          s=p.read_text()
-
-          old="""          const clean=value=>String(value||'').replace(/\\s+/g,' ').trim();
-          const isWhite=value=>/rgba?\\(\\s*255\\s*,\\s*255\\s*,\\s*255/i.test(value||'');
-"""
-          new="""          const clean=value=>String(value||'').replace(/\\s+/g,' ').trim();
-          const isWhite=value=>/rgba?\\(\\s*255\\s*,\\s*255\\s*,\\s*255/i.test(value||'');
-          const forbiddenProof=/\\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
-          const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(x)),`${label}: filler proof returned ${JSON.stringify(labels)}`);
-"""
-          assert old in s, 'helper insertion anchor missing'
-          s=s.replace(old,new,1)
-
-          old="""                const count=await values.count();
-                assert(count>=1&&count<=3,`${label}: metric count ${count}`);
-                assert(await labels.count()===count,`${label}: metric mismatch`);
-                const labelText=(await labels.allTextContents()).map(clean);
-                assert(labelText.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`${label}: metric labels too long ${JSON.stringify(labelText)}`);
-                const valueTops=await values.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                const labelTops=await labels.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                assert(Math.max(...valueTops)-Math.min(...valueTops)<=2,`${label}: metric values not horizontal`);
-                assert(Math.max(...labelTops)-Math.min(...labelTops)<=2,`${label}: metric labels not horizontal`);
-"""
-          new="""                const count=await values.count();
-                assert(count<=3,`${label}: metric count ${count}`);
-                assert(await labels.count()===count,`${label}: metric mismatch`);
-                const labelText=(await labels.allTextContents()).map(clean);
-                assert(labelText.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`${label}: metric labels too long ${JSON.stringify(labelText)}`);
-                assertProofLabels(labelText,label);
-                if(count>1){
-                  const valueTops=await values.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  const labelTops=await labels.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  assert(Math.max(...valueTops)-Math.min(...valueTops)<=2,`${label}: metric values not horizontal`);
-                  assert(Math.max(...labelTops)-Math.min(...labelTops)<=2,`${label}: metric labels not horizontal`);
-                }
-"""
-          assert old in s, 'domain metric block missing'
-          s=s.replace(old,new,1)
-
-          old="""                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),mr=metrics.getBoundingClientRect(),tir=title.getBoundingClientRect();
-                  const ms=getComputedStyle(metrics),vs=getComputedStyle(visual);
-                  return{bg:getComputedStyle(content).backgroundColor,valueSize:parseFloat(getComputedStyle(value).fontSize),labelSize:parseFloat(getComputedStyle(metricLabel).fontSize),metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr.top,titleBottom:tir.bottom,metricBorderTop:parseFloat(ms.borderTopWidth)||0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
-"""
-          new="""                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),tir=title.getBoundingClientRect();
-                  const mr=metrics?.getBoundingClientRect();
-                  const ms=metrics?getComputedStyle(metrics):null,vs=getComputedStyle(visual);
-                  return{bg:getComputedStyle(content).backgroundColor,valueSize:value?parseFloat(getComputedStyle(value).fontSize):null,labelSize:metricLabel?parseFloat(getComputedStyle(metricLabel).fontSize):null,metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr?.top??null,titleBottom:tir.bottom,metricBorderTop:ms?(parseFloat(ms.borderTopWidth)||0):0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
-"""
-          assert old in s, 'domain state block missing'
-          s=s.replace(old,new,1)
-
-          old="""                assert(!isWhite(state.bg),`${label}: project tint missing`);
-                assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
-                assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
-                if(width===430){
-                  assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
-                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
-                  assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
-                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
-                }
-"""
-          new="""                assert(!isWhite(state.bg),`${label}: project tint missing`);
-                if(count>0)assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
-                assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
-                if(width===430){
-                  if(count>0)assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
-                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
-                  if(count>0)assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
-                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
-                }
-"""
-          assert old in s, 'domain hierarchy block missing'
-          s=s.replace(old,new,1)
-
-          old="""              const expected=[3,2,2,2];
-              for(let i=0;i<4;i++){
-                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
-                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
-                assert(await card.locator('.work-index-card__metric').count()===expected[i],`Work ${width}: card ${i+1} metric count`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assert(metricLabels.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`Work ${width}: card ${i+1} long metric labels`);
-                const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: card ${i+1} metrics not horizontal`);
-                const visual=card.locator('.work-index-card__visual img');
-                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: card ${i+1} visual missing`);
-                const typ=await card.evaluate(node=>({bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-value')).fontSize),l:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-label')).fontSize)}));
-                assert(!isWhite(typ.bg)&&typ.v>typ.l,`Work ${width}: card ${i+1} hierarchy/tint`);
-                if(width<=1100){const geo=await card.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(geo.vt>=geo.cb-2,`Work ${width}: card ${i+1} must stack`)}
-              }
-"""
-          new="""              const maximum=[3,2,2,2];
-              for(let i=0;i<4;i++){
-                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
-                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
-                const metricCount=await card.locator('.work-index-card__metric').count();
-                assert(metricCount<=maximum[i],`Work ${width}: card ${i+1} metric count ${metricCount}`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assert(metricLabels.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`Work ${width}: card ${i+1} long metric labels`);
-                assertProofLabels(metricLabels,`Work ${width}: card ${i+1}`);
-                if(metricCount>1){
-                  const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: card ${i+1} metrics not horizontal`);
-                }
-                const visual=card.locator('.work-index-card__visual img');
-                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: card ${i+1} visual missing`);
-                const typ=await card.evaluate(node=>{const value=node.querySelector('.work-index-card__metric-value'),label=node.querySelector('.work-index-card__metric-label');return{bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:value?parseFloat(getComputedStyle(value).fontSize):null,l:label?parseFloat(getComputedStyle(label).fontSize):null}});
-                assert(!isWhite(typ.bg),`Work ${width}: card ${i+1} tint`);
-                if(metricCount>0)assert(typ.v>typ.l,`Work ${width}: card ${i+1} metric hierarchy`);
-                if(width<=1100){const geo=await card.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(geo.vt>=geo.cb-2,`Work ${width}: card ${i+1} must stack`)}
-              }
-"""
-          assert old in s, 'featured metric block missing'
-          s=s.replace(old,new,1)
-
-          old="""              const more=work.locator('.work-index__more-grid .work-index-card');
-              assert(await more.count()>=1,`Work ${width}: More Work empty`);
-              for(let i=0;i<await more.count();i++)assert(await more.nth(i).locator('.work-index-card__metric').count()===1,`Work ${width}: More Work ${i+1} metric count`);
-"""
-          new="""              const more=work.locator('.work-index__more-grid .work-index-card');
-              assert(await more.count()>=1,`Work ${width}: More Work empty`);
-              for(let i=0;i<await more.count();i++){
-                const card=more.nth(i),metricCount=await card.locator('.work-index-card__metric').count();
-                assert(metricCount<=1,`Work ${width}: More Work ${i+1} metric count ${metricCount}`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assertProofLabels(metricLabels,`Work ${width}: More Work ${i+1}`);
-              }
-              const bandzo=work.locator('.work-index-card[data-work-index-project="bandzo"]');
-              if(await bandzo.count()){
-                const bandzoLabels=(await bandzo.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assertProofLabels(bandzoLabels,`Work ${width}: Bandzo`);
-              }
-"""
-          assert old in s, 'more work metric block missing'
-          s=s.replace(old,new,1)
-
-          p.write_text(s)
-          PY
+          echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCnA9UGF0aCgnLmdpdGh1Yi93b3JrZmxvd3Mvc3R5bGUtYi1kb21haW4td29yay1xYS55bWwnKQpzPXAucmVhZF90ZXh0KCkKCm9sZD0iIiIgICAgICAgICAgY29uc3QgY2xlYW49dmFsdWU9PlN0cmluZyh2YWx1ZXx8JycpLnJlcGxhY2UoL1xccysvZywnICcpLnRyaW0oKTsKICAgICAgICAgIGNvbnN0IGlzV2hpdGU9dmFsdWU9Pi9yZ2JhP1xcKFxccyoyNTVcXHMqLFxccyoyNTVcXHMqLFxccyoyNTUvaS50ZXN0KHZhbHVlfHwnJyk7CiIiIgpuZXc9IiIiICAgICAgICAgIGNvbnN0IGNsZWFuPXZhbHVlPT5TdHJpbmcodmFsdWV8fCcnKS5yZXBsYWNlKC9cXHMrL2csJyAnKS50cmltKCk7CiAgICAgICAgICBjb25zdCBpc1doaXRlPXZhbHVlPT4vcmdiYT9cXChcXHMqMjU1XFxzKixcXHMqMjU1XFxzKixcXHMqMjU1L2kudGVzdCh2YWx1ZXx8JycpOwogICAgICAgICAgY29uc3QgZm9yYmlkZGVuUHJvb2Y9L1xcYig/OnRpbWVsaW5lfGR1cmF0aW9ufGludGVydmlld3M/fHBhcnRpY2lwYW50cz98cmVzcG9uZGVudHM/fGZ1bmN0aW9ucz98Zmxvd3M/fHByb3RvdHlwZXM/fHVzYWJpbGl0eSB0YXNrcz8pXFxifOaZgueoi3zmnJ/plpN86Kiq6KuHfOWPg+iIh+iAhXzlip/og7185Y6f5Z6LfOWPr+eUqOaAp+S7u+WLmS9pOwogICAgICAgICAgY29uc3QgYXNzZXJ0UHJvb2ZMYWJlbHM9KGxhYmVscyxsYWJlbCk9PmFzc2VydChsYWJlbHMuZXZlcnkoeD0+IWZvcmJpZGRlblByb29mLnRlc3QoeCkpLGAke2xhYmVsfTogZmlsbGVyIHByb29mIHJldHVybmVkICR7SlNPTi5zdHJpbmdpZnkobGFiZWxzKX1gKTsKIiIiCmFzc2VydCBvbGQgaW4gcywgJ2hlbHBlciBpbnNlcnRpb24gYW5jaG9yIG1pc3NpbmcnCnM9cy5yZXBsYWNlKG9sZCxuZXcsMSkKCm9sZD0iIiIgICAgICAgICAgICAgICAgY29uc3QgY291bnQ9YXdhaXQgdmFsdWVzLmNvdW50KCk7CiAgICAgICAgICAgICAgICBhc3NlcnQoY291bnQ+PTEmJmNvdW50PD0zLGAke2xhYmVsfTogbWV0cmljIGNvdW50ICR7Y291bnR9YCk7CiAgICAgICAgICAgICAgICBhc3NlcnQoYXdhaXQgbGFiZWxzLmNvdW50KCk9PT1jb3VudCxgJHtsYWJlbH06IG1ldHJpYyBtaXNtYXRjaGApOwogICAgICAgICAgICAgICAgY29uc3QgbGFiZWxUZXh0PShhd2FpdCBsYWJlbHMuYWxsVGV4dENvbnRlbnRzKCkpLm1hcChjbGVhbik7CiAgICAgICAgICAgICAgICBhc3NlcnQobGFiZWxUZXh0LmV2ZXJ5KHg9Pnguc3BsaXQoL1xccysvKS5maWx0ZXIoQm9vbGVhbikubGVuZ3RoPD0yKSxgJHtsYWJlbH06IG1ldHJpYyBsYWJlbHMgdG9vIGxvbmcgJHtKU09OLnN0cmluZ2lmeShsYWJlbFRleHQpfWApOwogICAgICAgICAgICAgICAgY29uc3QgdmFsdWVUb3BzPWF3YWl0IHZhbHVlcy5ldmFsdWF0ZUFsbChub2Rlcz0+bm9kZXMubWFwKG49Pm4uZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCkudG9wKSk7CiAgICAgICAgICAgICAgICBjb25zdCBsYWJlbFRvcHM9YXdhaXQgbGFiZWxzLmV2YWx1YXRlQWxsKG5vZGVzPT5ub2Rlcy5tYXAobj0+bi5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKS50b3ApKTsKICAgICAgICAgICAgICAgIGFzc2VydChNYXRoLm1heCguLi52YWx1ZVRvcHMpLU1hdGgubWluKC4uLnZhbHVlVG9wcyk8PTIsYCR7bGFiZWx9OiBtZXRyaWMgdmFsdWVzIG5vdCBob3Jpem9udGFsYCk7CiAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5tYXgoLi4ubGFiZWxUb3BzKS1NYXRoLm1pbiguLi5sYWJlbFRvcHMpPD0yLGAke2xhYmVsfTogbWV0cmljIGxhYmVscyBub3QgaG9yaXpvbnRhbGApOwoiIiIKbmV3PSIiIiAgICAgICAgICAgICAgICBjb25zdCBjb3VudD1hd2FpdCB2YWx1ZXMuY291bnQoKTsKICAgICAgICAgICAgICAgIGFzc2VydChjb3VudDw9MyxgJHtsYWJlbH06IG1ldHJpYyBjb3VudCAke2NvdW50fWApOwogICAgICAgICAgICAgICAgYXNzZXJ0KGF3YWl0IGxhYmVscy5jb3VudCgpPT09Y291bnQsYCR7bGFiZWx9OiBtZXRyaWMgbWlzbWF0Y2hgKTsKICAgICAgICAgICAgICAgIGNvbnN0IGxhYmVsVGV4dD0oYXdhaXQgbGFiZWxzLmFsbFRleHRDb250ZW50cygpKS5tYXAoY2xlYW4pOwogICAgICAgICAgICAgICAgYXNzZXJ0KGxhYmVsVGV4dC5ldmVyeSh4PT54LnNwbGl0KC9cXHMrLykuZmlsdGVyKEJvb2xlYW4pLmxlbmd0aDw9MiksYCR7bGFiZWx9OiBtZXRyaWMgbGFiZWxzIHRvbyBsb25nICR7SlNPTi5zdHJpbmdpZnkobGFiZWxUZXh0KX1gKTsKICAgICAgICAgICAgICAgIGFzc2VydFByb29mTGFiZWxzKGxhYmVsVGV4dCxsYWJlbCk7CiAgICAgICAgICAgICAgICBpZihjb3VudD4xKXsKICAgICAgICAgICAgICAgICAgY29uc3QgdmFsdWVUb3BzPWF3YWl0IHZhbHVlcy5ldmFsdWF0ZUFsbChub2Rlcz0+bm9kZXMubWFwKG49Pm4uZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCkudG9wKSk7CiAgICAgICAgICAgICAgICAgIGNvbnN0IGxhYmVsVG9wcz1hd2FpdCBsYWJlbHMuZXZhbHVhdGVBbGwobm9kZXM9Pm5vZGVzLm1hcChuPT5uLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLnRvcCkpOwogICAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5tYXgoLi4udmFsdWVUb3BzKS1NYXRoLm1pbiguLi52YWx1ZVRvcHMpPD0yLGAke2xhYmVsfTogbWV0cmljIHZhbHVlcyBub3QgaG9yaXpvbnRhbGApOwogICAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5tYXgoLi4ubGFiZWxUb3BzKS1NYXRoLm1pbiguLi5sYWJlbFRvcHMpPD0yLGAke2xhYmVsfTogbWV0cmljIGxhYmVscyBub3QgaG9yaXpvbnRhbGApOwogICAgICAgICAgICAgICAgfQoiIiIKYXNzZXJ0IG9sZCBpbiBzLCAnZG9tYWluIG1ldHJpYyBibG9jayBtaXNzaW5nJwpzPXMucmVwbGFjZShvbGQsbmV3LDEpCgpvbGQ9IiIiICAgICAgICAgICAgICAgICAgY29uc3QgY3I9Y29udGVudC5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKSx2cj12aXN1YWwuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCksdHI9Y3RhLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLG1yPW1ldHJpY3MuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCksdGlyPXRpdGxlLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpOwogICAgICAgICAgICAgICAgICBjb25zdCBtcz1nZXRDb21wdXRlZFN0eWxlKG1ldHJpY3MpLHZzPWdldENvbXB1dGVkU3R5bGUodmlzdWFsKTsKICAgICAgICAgICAgICAgICAgcmV0dXJue2JnOmdldENvbXB1dGVkU3R5bGUoY29udGVudCkuYmFja2dyb3VuZENvbG9yLHZhbHVlU2l6ZTpwYXJzZUZsb2F0KGdldENvbXB1dGVkU3R5bGUodmFsdWUpLmZvbnRTaXplKSxsYWJlbFNpemU6cGFyc2VGbG9hdChnZXRDb21wdXRlZFN0eWxlKG1ldHJpY0xhYmVsKS5mb250U2l6ZSksbWV0YVNpemU6cGFyc2VGbG9hdChnZXRDb21wdXRlZFN0eWxlKG1ldGEpLmZvbnRTaXplKSxjb250ZW50TGVmdDpjci5sZWZ0LGNvbnRlbnRSaWdodDpjci5yaWdodCxjb250ZW50Qm90dG9tOmNyLmJvdHRvbSx2aXN1YWxMZWZ0OnZyLmxlZnQsdmlzdWFsVG9wOnZyLnRvcCx2aXN1YWxXaWR0aDp2ci53aWR0aCx2aXN1YWxIZWlnaHQ6dnIuaGVpZ2h0LGN0YUxlZnQ6dHIubGVmdCxjdGFSaWdodDp0ci5yaWdodCxtZXRyaWNzVG9wOm1yLnRvcCx0aXRsZUJvdHRvbTp0aXIuYm90dG9tLG1ldHJpY0JvcmRlclRvcDpwYXJzZUZsb2F0KG1zLmJvcmRlclRvcFdpZHRoKXx8MCx2aXN1YWxSYXRpbzp2ci5oZWlnaHQ/dnIud2lkdGgvdnIuaGVpZ2h0OjAsdmlzdWFsT2JqZWN0Rml0OnZzLm9iamVjdEZpdH07CiIiIgpuZXc9IiIiICAgICAgICAgICAgICAgICAgY29uc3QgY3I9Y29udGVudC5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKSx2cj12aXN1YWwuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCksdHI9Y3RhLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLHRpcj10aXRsZS5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTsKICAgICAgICAgICAgICAgICAgY29uc3QgbXI9bWV0cmljcz8uZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7CiAgICAgICAgICAgICAgICAgIGNvbnN0IG1zPW1ldHJpY3M/Z2V0Q29tcHV0ZWRTdHlsZShtZXRyaWNzKTpudWxsLHZzPWdldENvbXB1dGVkU3R5bGUodmlzdWFsKTsKICAgICAgICAgICAgICAgICAgcmV0dXJue2JnOmdldENvbXB1dGVkU3R5bGUoY29udGVudCkuYmFja2dyb3VuZENvbG9yLHZhbHVlU2l6ZTp2YWx1ZT9wYXJzZUZsb2F0KGdldENvbXB1dGVkU3R5bGUodmFsdWUpLmZvbnRTaXplKTpudWxsLGxhYmVsU2l6ZTptZXRyaWNMYWJlbD9wYXJzZUZsb2F0KGdldENvbXB1dGVkU3R5bGUobWV0cmljTGFiZWwpLmZvbnRTaXplKTpudWxsLG1ldGFTaXplOnBhcnNlRmxvYXQoZ2V0Q29tcHV0ZWRTdHlsZShtZXRhKS5mb250U2l6ZSksY29udGVudExlZnQ6Y3IubGVmdCxjb250ZW50UmlnaHQ6Y3IucmlnaHQsY29udGVudEJvdHRvbTpjci5ib3R0b20sdmlzdWFsTGVmdDp2ci5sZWZ0LHZpc3VhbFRvcDp2ci50b3AsdmlzdWFsV2lkdGg6dnIud2lkdGgsdmlzdWFsSGVpZ2h0OnZyLmhlaWdodCxjdGFMZWZ0OnRyLmxlZnQsY3RhUmlnaHQ6dHIucmlnaHQsbWV0cmljc1RvcDptcj8udG9wPz9udWxsLHRpdGxlQm90dG9tOnRpci5ib3R0b20sbWV0cmljQm9yZGVyVG9wOm1zPyhwYXJzZUZsb2F0KG1zLmJvcmRlclRvcFdpZHRoKXx8MCk6MCx2aXN1YWxSYXRpbzp2ci5oZWlnaHQ/dnIud2lkdGgvdnIuaGVpZ2h0OjAsdmlzdWFsT2JqZWN0Rml0OnZzLm9iamVjdEZpdH07CiIiIgphc3NlcnQgb2xkIGluIHMsICdkb21haW4gc3RhdGUgYmxvY2sgbWlzc2luZycKcz1zLnJlcGxhY2Uob2xkLG5ldywxKQoKb2xkPSIiIiAgICAgICAgICAgICAgICBhc3NlcnQoIWlzV2hpdGUoc3RhdGUuYmcpLGAke2xhYmVsfTogcHJvamVjdCB0aW50IG1pc3NpbmdgKTsKICAgICAgICAgICAgICAgIGFzc2VydChzdGF0ZS52YWx1ZVNpemU+c3RhdGUubGFiZWxTaXplLGAke2xhYmVsfTogbWV0cmljIGhpZXJhcmNoeSBpbnZhbGlkYCk7CiAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5hYnMoc3RhdGUuY3RhTGVmdC1zdGF0ZS5jb250ZW50TGVmdCk8PTMwJiZNYXRoLmFicyhzdGF0ZS5jdGFSaWdodC1zdGF0ZS5jb250ZW50UmlnaHQpPD0zMCxgJHtsYWJlbH06IENUQSB3aWR0aCBtaXNtYXRjaGApOwogICAgICAgICAgICAgICAgaWYod2lkdGg9PT00MzApewogICAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5hYnMoc3RhdGUubWV0YVNpemUtc3RhdGUubGFiZWxTaXplKTw9MC41LGAke2xhYmVsfTogbW9iaWxlIG1ldGEgc2l6ZSAke3N0YXRlLm1ldGFTaXplfS8ke3N0YXRlLmxhYmVsU2l6ZX1gKTsKICAgICAgICAgICAgICAgICAgYXNzZXJ0KHN0YXRlLm1ldHJpY0JvcmRlclRvcD09PTAsYCR7bGFiZWx9OiBtb2JpbGUgbWV0cmljcyB0b3AgZGl2aWRlciByZXR1cm5lZGApOwogICAgICAgICAgICAgICAgICBhc3NlcnQoc3RhdGUubWV0cmljc1RvcD5zdGF0ZS50aXRsZUJvdHRvbSxgJHtsYWJlbH06IG1vYmlsZSBtZXRyaWNzIG5vdCBiZWxvdyB0aXRsZWApOwogICAgICAgICAgICAgICAgICBhc3NlcnQoc3RhdGUudmlzdWFsUmF0aW8+PTEuNzImJnN0YXRlLnZpc3VhbFJhdGlvPD0xLjg0LGAke2xhYmVsfTogbW9iaWxlIHZpc3VhbCByYXRpbyAke3N0YXRlLnZpc3VhbFJhdGlvfWApOwogICAgICAgICAgICAgICAgfQoiIiIKbmV3PSIiIiAgICAgICAgICAgICAgICBhc3NlcnQoIWlzV2hpdGUoc3RhdGUuYmcpLGAke2xhYmVsfTogcHJvamVjdCB0aW50IG1pc3NpbmdgKTsKICAgICAgICAgICAgICAgIGlmKGNvdW50PjApYXNzZXJ0KHN0YXRlLnZhbHVlU2l6ZT5zdGF0ZS5sYWJlbFNpemUsYCR7bGFiZWx9OiBtZXRyaWMgaGllcmFyY2h5IGludmFsaWRgKTsKICAgICAgICAgICAgICAgIGFzc2VydChNYXRoLmFicyhzdGF0ZS5jdGFMZWZ0LXN0YXRlLmNvbnRlbnRMZWZ0KTw9MzAmJk1hdGguYWJzKHN0YXRlLmN0YVJpZ2h0LXN0YXRlLmNvbnRlbnRSaWdodCk8PTMwLGAke2xhYmVsfTogQ1RBIHdpZHRoIG1pc21hdGNoYCk7CiAgICAgICAgICAgICAgICBpZih3aWR0aD09PTQzMCl7CiAgICAgICAgICAgICAgICAgIGlmKGNvdW50PjApYXNzZXJ0KE1hdGguYWJzKHN0YXRlLm1ldGFTaXplLXN0YXRlLmxhYmVsU2l6ZSk8PTAuNSxgJHtsYWJlbH06IG1vYmlsZSBtZXRhIHNpemUgJHtzdGF0ZS5tZXRhU2l6ZX0vJHtzdGF0ZS5sYWJlbFNpemV9YCk7CiAgICAgICAgICAgICAgICAgIGFzc2VydChzdGF0ZS5tZXRyaWNCb3JkZXJUb3A9PT0wLGAke2xhYmVsfTogbW9iaWxlIG1ldHJpY3MgdG9wIGRpdmlkZXIgcmV0dXJuZWRgKTsKICAgICAgICAgICAgICAgICAgaWYoY291bnQ+MClhc3NlcnQoc3RhdGUubWV0cmljc1RvcD5zdGF0ZS50aXRsZUJvdHRvbSxgJHtsYWJlbH06IG1vYmlsZSBtZXRyaWNzIG5vdCBiZWxvdyB0aXRsZWApOwogICAgICAgICAgICAgICAgICBhc3NlcnQoc3RhdGUudmlzdWFsUmF0aW8+PTEuNzImJnN0YXRlLnZpc3VhbFJhdGlvPD0xLjg0LGAke2xhYmVsfTogbW9iaWxlIHZpc3VhbCByYXRpbyAke3N0YXRlLnZpc3VhbFJhdGlvfWApOwogICAgICAgICAgICAgICAgfQoiIiIKYXNzZXJ0IG9sZCBpbiBzLCAnZG9tYWluIGhpZXJhcmNoeSBibG9jayBtaXNzaW5nJwpzPXMucmVwbGFjZShvbGQsbmV3LDEpCgpvbGQ9IiIiICAgICAgICAgICAgICBjb25zdCBleHBlY3RlZD1bMywyLDIsMl07CiAgICAgICAgICAgICAgZm9yKGxldCBpPTA7aTw0O2krKyl7CiAgICAgICAgICAgICAgICBjb25zdCBjYXJkPWZlYXR1cmVkLm50aChpKSxjYXJkQm94PWF3YWl0IGNhcmQuYm91bmRpbmdCb3goKSxidXR0b25Cb3g9YXdhaXQgY2FyZC5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX19idXR0b24nKS5ib3VuZGluZ0JveCgpOwogICAgICAgICAgICAgICAgYXNzZXJ0KGNhcmRCb3gmJmJ1dHRvbkJveCYmTWF0aC5hYnMoY2FyZEJveC53aWR0aC1idXR0b25Cb3gud2lkdGgpPD0yJiZNYXRoLmFicyhjYXJkQm94LmhlaWdodC1idXR0b25Cb3guaGVpZ2h0KTw9MixgV29yayAke3dpZHRofTogY2FyZCAke2krMX0gdGFyZ2V0IGFyZWFgKTsKICAgICAgICAgICAgICAgIGFzc2VydChhd2FpdCBjYXJkLmxvY2F0b3IoJy53b3JrLWluZGV4LWNhcmRfX21ldHJpYycpLmNvdW50KCk9PT1leHBlY3RlZFtpXSxgV29yayAke3dpZHRofTogY2FyZCAke2krMX0gbWV0cmljIGNvdW50YCk7CiAgICAgICAgICAgICAgICBjb25zdCBtZXRyaWNMYWJlbHM9KGF3YWl0IGNhcmQubG9jYXRvcignLndvcmstaW5kZXgtY2FyZF9fbWV0cmljLWxhYmVsJykuYWxsVGV4dENvbnRlbnRzKCkpLm1hcChjbGVhbik7CiAgICAgICAgICAgICAgICBhc3NlcnQobWV0cmljTGFiZWxzLmV2ZXJ5KHg9Pnguc3BsaXQoL1xccysvKS5maWx0ZXIoQm9vbGVhbikubGVuZ3RoPD0yKSxgV29yayAke3dpZHRofTogY2FyZCAke2krMX0gbG9uZyBtZXRyaWMgbGFiZWxzYCk7CiAgICAgICAgICAgICAgICBjb25zdCB0b3BzPWF3YWl0IGNhcmQubG9jYXRvcignLndvcmstaW5kZXgtY2FyZF9fbWV0cmljJykuZXZhbHVhdGVBbGwobm9kZXM9Pm5vZGVzLm1hcChuPT5uLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLnRvcCkpOwogICAgICAgICAgICAgICAgYXNzZXJ0KE1hdGgubWF4KC4uLnRvcHMpLU1hdGgubWluKC4uLnRvcHMpPD0yLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSBtZXRyaWNzIG5vdCBob3Jpem9udGFsYCk7CiAgICAgICAgICAgICAgICBjb25zdCB2aXN1YWw9Y2FyZC5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX192aXN1YWwgaW1nJyk7CiAgICAgICAgICAgICAgICBhc3NlcnQoYXdhaXQgdmlzdWFsLmNvdW50KCk9PT0xJiZhd2FpdCB2aXN1YWwuZXZhbHVhdGUoaW1nPT5pbWcuY29tcGxldGUmJmltZy5uYXR1cmFsV2lkdGg+MCksYFdvcmsgJHt3aWR0aH06IGNhcmQgJHtpKzF9IHZpc3VhbCBtaXNzaW5nYCk7CiAgICAgICAgICAgICAgICBjb25zdCB0eXA9YXdhaXQgY2FyZC5ldmFsdWF0ZShub2RlPT4oe2JnOmdldENvbXB1dGVkU3R5bGUobm9kZS5xdWVyeVNlbGVjdG9yKCcud29yay1pbmRleC1jYXJkX19jb250ZW50JykpLmJhY2tncm91bmRDb2xvcix2OnBhcnNlRmxvYXQoZ2V0Q29tcHV0ZWRTdHlsZShub2RlLnF1ZXJ5U2VsZWN0b3IoJy53b3JrLWluZGV4LWNhcmRfX21ldHJpYy12YWx1ZScpKS5mb250U2l6ZSksbDpwYXJzZUZsb2F0KGdldENvbXB1dGVkU3R5bGUobm9kZS5xdWVyeVNlbGVjdG9yKCcud29yay1pbmRleC1jYXJkX19tZXRyaWMtbGFiZWwnKSkuZm9udFNpemUpfSkpOwogICAgICAgICAgICAgICAgYXNzZXJ0KCFpc1doaXRlKHR5cC5iZykmJnR5cC52PnR5cC5sLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSBoaWVyYXJjaHkvdGludGApOwogICAgICAgICAgICAgICAgaWYod2lkdGg8PTExMDApe2NvbnN0IGdlbz1hd2FpdCBjYXJkLmV2YWx1YXRlKG5vZGU9Pntjb25zdCBjPW5vZGUucXVlcnlTZWxlY3RvcignLndvcmstaW5kZXgtY2FyZF9fY29udGVudCcpLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLHY9bm9kZS5xdWVyeVNlbGVjdG9yKCcud29yay1pbmRleC1jYXJkX192aXN1YWwnKS5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTtyZXR1cm57Y2I6Yy5ib3R0b20sdnQ6di50b3B9fSk7YXNzZXJ0KGdlby52dD49Z2VvLmNiLTIsYFdvcmsgJHt3aWR0aH06IGNhcmQgJHtpKzF9IG11c3Qgc3RhY2tgKX0KICAgICAgICAgICAgICB9CiIiIgpuZXc9IiIiICAgICAgICAgICAgICBjb25zdCBtYXhpbXVtPVszLDIsMiwyXTsKICAgICAgICAgICAgICBmb3IobGV0IGk9MDtpPDQ7aSsrKXsKICAgICAgICAgICAgICAgIGNvbnN0IGNhcmQ9ZmVhdHVyZWQubnRoKGkpLGNhcmRCb3g9YXdhaXQgY2FyZC5ib3VuZGluZ0JveCgpLGJ1dHRvbkJveD1hd2FpdCBjYXJkLmxvY2F0b3IoJy53b3JrLWluZGV4LWNhcmRfX2J1dHRvbicpLmJvdW5kaW5nQm94KCk7CiAgICAgICAgICAgICAgICBhc3NlcnQoY2FyZEJveCYmYnV0dG9uQm94JiZNYXRoLmFicyhjYXJkQm94LndpZHRoLWJ1dHRvbkJveC53aWR0aCk8PTImJk1hdGguYWJzKGNhcmRCb3guaGVpZ2h0LWJ1dHRvbkJveC5oZWlnaHQpPD0yLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSB0YXJnZXQgYXJlYWApOwogICAgICAgICAgICAgICAgY29uc3QgbWV0cmljQ291bnQ9YXdhaXQgY2FyZC5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX19tZXRyaWMnKS5jb3VudCgpOwogICAgICAgICAgICAgICAgYXNzZXJ0KG1ldHJpY0NvdW50PD1tYXhpbXVtW2ldLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSBtZXRyaWMgY291bnQgJHttZXRyaWNDb3VudH1gKTsKICAgICAgICAgICAgICAgIGNvbnN0IG1ldHJpY0xhYmVscz0oYXdhaXQgY2FyZC5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX19tZXRyaWMtbGFiZWwnKS5hbGxUZXh0Q29udGVudHMoKSkubWFwKGNsZWFuKTsKICAgICAgICAgICAgICAgIGFzc2VydChtZXRyaWNMYWJlbHMuZXZlcnkoeD0+eC5zcGxpdCgvXFxzKy8pLmZpbHRlcihCb29sZWFuKS5sZW5ndGg8PTIpLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSBsb25nIG1ldHJpYyBsYWJlbHNgKTsKICAgICAgICAgICAgICAgIGFzc2VydFByb29mTGFiZWxzKG1ldHJpY0xhYmVscyxgV29yayAke3dpZHRofTogY2FyZCAke2krMX1gKTsKICAgICAgICAgICAgICAgIGlmKG1ldHJpY0NvdW50PjEpewogICAgICAgICAgICAgICAgICBjb25zdCB0b3BzPWF3YWl0IGNhcmQubG9jYXRvcignLndvcmstaW5kZXgtY2FyZF9fbWV0cmljJykuZXZhbHVhdGVBbGwobm9kZXM9Pm5vZGVzLm1hcChuPT5uLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLnRvcCkpOwogICAgICAgICAgICAgICAgICBhc3NlcnQoTWF0aC5tYXgoLi4udG9wcyktTWF0aC5taW4oLi4udG9wcyk8PTIsYFdvcmsgJHt3aWR0aH06IGNhcmQgJHtpKzF9IG1ldHJpY3Mgbm90IGhvcml6b250YWxgKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvbnN0IHZpc3VhbD1jYXJkLmxvY2F0b3IoJy53b3JrLWluZGV4LWNhcmRfX3Zpc3VhbCBpbWcnKTsKICAgICAgICAgICAgICAgIGFzc2VydChhd2FpdCB2aXN1YWwuY291bnQoKT09PTEmJmF3YWl0IHZpc3VhbC5ldmFsdWF0ZShpbWc9PmltZy5jb21wbGV0ZSYmaW1nLm5hdHVyYWxXaWR0aD4wKSxgV29yayAke3dpZHRofTogY2FyZCAke2krMX0gdmlzdWFsIG1pc3NpbmdgKTsKICAgICAgICAgICAgICAgIGNvbnN0IHR5cD1hd2FpdCBjYXJkLmV2YWx1YXRlKG5vZGU9Pntjb25zdCB2YWx1ZT1ub2RlLnF1ZXJ5U2VsZWN0b3IoJy53b3JrLWluZGV4LWNhcmRfX21ldHJpYy12YWx1ZScpLGxhYmVsPW5vZGUucXVlcnlTZWxlY3RvcignLndvcmstaW5kZXgtY2FyZF9fbWV0cmljLWxhYmVsJyk7cmV0dXJue2JnOmdldENvbXB1dGVkU3R5bGUobm9kZS5xdWVyeVNlbGVjdG9yKCcud29yay1pbmRleC1jYXJkX19jb250ZW50JykpLmJhY2tncm91bmRDb2xvcix2OnZhbHVlP3BhcnNlRmxvYXQoZ2V0Q29tcHV0ZWRTdHlsZSh2YWx1ZSkuZm9udFNpemUpOm51bGwsbDpsYWJlbD9wYXJzZUZsb2F0KGdldENvbXB1dGVkU3R5bGUobGFiZWwpLmZvbnRTaXplKTpudWxsfX0pOwogICAgICAgICAgICAgICAgYXNzZXJ0KCFpc1doaXRlKHR5cC5iZyksYFdvcmsgJHt3aWR0aH06IGNhcmQgJHtpKzF9IHRpbnRgKTsKICAgICAgICAgICAgICAgIGlmKG1ldHJpY0NvdW50PjApYXNzZXJ0KHR5cC52PnR5cC5sLGBXb3JrICR7d2lkdGh9OiBjYXJkICR7aSsxfSBtZXRyaWMgaGllcmFyY2h5YCk7CiAgICAgICAgICAgICAgICBpZih3aWR0aDw9MTEwMCl7Y29uc3QgZ2VvPWF3YWl0IGNhcmQuZXZhbHVhdGUobm9kZT0+e2NvbnN0IGM9bm9kZS5xdWVyeVNlbGVjdG9yKCcud29yay1pbmRleC1jYXJkX19jb250ZW50JykuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCksdj1ub2RlLnF1ZXJ5U2VsZWN0b3IoJy53b3JrLWluZGV4LWNhcmRfX3Zpc3VhbCcpLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpO3JldHVybntjYjpjLmJvdHRvbSx2dDp2LnRvcH19KTthc3NlcnQoZ2VvLnZ0Pj1nZW8uY2ItMixgV29yayAke3dpZHRofTogY2FyZCAke2krMX0gbXVzdCBzdGFja2ApfQogICAgICAgICAgICAgIH0KIiIiCmFzc2VydCBvbGQgaW4gcywgJ2ZlYXR1cmVkIG1ldHJpYyBibG9jayBtaXNzaW5nJwpzPXMucmVwbGFjZShvbGQsbmV3LDEpCgpvbGQ9IiIiICAgICAgICAgICAgICBjb25zdCBtb3JlPXdvcmsubG9jYXRvcignLndvcmstaW5kZXhfX21vcmUtZ3JpZCAud29yay1pbmRleC1jYXJkJyk7CiAgICAgICAgICAgICAgYXNzZXJ0KGF3YWl0IG1vcmUuY291bnQoKT49MSxgV29yayAke3dpZHRofTogTW9yZSBXb3JrIGVtcHR5YCk7CiAgICAgICAgICAgICAgZm9yKGxldCBpPTA7aTxhd2FpdCBtb3JlLmNvdW50KCk7aSsrKWFzc2VydChhd2FpdCBtb3JlLm50aChpKS5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX19tZXRyaWMnKS5jb3VudCgpPT09MSxgV29yayAke3dpZHRofTogTW9yZSBXb3JrICR7aSsxfSBtZXRyaWMgY291bnRgKTsKIiIiCm5ldz0iIiIgICAgICAgICAgICAgIGNvbnN0IG1vcmU9d29yay5sb2NhdG9yKCcud29yay1pbmRleF9fbW9yZS1ncmlkIC53b3JrLWluZGV4LWNhcmQnKTsKICAgICAgICAgICAgICBhc3NlcnQoYXdhaXQgbW9yZS5jb3VudCgpPj0xLGBXb3JrICR7d2lkdGh9OiBNb3JlIFdvcmsgZW1wdHlgKTsKICAgICAgICAgICAgICBmb3IobGV0IGk9MDtpPGF3YWl0IG1vcmUuY291bnQoKTtpKyspewogICAgICAgICAgICAgICAgY29uc3QgY2FyZD1tb3JlLm50aChpKSxtZXRyaWNDb3VudD1hd2FpdCBjYXJkLmxvY2F0b3IoJy53b3JrLWluZGV4LWNhcmRfX21ldHJpYycpLmNvdW50KCk7CiAgICAgICAgICAgICAgICBhc3NlcnQobWV0cmljQ291bnQ8PTEsYFdvcmsgJHt3aWR0aH06IE1vcmUgV29yayAke2krMX0gbWV0cmljIGNvdW50ICR7bWV0cmljQ291bnR9YCk7CiAgICAgICAgICAgICAgICBjb25zdCBtZXRyaWNMYWJlbHM9KGF3YWl0IGNhcmQubG9jYXRvcignLndvcmstaW5kZXgtY2FyZF9fbWV0cmljLWxhYmVsJykuYWxsVGV4dENvbnRlbnRzKCkpLm1hcChjbGVhbik7CiAgICAgICAgICAgICAgICBhc3NlcnRQcm9vZkxhYmVscyhtZXRyaWNMYWJlbHMsYFdvcmsgJHt3aWR0aH06IE1vcmUgV29yayAke2krMX1gKTsKICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgY29uc3QgYmFuZHpvPXdvcmsubG9jYXRvcignLndvcmstaW5kZXgtY2FyZFtkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0iYmFuZHpvIl0nKTsKICAgICAgICAgICAgICBpZihhd2FpdCBiYW5kem8uY291bnQoKSl7CiAgICAgICAgICAgICAgICBjb25zdCBiYW5kem9MYWJlbHM9KGF3YWl0IGJhbmR6by5sb2NhdG9yKCcud29yay1pbmRleC1jYXJkX19tZXRyaWMtbGFiZWwnKS5hbGxUZXh0Q29udGVudHMoKSkubWFwKGNsZWFuKTsKICAgICAgICAgICAgICAgIGFzc2VydFByb29mTGFiZWxzKGJhbmR6b0xhYmVscyxgV29yayAke3dpZHRofTogQmFuZHpvYCk7CiAgICAgICAgICAgICAgfQoiIiIKYXNzZXJ0IG9sZCBpbiBzLCAnbW9yZSB3b3JrIG1ldHJpYyBibG9jayBtaXNzaW5nJwpzPXMucmVwbGFjZShvbGQsbmV3LDEpCgpwLndyaXRlX3RleHQocykK' | base64 -d >/tmp/patch.py
+          python /tmp/patch.py
       - name: Commit QA contract update
         run: |
           git config user.name github-actions[bot]
