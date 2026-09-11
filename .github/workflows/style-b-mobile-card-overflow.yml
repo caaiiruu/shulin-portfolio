@@ -54,9 +54,9 @@ jobs:
           const report=[];
           const assert=(value,message)=>{if(!value)throw new Error(message)};
           const cathayExpected={
-            'cathay-mortgage-assistant':'From rigid scripts to flexible mortgage consultation',
-            'cathay-sit-review-remediation-operations':'From interface issues to prioritised remediation',
-            'cathay-sit-online-account-opening':'From fragmented steps to end-to-end account opening'
+            'cathay-mortgage-assistant':'Rigid scripts to flexible mortgage consultation',
+            'cathay-sit-review-remediation-operations':'Interface issues to prioritised remediation',
+            'cathay-sit-online-account-opening':'Fragmented steps to end-to-end account opening'
           };
           page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
           page.on('pageerror',e=>errors.push(e.message));
@@ -107,7 +107,7 @@ jobs:
             assert(state.companyBox.height<=40,`${label}: company eyebrow too tall ${JSON.stringify(state)}`);
             if(cathayExpected[state.project]){
               assert(state.company==='Cathay',`${label}: Cathay company label drifted: ${state.company}`);
-              assert(state.title===cathayExpected[state.project],`${label}: canonical card title drifted: ${state.title}`);
+              assert(state.title===cathayExpected[state.project],`${label}: canonical visible card title drifted: ${state.title}`);
             }
             assert(state.viewportOverflow<=1,`${label}: horizontal viewport overflow ${state.viewportOverflow}`);
             await card.screenshot({path:path.join(out,`${label.replace(/[^a-z0-9-]+/gi,'-').toLowerCase()}.png`)});
