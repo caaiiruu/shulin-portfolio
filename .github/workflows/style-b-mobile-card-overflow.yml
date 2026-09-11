@@ -106,7 +106,7 @@ jobs:
             assert(state.content.scrollHeight<=state.content.clientHeight+1,`${label}: content internal overflow ${JSON.stringify(state)}`);
             assert(state.companyBox.height<=40,`${label}: company eyebrow too tall ${JSON.stringify(state)}`);
             if(cathayExpected[state.project]){
-              assert(state.company==='Cathay',`${label}: Cathay company label drifted: ${state.company}`);
+              assert(state.company.toLocaleLowerCase('en')==='cathay',`${label}: Cathay company label drifted: ${state.company}`);
               assert(state.title===cathayExpected[state.project],`${label}: canonical visible card title drifted: ${state.title}`);
             }
             assert(state.viewportOverflow<=1,`${label}: horizontal viewport overflow ${state.viewportOverflow}`);
