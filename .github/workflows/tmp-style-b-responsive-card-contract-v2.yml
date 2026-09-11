@@ -1,0 +1,131 @@
+name: Temporary Style B Responsive Card Contract V2
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+    paths:
+      - '.github/workflows/tmp-style-b-responsive-card-contract-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: migration/style-b-domain-work-v1
+      - name: Apply responsive card contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('public/site/assets/js/domain-experience.js')
+          s = p.read_text()
+          a = "  const buildControls = () => {\n    let controls = projectPanel?.querySelector('.domain-wheel-v2__controls');\n    if (controls) return controls;\n"
+          b = "  const buildControls = () => {\n    let controls = projectPanel?.querySelector('.domain-wheel-v2__controls');\n    if (cards.length <= 1) { controls?.remove(); return null; }\n    if (controls) return controls;\n"
+          if s.count(a) != 1:
+              raise SystemExit('domain controls anchor mismatch')
+          p.write_text(s.replace(a, b, 1))
+
+          p = Path('public/site/assets/js/work.js')
+          s = p.read_text()
+          a = """    const featured = element('div', 'work-index__featured');
+    featured.append(createCard(cards[0], 'hero', 3));
+    featured.append(createCard(cards[1], 'secondary', 2));
+    const secondRow = element('div', 'work-index__featured-secondary-row');
+    secondRow.append(createCard(cards[2], 'half', 2), createCard(cards[3], 'half', 2));
+    featured.append(secondRow);
+
+    const more = element('section', 'work-index__more');
+    const moreHead = element('div', 'work-index__more-head');
+    moreHead.append(element('h2', '', copy('More work', '更多作品')));
+    const moreGrid = element('div', 'work-index__more-grid');
+    cards.slice(4).forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
+"""
+          b = """    const featured = element('div', 'work-index__featured');
+    featured.append(createCard(cards[0], 'hero', 3));
+    featured.append(createCard(cards[1], 'secondary', 2));
+
+    const more = element('section', 'work-index__more');
+    const moreHead = element('div', 'work-index__more-head');
+    moreHead.append(element('h2', '', copy('More work', '更多作品')));
+    const moreGrid = element('div', 'work-index__more-grid');
+    cards.slice(2).forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
+"""
+          if s.count(a) != 1:
+              raise SystemExit('work layout anchor mismatch')
+          p.write_text(s.replace(a, b, 1))
+
+          p = Path('public/site/assets/css/components/domain-experience.css')
+          s = p.read_text()
+          marker = '/* Human contract responsive outer-card fallback v2 */'
+          if marker not in s:
+              s += r'''
+
+/* Human contract responsive outer-card fallback v2 */
+.domain-experience .domain-project-card-v2__cta{width:100%;margin:var(--space-3) 0 0;padding:var(--space-3) 0 0}
+@media(max-width:900px){
+  .domain-experience{--domain-card-height:var(--dimension-640px);--domain-wheel-height:calc(var(--dimension-640px) + var(--space-8));--domain-card-content-padding:var(--space-5)}
+  .domain-experience .domain-project-card-v2{grid-template-columns:1fr;grid-template-rows:minmax(0,60%) minmax(0,40%)}
+  .domain-experience .domain-project-card-v2__content{grid-row:1;grid-template-rows:auto auto minmax(var(--space-3),1fr) auto auto;min-height:0}
+  .domain-experience .domain-project-card-v2__visual{grid-row:2;min-height:0;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
+  .domain-experience .domain-project-card-v2__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-1)}
+  .domain-experience .domain-project-card-v2__identity{display:flex;justify-content:flex-start;max-width:none;white-space:normal;text-align:left}
+  .domain-experience .domain-project-card-v2__title{max-width:none;margin-top:var(--space-4);font-size:var(--dimension-2rem);line-height:1.04}
+  .domain-experience .domain-project-card-v2__metrics{padding-top:var(--space-3);border-top:var(--dimension-1px) solid color-mix(in srgb,var(--sys-color-text-primary) 16%,transparent)}
+  .domain-experience .domain-project-card-v2__cta{min-height:var(--dimension-48px);margin-top:var(--space-2);padding:var(--space-2) 0 0}
+}
+@media(max-width:600px){
+  .domain-experience{--domain-card-height:calc(var(--dimension-640px) - var(--dimension-64px));--domain-wheel-height:calc(var(--dimension-640px) - var(--dimension-16px))}
+  .domain-experience .domain-project-card-v2{grid-template-rows:minmax(0,1fr) auto}
+  .domain-experience .domain-project-card-v2__visual{aspect-ratio:16/9}
+}
+'''
+          p.write_text(s)
+
+          p = Path('public/site/assets/css/components/work-index.css')
+          s = p.read_text()
+          marker = '/* Human contract content-safe Work card fallback v2 */'
+          if marker not in s:
+              s += r'''
+
+/* Human contract content-safe Work card fallback v2 */
+.work-index__featured{align-items:stretch}
+.work-index__featured>.work-index-card{height:100%}
+.work-index-card--secondary .work-index-card__button{grid-template-columns:1fr;grid-template-rows:auto auto;grid-template-areas:"content" "visual";min-height:100%}
+.work-index-card--secondary .work-index-card__content{grid-area:content;min-height:0}
+.work-index-card--secondary .work-index-card__visual{grid-area:visual;min-height:0;aspect-ratio:16/9;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
+.work-index-card--secondary .work-index-card__meta,.work-index-card--half .work-index-card__meta,.work-index-card--compact .work-index-card__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-1)}
+.work-index-card--secondary .work-index-card__identity,.work-index-card--half .work-index-card__identity,.work-index-card--compact .work-index-card__identity{justify-content:flex-start;margin-left:0;max-width:none;white-space:normal;text-align:left}
+.work-index__more-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.work-index-card--compact{height:100%}
+.work-index-card--compact .work-index-card__button{grid-template-columns:1fr;grid-template-rows:auto auto;grid-template-areas:"content" "visual";min-height:100%}
+.work-index-card--compact .work-index-card__content{grid-area:content;min-height:0}
+.work-index-card--compact .work-index-card__visual{grid-area:visual;min-height:0;aspect-ratio:16/9;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
+@media(max-width:1100px){
+  .work-index-card__content{grid-template-rows:auto auto minmax(var(--space-3),1fr) auto auto;padding:var(--space-5)}
+  .work-index-card__meta,.work-index-card--secondary .work-index-card__meta,.work-index-card--half .work-index-card__meta,.work-index-card--compact .work-index-card__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-2)}
+  .work-index-card__identity,.work-index-card--secondary .work-index-card__identity,.work-index-card--half .work-index-card__identity,.work-index-card--compact .work-index-card__identity{justify-content:flex-start;margin-left:0;max-width:none;white-space:normal;text-align:left}
+  .work-index-card__title,.work-index-card--secondary .work-index-card__title,.work-index-card--half .work-index-card__title{max-width:none;margin-top:var(--space-5);font-size:var(--dimension-2rem);line-height:1.05}
+  .work-index-card--hero .work-index-card__title{font-size:var(--dimension-2-25rem)}
+  .work-index__more-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4)}
+}
+@media(max-width:760px){.work-index__more-grid{grid-template-columns:1fr}}
+'''
+          p.write_text(s)
+          PY
+          git diff --check
+      - name: Commit scoped responsive contract
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add public/site/assets/js/domain-experience.js public/site/assets/js/work.js public/site/assets/css/components/domain-experience.css public/site/assets/css/components/work-index.css
+          git diff --cached --check
+          git commit -m 'Strengthen responsive outer-card layout contract'
+          git push origin HEAD:migration/style-b-domain-work-v1
