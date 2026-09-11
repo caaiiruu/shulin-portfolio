@@ -34,68 +34,48 @@ jobs:
               p.write_text(text.replace(old,new,1))
               return True
 
-          replace_exact('public/site/assets/js/work.js',
-          "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n\n  const taxonomy = [",
-          "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const visibleProjectTitle = (value) => {\n    let text = String(value || '').trim();\n    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;\n    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }\n    }\n    return text;\n  };\n\n  const taxonomy = [")
-          replace_exact('public/site/assets/js/work.js',
-          "  const projectTitle = (raw, adapted, source) => firstText(\n    language() === 'zh' ? raw?.transformation_zh : raw?.transformation,\n    raw?.transformation,\n    adapted?.transformation,\n    raw?.title,\n    adapted?.title,\n    source.title?.textContent,\n    source.projectId\n  );",
-          "  const projectTitle = (raw, adapted, source) => visibleProjectTitle(firstText(\n    language() === 'zh' ? raw?.transformation_zh : raw?.transformation,\n    raw?.transformation,\n    adapted?.transformation,\n    raw?.title,\n    adapted?.title,\n    source.title?.textContent,\n    source.projectId\n  ));")
-          replace_exact('public/site/assets/js/domain-experience.js',
-          "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];",
-          "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];\n  const visibleProjectTitle = (value) => {\n    let text = String(value || '').trim();\n    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;\n    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }\n    }\n    return text;\n  };")
-          replace_exact('public/site/assets/js/domain-experience.js',
-          "    title.textContent = firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);",
-          "    title.textContent = visibleProjectTitle(firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title));")
+          replace_exact('public/site/assets/js/work.js', "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n\n  const taxonomy = [", "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const visibleProjectTitle = (value) => {\n    let text = String(value || '').trim();\n    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;\n    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }\n    }\n    return text;\n  };\n\n  const taxonomy = [")
+          replace_exact('public/site/assets/js/work.js', "  const projectTitle = (raw, adapted, source) => firstText(\n    language() === 'zh' ? raw?.transformation_zh : raw?.transformation,\n    raw?.transformation,\n    adapted?.transformation,\n    raw?.title,\n    adapted?.title,\n    source.title?.textContent,\n    source.projectId\n  );", "  const projectTitle = (raw, adapted, source) => visibleProjectTitle(firstText(\n    language() === 'zh' ? raw?.transformation_zh : raw?.transformation,\n    raw?.transformation,\n    adapted?.transformation,\n    raw?.title,\n    adapted?.title,\n    source.title?.textContent,\n    source.projectId\n  ));")
+          replace_exact('public/site/assets/js/domain-experience.js', "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];", "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n  const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];\n  const visibleProjectTitle = (value) => {\n    let text = String(value || '').trim();\n    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;\n    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }\n    }\n    return text;\n  };")
+          replace_exact('public/site/assets/js/domain-experience.js', "    title.textContent = firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);", "    title.textContent = visibleProjectTitle(firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title));")
 
-          replace_exact('tests/portfolio-r182-certification.test.mjs',
-          "  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);",
-          "  assert.match(content.contentVersion,/^(?:r18(?:22|26|3|-non-asset-complete)|2026-09-11-style-b-cathay-canonical-naming)/);")
-
-          replace_exact('tests/rendered-html.test.mjs',
-          '  assert.equal(project.title.en,"Fragmented account-opening steps to a validated end-to-end flow");',
-          '  assert.equal(project.title.en,"From fragmented steps to end-to-end account opening");')
-          replace_exact('tests/rendered-html.test.mjs',
-          '  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");',
-          '  assert.equal(project.title.en,"From rigid scripts to flexible mortgage consultation");')
-          replace_exact('tests/rendered-html.test.mjs',
-          '  assert.equal(project.company,"Cathay Life Insurance");',
-          '  assert.equal(project.company,"Cathay");')
-          replace_exact('tests/rendered-html.test.mjs',
-          '  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");',
-          '  assert.equal(project.heroMetadata.company,"Cathay");')
-          replace_exact('tests/rendered-html.test.mjs',
-          '  assert.doesNotMatch(project.title.en,/^From\\s/);',
-          '  assert.equal(project.title.en.startsWith("From "),true);')
+          replace_exact('tests/portfolio-r182-certification.test.mjs', "  assert.match(content.contentVersion,/r18(?:22|26|3|-non-asset-complete)/);", "  assert.match(content.contentVersion,/^(?:r18(?:22|26|3|-non-asset-complete)|2026-09-11-style-b-cathay-canonical-naming)/);")
+          replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.title.en,"Fragmented account-opening steps to a validated end-to-end flow");', '  assert.equal(project.title.en,"From fragmented steps to end-to-end account opening");')
+          replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");', '  assert.equal(project.title.en,"From rigid scripts to flexible mortgage consultation");')
+          replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.company,"Cathay Life Insurance");', '  assert.equal(project.company,"Cathay");')
+          replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");', '  assert.equal(project.heroMetadata.company,"Cathay");')
+          replace_exact('tests/rendered-html.test.mjs', '  assert.doesNotMatch(project.title.en,/^From\\s/);', '  assert.equal(project.title.en.startsWith("From "),true);')
 
           test_path=Path('tests/rendered-html.test.mjs')
           text=test_path.read_text()
           marker='test("keeps Cathay canonical names concise while all visible surfaces share one title rule"'
           if marker not in text:
-              text += r'''
-
-test("keeps Cathay canonical names concise while all visible surfaces share one title rule", () => {
-  const ssot=JSON.parse(read("content/portfolio-content.json"));
-  const work=read("assets/js/work.js");
-  const domain=read("assets/js/domain-experience.js");
-  const cathay={
-    "cathay-mortgage-assistant":"From rigid scripts to flexible mortgage consultation",
-    "cathay-sit-online-account-opening":"From fragmented steps to end-to-end account opening",
-    "cathay-sit-review-remediation-operations":"From interface issues to prioritised remediation"
-  };
-  for(const [id,title] of Object.entries(cathay)){
-    const project=ssot.projects[id];
-    assert.equal(project.company,"Cathay",id);
-    assert.equal(project.heroMetadata.company,"Cathay",id);
-    assert.equal(project.title.en,title,id);
-    assert.equal(project.transformation,title,id);
-  }
-  assert.match(work,/visibleProjectTitle/);
-  assert.match(domain,/visibleProjectTitle/);
-  assert.match(work,/forbiddenVisiblePrefixes/);
-  assert.match(domain,/forbiddenVisiblePrefixes/);
-});
-'''
-              test_path.write_text(text)
+              lines=[
+                '',
+                'test("keeps Cathay canonical names concise while all visible surfaces share one title rule", () => {',
+                '  const ssot=JSON.parse(read("content/portfolio-content.json"));',
+                '  const work=read("assets/js/work.js");',
+                '  const domain=read("assets/js/domain-experience.js");',
+                '  const cathay={',
+                '    "cathay-mortgage-assistant":"From rigid scripts to flexible mortgage consultation",',
+                '    "cathay-sit-online-account-opening":"From fragmented steps to end-to-end account opening",',
+                '    "cathay-sit-review-remediation-operations":"From interface issues to prioritised remediation"',
+                '  };',
+                '  for(const [id,title] of Object.entries(cathay)){',
+                '    const project=ssot.projects[id];',
+                '    assert.equal(project.company,"Cathay",id);',
+                '    assert.equal(project.heroMetadata.company,"Cathay",id);',
+                '    assert.equal(project.title.en,title,id);',
+                '    assert.equal(project.transformation,title,id);',
+                '  }',
+                '  assert.match(work,/visibleProjectTitle/);',
+                '  assert.match(domain,/visibleProjectTitle/);',
+                '  assert.match(work,/forbiddenVisiblePrefixes/);',
+                '  assert.match(domain,/forbiddenVisiblePrefixes/);',
+                '});',
+                ''
+              ]
+              test_path.write_text(text+'\n'.join(lines))
           PY
           git diff --check
           if git diff --quiet; then
