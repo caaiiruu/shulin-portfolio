@@ -1,0 +1,128 @@
+name: Style B Mobile Domain Card Overflow
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-card-overflow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install and build
+        run: |
+          npm run install:ci
+          npm run build
+
+      - name: Install browser
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/style-b-mobile-card.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/style-b-mobile-card.log
+          exit 1
+
+      - name: Verify every Domain card at 430px
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/style-b-mobile-domain-card-overflow');
+          fs.mkdirSync(out,{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({viewport:{width:430,height:1000},reducedMotion:'no-preference'});
+          const page=await context.newPage();
+          const errors=[];
+          const report=[];
+          const assert=(value,message)=>{if(!value)throw new Error(message)};
+          page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+          page.on('pageerror',e=>errors.push(e.message));
+
+          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          const domain=page.locator('#domains');
+          await domain.scrollIntoViewIfNeeded();
+          const tabs=domain.locator('.domain-tab');
+          assert(await tabs.count()===6,'Expected six Domain tabs');
+
+          const verifyCard=async(card,label)=>{
+            await card.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(350);
+            const state=await card.evaluate(node=>{
+              const content=node.querySelector('.domain-project-card-v2__content');
+              const title=node.querySelector('.domain-project-card-v2__title');
+              const metrics=node.querySelector('.domain-project-card-v2__metrics');
+              const cta=node.querySelector('.domain-project-card-v2__cta');
+              const visual=node.querySelector('.domain-project-card-v2__visual');
+              const company=node.querySelector('.domain-project-card-v2__company');
+              const r=n=>n?.getBoundingClientRect();
+              const cr=r(content),tr=r(title),mr=r(metrics),ar=r(cta),vr=r(visual),cor=r(company),nr=r(node);
+              return {
+                project:node.dataset.project,
+                title:(title?.innerText||title?.textContent||'').trim(),
+                company:(company?.innerText||company?.textContent||'').trim(),
+                card:{top:nr.top,bottom:nr.bottom,height:nr.height},
+                content:{top:cr.top,bottom:cr.bottom,height:cr.height,scrollHeight:content.scrollHeight,clientHeight:content.clientHeight},
+                titleBox:{top:tr.top,bottom:tr.bottom,height:tr.height},
+                metricsBox:{top:mr?.top||0,bottom:mr?.bottom||0,height:mr?.height||0},
+                ctaBox:{top:ar.top,bottom:ar.bottom,height:ar.height},
+                visualBox:{top:vr.top,bottom:vr.bottom,height:vr.height},
+                companyBox:{height:cor?.height||0},
+                viewportOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth
+              };
+            });
+            assert(state.titleBox.bottom<=state.metricsBox.top+1,`${label}: title overlaps metrics ${JSON.stringify(state)}`);
+            assert(state.metricsBox.bottom<=state.ctaBox.top+1,`${label}: metrics overlap CTA ${JSON.stringify(state)}`);
+            assert(state.ctaBox.bottom<=state.content.bottom+1,`${label}: CTA clipped by content ${JSON.stringify(state)}`);
+            assert(state.visualBox.top>=state.content.bottom-2,`${label}: visual overlaps content ${JSON.stringify(state)}`);
+            assert(state.content.scrollHeight<=state.content.clientHeight+1,`${label}: content internal overflow ${JSON.stringify(state)}`);
+            assert(state.companyBox.height<=40,`${label}: company eyebrow too tall ${JSON.stringify(state)}`);
+            assert(state.viewportOverflow<=1,`${label}: horizontal viewport overflow ${state.viewportOverflow}`);
+            await card.screenshot({path:path.join(out,`${label.replace(/[^a-z0-9-]+/gi,'-').toLowerCase()}.png`)});
+            report.push({label,...state});
+          };
+
+          for(let tabIndex=0;tabIndex<await tabs.count();tabIndex++){
+            await tabs.nth(tabIndex).click();
+            await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',tabIndex);
+            await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2').length>0);
+            const projectIds=await domain.locator('.domain-project-card-v2').evaluateAll(nodes=>nodes.map(n=>n.dataset.project));
+            for(const projectId of projectIds){
+              const card=domain.locator(`.domain-project-card-v2[data-project="${projectId}"]`);
+              await card.evaluate(node=>node.click());
+              await page.waitForFunction(id=>document.querySelector(`#domains .domain-project-card-v2[data-project="${id}"]`)?.dataset.wheelOffset==='0',projectId);
+              await verifyCard(card,`tab-${tabIndex+1}-${projectId}`);
+            }
+          }
+
+          assert(errors.length===0,`Console/page errors: ${JSON.stringify(errors)}`);
+          fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({report,errors},null,2));
+          await context.close();
+          await browser.close();
+          NODE
+
+      - name: Upload mobile overflow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: style-b-mobile-domain-card-overflow
+          path: artifacts/style-b-mobile-domain-card-overflow
+          retention-days: 3
