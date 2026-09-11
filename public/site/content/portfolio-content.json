@@ -1,5 +1,5 @@
 {
-  "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
+  "contentVersion": "2026-09-11-style-b-cathay-canonical-naming",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -13578,7 +13578,7 @@
     },
     "cathay-mortgage-assistant": {
       "id": "cathay-mortgage-assistant",
-      "company": "Cathay Life Insurance",
+      "company": "Cathay",
       "period": "2016",
       "status": "launched",
       "relationship": {
@@ -13589,8 +13589,8 @@
         ]
       },
       "title": {
-        "en": "Rigid tablet script to a flexible mortgage consultation system",
-        "zh": "從僵化的平板腳本，到彈性的房貸諮詢系統"
+        "en": "From rigid scripts to flexible mortgage consultation",
+        "zh": "從僵化話術到彈性房貸諮詢"
       },
       "problemTypes": {
         "en": [
@@ -14206,8 +14206,8 @@
         "contentStatus": "approved-r172.2"
       },
       "type_zh": "內部系統",
-      "transformation": "From a rigid tablet script to a flexible mortgage consultation flow",
-      "transformation_zh": "從僵化的平板腳本，到彈性的房貸諮詢流程",
+      "transformation": "From rigid scripts to flexible mortgage consultation",
+      "transformation_zh": "從僵化話術到彈性房貸諮詢",
       "problem_types": [
         "Rigid consultation flow",
         "Missing customer context",
@@ -14654,7 +14654,7 @@
         "zh": "房貸諮詢"
       },
       "heroMetadata": {
-        "company": "Cathay Life Insurance",
+        "company": "Cathay",
         "domain": {
           "en": "Internal mortgage consultation",
           "zh": "內部房貸諮詢"
@@ -17154,7 +17154,7 @@
     },
     "cathay-sit-online-account-opening": {
       "id": "cathay-sit-online-account-opening",
-      "company": "Cathay Securities Investment Trust",
+      "company": "Cathay",
       "engagementType": "Independent freelance engagement",
       "period": "May-Jun 2024",
       "status": "design-delivered-to-client-development-production-outcome-needs-confirmation",
@@ -17167,8 +17167,8 @@
         ]
       },
       "title": {
-        "en": "Fragmented account-opening steps to a validated end-to-end flow",
-        "zh": "從分散的開戶步驟到經驗證的端到端流程"
+        "en": "From fragmented steps to end-to-end account opening",
+        "zh": "從零散步驟到端到端開戶流程"
       },
       "problemTypes": {
         "en": [
@@ -18194,8 +18194,8 @@
           "zh": "我將分散的申請要求對齊成一條端到端流程，並轉化為可交付的完整介面規格。"
         }
       },
-      "transformation": "Fragmented account-opening steps to a validated end-to-end flow",
-      "transformation_zh": "從分散的開戶步驟到經驗證的端到端流程",
+      "transformation": "From fragmented steps to end-to-end account opening",
+      "transformation_zh": "從零散步驟到端到端開戶流程",
       "problem_types": [
         "Account-opening workflows",
         "Financial onboarding",
@@ -18389,7 +18389,7 @@
         "zh": "數位開戶"
       },
       "heroMetadata": {
-        "company": "Cathay Securities Investment Trust",
+        "company": "Cathay",
         "domain": {
           "en": "Digital onboarding",
           "zh": "數位開戶"
@@ -18463,7 +18463,7 @@
     },
     "cathay-sit-review-remediation-operations": {
       "id": "cathay-sit-review-remediation-operations",
-      "company": "Cathay Securities Investment Trust",
+      "company": "Cathay",
       "engagementType": "Independent freelance engagement",
       "period": "Sep 2024-Jan 2025",
       "status": "operational-discovery-and-roadmap-delivered-implementation-not-confirmed",
@@ -18478,8 +18478,8 @@
         ]
       },
       "title": {
-        "en": "Interface symptoms to a prioritised remediation model",
-        "zh": "從分散的審件知識，到共享的補件營運模型"
+        "en": "From interface issues to prioritised remediation",
+        "zh": "從介面問題到優先修正"
       },
       "problemTypes": {
         "en": [
@@ -19664,8 +19664,8 @@
           "zh": "先建立共享營運基準，再定義優化方向；不代表軟體已實作。"
         }
       },
-      "transformation": "From fragmented review knowledge to a shared remediation operating model",
-      "transformation_zh": "從分散的審件知識，到共享的補件營運模型",
+      "transformation": "From interface issues to prioritised remediation",
+      "transformation_zh": "從介面問題到優先修正",
       "problem_types": [
         "Review operations",
         "Remediation workflows",
@@ -19861,7 +19861,7 @@
         "zh": "投資營運"
       },
       "heroMetadata": {
-        "company": "Cathay Securities Investment Trust",
+        "company": "Cathay",
         "domain": {
           "en": "Investment operations",
           "zh": "投資營運"

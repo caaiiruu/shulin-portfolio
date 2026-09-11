@@ -1,7 +1,7 @@
 {
   "manifestType": "portfolio-public-runtime-asset-manifest",
   "packageVersion": "r45",
-  "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
+  "contentVersion": "2026-09-11-style-b-cathay-canonical-naming",
   "resolutionContract": {
     "owner": "public/site/assets/js/app.js#resolveProjectAsset",
     "priority": [
@@ -13,7 +13,9 @@
   "items": {
     "red-dot-2016-game-design-winner-public-v1": {
       "id": "red-dot-2016-game-design-winner-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "hello-sabau",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-game-design-winner-public-v1.jpg",
@@ -38,7 +40,9 @@
     },
     "red-dot-2016-packaging-design-winner-public-v1": {
       "id": "red-dot-2016-packaging-design-winner-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "matsu-temple-packaging",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-packaging-design-winner-public-v1.jpg",
@@ -1605,7 +1609,9 @@
     },
     "rsa-student-design-awards-competition-public-v1": {
       "id": "rsa-student-design-awards-competition-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "capture-ideas",
       "type": "image/jpeg",
       "publicPath": "/site/assets/experiments/capture-ideas/rsa-student-design-awards-competition-public-v1.jpg",
