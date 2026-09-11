@@ -111,37 +111,14 @@
   .domain-experience .domain-project-card-v2[data-wheel-offset="1"]{opacity:.7;filter:saturate(.84);transform:translateX(calc(-50% + var(--domain-side-shift))) translateY(var(--space-3)) scale(var(--domain-side-scale)) rotate(var(--domain-side-rotation))}
   .domain-experience .domain-project-card-v2__content{grid-row:1;grid-template-rows:auto auto minmax(var(--space-3),1fr) auto auto;height:100%;min-height:0;padding:var(--domain-card-content-padding)}
   .domain-experience .domain-project-card-v2__visual{grid-row:2;height:auto;min-height:0;aspect-ratio:16/9;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
-  .domain-experience .domain-project-card-v2__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-2);font-size:var(--sys-type-label)}
-  .domain-experience .domain-project-card-v2__identity{display:flex;justify-content:flex-start;max-width:none;white-space:normal;text-align:left;font-size:var(--sys-type-label)}
+  .domain-experience .domain-project-card-v2__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-1);font-size:var(--sys-type-label)}
+  .domain-experience .domain-project-card-v2__identity{display:flex;justify-content:flex-start;max-width:none;white-space:normal;text-align:left;font-size:var(--sys-type-label);line-height:1.25}
   .domain-experience .domain-project-card-v2__type{font-size:var(--sys-type-label)}
-  .domain-experience .domain-project-card-v2__title{max-width:none;margin-top:var(--space-6);font-size:var(--dimension-2-25rem);line-height:1.05}
+  .domain-experience .domain-project-card-v2__title{max-width:none;margin-top:var(--space-4);font-size:var(--dimension-2rem);line-height:1.04}
   .domain-experience .domain-project-card-v2__metrics{grid-template-rows:minmax(var(--dimension-24px),auto) minmax(var(--dimension-32px),auto);column-gap:var(--space-2);row-gap:var(--space-1);padding-top:0;border-top:0}
   .domain-experience .domain-project-card-v2__metric-value{font-size:var(--sys-type-heading-3)}
   .domain-experience .domain-project-card-v2__metric-label{font-size:var(--sys-type-label);overflow-wrap:normal}
   .domain-experience .domain-project-card-v2__cta{min-height:var(--dimension-48px);margin-top:var(--space-2);padding-block:var(--space-2)}
   .domain-experience .domain-wheel-v2__controls{display:none}
-
-  /* Mobile copy budget: keep every card's hierarchy visible inside the fixed wheel geometry. */
-  .domain-experience .domain-project-card-v2__title{margin-top:var(--space-4);font-size:var(--dimension-2rem);line-height:1.04}
-  .domain-experience .domain-project-card-v2__meta{gap:var(--space-1)}
-  .domain-experience .domain-project-card-v2__identity{line-height:1.25}
-
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__company,
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__company,
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__company,
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__company{font-size:0}
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__company::after{content:"CATHAY LIFE";font-size:var(--sys-type-label)}
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__company::after{content:"CATHAY SIT";font-size:var(--sys-type-label)}
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__company::after{content:"國泰人壽";font-size:var(--sys-type-label)}
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__company::after{content:"國泰投信";font-size:var(--sys-type-label)}
-
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__title,
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__title,
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__title,
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__title{font-size:0;line-height:0}
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__title::after{content:"Rigid scripts to flexible consultation";display:block;font-size:var(--dimension-2rem);line-height:1.04;letter-spacing:var(--sys-tracking-heading)}
-  html[lang^="en"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__title::after{content:"Interface issues to prioritised remediation";display:block;font-size:var(--dimension-2rem);line-height:1.04;letter-spacing:var(--sys-tracking-heading)}
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__title::after{content:"從制式腳本到彈性房貸諮詢";display:block;font-size:var(--dimension-2rem);line-height:1.08;letter-spacing:var(--sys-tracking-heading)}
-  html[lang^="zh"] .domain-experience .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__title::after{content:"從介面問題到優先修復模型";display:block;font-size:var(--dimension-2rem);line-height:1.08;letter-spacing:var(--sys-tracking-heading)}
 }
 @media(prefers-reduced-motion:reduce){.domain-experience .domain-project-card-v2,.domain-experience .domain-project-card-v2__image,.domain-experience .domain-project-card-v2__cta-arrow,.domain-experience .domain-wheel-v2__control,.domain-experience .domain-tab,.domain-experience-disclosure__summary,.domain-experience-disclosure__summary::after{transition:none}.domain-experience-disclosure[open] ul{animation:none}}
