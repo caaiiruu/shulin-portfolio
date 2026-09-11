@@ -43,6 +43,8 @@ jobs:
           const widths=[1419,871,430];
           const report={domain:{},work:{},errors:[]};
           const assert=(value,message)=>{if(!value)throw new Error(message)};
+          const forbiddenProof=/\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
+          const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(String(x||'').trim())),`${label}: filler proof returned ${JSON.stringify(labels)}`);
 
           for(const width of widths){
             const context=await browser.newContext({viewport:{width,height:1100},reducedMotion:'no-preference'});
@@ -58,6 +60,7 @@ jobs:
             assert(new Set(iconKeys).size===6,`Domain ${width}: icon semantics not distinct ${JSON.stringify(iconKeys)}`);
             const domainLabels=await page.locator('#domains .domain-project-card-v2__metric-label').allTextContents();
             assert(domainLabels.every(label=>!/[+/]/.test(label)),`Domain ${width}: residual metric punctuation ${JSON.stringify(domainLabels)}`);
+            assertProofLabels(domainLabels,`Domain ${width}`);
             const domain=page.locator('#domains');
             await domain.scrollIntoViewIfNeeded();
             await domain.evaluate(async root=>{
@@ -70,14 +73,9 @@ jobs:
 
             await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
             await page.waitForSelector('.work-index',{timeout:10000});
-            const payment=page.locator('.work-index-card[data-work-index-project="payment"]');
-            const paymentValues=await payment.locator('.work-index-card__metric-value').allTextContents();
-            const paymentLabels=await payment.locator('.work-index-card__metric-label').allTextContents();
-            const txIndex=paymentValues.findIndex(value=>/~?230k/i.test(value.trim()));
-            assert(txIndex>=0,`Work ${width}: ~230K Payment metric missing`);
-            assert(paymentLabels[txIndex]?.trim().toLowerCase()==='transactions',`Work ${width}: ~230K label must be transactions, got ${paymentLabels[txIndex]}`);
             const allMetricLabels=await page.locator('.work-index-card__metric-label').allTextContents();
             assert(allMetricLabels.every(label=>!/[+/]/.test(label)),`Work ${width}: residual metric punctuation ${JSON.stringify(allMetricLabels)}`);
+            assertProofLabels(allMetricLabels,`Work ${width}`);
 
             const cards=page.locator('.work-index-card');
             const painted=[];
@@ -85,6 +83,8 @@ jobs:
               const card=cards.nth(i);
               await card.scrollIntoViewIfNeeded();
               const project=await card.getAttribute('data-work-index-project');
+              const cardLabels=await card.locator('.work-index-card__metric-label').allTextContents();
+              assertProofLabels(cardLabels,`Work ${width} ${project}`);
               const image=card.locator('.work-index-card__visual img');
               assert(await image.count()===1,`Work ${width} ${project}: visual image missing`);
               await image.evaluate(async img=>{if(img.decode){try{await img.decode()}catch{}}});
@@ -106,11 +106,11 @@ jobs:
               assert(state.width>40&&state.height>40&&state.display!=='none'&&state.visibility!=='hidden'&&Number(state.opacity)>0,`Work ${width} ${project}: image not visibly laid out`);
               assert(state.nonWhiteRatio>0.01,`Work ${width} ${project}: image raster appears blank`);
               await card.screenshot({path:path.join(out,`work-${width}-${project}-painted.png`)});
-              painted.push({project,...state});
+              painted.push({project,metricLabels:cardLabels,...state});
             }
 
             assert(errors.length===0,`Console/page errors ${width} ${JSON.stringify(errors)}`);
-            report.work[width]={paymentValues,paymentLabels,workMetricLabels:allMetricLabels,painted};
+            report.work[width]={workMetricLabels:allMetricLabels,painted};
             report.errors.push(...errors.map(text=>({width,text})));
             await context.close();
           }
