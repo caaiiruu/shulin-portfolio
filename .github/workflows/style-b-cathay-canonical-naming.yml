@@ -1,0 +1,100 @@
+name: Style B Cathay Canonical Naming Patch
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.head_commit.message == 'Apply Cathay canonical naming patch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: migration/style-b-domain-work-v1
+
+      - name: Apply Human-approved canonical naming
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const contentPath='public/site/content/portfolio-content.json';
+          const manifestPath='public/site/content/portfolio-asset-manifest.json';
+          const data=JSON.parse(fs.readFileSync(contentPath,'utf8'));
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          const version='2026-09-11-style-b-cathay-canonical-naming';
+
+          const updates={
+            'cathay-mortgage-assistant':{
+              en:'From rigid scripts to flexible mortgage consultation',
+              zh:'從僵化話術到彈性房貸諮詢'
+            },
+            'cathay-sit-review-remediation-operations':{
+              en:'From interface issues to prioritised remediation',
+              zh:'從介面問題到優先修正'
+            },
+            'cathay-sit-online-account-opening':{
+              en:'From fragmented steps to end-to-end account opening',
+              zh:'從零散步驟到端到端開戶流程'
+            }
+          };
+
+          const localize=(value,en,zh)=>{
+            if(value && typeof value==='object' && !Array.isArray(value)) return {...value,en,zh};
+            return {en,zh};
+          };
+
+          for(const [id,next] of Object.entries(updates)){
+            const p=data.projects?.[id];
+            if(!p) throw new Error(`Missing canonical project ${id}`);
+            console.log('BEFORE',id,JSON.stringify({company:p.company,title:p.title,transformation:p.transformation,transformation_zh:p.transformation_zh,hero:p.publicContent?.hero,heroMetadata:p.heroMetadata},null,2));
+
+            p.company='Cathay';
+            p.title=localize(p.title,next.en,next.zh);
+
+            if(p.transformation && typeof p.transformation==='object' && !Array.isArray(p.transformation)) {
+              p.transformation={...p.transformation,en:next.en,zh:next.zh};
+            } else {
+              p.transformation=next.en;
+            }
+            p.transformation_zh=next.zh;
+
+            // Keep duplicated public hero/project-name fields aligned only when they
+            // are acting as project-title mirrors. Do not rewrite narrative headings.
+            const syncMirroredTitle=(holder,key)=>{
+              if(!holder || !(key in holder)) return;
+              const value=holder[key];
+              if(value && typeof value==='object' && !Array.isArray(value) && ('en' in value || 'zh' in value)) {
+                holder[key]={...value,en:next.en,zh:next.zh};
+              }
+            };
+            syncMirroredTitle(p.heroMetadata,'title');
+            syncMirroredTitle(p.publicContent?.hero,'title');
+
+            console.log('AFTER',id,JSON.stringify({company:p.company,title:p.title,transformation:p.transformation,transformation_zh:p.transformation_zh,hero:p.publicContent?.hero,heroMetadata:p.heroMetadata},null,2));
+          }
+
+          data.contentVersion=version;
+          manifest.contentVersion=version;
+          fs.writeFileSync(contentPath,JSON.stringify(data,null,2)+'\n');
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+      - name: Validate SSOT before commit
+        run: |
+          npm run install:ci
+          npm run validate:ssot
+          npm run build
+
+      - name: Commit canonical content patch
+        run: |
+          git config user.name 'caiiru'
+          git config user.email '63276875+caaiiruu@users.noreply.github.com'
+          git add public/site/content/portfolio-content.json public/site/content/portfolio-asset-manifest.json
+          git diff --cached --check
+          git commit -m 'Canonicalize Cathay recruiter-facing names'
+          git push origin HEAD:migration/style-b-domain-work-v1
