@@ -44,7 +44,7 @@ jobs:
           replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");', '  assert.equal(project.title.en,"From rigid scripts to flexible mortgage consultation");')
           replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.company,"Cathay Life Insurance");', '  assert.equal(project.company,"Cathay");')
           replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");', '  assert.equal(project.heroMetadata.company,"Cathay");')
-          replace_exact('tests/rendered-html.test.mjs', '  assert.doesNotMatch(project.title.en,/^From\\s/);', '  assert.equal(project.title.en.startsWith("From "),true);')
+          replace_exact('tests/rendered-html.test.mjs', '  assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across 4 core tasks.");\n  assert.doesNotMatch(project.title.en,/^From\\s/);', '  assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across 4 core tasks.");\n  assert.equal(project.title.en.startsWith("From "),true);')
 
           test_path=Path('tests/rendered-html.test.mjs')
           text=test_path.read_text()
