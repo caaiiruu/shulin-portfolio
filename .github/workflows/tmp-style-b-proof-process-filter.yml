@@ -1,0 +1,40 @@
+name: Temporary Style B Proof Process Filter
+
+on:
+  push:
+    branches: [migration/style-b-domain-work-v1]
+    paths: [.github/workflows/tmp-style-b-proof-process-filter.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: migration/style-b-domain-work-v1
+      - name: Strengthen recruiter proof filter
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          paths=[Path('public/site/assets/js/work.js'),Path('public/site/assets/js/domain-experience.js')]
+          old=r"const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|時程|週期|交付(?:期間|時程|週期)/i;"
+          new=r"const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|interviews?|participants?|respondents?|core\s*functions?|functions?|flows?|prototypes?|usability\s*tasks?|時程|週期|交付(?:期間|時程|週期)|訪談|參與者|功能|原型|可用性任務/i;"
+          for p in paths:
+            s=p.read_text()
+            if s.count(old)!=1:
+              raise SystemExit(f'{p}: expected exactly one proof forbidden anchor, got {s.count(old)}')
+            p.write_text(s.replace(old,new,1))
+          PY
+          git diff --check
+      - name: Commit scoped proof filter
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add public/site/assets/js/work.js public/site/assets/js/domain-experience.js
+          git diff --cached --check
+          git commit -m "Exclude process metrics from outer-card proof"
+          git push origin HEAD:migration/style-b-domain-work-v1
