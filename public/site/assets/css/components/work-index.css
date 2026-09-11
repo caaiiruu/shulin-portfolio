@@ -82,11 +82,12 @@
   .work-index-card__content{grid-template-rows:auto auto minmax(var(--space-3),1fr) auto auto;padding:var(--space-5)}
   .work-index-card__meta,.work-index-card--secondary .work-index-card__meta{display:grid;grid-template-columns:1fr;justify-items:start;gap:var(--space-2);font-size:var(--sys-type-label)}
   .work-index-card__identity,.work-index-card--secondary .work-index-card__identity{justify-content:flex-start;margin-left:0;max-width:none;white-space:normal;text-align:left}
-  .work-index-card__title{max-width:none;margin-top:var(--space-6);font-size:var(--dimension-2-125rem);line-height:1.05}
+  .work-index-card__title,.work-index-card--secondary .work-index-card__title,.work-index-card--half .work-index-card__title{max-width:none;margin-top:var(--space-6);font-size:var(--dimension-2rem);line-height:1.05}
   .work-index-card--hero .work-index-card__title{font-size:var(--dimension-2-25rem)}
   .work-index-card--compact .work-index-card__title{font-size:var(--dimension-1-75rem)}
   .work-index-card__metrics{gap:var(--space-2);margin:0;padding-top:0;border-top:0}
-  .work-index-card__metric-value{font-size:var(--sys-type-body-lg)!important}
+  .work-index-card__metric-value,.work-index-card--secondary .work-index-card__metric-value,.work-index-card--half .work-index-card__metric-value{font-size:var(--sys-type-heading-3)!important}
+  .work-index-card--compact .work-index-card__metric-value{font-size:var(--sys-type-body-lg)!important}
   .work-index-card__metric-label{font-size:var(--sys-type-label)}
   .work-index-card__cta{margin-top:var(--space-2);padding-top:var(--space-2)}
   .work-index-card__visual{aspect-ratio:16/9;min-height:0!important}
