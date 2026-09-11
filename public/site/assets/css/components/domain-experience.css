@@ -140,5 +140,6 @@
 @media(max-width:600px){
   .domain-experience{--domain-card-height:calc(var(--dimension-640px) - var(--dimension-64px));--domain-wheel-height:calc(var(--dimension-640px) - var(--dimension-16px))}
   .domain-experience .domain-project-card-v2{grid-template-rows:minmax(0,1fr) auto}
+  .domain-experience .domain-project-card-v2__metrics{padding-top:0;border-top:0}
   .domain-experience .domain-project-card-v2__visual{aspect-ratio:16/9}
 }
