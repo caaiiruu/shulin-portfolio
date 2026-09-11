@@ -100,17 +100,25 @@ jobs:
             report.push({label,...state});
           };
 
+          const activateProject=async(projectId,maxSteps)=>{
+            for(let step=0;step<=maxSteps;step++){
+              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              if((await active.getAttribute('data-project'))===projectId)return;
+              await active.focus();
+              await page.keyboard.press('ArrowRight');
+              await page.waitForTimeout(80);
+            }
+            throw new Error(`Could not activate ${projectId}`);
+          };
+
           for(let tabIndex=0;tabIndex<await tabs.count();tabIndex++){
             await tabs.nth(tabIndex).click();
             await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',tabIndex);
             await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2').length>0);
             const projectIds=await domain.locator('.domain-project-card-v2').evaluateAll(nodes=>nodes.map(n=>n.dataset.project));
             for(const projectId of projectIds){
+              await activateProject(projectId,projectIds.length+1);
               const card=domain.locator(`.domain-project-card-v2[data-project="${projectId}"]`);
-              if((await card.getAttribute('data-wheel-offset'))!=='0'){
-                await card.evaluate(node=>node.click());
-                await page.waitForFunction(id=>document.querySelector(`#domains .domain-project-card-v2[data-project="${id}"]`)?.dataset.wheelOffset==='0',projectId);
-              }
               await verifyCard(card,`tab-${tabIndex+1}-${projectId}`);
             }
           }
