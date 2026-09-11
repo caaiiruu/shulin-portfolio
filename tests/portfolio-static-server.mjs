@@ -7,7 +7,7 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
   ".jpeg": "image/jpeg",
-  ".jpg": "image/jpeg",
+  ".jpg": "image/jpg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json",
   ".pdf": "application/pdf",
@@ -16,6 +16,13 @@ const types = {
   ".webp": "image/webp",
   ".woff2": "font/woff2",
 };
+
+const cleanPages = new Map([
+  ["/", "site/index.html"],
+  ["/work", "site/work.html"],
+  ["/experiments", "site/experiments.html"],
+  ["/profile", "site/profile.html"],
+]);
 
 const port=Number(process.env.PORT||3000);
 http.createServer((request, response) => {
@@ -28,9 +35,12 @@ http.createServer((request, response) => {
   }
 
   const cleanWorkRoute = pathname.match(/^\/work\/([^/]+)\/?$/);
+  const cleanPage = cleanPages.get(pathname.replace(/\/$/, "") || "/");
   let file = cleanWorkRoute
     ? path.resolve(root, `./site/work/${cleanWorkRoute[1]}.html`)
-    : path.resolve(root, `.${pathname}`);
+    : cleanPage
+      ? path.resolve(root, cleanPage)
+      : path.resolve(root, `.${pathname}`);
   if (file.startsWith(root) && (!fs.existsSync(file) || fs.statSync(file).isDirectory())) {
     const htmlFile = `${file}.html`;
     if (htmlFile.startsWith(root) && fs.existsSync(htmlFile)) file = htmlFile;
