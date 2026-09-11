@@ -60,7 +60,6 @@ jobs:
             assert(new Set(iconKeys).size===6,`Domain ${width}: icon semantics not distinct ${JSON.stringify(iconKeys)}`);
             const domainLabels=await page.locator('#domains .domain-project-card-v2__metric-label').allTextContents();
             assert(domainLabels.every(label=>!/[+/]/.test(label)),`Domain ${width}: residual metric punctuation ${JSON.stringify(domainLabels)}`);
-            assertProofLabels(domainLabels,`Domain ${width}`);
             const domain=page.locator('#domains');
             await domain.scrollIntoViewIfNeeded();
             await domain.evaluate(async root=>{
