@@ -212,14 +212,29 @@ jobs:
               }
 
               if(width===430){
+                const targetDomain=await tabs.nth(0).getAttribute('data-domain');
+                assert(targetDomain,'Home 430: first Domain tab missing data-domain');
                 await tabs.nth(0).click();
-                await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
+                await page.waitForFunction(expected=>{
+                  const root=document.querySelector('#domains');
+                  const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
+                  const wheel=root?.querySelector('.domain-wheel-v2');
+                  const active=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
+                  const visual=active?.length===1?active[0].querySelector('.domain-project-card-v2__visual'):null;
+                  return selected?.getAttribute('data-domain')===expected
+                    && wheel?.dataset.domainPresentationId===expected
+                    && active?.length===1
+                    && active[0].isConnected
+                    && Boolean(visual?.isConnected);
+                },targetDomain);
+                await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
                 const cards=domain.locator('.domain-project-card-v2');
                 if(await cards.count()>1){
                   const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
                   const firstProject=await activeCard.getAttribute('data-project');
                   const visual=activeCard.locator('.domain-project-card-v2__visual');
-                  await visual.scrollIntoViewIfNeeded();
+                  await visual.evaluate(node=>node.scrollIntoView({block:'center',inline:'nearest'}));
+                  await page.waitForTimeout(60);
                   const vb=await visual.boundingBox();
                   assert(vb,'Home 430: swipe visual missing');
                   const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
