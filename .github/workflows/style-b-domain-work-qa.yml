@@ -25,7 +25,8 @@ jobs:
           git diff --check "$BASE"...HEAD
           git diff --name-only "$BASE"...HEAD | tee /tmp/changed.txt
           ! grep -Fxq 'public/site/assets/js/app.js' /tmp/changed.txt
-          ! grep -Fxq 'public/site/content/portfolio-content.json' /tmp/changed.txt
+          test -f public/site/content/portfolio-content.json
+          test -f public/site/content/portfolio-asset-manifest.json
           ! grep -Fxq 'public/site/assets/css/components/project-card.css' /tmp/changed.txt
           ! grep -Fxq 'scripts/build-production-assets.mjs' /tmp/changed.txt
           ! grep -Fxq 'scripts/generate-project-pages.mjs' /tmp/changed.txt
@@ -33,6 +34,26 @@ jobs:
           ! grep -Fxq 'public/site/assets/css/components/project-detail-overview.css' /tmp/changed.txt
           git diff --quiet "$BASE"...HEAD -- public/site/assets/css/components/domain-selector.css
           ! grep -q 'related-project-card' public/site/assets/css/components/domain-experience.css
+
+      - name: Verify approved Cathay canonical SSOT
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const data=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
+          const manifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
+          if(data.contentVersion!==manifest.contentVersion) throw new Error('Content/asset manifest version drift');
+          const expected={
+            'cathay-mortgage-assistant':'From rigid scripts to flexible mortgage consultation',
+            'cathay-sit-review-remediation-operations':'From interface issues to prioritised remediation',
+            'cathay-sit-online-account-opening':'From fragmented steps to end-to-end account opening'
+          };
+          for(const [id,title] of Object.entries(expected)){
+            const p=data.projects?.[id];
+            if(!p) throw new Error(`Missing ${id}`);
+            if(p.company!=='Cathay'||p.heroMetadata?.company!=='Cathay') throw new Error(`${id}: company not canonical Cathay`);
+            if(p.title?.en!==title||p.transformation!==title) throw new Error(`${id}: title/transformation drift`);
+          }
+          NODE
 
       - name: Install build and validate source
         run: |
