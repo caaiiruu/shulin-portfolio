@@ -55,6 +55,7 @@ jobs:
 
             p.company='Cathay';
             p.title=localize(p.title,next.en,next.zh);
+            if(p.heroMetadata?.company) p.heroMetadata.company='Cathay';
 
             if(p.transformation && typeof p.transformation==='object' && !Array.isArray(p.transformation)) {
               p.transformation={...p.transformation,en:next.en,zh:next.zh};
@@ -63,8 +64,6 @@ jobs:
             }
             p.transformation_zh=next.zh;
 
-            // Keep duplicated public hero/project-name fields aligned only when they
-            // are acting as project-title mirrors. Do not rewrite narrative headings.
             const syncMirroredTitle=(holder,key)=>{
               if(!holder || !(key in holder)) return;
               const value=holder[key];
@@ -84,11 +83,11 @@ jobs:
           fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
           NODE
 
-      - name: Validate SSOT before commit
+      - name: Build and validate SSOT before commit
         run: |
           npm run install:ci
-          npm run validate:ssot
           npm run build
+          npm run validate:ssot
 
       - name: Commit canonical content patch
         run: |
