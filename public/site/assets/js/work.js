@@ -296,6 +296,7 @@
     const adapted = adaptedProject(source.projectId);
     const article = element('article', `work-index-card work-index-card--${variant}`);
     article.dataset.workIndexProject = source.projectId;
+    article.dataset.workIndexTier = variant;
     article.dataset.workCategories = (categoryMap[source.projectId] || []).join(' ');
     article.style.setProperty('--project-card-tint', tintForProject(source.projectId));
 
@@ -384,14 +385,24 @@
     featured.append(createCard(cards[0], 'hero', 3));
     featured.append(createCard(cards[1], 'secondary', 2));
 
+    const mediumSources = cards.slice(2, 4);
+    if (mediumSources.length) {
+      const mediumRow = element('div', 'work-index__featured-secondary-row');
+      mediumRow.dataset.workIndexTier = 'medium-row';
+      mediumSources.forEach((card) => mediumRow.append(createCard(card, 'half', 2)));
+      featured.append(mediumRow);
+    }
+
+    const moreSources = cards.slice(4);
     const more = element('section', 'work-index__more');
     const moreHead = element('div', 'work-index__more-head');
     moreHead.append(element('h2', '', copy('More work', '更多作品')));
     const moreGrid = element('div', 'work-index__more-grid');
-    cards.slice(2).forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
+    moreSources.forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
     more.append(moreHead, moreGrid);
 
-    shell.append(intro, filters, featured, more);
+    shell.append(intro, filters, featured);
+    if (moreSources.length) shell.append(more);
     root.append(shell);
     sourceHero?.insertAdjacentElement('beforebegin', root);
     sourceHero?.setAttribute('hidden', '');
