@@ -225,7 +225,7 @@
   const proofTier = (value, rawLabel) => {
     const label = String(rawLabel || '').trim();
     const text = `${label} ${value}`.toLowerCase();
-    const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|時程|週期|交付(?:期間|時程|週期)/i;
+    const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|interviews?|participants?|respondents?|core\s*functions?|functions?|flows?|prototypes?|usability\s*tasks?|時程|週期|交付(?:期間|時程|週期)|訪談|參與者|功能|原型|可用性任務/i;
     if (forbidden.test(label)) return 0;
     const impact = /success|conversion|completion|adoption|active|usage|nps|satisfaction|retention|redemption|digital\s*share|share|rate|faster|speed|efficien|reduc|decreas|increas|improv|saved|accuracy|quality|error|drop|lift|growth|uptake|成功|轉換|完成率|採用|活躍|使用率|滿意|留存|兌換|佔比|比例|更快|效率|降低|減少|提升|增加|節省|準確|品質|錯誤/i;
     if (impact.test(text)) return 2;
