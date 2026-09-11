@@ -65,6 +65,24 @@
     }
     return text;
   };
+  const syncDirectProjectSummary = () => {
+    const summary = document.querySelector('.direct-project-summary[data-project-route-summary]');
+    if (!summary) return;
+    const projectId = summary.dataset.projectRouteSummary || '';
+    const project = DATA.projects?.[projectId];
+    if (!project) return;
+    const company = summary.querySelector(':scope > p');
+    const title = summary.querySelector(':scope > h1');
+    if (company) company.textContent = firstText(project.company);
+    if (title) title.textContent = visibleProjectTitle(firstText(
+      language() === 'zh' ? project.transformation_zh : project.transformation,
+      project.transformation,
+      project.title,
+      projectId
+    ));
+  };
+  syncDirectProjectSummary();
+  document.addEventListener('portfolio:language', syncDirectProjectSummary);
 
   const taxonomy = [
     ['all', 'All', '全部'],
