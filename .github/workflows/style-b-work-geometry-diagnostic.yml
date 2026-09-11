@@ -27,36 +27,78 @@ jobs:
         run: |
           PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-geometry-server.log 2>&1 &
           for i in $(seq 1 30); do
-            curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0
+            curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0
             sleep 1
           done
           cat /tmp/work-geometry-server.log
           exit 1
-      - name: Measure Work card geometry
+      - name: Mirror Human QA then sample Work geometry
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
           import { chromium } from '@playwright/test';
+          const base='http://127.0.0.1:4173';
           const browser=await chromium.launch({headless:true});
-          const page=await browser.newPage({viewport:{width:430,height:1100}});
-          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
-          await page.waitForSelector('.work-index');
-          await page.waitForFunction(()=>[...document.querySelectorAll('.work-index-card__visual img')].every(img=>img.complete&&img.naturalWidth>0));
-          const cards=page.locator('.work-index__featured .work-index-card');
-          const result=[];
-          for(let i=0;i<await cards.count();i++){
-            const card=cards.nth(i);
-            await card.scrollIntoViewIfNeeded();
-            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-            result.push(await card.evaluate(node=>{
-              const button=node.querySelector('.work-index-card__button');
-              const content=node.querySelector('.work-index-card__content');
-              const visual=node.querySelector('.work-index-card__visual');
-              const r=n=>{const b=n.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height,top:b.top,bottom:b.bottom}};
-              const s=n=>{const c=getComputedStyle(n);return{display:c.display,height:c.height,minHeight:c.minHeight,maxHeight:c.maxHeight,alignSelf:c.alignSelf,boxSizing:c.boxSizing,gridTemplateRows:c.gridTemplateRows,overflow:c.overflow,paddingTop:c.paddingTop,paddingBottom:c.paddingBottom,borderTop:c.borderTopWidth,borderBottom:c.borderBottomWidth}};
-              return{project:node.dataset.workIndexProject,card:{box:r(node),style:s(node)},button:{box:r(button),style:s(button)},content:{box:r(content),style:s(content)},visual:{box:r(visual),style:s(visual)},delta:{width:r(node).width-r(button).width,height:r(node).height-r(button).height}};
-            }));
+          const context=await browser.newContext({viewport:{width:430,height:1100},reducedMotion:'no-preference'});
+          const page=await context.newPage();
+
+          // Mirror the Human QA 430 Domain sequence before navigating to Work.
+          await page.goto(`${base}/site/index.html`,{waitUntil:'networkidle'});
+          const domain=page.locator('#domains');
+          await domain.scrollIntoViewIfNeeded();
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+          const tabs=domain.locator('.domain-tab');
+          for(let i=0;i<await tabs.count();i++){
+            await tabs.nth(i).click();
+            await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
+            await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
           }
-          console.log('WORK_GEOMETRY_430='+JSON.stringify(result,null,2));
+          const targetDomain=await tabs.nth(0).getAttribute('data-domain');
+          await tabs.nth(0).click();
+          await page.waitForFunction(expected=>{
+            const root=document.querySelector('#domains');
+            const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
+            const wheel=root?.querySelector('.domain-wheel-v2');
+            const active=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
+            const visual=active?.length===1?active[0].querySelector('.domain-project-card-v2__visual'):null;
+            return selected?.getAttribute('data-domain')===expected&&wheel?.dataset.domainPresentationId===expected&&active?.length===1&&active[0].isConnected&&Boolean(visual?.isConnected);
+          },targetDomain);
+          await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+          const cards=domain.locator('.domain-project-card-v2');
+          if(await cards.count()>1){
+            const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+            const visual=activeCard.locator('.domain-project-card-v2__visual');
+            await visual.evaluate(node=>node.scrollIntoView({block:'center',inline:'nearest'}));
+            await page.waitForTimeout(60);
+            const vb=await visual.boundingBox();
+            const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
+            await page.mouse.move(sx,cy);await page.mouse.down();await page.mouse.move(ex,cy,{steps:8});await page.mouse.up();
+            await page.waitForTimeout(80);
+          }
+
+          // Match Human QA navigation and image-ready condition, then sample immediately and as layout settles.
+          await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
+          await page.waitForSelector('.work-index',{timeout:10000});
+          await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(img=>img.complete&&img.naturalWidth>0&&img.naturalHeight>0)},{timeout:10000});
+
+          const sample=async label=>{
+            const result=await page.locator('.work-index__featured .work-index-card').evaluateAll(nodes=>nodes.map(node=>{
+              const button=node.querySelector('.work-index-card__button');
+              const c=node.getBoundingClientRect(),b=button.getBoundingClientRect();
+              return {project:node.dataset.workIndexProject,card:{width:c.width,height:c.height},button:{width:b.width,height:b.height},delta:{width:c.width-b.width,height:c.height-b.height},cardBorder:{left:getComputedStyle(node).borderLeftWidth,right:getComputedStyle(node).borderRightWidth,top:getComputedStyle(node).borderTopWidth,bottom:getComputedStyle(node).borderBottomWidth}};
+            }));
+            console.log(`WORK_GEOMETRY_${label}=`+JSON.stringify({fonts:await page.evaluate(()=>document.fonts?.status||'unsupported'),result}));
+          };
+          await sample('T0');
+          await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+          await sample('RAF1');
+          await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+          await sample('RAF2');
+          await page.waitForTimeout(50);
+          await sample('T50');
+          await page.evaluate(async()=>{if(document.fonts?.ready)await document.fonts.ready;});
+          await sample('FONTS_READY');
+
           await browser.close();
           NODE
