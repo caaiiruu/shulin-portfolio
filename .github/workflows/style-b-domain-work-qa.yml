@@ -297,9 +297,9 @@ jobs:
               await context.close();
             }
             const cathayRoutes={
-              'cathay-mortgage-assistant':'From rigid scripts to flexible mortgage consultation',
-              'cathay-sit-review-remediation-operations':'From interface issues to prioritised remediation',
-              'cathay-sit-online-account-opening':'From fragmented steps to end-to-end account opening'
+              'cathay-mortgage-assistant':'Rigid scripts to flexible mortgage consultation',
+              'cathay-sit-review-remediation-operations':'Interface issues to prioritised remediation',
+              'cathay-sit-online-account-opening':'Fragmented steps to end-to-end account opening'
             };
             for(const [slug,expectedTitle] of Object.entries(cathayRoutes)){
               const context=await browser.newContext({viewport:{width:430,height:1000}}),page=await context.newPage();
@@ -310,7 +310,7 @@ jobs:
                 canonical:document.querySelector('link[rel="canonical"]')?.href||''
               }));
               assert(identity.canonical.endsWith(`/work/${slug}`),`${slug}: canonical mismatch`);
-              assert(identity.body.includes(expectedTitle),`${slug}: inner detail title drifted from canonical title`);
+              assert(identity.body.includes(expectedTitle),`${slug}: inner detail title drifted from visible title contract`);
               assert(identity.body.includes('Cathay'),`${slug}: inner detail company must render Cathay`);
               report.routes[slug]={status:response.status(),canonical:identity.canonical,expectedTitle};
               await context.close();
