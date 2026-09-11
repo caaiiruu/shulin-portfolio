@@ -21,8 +21,8 @@ jobs:
           from pathlib import Path
           p=Path('.github/workflows/style-b-domain-work-qa.yml')
           text=p.read_text()
-          old="""  const cathayRoutes={\n    'cathay-mortgage-assistant':'From rigid scripts to flexible mortgage consultation',\n    'cathay-sit-review-remediation-operations':'From interface issues to prioritised remediation',\n    'cathay-sit-online-account-opening':'From fragmented steps to end-to-end account opening'\n  };"""
-          new="""  const cathayRoutes={\n    'cathay-mortgage-assistant':'Rigid scripts to flexible mortgage consultation',\n    'cathay-sit-review-remediation-operations':'Interface issues to prioritised remediation',\n    'cathay-sit-online-account-opening':'Fragmented steps to end-to-end account opening'\n  };"""
+          old="""            const cathayRoutes={\n              'cathay-mortgage-assistant':'From rigid scripts to flexible mortgage consultation',\n              'cathay-sit-review-remediation-operations':'From interface issues to prioritised remediation',\n              'cathay-sit-online-account-opening':'From fragmented steps to end-to-end account opening'\n            };"""
+          new="""            const cathayRoutes={\n              'cathay-mortgage-assistant':'Rigid scripts to flexible mortgage consultation',\n              'cathay-sit-review-remediation-operations':'Interface issues to prioritised remediation',\n              'cathay-sit-online-account-opening':'Fragmented steps to end-to-end account opening'\n            };"""
           count=text.count(old)
           if count==0:
               if new in text:
