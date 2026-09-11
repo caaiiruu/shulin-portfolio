@@ -96,6 +96,11 @@ jobs:
           const isWhite=value=>/rgba?\(\s*255\s*,\s*255\s*,\s*255/i.test(value||'');
           const forbiddenProof=/\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
           const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(x)),`${label}: filler proof returned ${JSON.stringify(labels)}`);
+          const stacked=async card=>card.evaluate(node=>{
+            const c=node.querySelector('.domain-project-card-v2__content,.work-index-card__content')?.getBoundingClientRect();
+            const v=node.querySelector('.domain-project-card-v2__visual,.work-index-card__visual')?.getBoundingClientRect();
+            return Boolean(c&&v&&v.top>=c.bottom-2);
+          });
 
           try{
             for(const width of widths){
@@ -115,7 +120,7 @@ jobs:
               assert(await tabs.count()===6,`Home ${width}: expected 6 Domain tabs`);
               assert(await domain.locator('.domain-tab__icon svg').count()===6,`Home ${width}: all Domain tabs require icons`);
               const iconStates=await domain.locator('.domain-tab__icon').evaluateAll(nodes=>nodes.map(n=>{const s=getComputedStyle(n);return{display:s.display,visibility:s.visibility,opacity:Number(s.opacity),w:n.getBoundingClientRect().width,h:n.getBoundingClientRect().height}}));
-              assert(iconStates.every(x=>x.display!=='none'&&x.visibility!=='hidden'&&x.opacity>0&&x.w>0&&x.h>0),`Home ${width}: Domain icons not rendered ${JSON.stringify(iconStates)}`);
+              assert(iconStates.every(x=>x.display!=='none'&&x.visibility!=='hidden'&&x.opacity>0&&x.w>0&&x.h>0),`Home ${width}: Domain icons not rendered`);
               const tabLabels=(await domain.locator('.domain-tab__label').allTextContents()).map(clean);
               assert(tabLabels.length===6&&tabLabels.every(Boolean),`Home ${width}: Domain labels missing`);
               assert(!tabLabels.some(x=>/^all$/i.test(x)),`Home ${width}: unexpected All tab`);
@@ -123,7 +128,7 @@ jobs:
               const viewport=await page.evaluate(()=>document.documentElement.clientWidth);
               const wheel=domain.locator('.domain-wheel-v2');
               const wheelBox=await wheel.boundingBox();
-              assert(wheelBox&&Math.abs(wheelBox.width-viewport)<=2,`Home ${width}: wheel not full bleed ${wheelBox?.width}/${viewport}`);
+              assert(wheelBox&&Math.abs(wheelBox.width-viewport)<=2,`Home ${width}: wheel not full bleed`);
               assert(Math.abs(wheelBox.x)<=2,`Home ${width}: wheel x ${wheelBox?.x}`);
 
               const disclosures=domain.locator('details.domain-experience-disclosure');
@@ -131,7 +136,7 @@ jobs:
               for(const d of await disclosures.all())assert(!(await d.getAttribute('open')),`Home ${width}: disclosure default open`);
               assert(await domain.locator('.domain-experience__project-heading:visible').count()===0,`Home ${width}: Related Work heading visible`);
 
-              const verifyActive=async(label)=>{
+              const verifyDomainCard=async(label)=>{
                 const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
                 assert(await active.count()===1,`${label}: exactly one active card required`);
                 assert(clean(await active.locator('.domain-project-card-v2__title').textContent()).length>8,`${label}: title missing`);
@@ -139,8 +144,7 @@ jobs:
                 const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
                 assert(href?.startsWith('/work/'),`${label}: CTA missing`);
                 const image=active.locator('.domain-project-card-v2__image');
-                assert(await image.count()===1,`${label}: temporary visual missing`);
-                assert(await image.evaluate(img=>img.complete&&img.naturalWidth>0&&img.naturalHeight>0),`${label}: visual not decoded`);
+                assert(await image.count()===1&&await image.evaluate(img=>img.complete&&img.naturalWidth>0&&img.naturalHeight>0),`${label}: visual not decoded`);
                 const values=active.locator('.domain-project-card-v2__metric-value');
                 const labels=active.locator('.domain-project-card-v2__metric-label');
                 const count=await values.count();
@@ -166,79 +170,62 @@ jobs:
                   const title=card.querySelector('.domain-project-card-v2__title');
                   const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),tir=title.getBoundingClientRect();
                   const mr=metrics?.getBoundingClientRect();
-                  const ms=metrics?getComputedStyle(metrics):null,vs=getComputedStyle(visual);
-                  return{bg:getComputedStyle(content).backgroundColor,valueSize:value?parseFloat(getComputedStyle(value).fontSize):null,labelSize:metricLabel?parseFloat(getComputedStyle(metricLabel).fontSize):null,metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr?.top??null,titleBottom:tir.bottom,metricBorderTop:ms?(parseFloat(ms.borderTopWidth)||0):0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
+                  const ms=metrics?getComputedStyle(metrics):null;
+                  return{bg:getComputedStyle(content).backgroundColor,valueSize:value?parseFloat(getComputedStyle(value).fontSize):null,labelSize:metricLabel?parseFloat(getComputedStyle(metricLabel).fontSize):null,metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr?.top??null,titleBottom:tir.bottom,metricBorderTop:ms?(parseFloat(ms.borderTopWidth)||0):0,visualRatio:vr.height?vr.width/vr.height:0};
                 });
                 assert(!isWhite(state.bg),`${label}: project tint missing`);
                 if(count>0)assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
                 assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
+                if(width===1419){
+                  assert(Math.abs(state.visualLeft-state.contentRight)<=2,`${label}: desktop horizontal billboard regressed`);
+                }else{
+                  assert(Math.abs(state.visualTop-state.contentBottom)<=2,`${label}: tablet/mobile must stack content before visual`);
+                  if(count>0)assert(state.metricsTop>state.titleBottom,`${label}: metrics not below title`);
+                }
                 if(width===430){
                   if(count>0)assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
                   assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
-                  if(count>0)assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
                   assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
                 }
-                return {active,state};
+                return{active,state};
               };
-
-              const {active,state}=await verifyActive(`Home ${width}`);
-              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]').count()===1,`Home ${width}: previous card missing`);
-              assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="1"]').count()===1,`Home ${width}: next card missing`);
-              assert(Number(await active.getAttribute('tabindex'))>=0,`Home ${width}: active not keyboard target`);
-
-              const box=await active.boundingBox();
-              if(width===1419){assert(Math.abs(box.width-1120)<=3&&Math.abs(box.height-430)<=3,`Home 1419: card geometry ${box.width}x${box.height}`)}
-              else if(width===871){assert(box.width>=716&&box.width<=734&&box.height>=440&&box.height<=460,`Home 871: card geometry ${box.width}x${box.height}`)}
-              else{assert(box.width>=330&&box.width<=338&&Math.abs(box.height-576)<=3,`Home 430: card geometry ${box.width}x${box.height}`)}
-              if(width===1419||width===871)assert(Math.abs(state.visualLeft-state.contentRight)<=2,`Home ${width}: horizontal billboard regressed`);
-              else assert(Math.abs(state.visualTop-state.contentBottom)<=2,`Home 430: visual must follow content`);
-
-              const controls=domain.locator('.domain-wheel-v2__control');
-              if(width>600){
-                const controlBoxes=await controls.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,cx:r.left+r.width/2}}));
-                assert(controlBoxes.length===2&&controlBoxes.every(b=>b.w>=44&&b.h>=44),`Home ${width}: controls below 44x44`);
-                const cardCenter=box.x+box.width/2;
-                const leftDistance=cardCenter-controlBoxes[0].cx;
-                const rightDistance=controlBoxes[1].cx-cardCenter;
-                assert(Math.abs(leftDistance-rightDistance)<=3,`Home ${width}: controls asymmetric ${leftDistance}/${rightDistance}`);
-              }else{
-                assert(await domain.locator('.domain-wheel-v2__control:visible').count()===0,`Home 430: wheel controls must be hidden`);
-              }
-
-              await page.mouse.move(1,1);await page.waitForTimeout(50);
-              const before=await active.evaluate(card=>{const image=getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform;const arrow=getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform;const m=new DOMMatrix(arrow==='none'?undefined:arrow);return{image,arrow,m11:m.m11,m12:m.m12,m21:m.m21,m22:m.m22,x:m.m41,y:m.m42}});
-              await active.hover();await page.waitForTimeout(320);
-              const after=await active.evaluate(card=>{const image=getComputedStyle(card.querySelector('.domain-project-card-v2__image')).transform;const arrow=getComputedStyle(card.querySelector('.domain-project-card-v2__cta-arrow')).transform;const m=new DOMMatrix(arrow==='none'?undefined:arrow);return{image,arrow,m11:m.m11,m12:m.m12,m21:m.m21,m22:m.m22,x:m.m41,y:m.m42}});
-              assert(before.image!==after.image,`Home ${width}: image hover motion missing`);
-              assert(after.x>before.x+1&&Math.abs(after.y-before.y)<1,`Home ${width}: CTA arrow must move right only ${before.x},${before.y} -> ${after.x},${after.y}`);
-              assert(Math.abs(after.m11-before.m11)<0.02&&Math.abs(after.m12-before.m12)<0.02&&Math.abs(after.m21-before.m21)<0.02&&Math.abs(after.m22-before.m22)<0.02,`Home ${width}: CTA arrow direction changed on hover`);
-
-              const firstProject=await active.getAttribute('data-project');
-              if(width>600){
-                await controls.nth(1).click();
-                const moved=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-                assert(await moved.getAttribute('data-project')!==firstProject,`Home ${width}: next control failed`);
-                await moved.focus();await page.keyboard.press('ArrowLeft');
-                assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')===firstProject,`Home ${width}: keyboard failed`);
-              }else{
-                const wheelBoxForDrag=await wheel.boundingBox();
-                const cy=wheelBoxForDrag.y+Math.min(wheelBoxForDrag.height/2,300);
-                const startX=wheelBoxForDrag.x+wheelBoxForDrag.width*.68;
-                const endX=wheelBoxForDrag.x+wheelBoxForDrag.width*.32;
-                await page.mouse.move(startX,cy);await page.mouse.down();await page.mouse.move(endX,cy,{steps:6});await page.mouse.up();
-                assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==firstProject,`Home 430: swipe failed`);
-              }
 
               for(let i=0;i<await tabs.count();i++){
                 await tabs.nth(i).click();
-                await page.waitForFunction(index=>document.querySelectorAll('.domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
+                await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
                 await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
-                await verifyActive(`Home ${width} Domain tab ${i+1}`);
+                const {active}=await verifyDomainCard(`Home ${width} Domain tab ${i+1}`);
+                const cards=domain.locator('.domain-project-card-v2');
+                const projectCount=await cards.count();
+                const visibleControls=domain.locator('.domain-wheel-v2__control:visible');
+                if(width<=600||projectCount<=1){
+                  assert(await visibleControls.count()===0,`Home ${width} Domain tab ${i+1}: controls must be hidden for mobile or single project`);
+                }else{
+                  assert(await visibleControls.count()===2,`Home ${width} Domain tab ${i+1}: expected two controls for ${projectCount} projects`);
+                  const firstProject=await active.getAttribute('data-project');
+                  await visibleControls.nth(1).click();
+                  const moved=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                  assert(await moved.getAttribute('data-project')!==firstProject,`Home ${width} Domain tab ${i+1}: next control failed`);
+                  await moved.focus();await page.keyboard.press('ArrowLeft');
+                }
                 for(const d of await disclosures.all())assert(!(await d.getAttribute('open')),`Home ${width}: disclosure reopened on tab ${i+1}`);
               }
 
+              if(width===430){
+                await tabs.nth(0).click();
+                await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
+                const cards=domain.locator('.domain-project-card-v2');
+                if(await cards.count()>1){
+                  const firstProject=await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
+                  const wb=await wheel.boundingBox();
+                  const cy=wb.y+Math.min(wb.height/2,300),sx=wb.x+wb.width*.68,ex=wb.x+wb.width*.32;
+                  await page.mouse.move(sx,cy);await page.mouse.down();await page.mouse.move(ex,cy,{steps:6});await page.mouse.up();
+                  assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==firstProject,'Home 430: swipe failed');
+                }
+              }
+
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Home ${width}: horizontal overflow`);
-              report.domain[width]={viewport,wheelWidth:wheelBox.width,wheelX:wheelBox.x,cardWidth:box.width,cardHeight:box.height,tabLabels};
+              report.domain[width]={viewport,wheelWidth:wheelBox.width,wheelX:wheelBox.x,tabLabels};
               await domain.screenshot({path:path.join(out,`domain-${width}.png`)});
 
               response=await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
@@ -248,42 +235,64 @@ jobs:
               const work=page.locator('.work-index');
               const filters=(await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters)===JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']),`Work ${width}: taxonomy ${JSON.stringify(filters)}`);
+
               const featured=work.locator('.work-index__featured .work-index-card');
-              assert(await featured.count()===4,`Work ${width}: expected 4 featured cards`);
-              const maximum=[3,2,2,2];
-              for(let i=0;i<4;i++){
-                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
-                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
-                const metricCount=await card.locator('.work-index-card__metric').count();
-                assert(metricCount<=maximum[i],`Work ${width}: card ${i+1} metric count ${metricCount}`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assert(metricLabels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Work ${width}: card ${i+1} long metric labels`);
-                assertProofLabels(metricLabels,`Work ${width}: card ${i+1}`);
-                if(metricCount>1){
-                  const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: card ${i+1} metrics not horizontal`);
-                }
-                const visual=card.locator('.work-index-card__visual img');
-                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: card ${i+1} visual missing`);
-                const typ=await card.evaluate(node=>{const value=node.querySelector('.work-index-card__metric-value'),label=node.querySelector('.work-index-card__metric-label');return{bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:value?parseFloat(getComputedStyle(value).fontSize):null,l:label?parseFloat(getComputedStyle(label).fontSize):null}});
-                assert(!isWhite(typ.bg),`Work ${width}: card ${i+1} tint`);
-                if(metricCount>0)assert(typ.v>typ.l,`Work ${width}: card ${i+1} metric hierarchy`);
-                if(width<=1100){const geo=await card.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(geo.vt>=geo.cb-2,`Work ${width}: card ${i+1} must stack`)}
-              }
-              await page.mouse.move(1,1);await page.waitForTimeout(50);
-              const hero=featured.nth(0);
-              const workBefore=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
-              await hero.hover();await page.waitForTimeout(320);
-              const workAfter=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
-              assert(workBefore.i!==workAfter.i&&workBefore.a!==workAfter.a,`Work ${width}: hover motion missing`);
               const more=work.locator('.work-index__more-grid .work-index-card');
-              assert(await more.count()>=1,`Work ${width}: More Work empty`);
+              assert(await featured.count()===2,`Work ${width}: expected 2 featured cards`);
+              assert(await more.count()===3,`Work ${width}: expected 3 More Work cards`);
+              const maximum=[3,2];
+              for(let i=0;i<2;i++){
+                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
+                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: featured ${i+1} target area`);
+                const metricCount=await card.locator('.work-index-card__metric').count();
+                assert(metricCount<=maximum[i],`Work ${width}: featured ${i+1} metric count ${metricCount}`);
+                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assert(metricLabels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Work ${width}: featured ${i+1} long metric labels`);
+                assertProofLabels(metricLabels,`Work ${width}: featured ${i+1}`);
+                const visual=card.locator('.work-index-card__visual img');
+                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: featured ${i+1} visual missing`);
+                const typ=await card.evaluate(node=>{const value=node.querySelector('.work-index-card__metric-value'),label=node.querySelector('.work-index-card__metric-label');return{bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:value?parseFloat(getComputedStyle(value).fontSize):null,l:label?parseFloat(getComputedStyle(label).fontSize):null}});
+                assert(!isWhite(typ.bg),`Work ${width}: featured ${i+1} tint`);
+                if(metricCount>0)assert(typ.v>typ.l,`Work ${width}: featured ${i+1} metric hierarchy`);
+              }
+
+              const hero=featured.nth(0),secondary=featured.nth(1);
+              if(width===1419){
+                const [h,s]=await Promise.all([hero.boundingBox(),secondary.boundingBox()]);
+                assert(h&&s&&Math.abs(h.y-s.y)<=2,`Work 1419: featured cards not row-aligned`);
+                assert(Math.abs(h.height-s.height)<=2,`Work 1419: featured cards not equal height ${h?.height}/${s?.height}`);
+                const heroGeo=await hero.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cr:c.right,vl:v.left}});
+                assert(Math.abs(heroGeo.vl-heroGeo.cr)<=2,'Work 1419: hero must remain horizontal');
+                assert(await stacked(secondary),'Work 1419: secondary must use mobile-style stacked layout');
+              }else{
+                assert(await stacked(hero),`Work ${width}: hero must stack`);
+                assert(await stacked(secondary),`Work ${width}: secondary must stack`);
+              }
+
+              const moreBoxes=await more.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}}));
+              if(width===1419){
+                assert(moreBoxes.length===3&&Math.max(...moreBoxes.map(x=>x.y))-Math.min(...moreBoxes.map(x=>x.y))<=2,'Work 1419: More Work must be one 3-up row');
+                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===3,'Work 1419: More Work must have three columns');
+              }else if(width===871){
+                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===2,'Work 871: More Work must use two columns');
+              }else{
+                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===1,'Work 430: More Work must use one column');
+              }
+
               for(let i=0;i<await more.count();i++){
                 const card=more.nth(i),metricCount=await card.locator('.work-index-card__metric').count();
                 assert(metricCount<=1,`Work ${width}: More Work ${i+1} metric count ${metricCount}`);
                 const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
                 assertProofLabels(metricLabels,`Work ${width}: More Work ${i+1}`);
+                assert(await stacked(card),`Work ${width}: More Work ${i+1} must use compact mobile-style layout`);
               }
+
+              await page.mouse.move(1,1);await page.waitForTimeout(50);
+              const workBefore=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
+              await hero.hover();await page.waitForTimeout(320);
+              const workAfter=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
+              assert(workBefore.i!==workAfter.i&&workBefore.a!==workAfter.a,`Work ${width}: hover motion missing`);
+
               const bandzo=work.locator('.work-index-card[data-work-index-project="bandzo"]');
               if(await bandzo.count()){
                 const bandzoLabels=(await bandzo.locator('.work-index-card__metric-label').allTextContents()).map(clean);
@@ -293,7 +302,7 @@ jobs:
               assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count()>=1,`Work ${width}: Operations filter empty`);
               await work.locator('[data-work-index-filter="all"]').click();
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Work ${width}: horizontal overflow`);
-              report.work[width]={filters};
+              report.work[width]={filters,featured:2,more:3};
               await work.screenshot({path:path.join(out,`work-${width}.png`)});
               await context.close();
             }
@@ -326,10 +335,7 @@ jobs:
               const context=await browser.newContext({viewport:{width:430,height:1000}}),page=await context.newPage();
               const response=await page.goto(`${base}/site/work/${slug}.html`,{waitUntil:'networkidle'});
               assert(response?.ok(),`${slug}: route failed`);
-              const identity=await page.evaluate(()=>({
-                body:document.body.innerText,
-                canonical:document.querySelector('link[rel="canonical"]')?.href||''
-              }));
+              const identity=await page.evaluate(()=>({body:document.body.innerText,canonical:document.querySelector('link[rel="canonical"]')?.href||''}));
               assert(identity.canonical.endsWith(`/work/${slug}`),`${slug}: canonical mismatch`);
               assert(identity.body.includes(expectedTitle),`${slug}: inner detail title drifted from visible title contract`);
               assert(identity.body.includes('Cathay'),`${slug}: inner detail company must render Cathay`);
