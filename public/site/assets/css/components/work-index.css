@@ -1,5 +1,5 @@
 /* Style B Work Index — Project Card v2 parity with Domain. */
-.work-index{--work-index-gap:var(--space-6);--work-index-card-padding:clamp(var(--space-5),var(--dimension-2-2vw),var(--space-7));--work-card-motion-duration:360ms;--work-card-motion-ease:cubic-bezier(.22,1,.36,1);--project-card-tint:var(--sys-color-surface-soft);--work-metric-count:3;display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
+.work-index{--work-index-gap:var(--space-6);--work-index-card-padding:clamp(var(--space-5),var(--dimension-2-2vw),var(--space-7));--work-card-motion-duration:calc(var(--motion-base) + (var(--motion-fast) * .75));--work-card-motion-ease:cubic-bezier(.22,1,.36,1);--project-card-tint:var(--sys-color-surface-soft);--work-metric-count:3;display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
 .work-index__shell{display:grid;gap:var(--space-7)}
 .work-index__intro{display:grid;gap:var(--space-2);max-width:var(--dimension-52ch)}
 .work-index__eyebrow{font-size:var(--sys-type-label);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase;color:var(--sys-color-text-accent)}
