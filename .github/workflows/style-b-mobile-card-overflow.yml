@@ -108,7 +108,7 @@ jobs:
             for(const projectId of projectIds){
               const card=domain.locator(`.domain-project-card-v2[data-project="${projectId}"]`);
               if((await card.getAttribute('data-wheel-offset'))!=='0'){
-                await card.click({position:{x:8,y:8}});
+                await card.evaluate(node=>node.click());
                 await page.waitForFunction(id=>document.querySelector(`#domains .domain-project-card-v2[data-project="${id}"]`)?.dataset.wheelOffset==='0',projectId);
               }
               await verifyCard(card,`tab-${tabIndex+1}-${projectId}`);
