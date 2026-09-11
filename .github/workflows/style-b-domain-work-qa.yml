@@ -216,10 +216,20 @@ jobs:
                 await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
                 const cards=domain.locator('.domain-project-card-v2');
                 if(await cards.count()>1){
-                  const firstProject=await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project');
-                  const wb=await wheel.boundingBox();
-                  const cy=wb.y+Math.min(wb.height/2,300),sx=wb.x+wb.width*.68,ex=wb.x+wb.width*.32;
-                  await page.mouse.move(sx,cy);await page.mouse.down();await page.mouse.move(ex,cy,{steps:6});await page.mouse.up();
+                  const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                  const firstProject=await activeCard.getAttribute('data-project');
+                  const vb=await activeCard.locator('.domain-project-card-v2__visual').boundingBox();
+                  assert(vb,'Home 430: swipe visual missing');
+                  const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
+                  const client=await context.newCDPSession(page);
+                  await client.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+                  await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:sx,y:cy,id:1}]});
+                  for(let i=1;i<=6;i++){
+                    const x=sx+(ex-sx)*(i/6);
+                    await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:cy,id:1}]});
+                  }
+                  await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+                  await client.send('Emulation.setTouchEmulationEnabled',{enabled:false,maxTouchPoints:1});
                   assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==firstProject,'Home 430: swipe failed');
                 }
               }
