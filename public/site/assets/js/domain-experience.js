@@ -222,33 +222,52 @@
     return cleaned.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
   };
 
-  const collectMetrics = (project) => {
-    const sources = [
-      project?.cardMetrics, project?.card_metrics, project?.primaryMetrics, project?.primary_metrics, project?.metrics,
-      project?.impactEvidence?.primaryMetrics, project?.impactEvidence?.primary_metrics,
-      project?.impact_evidence?.primaryMetrics, project?.impact_evidence?.primary_metrics,
-      project?.publicContent?.impactEvidence?.primaryMetrics, project?.publicContent?.impact_evidence?.primary_metrics,
-      project?.impactEvidence?.supportingMetrics, project?.impactEvidence?.supporting_metrics,
-      project?.impact_evidence?.supportingMetrics, project?.impact_evidence?.supporting_metrics
-    ];
-    const result = [];
+  const proofTier = (value, rawLabel) => {
+    const label = String(rawLabel || '').trim();
+    const text = `${label} ${value}`.toLowerCase();
+    const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|時程|週期|交付(?:期間|時程|週期)/i;
+    if (forbidden.test(label)) return 0;
+    const impact = /success|conversion|completion|adoption|active|usage|nps|satisfaction|retention|redemption|digital\s*share|share|rate|faster|speed|efficien|reduc|decreas|increas|improv|saved|accuracy|quality|error|drop|lift|growth|uptake|成功|轉換|完成率|採用|活躍|使用率|滿意|留存|兌換|佔比|比例|更快|效率|降低|減少|提升|增加|節省|準確|品質|錯誤/i;
+    if (impact.test(text)) return 2;
+    const scale = /user|transaction|store|market|countr|gateway|bank|operator|device|platform|channel|region|location|merchant|customer|account|order|booking|service|system|terminal|branch|workflow|decision\s*model|門市|使用者|用戶|交易|市場|國家|銀行|裝置|平台|通路|地區|商戶|客戶|帳戶|訂單|預訂|服務|系統|據點|工作流|決策模型/i;
+    if (scale.test(text)) return 1;
+    return 0;
+  };
+
+  const selectProofMetrics = (sources, limit) => {
+    const candidates = [];
     const seen = new Set();
+    let order = 0;
     for (const source of sources) {
       if (!Array.isArray(source)) continue;
       for (const item of source) {
         if (!item || typeof item !== 'object') continue;
         const value = firstText(item.value, item.metric, item.amount);
-        const label = conciseMetricLabel(firstText(item.label, item.name, item.description));
-        if (!value || !label) continue;
+        const rawLabel = firstText(item.label, item.name, item.description);
+        const label = conciseMetricLabel(rawLabel);
+        const tier = proofTier(value, rawLabel);
+        if (!value || !label || tier === 0) continue;
         const fingerprint = `${value}|${label}`;
         if (seen.has(fingerprint)) continue;
         seen.add(fingerprint);
-        result.push({ value, label });
-        if (result.length === 3) return result;
+        candidates.push({ value, label, tier, order: order++ });
       }
     }
-    return result;
+    return candidates
+      .sort((a, b) => b.tier - a.tier || a.order - b.order)
+      .slice(0, limit)
+      .map(({ value, label }) => ({ value, label }));
   };
+  const collectMetrics = (project) => selectProofMetrics([
+    project?.cardMetrics, project?.card_metrics, project?.primaryMetrics, project?.primary_metrics, project?.metrics,
+    project?.impactEvidence?.primaryMetrics, project?.impactEvidence?.primary_metrics,
+    project?.impact_evidence?.primaryMetrics, project?.impact_evidence?.primary_metrics,
+    project?.publicContent?.impactEvidence?.primaryMetrics, project?.publicContent?.impact_evidence?.primary_metrics,
+    project?.supportingMetrics, project?.supporting_metrics,
+    project?.impactEvidence?.supportingMetrics, project?.impactEvidence?.supporting_metrics,
+    project?.impact_evidence?.supportingMetrics, project?.impact_evidence?.supporting_metrics,
+    project?.publicContent?.impactEvidence?.supportingMetrics, project?.publicContent?.impact_evidence?.supporting_metrics
+  ], 3);
 
   const tintPalette = ['rgb(223 235 246)', 'rgb(231 229 249)', 'rgb(248 225 214)', 'rgb(224 241 233)', 'rgb(245 235 210)', 'rgb(230 238 225)'];
   const tintForProject = (key) => {
@@ -320,6 +339,7 @@
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
+    metricList.style.gridTemplateColumns = `repeat(${Math.max(metrics.length, 1)}, minmax(0, 1fr))`;
     metrics.forEach(({ value }) => { const dt = document.createElement('dt'); dt.className = 'domain-project-card-v2__metric-value'; dt.textContent = value; metricList.append(dt); });
     metrics.forEach(({ label }) => { const dd = document.createElement('dd'); dd.className = 'domain-project-card-v2__metric-label'; dd.textContent = label; metricList.append(dd); });
 

@@ -185,35 +185,54 @@
     return cleaned.split(/\s+/).filter(Boolean).slice(0, 2).join(' ');
   };
 
-  const evidenceRows = (raw, adapted, count) => {
-    const sources = [
-      raw?.impactEvidence?.primaryMetrics,
-      raw?.impact_evidence?.primaryMetrics,
-      adapted?.impactEvidence?.primaryMetrics,
-      adapted?.impact_evidence?.primaryMetrics,
-      raw?.impactEvidence?.supportingMetrics,
-      raw?.impact_evidence?.supportingMetrics,
-      adapted?.impactEvidence?.supportingMetrics,
-      adapted?.impact_evidence?.supportingMetrics
-    ];
-    const rows = [];
+  const proofTier = (value, rawLabel) => {
+    const label = String(rawLabel || '').trim();
+    const text = `${label} ${value}`.toLowerCase();
+    const forbidden = /timeline|duration|delivery\s*(?:period|timeline|time)|project\s*(?:period|timeline)|schedule|時程|週期|交付(?:期間|時程|週期)/i;
+    if (forbidden.test(label)) return 0;
+    const impact = /success|conversion|completion|adoption|active|usage|nps|satisfaction|retention|redemption|digital\s*share|share|rate|faster|speed|efficien|reduc|decreas|increas|improv|saved|accuracy|quality|error|drop|lift|growth|uptake|成功|轉換|完成率|採用|活躍|使用率|滿意|留存|兌換|佔比|比例|更快|效率|降低|減少|提升|增加|節省|準確|品質|錯誤/i;
+    if (impact.test(text)) return 2;
+    const scale = /user|transaction|store|market|countr|gateway|bank|operator|device|platform|channel|region|location|merchant|customer|account|order|booking|service|system|terminal|branch|workflow|decision\s*model|門市|使用者|用戶|交易|市場|國家|銀行|裝置|平台|通路|地區|商戶|客戶|帳戶|訂單|預訂|服務|系統|據點|工作流|決策模型/i;
+    if (scale.test(text)) return 1;
+    return 0;
+  };
+
+  const selectProofMetrics = (sources, limit) => {
+    const candidates = [];
     const seen = new Set();
-    for (const items of sources) {
-      if (!Array.isArray(items)) continue;
-      for (const item of items) {
+    let order = 0;
+    for (const source of sources) {
+      if (!Array.isArray(source)) continue;
+      for (const item of source) {
         if (!item || typeof item !== 'object') continue;
         const value = firstText(item.value, item.metric, item.amount);
-        const label = conciseMetricLabel(firstText(item.label, item.name, item.description));
-        if (!value || !label) continue;
-        const key = `${value}|${label}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        rows.push({ value, label });
-        if (rows.length === count) return rows;
+        const rawLabel = firstText(item.label, item.name, item.description);
+        const label = conciseMetricLabel(rawLabel);
+        const tier = proofTier(value, rawLabel);
+        if (!value || !label || tier === 0) continue;
+        const fingerprint = `${value}|${label}`;
+        if (seen.has(fingerprint)) continue;
+        seen.add(fingerprint);
+        candidates.push({ value, label, tier, order: order++ });
       }
     }
-    return rows;
+    return candidates
+      .sort((a, b) => b.tier - a.tier || a.order - b.order)
+      .slice(0, limit)
+      .map(({ value, label }) => ({ value, label }));
   };
+  const evidenceRows = (raw, adapted, count) => selectProofMetrics([
+    raw?.cardMetrics, raw?.card_metrics, raw?.primaryMetrics, raw?.primary_metrics, raw?.metrics,
+    raw?.impactEvidence?.primaryMetrics, raw?.impactEvidence?.primary_metrics,
+    raw?.impact_evidence?.primaryMetrics, raw?.impact_evidence?.primary_metrics,
+    raw?.impactEvidence?.supportingMetrics, raw?.impactEvidence?.supporting_metrics,
+    raw?.impact_evidence?.supportingMetrics, raw?.impact_evidence?.supporting_metrics,
+    adapted?.cardMetrics, adapted?.card_metrics, adapted?.primaryMetrics, adapted?.primary_metrics, adapted?.metrics,
+    adapted?.impactEvidence?.primaryMetrics, adapted?.impactEvidence?.primary_metrics,
+    adapted?.impact_evidence?.primaryMetrics, adapted?.impact_evidence?.primary_metrics,
+    adapted?.impactEvidence?.supportingMetrics, adapted?.impactEvidence?.supporting_metrics,
+    adapted?.impact_evidence?.supportingMetrics, adapted?.impact_evidence?.supporting_metrics
+  ], count);
 
   const tintPalette = [
     'rgb(223 235 246)',
