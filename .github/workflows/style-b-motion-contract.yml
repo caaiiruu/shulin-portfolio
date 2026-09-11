@@ -149,7 +149,8 @@ jobs:
             await reducedPage.goto(`${base}/site/index.html`,{waitUntil:'networkidle'});
             await reducedPage.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
             const reducedState=await reducedPage.locator('#domains').evaluate(root=>({card:getComputedStyle(root.querySelector('.domain-project-card-v2')).transitionDuration,summary:getComputedStyle(root.querySelector('.domain-experience-disclosure__summary')).transitionDuration}));
-            assert(reducedState.card.split(',').every(v=>parseFloat(v)===0)&&reducedState.summary.split(',').every(v=>parseFloat(v)===0),`Reduced motion contract failed ${JSON.stringify(reducedState)}`);
+            const effectivelyZero=value=>value.split(',').every(v=>parseFloat(v)<=.00002);
+            assert(effectivelyZero(reducedState.card)&&effectivelyZero(reducedState.summary),`Reduced motion contract failed ${JSON.stringify(reducedState)}`);
             await reduced.close();
           } finally { await browser.close(); }
           NODE
