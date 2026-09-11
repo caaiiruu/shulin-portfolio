@@ -151,7 +151,7 @@
   .domain-experience .domain-content-v41{column-gap:var(--space-10)}
 }
 @media(max-width:900px){
-  .domain-experience{--domain-card-height:auto;--domain-wheel-height:var(--dimension-820px);--domain-card-content-padding:var(--space-5)}
+  .domain-experience{--domain-card-height:auto;--domain-wheel-height:calc(var(--dimension-640px) + var(--space-10) + var(--space-10));--domain-card-content-padding:var(--space-5)}
   .domain-experience .domain-project-card-v2{height:auto;grid-template-columns:1fr;grid-template-rows:auto auto}
   .domain-experience .domain-project-card-v2__content{grid-row:1;grid-template-rows:auto auto var(--space-5) auto auto;height:auto;min-height:0}
   .domain-experience .domain-project-card-v2__visual{grid-row:2;height:auto;min-height:0;aspect-ratio:16/9;border-top:var(--dimension-1px) solid var(--sys-color-border);border-left:0}
