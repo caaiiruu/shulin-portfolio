@@ -1,0 +1,43 @@
+name: Temporary Style B Mobile Divider Fix
+
+on:
+  push:
+    branches:
+      - migration/style-b-domain-work-v1
+    paths:
+      - .github/workflows/tmp-style-b-mobile-divider-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/style-b-domain-work-v1
+          fetch-depth: 0
+      - name: Restore mobile metric divider contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/site/assets/css/components/domain-experience.css')
+          s = p.read_text()
+          needle = '  .domain-experience .domain-project-card-v2__visual{aspect-ratio:16/9}\n}'
+          repl = '  .domain-experience .domain-project-card-v2__metrics{padding-top:0;border-top:0}\n  .domain-experience .domain-project-card-v2__visual{aspect-ratio:16/9}\n}'
+          if needle not in s:
+              raise SystemExit('target mobile fallback anchor not found')
+          if s.count(needle) != 1:
+              raise SystemExit(f'expected one target anchor, found {s.count(needle)}')
+          p.write_text(s.replace(needle, repl, 1))
+          PY
+          git diff --check
+          git diff -- public/site/assets/css/components/domain-experience.css
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/site/assets/css/components/domain-experience.css
+          git commit -m "Restore mobile Domain metric divider contract"
+          git push origin HEAD:migration/style-b-domain-work-v1
