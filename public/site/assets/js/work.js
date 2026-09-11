@@ -383,15 +383,12 @@
     const featured = element('div', 'work-index__featured');
     featured.append(createCard(cards[0], 'hero', 3));
     featured.append(createCard(cards[1], 'secondary', 2));
-    const secondRow = element('div', 'work-index__featured-secondary-row');
-    secondRow.append(createCard(cards[2], 'half', 2), createCard(cards[3], 'half', 2));
-    featured.append(secondRow);
 
     const more = element('section', 'work-index__more');
     const moreHead = element('div', 'work-index__more-head');
     moreHead.append(element('h2', '', copy('More work', '更多作品')));
     const moreGrid = element('div', 'work-index__more-grid');
-    cards.slice(4).forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
+    cards.slice(2).forEach((card) => moreGrid.append(createCard(card, 'compact', 1)));
     more.append(moreHead, moreGrid);
 
     shell.append(intro, filters, featured, more);

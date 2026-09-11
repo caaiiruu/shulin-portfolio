@@ -383,6 +383,7 @@
 
   const buildControls = () => {
     let controls = projectPanel?.querySelector('.domain-wheel-v2__controls');
+    if (cards.length <= 1) { controls?.remove(); return null; }
     if (controls) return controls;
     controls = document.createElement('div');
     controls.className = 'domain-wheel-v2__controls';
