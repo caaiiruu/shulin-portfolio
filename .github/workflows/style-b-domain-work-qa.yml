@@ -218,9 +218,19 @@ jobs:
                 if(await cards.count()>1){
                   const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
                   const firstProject=await activeCard.getAttribute('data-project');
-                  const vb=await activeCard.locator('.domain-project-card-v2__visual').boundingBox();
+                  const visual=activeCard.locator('.domain-project-card-v2__visual');
+                  await visual.scrollIntoViewIfNeeded();
+                  const vb=await visual.boundingBox();
                   assert(vb,'Home 430: swipe visual missing');
                   const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
+                  const hit=await page.evaluate(({x,y})=>{
+                    const node=document.elementFromPoint(x,y);
+                    return {
+                      project:node?.closest('.domain-project-card-v2')?.getAttribute('data-project')||'',
+                      visual:Boolean(node?.closest('.domain-project-card-v2__visual'))
+                    };
+                  },{x:sx,y:cy});
+                  assert(hit.project===firstProject&&hit.visual,`Home 430: swipe start does not hit active visual ${JSON.stringify(hit)}`);
                   await page.mouse.move(sx,cy);
                   await page.mouse.down();
                   await page.mouse.move(ex,cy,{steps:8});
