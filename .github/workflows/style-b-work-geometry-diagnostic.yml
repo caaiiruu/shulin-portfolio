@@ -1,0 +1,62 @@
+name: Style B Work Geometry Diagnostic
+
+on:
+  push:
+    branches: [migration/style-b-domain-work-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          npm run install:ci
+          npm run build
+      - name: Install Playwright
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Start static server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/work-geometry-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/work-geometry-server.log
+          exit 1
+      - name: Measure Work card geometry
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:430,height:1100}});
+          await page.goto('http://127.0.0.1:4173/site/work.html',{waitUntil:'networkidle'});
+          await page.waitForSelector('.work-index');
+          await page.waitForFunction(()=>[...document.querySelectorAll('.work-index-card__visual img')].every(img=>img.complete&&img.naturalWidth>0));
+          const cards=page.locator('.work-index__featured .work-index-card');
+          const result=[];
+          for(let i=0;i<await cards.count();i++){
+            const card=cards.nth(i);
+            await card.scrollIntoViewIfNeeded();
+            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+            result.push(await card.evaluate(node=>{
+              const button=node.querySelector('.work-index-card__button');
+              const content=node.querySelector('.work-index-card__content');
+              const visual=node.querySelector('.work-index-card__visual');
+              const r=n=>{const b=n.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height,top:b.top,bottom:b.bottom}};
+              const s=n=>{const c=getComputedStyle(n);return{display:c.display,height:c.height,minHeight:c.minHeight,maxHeight:c.maxHeight,alignSelf:c.alignSelf,boxSizing:c.boxSizing,gridTemplateRows:c.gridTemplateRows,overflow:c.overflow,paddingTop:c.paddingTop,paddingBottom:c.paddingBottom,borderTop:c.borderTopWidth,borderBottom:c.borderBottomWidth}};
+              return{project:node.dataset.workIndexProject,card:{box:r(node),style:s(node)},button:{box:r(button),style:s(button)},content:{box:r(content),style:s(content)},visual:{box:r(visual),style:s(visual)},delta:{width:r(node).width-r(button).width,height:r(node).height-r(button).height}};
+            }));
+          }
+          console.log('WORK_GEOMETRY_430='+JSON.stringify(result,null,2));
+          await browser.close();
+          NODE
