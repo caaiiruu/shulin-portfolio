@@ -1,0 +1,168 @@
+name: Temporary Style B Proof QA Contract Patch
+
+on:
+  push:
+    branches: [migration/style-b-domain-work-v1]
+    paths: [.github/workflows/tmp-style-b-proof-qa-contract.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: migration/style-b-domain-work-v1
+      - name: Patch Human contract for proof quality
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/style-b-domain-work-qa.yml')
+          s=p.read_text()
+
+          old="""          const clean=value=>String(value||'').replace(/\\s+/g,' ').trim();
+          const isWhite=value=>/rgba?\\(\\s*255\\s*,\\s*255\\s*,\\s*255/i.test(value||'');
+"""
+          new="""          const clean=value=>String(value||'').replace(/\\s+/g,' ').trim();
+          const isWhite=value=>/rgba?\\(\\s*255\\s*,\\s*255\\s*,\\s*255/i.test(value||'');
+          const forbiddenProof=/\\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
+          const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(x)),`${label}: filler proof returned ${JSON.stringify(labels)}`);
+"""
+          assert old in s, 'helper insertion anchor missing'
+          s=s.replace(old,new,1)
+
+          old="""                const count=await values.count();
+                assert(count>=1&&count<=3,`${label}: metric count ${count}`);
+                assert(await labels.count()===count,`${label}: metric mismatch`);
+                const labelText=(await labels.allTextContents()).map(clean);
+                assert(labelText.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`${label}: metric labels too long ${JSON.stringify(labelText)}`);
+                const valueTops=await values.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                const labelTops=await labels.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                assert(Math.max(...valueTops)-Math.min(...valueTops)<=2,`${label}: metric values not horizontal`);
+                assert(Math.max(...labelTops)-Math.min(...labelTops)<=2,`${label}: metric labels not horizontal`);
+"""
+          new="""                const count=await values.count();
+                assert(count<=3,`${label}: metric count ${count}`);
+                assert(await labels.count()===count,`${label}: metric mismatch`);
+                const labelText=(await labels.allTextContents()).map(clean);
+                assert(labelText.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`${label}: metric labels too long ${JSON.stringify(labelText)}`);
+                assertProofLabels(labelText,label);
+                if(count>1){
+                  const valueTops=await values.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                  const labelTops=await labels.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                  assert(Math.max(...valueTops)-Math.min(...valueTops)<=2,`${label}: metric values not horizontal`);
+                  assert(Math.max(...labelTops)-Math.min(...labelTops)<=2,`${label}: metric labels not horizontal`);
+                }
+"""
+          assert old in s, 'domain metric block missing'
+          s=s.replace(old,new,1)
+
+          old="""                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),mr=metrics.getBoundingClientRect(),tir=title.getBoundingClientRect();
+                  const ms=getComputedStyle(metrics),vs=getComputedStyle(visual);
+                  return{bg:getComputedStyle(content).backgroundColor,valueSize:parseFloat(getComputedStyle(value).fontSize),labelSize:parseFloat(getComputedStyle(metricLabel).fontSize),metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr.top,titleBottom:tir.bottom,metricBorderTop:parseFloat(ms.borderTopWidth)||0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
+"""
+          new="""                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),tir=title.getBoundingClientRect();
+                  const mr=metrics?.getBoundingClientRect();
+                  const ms=metrics?getComputedStyle(metrics):null,vs=getComputedStyle(visual);
+                  return{bg:getComputedStyle(content).backgroundColor,valueSize:value?parseFloat(getComputedStyle(value).fontSize):null,labelSize:metricLabel?parseFloat(getComputedStyle(metricLabel).fontSize):null,metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr?.top??null,titleBottom:tir.bottom,metricBorderTop:ms?(parseFloat(ms.borderTopWidth)||0):0,visualRatio:vr.height?vr.width/vr.height:0,visualObjectFit:vs.objectFit};
+"""
+          assert old in s, 'domain state block missing'
+          s=s.replace(old,new,1)
+
+          old="""                assert(!isWhite(state.bg),`${label}: project tint missing`);
+                assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
+                assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
+                if(width===430){
+                  assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
+                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
+                  assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
+                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
+                }
+"""
+          new="""                assert(!isWhite(state.bg),`${label}: project tint missing`);
+                if(count>0)assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
+                assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
+                if(width===430){
+                  if(count>0)assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
+                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
+                  if(count>0)assert(state.metricsTop>state.titleBottom,`${label}: mobile metrics not below title`);
+                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
+                }
+"""
+          assert old in s, 'domain hierarchy block missing'
+          s=s.replace(old,new,1)
+
+          old="""              const expected=[3,2,2,2];
+              for(let i=0;i<4;i++){
+                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
+                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
+                assert(await card.locator('.work-index-card__metric').count()===expected[i],`Work ${width}: card ${i+1} metric count`);
+                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assert(metricLabels.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`Work ${width}: card ${i+1} long metric labels`);
+                const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: card ${i+1} metrics not horizontal`);
+                const visual=card.locator('.work-index-card__visual img');
+                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: card ${i+1} visual missing`);
+                const typ=await card.evaluate(node=>({bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-value')).fontSize),l:parseFloat(getComputedStyle(node.querySelector('.work-index-card__metric-label')).fontSize)}));
+                assert(!isWhite(typ.bg)&&typ.v>typ.l,`Work ${width}: card ${i+1} hierarchy/tint`);
+                if(width<=1100){const geo=await card.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(geo.vt>=geo.cb-2,`Work ${width}: card ${i+1} must stack`)}
+              }
+"""
+          new="""              const maximum=[3,2,2,2];
+              for(let i=0;i<4;i++){
+                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
+                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
+                const metricCount=await card.locator('.work-index-card__metric').count();
+                assert(metricCount<=maximum[i],`Work ${width}: card ${i+1} metric count ${metricCount}`);
+                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assert(metricLabels.every(x=>x.split(/\\s+/).filter(Boolean).length<=2),`Work ${width}: card ${i+1} long metric labels`);
+                assertProofLabels(metricLabels,`Work ${width}: card ${i+1}`);
+                if(metricCount>1){
+                  const tops=await card.locator('.work-index-card__metric').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
+                  assert(Math.max(...tops)-Math.min(...tops)<=2,`Work ${width}: card ${i+1} metrics not horizontal`);
+                }
+                const visual=card.locator('.work-index-card__visual img');
+                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: card ${i+1} visual missing`);
+                const typ=await card.evaluate(node=>{const value=node.querySelector('.work-index-card__metric-value'),label=node.querySelector('.work-index-card__metric-label');return{bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:value?parseFloat(getComputedStyle(value).fontSize):null,l:label?parseFloat(getComputedStyle(label).fontSize):null}});
+                assert(!isWhite(typ.bg),`Work ${width}: card ${i+1} tint`);
+                if(metricCount>0)assert(typ.v>typ.l,`Work ${width}: card ${i+1} metric hierarchy`);
+                if(width<=1100){const geo=await card.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cb:c.bottom,vt:v.top}});assert(geo.vt>=geo.cb-2,`Work ${width}: card ${i+1} must stack`)}
+              }
+"""
+          assert old in s, 'featured metric block missing'
+          s=s.replace(old,new,1)
+
+          old="""              const more=work.locator('.work-index__more-grid .work-index-card');
+              assert(await more.count()>=1,`Work ${width}: More Work empty`);
+              for(let i=0;i<await more.count();i++)assert(await more.nth(i).locator('.work-index-card__metric').count()===1,`Work ${width}: More Work ${i+1} metric count`);
+"""
+          new="""              const more=work.locator('.work-index__more-grid .work-index-card');
+              assert(await more.count()>=1,`Work ${width}: More Work empty`);
+              for(let i=0;i<await more.count();i++){
+                const card=more.nth(i),metricCount=await card.locator('.work-index-card__metric').count();
+                assert(metricCount<=1,`Work ${width}: More Work ${i+1} metric count ${metricCount}`);
+                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assertProofLabels(metricLabels,`Work ${width}: More Work ${i+1}`);
+              }
+              const bandzo=work.locator('.work-index-card[data-work-index-project="bandzo"]');
+              if(await bandzo.count()){
+                const bandzoLabels=(await bandzo.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assertProofLabels(bandzoLabels,`Work ${width}: Bandzo`);
+              }
+"""
+          assert old in s, 'more work metric block missing'
+          s=s.replace(old,new,1)
+
+          p.write_text(s)
+          PY
+      - name: Commit QA contract update
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .github/workflows/style-b-domain-work-qa.yml
+          git diff --cached --check
+          git commit -m "Align Style B QA with proof quality contract"
+          git push origin HEAD:migration/style-b-domain-work-v1
