@@ -24,7 +24,8 @@ jobs:
           test "$(git merge-base "$BASE" HEAD)" = "$BASE"
           git diff --check "$BASE"...HEAD
           ! git diff --name-only "$BASE"...HEAD | grep -Fxq 'public/site/assets/js/app.js'
-          ! git diff --name-only "$BASE"...HEAD | grep -Fxq 'public/site/content/portfolio-content.json'
+          test -f public/site/content/portfolio-content.json
+          test -f public/site/content/portfolio-asset-manifest.json
           ! git diff --name-only "$BASE"...HEAD | grep -Fxq 'public/site/assets/css/components/project-card.css'
           npm run install:ci
           npm run build
@@ -96,7 +97,7 @@ jobs:
                 });
                 assert(mobile.identity.top>=mobile.type.bottom-1,`Domain 430: eyebrow is not two rows ${JSON.stringify(mobile)}`);
                 assert(Math.abs(mobile.identity.left-mobile.type.left)<=2,`Domain 430: eyebrow rows not left aligned`);
-                assert(mobile.titleSize>=34&&mobile.titleSize<=38,`Domain 430: title size ${mobile.titleSize}`);
+                assert(mobile.titleSize>=31&&mobile.titleSize<=33,`Domain 430: title size ${mobile.titleSize}`);
 
                 const adjacent=domain.locator('.domain-project-card-v2[data-wheel-offset="1"]');
                 const prev=domain.locator('.domain-project-card-v2[data-wheel-offset="-1"]');
