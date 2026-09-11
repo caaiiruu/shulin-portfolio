@@ -1,0 +1,41 @@
+name: Temporary Style B Visible Title Capitalization
+
+on:
+  push:
+    branches: [migration/style-b-domain-work-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  capitalize-visible-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/style-b-domain-work-v1
+          fetch-depth: 0
+      - name: Match shared recruiter-first visible-title behavior
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files=['public/site/assets/js/work.js','public/site/assets/js/domain-experience.js']
+          old="""    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }\n    }\n    return text;"""
+          new="""    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {\n      if (prefix && text.startsWith(prefix)) {\n        text = text.slice(prefix.length).trimStart();\n        text = text ? text.charAt(0).toLocaleUpperCase(language() === 'zh' ? 'zh-TW' : 'en') + text.slice(1) : text;\n        break;\n      }\n    }\n    return text;"""
+          changed=[]
+          for file in files:
+              p=Path(file); text=p.read_text(); count=text.count(old)
+              if count==0:
+                  if new in text: continue
+                  raise SystemExit(f'{file}: visible-title block not found')
+              if count!=1: raise SystemExit(f'{file}: expected one block, got {count}')
+              p.write_text(text.replace(old,new,1)); changed.append(file)
+          print('changed',changed)
+          PY
+          git diff --check
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/site/assets/js/work.js public/site/assets/js/domain-experience.js
+          git commit -m "Match Style B visible titles with detail contract"
+          git push origin HEAD:migration/style-b-domain-work-v1
