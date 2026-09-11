@@ -1,0 +1,68 @@
+name: Style B Domain CTA Geometry Diagnostic
+
+on:
+  push:
+    branches: [diagnostic/domain-cta-geometry]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm run install:ci
+          npm run build
+      - working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/style-b-domain-cta-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/style-b-domain-cta-server.log
+          exit 1
+      - working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({viewport:{width:1419,height:1100},reducedMotion:'no-preference'});
+          const page=await context.newPage();
+          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
+          const domain=page.locator('#domains');
+          await domain.scrollIntoViewIfNeeded();
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          await page.waitForSelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+          const tabs=domain.locator('.domain-tab');
+          for(let i=0;i<await tabs.count();i++){
+            await tabs.nth(i).click();
+            await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
+            await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
+            const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+            const cta=active.locator('.domain-project-card-v2__cta');
+            const sample=async label=>{
+              const [cardBox,contentBox,ctaBox]=await Promise.all([active.boundingBox(),active.locator('.domain-project-card-v2__content').boundingBox(),cta.boundingBox()]);
+              const styles=await active.evaluate(node=>{
+                const content=node.querySelector('.domain-project-card-v2__content');
+                const cta=node.querySelector('.domain-project-card-v2__cta');
+                const cs=getComputedStyle(cta), ps=getComputedStyle(content);
+                return {cardTransform:getComputedStyle(node).transform,contentPadding:ps.padding,ctaWidth:cs.width,ctaMargin:cs.margin,ctaPadding:cs.padding,ctaBoxSizing:cs.boxSizing};
+              });
+              console.log(JSON.stringify({tab:i+1,label,cardBox,contentBox,ctaBox,delta:{left:ctaBox.x-cardBox.x,right:(cardBox.x+cardBox.width)-(ctaBox.x+ctaBox.width),top:ctaBox.y-cardBox.y,bottom:(cardBox.y+cardBox.height)-(ctaBox.y+ctaBox.height)},styles}));
+            };
+            await sample('immediate');
+            await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+            await sample('2raf');
+            await page.waitForTimeout(500);
+            await sample('500ms');
+          }
+          await browser.close();
+          NODE
