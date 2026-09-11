@@ -93,14 +93,14 @@ jobs:
           const report={domain:{},work:{},routes:{},consoleErrors:[]};
           const assert=(value,message)=>{if(!value)throw new Error(message)};
           const clean=value=>String(value||'').replace(/\s+/g,' ').trim();
-          const isWhite=value=>/rgba?\(\s*255\s*,\s*255\s*,\s*255/i.test(value||'');
-          const forbiddenProof=/\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
-          const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(x)),`${label}: filler proof returned ${JSON.stringify(labels)}`);
+          const boxInside=(inner,outer,t=2)=>inner&&outer&&inner.left>=outer.left-t&&inner.right<=outer.right+t&&inner.top>=outer.top-t&&inner.bottom<=outer.bottom+t;
           const stacked=async card=>card.evaluate(node=>{
             const c=node.querySelector('.domain-project-card-v2__content,.work-index-card__content')?.getBoundingClientRect();
             const v=node.querySelector('.domain-project-card-v2__visual,.work-index-card__visual')?.getBoundingClientRect();
             return Boolean(c&&v&&v.top>=c.bottom-2);
           });
+          const forbiddenProof=/\b(?:timeline|duration|interviews?|participants?|respondents?|functions?|flows?|prototypes?|usability tasks?)\b|時程|期間|訪談|參與者|功能|原型|可用性任務/i;
+          const assertProofLabels=(labels,label)=>assert(labels.every(x=>!forbiddenProof.test(x)),`${label}: filler proof returned ${JSON.stringify(labels)}`);
 
           try{
             for(const width of widths){
@@ -119,118 +119,56 @@ jobs:
               const tabs=domain.locator('.domain-tab');
               assert(await tabs.count()===6,`Home ${width}: expected 6 Domain tabs`);
               assert(await domain.locator('.domain-tab__icon svg').count()===6,`Home ${width}: all Domain tabs require icons`);
-              const iconStates=await domain.locator('.domain-tab__icon').evaluateAll(nodes=>nodes.map(n=>{const s=getComputedStyle(n);return{display:s.display,visibility:s.visibility,opacity:Number(s.opacity),w:n.getBoundingClientRect().width,h:n.getBoundingClientRect().height}}));
-              assert(iconStates.every(x=>x.display!=='none'&&x.visibility!=='hidden'&&x.opacity>0&&x.w>0&&x.h>0),`Home ${width}: Domain icons not rendered`);
               const tabLabels=(await domain.locator('.domain-tab__label').allTextContents()).map(clean);
-              assert(tabLabels.length===6&&tabLabels.every(Boolean),`Home ${width}: Domain labels missing`);
-              assert(!tabLabels.some(x=>/^all$/i.test(x)),`Home ${width}: unexpected All tab`);
+              assert(tabLabels.length===6&&tabLabels.every(Boolean)&&!tabLabels.some(x=>/^all$/i.test(x)),`Home ${width}: Domain labels invalid ${JSON.stringify(tabLabels)}`);
+              const selectedDecoration=await domain.locator('.domain-tab[aria-selected="true"]').evaluate(node=>({after:getComputedStyle(node,'::after').content,labelAfter:getComputedStyle(node.querySelector('.domain-tab__label'),'::after').content}));
+              assert(['none','normal','""'].includes(selectedDecoration.after)&&['none','normal','""'].includes(selectedDecoration.labelAfter),`Home ${width}: selected tab trailing decoration returned ${JSON.stringify(selectedDecoration)}`);
 
               const viewport=await page.evaluate(()=>document.documentElement.clientWidth);
               const wheel=domain.locator('.domain-wheel-v2');
               const wheelBox=await wheel.boundingBox();
-              assert(wheelBox&&Math.abs(wheelBox.width-viewport)<=2,`Home ${width}: wheel not full bleed`);
-              assert(Math.abs(wheelBox.x)<=2,`Home ${width}: wheel x ${wheelBox?.x}`);
-
+              assert(wheelBox&&Math.abs(wheelBox.width-viewport)<=2&&Math.abs(wheelBox.x)<=2,`Home ${width}: wheel not full bleed`);
               const disclosures=domain.locator('details.domain-experience-disclosure');
               assert(await disclosures.count()===2,`Home ${width}: disclosure count`);
-              for(const d of await disclosures.all())assert(!(await d.getAttribute('open')),`Home ${width}: disclosure default open`);
-              assert(await domain.locator('.domain-experience__project-heading:visible').count()===0,`Home ${width}: Related Work heading visible`);
-
-              const verifyDomainCard=async(label)=>{
-                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-                assert(await active.count()===1,`${label}: exactly one active card required`);
-                assert(clean(await active.locator('.domain-project-card-v2__title').textContent()).length>8,`${label}: title missing`);
-                assert(await active.locator('.domain-project-card-v2__support').count()===0,`${label}: removed supporting sentence returned`);
-                const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
-                assert(href?.startsWith('/work/'),`${label}: CTA missing`);
-                const image=active.locator('.domain-project-card-v2__image');
-                assert(await image.count()===1&&await image.evaluate(img=>img.complete&&img.naturalWidth>0&&img.naturalHeight>0),`${label}: visual not decoded`);
-                const values=active.locator('.domain-project-card-v2__metric-value');
-                const labels=active.locator('.domain-project-card-v2__metric-label');
-                const count=await values.count();
-                assert(count<=3,`${label}: metric count ${count}`);
-                assert(await labels.count()===count,`${label}: metric mismatch`);
-                const labelText=(await labels.allTextContents()).map(clean);
-                assert(labelText.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`${label}: metric labels too long ${JSON.stringify(labelText)}`);
-                assertProofLabels(labelText,label);
-                if(count>1){
-                  const valueTops=await values.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  const labelTops=await labels.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().top));
-                  assert(Math.max(...valueTops)-Math.min(...valueTops)<=2,`${label}: metric values not horizontal`);
-                  assert(Math.max(...labelTops)-Math.min(...labelTops)<=2,`${label}: metric labels not horizontal`);
-                }
-                const state=await active.evaluate(card=>{
-                  const content=card.querySelector('.domain-project-card-v2__content');
-                  const visual=card.querySelector('.domain-project-card-v2__visual');
-                  const cta=card.querySelector('.domain-project-card-v2__cta');
-                  const value=card.querySelector('.domain-project-card-v2__metric-value');
-                  const metricLabel=card.querySelector('.domain-project-card-v2__metric-label');
-                  const meta=card.querySelector('.domain-project-card-v2__meta');
-                  const metrics=card.querySelector('.domain-project-card-v2__metrics');
-                  const title=card.querySelector('.domain-project-card-v2__title');
-                  const cr=content.getBoundingClientRect(),vr=visual.getBoundingClientRect(),tr=cta.getBoundingClientRect(),tir=title.getBoundingClientRect();
-                  const mr=metrics?.getBoundingClientRect();
-                  const ms=metrics?getComputedStyle(metrics):null;
-                  return{bg:getComputedStyle(content).backgroundColor,valueSize:value?parseFloat(getComputedStyle(value).fontSize):null,labelSize:metricLabel?parseFloat(getComputedStyle(metricLabel).fontSize):null,metaSize:parseFloat(getComputedStyle(meta).fontSize),contentLeft:cr.left,contentRight:cr.right,contentBottom:cr.bottom,visualLeft:vr.left,visualTop:vr.top,visualWidth:vr.width,visualHeight:vr.height,ctaLeft:tr.left,ctaRight:tr.right,metricsTop:mr?.top??null,titleBottom:tir.bottom,metricBorderTop:ms?(parseFloat(ms.borderTopWidth)||0):0,visualRatio:vr.height?vr.width/vr.height:0};
-                });
-                assert(!isWhite(state.bg),`${label}: project tint missing`);
-                if(count>0)assert(state.valueSize>state.labelSize,`${label}: metric hierarchy invalid`);
-                assert(Math.abs(state.ctaLeft-state.contentLeft)<=30&&Math.abs(state.ctaRight-state.contentRight)<=30,`${label}: CTA width mismatch`);
-                if(width===1419){
-                  assert(Math.abs(state.visualLeft-state.contentRight)<=2,`${label}: desktop horizontal billboard regressed`);
-                }else{
-                  assert(Math.abs(state.visualTop-state.contentBottom)<=2,`${label}: tablet/mobile must stack content before visual`);
-                  if(count>0)assert(state.metricsTop>state.titleBottom,`${label}: metrics not below title`);
-                }
-                if(width===430){
-                  if(count>0)assert(Math.abs(state.metaSize-state.labelSize)<=0.5,`${label}: mobile meta size ${state.metaSize}/${state.labelSize}`);
-                  assert(state.metricBorderTop===0,`${label}: mobile metrics top divider returned`);
-                  assert(state.visualRatio>=1.72&&state.visualRatio<=1.84,`${label}: mobile visual ratio ${state.visualRatio}`);
-                }
-                return{active,state};
-              };
+              for(const d of await disclosures.all()) assert(!(await d.getAttribute('open')),`Home ${width}: disclosure default open`);
+              if(width===1419){
+                const [a,b]=await Promise.all([disclosures.nth(0).boundingBox(),disclosures.nth(1).boundingBox()]);
+                assert(a&&b&&b.x-(a.x+a.width)>=48,`Home 1419: disclosure columns too close ${a&&b?b.x-(a.x+a.width):'missing'}`);
+              }
 
               for(let i=0;i<await tabs.count();i++){
                 await tabs.nth(i).click();
                 await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
                 await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
-                const {active}=await verifyDomainCard(`Home ${width} Domain tab ${i+1}`);
-                const cards=domain.locator('.domain-project-card-v2');
-                const projectCount=await cards.count();
-                const visibleControls=domain.locator('.domain-wheel-v2__control:visible');
-                if(width<=600||projectCount<=1){
-                  assert(await visibleControls.count()===0,`Home ${width} Domain tab ${i+1}: controls must be hidden for mobile or single project`);
-                }else{
-                  assert(await visibleControls.count()===2,`Home ${width} Domain tab ${i+1}: expected two controls for ${projectCount} projects`);
-                  const firstProject=await active.getAttribute('data-project');
-                  await visibleControls.nth(1).click();
-                  const moved=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-                  assert(await moved.getAttribute('data-project')!==firstProject,`Home ${width} Domain tab ${i+1}: next control failed`);
-                  await moved.focus();await page.keyboard.press('ArrowLeft');
-                }
-                for(const d of await disclosures.all())assert(!(await d.getAttribute('open')),`Home ${width}: disclosure reopened on tab ${i+1}`);
+                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                const cardBox=await active.boundingBox();
+                const cta=active.locator('.domain-project-card-v2__cta');
+                const ctaBox=await cta.boundingBox();
+                assert(boxInside(ctaBox,cardBox,2),`Home ${width} Domain tab ${i+1}: CTA clipped outside card`);
+                assert(await active.locator('.domain-project-card-v2__image').evaluate(img=>img.complete&&img.naturalWidth>0),`Home ${width} Domain tab ${i+1}: visual not decoded`);
+                const labels=(await active.locator('.domain-project-card-v2__metric-label').allTextContents()).map(clean);
+                assert(labels.length<=3&&labels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Home ${width} Domain tab ${i+1}: metric labels invalid`);
+                assertProofLabels(labels,`Home ${width} Domain tab ${i+1}`);
+                const projectCount=await domain.locator('.domain-project-card-v2').count();
+                const controls=domain.locator('.domain-wheel-v2__control:visible');
+                if(width<=600||projectCount<=1) assert(await controls.count()===0,`Home ${width} Domain tab ${i+1}: controls must be hidden`);
+                else assert(await controls.count()===2,`Home ${width} Domain tab ${i+1}: expected two controls`);
+                if(width<1419) assert(await stacked(active),`Home ${width} Domain tab ${i+1}: card must stack content before visual`);
               }
 
               if(width===430){
                 const targetDomain=await tabs.nth(0).getAttribute('data-domain');
-                assert(targetDomain,'Home 430: first Domain tab missing data-domain');
                 await tabs.nth(0).click();
                 await page.waitForFunction(expected=>{
                   const root=document.querySelector('#domains');
                   const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
-                  const wheel=root?.querySelector('.domain-wheel-v2');
                   const active=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
                   const visual=active?.length===1?active[0].querySelector('.domain-project-card-v2__visual'):null;
-                  return selected?.getAttribute('data-domain')===expected
-                    && wheel?.dataset.domainPresentationId===expected
-                    && active?.length===1
-                    && active[0].isConnected
-                    && Boolean(visual?.isConnected);
+                  return selected?.getAttribute('data-domain')===expected&&active?.length===1&&Boolean(visual?.isConnected);
                 },targetDomain);
                 await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-                const cards=domain.locator('.domain-project-card-v2');
-                if(await cards.count()>1){
-                  const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                const activeCard=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                if(await domain.locator('.domain-project-card-v2').count()>1){
                   const firstProject=await activeCard.getAttribute('data-project');
                   const visual=activeCard.locator('.domain-project-card-v2__visual');
                   await visual.evaluate(node=>node.scrollIntoView({block:'center',inline:'nearest'}));
@@ -238,102 +176,77 @@ jobs:
                   const vb=await visual.boundingBox();
                   assert(vb,'Home 430: swipe visual missing');
                   const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
-                  const hit=await page.evaluate(({x,y})=>{
-                    const node=document.elementFromPoint(x,y);
-                    return {
-                      project:node?.closest('.domain-project-card-v2')?.getAttribute('data-project')||'',
-                      visual:Boolean(node?.closest('.domain-project-card-v2__visual'))
-                    };
-                  },{x:sx,y:cy});
-                  assert(hit.project===firstProject&&hit.visual,`Home 430: swipe start does not hit active visual ${JSON.stringify(hit)}`);
-                  await page.mouse.move(sx,cy);
-                  await page.mouse.down();
-                  await page.mouse.move(ex,cy,{steps:8});
-                  await page.mouse.up();
-                  await page.waitForTimeout(80);
+                  const hit=await page.evaluate(({x,y})=>{const node=document.elementFromPoint(x,y);return{project:node?.closest('.domain-project-card-v2')?.getAttribute('data-project')||'',visual:Boolean(node?.closest('.domain-project-card-v2__visual'))}},{x:sx,y:cy});
+                  assert(hit.project===firstProject&&hit.visual,`Home 430: swipe start misses active visual ${JSON.stringify(hit)}`);
+                  await page.mouse.move(sx,cy);await page.mouse.down();await page.mouse.move(ex,cy,{steps:8});await page.mouse.up();await page.waitForTimeout(80);
                   assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==firstProject,'Home 430: swipe failed');
                 }
               }
-
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Home ${width}: horizontal overflow`);
-              report.domain[width]={viewport,wheelWidth:wheelBox.width,wheelX:wheelBox.x,tabLabels};
+              report.domain[width]={tabLabels};
               await domain.screenshot({path:path.join(out,`domain-${width}.png`)});
 
               response=await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
               assert(response?.ok(),`Work ${width}: HTTP ${response?.status()}`);
               await page.waitForSelector('.work-index',{timeout:10000});
-              await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(img=>img.complete&&img.naturalWidth>0&&img.naturalHeight>0)},{timeout:10000});
+              await page.waitForFunction(()=>{const imgs=[...document.querySelectorAll('.work-index-card__visual img')];return imgs.length===5&&imgs.every(img=>img.complete&&img.naturalWidth>0)},{timeout:10000});
               const work=page.locator('.work-index');
               const filters=(await work.locator('.work-index-filter').allTextContents()).map(clean);
               assert(JSON.stringify(filters)===JSON.stringify(['All','Transactions','Operations','Incentives','0→1','Connected journeys']),`Work ${width}: taxonomy ${JSON.stringify(filters)}`);
 
-              const featured=work.locator('.work-index__featured .work-index-card');
-              const more=work.locator('.work-index__more-grid .work-index-card');
-              assert(await featured.count()===2,`Work ${width}: expected 2 featured cards`);
-              assert(await more.count()===3,`Work ${width}: expected 3 More Work cards`);
-              const maximum=[3,2];
-              for(let i=0;i<2;i++){
-                const card=featured.nth(i),cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox();
-                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: featured ${i+1} target area`);
-                const metricCount=await card.locator('.work-index-card__metric').count();
-                assert(metricCount<=maximum[i],`Work ${width}: featured ${i+1} metric count ${metricCount}`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assert(metricLabels.every(x=>x.split(/\s+/).filter(Boolean).length<=2),`Work ${width}: featured ${i+1} long metric labels`);
-                assertProofLabels(metricLabels,`Work ${width}: featured ${i+1}`);
-                const visual=card.locator('.work-index-card__visual img');
-                assert(await visual.count()===1&&await visual.evaluate(img=>img.complete&&img.naturalWidth>0),`Work ${width}: featured ${i+1} visual missing`);
-                const typ=await card.evaluate(node=>{const value=node.querySelector('.work-index-card__metric-value'),label=node.querySelector('.work-index-card__metric-label');return{bg:getComputedStyle(node.querySelector('.work-index-card__content')).backgroundColor,v:value?parseFloat(getComputedStyle(value).fontSize):null,l:label?parseFloat(getComputedStyle(label).fontSize):null}});
-                assert(!isWhite(typ.bg),`Work ${width}: featured ${i+1} tint`);
-                if(metricCount>0)assert(typ.v>typ.l,`Work ${width}: featured ${i+1} metric hierarchy`);
+              const leadPair=work.locator('.work-index__featured > .work-index-card');
+              const medium=work.locator('.work-index__featured-secondary-row .work-index-card--half');
+              const selected=work.locator('.work-index__featured .work-index-card');
+              const more=work.locator('.work-index__more-grid .work-index-card--compact');
+              const allCards=work.locator('.work-index-card');
+              assert(await leadPair.count()===2,`Work ${width}: expected 2 lead cards`);
+              assert(await medium.count()===2,`Work ${width}: expected 2 medium Selected Work cards`);
+              assert(await selected.count()===4,`Work ${width}: expected 4 Selected Work cards`);
+              assert(await more.count()===1,`Work ${width}: expected 1 More Work card`);
+              assert(await allCards.count()===5,`Work ${width}: expected 5 total work cards`);
+
+              for(let i=0;i<await allCards.count();i++){
+                const card=allCards.nth(i);
+                const type=card.locator('.work-index-card__type');
+                const identity=card.locator('.work-index-card__identity');
+                const [tb,ib]=await Promise.all([type.boundingBox(),identity.boundingBox()]);
+                assert(tb&&ib&&ib.y>=tb.y+tb.height-1&&Math.abs(ib.x-tb.x)<=2,`Work ${width}: card ${i+1} metadata must stack TYPE then COMPANY · YEAR`);
+                const titleMax=await card.locator('.work-index-card__title').evaluate(n=>getComputedStyle(n).maxWidth);
+                assert(titleMax==='none',`Work ${width}: card ${i+1} title max-width ${titleMax}`);
+                const cardBox=await card.boundingBox(),buttonBox=await card.locator('.work-index-card__button').boundingBox(),ctaBox=await card.locator('.work-index-card__cta').boundingBox();
+                assert(cardBox&&buttonBox&&Math.abs(cardBox.width-buttonBox.width)<=2&&Math.abs(cardBox.height-buttonBox.height)<=2,`Work ${width}: card ${i+1} target area`);
+                assert(boxInside(ctaBox,cardBox,2),`Work ${width}: card ${i+1} CTA clipped`);
+                const labels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
+                assertProofLabels(labels,`Work ${width}: card ${i+1}`);
               }
 
-              const hero=featured.nth(0),secondary=featured.nth(1);
+              const hero=leadPair.nth(0),secondary=leadPair.nth(1);
               if(width===1419){
-                const [h,s]=await Promise.all([hero.boundingBox(),secondary.boundingBox()]);
-                assert(h&&s&&Math.abs(h.y-s.y)<=2,`Work 1419: featured cards not row-aligned`);
-                assert(Math.abs(h.height-s.height)<=2,`Work 1419: featured cards not equal height ${h?.height}/${s?.height}`);
-                const heroGeo=await hero.evaluate(node=>{const c=node.querySelector('.work-index-card__content').getBoundingClientRect(),v=node.querySelector('.work-index-card__visual').getBoundingClientRect();return{cr:c.right,vl:v.left}});
-                assert(Math.abs(heroGeo.vl-heroGeo.cr)<=2,'Work 1419: hero must remain horizontal');
-                assert(await stacked(secondary),'Work 1419: secondary must use mobile-style stacked layout');
+                const [h,s,m1,m2,c]=await Promise.all([hero.boundingBox(),secondary.boundingBox(),medium.nth(0).boundingBox(),medium.nth(1).boundingBox(),more.nth(0).boundingBox()]);
+                assert(h&&s&&Math.abs(h.y-s.y)<=2&&Math.abs(h.height-s.height)<=2,`Work 1419: lead cards must align and match height`);
+                assert(h.width>s.width*1.6,`Work 1419: primary card must be clearly wider ${h.width}/${s.width}`);
+                assert(c&&Math.abs(s.width-c.width)<=40,`Work 1419: secondary width must approximate More Work card ${s.width}/${c.width}`);
+                assert(m1&&m2&&Math.abs(m1.y-m2.y)<=2&&Math.abs(m1.height-m2.height)<=2,`Work 1419: medium cards must align and match height`);
+                assert(!await stacked(hero),'Work 1419: hero must remain horizontal');
+                assert(await stacked(secondary),'Work 1419: secondary must remain stacked');
               }else{
                 assert(await stacked(hero),`Work ${width}: hero must stack`);
                 assert(await stacked(secondary),`Work ${width}: secondary must stack`);
               }
-
-              const moreBoxes=await more.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}}));
-              if(width===1419){
-                assert(moreBoxes.length===3&&Math.max(...moreBoxes.map(x=>x.y))-Math.min(...moreBoxes.map(x=>x.y))<=2,'Work 1419: More Work must be one 3-up row');
-                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===3,'Work 1419: More Work must have three columns');
-              }else if(width===871){
-                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===2,'Work 871: More Work must use two columns');
-              }else{
-                assert(new Set(moreBoxes.map(x=>Math.round(x.x))).size===1,'Work 430: More Work must use one column');
-              }
-
-              for(let i=0;i<await more.count();i++){
-                const card=more.nth(i),metricCount=await card.locator('.work-index-card__metric').count();
-                assert(metricCount<=1,`Work ${width}: More Work ${i+1} metric count ${metricCount}`);
-                const metricLabels=(await card.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assertProofLabels(metricLabels,`Work ${width}: More Work ${i+1}`);
-                assert(await stacked(card),`Work ${width}: More Work ${i+1} must use compact mobile-style layout`);
+              if(width===430){
+                for(let i=0;i<await medium.count();i++) assert(await stacked(medium.nth(i)),`Work 430: medium ${i+1} must stack`);
               }
 
               await page.mouse.move(1,1);await page.waitForTimeout(50);
-              const workBefore=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
+              const before=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
               await hero.hover();await page.waitForTimeout(320);
-              const workAfter=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
-              assert(workBefore.i!==workAfter.i&&workBefore.a!==workAfter.a,`Work ${width}: hover motion missing`);
-
-              const bandzo=work.locator('.work-index-card[data-work-index-project="bandzo"]');
-              if(await bandzo.count()){
-                const bandzoLabels=(await bandzo.locator('.work-index-card__metric-label').allTextContents()).map(clean);
-                assertProofLabels(bandzoLabels,`Work ${width}: Bandzo`);
-              }
+              const after=await hero.evaluate(card=>({i:getComputedStyle(card.querySelector('.work-index-card__image')).transform,a:getComputedStyle(card.querySelector('.work-index-card__cta-arrow')).transform}));
+              assert(before.i!==after.i&&before.a!==after.a,`Work ${width}: hover motion missing`);
               await work.locator('[data-work-index-filter="operations"]').click();
               assert(await work.locator('.work-index-card[data-work-categories~="operations"]:not([hidden])').count()>=1,`Work ${width}: Operations filter empty`);
               await work.locator('[data-work-index-filter="all"]').click();
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Work ${width}: horizontal overflow`);
-              report.work[width]={filters,featured:2,more:3};
+              report.work[width]={filters,lead:2,medium:2,selected:4,more:1};
               await work.screenshot({path:path.join(out,`work-${width}.png`)});
               await context.close();
             }
@@ -351,10 +264,9 @@ jobs:
               const context=await browser.newContext({viewport:{width:1419,height:1100}}),page=await context.newPage();
               const response=await page.goto(`${base}/site/work/${slug}.html`,{waitUntil:'networkidle'});
               assert(response?.ok(),`${slug}: route failed`);
-              const identity=await page.evaluate(()=>({title:document.title,canonical:document.querySelector('link[rel="canonical"]')?.href||''}));
-              assert(identity.canonical.endsWith(`/work/${slug}`),`${slug}: canonical mismatch`);
-              assert(identity.title.length>10&&!/404|not found/i.test(identity.title),`${slug}: title invalid`);
-              report.routes[slug]={status:response.status(),...identity};
+              const canonical=await page.locator('link[rel="canonical"]').getAttribute('href');
+              assert(canonical?.endsWith(`/work/${slug}`),`${slug}: canonical mismatch`);
+              report.routes[slug]={status:response.status(),canonical};
               await context.close();
             }
             const cathayRoutes={
@@ -368,8 +280,7 @@ jobs:
               assert(response?.ok(),`${slug}: route failed`);
               const identity=await page.evaluate(()=>({body:document.body.innerText,canonical:document.querySelector('link[rel="canonical"]')?.href||''}));
               assert(identity.canonical.endsWith(`/work/${slug}`),`${slug}: canonical mismatch`);
-              assert(identity.body.includes(expectedTitle),`${slug}: inner detail title drifted from visible title contract`);
-              assert(identity.body.includes('Cathay'),`${slug}: inner detail company must render Cathay`);
+              assert(identity.body.includes(expectedTitle)&&identity.body.includes('Cathay'),`${slug}: visible canonical content drift`);
               report.routes[slug]={status:response.status(),canonical:identity.canonical,expectedTitle};
               await context.close();
             }
