@@ -60,6 +60,11 @@ jobs:
             assert(domainLabels.every(label=>!/[+/]/.test(label)),`Domain ${width}: residual metric punctuation ${JSON.stringify(domainLabels)}`);
             const domain=page.locator('#domains');
             await domain.scrollIntoViewIfNeeded();
+            await domain.evaluate(async root=>{
+              const running=root.getAnimations({subtree:true}).filter(animation=>animation.playState==='running');
+              await Promise.allSettled(running.map(animation=>animation.finished));
+            });
+            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
             await domain.screenshot({path:path.join(out,`domain-${width}-painted.png`)});
             report.domain[width]={iconKeys,metricLabels:domainLabels};
 
