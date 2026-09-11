@@ -100,12 +100,10 @@ jobs:
               assert(state.complete&&state.naturalWidth>0&&state.naturalHeight>0,`Work ${width} ${project}: image not decoded`);
               assert(state.width>40&&state.height>40&&state.display!=='none'&&state.visibility!=='hidden'&&Number(state.opacity)>0,`Work ${width} ${project}: image not visibly laid out`);
               assert(state.nonWhiteRatio>0.01,`Work ${width} ${project}: image raster appears blank`);
+              await card.screenshot({path:path.join(out,`work-${width}-${project}-painted.png`)});
               painted.push({project,...state});
             }
 
-            await page.locator('.work-index').scrollIntoViewIfNeeded();
-            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-            await page.locator('.work-index').screenshot({path:path.join(out,`work-${width}-painted.png`)});
             assert(errors.length===0,`Console/page errors ${width} ${JSON.stringify(errors)}`);
             report.work[width]={paymentValues,paymentLabels,workMetricLabels:allMetricLabels,painted};
             report.errors.push(...errors.map(text=>({width,text})));
