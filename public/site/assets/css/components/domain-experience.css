@@ -102,7 +102,7 @@
   .domain-experience-disclosure{grid-column:1}
 }
 @media(max-width:600px){
-  .domain-experience{--domain-card-width:min(86%,calc(var(--dimension-330px) + var(--space-1)));--domain-card-height:calc(var(--dimension-640px) - var(--dimension-64px));--domain-wheel-height:calc(var(--dimension-640px) - var(--dimension-16px));--domain-card-content-padding:var(--dimension-20px);--domain-card-visual-padding:var(--space-2);--domain-side-shift:70vw;--domain-side-scale:.88;--domain-side-rotation:calc(var(--dimension-1deg) * 3)}
+  .domain-experience{--domain-card-width:min(86%,calc(var(--dimension-330px) + var(--space-1)));--domain-card-height:calc(var(--dimension-640px) - var(--dimension-64px));--domain-wheel-height:calc(var(--dimension-640px) - var(--dimension-16px));--domain-card-content-padding:var(--dimension-20px);--domain-card-visual-padding:var(--space-2);--domain-side-shift:70%;--domain-side-scale:.88;--domain-side-rotation:calc(var(--dimension-1deg) * 3)}
   .domain-experience .domain-statement{font-size:var(--sys-type-heading-2)}
   .domain-experience .domain-synthesis{font-size:var(--sys-type-body)}
   .domain-experience .domain-project-card-v2{top:0;grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
