@@ -93,7 +93,16 @@ jobs:
           const report={domain:{},work:{},routes:{},consoleErrors:[]};
           const assert=(value,message)=>{if(!value)throw new Error(message)};
           const clean=value=>String(value||'').replace(/\s+/g,' ').trim();
-          const boxInside=(inner,outer,t=2)=>inner&&outer&&inner.left>=outer.left-t&&inner.right<=outer.right+t&&inner.top>=outer.top-t&&inner.bottom<=outer.bottom+t;
+          const boxEdges=box=>box?{
+            left:box.left??box.x,
+            right:box.right??(box.x+box.width),
+            top:box.top??box.y,
+            bottom:box.bottom??(box.y+box.height)
+          }:null;
+          const boxInside=(inner,outer,t=2)=>{
+            const i=boxEdges(inner),o=boxEdges(outer);
+            return Boolean(i&&o&&i.left>=o.left-t&&i.right<=o.right+t&&i.top>=o.top-t&&i.bottom<=o.bottom+t);
+          };
           const stacked=async card=>card.evaluate(node=>{
             const c=node.querySelector('.domain-project-card-v2__content,.work-index-card__content')?.getBoundingClientRect();
             const v=node.querySelector('.domain-project-card-v2__visual,.work-index-card__visual')?.getBoundingClientRect();
