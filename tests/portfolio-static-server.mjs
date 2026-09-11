@@ -9,7 +9,7 @@ const types = {
   ".jpeg": "image/jpeg",
   ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
+  ".json": "application/json",
   ".pdf": "application/pdf",
   ".png": "image/png",
   ".svg": "image/svg+xml",
@@ -20,7 +20,17 @@ const types = {
 const port=Number(process.env.PORT||3000);
 http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, "http://127.0.0.1").pathname);
-  let file = path.resolve(root, `.${pathname}`);
+  const generatedWorkRoute = pathname.match(/^\/site\/work\/([^/]+)\.html$/);
+  if (generatedWorkRoute) {
+    response.writeHead(302, { location: `/work/${encodeURIComponent(generatedWorkRoute[1])}`, "cache-control": "no-store" });
+    response.end();
+    return;
+  }
+
+  const cleanWorkRoute = pathname.match(/^\/work\/([^/]+)\/?$/);
+  let file = cleanWorkRoute
+    ? path.resolve(root, `./site/work/${cleanWorkRoute[1]}.html`)
+    : path.resolve(root, `.${pathname}`);
   if (file.startsWith(root) && (!fs.existsSync(file) || fs.statSync(file).isDirectory())) {
     const htmlFile = `${file}.html`;
     if (htmlFile.startsWith(root) && fs.existsSync(htmlFile)) file = htmlFile;
