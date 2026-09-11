@@ -57,6 +57,14 @@
     return '';
   };
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
+  const visibleProjectTitle = (value) => {
+    let text = String(value || '').trim();
+    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;
+    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {
+      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }
+    }
+    return text;
+  };
 
   const taxonomy = [
     ['all', 'All', '全部'],
@@ -121,7 +129,7 @@
     const text = firstText(raw?.year, raw?.period, raw?.timeline, raw?.infoGrid?.timeline?.dateRange, adapted?.year, adapted?.period, adapted?.timeline, source.date);
     return text.match(/(?:19|20)\d{2}/)?.[0] || source.date.slice(0, 4);
   };
-  const projectTitle = (raw, adapted, source) => firstText(
+  const projectTitle = (raw, adapted, source) => visibleProjectTitle(firstText(
     language() === 'zh' ? raw?.transformation_zh : raw?.transformation,
     raw?.transformation,
     adapted?.transformation,
@@ -129,7 +137,7 @@
     adapted?.title,
     source.title?.textContent,
     source.projectId
-  );
+  ));
 
   const conciseMetricLabel = (label) => {
     const text = String(label || '').trim();

@@ -2087,7 +2087,7 @@ test("R166.1 projects Cathay OA through the recruiter-first shared IA without pl
   assert.equal(project.presentation.composition,"recruiter-first-system-case");
   assert.deepEqual(project.presentation.sectionOrder,expectedOrder);
   assert.deepEqual(project.sectionOrder,expectedOrder);
-  assert.equal(project.title.en,"Fragmented account-opening steps to a validated end-to-end flow");
+  assert.equal(project.title.en,"From fragmented steps to end-to-end account opening");
   assert.deepEqual(project.searchIndexV2.problemTags.en,["account opening","identity verification","application recovery"]);
   assert.equal(project.presentation.visibility.problemTypes,undefined);
   assert.equal(project.whatMadeThisHard.length,3);
@@ -2181,11 +2181,11 @@ test("R172.2 migrates Cathay Mortgage through shared recruiter-first owners with
   assert.deepEqual(project.presentation.sectionOrder,order);
   assert.ok(order.indexOf("design-decisions")<order.indexOf("evidence"));
   assert.deepEqual(project.presentation.navigation.map(item=>item.key),["overview","complexity","decisions","evidence","outcomes","ownership"]);
-  assert.equal(project.title.en,"Rigid tablet script to a flexible mortgage consultation system");
-  assert.equal(project.company,"Cathay Life Insurance");
-  assert.equal(project.heroMetadata.company,"Cathay Life Insurance");
+  assert.equal(project.title.en,"From rigid scripts to flexible mortgage consultation");
+  assert.equal(project.company,"Cathay");
+  assert.equal(project.heroMetadata.company,"Cathay");
   assert.equal(project.atAGlance.en,"Led UX redesign of a launched mortgage consultation tool, replacing a fixed tablet script with scenario-led guidance validated across 4 core tasks.");
-  assert.doesNotMatch(project.title.en,/^From\s/);
+  assert.equal(project.title.en.startsWith("From "),true);
   assert.equal(project.infoGrid.timeline.dateRange.en,"2016");
   assert.equal(project.infoGrid.timeline.duration.en,"4 months");
   assert.equal(project.infoGrid.timeline.duration.zh,"4 個月");
@@ -2329,4 +2329,26 @@ test("R183.8F P3.4B keeps outcomes, framed evidence and history-aware project-op
   assert.ok(ssot.projects.bandzo.canonicalEvidence.items.every(item=>item.presentation==="document"));
   assert.deepEqual(ssot.projects["taishin-p2p-marketplace-platform"].publicContent.decisionEvidence.structuredGroups.map(item=>item.presentation),['natural-ratio','framed','framed','framed']);
   assert.match(app,/const metricSegments=emphasis\?\.sourceSegments\?\.\[lang==='zh'\?'zh':'en'\]\|\|\[\]/);
+});
+
+test("keeps Cathay canonical names concise while all visible surfaces share one title rule", () => {
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const work=read("assets/js/work.js");
+  const domain=read("assets/js/domain-experience.js");
+  const cathay={
+    "cathay-mortgage-assistant":"From rigid scripts to flexible mortgage consultation",
+    "cathay-sit-online-account-opening":"From fragmented steps to end-to-end account opening",
+    "cathay-sit-review-remediation-operations":"From interface issues to prioritised remediation"
+  };
+  for(const [id,title] of Object.entries(cathay)){
+    const project=ssot.projects[id];
+    assert.equal(project.company,"Cathay",id);
+    assert.equal(project.heroMetadata.company,"Cathay",id);
+    assert.equal(project.title.en,title,id);
+    assert.equal(project.transformation,title,id);
+  }
+  assert.match(work,/visibleProjectTitle/);
+  assert.match(domain,/visibleProjectTitle/);
+  assert.match(work,/forbiddenVisiblePrefixes/);
+  assert.match(domain,/forbiddenVisiblePrefixes/);
 });

@@ -59,6 +59,14 @@
   };
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
   const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
+  const visibleProjectTitle = (value) => {
+    let text = String(value || '').trim();
+    const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;
+    for (const prefix of Array.isArray(prefixes) ? prefixes : []) {
+      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }
+    }
+    return text;
+  };
 
   const tabIcon = {
     finance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 3 3 8h18L12 3Z"/></svg>',
@@ -302,7 +310,7 @@
 
     const title = document.createElement('h3');
     title.className = 'domain-project-card-v2__title';
-    title.textContent = firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title);
+    title.textContent = visibleProjectTitle(firstText(language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title));
 
     const metrics = collectMetrics(project);
     const metricList = document.createElement('dl');
