@@ -124,7 +124,8 @@
 @media(prefers-reduced-motion:reduce){.domain-experience .domain-project-card-v2,.domain-experience .domain-project-card-v2__image,.domain-experience .domain-project-card-v2__cta-arrow,.domain-experience .domain-wheel-v2__control,.domain-experience .domain-tab,.domain-experience-disclosure__summary,.domain-experience-disclosure__summary::after{transition:none}.domain-experience-disclosure[open] ul{animation:none}}
 
 /* Human contract responsive outer-card fallback v2 */
-.domain-experience .domain-project-card-v2__cta{width:100%;margin:var(--space-3) 0 0;padding:var(--space-3) 0 0}
+.domain-experience .domain-project-card-v2__cta{position:relative;border-top:0}
+.domain-experience .domain-project-card-v2__cta::before{position:absolute;top:0;left:var(--domain-card-content-padding);right:var(--domain-card-content-padding);height:var(--dimension-1px);background:color-mix(in srgb,var(--sys-color-text-primary) 16%,transparent);content:"";pointer-events:none}
 @media(max-width:900px){
   .domain-experience{--domain-card-height:var(--dimension-640px);--domain-wheel-height:calc(var(--dimension-640px) + var(--space-8));--domain-card-content-padding:var(--space-5)}
   .domain-experience .domain-project-card-v2{grid-template-columns:1fr;grid-template-rows:minmax(0,60%) minmax(0,40%)}
