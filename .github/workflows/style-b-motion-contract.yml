@@ -109,10 +109,31 @@ jobs:
                 const depth=await adjacent.evaluate(n=>{const s=getComputedStyle(n);const m=new DOMMatrix(s.transform);return{opacity:Number(s.opacity),scale:Math.hypot(m.a,m.b),rotation:Math.atan2(m.b,m.a)*180/Math.PI,duration:s.transitionDuration}});
                 assert(depth.opacity>=.5&&depth.scale<.98&&Math.abs(depth.rotation)>=1,`Domain 430: wheel depth motion missing ${JSON.stringify(depth)}`);
                 assert(depth.duration.split(',').some(v=>parseFloat(v)>=.35),`Domain 430: wheel transition too short ${depth.duration}`);
-                const first=await active.getAttribute('data-project');
-                const wheel=domain.locator('.domain-wheel-v2');
-                const wb=await wheel.boundingBox();
-                const cy=wb.y+Math.min(wb.height/2,280),sx=wb.x+wb.width*.7,ex=wb.x+wb.width*.3;
+
+                const targetDomain=await domain.locator('.domain-tab').nth(0).getAttribute('data-domain');
+                assert(targetDomain,'Domain 430: first tab missing data-domain');
+                await domain.locator('.domain-tab').nth(0).click();
+                await page.waitForFunction(expected=>{
+                  const root=document.querySelector('#domains');
+                  const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
+                  const activeCards=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
+                  const visual=activeCards?.length===1?activeCards[0].querySelector('.domain-project-card-v2__visual'):null;
+                  return selected?.getAttribute('data-domain')===expected&&activeCards?.length===1&&Boolean(visual?.isConnected);
+                },targetDomain);
+                await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+                const stableActive=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                const first=await stableActive.getAttribute('data-project');
+                const visual=stableActive.locator('.domain-project-card-v2__visual');
+                await visual.evaluate(node=>node.scrollIntoView({block:'center',inline:'nearest'}));
+                await page.waitForTimeout(60);
+                const vb=await visual.boundingBox();
+                assert(vb,'Domain 430: active visual missing');
+                const cy=vb.y+vb.height*.5,sx=vb.x+vb.width*.68,ex=vb.x+vb.width*.32;
+                const hit=await page.evaluate(({x,y})=>{
+                  const node=document.elementFromPoint(x,y);
+                  return{project:node?.closest('.domain-project-card-v2')?.getAttribute('data-project')||'',visual:Boolean(node?.closest('.domain-project-card-v2__visual'))};
+                },{x:sx,y:cy});
+                assert(hit.project===first&&hit.visual,`Domain 430: swipe start misses active visual ${JSON.stringify(hit)}`);
                 await page.mouse.move(sx,cy);await page.mouse.down();await page.mouse.move(ex,cy,{steps:8});await page.mouse.up();
                 await page.waitForTimeout(80);
                 assert(await domain.locator('.domain-project-card-v2[data-wheel-offset="0"]').getAttribute('data-project')!==first,'Domain 430: swipe did not rotate wheel');
