@@ -61,7 +61,11 @@
     let text = String(value || '').trim();
     const prefixes = DATA.implementationContracts?.recruiterFirstPresentation?.hero?.forbiddenVisiblePrefixes;
     for (const prefix of Array.isArray(prefixes) ? prefixes : []) {
-      if (prefix && text.startsWith(prefix)) { text = text.slice(prefix.length).trimStart(); break; }
+      if (prefix && text.startsWith(prefix)) {
+        text = text.slice(prefix.length).trimStart();
+        text = text ? text.charAt(0).toLocaleUpperCase(language() === 'zh' ? 'zh-TW' : 'en') + text.slice(1) : text;
+        break;
+      }
     }
     return text;
   };
