@@ -178,12 +178,8 @@
   .domain-experience{--domain-wheel-height:calc(var(--dimension-640px) - var(--space-8))}
   .domain-experience .domain-project-card-v2__content{height:calc(var(--dimension-360px) + var(--space-2));min-height:calc(var(--dimension-360px) + var(--space-2));grid-template-rows:auto auto minmax(0,1fr) minmax(var(--space-8),auto) auto}
 }
-@media(max-width:900px) and (hover:none), (max-width:900px) and (pointer:coarse){
-  .domain-experience .domain-project-card-v2[data-wheel-state="adjacent"]:hover{opacity:.62;filter:saturate(.8)}
+@media(hover:none),(pointer:coarse){
   .domain-experience .domain-project-card-v2[data-wheel-offset="0"]:hover .domain-project-card-v2__image{transform:scale(1);filter:none}
   .domain-experience .domain-project-card-v2[data-wheel-offset="0"]:hover .domain-project-card-v2__cta-arrow{transform:rotate(var(--arrow-rotate-right))}
   .domain-experience .domain-wheel-v2__control:hover{transform:none}
-}
-@media(max-width:600px) and (hover:none), (max-width:600px) and (pointer:coarse){
-  .domain-experience .domain-project-card-v2[data-wheel-state="adjacent"]:hover{opacity:.7;filter:saturate(.84)}
 }
