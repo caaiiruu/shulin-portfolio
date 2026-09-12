@@ -18,7 +18,6 @@
   const contentRail = document.getElementById('domainContentRail');
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
 
-
   let viewportSyncFrame = 0;
   const syncViewportWidth = () => {
     section.style.setProperty('--domain-viewport-width', `${document.documentElement.clientWidth}px`);
@@ -258,6 +257,7 @@
       .slice(0, limit)
       .map(({ value, label }) => ({ value, label }));
   };
+
   const collectMetrics = (project) => selectProofMetrics([
     project?.cardMetrics, project?.card_metrics, project?.primaryMetrics, project?.primary_metrics, project?.metrics,
     project?.impactEvidence?.primaryMetrics, project?.impactEvidence?.primary_metrics,
@@ -339,6 +339,7 @@
     const metricList = document.createElement('dl');
     metricList.className = 'domain-project-card-v2__metrics';
     metricList.dataset.metricCount = String(metrics.length);
+    metricList.setAttribute('aria-hidden', String(metrics.length === 0));
     metricList.style.gridTemplateColumns = `repeat(${Math.max(metrics.length, 1)}, minmax(0, 1fr))`;
     metrics.forEach(({ value }) => { const dt = document.createElement('dt'); dt.className = 'domain-project-card-v2__metric-value'; dt.textContent = value; metricList.append(dt); });
     metrics.forEach(({ label }) => { const dd = document.createElement('dd'); dd.className = 'domain-project-card-v2__metric-label'; dd.textContent = label; metricList.append(dd); });
@@ -350,9 +351,7 @@
     const arrow = document.createElement('span'); arrow.className = 'domain-project-card-v2__cta-arrow icon-arrow icon-arrow--right'; arrow.setAttribute('aria-hidden', 'true');
     cta.append(ctaLabel, arrow);
 
-    body.append(meta, title);
-    if (metrics.length) body.append(metricList);
-    body.append(cta);
+    body.append(meta, title, metricList, cta);
     article.append(body, buildVisual(project, key));
     return article;
   };
