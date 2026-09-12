@@ -149,6 +149,7 @@ jobs:
                 await tabs.nth(i).click();
                 await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
                 await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
+                await page.waitForTimeout(width<=900?420:60);
                 const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
                 const cardBox=await active.boundingBox();
                 const cta=active.locator('.domain-project-card-v2__cta');
@@ -160,9 +161,31 @@ jobs:
                 assertProofLabels(labels,`Home ${width} Domain tab ${i+1}`);
                 const projectCount=await domain.locator('.domain-project-card-v2').count();
                 const controls=domain.locator('.domain-wheel-v2__control:visible');
-                if(width<=600||projectCount<=1) assert(await controls.count()===0,`Home ${width} Domain tab ${i+1}: controls must be hidden`);
+                if(width<=900||projectCount<=1) assert(await controls.count()===0,`Home ${width} Domain tab ${i+1}: controls must be hidden`);
                 else assert(await controls.count()===2,`Home ${width} Domain tab ${i+1}: expected two controls`);
                 if(width<1419) assert(await stacked(active),`Home ${width} Domain tab ${i+1}: card must stack content before visual`);
+
+                if(width<=900){
+                  const layout=await domain.locator('.domain-project-card-v2').evaluateAll(nodes=>nodes.map(node=>{
+                    const content=node.querySelector('.domain-project-card-v2__content');
+                    const cta=node.querySelector('.domain-project-card-v2__cta');
+                    return {
+                      project:node.getAttribute('data-project')||'',
+                      cardHeight:node.offsetHeight,
+                      contentHeight:content?.offsetHeight||0,
+                      ctaTop:cta?.offsetTop||0,
+                      metricCount:Number(node.querySelector('.domain-project-card-v2__metrics')?.dataset.metricCount||0)
+                    };
+                  }));
+                  const cardHeights=layout.map(x=>x.cardHeight),contentHeights=layout.map(x=>x.contentHeight),ctaTops=layout.map(x=>x.ctaTop);
+                  assert(Math.max(...cardHeights)-Math.min(...cardHeights)<=2,`Home ${width} Domain tab ${i+1}: card heights drift ${JSON.stringify(layout)}`);
+                  assert(Math.max(...contentHeights)-Math.min(...contentHeights)<=2,`Home ${width} Domain tab ${i+1}: content heights drift ${JSON.stringify(layout)}`);
+                  assert(Math.max(...ctaTops)-Math.min(...ctaTops)<=2,`Home ${width} Domain tab ${i+1}: CTA vertical alignment drift ${JSON.stringify(layout)}`);
+                  const disclosureBox=await disclosures.nth(0).boundingBox();
+                  const settledCardBox=await active.boundingBox();
+                  const gap=disclosureBox&&settledCardBox?disclosureBox.y-(settledCardBox.y+settledCardBox.height):null;
+                  assert(gap!==null&&gap>=12&&gap<=120,`Home ${width} Domain tab ${i+1}: wheel-to-disclosure gap ${gap}`);
+                }
               }
 
               if(width===430){
@@ -257,6 +280,25 @@ jobs:
               assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`Work ${width}: horizontal overflow`);
               report.work[width]={filters,lead:2,medium:2,selected:4,more:1};
               await work.screenshot({path:path.join(out,`work-${width}.png`)});
+              await context.close();
+            }
+
+            {
+              const context=await browser.newContext({viewport:{width:430,height:1000},hasTouch:true,isMobile:true,reducedMotion:'no-preference'});
+              const page=await context.newPage();
+              const response=await page.goto(`${base}/site/index.html`,{waitUntil:'networkidle'});
+              assert(response?.ok(),`Touch Home: HTTP ${response?.status()}`);
+              const domain=page.locator('#domains');
+              await domain.scrollIntoViewIfNeeded();
+              await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const image=active.locator('.domain-project-card-v2__image');
+              const before=await image.evaluate(node=>({transform:getComputedStyle(node).transform,filter:getComputedStyle(node).filter}));
+              const summary=domain.locator('details.domain-experience-disclosure').nth(0).locator('summary');
+              await summary.tap();
+              await page.waitForTimeout(160);
+              const after=await image.evaluate(node=>({transform:getComputedStyle(node).transform,filter:getComputedStyle(node).filter}));
+              assert(before.transform===after.transform&&before.filter===after.filter,`Touch Home: disclosure tap leaked card hover ${JSON.stringify({before,after})}`);
               await context.close();
             }
 
