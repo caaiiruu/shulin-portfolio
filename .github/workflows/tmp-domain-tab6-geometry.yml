@@ -1,0 +1,41 @@
+name: Temp Domain Tab6 Geometry
+on:
+  workflow_dispatch:
+  push:
+    branches: [diagnostic/domain-cta-geometry-3]
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm run install:ci
+          npm run build
+      - working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/server.log; exit 1
+      - working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:1419,height:1100}});
+          await page.goto('http://127.0.0.1:4173/site/index.html',{waitUntil:'networkidle'});
+          const domain=page.locator('#domains'); await domain.scrollIntoViewIfNeeded();
+          await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+          const tabs=domain.locator('.domain-tab'); await tabs.nth(5).click();
+          await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-tab')[5]?.getAttribute('aria-selected')==='true');
+          await page.waitForTimeout(500);
+          const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+          const data=await active.evaluate(node=>{
+            const q=s=>node.querySelector(s); const b=e=>e?(()=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom,right:r.right}})():null;
+            return {project:node.dataset.project,card:b(node),content:b(q('.domain-project-card-v2__content')),meta:b(q('.domain-project-card-v2__meta')),title:b(q('.domain-project-card-v2__title')),metrics:b(q('.domain-project-card-v2__metrics')),cta:b(q('.domain-project-card-v2__cta')),titleText:q('.domain-project-card-v2__title')?.textContent||'',contentScrollHeight:q('.domain-project-card-v2__content')?.scrollHeight,contentClientHeight:q('.domain-project-card-v2__content')?.clientHeight,styles:{grid:getComputedStyle(q('.domain-project-card-v2__content')).gridTemplateRows,overflow:getComputedStyle(node).overflow}};
+          });
+          console.log(JSON.stringify(data,null,2));
+          await browser.close();
+          NODE
