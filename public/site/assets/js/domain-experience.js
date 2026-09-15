@@ -196,8 +196,8 @@
     const raw = firstText(projection?.period, project?.year, project?.period, project?.heroMetadata?.year, project?.heroMetadata?.period, project?.timeline_pair, project?.timeline);
     return raw.match(/(?:19|20)\d{2}/)?.[0] || raw;
   };
-  const readType = (project, projection) => firstText(projection?.type, project?.type, project?.infoGrid?.type, project?.type_pair, project?.projectType, project?.project_type, project?.systemClassification?.publicLabel, project?.systemClassification?.label);
-  const companyFor = (project, projection) => projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : '');
+  const readType = (key, project, projection) => key === 'daily-hours' ? '0→1 Product' : firstText(projection?.type, project?.type, project?.infoGrid?.type, project?.type_pair, project?.projectType, project?.project_type, project?.systemClassification?.publicLabel, project?.systemClassification?.label);
+  const companyFor = (key, project, projection) => key === 'daily-hours' ? 'Shulin Studio' : (projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : ''));
   const titleFor = (project, projection, key) => visibleProjectTitle(firstText(projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, key));
 
   const conciseMetricLabel = label => {
@@ -233,9 +233,9 @@
         const rawLabel = firstText(item?.label,item?.name,item?.description);
         const label = conciseMetricLabel(rawLabel);
         const tier = proofTier(value,rawLabel);
-        const key = `${value}|${label}`;
-        if (!value || !label || !tier || seen.has(key)) continue;
-        seen.add(key);candidates.push({value,label,tier});
+        const metricKey = `${value}|${label}`;
+        if (!value || !label || !tier || seen.has(metricKey)) continue;
+        seen.add(metricKey);candidates.push({value,label,tier});
       }
     }
     return candidates.sort((a,b)=>b.tier-a.tier).slice(0,3);
@@ -256,7 +256,7 @@
       if (asset.width && asset.height) {img.width=asset.width;img.height=asset.height}
       visual.append(img);
     } else {
-      const fallback=document.createElement('span');fallback.className='domain-project-card-v2__visual-fallback';fallback.textContent=companyFor(project,projection);visual.append(fallback);
+      const fallback=document.createElement('span');fallback.className='domain-project-card-v2__visual-fallback';fallback.textContent=companyFor(key,project,projection);visual.append(fallback);
     }
     return visual;
   };
@@ -266,12 +266,12 @@
     const projection = projectionForProject(key);
     const article = document.createElement('article');
     article.className='domain-project-card-v2 domain-project-card-v2--large';
-    article.dataset.project=key;article.dataset.projectCardVariant='large';article.style.setProperty('--project-card-tint',tintForProject(key));
+    article.dataset.project=key;article.dataset.projectCardSystem='shared-v1';article.dataset.projectCardVariant='featured';article.style.setProperty('--project-card-tint',tintForProject(key));
     const content=document.createElement('div');content.className='domain-project-card-v2__content';
     const meta=document.createElement('div');meta.className='domain-project-card-v2__meta';
-    const type=document.createElement('span');type.className='domain-project-card-v2__type';type.textContent=readType(project,projection);
+    const type=document.createElement('span');type.className='domain-project-card-v2__type';type.textContent=readType(key,project,projection);
     const identity=document.createElement('span');identity.className='domain-project-card-v2__identity';
-    const company=document.createElement('strong');company.className='domain-project-card-v2__company';company.textContent=companyFor(project,projection);identity.append(company);
+    const company=document.createElement('strong');company.className='domain-project-card-v2__company';company.textContent=companyFor(key,project,projection);identity.append(company);
     const year=readYear(project,projection);if(year){const dot=document.createElement('span');dot.setAttribute('aria-hidden','true');dot.textContent='·';const yearNode=document.createElement('span');yearNode.className='domain-project-card-v2__year';yearNode.textContent=year;identity.append(dot,yearNode)}
     if(type.textContent)meta.append(type);meta.append(identity);
     const title=document.createElement('h3');title.className='domain-project-card-v2__title';title.textContent=titleFor(project,projection,key);
