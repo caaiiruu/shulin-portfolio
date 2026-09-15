@@ -35,6 +35,10 @@ test('approved English content is exact and zh remains pending',()=>{
   assert.deepEqual([content.shift.reframeOne,content.shift.reframeTwo],['Time is an input.','The decision is the product.']);
   assert.deepEqual(content.lifecycle,['Plan','Work','Monitor','Settle','Learn']);
   assert.equal(content.nextQuestion,'What should stay flexible—and what should become a system for other freelancers?');
+  assert.equal(content.outcomesHeadline,'A working decision system, not a portfolio concept.');
+  assert.deepEqual(content.outcomes.map(item=>item.title),['Live product','~2 days','Continuous iteration']);
+  assert.equal(content.cta.label,'Request demo access');
+  assert.equal(content.cta.supportingCopy,'Daily Hours is a live product I use in my own freelance practice.');
 });
 
 test('approved evidence bytes match every recorded SHA-256',()=>{
@@ -68,6 +72,9 @@ test('V2 owners do not leak into the legacy project-detail owner',()=>{
   const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
   assert.doesNotMatch(legacy,/csv2-|case-study-v2/i);
   assert.match(css,/\.csv2-main/);
+  assert.match(css,/body\.csv2-active \.site-footer::before,body\.csv2-active \.site-footer::after\{content:none\}/);
+  assert.match(css,/body\.csv2-active \.site-footer \.contact-bar-v42\{display:none\}/);
+  assert.doesNotMatch(css,/\.csv2-cta-row/);
   assert.match(app,/function resolvePresentationRoute\(/);
   const resolver=app.slice(0,app.indexOf('function pair'));
   assert.doesNotMatch(resolver,/daily-hours/);

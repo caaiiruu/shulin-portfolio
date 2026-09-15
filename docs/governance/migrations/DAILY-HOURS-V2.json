@@ -1,7 +1,7 @@
 {
   "migrationId": "DAILY-HOURS-V2",
-  "phase": "Phase 1 isolated Preview implementation",
-  "status": "LOCAL_VALIDATED_PREVIEW_PENDING",
+  "phase": "Phase 1.1 Human corrections and full-page cleanup",
+  "status": "READY_FOR_HUMAN_REVIEW",
   "certifiedProductionBaseline": {
     "commit": "f0c4ca0a770d7adb1f29d39a2a514c8715e1944e",
     "tree": "d66980327f1313c4827a50303dccb86330816d01",

@@ -65,23 +65,29 @@
     "lineOne": "Time is an input.",
     "lineTwo": "The decision is the product."
   },
+  "outcomesHeadline": "A working decision system, not a portfolio concept.",
   "outcomes": [
     {
-      "title": "Project health",
-      "statement": "Time becomes one signal inside a broader project-health model."
+      "theme": "Reality",
+      "title": "Live product",
+      "statement": "Used in real freelance work, not built only as a portfolio concept."
     },
     {
-      "title": "Attention",
-      "statement": "Priority must surface before lower-value reporting detail."
+      "theme": "Velocity",
+      "title": "~2 days",
+      "statement": "To the first usable version, shortening the problem-to-learning loop."
     },
     {
-      "title": "Lifecycle",
-      "statement": "Completed ≠ Billed ≠ Received"
+      "theme": "Learning",
+      "title": "Continuous iteration",
+      "statement": "Real usage continues to expose where the system should change next."
     }
   ],
   "nextQuestion": "What should stay flexible—and what should become a system for other freelancers?",
   "cta": {
-    "label": "Explore experiments",
-    "href": "/experiments"
+    "headline": "Try the working product",
+    "supportingCopy": "Daily Hours is a live product I use in my own freelance practice.",
+    "label": "Request demo access",
+    "href": "mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request&body=Hi%20Shulin%2C%0A%0AI%E2%80%99d%20like%20to%20request%20access%20to%20the%20Daily%20Hours%20demo."
   }
 }

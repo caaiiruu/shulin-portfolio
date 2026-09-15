@@ -65,6 +65,20 @@
       button.textContent='中文（待核准）';
     });
   }
+  function labelSharedChrome(){
+    const labels={
+      '/work':'Work',
+      '/experiments':'Experiments',
+      '/profile':'Profile',
+      '#main':'Back to top'
+    };
+    document.querySelectorAll('.site-header a,.site-footer a').forEach(link=>{
+      const href=link.getAttribute('href');
+      if(labels[href]&&!link.textContent.trim())link.textContent=labels[href];
+    });
+    const menuToggle=document.querySelector('.menu-toggle');
+    if(menuToggle&&!menuToggle.textContent.trim())menuToggle.setAttribute('aria-label','Open menu');
+  }
   function mount({route,content,assets,motion}){
     const root=document.querySelector('[data-case-study-v2-root]');
     if(!root||root.dataset.csv2Mounted==='true')return false;
@@ -72,7 +86,7 @@
     if(content.localeStatus?.en!=='APPROVED'||content.localeStatus?.zh!=='PENDING_HUMAN_APPROVAL')throw new Error('CSV2 localization contract mismatch');
     if(motion.status!=='VIDEO_PENDING'||motion.heroFilm!==null||motion.playCta?.enabled!==false)throw new Error('CSV2 motion contract mismatch');
     root.dataset.csv2Mounted='true';root.className='csv2-main';
-    document.body.classList.add('csv2-active');disablePendingZh();
+    document.body.classList.add('csv2-active');disablePendingZh();labelSharedChrome();
 
     const hero=section('hero','csv2-hero');
     const heroShell=shell();
@@ -133,6 +147,13 @@
         const button=node('button','csv2-evidence-index-button');button.type='button';button.setAttribute('role','tab');button.setAttribute('aria-selected',String(index===0));
         button.append(node('span','',String(index+1).padStart(2,'0')),node('span','',label));
         button.addEventListener('click',()=>renderEvidenceItem(decision,index));evidenceIndex.append(button);
+        button.addEventListener('keydown',event=>{
+          if(!['ArrowRight','ArrowDown','ArrowLeft','ArrowUp','Home','End'].includes(event.key))return;
+          event.preventDefault();
+          const last=decision.supportingAssets.length-1;
+          const next=event.key==='Home'?0:event.key==='End'?last:(index+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1)+decision.supportingAssets.length)%decision.supportingAssets.length;
+          renderEvidenceItem(decision,next);evidenceIndex.querySelectorAll('button')[next].focus();
+        });
         const item=node('div','csv2-accordion-item');const summary=node('button','csv2-accordion-summary');summary.type='button';summary.setAttribute('aria-expanded',String(index===0));
         summary.append(node('span','',label),icon('expand_more'));
         const panel=node('div','csv2-accordion-panel');panel.hidden=index!==0;panel.append(evidenceVisual(content,assets,id));
@@ -181,16 +202,19 @@
     const changedText=node('p','csv2-reveal',content.whatChanged.lineOne);changedText.append(node('span','',content.whatChanged.lineTwo));changedShell.append(changedText);changed.append(changedShell);
 
     const outcomes=section('outcomes');const outcomeShell=shell();const outcomeHead=node('div','csv2-section-head csv2-reveal');
-    outcomeHead.append(node('h2','csv2-heading','Outcomes'),node('p','csv2-support','Three decision lenses for interpreting the work.'));
-    const outcomeGrid=node('div','csv2-outcome-grid');content.outcomes.forEach((item,index)=>{const card=node('article','csv2-outcome csv2-reveal');card.append(node('strong','',`${String(index+1).padStart(2,'0')} / ${item.title}`),node('p','',item.statement));outcomeGrid.append(card)});
+    outcomeHead.append(node('h2','csv2-heading',content.outcomesHeadline));
+    const outcomeGrid=node('div','csv2-outcome-grid');content.outcomes.forEach((item,index)=>{const card=node('article','csv2-outcome csv2-reveal');card.append(node('span','csv2-outcome-theme',item.theme),node('strong','',`${String(index+1).padStart(2,'0')} / ${item.title}`),node('p','',item.statement));outcomeGrid.append(card)});
     outcomeShell.append(outcomeHead,outcomeGrid);outcomes.append(outcomeShell);
 
     const next=section('next-question','csv2-next');const nextShell=shell();nextShell.append(node('p','csv2-eyebrow','Next question'));
-    nextShell.append(node('h2','csv2-next-question csv2-reveal',content.nextQuestion));
-    const ctaRow=node('div','csv2-cta-row');ctaRow.append(node('span','csv2-support','Daily Hours remains an Experiment during Preview review.'));
-    const cta=node('a','csv2-cta',content.cta.label);cta.href=content.cta.href;cta.append(icon('arrow_forward'));ctaRow.append(cta);nextShell.append(ctaRow);next.append(nextShell);
+    nextShell.append(node('h2','csv2-next-question csv2-reveal',content.nextQuestion));next.append(nextShell);
 
-    root.replaceChildren(hero,first,shift,decisions,changed,outcomes,next);
+    const demo=section('request-demo','csv2-demo');const demoShell=shell();const demoSurface=node('div','csv2-demo-surface csv2-reveal');
+    const demoCopy=node('div','csv2-demo-copy');demoCopy.append(node('h2','csv2-demo-title',content.cta.headline),node('p','csv2-demo-support',content.cta.supportingCopy));
+    const cta=node('a','csv2-cta',content.cta.label);cta.href=content.cta.href;cta.append(icon('arrow_forward'));
+    demoSurface.append(demoCopy,cta);demoShell.append(demoSurface);demo.append(demoShell);
+
+    root.replaceChildren(hero,first,shift,decisions,changed,outcomes,next,demo);
     const reveal=()=>{
       const targets=[...document.querySelectorAll('.csv2-reveal,.csv2-lifecycle-model')];
       if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){targets.forEach(item=>item.classList.add('is-visible'));return}

@@ -1,7 +1,7 @@
 {
   "id": "CSV2-1.0",
   "name": "Case Study Presentation System v2",
-  "status": "APPROVED_FOR_PHASE_1_IMPLEMENTATION",
+  "status": "PHASE_1_1_HUMAN_CORRECTIONS",
   "scope": "Daily Hours Preview pilot only",
   "presentationContract": "case-study-v2",
   "defaultPresentationContract": "legacy",
@@ -24,7 +24,7 @@
     "CSV2LifecycleModel",
     "CSV2OutcomeSummary",
     "CSV2ClosingQuestion",
-    "CSV2RelatedCTA"
+    "CSV2RequestDemoCTA"
   ],
   "responsiveContracts": {
     "desktop": 1419,
@@ -35,6 +35,21 @@
     "en": "APPROVED",
     "zh": "PENDING_HUMAN_APPROVAL",
     "pendingBehavior": "disabled-accessible-toggle"
+  },
+  "accessibility": {
+    "standard": "WCAG 2.2 AA",
+    "normalTextMinimum": 4.5,
+    "largeTextMinimum": 3,
+    "nonTextMinimum": 3,
+    "brandBlue": "#2F6BFF",
+    "smallTextToken": "#7EA3FF",
+    "actionSurfaceToken": "#2E68F5",
+    "focusToken": "#A9C1FF"
+  },
+  "fullPageBoundary": {
+    "shared": ["global header", "global footer", "analytics", "SEO", "localization shell"],
+    "csv2OwnsBetweenChrome": true,
+    "legacyProjectEnding": false
   },
   "productionRelease": "BLOCKED"
 }

@@ -1,7 +1,7 @@
 {
   "releaseIdentity": "DH-WEB-1.0",
   "status": "FUTURE_RELEASE_BLOCKED",
-  "phase": "Phase 1 Preview only",
+  "phase": "Phase 1.1 Preview Human review",
   "branch": "release/daily-hours-v2-pilot",
   "route": "/work/daily-hours",
   "previewDeployment": null,
@@ -9,6 +9,7 @@
   "productionDeployment": null,
   "productionPromotion": false,
   "humanReviewRequired": true,
+  "previewReviewStatus": "READY_FOR_HUMAN_REVIEW",
   "publicIACutover": false,
   "limitations": [
     "DH-MOTION-0.0 VIDEO_PENDING",

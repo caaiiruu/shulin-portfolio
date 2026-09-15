@@ -1,7 +1,10 @@
 import fs from 'node:fs';
 import http from 'node:http';
+import {createRequire} from 'node:module';
 import path from 'node:path';
 
+const require=createRequire(import.meta.url);
+const axePath=require.resolve('axe-core/axe.min.js');
 const playwrightModule=await import(process.env.PLAYWRIGHT_MODULE_PATH||'playwright');
 const {chromium}=playwrightModule.default||playwrightModule;
 const output=path.resolve(process.env.EVIDENCE_DIR||'/tmp/daily-hours-v2-qa');
@@ -61,26 +64,43 @@ try{
     await tabs.nth(1).press('ArrowRight');
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Lifecycle');
     const lifecycle=await page.locator('.csv2-decision-title').textContent();
-    if(viewport.width<=600)await tabs.nth(1).click();
+    await tabs.nth(1).click();
+    await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Attention');
     const disclosure=page.locator('.csv2-disclosure');await disclosure.click();
     let interaction;
     if(viewport.width<=600){
       const accordions=page.locator('.csv2-accordion-summary');await accordions.nth(1).click();
-      interaction={mode:'accordion',open:await accordions.nth(1).getAttribute('aria-expanded'),first:await accordions.nth(0).getAttribute('aria-expanded')};
+      interaction={mode:'accordion',open:await accordions.nth(1).getAttribute('aria-expanded'),first:await accordions.nth(0).getAttribute('aria-expanded'),focusRetained:await accordions.nth(1).evaluate(element=>document.activeElement===element)};
     }else{
-      const evidenceTabs=page.locator('.csv2-evidence-index-button');if(await evidenceTabs.count()>1)await evidenceTabs.nth(1).click();
-      interaction={mode:'indexed-explorer',visible:await page.locator('#csv2EvidenceBody').isVisible(),tabs:await evidenceTabs.count()};
+      const evidenceTabs=page.locator('.csv2-evidence-index-button');await evidenceTabs.nth(0).press('ArrowRight');
+      interaction={mode:'indexed-explorer',visible:await page.locator('#csv2EvidenceBody').isVisible(),tabs:await evidenceTabs.count(),secondSelected:await evidenceTabs.nth(1).getAttribute('aria-selected'),focusMoved:await evidenceTabs.nth(1).evaluate(element=>document.activeElement===element)};
     }
+    await disclosure.click();const evidenceClosed=await disclosure.getAttribute('aria-expanded');
     await revealFullPage(page);
-    await page.locator('[data-csv2-section="hero"]').scrollIntoViewIfNeeded();await page.waitForTimeout(180);
-    await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:false});
-    await page.locator('.csv2-decision-stage').scrollIntoViewIfNeeded();await page.waitForTimeout(180);
-    await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}-decisions.png`),fullPage:false});
-    await page.locator('[data-csv2-section="outcomes"]').scrollIntoViewIfNeeded();await page.waitForTimeout(180);
-    await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}-outcomes.png`),fullPage:false});
-    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,interaction,attention,lifecycle,sections:initial.sections};
+    const cta=page.locator('.csv2-cta');
+    const ctaState=await cta.evaluate(element=>{const rect=element.getBoundingClientRect();const icon=element.querySelector('.csv2-icon');return{href:element.getAttribute('href'),fits:rect.left>=0&&rect.right<=innerWidth,tag:element.tagName,before:getComputedStyle(icon).transform}});
+    await cta.hover();await page.waitForTimeout(240);
+    const hoverTransform=await cta.locator('.csv2-icon').evaluate(element=>getComputedStyle(element).transform);
+    await cta.focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+    const focusState=await cta.evaluate(element=>({outline:getComputedStyle(element).outlineStyle,outlineWidth:getComputedStyle(element).outlineWidth}));
+    await cta.evaluate(element=>{window.__csv2CtaKeyboard=false;element.addEventListener('click',event=>{event.preventDefault();window.__csv2CtaKeyboard=true},{once:true})});
+    await cta.press('Enter');const keyboardActivated=await page.evaluate(()=>window.__csv2CtaKeyboard===true);
+    await page.addScriptTag({path:axePath});
+    const axeViolations=await page.evaluate(async()=>{const audit=await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}});return audit.violations.filter(item=>['critical','serious'].includes(item.impact)).map(item=>({id:item.id,impact:item.impact,nodes:item.nodes.map(node=>({target:node.target,summary:node.failureSummary}))}))});
+    const ending=await page.evaluate(()=>({
+      wave:getComputedStyle(document.querySelector('.site-footer'),'::before').content,
+      legacyContactVisible:document.querySelector('.contact-bar-v42')?.getClientRects().length>0,
+      redLegacyCta:Boolean([...document.querySelectorAll('.site-footer a')].find(link=>getComputedStyle(link).backgroundColor==='rgb(225, 57, 72)')),
+      outcomes:[...document.querySelectorAll('.csv2-outcome strong')].map(item=>item.textContent),
+      sections:[...document.querySelectorAll('main > section')].map(item=>item.dataset.csv2Section),
+      footerAfterMain:Boolean(document.querySelector('main + footer'))
+    }));
+    await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:true});
+    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
     results.push(result);
-    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||attention!=='Attention'||lifecycle!=='Lifecycle')failures.push(result);
+    const expectedSections=['hero','first-question','the-shift','three-decisions','what-changed','outcomes','next-question','request-demo'];
+    const expectedOutcomes=['01 / Live product','02 / ~2 days','03 / Continuous iteration'];
+    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes))failures.push(result);
     await context.close();
   }
   for(const id of ['payment','voucher','dbs','booking']){
