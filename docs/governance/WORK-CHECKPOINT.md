@@ -2,6 +2,13 @@
 
 ## Current incident state
 
+- Daily Hours release: `DAILY_HOURS_CSV2_PRODUCTION_RELEASED`
+- Production deployment: `dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh`
+- Production commit/tree: `7b6c4f47b6f1bba1e4d4048649305f22999b2976 / 4d09a13f477d44de829e91cf10adb798f5e1c387`
+- Public locale mode: `EN_ONLY_TEMPORARY`; ZH content preserved; public switch disabled
+- Style B Domain/Work: `SAFE_TO_RESUME`
+- Daily Hours freeze: `P0/P1 bug, scoped film release, or scoped localization re-enable only`
+
 - Severity: `P0 — Production Baseline Integrity Incident`
 - Production: `https://shulinchou.com/`
 - Production changes: `FROZEN`

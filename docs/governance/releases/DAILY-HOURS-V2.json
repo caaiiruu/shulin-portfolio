@@ -1,7 +1,7 @@
 {
   "releaseIdentity": "DH-WEB-1.0",
-  "status": "PRODUCTION_CANDIDATE",
-  "phase": "Phase 2A temporary EN-only public cutover",
+  "status": "DAILY_HOURS_CSV2_PRODUCTION_RELEASED",
+  "phase": "Phase 2A Production released and certified",
   "branch": "release/daily-hours-v2-pilot",
   "route": "/work/daily-hours",
   "approvedPreviewDeployment": "dpl_GQfD5ToFrDVNpJjcpHTfQBE94PFe",
@@ -12,8 +12,14 @@
   "previewCommit": "7b6c4f47b6f1bba1e4d4048649305f22999b2976",
   "previewTree": "4d09a13f477d44de829e91cf10adb798f5e1c387",
   "previewVerification": "PASSED_1419_871_430",
-  "productionDeployment": null,
-  "productionPromotion": false,
+  "productionDeployment": "dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh",
+  "productionCommit": "7b6c4f47b6f1bba1e4d4048649305f22999b2976",
+  "productionTree": "4d09a13f477d44de829e91cf10adb798f5e1c387",
+  "productionDomain": "https://shulinchou.com/",
+  "productionPromotion": true,
+  "productionReady": true,
+  "productionVerifiedAt": "2026-09-15T06:20:23Z",
+  "productionVerification": "PASSED_1419_871_430",
   "humanReviewRequired": false,
   "previewReviewStatus": "HUMAN_APPROVED_PREVIEW",
   "publicLocaleMode": "EN_ONLY_TEMPORARY",
@@ -22,6 +28,12 @@
   "publicIACutover": true,
   "limitations": [
     "DH-MOTION-0.0 VIDEO_PENDING",
-    "ZH_PENDING_HUMAN_APPROVAL"
+    "ZH_PENDING_HUMAN_APPROVAL",
+    "Localization may be re-enabled only in a separately scoped future release"
+  ],
+  "postReleaseFreeze": [
+    "P0/P1 Production bug",
+    "explicitly scoped film release",
+    "explicitly scoped localization re-enable"
   ]
 }

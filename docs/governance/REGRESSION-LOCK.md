@@ -1,6 +1,17 @@
 # Regression Lock
 
-Status: `ACTIVE_DURING_RECOVERY`
+Status: `DAILY_HOURS_PHASE_2A_VERIFIED / ACTIVE_FOR_FUTURE_WORK`
+
+## Phase 2A certification
+
+- Production deployment: `dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh`
+- Commit/tree: `7b6c4f47b6f1bba1e4d4048649305f22999b2976 / 4d09a13f477d44de829e91cf10adb798f5e1c387`
+- Responsive verification: `1419 / 871 / 430 VERIFIED`
+- Locale gate: `EN_ONLY_TEMPORARY VERIFIED`; ZH content preserved
+- Work / Experiments / Search / canonical / old deep-link identity: `VERIFIED`
+- Legacy Payment / Voucher / DBS / Booking: `VERIFIED`
+- Style B protected owners: `UNCHANGED`
+- Daily Hours freeze: `ACTIVE`
 
 Every Human-approved state remains locked until explicitly superseded by a newer Human approval.
 

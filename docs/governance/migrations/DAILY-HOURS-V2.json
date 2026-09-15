@@ -1,7 +1,7 @@
 {
   "migrationId": "DAILY-HOURS-V2",
   "phase": "Phase 2A temporary EN-only public cutover",
-  "status": "PRODUCTION_CANDIDATE",
+  "status": "DAILY_HOURS_CSV2_PRODUCTION_RELEASED",
   "certifiedProductionBaseline": {
     "commit": "f0c4ca0a770d7adb1f29d39a2a514c8715e1944e",
     "tree": "d66980327f1313c4827a50303dccb86330816d01",
@@ -23,6 +23,15 @@
     "tree": "4d09a13f477d44de829e91cf10adb798f5e1c387",
     "deployment": "dpl_A5wbWTxGKfX4XiRqz1pn3Jsw6xCZ",
     "url": "https://shulin-portfolio-bvpj9ri3o-chouruby0721s-projects.vercel.app",
+    "verification": "PASSED_1419_871_430"
+  },
+  "productionRelease": {
+    "deployment": "dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh",
+    "commit": "7b6c4f47b6f1bba1e4d4048649305f22999b2976",
+    "tree": "4d09a13f477d44de829e91cf10adb798f5e1c387",
+    "domain": "https://shulinchou.com/",
+    "ready": true,
+    "verifiedAt": "2026-09-15T06:20:23Z",
     "verification": "PASSED_1419_871_430"
   },
   "legacyCanonicalProjectCount": 13,

@@ -1,6 +1,6 @@
 # Human Approval Ledger
 
-Status: `RECOVERY_IN_PROGRESS / DAILY_HOURS_PHASE_1_SCOPED_APPROVALS_RECORDED`
+Status: `DAILY_HOURS_CSV2_PRODUCTION_RELEASED / PHASE_2A_RECORDED`
 
 Record the latest Human-approved state by area. Do not mark any entry VERIFIED without evidence and an exact recoverable source reference.
 
@@ -80,6 +80,24 @@ Missing evidence = `NOT VERIFIED`, never PASS.
 ## Daily Hours Phase 0.5–0.6 scoped approvals
 
 These records authorize Phase 1 implementation only. Traditional Chinese remains an explicit Human content gate for localization and release. These records do not approve a Preview, Production promotion, public IA change, or a fourteenth canonical project.
+
+## Daily Hours Phase 2A Production release approval
+
+- Area ID: `DH-WEB-1.0 / CSV2-1.0 / PUBLIC_LOCALE_MODE`
+- Latest approved state: `Daily Hours is released as one CSV2 Work identity; public portfolio is temporarily EN-only; ZH content and localization infrastructure are preserved`
+- Status: `DAILY_HOURS_CSV2_PRODUCTION_RELEASED`
+- Human evidence: `Phase 2A instruction dated 2026-09-15 explicitly authorizes the EN-only gate, Preview validation, and Production promotion after all gates pass`
+- Source owner: `release/daily-hours-v2-pilot`
+- Release commit/tree: `7b6c4f47b6f1bba1e4d4048649305f22999b2976 / 4d09a13f477d44de829e91cf10adb798f5e1c387`
+- Preview evidence: `dpl_A5wbWTxGKfX4XiRqz1pn3Jsw6xCZ / READY / PASSED_1419_871_430`
+- Production evidence: `dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh / READY / https://shulinchou.com/ / PASSED_1419_871_430`
+- Public locale: `EN_ONLY_TEMPORARY`; `ZH_CONTENT=PRESERVED`; `ZH_PUBLIC_SWITCH=DISABLED`
+- Public identity: `Work Daily Hours=1`; `Experiment Daily Hours=0`; internal Experiment provenance preserved
+- Roster: `13 legacy + 1 CSV2`
+- Motion: `DH-MOTION-0.0 VIDEO_PENDING`; `heroFilm=null`; `playCta.enabled=false`
+- Supersedes: `DH-WEB-1.0 FUTURE_RELEASE_BLOCKED` and `BLOCKED_BY_ZH_WORK_CARD_COPY`
+- Future localization: `May be re-enabled only in a separately scoped release`
+- Freeze: `P0/P1 Production bug, explicitly scoped film release, or explicitly scoped localization re-enable only`
 
 ### CSV2-1.0 — Case Study Presentation System v2 pilot
 

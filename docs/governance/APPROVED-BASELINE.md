@@ -1,8 +1,25 @@
 # Approved Baseline
 
-Status: `DAILY_HOURS_PHASE_1_BASELINE_VERIFIED / PRODUCTION_RELEASE_BLOCKED`
+Status: `DAILY_HOURS_CSV2_PRODUCTION_RELEASED / VERIFIED`
 
 This file identifies the only whole-site baseline that may be used as the parent for new implementation work.
+
+## Current Production release baseline
+
+- Baseline ID: `DAILY-HOURS-CSV2-PRODUCTION-2026-09-15`
+- Commit SHA: `7b6c4f47b6f1bba1e4d4048649305f22999b2976`
+- Tree SHA: `4d09a13f477d44de829e91cf10adb798f5e1c387`
+- Candidate Preview: `dpl_A5wbWTxGKfX4XiRqz1pn3Jsw6xCZ` — `https://shulin-portfolio-bvpj9ri3o-chouruby0721s-projects.vercel.app`
+- Production deployment: `dpl_GQBCPGW6wFQNgsAJaxqDKvfPf7xh`
+- Production domain: `https://shulinchou.com/`
+- Verified at: `2026-09-15T06:20:23Z`
+- Public locale mode: `EN_ONLY_TEMPORARY`
+- ZH content: `PRESERVED`
+- Daily Hours release: `DAILY_HOURS_CSV2_PRODUCTION_RELEASED`
+- Regression certification: `1419 / 871 / 430 PASS`
+- Style B protected owners: `UNCHANGED`
+
+Localization may be re-enabled only through a separately scoped future release. Daily Hours is frozen except for a P0/P1 Production bug, an explicitly scoped film release, or an explicitly scoped localization re-enable.
 
 ## Current state
 
@@ -15,11 +32,11 @@ This file identifies the only whole-site baseline that may be used as the parent
 - Production domain: `https://shulinchou.com/`
 - Purpose: `Daily Hours Case Study v2 Production Pilot — Phase 1 baseline`
 - Overall status: `VERIFIED FOR DAILY HOURS PHASE 1 IMPLEMENTATION ONLY`
-- Production release status: `BLOCKED`
+- Production release status: `SUPERSEDED BY DAILY-HOURS-CSV2-PRODUCTION-2026-09-15`
 
 ## Hard rule
 
-This certification authorizes only the named Daily Hours Phase 1 implementation baseline. It does not certify Daily Hours as production-ready, mark Case Study Presentation System v2 as Live, or unlock Production release.
+The historical Phase 1 baseline below remains recoverable evidence. The current Production release baseline above supersedes it for future work.
 
 No branch may claim a different canonical latest whole-site baseline without exact commit, tree, deployment, and Human evidence in this file and the Human Approval Ledger.
 
