@@ -1,0 +1,32 @@
+name: Temp Style B Integration Apply V2
+
+on:
+  push:
+    branches:
+      - integration/style-b-domain-work-prod-7b6c4f4
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch approved Style B checkpoint
+        run: git fetch origin 2d280c446703eb42002d6dfc7d9af41dcbf298db
+      - name: Apply Production-safe Style B reconstruction
+        run: python3 scripts/tmp-style-b-integration-apply.py
+      - name: Validate patch
+        run: git diff --check
+      - name: Commit reconstruction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/site/assets/css/components/domain-experience.css public/site/assets/js/domain-experience.js public/site/assets/css/components/work-index.css public/site/assets/js/work.js public/site/assets/css/components/project-card.css
+          git commit -m "Integrate Style B against certified Production"
+          git push origin HEAD:integration/style-b-domain-work-prod-7b6c4f4
