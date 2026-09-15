@@ -3,6 +3,13 @@
 
   const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};
   const REGISTRY = window.PROJECT_PRESENTATION_REGISTRY || {};
+  const PUBLIC_DOMAIN_MEMBERSHIP = Object.freeze({
+    'daily-hours': ['operations']
+  });
+  Object.values(REGISTRY.routes || {}).forEach(entry => {
+    const domainIds = PUBLIC_DOMAIN_MEMBERSHIP[entry?.projectId];
+    if (domainIds && entry?.workProjection) entry.workProjection.domainIds = [...domainIds];
+  });
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
   const localize = value => {
     if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
@@ -24,9 +31,8 @@
   };
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
 
-  /* CSV2 currently exits app.js before the legacy shared-header interaction block.
-     This bridge binds the SAME shared SiteHeader markup only on non-legacy routes;
-     legacy routes remain owned by the existing app.js behavior. */
+  /* CSV2 exits app.js before the legacy shared-header interaction block. This
+     bridge binds the SAME shared SiteHeader markup on non-legacy routes only. */
   const bindSharedChromeForPresentationRoute = () => {
     const path = window.location.pathname.replace(/\/$/,'') || '/';
     const route = REGISTRY.routes?.[path];
