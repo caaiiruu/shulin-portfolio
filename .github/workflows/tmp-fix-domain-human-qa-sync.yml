@@ -1,0 +1,69 @@
+name: Temp Fix Domain Human QA Sync
+on:
+  push:
+    branches: [migration/style-b-domain-work-v1]
+    paths: ['.github/workflows/tmp-fix-domain-human-qa-sync.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/style-b-domain-work-v1
+          fetch-depth: 0
+      - name: Patch deterministic Domain render synchronization
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/style-b-domain-work-qa.yml')
+          s=p.read_text()
+          old='''              for(let i=0;i<await tabs.count();i++){
+                await tabs.nth(i).click();
+                await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
+                await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
+                await page.waitForTimeout(width<=900?420:60);
+                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+'''
+          new='''              for(let i=0;i<await tabs.count();i++){
+                const previousPresentation=await domain.locator('#relatedProjects').getAttribute('data-domain-presentation-id');
+                const previousSelected=await domain.locator('.domain-tab[aria-selected="true"]').getAttribute('data-domain');
+                const requestedDomain=await tabs.nth(i).getAttribute('data-domain');
+                await tabs.nth(i).click();
+                await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
+                await page.waitForFunction(({before,requested,wasSelected})=>{
+                  const root=document.querySelector('#domains');
+                  const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
+                  const rail=root?.querySelector('#relatedProjects');
+                  const active=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
+                  const card=active?.length===1?active[0]:null;
+                  const presentation=rail?.dataset.domainPresentationId||'';
+                  if(selected?.getAttribute('data-domain')!==requested||!presentation||!card?.isConnected) return false;
+                  if(wasSelected!==requested&&before&&presentation===before) return false;
+                  return Boolean(card.querySelector('.domain-project-card-v2__cta')?.isConnected&&card.querySelector('.domain-project-card-v2__image')?.isConnected);
+                },{before:previousPresentation,requested:requestedDomain,wasSelected:previousSelected});
+                await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+                await page.waitForFunction(()=>{
+                  const card=document.querySelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
+                  const cta=card?.querySelector('.domain-project-card-v2__cta');
+                  if(!card||!cta) return false;
+                  const outer=card.getBoundingClientRect(),inner=cta.getBoundingClientRect(),t=2;
+                  return inner.left>=outer.left-t&&inner.right<=outer.right+t&&inner.top>=outer.top-t&&inner.bottom<=outer.bottom+t;
+                });
+                if(width<=900) await page.waitForTimeout(420);
+                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+'''
+          if old not in s:
+              raise SystemExit('Target Human QA block not found; refusing broad edit')
+          p.write_text(s.replace(old,new,1))
+          PY
+          git diff --check
+          git diff -- .github/workflows/style-b-domain-work-qa.yml
+      - name: Commit QA synchronization fix
+        run: |
+          git config user.name 'caiiru'
+          git config user.email '63276875+caaiiruu@users.noreply.github.com'
+          git add .github/workflows/style-b-domain-work-qa.yml
+          git commit -m 'Stabilize Domain Human QA render synchronization'
+          git push origin HEAD:migration/style-b-domain-work-v1
