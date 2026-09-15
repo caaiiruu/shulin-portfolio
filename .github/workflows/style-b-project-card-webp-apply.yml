@@ -1,0 +1,202 @@
+name: Style B Apply ProjectCard WebP
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-webp-apply.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Wire responsive WebP media and full-bleed ProjectCard contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          work_path = Path('public/site/assets/js/work.js')
+          domain_path = Path('public/site/assets/js/domain-experience.js')
+          css_path = Path('public/site/assets/css/components/project-card-system.css')
+          qa_path = Path('.github/workflows/style-b-prod-integration-qa.yml')
+
+          work = work_path.read_text()
+          anchor = "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n"
+          if 'const PROJECT_CARD_LEAD_VISUALS' not in work:
+              contract = r'''
+  const PROJECT_CARD_LEAD_VISUALS = Object.freeze(Object.fromEntries([
+    'payment','voucher','voucher-center','game-center','dbs','booking','cathay-mortgage-assistant','cathay-sit-online-account-opening','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','daily-hours'
+  ].map(id => [id, Object.freeze({
+    src800:`/site/assets/style-b/lead-visuals-webp/${id}-800.webp`,
+    src1200:`/site/assets/style-b/lead-visuals-webp/${id}-1200.webp`,
+    src1600:`/site/assets/style-b/lead-visuals-webp/${id}-1600.webp`,
+    width:1600,
+    height:900
+  })])));
+  window.PROJECT_CARD_SYSTEM = Object.freeze({
+    version:'shared-v1',
+    variants:Object.freeze(['featured','standard','compact']),
+    leadVisuals:PROJECT_CARD_LEAD_VISUALS
+  });
+  const applyProjectCardLeadVisual = (card,id,variant) => {
+    const visual = PROJECT_CARD_LEAD_VISUALS[id];
+    const img = card?.querySelector('.work-card-v32__image-v225');
+    if (!visual || !img) return;
+    img.src = visual.src1600;
+    img.srcset = `${visual.src800} 800w, ${visual.src1200} 1200w, ${visual.src1600} 1600w`;
+    img.sizes = variant === 'featured'
+      ? '(max-width: 1100px) 100vw, 58vw'
+      : variant === 'standard'
+        ? '(max-width: 1100px) 100vw, 50vw'
+        : '(max-width: 640px) 100vw, 33vw';
+    img.width = visual.width;
+    img.height = visual.height;
+    img.loading = variant === 'featured' ? 'eager' : 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = variant === 'featured' ? 'high' : 'auto';
+    img.removeAttribute('style');
+    card.dataset.projectCardLeadVisual = 'responsive-webp';
+  };
+'''
+              if anchor not in work:
+                  raise SystemExit('work.js firstText anchor missing')
+              work = work.replace(anchor, anchor + contract, 1)
+          call_anchor = "    card.classList.remove('work-card-v32--featured','work-card-v32--compact');\n"
+          if 'applyProjectCardLeadVisual(card,id,variant);' not in work:
+              if call_anchor not in work:
+                  raise SystemExit('work.js decorate anchor missing')
+              work = work.replace(call_anchor, call_anchor + "    applyProjectCardLeadVisual(card,id,variant);\n", 1)
+          work_path.write_text(work)
+
+          domain = domain_path.read_text()
+          domain_anchor = "  const firstText = (...values) => values.map(scalarText).find(Boolean) || '';\n"
+          if 'const projectCardLeadVisualFor' not in domain:
+              addition = r'''
+  const projectCardLeadVisualFor = key => window.PROJECT_CARD_SYSTEM?.leadVisuals?.[key] || null;
+'''
+              if domain_anchor not in domain:
+                  raise SystemExit('domain firstText anchor missing')
+              domain = domain.replace(domain_anchor, domain_anchor + addition, 1)
+          build_visual = r'''  const buildVisual = (project,key,projection) => {
+    const visual = document.createElement('div');
+    visual.className = 'domain-project-card-v2__visual';
+    const responsive = projectCardLeadVisualFor(key);
+    if (responsive) {
+      const img = document.createElement('img');
+      img.className = 'domain-project-card-v2__image';
+      img.src = responsive.src1600;
+      img.srcset = `${responsive.src800} 800w, ${responsive.src1200} 1200w, ${responsive.src1600} 1600w`;
+      img.sizes = '(max-width: 900px) 84vw, 48vw';
+      img.width = responsive.width;
+      img.height = responsive.height;
+      img.alt = titleFor(project,projection,key);
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.draggable = false;
+      visual.dataset.projectCardLeadVisual = 'responsive-webp';
+      visual.append(img);
+      return visual;
+    }
+    const assetId = projection?.coverAssetId || project?.coverAssetId || project?.hero_visual_brief?.assetId || project?.heroVisualBrief?.assetId;
+    const caseAsset = project?.presentationContract !== 'legacy' ? window.CASE_STUDY_ASSETS?.[key]?.assets?.[assetId] : null;
+    const asset = caseAsset ? {src:caseAsset.publicPath,alt:caseAsset.alt,width:caseAsset.width,height:caseAsset.height} : (assetId ? window.resolveProjectAsset?.(assetId,key) : null);
+    if (asset?.src) {
+      const img = document.createElement('img');
+      img.className = 'domain-project-card-v2__image';
+      img.src = asset.src;img.alt = scalarText(asset.alt);img.loading='lazy';img.decoding='async';img.draggable=false;
+      if (asset.width && asset.height) {img.width=asset.width;img.height=asset.height}
+      visual.append(img);
+    } else {
+      const fallback=document.createElement('span');fallback.className='domain-project-card-v2__visual-fallback';fallback.textContent=companyFor(key,project,projection);visual.append(fallback);
+    }
+    return visual;
+  };
+
+  const buildCard'''
+          pattern = re.compile(r"  const buildVisual = \(project,key,projection\) => \{.*?\n  \};\n\n  const buildCard", re.S)
+          domain, count = pattern.subn(build_visual, domain, count=1)
+          if count != 1:
+              raise SystemExit(f'domain buildVisual replacement count {count}')
+          domain_path.write_text(domain)
+
+          css = css_path.read_text()
+          css = css.replace('background-position:center;background-repeat:no-repeat;background-size:contain', 'background-position:center;background-repeat:no-repeat;background-size:cover')
+          css = css.replace('object-fit:contain;object-position:center', 'object-fit:cover;object-position:center')
+          marker_start = '/* Canonical lead-visual projection. One media source is reused by Work and Domain. */'
+          marker_end = '@media(max-width:1100px){'
+          start = css.find(marker_start)
+          end = css.find(marker_end, start if start >= 0 else 0)
+          if start < 0 or end < 0:
+              raise SystemExit('project-card-system media projection markers missing')
+          full_bleed = '''/* Full-bleed media contract. Project media is delivered through responsive <img> sources, never CSS background substitution. */
+.work-card-v32[data-project-card-system="shared-v1"] .work-artifact{padding:0!important;background-image:none!important}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__image-v225{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__visual{padding:0!important;overflow:hidden;background-image:none!important}
+.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__image{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+
+'''
+          css = css[:start] + full_bleed + css[end:]
+          css_path.write_text(css)
+
+          qa = qa_path.read_text()
+          qa = qa.replace('branches: [integration/style-b-domain-work-prod-7b6c4f]', 'branches: [integration/style-b-domain-work-prod-7b6c4f, integration/style-b-project-card-webp-v1]')
+          assertion_anchor = "              const allCards=work.locator('.work-card-v32[data-project-card-variant]');\n"
+          if 'ProjectCard variant drift' not in qa:
+              assertions = '''              const variants=await allCards.evaluateAll(cards=>cards.map(card=>card.dataset.projectCardVariant));
+              assert(variants.every(value=>['featured','standard','compact'].includes(value)),`Work ${width}: ProjectCard variant drift ${JSON.stringify(variants)}`);
+              const sharedSystem=await allCards.evaluateAll(cards=>cards.every(card=>card.dataset.projectCardSystem==='shared-v1'));
+              assert(sharedSystem,`Work ${width}: shared ProjectCard system missing`);
+              const dailyMeta=await dh.locator('.project-card__meta').innerText();
+              assert(/0→1 PRODUCT/i.test(dailyMeta)&&/SHULIN STUDIO/i.test(dailyMeta)&&/2026/.test(dailyMeta),`Work ${width}: Daily Hours metadata ${dailyMeta}`);
+              const mappedMedia=work.locator('.work-card-v32[data-project-card-lead-visual="responsive-webp"] .work-card-v32__image-v225');
+              assert(await mappedMedia.count()>=6,`Work ${width}: responsive WebP projection missing`);
+              for(let i=0;i<await mappedMedia.count();i++){
+                const img=mappedMedia.nth(i);
+                const src=await img.getAttribute('src');
+                assert(/lead-visuals-webp\/.*-1600\.webp$/.test(src||''),`Work ${width}: non-WebP lead visual ${src}`);
+                const fit=await img.evaluate(el=>getComputedStyle(el).objectFit);
+                assert(fit==='cover',`Work ${width}: lead visual not full bleed (${fit})`);
+              }
+'''
+              if assertion_anchor not in qa:
+                  raise SystemExit('QA allCards anchor missing')
+              qa = qa.replace(assertion_anchor, assertion_anchor + assertions, 1)
+          if 'same-row standard card heights' not in qa:
+              geometry_anchor = "                assert(a&&b&&a.width>b.width*1.6,`Work 1419: hierarchy ${a?.width}/${b?.width}`);\n"
+              geometry = '''                const standardRow=work.locator('.work-index__featured-secondary-row > .work-card-v32');
+                if(await standardRow.count()===2){
+                  const boxes=await Promise.all([standardRow.nth(0).boundingBox(),standardRow.nth(1).boundingBox()]);
+                  assert(boxes[0]&&boxes[1]&&Math.abs(boxes[0].height-boxes[1].height)<=2,`Work 1419: same-row standard card heights ${boxes[0]?.height}/${boxes[1]?.height}`);
+                  const mediaBoxes=await Promise.all([standardRow.nth(0).locator('.work-artifact').boundingBox(),standardRow.nth(1).locator('.work-artifact').boundingBox()]);
+                  assert(mediaBoxes[0]&&mediaBoxes[1]&&Math.abs(mediaBoxes[0].height-mediaBoxes[1].height)<=2,`Work 1419: same-row media heights ${mediaBoxes[0]?.height}/${mediaBoxes[1]?.height}`);
+                }
+                const firstArrow=allCards.first().locator('.work-card-v32__action .icon-arrow--right');
+                const before=await firstArrow.boundingBox();
+                await allCards.first().locator('.work-card-v32__button').hover();
+                await page.waitForTimeout(180);
+                const after=await firstArrow.boundingBox();
+                assert(before&&after&&after.x>before.x&&Math.abs(after.y-before.y)<=1,`Work 1419: hover arrow motion ${JSON.stringify({before,after})}`);
+'''
+              if geometry_anchor not in qa:
+                  raise SystemExit('QA geometry anchor missing')
+              qa = qa.replace(geometry_anchor, geometry_anchor + geometry, 1)
+          qa_path.write_text(qa)
+          PY
+          rm -f .github/workflows/style-b-materialize-webp.yml .github/workflows/style-b-project-card-webp-apply.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/js/work.js public/site/assets/js/domain-experience.js public/site/assets/css/components/project-card-system.css .github/workflows/style-b-prod-integration-qa.yml .github/workflows/style-b-materialize-webp.yml .github/workflows/style-b-project-card-webp-apply.yml
+          git diff --check --cached
+          git commit -m 'Serve full-bleed responsive WebP ProjectCard media'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
