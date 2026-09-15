@@ -69,7 +69,6 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-proof{padding:0 48px 48px}
 .csv2-proof-frame{margin:0;border-radius:18px;overflow:hidden;background:#eef3ff}
 .csv2-proof-frame img{display:block;width:100%;height:auto}
-.csv2-proof-caption{display:flex;justify-content:space-between;gap:24px;margin-top:16px;color:var(--csv2-muted);font-size:.875rem}
 .csv2-evidence{margin-top:28px;border-top:1px solid var(--csv2-line)}
 .csv2-disclosure{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:60px;padding:18px 48px;border:0;background:transparent;color:var(--csv2-text);font:600 1rem/1.3 inherit;cursor:pointer}
 .csv2-icon{display:inline-grid;place-items:center;width:24px;height:24px;flex:0 0 24px;transition:transform .22s ease}
@@ -82,8 +81,8 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-evidence-index-button[aria-selected="true"]{border-color:var(--csv2-line);background:rgba(255,255,255,.05);color:var(--csv2-text)}
 .csv2-evidence-index-button span:first-child{color:var(--csv2-accent-text);font:600 .75rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
 .csv2-evidence-media{min-width:0}
-.csv2-evidence-frame{margin:0;border-radius:14px;overflow:hidden;background:#eef3ff}
-.csv2-evidence-frame img{display:block;width:100%;height:auto}
+.csv2-evidence-frame{--csv2-evidence-inset:14px;position:relative;aspect-ratio:36/25;margin:0;border-radius:14px;overflow:hidden;background:#eef3ff}
+.csv2-evidence-frame img{position:absolute;inset:var(--csv2-evidence-inset);display:block;width:calc(100% - 2 * var(--csv2-evidence-inset));height:calc(100% - 2 * var(--csv2-evidence-inset));object-fit:contain}
 .csv2-evidence-caption{margin:14px 0 0;color:var(--csv2-muted);font-size:.875rem;line-height:1.5}
 .csv2-accordion{display:none}
 .csv2-lifecycle-model{padding:28px;border:1px solid var(--csv2-line);border-radius:16px;background:#080c14}
@@ -98,9 +97,10 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-change p{max-width:1040px;margin:0;color:var(--csv2-on-brand);font-size:clamp(3rem,6vw,6.5rem);font-weight:700;line-height:.94;letter-spacing:-.055em}
 .csv2-change p span{display:block;color:#fff}
 .csv2-outcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.csv2-outcome{min-height:260px;padding:30px;border:1px solid var(--csv2-line);border-radius:18px;background:var(--csv2-panel);transition:transform .22s ease,border-color .22s ease}
+.csv2-outcome{position:relative;min-height:260px;padding:30px;border:1px solid var(--csv2-line);border-radius:18px;background:var(--csv2-panel);transition:transform .22s ease,border-color .22s ease}
 .csv2-outcome:hover{transform:translateY(-5px);border-color:var(--csv2-control)}
 .csv2-outcome-theme{display:block;margin-bottom:18px;color:var(--csv2-accent-text);font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.csv2-outcome-index{position:absolute;top:30px;right:30px;color:var(--csv2-muted);font:600 .8125rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace}
 .csv2-outcome strong{display:block;color:var(--csv2-text);font-size:1.125rem}
 .csv2-outcome p{margin:60px 0 0;color:var(--csv2-muted);font-size:1.35rem;line-height:1.35}
 .csv2-next{padding:150px 0}
@@ -110,7 +110,7 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-demo-copy{max-width:680px}
 .csv2-demo-title{margin:0;color:var(--csv2-text);font-size:clamp(2rem,4vw,4rem);line-height:1;letter-spacing:-.04em}
 .csv2-demo-support{margin:20px 0 0;color:var(--csv2-muted);font-size:1rem;line-height:1.6}
-body.csv2-active .csv2-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 20px;border:1px solid var(--csv2-action);border-radius:12px;background:var(--csv2-action);color:#fff;font-weight:650;text-decoration:none;cursor:pointer;transition:box-shadow .2s ease,transform .2s ease}
+body.csv2-active .csv2-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 20px;border:1px solid var(--csv2-action);border-radius:12px;background:var(--csv2-action);color:#fff;font-weight:650;white-space:nowrap;text-decoration:none;cursor:pointer;transition:box-shadow .2s ease,transform .2s ease}
 .csv2-cta .csv2-icon{transition:transform .2s ease}
 body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-shadow:0 12px 30px rgba(47,107,255,.28);transform:translateY(-2px)}
 .csv2-cta:hover .csv2-icon{transform:translateX(5px)}
@@ -146,8 +146,7 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-decision-copy{padding:28px 22px}
   .csv2-proof{padding:0 14px 22px}
   .csv2-proof-frame{border-radius:12px}
-  .csv2-proof-caption{display:block;padding-inline:8px}
-  .csv2-proof-caption span{display:block;margin-top:6px}
+  .csv2-evidence-frame{--csv2-evidence-inset:10px}
   .csv2-disclosure{padding:16px 22px}
   .csv2-evidence-body{display:none}
   .csv2-evidence-body[hidden]{display:none}
@@ -162,8 +161,8 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-lifecycle-model.is-visible .csv2-lifecycle-state:not(:last-child)::after{transform:scaleY(1)}
   .csv2-change{padding:96px 0}
   .csv2-next{padding:96px 0}
-  .csv2-demo-surface{display:block;padding:28px 22px;border-radius:18px}
-  .csv2-cta{width:100%;margin-top:28px}
+  .csv2-demo-surface{display:grid;grid-template-columns:minmax(0,1fr);padding:28px 22px;border-radius:18px}
+  body.csv2-active .csv2-cta{box-sizing:border-box;width:100%;margin-top:28px}
 }
 @media(prefers-reduced-motion:reduce){
   .csv2-reveal,.csv2-decision-panel,.csv2-icon,.csv2-cta .csv2-icon,.csv2-outcome,.csv2-lifecycle-state::after{transition:none!important;transform:none!important}

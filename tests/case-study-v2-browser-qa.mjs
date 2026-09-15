@@ -58,6 +58,16 @@ try{
       play:[...document.querySelectorAll('button,a')].some(item=>/play product film/i.test(item.textContent||'')),
       zh:[...document.querySelectorAll('[data-lang-toggle]')].map(button=>({disabled:button.disabled,aria:button.getAttribute('aria-disabled')}))
     }));
+    const proofCaptionCount=await page.locator('.csv2-proof-caption').count();
+    const initialDisclosure=page.locator('.csv2-disclosure');await initialDisclosure.click();
+    const connectedContext=await page.evaluate(()=>{
+      const image=[...document.querySelectorAll('[data-csv2-asset="daily-hours-project-health-context"]')].find(item=>item.getBoundingClientRect().width>0);
+      const frame=image?.closest('.csv2-evidence-frame');
+      if(!image||!frame)return null;
+      const frameRect=frame.getBoundingClientRect();const imageRect=image.getBoundingClientRect();
+      return{frameWidth:frameRect.width,frameHeight:frameRect.height,imageWidth:imageRect.width,imageHeight:imageRect.height,contained:imageRect.width<=frameRect.width&&imageRect.height<=frameRect.height};
+    });
+    await initialDisclosure.click();
     const tabs=page.locator('.csv2-decision-tab');await tabs.nth(1).click();
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Attention');
     const attention=await page.locator('.csv2-decision-title').textContent();
@@ -76,9 +86,12 @@ try{
       interaction={mode:'indexed-explorer',visible:await page.locator('#csv2EvidenceBody').isVisible(),tabs:await evidenceTabs.count(),secondSelected:await evidenceTabs.nth(1).getAttribute('aria-selected'),focusMoved:await evidenceTabs.nth(1).evaluate(element=>document.activeElement===element)};
     }
     await disclosure.click();const evidenceClosed=await disclosure.getAttribute('aria-expanded');
+    await tabs.nth(0).click();
+    await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Project health');
+    await disclosure.click();
     await revealFullPage(page);
     const cta=page.locator('.csv2-cta');
-    const ctaState=await cta.evaluate(element=>{const rect=element.getBoundingClientRect();const icon=element.querySelector('.csv2-icon');return{href:element.getAttribute('href'),fits:rect.left>=0&&rect.right<=innerWidth,tag:element.tagName,before:getComputedStyle(icon).transform}});
+    const ctaState=await cta.evaluate(element=>{const rect=element.getBoundingClientRect();const icon=element.querySelector('.csv2-icon');const label=element.querySelector('.csv2-cta-label');const copy=element.parentElement.querySelector('.csv2-demo-copy').getBoundingClientRect();const labelRange=document.createRange();labelRange.selectNodeContents(label);return{href:element.getAttribute('href'),fits:rect.left>=0&&rect.right<=innerWidth,tag:element.tagName,before:getComputedStyle(icon).transform,labelLines:labelRange.getClientRects().length,stacked:rect.top>=copy.bottom}});
     await cta.hover();await page.waitForTimeout(240);
     const hoverTransform=await cta.locator('.csv2-icon').evaluate(element=>getComputedStyle(element).transform);
     await cta.focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
@@ -92,15 +105,17 @@ try{
       legacyContactVisible:document.querySelector('.contact-bar-v42')?.getClientRects().length>0,
       redLegacyCta:Boolean([...document.querySelectorAll('.site-footer a')].find(link=>getComputedStyle(link).backgroundColor==='rgb(225, 57, 72)')),
       outcomes:[...document.querySelectorAll('.csv2-outcome strong')].map(item=>item.textContent),
+      outcomeIndices:[...document.querySelectorAll('.csv2-outcome')].map(card=>{const index=card.querySelector('.csv2-outcome-index');const cardRect=card.getBoundingClientRect();const indexRect=index.getBoundingClientRect();return{text:index.textContent,topRight:indexRect.top>=cardRect.top&&indexRect.top<cardRect.top+60&&indexRect.right<=cardRect.right&&indexRect.right>cardRect.right-60}}),
       sections:[...document.querySelectorAll('main > section')].map(item=>item.dataset.csv2Section),
       footerAfterMain:Boolean(document.querySelector('main + footer'))
     }));
     await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:true});
-    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
+    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,connectedContext,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
     results.push(result);
     const expectedSections=['hero','first-question','the-shift','three-decisions','what-changed','outcomes','next-question','request-demo'];
-    const expectedOutcomes=['01 / Live product','02 / ~2 days','03 / Continuous iteration'];
-    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes))failures.push(result);
+    const expectedOutcomes=['Live product','~2 days','Continuous iteration'];
+    const expectedOutcomeIndices=['01','02','03'];
+    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
     await context.close();
   }
   for(const id of ['payment','voucher','dbs','booking']){

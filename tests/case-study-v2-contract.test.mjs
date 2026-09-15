@@ -80,3 +80,14 @@ test('V2 owners do not leak into the legacy project-detail owner',()=>{
   assert.doesNotMatch(resolver,/daily-hours/);
   assert.match(resolver,/presentationResolution\.contract!==['"]legacy['"]/);
 });
+
+test('Phase 1.1B visual corrections stay inside CSV2 owners',()=>{
+  const renderer=fs.readFileSync(path.join(root,'assets/js/case-study-v2.js'),'utf8');
+  const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
+  assert.doesNotMatch(renderer,/csv2-proof-caption/);
+  assert.match(renderer,/node\('span','csv2-outcome-index',String\(index\+1\)\.padStart\(2,'0'\)\)/);
+  assert.match(renderer,/node\('strong','',item\.title\)/);
+  assert.match(renderer,/node\('span','csv2-cta-label',content\.cta\.label\)/);
+  assert.match(css,/\.csv2-evidence-frame\{[^}]*aspect-ratio:36\/25/);
+  assert.match(css,/body\.csv2-active \.csv2-cta\{[^}]*white-space:nowrap/);
+});

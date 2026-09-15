@@ -122,7 +122,7 @@
     const kicker=node('p','csv2-decision-kicker');const title=node('h3','csv2-decision-title');const question=node('p','csv2-decision-question');const direction=node('p','csv2-decision-direction');
     copy.append(kicker,title,question,direction);stage.append(copy);
     const proof=node('div','csv2-proof');proof.dataset.csv2Section='primary-proof';
-    const proofFrame=node('figure','csv2-proof-frame');const proofCaption=node('div','csv2-proof-caption');proof.append(proofFrame,proofCaption);stage.append(proof);
+    const proofFrame=node('figure','csv2-proof-frame');proof.append(proofFrame);stage.append(proof);
     const evidence=node('div','csv2-evidence');evidence.dataset.csv2Section='supporting-evidence';
     const disclosure=node('button','csv2-disclosure');disclosure.type='button';disclosure.setAttribute('aria-expanded','false');disclosure.setAttribute('aria-controls','csv2EvidenceBody');
     const disclosureLabel=node('span','','Explore supporting evidence');disclosure.append(disclosureLabel,icon('expand_more'));
@@ -173,7 +173,6 @@
       const apply=()=>{
         kicker.textContent=`Decision ${decision.number}`;title.textContent=decision.title;question.textContent=decision.question;direction.textContent=decision.direction;
         const asset=assetRecord(assets,decision.primaryAsset);proofFrame.replaceChildren(imageFor(asset,decision.primaryAsset));
-        proofCaption.replaceChildren(node('strong','',asset.role),node('span','',`Decision ${decision.number}`));
         buildEvidence(decision);disclosure.setAttribute('aria-expanded','false');disclosureLabel.textContent='Explore supporting evidence';evidenceBody.hidden=true;
         tabs.querySelectorAll('button').forEach((button,buttonIndex)=>{button.setAttribute('aria-selected',String(buttonIndex===index));button.tabIndex=buttonIndex===index?0:-1});
         stage.classList.remove('is-switching');
@@ -203,7 +202,7 @@
 
     const outcomes=section('outcomes');const outcomeShell=shell();const outcomeHead=node('div','csv2-section-head csv2-reveal');
     outcomeHead.append(node('h2','csv2-heading',content.outcomesHeadline));
-    const outcomeGrid=node('div','csv2-outcome-grid');content.outcomes.forEach((item,index)=>{const card=node('article','csv2-outcome csv2-reveal');card.append(node('span','csv2-outcome-theme',item.theme),node('strong','',`${String(index+1).padStart(2,'0')} / ${item.title}`),node('p','',item.statement));outcomeGrid.append(card)});
+    const outcomeGrid=node('div','csv2-outcome-grid');content.outcomes.forEach((item,index)=>{const card=node('article','csv2-outcome csv2-reveal');card.append(node('span','csv2-outcome-theme',item.theme),node('span','csv2-outcome-index',String(index+1).padStart(2,'0')),node('strong','',item.title),node('p','',item.statement));outcomeGrid.append(card)});
     outcomeShell.append(outcomeHead,outcomeGrid);outcomes.append(outcomeShell);
 
     const next=section('next-question','csv2-next');const nextShell=shell();nextShell.append(node('p','csv2-eyebrow','Next question'));
@@ -211,7 +210,7 @@
 
     const demo=section('request-demo','csv2-demo');const demoShell=shell();const demoSurface=node('div','csv2-demo-surface csv2-reveal');
     const demoCopy=node('div','csv2-demo-copy');demoCopy.append(node('h2','csv2-demo-title',content.cta.headline),node('p','csv2-demo-support',content.cta.supportingCopy));
-    const cta=node('a','csv2-cta',content.cta.label);cta.href=content.cta.href;cta.append(icon('arrow_forward'));
+    const cta=node('a','csv2-cta');cta.href=content.cta.href;cta.append(node('span','csv2-cta-label',content.cta.label),icon('arrow_forward'));
     demoSurface.append(demoCopy,cta);demoShell.append(demoSurface);demo.append(demoShell);
 
     root.replaceChildren(hero,first,shift,decisions,changed,outcomes,next,demo);
