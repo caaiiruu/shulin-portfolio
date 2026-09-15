@@ -53,6 +53,7 @@
 .domain-experience .domain-project-card-v2__title{grid-row:2;max-width:var(--dimension-17ch);margin:var(--space-7) 0 0;font-size:var(--sys-type-heading-2);font-weight:var(--sys-weight-heavy);line-height:1.04;letter-spacing:var(--sys-tracking-heading);text-wrap:balance;text-transform:none}
 .domain-experience .domain-project-card-v2__support{display:none}
 .domain-experience .domain-project-card-v2__metrics{grid-row:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(var(--dimension-32px),auto) minmax(var(--dimension-40px),auto);column-gap:var(--space-3);row-gap:var(--space-1);align-self:end;width:100%;margin:0;padding:var(--space-4) 0 0;border-top:var(--dimension-1px) solid color-mix(in srgb,var(--sys-color-text-primary) 16%,transparent)}
+.domain-experience .domain-project-card-v2__metrics[data-metric-count="0"]{border-top:0}
 .domain-experience .domain-project-card-v2__metric-value{grid-row:1;margin:0;min-width:0;color:var(--sys-color-text-primary);font-size:var(--sys-type-heading-3);font-weight:var(--sys-weight-heavy);line-height:1}
 .domain-experience .domain-project-card-v2__metric-label{grid-row:2;margin:0;min-width:0;color:var(--sys-color-text-secondary);font-size:var(--sys-type-label);line-height:1.25;text-transform:lowercase}
 .domain-experience .domain-project-card-v2__metric-value:nth-of-type(1),.domain-experience .domain-project-card-v2__metric-label:nth-of-type(1){grid-column:1}
@@ -135,6 +136,7 @@
   .domain-experience .domain-project-card-v2__identity{display:flex;justify-content:flex-start;max-width:none;white-space:normal;text-align:left}
   .domain-experience .domain-project-card-v2__title{max-width:none;margin-top:var(--space-4);font-size:var(--dimension-2rem);line-height:1.04}
   .domain-experience .domain-project-card-v2__metrics{padding-top:var(--space-3);border-top:var(--dimension-1px) solid color-mix(in srgb,var(--sys-color-text-primary) 16%,transparent)}
+  .domain-experience .domain-project-card-v2__metrics[data-metric-count="0"]{border-top:0}
   .domain-experience .domain-project-card-v2__cta{min-height:var(--dimension-48px);margin-top:var(--space-2);padding:var(--space-2) 0 0}
 }
 @media(max-width:600px){
