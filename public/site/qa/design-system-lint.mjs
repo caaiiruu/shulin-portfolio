@@ -31,7 +31,8 @@ if (!foundation.includes("::selection{background:var(--color-selection-surface);
 }
 for (const directory of ["assets/css", "assets/js"]) {
   for (const name of fs.readdirSync(path.join(root, directory))) {
-    if (/-(?:v)?\d+\.(?:css|js)$/.test(name)) errors.push(`${directory}/${name}: versioned legacy source must be recovered from Git, not kept beside canonical owners`);
+    const approvedIsolatedOwner = directory === "assets/js" && name === "case-study-v2.js";
+    if (/-(?:v)?\d+\.(?:css|js)$/.test(name) && !approvedIsolatedOwner) errors.push(`${directory}/${name}: versioned legacy source must be recovered from Git, not kept beside canonical owners`);
   }
 }
 

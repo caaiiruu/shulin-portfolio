@@ -19,6 +19,7 @@ const componentCssSources = [
   "assets/css/components/search.css",
   "assets/css/components/popup-shell.css",
   "assets/css/components/project-detail-overview.css",
+  "assets/css/components/case-study-v2.css",
   "assets/css/components/domain-selector.css",
   "assets/css/components/horizontal-rail.css",
   "assets/css/components/work-library.css",
@@ -34,6 +35,7 @@ const componentCssSources = [
 ];
 const jsSources = [
   "assets/js/analytics.js",
+  "assets/js/case-study-v2.js",
   "assets/js/app.js",
   "assets/js/home.js",
   "assets/js/work.js",
@@ -41,6 +43,8 @@ const jsSources = [
 ];
 const contentOwner = "content/portfolio-content.json";
 const assetManifestOwner = "content/portfolio-asset-manifest.json";
+const presentationRegistryOwner = "content/project-presentation-registry.json";
+const caseStudyV2RegistryOwner = "docs/design-system/case-study-v2/registry.json";
 
 function bundle(sources, banner) {
   return `${banner}\n${sources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
@@ -117,6 +121,8 @@ for (const component of live.filter((entry) => entry.contentOwner)) {
 }
 const content = JSON.parse(fs.readFileSync(path.join(root, contentOwner), "utf8"));
 const assetManifest = JSON.parse(fs.readFileSync(path.join(root, assetManifestOwner), "utf8"));
+const presentationRegistry = JSON.parse(fs.readFileSync(path.join(root, presentationRegistryOwner), "utf8"));
+const caseStudyV2Registry = JSON.parse(fs.readFileSync(path.join(root, caseStudyV2RegistryOwner), "utf8"));
 const expectedProjectIds = [
   "voucher",
   "voucher-center",
@@ -143,6 +149,19 @@ if (projectIds.length !== 13 || new Set(projectIds).size !== 13) {
 }
 if (projectIds.some((id, index) => id !== expectedProjectIds[index])) {
   throw new Error("The active Content SSOT project roster or order does not match the approved r146 contract");
+}
+if (presentationRegistry.defaultPresentationContract !== "legacy") {
+  throw new Error("The default presentation contract must remain legacy");
+}
+const caseStudyV2Routes = Object.entries(presentationRegistry.routes || {}).filter(([, entry]) => entry.presentationContract === "case-study-v2");
+if (caseStudyV2Routes.length !== 1 || caseStudyV2Routes[0][0] !== "/work/daily-hours" || caseStudyV2Routes[0][1].projectId !== "daily-hours") {
+  throw new Error("Daily Hours must be the only registered Case Study v2 route");
+}
+if (content.projects["daily-hours"]) {
+  throw new Error("Daily Hours must not enter the legacy 13-project Content SSOT during Phase 1");
+}
+if (caseStudyV2Registry.id !== "CSV2-1.0" || caseStudyV2Registry.productionRelease !== "BLOCKED") {
+  throw new Error("Case Study v2 registry identity or Production gate is invalid");
 }
 for (const [projectId, project] of Object.entries(content.projects)) {
   const type = project.infoGrid?.type?.value;
@@ -313,7 +332,23 @@ function createRuntimeContentProjection(source) {
   return runtimeContent;
 }
 const runtimeContent = createRuntimeContentProjection(content);
-const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(runtimeContent)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};`;
+const caseStudyContent = {};
+const caseStudyAssets = {};
+const caseStudyMotion = {};
+for (const [, entry] of caseStudyV2Routes) {
+  const caseRoot = path.join(root, "content/case-studies", entry.projectId);
+  caseStudyContent[entry.projectId] = JSON.parse(fs.readFileSync(path.join(caseRoot, "content.json"), "utf8"));
+  caseStudyAssets[entry.projectId] = JSON.parse(fs.readFileSync(path.join(caseRoot, "asset-manifest.json"), "utf8"));
+  caseStudyMotion[entry.projectId] = JSON.parse(fs.readFileSync(path.join(caseRoot, "motion-manifest.json"), "utf8"));
+  for (const [assetId, asset] of Object.entries(caseStudyAssets[entry.projectId].assets || {})) {
+    if (asset.classification === "PRESENTATION_COMPONENT") continue;
+    const file = path.join(root, asset.publicPath.slice("/site/".length));
+    if (!asset.publicPath.startsWith("/site/") || !fs.existsSync(file)) throw new Error(`Missing Case Study v2 asset: ${assetId}`);
+    const bytes = fs.readFileSync(file);
+    if (bytes.length !== asset.bytes || createHash("sha256").update(bytes).digest("hex") !== asset.sha256) throw new Error(`Case Study v2 asset identity mismatch: ${assetId}`);
+  }
+}
+const contentRuntime = `window.PORTFOLIO_DATA=${JSON.stringify(runtimeContent)};\nwindow.PORTFOLIO_ASSET_MANIFEST=${JSON.stringify(assetManifest)};\nwindow.PROJECT_PRESENTATION_REGISTRY=${JSON.stringify(presentationRegistry)};\nwindow.CASE_STUDY_V2_REGISTRY=${JSON.stringify(caseStudyV2Registry)};\nwindow.CASE_STUDY_CONTENT=${JSON.stringify(caseStudyContent)};\nwindow.CASE_STUDY_ASSETS=${JSON.stringify(caseStudyAssets)};\nwindow.CASE_STUDY_MOTION=${JSON.stringify(caseStudyMotion)};`;
 const js = `${bundle([], "/* Generated production runtime. Edit canonical sources, not this file. */")}\n${contentRuntime}\n${jsSources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
 for (const [key, project] of Object.entries(content.projects || {})) {
   if (!project.title?.en || !project.title?.zh) throw new Error(`Project ${key} has no bilingual canonical title`);

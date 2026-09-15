@@ -1,5 +1,25 @@
 (function(){
   'use strict';
+  function resolvePresentationRoute(pathname=window.location.pathname){
+    const registry=window.PROJECT_PRESENTATION_REGISTRY||{};
+    const normalized=String(pathname||'/').replace(/\/$/,'')||'/';
+    const route=registry.routes?.[normalized]||null;
+    return {route,contract:route?.presentationContract||registry.defaultPresentationContract||'legacy'};
+  }
+  const presentationResolution=resolvePresentationRoute();
+  if(presentationResolution.contract!=='legacy'){
+    const route=presentationResolution.route;
+    const projectId=route?.projectId;
+    const renderer=window.CASE_STUDY_PRESENTATIONS?.[presentationResolution.contract];
+    if(!route||!projectId||typeof renderer?.mount!=='function')throw new Error(`Unknown presentation contract: ${presentationResolution.contract}`);
+    renderer.mount({
+      route,
+      content:window.CASE_STUDY_CONTENT?.[projectId],
+      assets:window.CASE_STUDY_ASSETS?.[projectId],
+      motion:window.CASE_STUDY_MOTION?.[projectId]
+    });
+    return;
+  }
   function pair(value,fallback=''){
     if(value&&typeof value==='object'&&!Array.isArray(value))return [value.en??fallback,value.zh??''];
     return [value??fallback,''];
