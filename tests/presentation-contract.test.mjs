@@ -35,6 +35,19 @@ test('routes every public Primary through one renderer and isolates legacy IA',(
   assert.doesNotMatch(canonical,/p\.presentation\?\.sectionOrder|p\.section_order/);
 });
 
+test('keeps Case Study v2 behind one centralized non-legacy resolver',()=>{
+  const presentationRegistry=JSON.parse(read('content/project-presentation-registry.json'));
+  const v2Registry=JSON.parse(read('docs/design-system/case-study-v2/registry.json'));
+  const v2Runtime=read('assets/js/case-study-v2.js');
+  assert.equal(presentationRegistry.defaultPresentationContract,'legacy');
+  assert.deepEqual(Object.keys(presentationRegistry.routes),['/work/daily-hours']);
+  assert.equal(presentationRegistry.routes['/work/daily-hours'].presentationContract,'case-study-v2');
+  assert.equal(v2Registry.owners.runtime,'assets/js/case-study-v2.js');
+  assert.match(app,/function resolvePresentationRoute\(/);
+  assert.match(v2Runtime,/CASE_STUDY_PRESENTATIONS/);
+  assert.doesNotMatch(css,/csv2-|case-study-v2/i);
+});
+
 test('resolves components deterministically from semantic slots',()=>{
   assert.match(app,/function resolveProjectSemanticSlot\(project,slot\)/);
   assert.match(app,/for\(const path of list\(contract\?\.sourcePaths\)\)/);
