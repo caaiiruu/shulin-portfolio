@@ -96,6 +96,11 @@ jobs:
           try{
             for(const width of widths){
               const context=await browser.newContext({viewport:{width,height:1100},hasTouch:width===430,isMobile:width===430});
+              await context.addInitScript(() => {
+                if (window.location.pathname === '/site/work/daily-hours.html') {
+                  window.history.replaceState(null,'','/work/daily-hours');
+                }
+              });
               const page=await context.newPage();
               const errors=[];
               page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
@@ -109,7 +114,7 @@ jobs:
                 assert(await page.evaluate(()=>document.documentElement.lang)==='en',`${name} ${width}: lang not EN`);
                 assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`${name} ${width}: horizontal overflow`);
                 if(name==='daily-hours'){
-                  assert(await page.locator('[data-case-study-v2-root] .csv2-main, .csv2-main').count()>=1||await page.locator('[data-case-study-v2-root]').getAttribute('data-csv2-mounted')==='true',`Daily Hours ${width}: CSV2 not mounted`);
+                  assert(await page.locator('.csv2-main[data-csv2-mounted="true"]').count()===1,`Daily Hours ${width}: CSV2 not mounted`);
                   assert(await page.locator('.csv2-cta').count()===1,`Daily Hours ${width}: Request Demo CTA missing`);
                   if(width===1419) assert(await page.locator('.csv2-evidence-index').count()===1,`Daily Hours 1419: indexed evidence missing`);
                   if(width<=871) assert(await page.locator('.csv2-accordion').count()===1,`Daily Hours ${width}: accordion missing`);
