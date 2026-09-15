@@ -407,12 +407,14 @@
     rendering = true;
     activeIndex = 0;
     cards = ids.map(buildCard);
+    // Assign wheel state before insertion so category changes paint in their
+    // settled geometry instead of transitioning from an unpositioned card.
+    syncWheel();
     related.replaceChildren(...cards);
     related.classList.add('domain-wheel-v2');
     related.removeAttribute('data-rail');
     related.removeAttribute('data-card-variant');
     buildControls();
-    syncWheel();
     resetDisclosures();
     related.dataset.domainPresentationId = domain?.id || tab?.dataset.domain || '';
     pendingRenderTab = null;
