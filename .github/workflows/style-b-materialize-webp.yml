@@ -1,0 +1,65 @@
+name: Style B Materialize Lead WebP
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-materialize-webp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Decode embedded WebP payloads into standalone cacheable assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, re
+          from pathlib import Path
+
+          expected = {
+              'payment': Path('public/site/assets/style-b/lead-visuals/payment.svg'),
+              'voucher': Path('public/site/assets/style-b/lead-visuals/voucher.svg'),
+              'voucher-center': Path('public/site/assets/style-b/lead-visuals/voucher-center.svg'),
+              'game-center': Path('public/site/assets/style-b/lead-visuals/game-center.svg'),
+              'dbs': Path('public/site/assets/style-b/lead-visuals/dbs.svg'),
+              'booking': Path('public/site/assets/style-b/lead-visuals/booking.svg'),
+              'cathay-mortgage-assistant': Path('public/site/assets/style-b/lead-visuals/cathay-mortgage-assistant.svg'),
+              'cathay-sit-online-account-opening': Path('public/site/assets/style-b/lead-visuals/cathay-sit-online-account-opening.svg'),
+              'cathay-sit-review-remediation-operations': Path('public/site/assets/style-b/lead-visuals/cathay-sit-review-remediation-operations.svg'),
+              'ctbc-mortgage-self-service-app': Path('public/site/assets/style-b/lead-visuals/ctbc-mortgage-self-service-app.svg'),
+              'daily-hours': Path('public/site/assets/style-b/daily-hours-lead-visual.svg'),
+          }
+          out = Path('public/site/assets/style-b/lead-visuals-webp')
+          out.mkdir(parents=True, exist_ok=True)
+          pattern = re.compile(r'data:image/webp;base64,([^\"\']+)')
+          missing = []
+          for project_id, source in expected.items():
+              if not source.exists():
+                  missing.append(str(source))
+                  continue
+              match = pattern.search(source.read_text())
+              if not match:
+                  raise SystemExit(f'No WebP payload in {source}')
+              payload = base64.b64decode(match.group(1))
+              if payload[:4] != b'RIFF' or payload[8:12] != b'WEBP':
+                  raise SystemExit(f'Invalid WebP payload in {source}')
+              (out / f'{project_id}.webp').write_bytes(payload)
+          if missing:
+              raise SystemExit('Missing lead visual sources: ' + ', '.join(missing))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/style-b/lead-visuals-webp
+          git diff --cached --quiet && exit 0
+          git commit -m 'Materialize cacheable ProjectCard WebP lead visuals'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
