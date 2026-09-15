@@ -42,6 +42,8 @@ async function settle(page){
     const step=Math.max(320,Math.floor(innerHeight*.75));
     for(let y=0;y<document.documentElement.scrollHeight;y+=step){window.scrollTo(0,y);await new Promise(resolve=>setTimeout(resolve,30))}
     window.scrollTo(0,0);
+    document.querySelectorAll('[data-motion-reveal]').forEach(node=>node.classList.add('is-inview'));
+    document.querySelectorAll('.csv2-reveal,.csv2-lifecycle-model').forEach(node=>node.classList.add('is-visible'));
     await Promise.all([...document.images].filter(image=>image.getClientRects().length).map(async image=>{image.loading='eager';try{await image.decode()}catch{}}));
   });
   await page.waitForTimeout(250);
@@ -51,11 +53,13 @@ try{
   for(const viewport of viewports){
     const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},reducedMotion:viewport.name==='430'?'reduce':'no-preference'});
     await context.addInitScript(()=>localStorage.setItem('portfolioLang','zh'));
+    await context.addInitScript({path:axePath});
     const page=await context.newPage();
     const consoleErrors=[];
     const runtimeErrors=[];
     page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text())});
     page.on('pageerror',error=>runtimeErrors.push(error.message));
+    if(process.env.PREVIEW_ACCESS_URL)await page.goto(process.env.PREVIEW_ACCESS_URL,{waitUntil:'networkidle'});
 
     for(const route of routes){
       const response=await page.goto(`${base}${route}`,{waitUntil:'networkidle'});
@@ -112,7 +116,6 @@ try{
 
     for(const route of ['/work','/experiments','/work/daily-hours']){
       await page.goto(`${base}${route}`,{waitUntil:'networkidle'});
-      await page.addScriptTag({path:axePath});
       const violations=await page.evaluate(async()=>{const audit=await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}});return audit.violations.filter(item=>['critical','serious'].includes(item.impact)).map(item=>item.id)});
       if(violations.length)failures.push({viewport:viewport.name,route,check:'axe',violations});
     }
