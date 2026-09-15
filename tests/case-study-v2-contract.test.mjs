@@ -100,3 +100,16 @@ test('CSV2 evidence captions render only when they add explanatory value',()=>{
   assert.doesNotMatch(renderer,/node\('p','csv2-evidence-caption',asset\?\.role/);
   assert.equal(Object.values(assets.assets).filter(asset=>asset.caption).length,0);
 });
+
+test('CSV2 lifecycle model preserves semantics and stacks on mobile',()=>{
+  const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
+  assert.deepEqual(content.lifecycleModel,{
+    states:['Active','Completed','Billed','Received'],
+    semantics:['Forecast','Final','Receivable','Cash received'],
+    label:'Completed ≠ Billed ≠ Received'
+  });
+  const mobile=css.slice(css.indexOf('@media(max-width:600px)'));
+  assert.match(mobile,/\.csv2-lifecycle-states\{display:flex;flex-direction:column;width:100%;gap:28px\}/);
+  assert.match(mobile,/\.csv2-lifecycle-state:not\(:last-child\)::after\{content:"↓"/);
+  assert.match(mobile,/white-space:normal;text-overflow:clip/);
+});

@@ -85,9 +85,9 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-evidence-frame img{position:absolute;inset:var(--csv2-evidence-inset);display:block;width:calc(100% - 2 * var(--csv2-evidence-inset));height:calc(100% - 2 * var(--csv2-evidence-inset));object-fit:contain}
 .csv2-evidence-caption{margin:14px 0 0;color:var(--csv2-muted);font-size:.875rem;line-height:1.5}
 .csv2-accordion{display:none}
-.csv2-lifecycle-model{padding:28px;border:1px solid var(--csv2-line);border-radius:16px;background:#080c14}
-.csv2-lifecycle-states{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.csv2-lifecycle-state{position:relative;min-width:0;padding:18px;border:1px solid var(--csv2-line);border-radius:12px;background:var(--csv2-panel-strong)}
+.csv2-lifecycle-model{padding:16px;border:1px solid var(--csv2-line);border-radius:16px;background:#080c14}
+.csv2-lifecycle-states{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.csv2-lifecycle-state{position:relative;min-width:0;padding:14px 10px;border:1px solid var(--csv2-line);border-radius:12px;background:var(--csv2-panel-strong)}
 .csv2-lifecycle-state:not(:last-child)::after{content:"";position:absolute;top:50%;left:calc(100% + 4px);width:16px;height:1px;background:var(--csv2-accent);transform:scaleX(0);transform-origin:left;transition:transform .45s ease}
 .csv2-lifecycle-model.is-visible .csv2-lifecycle-state:not(:last-child)::after{transform:scaleX(1)}
 .csv2-lifecycle-state strong,.csv2-lifecycle-state span{display:block}
@@ -155,10 +155,13 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-accordion-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;padding:18px 8px;border:0;background:transparent;color:var(--csv2-text);font:600 .9375rem/1.35 inherit;text-align:left;cursor:pointer}
   .csv2-accordion-panel{padding:0 0 20px}
   .csv2-accordion-panel[hidden]{display:none}
-  .csv2-lifecycle-model{padding:18px}
-  .csv2-lifecycle-states{grid-template-columns:1fr;gap:12px}
-  .csv2-lifecycle-state:not(:last-child)::after{top:100%;left:50%;width:1px;height:12px;transform:scaleY(0);transform-origin:top}
-  .csv2-lifecycle-model.is-visible .csv2-lifecycle-state:not(:last-child)::after{transform:scaleY(1)}
+  .csv2-lifecycle-model{width:100%;box-sizing:border-box;padding:18px;overflow:visible}
+  .csv2-lifecycle-states{display:flex;flex-direction:column;width:100%;gap:28px}
+  .csv2-lifecycle-state{width:100%;box-sizing:border-box;overflow:visible}
+  .csv2-lifecycle-state strong,.csv2-lifecycle-state span{max-width:none;overflow:visible;white-space:normal;text-overflow:clip}
+  .csv2-lifecycle-state:not(:last-child)::after{content:"↓";top:100%;left:0;width:100%;height:28px;background:transparent;color:var(--csv2-accent-text);font-size:1rem;line-height:28px;text-align:center;transform:none;transition:none}
+  .csv2-lifecycle-model.is-visible .csv2-lifecycle-state:not(:last-child)::after{transform:none}
+  .csv2-lifecycle-label{overflow-wrap:anywhere}
   .csv2-change{padding:96px 0}
   .csv2-next{padding:96px 0}
   .csv2-demo-surface{display:grid;grid-template-columns:minmax(0,1fr);padding:28px 22px;border-radius:18px}

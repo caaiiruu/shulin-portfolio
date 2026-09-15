@@ -75,6 +75,25 @@ try{
     await tabs.nth(1).press('ArrowRight');
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Lifecycle');
     const lifecycle=await page.locator('.csv2-decision-title').textContent();
+    await page.locator('.csv2-disclosure').click();
+    const lifecycleModel=await page.evaluate(()=>{
+      const model=[...document.querySelectorAll('.csv2-lifecycle-model')].find(element=>element.getClientRects().length);
+      const states=[...model.querySelectorAll('.csv2-lifecycle-state')];
+      const stateRects=states.map(state=>state.getBoundingClientRect());
+      const label=model.querySelector('.csv2-lifecycle-label');const labelRect=label.getBoundingClientRect();
+      const clipped=states.flatMap(state=>[...state.children].filter(text=>text.scrollWidth>text.clientWidth||text.scrollHeight>text.clientHeight).map(text=>text.textContent));
+      return{
+        states:states.map(state=>[...state.children].map(text=>text.textContent)),
+        orientation:stateRects.every((rect,index)=>index===0||Math.abs(rect.top-stateRects[0].top)<1)?'horizontal':'vertical',
+        contained:stateRects.every(rect=>rect.left>=model.getBoundingClientRect().left&&rect.right<=model.getBoundingClientRect().right),
+        clipped,
+        distinction:label.textContent,
+        distinctionBelow:labelRect.top>=stateRects.at(-1).bottom,
+        connector:getComputedStyle(states[0],'::after').content
+      };
+    });
+    await page.locator('.csv2-lifecycle-model:visible').screenshot({path:path.join(output,`daily-hours-lifecycle-${viewport.name}.png`)});
+    await page.locator('.csv2-disclosure').click();
     await tabs.nth(1).click();
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Attention');
     const disclosure=page.locator('.csv2-disclosure');await disclosure.click();
@@ -111,12 +130,12 @@ try{
       footerAfterMain:Boolean(document.querySelector('main + footer'))
     }));
     await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:true});
-    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,redundantEvidenceCaptions,connectedContext,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
+    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,redundantEvidenceCaptions,connectedContext,lifecycleModel,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
     results.push(result);
     const expectedSections=['hero','first-question','the-shift','three-decisions','what-changed','outcomes','next-question','request-demo'];
     const expectedOutcomes=['Live product','~2 days','Continuous iteration'];
     const expectedOutcomeIndices=['01','02','03'];
-    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||redundantEvidenceCaptions.length||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
+    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||redundantEvidenceCaptions.length||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||JSON.stringify(lifecycleModel.states)!==JSON.stringify([['Active','Forecast'],['Completed','Final'],['Billed','Receivable'],['Received','Cash received']])||lifecycleModel.distinction!=='Completed ≠ Billed ≠ Received'||!lifecycleModel.contained||lifecycleModel.clipped.length||!lifecycleModel.distinctionBelow||(viewport.name==='430'&&(lifecycleModel.orientation!=='vertical'||lifecycleModel.connector!=='"↓"'))||(viewport.name!=='430'&&lifecycleModel.orientation!=='horizontal')||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
     await context.close();
   }
   for(const id of ['payment','voucher','dbs','booking']){
