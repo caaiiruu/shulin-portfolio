@@ -19,7 +19,7 @@
 }
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__content{
   --project-card-content-padding:var(--project-card-system-content-padding);
-  display:grid;grid-template-rows:auto auto minmax(var(--space-4),1fr) var(--project-card-system-metric-slot) minmax(var(--space-4),1fr) auto;
+  display:grid;grid-template-rows:auto auto minmax(var(--space-6),1fr) var(--project-card-system-metric-slot) var(--space-4) auto;
   min-width:0;height:100%;padding:var(--project-card-content-padding);background:var(--project-card-tint,var(--color-surface-raised));
 }
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__meta{grid-row:1}
@@ -28,11 +28,11 @@
 }
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metrics{
   grid-row:4;display:grid;grid-template-columns:repeat(var(--project-card-metric-count,1),minmax(0,1fr));grid-template-rows:minmax(var(--dimension-32px),auto) minmax(var(--dimension-40px),auto);
-  column-gap:var(--space-3);row-gap:var(--project-card-system-metric-gap);align-self:stretch;align-content:end;width:100%;min-height:var(--dimension-72px);margin:0;padding:var(--space-4) 0 0;border-top:var(--dimension-1px) solid color-mix(in srgb,var(--color-text-primary) 16%,transparent);
+  column-gap:var(--space-3);row-gap:var(--project-card-system-metric-gap);align-self:end;align-content:end;width:100%;min-height:var(--dimension-72px);margin:0;padding:var(--space-4) 0 0;border-top:var(--dimension-1px) solid color-mix(in srgb,var(--color-text-primary) 16%,transparent);
 }
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metrics[data-metric-count="0"]{border-top:0}
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metric{display:contents}
-.work-card-v32[data-project-card-system="shared-v1"] .project-card__metric-value{grid-row:1;align-self:end;margin:0;font-size:var(--sys-type-heading-3);font-weight:var(--sys-weight-heavy);line-height:1}
+.work-card-v32[data-project-card-system="shared-v1"] .project-card__metric-value{grid-row:1;align-self:end;margin:0;color:var(--color-text-primary);font-size:var(--sys-type-heading-3);font-weight:var(--sys-weight-heavy);line-height:1}
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metric-label{grid-row:2;align-self:start;margin:0;color:var(--color-text-secondary);font-size:var(--sys-type-label);line-height:1.25;text-transform:lowercase}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action{
   grid-row:6;position:relative;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);align-self:stretch;width:calc(100% + (var(--project-card-content-padding) * 2));min-height:var(--project-card-system-cta-height);margin:0 calc(var(--project-card-content-padding) * -1) calc(var(--project-card-content-padding) * -1);padding:var(--space-3) var(--project-card-content-padding);color:var(--color-text-primary);text-decoration:none;
@@ -41,9 +41,9 @@
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action::after{content:none!important;display:none!important}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}
 .work-card-v32[data-project-card-system="shared-v1"] .work-artifact{padding:0;overflow:hidden;background-color:var(--project-card-media-surface);background-position:center;background-repeat:no-repeat;background-size:contain}
-.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__image-v225{width:100%;height:100%;object-fit:contain;transform:scale(1);transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__image-v225{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(1);transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
 
-/* Variant contract. */
+/* Variant contract: exactly Featured, Standard and Compact. */
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-card-v32__button{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);grid-template-areas:"content visual"}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-card-v32__content{grid-area:content;--project-card-content-padding:var(--project-card-system-featured-padding)}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-artifact{grid-area:visual;min-height:var(--dimension-430px);height:100%;border-left:var(--dimension-1px) solid var(--color-border)}
@@ -51,8 +51,8 @@
 
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__button,
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"content" "visual"}
-.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__content,
-.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__content{grid-area:content}
+.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__content{grid-area:content;min-height:var(--dimension-430px)}
+.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__content{grid-area:content;min-height:calc(var(--dimension-300px) + var(--space-8))}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-artifact,
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-artifact{grid-area:visual;width:100%;height:auto;aspect-ratio:var(--project-card-system-media-ratio);border-top:var(--dimension-1px) solid var(--color-border)}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .project-card__title{font-size:var(--project-card-compact-title)!important}
@@ -68,26 +68,16 @@
 }
 @media(hover:none),(pointer:coarse){.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__image-v225{transform:scale(1);filter:none}}
 
-/* Canonical Human-supplied lead visual projection: one source is reused by Work and Domain. */
-:is(.work-card-v32[data-work-index-project="payment"] .work-artifact,.domain-project-card-v2[data-project="payment"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/payment.svg')}
-:is(.work-card-v32[data-work-index-project="voucher"] .work-artifact,.domain-project-card-v2[data-project="voucher"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/voucher.svg')}
-:is(.work-card-v32[data-work-index-project="voucher-center"] .work-artifact,.domain-project-card-v2[data-project="voucher-center"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/voucher-center.svg')}
-:is(.work-card-v32[data-work-index-project="game-center"] .work-artifact,.domain-project-card-v2[data-project="game-center"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/game-center.svg')}
-:is(.work-card-v32[data-work-index-project="dbs"] .work-artifact,.domain-project-card-v2[data-project="dbs"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/dbs.svg')}
-:is(.work-card-v32[data-work-index-project="booking"] .work-artifact,.domain-project-card-v2[data-project="booking"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/booking.svg')}
-:is(.work-card-v32[data-work-index-project="cathay-mortgage-assistant"] .work-artifact,.domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/cathay-mortgage-assistant.svg')}
-:is(.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"] .work-artifact,.domain-project-card-v2[data-project="cathay-sit-online-account-opening"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/cathay-sit-online-account-opening.svg')}
-:is(.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"] .work-artifact,.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/cathay-sit-review-remediation-operations.svg')}
-:is(.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"] .work-artifact,.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/ctbc-mortgage-self-service-app.svg')}
-:is(.work-card-v32[data-work-index-project="daily-hours"] .work-artifact,.domain-project-card-v2[data-project="daily-hours"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/daily-hours.svg')}
-:is(.work-card-v32[data-work-index-project="payment"],.work-card-v32[data-work-index-project="voucher"],.work-card-v32[data-work-index-project="voucher-center"],.work-card-v32[data-work-index-project="game-center"],.work-card-v32[data-work-index-project="dbs"],.work-card-v32[data-work-index-project="booking"],.work-card-v32[data-work-index-project="cathay-mortgage-assistant"],.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"],.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"],.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"],.work-card-v32[data-work-index-project="daily-hours"]) .work-card-v32__image-v225{opacity:0}
-:is(.domain-project-card-v2[data-project="payment"],.domain-project-card-v2[data-project="voucher"],.domain-project-card-v2[data-project="voucher-center"],.domain-project-card-v2[data-project="game-center"],.domain-project-card-v2[data-project="dbs"],.domain-project-card-v2[data-project="booking"],.domain-project-card-v2[data-project="cathay-mortgage-assistant"],.domain-project-card-v2[data-project="cathay-sit-online-account-opening"],.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"],.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"],.domain-project-card-v2[data-project="daily-hours"]) .domain-project-card-v2__image{opacity:0}
+/* Daily Hours is CSV2 and has no legacy ProjectCard asset record; use its latest approved portfolio visual without changing frozen CSV2 owners. */
+:is(.work-card-v32[data-work-index-project="daily-hours"] .work-artifact,.domain-project-card-v2[data-project="daily-hours"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/daily-hours-lead-visual.svg');background-position:center;background-repeat:no-repeat;background-size:contain}
+.work-card-v32[data-work-index-project="daily-hours"] .work-card-v32__image-v225,.domain-project-card-v2[data-project="daily-hours"] .domain-project-card-v2__image{opacity:0}
 
 @media(max-width:1100px){
   .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"content" "visual"}
+  .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-card-v32__content{min-height:var(--dimension-430px)}
   .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="featured"] .work-artifact{grid-area:visual;min-height:0;height:auto;aspect-ratio:var(--project-card-system-media-ratio);border-left:0;border-top:var(--dimension-1px) solid var(--color-border)}
 }
 @media(max-width:640px){
-  .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__content{grid-template-rows:auto auto minmax(var(--space-3),1fr) var(--project-card-system-metric-slot) minmax(var(--space-3),1fr) auto}
+  .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__content{min-height:0;grid-template-rows:auto auto minmax(var(--space-4),1fr) var(--project-card-system-metric-slot) var(--space-3) auto}
   .work-card-v32[data-project-card-system="shared-v1"] .project-card__metrics{padding-top:0;border-top:0}
 }
