@@ -185,3 +185,8 @@
   .domain-experience .domain-project-card-v2[data-wheel-offset="0"]:hover .domain-project-card-v2__cta-arrow{transform:rotate(var(--arrow-rotate-right))}
   .domain-experience .domain-wheel-v2__control:hover{transform:none}
 }
+
+/* Empty-metrics desktop content-safe height v5 */
+@media(min-width:901px){
+  .domain-experience{--domain-card-height:calc(var(--dimension-430px) + var(--space-8));--domain-wheel-height:calc(var(--domain-card-height) + var(--space-9))}
+}
