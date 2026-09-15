@@ -1,5 +1,7 @@
 /* Style B Work Index — layout/composition only. ProjectCard visuals remain owned by project-card.css. */
-.work-index{display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
+.work-index{--project-card-metric-count:1;display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
+/* Variant input only: the shared ProjectCard owner consumes this padding token. */
+.work-index .work-card-v32[data-project-card-variant="featured"] .work-card-v32__content{--project-card-content-padding:var(--space-6)!important}
 .work-index__shell{display:grid;gap:var(--space-7)}
 .work-index__intro{display:grid;gap:var(--space-2);max-width:var(--dimension-52ch)}
 .work-index__eyebrow{font-size:var(--sys-type-label);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase;color:var(--sys-color-text-accent)}
