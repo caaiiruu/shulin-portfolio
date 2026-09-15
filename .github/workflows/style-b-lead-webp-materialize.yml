@@ -1,0 +1,48 @@
+name: Style B Lead WebP Materialize
+
+on:
+  push:
+    branches:
+      - integration/style-b-domain-work-prod-7b6c4f
+    paths:
+      - 'tmp/style-b-lead-visuals/*.json'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-domain-work-prod-7b6c4f
+          fetch-depth: 0
+      - name: Materialize responsive WebP assets when all chunks exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in 1 2 3 4 5; do
+            test -f "tmp/style-b-lead-visuals/lead-visuals-${i}.json" || { echo "Waiting for all chunks"; exit 0; }
+          done
+          python3 - <<'PY'
+          import base64, json
+          from pathlib import Path
+          src = Path('tmp/style-b-lead-visuals')
+          out = Path('public/site/assets/style-b/lead-visuals-webp')
+          out.mkdir(parents=True, exist_ok=True)
+          for path in sorted(src.glob('lead-visuals-*.json')):
+              data = json.loads(path.read_text())
+              for key, payload in data.items():
+                  (out / f'{key}.webp').write_bytes(base64.b64decode(payload))
+          PY
+          rm -rf tmp/style-b-lead-visuals
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/style-b/lead-visuals-webp tmp/style-b-lead-visuals
+          if git diff --cached --quiet; then
+            echo 'No asset changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Materialize responsive ProjectCard WebP lead visuals'
+          git push origin HEAD:integration/style-b-domain-work-prod-7b6c4f
