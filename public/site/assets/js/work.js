@@ -31,6 +31,14 @@
   };
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
 
+  if (!document.querySelector('link[data-project-card-system="shared-v1"]')) {
+    const systemStyle = document.createElement('link');
+    systemStyle.rel = 'stylesheet';
+    systemStyle.href = '/site/assets/css/components/project-card-system.css';
+    systemStyle.dataset.projectCardSystem = 'shared-v1';
+    document.head.append(systemStyle);
+  }
+
   /* CSV2 exits app.js before the legacy shared-header interaction block. This
      bridge binds the SAME shared SiteHeader markup on non-legacy routes only. */
   const bindSharedChromeForPresentationRoute = () => {
@@ -120,8 +128,8 @@
     const raw = firstText(projection?.period, project?.year, project?.period, project?.timeline, project?.timeline_pair, card?.dataset.projectDate);
     return raw.match(/(?:19|20)\d{2}/)?.[0] || String(raw).slice(0,4);
   };
-  const readType = (project, projection) => firstText(projection?.type, project?.infoGrid?.type, project?.type_pair, project?.type, project?.systemClassification?.publicLabel, 'Work');
-  const readCompany = (project, projection) => projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : '');
+  const readType = (id, project, projection) => id === 'daily-hours' ? '0→1 Product' : firstText(projection?.type, project?.infoGrid?.type, project?.type_pair, project?.type, project?.systemClassification?.publicLabel, 'Work');
+  const readCompany = (id, project, projection) => id === 'daily-hours' ? 'Shulin Studio' : (projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : ''));
   const readTitle = (project, projection, id, card) => visibleProjectTitle(firstText(projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, card.querySelector('h2')?.textContent, id));
 
   const conciseMetricLabel = label => {
@@ -164,7 +172,7 @@
   const normalizeCategories = (id, project, card, projection) => {
     const existing=(card.dataset.workCategories||card.dataset.workCategory||'').split(/\s+/).filter(Boolean);
     const set=new Set(['all']);
-    const type=readType(project,projection).toLowerCase();
+    const type=readType(id,project,projection).toLowerCase();
     existing.forEach(value=>{
       if(value==='incentive')set.add('incentives');
       if(value==='operations')set.add('operations');
@@ -183,11 +191,11 @@
 
   const decorateCard = (card, variant) => {
     const id=projectIdFromCard(card);const project=publicProjects[id]||{};const projection=projectionForProject(id);const control=card.querySelector('.work-card-v32__button');const content=card.querySelector('.work-card-v32__content');if(!id||!control||!content)return null;
-    card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');card.style.setProperty('--project-card-tint',tintFor(id));
+    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');card.style.setProperty('--project-card-tint',tintFor(id));
     card.classList.remove('work-card-v32--featured','work-card-v32--compact');
     const meta=document.createElement('div');meta.className='project-card__meta';
-    const type=document.createElement('span');type.className='project-card__type';type.textContent=readType(project,projection);
-    const identity=document.createElement('span');identity.className='project-card__identity';const company=document.createElement('strong');company.className='project-card__company';company.textContent=readCompany(project,projection);identity.append(company);const year=readYear(project,projection,card);if(year){const dot=document.createElement('span');dot.setAttribute('aria-hidden','true');dot.textContent='·';const y=document.createElement('span');y.className='project-card__year';y.textContent=year;identity.append(dot,y)}meta.append(type,identity);
+    const type=document.createElement('span');type.className='project-card__type';type.textContent=readType(id,project,projection);
+    const identity=document.createElement('span');identity.className='project-card__identity';const company=document.createElement('strong');company.className='project-card__company';company.textContent=readCompany(id,project,projection);identity.append(company);const year=readYear(project,projection,card);if(year){const dot=document.createElement('span');dot.setAttribute('aria-hidden','true');dot.textContent='·';const y=document.createElement('span');y.className='project-card__year';y.textContent=year;identity.append(dot,y)}meta.append(type,identity);
     const title=document.createElement('h2');title.className='project-card__title';title.textContent=readTitle(project,projection,id,card);
     const rows=metricsFor(project);const metrics=document.createElement('dl');metrics.className='project-card__metrics';metrics.dataset.metricCount=String(rows.length);metrics.style.setProperty('--project-card-metric-count',String(Math.max(rows.length,1)));metrics.setAttribute('aria-hidden',String(rows.length===0));rows.forEach(({value,label})=>{const item=document.createElement('div');item.className='project-card__metric';const dt=document.createElement('dt');dt.className='project-card__metric-value';dt.textContent=value;const dd=document.createElement('dd');dd.className='project-card__metric-label';dd.textContent=label;item.append(dt,dd);metrics.append(item)});
     const action=document.createElement('span');action.className='work-card-v32__action related-project-card__action text-cta';const actionLabel=document.createElement('span');actionLabel.textContent='View case';const arrow=document.createElement('span');arrow.className='icon-arrow icon-arrow--right';arrow.setAttribute('aria-hidden','true');action.append(actionLabel,arrow);
@@ -217,8 +225,8 @@
 
     const featured=document.createElement('div');featured.className='work-index__featured';
     if(ordered[0])featured.append(decorateCard(ordered[0],'featured'));
-    if(ordered[1])featured.append(decorateCard(ordered[1],'secondary'));
-    const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';ordered.slice(2,4).forEach(card=>mediumRow.append(decorateCard(card,'supporting')));if(mediumRow.children.length)featured.append(mediumRow);
+    if(ordered[1])featured.append(decorateCard(ordered[1],'standard'));
+    const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';ordered.slice(2,4).forEach(card=>mediumRow.append(decorateCard(card,'standard')));if(mediumRow.children.length)featured.append(mediumRow);
     const moreCards=ordered.slice(4);const more=document.createElement('section');more.className='work-index__more';const moreHead=document.createElement('div');moreHead.className='work-index__more-head';const moreTitle=document.createElement('h2');moreTitle.textContent='More work';moreHead.append(moreTitle);const moreGrid=document.createElement('div');moreGrid.className='work-index__more-grid';moreCards.forEach(card=>moreGrid.append(decorateCard(card,'compact')));more.append(moreHead,moreGrid);
     shell.append(intro,filters,featured);if(moreCards.length)shell.append(more);root.append(shell);
     sourceHero?.insertAdjacentElement('beforebegin',root);if(sourceHero)sourceHero.hidden=true;sourceLibrary.hidden=true;applyFilter(root);return true;
