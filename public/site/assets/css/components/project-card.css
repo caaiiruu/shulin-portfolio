@@ -79,3 +79,15 @@
 .related-project-card__visual-v45{display:grid;width:100%;min-height:0;place-items:center;aspect-ratio:var(--project-card-media-ratio,16/9);overflow:hidden;border-radius:var(--radius-sm);background:var(--project-card-media-surface)}
 .related-project-card__image-v148{display:block;width:100%;height:100%;object-fit:contain;object-position:var(--project-card-media-focal-position);background:var(--project-card-media-surface)}
 @media(max-width:900px){.work-card-v32 .work-card-v32__visual-v225,.work-card-v32--compact .work-card-v32__visual-v225{height:auto;aspect-ratio:var(--project-card-media-ratio,16/9)}}
+
+
+/* Style B shared ProjectCard variants — reusable, project-agnostic. */
+.work-card-v32--featured .work-card-v32__button{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr)}
+.work-card-v32--supporting .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:auto auto}
+.work-card-v32--standard .work-card-v32__button{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.work-card-v32--supporting .work-artifact{min-height:0;height:auto;aspect-ratio:16/9}
+.work-card-v32--supporting .work-card-v32__content{border-top:var(--dimension-1px) solid var(--color-border)}
+.work-card-v32--standard .work-card-v32__content{min-height:var(--dimension-280px)}
+.work-card-v32--supporting .work-card-v32__content,.work-card-v32--standard .work-card-v32__content,.work-card-v32--compact .work-card-v32__content{--project-card-company-title-gap:var(--space-6)}
+.work-card-v32--supporting .work-card-v32__content>p,.work-card-v32--standard .work-card-v32__content>p{margin-top:var(--space-5)}
+@media(max-width:1100px){.work-card-v32--featured .work-card-v32__button,.work-card-v32--supporting .work-card-v32__button,.work-card-v32--standard .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:auto auto}}
