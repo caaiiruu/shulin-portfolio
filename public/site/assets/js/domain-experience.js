@@ -174,11 +174,16 @@
     );
     return operationsSignal ? ['operations'] : [];
   };
+  const canonicalDomainKey = domain => {
+    const signals = [domain?.id, localize(domain?.label), ...asList(domain?.legacyAliases)].map(normalize).filter(Boolean);
+    return Object.keys(aliasMap).find(key => [key, ...aliasMap[key]].some(alias => signals.some(signal => signal === alias || signal.includes(alias)))) || normalize(domain?.id);
+  };
   const registryProjectsForDomain = domain => {
     if (!domain) return [];
-    const ids = new Set([normalize(domain.id), ...asList(domain.legacyAliases).map(normalize)]);
+    const key = canonicalDomainKey(domain);
+    const accepted = new Set([key, ...(aliasMap[key] || [])].map(normalize));
     return Object.values(REGISTRY.routes || {})
-      .filter(entry => entry.publicDiscovery === true && projectedDomainIdsForEntry(entry).some(id => ids.has(normalize(id))))
+      .filter(entry => entry.publicDiscovery === true && projectedDomainIdsForEntry(entry).some(id => accepted.has(normalize(id))))
       .map(entry => entry.projectId);
   };
   const projectIdsForDomain = domain => {
