@@ -155,11 +155,30 @@
       }) || null;
   };
   const selectedTab = () => section.querySelector('.domain-tab[aria-selected="true"]') || section.querySelector('.domain-tab');
+  const projectedDomainIdsForEntry = entry => {
+    const explicit = asList(entry?.workProjection?.domainIds).map(normalize).filter(Boolean);
+    if (explicit.length) return explicit;
+    const search = entry?.workProjection?.searchIndexV2 || {};
+    const publicSignals = [
+      ...asList(search?.problemTags?.en),
+      ...asList(search?.problemTags?.zh),
+      ...asList(search?.capabilityTags?.en),
+      ...asList(search?.capabilityTags?.zh)
+    ].map(normalize).filter(Boolean);
+    const operationsSignal = publicSignals.some(signal =>
+      signal.includes('operations') ||
+      signal.includes('operational') ||
+      signal.includes('workflow') ||
+      signal.includes('project-health') ||
+      signal.includes('workload-planning')
+    );
+    return operationsSignal ? ['operations'] : [];
+  };
   const registryProjectsForDomain = domain => {
     if (!domain) return [];
     const ids = new Set([normalize(domain.id), ...asList(domain.legacyAliases).map(normalize)]);
     return Object.values(REGISTRY.routes || {})
-      .filter(entry => entry.publicDiscovery === true && entry.workProjection && asList(entry.workProjection.domainIds).some(id => ids.has(normalize(id))))
+      .filter(entry => entry.publicDiscovery === true && projectedDomainIdsForEntry(entry).some(id => ids.has(normalize(id))))
       .map(entry => entry.projectId);
   };
   const projectIdsForDomain = domain => {
