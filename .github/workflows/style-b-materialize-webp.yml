@@ -63,7 +63,7 @@ jobs:
                   raise SystemExit(f'Missing canonical Lead Visual master: {source}')
               with Image.open(source) as raw:
                   image = crop_16_9(raw.convert('RGB'))
-                  for width in (800, 1600):
+                  for width in (800, 1200, 1600):
                       height = width * 9 // 16
                       derivative = image.resize((width, height), Image.Resampling.LANCZOS)
                       target = out / f'{project_id}-{width}.webp'
@@ -74,5 +74,5 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/site/assets/style-b/lead-visuals-webp
           git diff --cached --quiet && exit 0
-          git commit -m 'Materialize responsive ProjectCard WebP lead visuals'
+          git commit -m 'Add 1200px ProjectCard WebP derivatives'
           git push origin HEAD:integration/style-b-project-card-webp-v1
