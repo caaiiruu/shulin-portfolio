@@ -1,7 +1,5 @@
-/* Style B Work Index — layout/composition only. ProjectCard visuals remain owned by project-card.css. */
+/* Style B Work Index — layout/composition only. ProjectCard visuals are owned by the shared ProjectCard system. */
 .work-index{--project-card-metric-count:1;display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
-/* Variant input only: the shared ProjectCard owner consumes this padding token. */
-.work-index .work-card-v32[data-project-card-variant="featured"] .work-card-v32__content{--project-card-content-padding:var(--space-6)!important}
 .work-index__shell{display:grid;gap:var(--space-7)}
 .work-index__intro{display:grid;gap:var(--space-2);max-width:var(--dimension-52ch)}
 .work-index__eyebrow{font-size:var(--sys-type-label);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase;color:var(--sys-color-text-accent)}
@@ -22,20 +20,6 @@
 .work-index__more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-6);align-items:stretch}
 .work-index__more-grid>.work-card-v32{height:100%}
 .work-index [hidden]{display:none!important}
-
-/* Human-review parity: preserve Domain card motion language while keeping Work composition page-owned. */
-.work-index .work-card-v32[data-project-card-variant] .work-card-v32__content{grid-template-rows:auto auto minmax(var(--space-10),1fr) auto auto}
-.work-index .work-card-v32[data-project-card-variant] .work-card-v32__action::after{content:none!important;display:none!important}
-.work-index .work-card-v32[data-work-index-project="daily-hours"] .project-card__company{font-size:0}
-.work-index .work-card-v32[data-work-index-project="daily-hours"] .project-card__company::after{content:"Shulin Studio";font-size:var(--text-xs);font-weight:var(--sys-weight-bold)}
-.work-index .work-card-v32[data-work-index-project="daily-hours"] .work-artifact{background:var(--project-card-media-surface) url('/site/assets/style-b/daily-hours-lead-visual.svg') center/contain no-repeat;transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
-.work-index .work-card-v32[data-work-index-project="daily-hours"] .work-card-v32__image-v225{opacity:0}
-@media(hover:hover) and (pointer:fine){
-  .work-index .work-card-v32[data-project-card-variant] .work-card-v32__button:hover{border-color:var(--color-border);border-radius:var(--radius-lg);box-shadow:none;transform:none}
-  .work-index .work-card-v32[data-project-card-variant] .work-card-v32__button:hover .work-card-v32__action{background:transparent;color:var(--color-text-primary)}
-  .work-index .work-card-v32[data-work-index-project="daily-hours"] .work-card-v32__button:hover .work-artifact{transform:scale(1.055) translateY(calc(var(--dimension-2px) * -1));filter:saturate(1.06)}
-}
-
 @media(max-width:1100px){
   .work-index__featured{grid-template-columns:1fr}
   .work-index__featured-secondary-row,.work-index__more-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
