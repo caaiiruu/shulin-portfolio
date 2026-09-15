@@ -1,0 +1,213 @@
+name: Temp Style B Integration Apply
+
+on:
+  push:
+    branches: [integration/style-b-domain-work-prod-7b6c4f4]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct Human-approved Style B on Production baseline
+        env:
+          STYLE_B_SHA: 2d280c446703eb42002d6dfc7d9af41dcbf298db
+        run: |
+          set -euo pipefail
+          git fetch origin "$STYLE_B_SHA"
+          git show "$STYLE_B_SHA:public/site/assets/css/components/domain-experience.css" > public/site/assets/css/components/domain-experience.css
+          git show "$STYLE_B_SHA:public/site/assets/js/domain-experience.js" > public/site/assets/js/domain-experience.js
+
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          # Domain: preserve approved presentation while resolving against Production publicProjects.
+          p=Path('public/site/assets/js/domain-experience.js')
+          s=p.read_text()
+          s=s.replace("  const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};", "  const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};\n  const PUBLIC_PROJECTS = DATA.publicProjects || DATA.projects || {};")
+          old="""  const projectIdsForDomain = (domain) => {\n    if (!domain) return [];\n    return [...new Set([...asList(domain.featuredProjectIds), ...asList(domain.supportingProjectIds)])]\n      .filter((key) => DATA.projects?.[key]);\n  };"""
+          new="""  const projectIdsForDomain = (domain) => {\n    if (!domain) return [];\n    const ids = [...asList(domain.featuredProjectIds), ...asList(domain.supportingProjectIds)];\n    const normalizedDomain = normalize(domain.id);\n    const operationsAliases = DOMAIN_ALIASES.operations.map(normalize);\n    if (operationsAliases.includes(normalizedDomain) && PUBLIC_PROJECTS['daily-hours']) ids.push('daily-hours');\n    return [...new Set(ids)].filter((key) => PUBLIC_PROJECTS[key]);\n  };"""
+          if old not in s: raise SystemExit('projectIdsForDomain contract not found')
+          s=s.replace(old,new)
+          s=s.replace("    const project = DATA.projects?.[key] || {};", "    const project = PUBLIC_PROJECTS[key] || {};")
+          s=s.replace("    const asset = assetId ? window.resolveProjectAsset?.(assetId, key) : null;", "    const csv2Asset = project?.presentationContract && project.presentationContract !== 'legacy' ? window.CASE_STUDY_ASSETS?.[key]?.assets?.[assetId] : null;\n    const asset = csv2Asset ? {src:csv2Asset.publicPath,alt:csv2Asset.alt,width:csv2Asset.width,height:csv2Asset.height} : (assetId ? window.resolveProjectAsset?.(assetId, key) : null);")
+          s=s.replace("    type.textContent = readType(project);", "    type.textContent = readType(project) || (project.presentationContract && project.presentationContract !== 'legacy' ? firstText(project.company) : '');")
+          s=s.replace("    company.textContent = firstText(project?.company);", "    company.textContent = project.presentationContract && project.presentationContract !== 'legacy' ? 'Independent' : firstText(project?.company);")
+          s=s.replace("    cta.href = `/work/${key}`;", "    cta.href = project.publicRoute || `/work/${key}`;")
+          s=s.replace("  const navigateCard = (card) => { const key = card?.dataset.project; if (key) window.location.href = `/work/${key}`; };", "  const navigateCard = (card) => { const key = card?.dataset.project; const project = key ? PUBLIC_PROJECTS[key] : null; if (key) window.location.href = project?.publicRoute || `/work/${key}`; };")
+          p.write_text(s)
+
+          # Work: composition only. Cards remain rendered by Production createWorkCard / project-card.css.
+          Path('public/site/assets/css/components/work-index.css').write_text(r'''/* Style B Work composition only. ProjectCard internals remain owned by project-card.css. */
+.work-library-v32.style-b-work{padding-top:var(--space-8)}
+.work-library-v32.style-b-work .work-library-v32__head{margin-bottom:var(--space-7)}
+.work-gallery-v32.style-b-work-index{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--space-6);align-items:stretch}
+.work-gallery-v32.style-b-work-index>.work-card-v32{grid-column:span 3;min-width:0;height:100%}
+.work-gallery-v32.style-b-work-index>.work-card-v32[data-style-b-tier="featured"]{grid-column:span 4}
+.work-gallery-v32.style-b-work-index>.work-card-v32[data-style-b-tier="supporting"]{grid-column:span 2}
+.work-gallery-v32.style-b-work-index>.work-card-v32[data-style-b-tier="standard"]{grid-column:span 3}
+.work-archive-v33.style-b-more{display:grid!important;margin-top:var(--space-8)}
+.work-archive-v33.style-b-more .work-archive-v33__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6);align-items:stretch}
+.work-archive-v33.style-b-more .work-card-v32{height:100%}
+@media(max-width:1100px){
+  .work-gallery-v32.style-b-work-index{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
+  .work-gallery-v32.style-b-work-index>.work-card-v32,.work-gallery-v32.style-b-work-index>.work-card-v32[data-style-b-tier]{grid-column:span 1}
+}
+@media(max-width:640px){
+  .work-gallery-v32.style-b-work-index,.work-archive-v33.style-b-more .work-archive-v33__grid{grid-template-columns:1fr;gap:var(--space-5)}
+}
+''')
+
+          # Work runtime only rearranges Production-rendered shared cards and adds reusable variants.
+          Path('public/site/assets/js/work.js').write_text(r'''(() => {
+  'use strict';
+
+  const loadStyle=(href,owner)=>{
+    if(document.querySelector(`link[data-style-b-owner="${owner}"]`))return;
+    const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset.styleBOwner=owner;document.head.append(link);
+  };
+
+  const loadDomain=()=>{
+    if(!document.getElementById('domains')||document.querySelector('script[data-style-b-owner="domain-experience"]'))return false;
+    const script=document.createElement('script');script.src='/site/assets/js/domain-experience.js';script.defer=true;script.dataset.styleBOwner='domain-experience';document.body.append(script);return true;
+  };
+  if(loadDomain())return;
+
+  const rail=document.getElementById('workFilterRail');
+  if(rail){const reset=()=>{rail.scrollLeft=0};requestAnimationFrame(reset);window.addEventListener('pageshow',reset)}
+
+  const library=document.querySelector('.work-library-v32');
+  const gallery=document.getElementById('workGallery');
+  const archive=document.getElementById('workArchive');
+  const archiveGrid=document.getElementById('workArchiveGrid');
+  if(!library||!gallery||!archive||!archiveGrid)return;
+  loadStyle('/site/assets/css/components/work-index.css','work-index');
+  library.classList.add('style-b-work');gallery.classList.add('style-b-work-index');archive.classList.add('style-b-more');
+
+  const idForCard=card=>{
+    const project=card.querySelector('[data-project]')?.dataset.project;
+    if(project)return project;
+    const href=card.querySelector('[data-public-work-route]')?.getAttribute('href')||'';
+    return href.split('/').filter(Boolean).at(-1)||'';
+  };
+  const cards=[...gallery.querySelectorAll(':scope > .work-card-v32'),...archiveGrid.querySelectorAll(':scope > .work-card-v32')];
+  const byId=new Map(cards.map(card=>[idForCard(card),card]).filter(([id])=>id));
+  const selected=['voucher','payment','dbs','booking'];
+  const more=['game-center','daily-hours'];
+  cards.forEach(card=>{card.hidden=true;card.removeAttribute('data-style-b-tier')});
+
+  const applyVariant=(card,tier,variant)=>{
+    if(!card)return;
+    card.hidden=false;card.dataset.styleBTier=tier;
+    card.classList.remove('work-card-v32--featured','work-card-v32--supporting','work-card-v32--standard','work-card-v32--compact');
+    card.classList.add(`work-card-v32--${variant}`);
+  };
+  selected.forEach((id,index)=>{
+    const card=byId.get(id);if(!card)return;
+    gallery.append(card);
+    applyVariant(card,index===0?'featured':index===1?'supporting':'standard',index===0?'featured':index===1?'supporting':'standard');
+  });
+  more.forEach(id=>{
+    const card=byId.get(id);if(!card)return;
+    archiveGrid.append(card);applyVariant(card,'compact','compact');
+  });
+  archive.hidden=false;
+  const archiveTitle=document.getElementById('workArchiveTitle');if(archiveTitle)archiveTitle.textContent='More Work';
+
+  const taxonomy=[['all','All'],['transactions','Transactions'],['operations','Operations'],['incentives','Incentives'],['zero','0→1'],['connected','Connected journeys']];
+  const categories={voucher:['incentives'],payment:['transactions','zero'],dbs:['operations'],booking:['connected'],'game-center':['incentives','zero'],'daily-hours':['operations','zero']};
+  const buttons=[...document.querySelectorAll('[data-work-filter]')];
+  buttons.forEach((button,index)=>{
+    const next=taxonomy[index];if(!next){button.hidden=true;return}
+    button.hidden=false;button.dataset.workFilter=next[0];button.textContent=next[1];button.removeAttribute('data-copy-key');
+  });
+  for(const [id,card] of byId){card.dataset.workCategories=(categories[id]||[]).join(' ')}
+  const visibleCards=()=>[...gallery.querySelectorAll(':scope > .work-card-v32'),...archiveGrid.querySelectorAll(':scope > .work-card-v32')].filter(card=>!card.hidden);
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+    const filter=button.dataset.workFilter;
+    buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    visibleCards().forEach(card=>{const matches=filter==='all'||card.dataset.workCategories.split(/\s+/).includes(filter);card.hidden=!matches});
+  }));
+})();
+''')
+
+          # Shared ProjectCard variants: visual owner remains project-card.css; no project-specific selector.
+          pc=Path('public/site/assets/css/components/project-card.css')
+          pcs=pc.read_text()
+          marker='/* Style B shared ProjectCard variants — reusable, project-agnostic. */'
+          if marker not in pcs:
+            pcs += r'''
+
+/* Style B shared ProjectCard variants — reusable, project-agnostic. */
+.work-card-v32--featured .work-card-v32__button{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr)}
+.work-card-v32--supporting .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:auto auto}
+.work-card-v32--standard .work-card-v32__button{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.work-card-v32--supporting .work-artifact{min-height:0;height:auto;aspect-ratio:16/9}
+.work-card-v32--supporting .work-card-v32__content{border-top:var(--dimension-1px) solid var(--color-border)}
+.work-card-v32--standard .work-card-v32__content{min-height:var(--dimension-280px)}
+.work-card-v32--supporting .work-card-v32__content,.work-card-v32--standard .work-card-v32__content,.work-card-v32--compact .work-card-v32__content{--project-card-company-title-gap:var(--space-6)}
+.work-card-v32--supporting .work-card-v32__content>p,.work-card-v32--standard .work-card-v32__content>p{margin-top:var(--space-5)}
+@media(max-width:1100px){.work-card-v32--featured .work-card-v32__button,.work-card-v32--supporting .work-card-v32__button,.work-card-v32--standard .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:auto auto}}
+'''
+            pc.write_text(pcs)
+
+          # Shared Header behavior is initialized before presentation branching, from the existing shared app.js owner.
+          app=Path('public/site/assets/js/app.js')
+          a=app.read_text()
+          helper=r'''  function initSharedSiteHeader(){
+    const header=document.querySelector('.site-header');
+    if(!header||header.dataset.sharedHeaderBound==='true')return;
+    header.dataset.sharedHeaderBound='true';
+    header.dataset.themeSurface='site-chrome';
+    document.querySelector('.site-footer')?.setAttribute('data-theme-surface','site-chrome');
+    const body=document.body;
+    const menu=document.getElementById('mobileMenu');
+    const toggle=document.querySelector('.menu-toggle');
+    const media=window.matchMedia('(max-width: 900px)');
+    const heroHeader=document.querySelector('.site-header--hero');
+    let frame=0;
+    const syncHero=()=>{frame=0;if(!heroHeader)return;const scrolled=window.scrollY>2;heroHeader.classList.toggle('is-scrolled',scrolled);heroHeader.dataset.scrollState=scrolled?'scrolled':'top'};
+    const scheduleHero=()=>{if(!frame)frame=requestAnimationFrame(syncHero)};
+    const label=open=>toggle?.setAttribute('aria-label',open?'Close menu':'Open menu');
+    const setMenu=(open,{restoreFocus=false,moveFocus=false}={})=>{if(!menu||!toggle)return;menu.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));body.classList.toggle('is-locked',open);label(open);if(open&&moveFocus)requestAnimationFrame(()=>menu.querySelector('a,button')?.focus());if(!open&&restoreFocus)toggle.focus()};
+    const currentPath=new URL(location.href).pathname;
+    menu?.querySelectorAll('a').forEach(link=>{const current=new URL(link.href,location.href).pathname===currentPath;if(current)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});
+    syncHero();window.addEventListener('scroll',scheduleHero,{passive:true});label(false);
+    toggle?.addEventListener('click',()=>setMenu(!menu?.classList.contains('is-open'),{moveFocus:!menu?.classList.contains('is-open')}));
+    menu?.addEventListener('click',event=>{if(event.target.closest('a'))setMenu(false)});
+    document.addEventListener('click',event=>{if(menu?.classList.contains('is-open')&&!event.target.closest('.site-header'))setMenu(false)});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu?.classList.contains('is-open'))setMenu(false,{restoreFocus:true})});
+    media.addEventListener('change',event=>{if(!event.matches)setMenu(false)});
+  }
+'''
+          anchor="  function retiredExperimentDestination(){"
+          if 'function initSharedSiteHeader()' not in a:
+            if anchor not in a: raise SystemExit('app header insertion anchor missing')
+            a=a.replace(anchor,helper+"  initSharedSiteHeader();\n"+anchor,1)
+          start="  const menu=doc.getElementById('mobileMenu');"
+          end="  mobileMenuMedia.addEventListener('change',event=>{if(!event.matches)setMenu(false)});"
+          if start in a and end in a:
+            i=a.index(start);j=a.index(end,i)+len(end)
+            a=a[:i]+"  // Shared SiteHeader behavior is initialized before presentation branching.\n  initSharedSiteHeader();"+a[j:]
+          app.write_text(a)
+          PY
+
+          git add public/site/assets/css/components/domain-experience.css \
+                  public/site/assets/js/domain-experience.js \
+                  public/site/assets/css/components/work-index.css \
+                  public/site/assets/js/work.js \
+                  public/site/assets/css/components/project-card.css \
+                  public/site/assets/js/app.js
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Integrate Human-approved Style B on certified Production"
+          git push origin HEAD:integration/style-b-domain-work-prod-7b6c4f4
