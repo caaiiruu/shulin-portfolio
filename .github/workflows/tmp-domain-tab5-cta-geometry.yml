@@ -11,14 +11,16 @@ jobs:
       - run: |
           npm run install:ci
           npm run build
-      - run: |
+      - working-directory: public/site/qa
+        run: |
           npm ci
           npx playwright install --with-deps chromium
       - run: |
           PORT=4173 node tests/portfolio-static-server.mjs >/tmp/server.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0; sleep 1; done
           cat /tmp/server.log; exit 1
-      - run: |
+      - working-directory: public/site/qa
+        run: |
           node --input-type=module <<'NODE'
           import { chromium } from '@playwright/test';
           const browser=await chromium.launch({headless:true});
