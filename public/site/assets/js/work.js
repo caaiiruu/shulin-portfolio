@@ -38,6 +38,13 @@
     systemStyle.dataset.projectCardSystem = 'shared-v1';
     document.head.append(systemStyle);
   }
+  if (!document.querySelector('script[data-project-card-media="shared-v1"]')) {
+    const mediaScript = document.createElement('script');
+    mediaScript.src = '/site/assets/js/project-card-media.js';
+    mediaScript.defer = true;
+    mediaScript.dataset.projectCardMedia = 'shared-v1';
+    document.body.append(mediaScript);
+  }
 
   /* CSV2 exits app.js before the legacy shared-header interaction block. This
      bridge binds the SAME shared SiteHeader markup on non-legacy routes only. */
