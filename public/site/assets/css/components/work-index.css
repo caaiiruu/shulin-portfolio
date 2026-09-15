@@ -1,0 +1,36 @@
+/* Style B Work Index — layout/composition only. ProjectCard visuals remain owned by project-card.css. */
+.work-index{display:block;padding:clamp(var(--space-7),var(--dimension-7vw),var(--space-10)) 0 var(--space-10)}
+.work-index__shell{display:grid;gap:var(--space-7)}
+.work-index__intro{display:grid;gap:var(--space-2);max-width:var(--dimension-52ch)}
+.work-index__eyebrow{font-size:var(--sys-type-label);font-weight:var(--sys-weight-bold);letter-spacing:var(--sys-tracking-label);text-transform:uppercase;color:var(--sys-color-text-accent)}
+.work-index__intro h1{max-width:var(--dimension-18ch);font-size:var(--type-page-title);line-height:1;letter-spacing:var(--sys-tracking-heading);text-wrap:balance}
+.work-index__filters{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}
+.work-index-filter{min-height:var(--control-height);padding:var(--space-2) var(--space-4);border:var(--dimension-1px) solid var(--sys-color-border);border-radius:var(--radius-pill);background:transparent;color:var(--sys-color-text-secondary);font:inherit;font-size:var(--text-sm);font-weight:var(--sys-weight-bold);cursor:pointer;transition:background-color var(--motion-fast) var(--ease-standard),color var(--motion-fast) var(--ease-standard),border-color var(--motion-fast) var(--ease-standard),transform var(--motion-fast) var(--ease-standard)}
+.work-index-filter:hover{border-color:var(--sys-color-border-strong);color:var(--sys-color-text-primary);transform:translateY(var(--dimension-neg-1px))}
+.work-index-filter:active{transform:scale(.98)}
+.work-index-filter:focus-visible{outline:var(--dimension-3px) solid var(--color-focus);outline-offset:var(--dimension-2px)}
+.work-index-filter[aria-pressed="true"]{border-color:var(--sys-color-action-primary);background:var(--sys-color-action-primary);color:var(--sys-color-on-action)}
+.work-index__featured{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--space-6);align-items:stretch}
+.work-index__featured>.work-card-v32{height:100%}
+.work-index__featured-secondary-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6);grid-column:1/-1;align-items:stretch}
+.work-index__featured-secondary-row>.work-card-v32{height:100%}
+.work-index__more{display:grid;gap:var(--space-5);margin-top:var(--space-3)}
+.work-index__more-head{display:flex;align-items:end;justify-content:space-between;gap:var(--space-4)}
+.work-index__more-head h2{font-size:var(--sys-type-heading-2);line-height:var(--sys-leading-heading);letter-spacing:var(--sys-tracking-heading)}
+.work-index__more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-6);align-items:stretch}
+.work-index__more-grid>.work-card-v32{height:100%}
+.work-index [hidden]{display:none!important}
+@media(max-width:1100px){
+  .work-index__featured{grid-template-columns:1fr}
+  .work-index__featured-secondary-row,.work-index__more-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+}
+@media(max-width:640px){
+  .work-index{padding-top:var(--space-7)}
+  .work-index__shell{gap:var(--space-6)}
+  .work-index__intro h1{font-size:var(--type-page-title-compact)}
+  .work-index__filters{flex-wrap:nowrap;width:calc(100% + (var(--page-gutter) * 2));margin-inline:calc(-1 * var(--page-gutter));padding-inline:var(--page-gutter);padding-bottom:var(--space-2);overflow-x:auto;scrollbar-width:none;overscroll-behavior-inline:contain}
+  .work-index__filters::-webkit-scrollbar{display:none}
+  .work-index-filter{flex:0 0 auto}
+  .work-index__featured-secondary-row,.work-index__more-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.work-index-filter{transition:none}}
