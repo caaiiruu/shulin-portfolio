@@ -4,12 +4,13 @@ import vm from 'node:vm';
 import test from 'node:test';
 const app=fs.readFileSync(new URL('../public/site/assets/js/app.js',import.meta.url),'utf8');
 const content=JSON.parse(fs.readFileSync(new URL('../public/site/content/portfolio-content.json',import.meta.url)));
+const presentationRegistry=JSON.parse(fs.readFileSync(new URL('../public/site/content/project-presentation-registry.json',import.meta.url)));
 const baseline=JSON.parse(fs.readFileSync(new URL('./fixtures/search-resolution-baseline.json',import.meta.url)));
-function runtime(source,content,lang){
+function runtime(source,content,lang,registry=presentationRegistry){
  const adapters=source.slice(source.indexOf('  function pair('),source.indexOf("  document.querySelector('[data-project-route-summary]')"));
  const localization=source.slice(source.indexOf('  const normalizePublicCopy='),source.indexOf('  const ui='));
  const search=source.slice(source.indexOf('    const normalize=value=>'),source.indexOf('    const SEARCH_RESULT_PROJECT_PROJECTIONS='));
- const sandbox={content,lang,URLSearchParams,window:{location:{hostname:'localhost',search:''}}};
+ const sandbox={content,lang,URLSearchParams,window:{PROJECT_PRESENTATION_REGISTRY:registry,location:{hostname:'localhost',search:''}}};
  return vm.runInNewContext(`${adapters}\nconst DATA=adaptContent(content);\n${localization}\n${search}\n({searchEntities,normalize,normalizeQuery:typeof normalizeSearchQuery==='undefined'?normalize:normalizeSearchQuery,matchingIntentIds,shortcuts:SEARCH_RECOMMENDED_QUERIES,DATA})`,sandbox);
 }
 
@@ -22,7 +23,7 @@ for(const [i,item] of en.shortcuts.entries())test(`shortcut ${item.label.en} res
  const a=en.searchEntities(item.query.en),b=zh.searchEntities(item.query.zh);
  assert.ok(a.some(r=>r.type==='project'&&content.projects[r.key]));
  assert.equal(a[0].key,top[i]);
- for(const result of a){assert.ok(en.DATA.projects[result.key]||en.DATA.experiments[result.key],result.key);assert.ok(result.score>0);assert.ok(result.reasons.length>0);}
+ for(const result of a){assert.ok(en.DATA.publicProjects[result.key]||en.DATA.experiments[result.key],result.key);assert.ok(result.score>0);assert.ok(result.reasons.length>0);}
  assert.deepEqual(summary(b).map(({id,intents})=>({id,intents})),summary(a).map(({id,intents})=>({id,intents})));
  assert.ok(b.every(result=>result.score>0&&result.reasons.length>0));
  assert.deepEqual(summary(a),baseline.shortcuts[item.query.en]);
@@ -32,7 +33,7 @@ test('unmatched input remains empty and exact aliases do not broaden free text',
  for(const r of [en,zh]){assert.equal(r.searchEntities('qzx-unmatched-987').length,0);assert.equal(r.searchEntities('').length,0);assert.equal(r.normalizeQuery('unrelated 支付 request'),r.normalize('unrelated 支付 request'));}
 });
 test('shortcut matches cannot come from a fallback when canonical entities are absent',()=>{
- const empty=runtime(app,{...content,projects:{},experiments:{},sideProjects:{}},'en');
+ const empty=runtime(app,{...content,projects:{},experiments:{},sideProjects:{}},'en',{routes:{}});
  for(const item of empty.shortcuts)assert.equal(empty.searchEntities(item.query.en).length,0);
 });
 test('existing manual free-text rankings and scores remain unchanged in both languages',()=>{

@@ -160,8 +160,18 @@ if (caseStudyV2Routes.length !== 1 || caseStudyV2Routes[0][0] !== "/work/daily-h
 if (content.projects["daily-hours"]) {
   throw new Error("Daily Hours must not enter the legacy 13-project Content SSOT during Phase 1");
 }
-if (caseStudyV2Registry.id !== "CSV2-1.0" || caseStudyV2Registry.productionRelease !== "BLOCKED") {
+if (caseStudyV2Registry.id !== "CSV2-1.0" || caseStudyV2Registry.productionRelease !== "PRODUCTION_CANDIDATE") {
   throw new Error("Case Study v2 registry identity or Production gate is invalid");
+}
+if (content.publicLocaleMode !== "EN_ONLY_TEMPORARY") {
+  throw new Error("The public portfolio must use the Human-approved temporary EN-only locale mode");
+}
+const dailyHoursRoute=presentationRegistry.routes["/work/daily-hours"];
+if (!dailyHoursRoute.publicDiscovery || !dailyHoursRoute.sitemap || dailyHoursRoute.previewOnly || dailyHoursRoute.workProjection?.summary !== "A freelance project-economics and decision workspace.") {
+  throw new Error("Daily Hours public Work projection is incomplete");
+}
+if (content.experiments?.["freelance-project-operations-tool"]?.releaseEligibility !== "DEFERRED_NON_SHIPPING") {
+  throw new Error("The historical Daily Hours Experiment must be preserved but publicly retired");
 }
 for (const [projectId, project] of Object.entries(content.projects)) {
   const type = project.infoGrid?.type?.value;
@@ -221,7 +231,12 @@ function replaceProductionAssets(html, cssFile, jsFile) {
   }
   const withoutCss = html.replace(/<link\b[^>]*href="\/site\/assets\/css\/(?:tokens|base|production\.[a-f0-9]+)\.css"[^>]*>/g, "");
   const withoutJs = withoutCss.replace(/<script\b[^>]*src="\/site\/assets\/js\/(?:data|project-ssot|app|home|work|runtime|production\.[a-f0-9]+)\.js"[^>]*><\/script>/g, "");
-  return withoutJs
+  const localeSafeHtml = content.publicLocaleMode === "EN_ONLY_TEMPORARY"
+    ? withoutJs
+      .replace(/<button\b[^>]*data-lang-toggle[^>]*>[\s\S]*?<\/button>/g, "")
+      .replace(/<html\b[^>]*\blang="[^"]*"/i, '<html lang="en"')
+    : withoutJs;
+  return localeSafeHtml
     .replace('<h2 class="heading-2" data-en="What are you trying to solve?"', '<h2 data-en="What are you trying to solve?"')
     .replace("</head>", `<link rel="icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">

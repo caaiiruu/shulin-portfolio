@@ -1,5 +1,6 @@
 {
   "contentVersion": "2026-09-01-r1838f-red-dot-recognition",
+  "publicLocaleMode": "EN_ONLY_TEMPORARY",
   "supersedes": "2026-08-24-r173.4",
   "interactiveFlowRegistry": {
     "voucher-center-discovery-ut-2024": {
@@ -26885,7 +26886,7 @@
         "en": "Working prototype / working internal tool",
         "zh": "運作中的原型／內部工具"
       },
-      "releaseEligibility": "READY_PUBLIC",
+      "releaseEligibility": "DEFERRED_NON_SHIPPING",
       "hero": null,
       "presentationSections": [
         {

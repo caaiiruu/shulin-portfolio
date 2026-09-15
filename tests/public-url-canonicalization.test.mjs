@@ -35,13 +35,13 @@ test('built pages retain one clean canonical and no implementation-detail page l
   }
 });
 
-test('Daily Hours Preview document owns its clean canonical without public discovery',()=>{
+test('Daily Hours public document owns its clean canonical and discovery contract',()=>{
   const html=fs.readFileSync('public/site/work/daily-hours.html','utf8');
   const registry=JSON.parse(fs.readFileSync('public/site/content/project-presentation-registry.json','utf8'));
   assert.match(html,/<link rel="canonical" href="https:\/\/shulinchou\.com\/work\/daily-hours"\/>/);
   assert.match(html,/<meta property="og:url" content="https:\/\/shulinchou\.com\/work\/daily-hours"\/>/);
-  assert.equal(registry.routes['/work/daily-hours'].publicDiscovery,false);
-  assert.equal(registry.routes['/work/daily-hours'].sitemap,false);
+  assert.equal(registry.routes['/work/daily-hours'].publicDiscovery,true);
+  assert.equal(registry.routes['/work/daily-hours'].sitemap,true);
 });
 
 test('clean routes rewrite to the preserved static site tree',()=>{

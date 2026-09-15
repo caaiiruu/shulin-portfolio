@@ -1,7 +1,7 @@
 {
   "migrationId": "DAILY-HOURS-V2",
-  "phase": "Phase 1.1 Human corrections and full-page cleanup",
-  "status": "READY_FOR_HUMAN_REVIEW",
+  "phase": "Phase 2A temporary EN-only public cutover",
+  "status": "PRODUCTION_CANDIDATE",
   "certifiedProductionBaseline": {
     "commit": "f0c4ca0a770d7adb1f29d39a2a514c8715e1944e",
     "tree": "d66980327f1313c4827a50303dccb86330816d01",
@@ -9,7 +9,15 @@
   },
   "sourceIdentity": "freelance-project-operations-tool",
   "previewRoute": "/work/daily-hours",
-  "publicIACutover": false,
+  "humanApprovedPreview": {
+    "commit": "c51ca6194ee956ad6fedd44d055a44abeb1ead49",
+    "tree": "89d5208dcfd779efc376d2fba9e033f684cf8592",
+    "deployment": "dpl_GQfD5ToFrDVNpJjcpHTfQBE94PFe",
+    "status": "HUMAN_APPROVED_PREVIEW"
+  },
+  "publicLocaleMode": "EN_ONLY_TEMPORARY",
+  "zhContent": "PRESERVED",
+  "publicIACutover": true,
   "legacyCanonicalProjectCount": 13,
   "presentationContract": "case-study-v2",
   "legacyPresentationContract": "legacy",

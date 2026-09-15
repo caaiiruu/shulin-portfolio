@@ -15,6 +15,7 @@
     "test:routes": "npm run build && node --test tests/project-detail-routes.test.mjs",
     "test:browser-contract": "node tests/presentation-contract-browser-qa.mjs",
     "test:case-study-v2-browser": "node tests/case-study-v2-browser-qa.mjs",
+    "test:phase2a-browser": "node tests/daily-hours-phase2a-browser-qa.mjs",
     "test:r1838f2-browser": "node tests/portfolio-r1838f2-browser-qa.mjs",
     "validate:ssot": "node public/site/qa/ssot-governance.mjs && node public/site/qa/public-ssot-boundary.mjs && node scripts/content-completeness-audit.mjs",
     "validate:content-completeness": "node scripts/content-completeness-audit.mjs",

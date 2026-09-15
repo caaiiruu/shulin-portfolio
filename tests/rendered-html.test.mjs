@@ -912,7 +912,6 @@ test("projects only individually eligible Experiments into public discovery", ()
   const eligible=Object.values({...content.experiments,...content.sideProjects}).filter(item=>item.releaseEligibility);
   assert.ok(eligible.every(item=>['READY_PUBLIC','DEFERRED_NON_SHIPPING','HUMAN_INPUT_REQUIRED'].includes(item.releaseEligibility)));
   assert.deepEqual(eligible.filter(item=>item.releaseEligibility==='READY_PUBLIC').map(item=>item.id),[
-    'freelance-project-operations-tool',
     'weekly-design-session',
     'food-testing-workshop',
     'aja-creative-workshop',

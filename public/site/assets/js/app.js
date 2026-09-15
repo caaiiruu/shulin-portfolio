@@ -1,5 +1,20 @@
 (function(){
   'use strict';
+  const PUBLIC_LOCALE_MODE=window.PORTFOLIO_DATA?.publicLocaleMode||'BILINGUAL';
+  if(PUBLIC_LOCALE_MODE==='EN_ONLY_TEMPORARY'){
+    document.documentElement.lang='en';
+    document.querySelectorAll('[data-lang-toggle]').forEach(control=>control.remove());
+  }
+  function retiredExperimentDestination(){
+    const path=window.location.pathname.replace(/\/$/,'');
+    if(!['/experiments','/site/experiments','/site/experiments.html'].includes(path))return null;
+    const slug=new URLSearchParams(window.location.search).get('experiment');
+    if(!slug)return null;
+    return Object.entries(window.PROJECT_PRESENTATION_REGISTRY?.routes||{})
+      .find(([,entry])=>entry.publicDiscovery===true&&entry.legacyExperimentSlugs?.includes(slug))?.[0]||null;
+  }
+  const retiredDestination=retiredExperimentDestination();
+  if(retiredDestination){window.location.replace(retiredDestination);return}
   function resolvePresentationRoute(pathname=window.location.pathname){
     const registry=window.PROJECT_PRESENTATION_REGISTRY||{};
     const normalized=String(pathname||'/').replace(/\/$/,'')||'/';
@@ -249,11 +264,31 @@
     const explorations=raw.experimentArchitecture?.releaseVisibility==='DEFERRED_NON_SHIPPING'
       ?{}
       :Object.fromEntries(eligibleExplorations);
+    const caseStudyProjects=Object.fromEntries(Object.entries(window.PROJECT_PRESENTATION_REGISTRY?.routes||{})
+      .filter(([,entry])=>entry.presentationContract!=='legacy'&&entry.publicDiscovery===true&&entry.workProjection)
+      .map(([route,entry])=>{
+        const projection=entry.workProjection;
+        return [entry.projectId,{
+          project_id:entry.projectId,
+          presentationContract:entry.presentationContract,
+          publicRoute:projection.route||route,
+          company:[projection.type,''],
+          domain_label:['',''],
+          title_pair:[projection.title,''],
+          at_a_glance_pair:[projection.summary,''],
+          period:projection.period||'',
+          workFilterIds:list(projection.filterIds),
+          coverAssetId:projection.coverAssetId||'',
+          searchIndexV2:projection.searchIndexV2||{}
+        }];
+      }));
     const intentCatalog=list(raw.contentDiscovery?.queryIntentCatalog);
     const searchContract=raw.contentDiscovery?.searchMatchingContract||{};
     return {
       ...raw,
       projects,
+      caseStudyProjects,
+      publicProjects:{...projects,...caseStudyProjects},
       experiments:Object.fromEntries(Object.entries(explorations).map(([id,p])=>[id,adaptExploration(id,p)])),
       search:{
         intentCatalog,
@@ -478,7 +513,7 @@
     return node;
   }
 
-  try{lang=localStorage.getItem('portfolioLang')||'en'}catch{lang='en'}
+  try{lang=PUBLIC_LOCALE_MODE==='EN_ONLY_TEMPORARY'?'en':(localStorage.getItem('portfolioLang')||'en')}catch{lang='en'}
   function renderLimitedRichText(node,raw){
     clear(node);
     let target=node;
@@ -774,7 +809,7 @@
     };
     const searchPortfolioOrder=[...new Set([
       ...list(DATA.workIndex?.principalPortfolioArchitecture?.featuredOrder),
-      ...Object.keys(DATA.projects)
+      ...Object.keys(DATA.publicProjects)
     ])];
     const rankProject=(key,project,query,matchedIntentIds)=>{
       const index=project.searchIndexV2||{};
@@ -830,7 +865,7 @@
       const normalized=normalizeSearchQuery(query);
       if(!normalized)return [];
       const intentIds=matchingIntentIds(normalized);
-      const projects=Object.entries(DATA.projects).map(([key,item])=>({key,type:'project',item}));
+      const projects=Object.entries(DATA.publicProjects).map(([key,item])=>({key,type:'project',item}));
       const explorations=Object.entries(DATA.experiments).map(([key,item])=>({key,type:'experiment',item:{
         ...item,
         title_pair:item.title,
@@ -857,6 +892,7 @@
       'booking-taxi-pickup-service-strategy':{ownershipEnd:{en:', working with',zh:'，並與'},defaultSignal:{source:'outcome',index:0}}
     };
     const searchResultProjection=(key,project,{intentIds=[]}={})=>{
+      if(project.presentationContract!=='legacy')return {kind:'evidence',value:localize(project.at_a_glance_pair)};
       const contract=SEARCH_RESULT_PROJECT_PROJECTIONS[key];
       if(!contract)throw new Error(`SearchResultCard: missing approved projection contract for "${key}".`);
       const ownershipSource=localize(project.ownership_model?.publicSummary).trim();
@@ -883,10 +919,11 @@
     };
     window.searchResultCardProjection=(key,context)=>searchResultProjection(key,DATA.projects[key],context);
     const appendProject=(container,key,reasons=[],matchedIntentIds=[],score=0)=>{
-      const project=DATA.projects[key];if(!project)return;
+      const project=DATA.publicProjects[key];if(!project)return;
       const projection=searchResultProjection(key,project,{intentIds:matchedIntentIds,reasons});
-      const card=element('button','related-project-card related-project-card--search related-project-card-v45');
-      card.type='button';card.dataset.project=key;
+      const card=element(project.publicRoute?'a':'button','related-project-card related-project-card--search related-project-card-v45');
+      if(project.publicRoute){card.href=project.publicRoute;card.dataset.publicWorkRoute=project.publicRoute}
+      else{card.type='button';card.dataset.project=key}
       card.dataset.searchCardProjection='approved';
       card.dataset.searchScore=String(score);
       card.dataset.searchIntents=matchedIntentIds.join(',');
@@ -1256,7 +1293,7 @@
   const workArchive=doc.getElementById('workArchive');
   const workArchiveGrid=doc.getElementById('workArchiveGrid');
   const workFilterRegistry=list(DATA.workIndex?.workFilters);
-  const workFilterIdsForProject=id=>workFilterRegistry
+  const workFilterIdsForProject=(id,project)=>project.workFilterIds||workFilterRegistry
     .filter(filter=>filter.id!=='all'&&list(filter.projectIds).includes(id))
     .map(filter=>filter.id);
   function createWorkCard(id,project,index){
@@ -1264,11 +1301,17 @@
     card.classList.add(index===0?'work-card-v32--featured':'work-card-v32--compact');
     card.dataset.featureRank=String(index+1);
     card.dataset.projectDate=String(project.period||project.timeline||'');
-    card.dataset.workCategories=workFilterIdsForProject(id).join(' ');
-    const button=element('button','work-card-v32__button');
-    button.type='button';button.dataset.project=id;button.dataset.pressable='';
-    const coverAssetId=id==='voucher'?'voucher-hero-incentive-journey-public-v1':(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId);
-    const coverAsset=coverAssetId?resolveProjectAsset(coverAssetId,id):null;
+    card.dataset.workCategories=workFilterIdsForProject(id,project).join(' ');
+    const button=element(project.publicRoute?'a':'button','work-card-v32__button');
+    if(project.publicRoute){button.href=project.publicRoute;button.dataset.publicWorkRoute=project.publicRoute}
+    else{button.type='button';button.dataset.project=id}
+    button.dataset.pressable='';
+    const coverAssetId=project.coverAssetId||(id==='voucher'?'voucher-hero-incentive-journey-public-v1':(project.hero_visual_brief?.assetId||project.heroVisualBrief?.assetId));
+    const caseStudyAsset=project.presentationContract!=='legacy'?window.CASE_STUDY_ASSETS?.[id]?.assets?.[coverAssetId]:null;
+    const coverAsset=caseStudyAsset?{
+      assetId:coverAssetId,src:caseStudyAsset.publicPath,alt:[caseStudyAsset.alt,''],
+      width:caseStudyAsset.width,height:caseStudyAsset.height,isPlaceholder:false
+    }:(coverAssetId?resolveProjectAsset(coverAssetId,id):null);
     const visual=element('div',coverAsset?'work-artifact work-card-v32__visual-v225':`work-artifact work-artifact--${id}`);
     visual.dataset.frameRole='project-cover';
     if(coverAsset){
@@ -1314,6 +1357,7 @@
     if(workArchiveGrid){
       clear(workArchiveGrid);
       moreWork.forEach((id,index)=>workArchiveGrid.append(createWorkCard(id,DATA.projects[id],index+featuredIds.length)));
+      Object.entries(DATA.caseStudyProjects).forEach(([id,project],index)=>workArchiveGrid.append(createWorkCard(id,project,index+Object.keys(DATA.projects).length)));
     }
   }
   function renderCareerTimeline(){

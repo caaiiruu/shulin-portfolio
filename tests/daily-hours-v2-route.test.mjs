@@ -14,13 +14,32 @@ test('Daily Hours emits an isolated Preview document with exact SEO',()=>{
   assert.doesNotMatch(html,/id="detailDialog"|data-project="daily-hours"|work-card-v32/);
 });
 
-test('public IA and legacy project roster remain unchanged',()=>{
+test('public IA adds one CSV2 projection while the legacy project roster remains unchanged',()=>{
   assert.equal(Object.keys(content.projects).length,13);
   assert.equal(content.projects['daily-hours'],undefined);
   const matches=Object.values(content.experiments||{}).filter(item=>item.publicSlug==='daily-hours'&&item.title?.en==='Daily Hours');
   assert.equal(matches.length,1);
+  assert.equal(matches[0].releaseEligibility,'DEFERRED_NON_SHIPPING');
   const work=fs.readFileSync('public/site/work.html','utf8');
   assert.doesNotMatch(work,/data-project="daily-hours"/);
+  const runtime=fs.readFileSync('public/site/assets/js/app.js','utf8');
+  assert.match(runtime,/dataset\.publicWorkRoute/);
+});
+
+test('temporary EN-only mode removes switch controls from generated public HTML without deleting zh content',()=>{
+  assert.equal(content.publicLocaleMode,'EN_ONLY_TEMPORARY');
+  for(const file of ['index.html','work.html','experiments.html','profile.html','work/daily-hours.html']){
+    const page=fs.readFileSync(`public/site/${file}`,'utf8');
+    assert.doesNotMatch(page,/data-lang-toggle/);
+    assert.match(page,/<html lang="en">/);
+  }
+  assert.equal(content.projects.voucher.title.zh.length>0,true);
+});
+
+test('public sitemap contains one canonical Daily Hours route',()=>{
+  const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
+  assert.equal((sitemap.match(/https:\/\/shulinchou\.com\/work\/daily-hours/g)||[]).length,1);
+  assert.doesNotMatch(sitemap,/experiments\?experiment=daily-hours/);
 });
 
 test('generated runtime contains one V2 registry and no film CTA',()=>{

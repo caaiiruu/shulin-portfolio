@@ -1,8 +1,8 @@
 {
   "id": "CSV2-1.0",
   "name": "Case Study Presentation System v2",
-  "status": "PHASE_1_1_HUMAN_CORRECTIONS",
-  "scope": "Daily Hours Preview pilot only",
+  "status": "PRODUCTION_CANDIDATE",
+  "scope": "Daily Hours public release candidate",
   "presentationContract": "case-study-v2",
   "defaultPresentationContract": "legacy",
   "owners": {
@@ -51,5 +51,5 @@
     "csv2OwnsBetweenChrome": true,
     "legacyProjectEnding": false
   },
-  "productionRelease": "BLOCKED"
+  "productionRelease": "PRODUCTION_CANDIDATE"
 }

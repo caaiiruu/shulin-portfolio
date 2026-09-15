@@ -14,7 +14,7 @@ const motion=readJson('content/case-studies/daily-hours/motion-manifest.json');
 
 test('CSV2 is isolated and Daily Hours is its only consumer',()=>{
   assert.equal(registry.id,'CSV2-1.0');
-  assert.equal(registry.productionRelease,'BLOCKED');
+  assert.equal(registry.productionRelease,'PRODUCTION_CANDIDATE');
   assert.equal(presentation.defaultPresentationContract,'legacy');
   assert.deepEqual(Object.keys(presentation.routes),['/work/daily-hours']);
   assert.deepEqual(presentation.routes['/work/daily-hours'],{
@@ -22,7 +22,17 @@ test('CSV2 is isolated and Daily Hours is its only consumer',()=>{
     contentOwner:'content/case-studies/daily-hours/content.json',
     assetOwner:'content/case-studies/daily-hours/asset-manifest.json',
     motionOwner:'content/case-studies/daily-hours/motion-manifest.json',
-    publicDiscovery:false,sitemap:false,previewOnly:true
+    publicDiscovery:true,sitemap:true,previewOnly:false,
+    legacyExperimentSlugs:['daily-hours'],
+    workProjection:{
+      title:'Daily Hours',type:'0→1 Product',summary:'A freelance project-economics and decision workspace.',
+      route:'/work/daily-hours',period:'2026',filterIds:['zero'],coverAssetId:'daily-hours-hero-static',
+      searchIndexV2:{
+        contentType:'project',canonicalId:'daily-hours',aliases:{en:['Daily Hours']},
+        problemTags:{en:['freelance operations','project economics','decision workspace','0→1 product']},
+        capabilityTags:{en:['project health','project estimation','workload planning']},intentIds:['launch-zero-to-one-product']
+      }
+    }
   });
 });
 

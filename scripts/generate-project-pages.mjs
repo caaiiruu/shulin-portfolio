@@ -87,4 +87,11 @@ ${runtime}
 </body></html>`;
   fs.writeFileSync(path.join(outDir,`${entry.projectId}.html`),html);
 }
+const sitemapRoutes=[
+  "/","/work","/experiments","/profile",
+  ...Object.keys(content.projects||{}).map(id=>`/work/${id}`),
+  ...Object.entries(presentationRegistry.routes||{}).filter(([,entry])=>entry.sitemap===true).map(([route])=>route)
+];
+const sitemap=`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...new Set(sitemapRoutes)].map(route=>`  <url><loc>https://shulinchou.com${route}</loc></url>`).join("\n")}\n</urlset>\n`;
+fs.writeFileSync(path.resolve("public/sitemap.xml"),sitemap);
 console.log(`Generated ${Object.keys(content.projects||{}).length} canonical project documents and ${v2Routes.length} Case Study v2 document.`);
