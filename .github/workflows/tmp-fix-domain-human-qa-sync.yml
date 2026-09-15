@@ -1,8 +1,10 @@
 name: Temp Fix Domain Human QA Sync
 on:
   push:
-    branches: [migration/style-b-domain-work-v1]
-    paths: ['.github/workflows/tmp-fix-domain-human-qa-sync.yml']
+    branches:
+      - migration/style-b-domain-work-v1
+    paths:
+      - .github/workflows/tmp-fix-domain-human-qa-sync.yml
 permissions:
   contents: write
 jobs:
@@ -13,57 +15,17 @@ jobs:
         with:
           ref: migration/style-b-domain-work-v1
           fetch-depth: 0
-      - name: Patch deterministic Domain render synchronization
+      - name: Patch QA synchronization
+        env:
+          OLD_B64: ICAgICAgICAgICAgICBmb3IobGV0IGk9MDtpPGF3YWl0IHRhYnMuY291bnQoKTtpKyspewogICAgICAgICAgICAgICAgYXdhaXQgdGFicy5udGgoaSkuY2xpY2soKTsKICAgICAgICAgICAgICAgIGF3YWl0IHBhZ2Uud2FpdEZvckZ1bmN0aW9uKGluZGV4PT5kb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcjZG9tYWlucyAuZG9tYWluLXRhYicpW2luZGV4XT8uZ2V0QXR0cmlidXRlKCdhcmlhLXNlbGVjdGVkJyk9PT0ndHJ1ZScsaSk7CiAgICAgICAgICAgICAgICBhd2FpdCBwYWdlLndhaXRGb3JGdW5jdGlvbigoKT0+ZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnI2RvbWFpbnMgLmRvbWFpbi1wcm9qZWN0LWNhcmQtdjJbZGF0YS13aGVlbC1vZmZzZXQ9IjAiXScpLmxlbmd0aD09PTEpOwogICAgICAgICAgICAgICAgYXdhaXQgcGFnZS53YWl0Rm9yVGltZW91dCh3aWR0aDw9OTAwPzQyMDo2MCk7CiAgICAgICAgICAgICAgICBjb25zdCBhY3RpdmU9ZG9tYWluLmxvY2F0b3IoJy5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtd2hlZWwtb2Zmc2V0PSIwIl0nKTsK
+          NEW_B64: ICAgICAgICAgICAgICBmb3IobGV0IGk9MDtpPGF3YWl0IHRhYnMuY291bnQoKTtpKyspewogICAgICAgICAgICAgICAgY29uc3QgcHJldmlvdXNQcmVzZW50YXRpb249YXdhaXQgZG9tYWluLmxvY2F0b3IoJyNyZWxhdGVkUHJvamVjdHMnKS5nZXRBdHRyaWJ1dGUoJ2RhdGEtZG9tYWluLXByZXNlbnRhdGlvbi1pZCcpOwogICAgICAgICAgICAgICAgY29uc3QgcHJldmlvdXNTZWxlY3RlZD1hd2FpdCBkb21haW4ubG9jYXRvcignLmRvbWFpbi10YWJbYXJpYS1zZWxlY3RlZD0idHJ1ZSJdJykuZ2V0QXR0cmlidXRlKCdkYXRhLWRvbWFpbicpOwogICAgICAgICAgICAgICAgY29uc3QgcmVxdWVzdGVkRG9tYWluPWF3YWl0IHRhYnMubnRoKGkpLmdldEF0dHJpYnV0ZSgnZGF0YS1kb21haW4nKTsKICAgICAgICAgICAgICAgIGF3YWl0IHRhYnMubnRoKGkpLmNsaWNrKCk7CiAgICAgICAgICAgICAgICBhd2FpdCBwYWdlLndhaXRGb3JGdW5jdGlvbihpbmRleD0+ZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnI2RvbWFpbnMgLmRvbWFpbi10YWInKVtpbmRleF0/LmdldEF0dHJpYnV0ZSgnYXJpYS1zZWxlY3RlZCcpPT09J3RydWUnLGkpOwogICAgICAgICAgICAgICAgYXdhaXQgcGFnZS53YWl0Rm9yRnVuY3Rpb24oKHtiZWZvcmUscmVxdWVzdGVkLHdhc1NlbGVjdGVkfSk9PnsKICAgICAgICAgICAgICAgICAgY29uc3Qgcm9vdD1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjZG9tYWlucycpOwogICAgICAgICAgICAgICAgICBjb25zdCBzZWxlY3RlZD1yb290Py5xdWVyeVNlbGVjdG9yKCcuZG9tYWluLXRhYlthcmlhLXNlbGVjdGVkPSJ0cnVlIl0nKTsKICAgICAgICAgICAgICAgICAgY29uc3QgcmFpbD1yb290Py5xdWVyeVNlbGVjdG9yKCcjcmVsYXRlZFByb2plY3RzJyk7CiAgICAgICAgICAgICAgICAgIGNvbnN0IGFjdGl2ZT1yb290Py5xdWVyeVNlbGVjdG9yQWxsKCcuZG9tYWluLXByb2plY3QtY2FyZC12MltkYXRhLXdoZWVsLW9mZnNldD0iMCJdJyk7CiAgICAgICAgICAgICAgICAgIGNvbnN0IGNhcmQ9YWN0aXZlPy5sZW5ndGg9PT0xP2FjdGl2ZVswXTpudWxsOwogICAgICAgICAgICAgICAgICBjb25zdCBwcmVzZW50YXRpb249cmFpbD8uZGF0YXNldC5kb21haW5QcmVzZW50YXRpb25JZHx8Jyc7CiAgICAgICAgICAgICAgICAgIGlmKHNlbGVjdGVkPy5nZXRBdHRyaWJ1dGUoJ2RhdGEtZG9tYWluJykhPT1yZXF1ZXN0ZWR8fCFwcmVzZW50YXRpb258fCFjYXJkPy5pc0Nvbm5lY3RlZCkgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICAgICAgICBpZih3YXNTZWxlY3RlZCE9PXJlcXVlc3RlZCYmYmVmb3JlJiZwcmVzZW50YXRpb249PT1iZWZvcmUpIHJldHVybiBmYWxzZTsKICAgICAgICAgICAgICAgICAgcmV0dXJuIEJvb2xlYW4oY2FyZC5xdWVyeVNlbGVjdG9yKCcuZG9tYWluLXByb2plY3QtY2FyZC12Ml9fY3RhJyk/LmlzQ29ubmVjdGVkJiZjYXJkLnF1ZXJ5U2VsZWN0b3IoJy5kb21haW4tcHJvamVjdC1jYXJkLXYyX19pbWFnZScpPy5pc0Nvbm5lY3RlZCk7CiAgICAgICAgICAgICAgICB9LHtiZWZvcmU6cHJldmlvdXNQcmVzZW50YXRpb24scmVxdWVzdGVkOnJlcXVlc3RlZERvbWFpbix3YXNTZWxlY3RlZDpwcmV2aW91c1NlbGVjdGVkfSk7CiAgICAgICAgICAgICAgICBhd2FpdCBwYWdlLmV2YWx1YXRlKCgpPT5uZXcgUHJvbWlzZShyZXNvbHZlPT5yZXF1ZXN0QW5pbWF0aW9uRnJhbWUoKCk9PnJlcXVlc3RBbmltYXRpb25GcmFtZShyZXNvbHZlKSkpKTsKICAgICAgICAgICAgICAgIGF3YWl0IHBhZ2Uud2FpdEZvckZ1bmN0aW9uKCgpPT57CiAgICAgICAgICAgICAgICAgIGNvbnN0IGNhcmQ9ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI2RvbWFpbnMgLmRvbWFpbi1wcm9qZWN0LWNhcmQtdjJbZGF0YS13aGVlbC1vZmZzZXQ9IjAiXScpOwogICAgICAgICAgICAgICAgICBjb25zdCBjdGE9Y2FyZD8ucXVlcnlTZWxlY3RvcignLmRvbWFpbi1wcm9qZWN0LWNhcmQtdjJfX2N0YScpOwogICAgICAgICAgICAgICAgICBpZighY2FyZHx8IWN0YSkgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICAgICAgICBjb25zdCBvdXRlcj1jYXJkLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLGlubmVyPWN0YS5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKSx0PTI7CiAgICAgICAgICAgICAgICAgIHJldHVybiBpbm5lci5sZWZ0Pj1vdXRlci5sZWZ0LXQmJmlubmVyLnJpZ2h0PD1vdXRlci5yaWdodCt0JiZpbm5lci50b3A+PW91dGVyLnRvcC10JiZpbm5lci5ib3R0b208PW91dGVyLmJvdHRvbSt0OwogICAgICAgICAgICAgICAgfSk7CiAgICAgICAgICAgICAgICBpZih3aWR0aDw9OTAwKSBhd2FpdCBwYWdlLndhaXRGb3JUaW1lb3V0KDQyMCk7CiAgICAgICAgICAgICAgICBjb25zdCBhY3RpdmU9ZG9tYWluLmxvY2F0b3IoJy5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtd2hlZWwtb2Zmc2V0PSIwIl0nKTsK
+        run: >-
+          python -c "from pathlib import Path; import os,base64; p=Path('.github/workflows/style-b-domain-work-qa.yml'); s=p.read_text(); old=base64.b64decode(os.environ['OLD_B64']).decode(); new=base64.b64decode(os.environ['NEW_B64']).decode(); assert old in s, 'target block missing'; p.write_text(s.replace(old,new,1))"
+      - name: Commit patch
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('.github/workflows/style-b-domain-work-qa.yml')
-          s=p.read_text()
-          old='''              for(let i=0;i<await tabs.count();i++){
-                await tabs.nth(i).click();
-                await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
-                await page.waitForFunction(()=>document.querySelectorAll('#domains .domain-project-card-v2[data-wheel-offset="0"]').length===1);
-                await page.waitForTimeout(width<=900?420:60);
-                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-'''
-          new='''              for(let i=0;i<await tabs.count();i++){
-                const previousPresentation=await domain.locator('#relatedProjects').getAttribute('data-domain-presentation-id');
-                const previousSelected=await domain.locator('.domain-tab[aria-selected="true"]').getAttribute('data-domain');
-                const requestedDomain=await tabs.nth(i).getAttribute('data-domain');
-                await tabs.nth(i).click();
-                await page.waitForFunction(index=>document.querySelectorAll('#domains .domain-tab')[index]?.getAttribute('aria-selected')==='true',i);
-                await page.waitForFunction(({before,requested,wasSelected})=>{
-                  const root=document.querySelector('#domains');
-                  const selected=root?.querySelector('.domain-tab[aria-selected="true"]');
-                  const rail=root?.querySelector('#relatedProjects');
-                  const active=root?.querySelectorAll('.domain-project-card-v2[data-wheel-offset="0"]');
-                  const card=active?.length===1?active[0]:null;
-                  const presentation=rail?.dataset.domainPresentationId||'';
-                  if(selected?.getAttribute('data-domain')!==requested||!presentation||!card?.isConnected) return false;
-                  if(wasSelected!==requested&&before&&presentation===before) return false;
-                  return Boolean(card.querySelector('.domain-project-card-v2__cta')?.isConnected&&card.querySelector('.domain-project-card-v2__image')?.isConnected);
-                },{before:previousPresentation,requested:requestedDomain,wasSelected:previousSelected});
-                await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-                await page.waitForFunction(()=>{
-                  const card=document.querySelector('#domains .domain-project-card-v2[data-wheel-offset="0"]');
-                  const cta=card?.querySelector('.domain-project-card-v2__cta');
-                  if(!card||!cta) return false;
-                  const outer=card.getBoundingClientRect(),inner=cta.getBoundingClientRect(),t=2;
-                  return inner.left>=outer.left-t&&inner.right<=outer.right+t&&inner.top>=outer.top-t&&inner.bottom<=outer.bottom+t;
-                });
-                if(width<=900) await page.waitForTimeout(420);
-                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-'''
-          if old not in s:
-              raise SystemExit('Target Human QA block not found; refusing broad edit')
-          p.write_text(s.replace(old,new,1))
-          PY
           git diff --check
-          git diff -- .github/workflows/style-b-domain-work-qa.yml
-      - name: Commit QA synchronization fix
-        run: |
-          git config user.name 'caiiru'
-          git config user.email '63276875+caaiiruu@users.noreply.github.com'
+          git config user.name caiiru
+          git config user.email 63276875+caaiiruu@users.noreply.github.com
           git add .github/workflows/style-b-domain-work-qa.yml
-          git commit -m 'Stabilize Domain Human QA render synchronization'
+          git commit -m "Stabilize Domain Human QA render synchronization"
           git push origin HEAD:migration/style-b-domain-work-v1
