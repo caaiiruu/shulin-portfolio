@@ -27,6 +27,16 @@
   }
   function shell(){return node('div','csv2-shell')}
   function assetRecord(manifest,id){return manifest?.assets?.[id]||null}
+  function captionKey(value){
+    return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\b(primary|supporting|connected|context|decision|proof|evidence|media|image)\b/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function explanatoryCaption(asset,label,decisionTitle){
+    const caption=asset?.caption?.trim();
+    if(!caption)return '';
+    const captionIdentity=captionKey(caption);
+    const duplicates=[label,asset.role,decisionTitle].some(value=>captionIdentity===captionKey(value));
+    return duplicates?'':caption;
+  }
   function imageFor(asset,id,critical=false){
     if(!asset?.publicPath)return null;
     const image=node('img');
@@ -137,7 +147,8 @@
     let activeDecision=0;
     function renderEvidenceItem(decision,index){
       const id=decision.supportingAssets[index];const asset=assetRecord(assets,id);
-      evidenceMedia.replaceChildren(evidenceVisual(content,assets,id),node('p','csv2-evidence-caption',asset?.role||'Lifecycle model'));
+      const label=asset?.role||'Lifecycle model';const caption=explanatoryCaption(asset,label,decision.title);
+      const media=[evidenceVisual(content,assets,id)];if(caption)media.push(node('p','csv2-evidence-caption',caption));evidenceMedia.replaceChildren(...media);
       evidenceIndex.querySelectorAll('button').forEach((button,buttonIndex)=>button.setAttribute('aria-selected',String(buttonIndex===index)));
     }
     function buildEvidence(decision){

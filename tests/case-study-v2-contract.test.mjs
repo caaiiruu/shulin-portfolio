@@ -91,3 +91,12 @@ test('Phase 1.1B visual corrections stay inside CSV2 owners',()=>{
   assert.match(css,/\.csv2-evidence-frame\{[^}]*aspect-ratio:36\/25/);
   assert.match(css,/body\.csv2-active \.csv2-cta\{[^}]*white-space:nowrap/);
 });
+
+test('CSV2 evidence captions render only when they add explanatory value',()=>{
+  const renderer=fs.readFileSync(path.join(root,'assets/js/case-study-v2.js'),'utf8');
+  assert.match(renderer,/const caption=asset\?\.caption\?\.trim\(\)/);
+  assert.match(renderer,/duplicates=\[label,asset\.role,decisionTitle\]/);
+  assert.match(renderer,/if\(caption\)media\.push\(node\('p','csv2-evidence-caption',caption\)\)/);
+  assert.doesNotMatch(renderer,/node\('p','csv2-evidence-caption',asset\?\.role/);
+  assert.equal(Object.values(assets.assets).filter(asset=>asset.caption).length,0);
+});

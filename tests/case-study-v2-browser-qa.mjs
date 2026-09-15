@@ -60,6 +60,7 @@ try{
     }));
     const proofCaptionCount=await page.locator('.csv2-proof-caption').count();
     const initialDisclosure=page.locator('.csv2-disclosure');await initialDisclosure.click();
+    const redundantEvidenceCaptions=await page.locator('.csv2-evidence-caption').allTextContents();
     const connectedContext=await page.evaluate(()=>{
       const image=[...document.querySelectorAll('[data-csv2-asset="daily-hours-project-health-context"]')].find(item=>item.getBoundingClientRect().width>0);
       const frame=image?.closest('.csv2-evidence-frame');
@@ -110,12 +111,12 @@ try{
       footerAfterMain:Boolean(document.querySelector('main + footer'))
     }));
     await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:true});
-    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,connectedContext,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
+    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,redundantEvidenceCaptions,connectedContext,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
     results.push(result);
     const expectedSections=['hero','first-question','the-shift','three-decisions','what-changed','outcomes','next-question','request-demo'];
     const expectedOutcomes=['Live product','~2 days','Continuous iteration'];
     const expectedOutcomeIndices=['01','02','03'];
-    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
+    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||redundantEvidenceCaptions.length||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
     await context.close();
   }
   for(const id of ['payment','voucher','dbs','booking']){
