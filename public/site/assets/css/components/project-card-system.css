@@ -39,7 +39,7 @@
 }
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action::before{position:absolute;top:0;left:var(--project-card-content-padding);right:var(--project-card-content-padding);height:var(--dimension-1px);background:color-mix(in srgb,var(--color-text-primary) 16%,transparent);content:"";pointer-events:none}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action::after{content:none!important;display:none!important}
-.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:none;transition:transform var(--motion-base) var(--ease-enter)}
 .work-card-v32[data-project-card-system="shared-v1"] .work-artifact{padding:0;overflow:hidden;background-color:var(--project-card-media-surface);background-position:center;background-repeat:no-repeat;background-size:contain}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__image-v225{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(1);transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
 
@@ -51,35 +51,36 @@
 
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__button,
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__button{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"content" "visual"}
-.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__content{grid-area:content;min-height:var(--dimension-430px)}
-.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__content{grid-area:content;min-height:calc(var(--dimension-300px) + var(--space-8))}
+.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-card-v32__content{grid-area:content;min-height:calc(var(--dimension-300px) + var(--space-8))}
+.work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-card-v32__content{grid-area:content;min-height:calc(var(--dimension-300px) + var(--space-6))}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="standard"] .work-artifact,
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .work-artifact{grid-area:visual;width:100%;height:auto;aspect-ratio:var(--project-card-system-media-ratio);border-top:var(--dimension-1px) solid var(--color-border)}
 .work-card-v32[data-project-card-system="shared-v1"][data-project-card-variant="compact"] .project-card__title{font-size:var(--project-card-compact-title)!important}
 
 /* Domain parity: same interaction language, without replacing Domain carousel layout ownership. */
-.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__cta-arrow{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}
+.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__cta-arrow{transition:transform var(--motion-base) var(--ease-enter)}
 
 @media(hover:hover) and (pointer:fine){
   .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover{border-color:var(--color-border);border-radius:var(--radius-lg);box-shadow:none;transform:none}
   .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__image-v225{transform:scale(var(--project-card-system-hover-scale)) translateY(calc(var(--dimension-2px) * -1));filter:saturate(1.06)}
   .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action{color:var(--color-text-primary);background:transparent}
-  .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))}
+  .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift))}
 }
 @media(hover:none),(pointer:coarse){.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__image-v225{transform:scale(1);filter:none}}
 
-/* Human-supplied lead visuals override only the media source. Canonical project data/route ownership remains unchanged. */
-:is(.work-card-v32[data-work-index-project="payment"] .work-artifact,.domain-project-card-v2[data-project="payment"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/payment.svg')}
-:is(.work-card-v32[data-work-index-project="voucher"] .work-artifact,.domain-project-card-v2[data-project="voucher"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/voucher.svg')}
+/* Canonical lead-visual projection. One media source is reused by Work and Domain. */
+:is(.work-card-v32[data-work-index-project="payment"] .work-artifact,.domain-project-card-v2[data-project="payment"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg')}
+:is(.work-card-v32[data-work-index-project="voucher"] .work-artifact,.domain-project-card-v2[data-project="voucher"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="voucher-center"] .work-artifact,.domain-project-card-v2[data-project="voucher-center"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/voucher-center/voucher-center-lead-visual-claim-journey-public-v1.jpg')}
-:is(.work-card-v32[data-work-index-project="game-center"] .work-artifact,.domain-project-card-v2[data-project="game-center"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/game-center.svg')}
-:is(.work-card-v32[data-work-index-project="dbs"] .work-artifact,.domain-project-card-v2[data-project="dbs"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/dbs.svg')}
-:is(.work-card-v32[data-work-index-project="booking"] .work-artifact,.domain-project-card-v2[data-project="booking"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/lead-visuals/booking.svg')}
+:is(.work-card-v32[data-work-index-project="game-center"] .work-artifact,.domain-project-card-v2[data-project="game-center"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg')}
+:is(.work-card-v32[data-work-index-project="dbs"] .work-artifact,.domain-project-card-v2[data-project="dbs"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg')}
+:is(.work-card-v32[data-work-index-project="booking"] .work-artifact,.domain-project-card-v2[data-project="booking"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="cathay-mortgage-assistant"] .work-artifact,.domain-project-card-v2[data-project="cathay-mortgage-assistant"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/cathay-mortgage-assistant/cathay-mortgage-assistant-lead-visual-consultation-system-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"] .work-artifact,.domain-project-card-v2[data-project="cathay-sit-online-account-opening"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"] .work-artifact,.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/cathay-sit-review-remediation-operations/cathay-review-remediation-lead-visual-remediation-operating-model-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"] .work-artifact,.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"] .domain-project-card-v2__visual){background-image:url('/site/assets/projects/ctbc-mortgage-self-service-app/ctbc-mortgage-self-service-lead-visual-service-architecture-public-v1.jpg')}
 :is(.work-card-v32[data-work-index-project="daily-hours"] .work-artifact,.domain-project-card-v2[data-project="daily-hours"] .domain-project-card-v2__visual){background-image:url('/site/assets/style-b/daily-hours-lead-visual.svg')}
+
 :is(.work-card-v32[data-work-index-project="payment"],.work-card-v32[data-work-index-project="voucher"],.work-card-v32[data-work-index-project="voucher-center"],.work-card-v32[data-work-index-project="game-center"],.work-card-v32[data-work-index-project="dbs"],.work-card-v32[data-work-index-project="booking"],.work-card-v32[data-work-index-project="cathay-mortgage-assistant"],.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"],.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"],.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"],.work-card-v32[data-work-index-project="daily-hours"]) .work-card-v32__image-v225{opacity:0}
 :is(.domain-project-card-v2[data-project="payment"],.domain-project-card-v2[data-project="voucher"],.domain-project-card-v2[data-project="voucher-center"],.domain-project-card-v2[data-project="game-center"],.domain-project-card-v2[data-project="dbs"],.domain-project-card-v2[data-project="booking"],.domain-project-card-v2[data-project="cathay-mortgage-assistant"],.domain-project-card-v2[data-project="cathay-sit-online-account-opening"],.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"],.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"],.domain-project-card-v2[data-project="daily-hours"]) .domain-project-card-v2__image{opacity:0}
 
