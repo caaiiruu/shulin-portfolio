@@ -113,3 +113,16 @@ test('CSV2 lifecycle model preserves semantics and stacks on mobile',()=>{
   assert.match(mobile,/\.csv2-lifecycle-state:not\(:last-child\)::after\{content:"↓"/);
   assert.match(mobile,/white-space:normal;text-overflow:clip/);
 });
+
+test('CSV2 uses an accessible single-open evidence accordion at tablet width',()=>{
+  const renderer=fs.readFileSync(path.join(root,'assets/js/case-study-v2.js'),'utf8');
+  const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
+  const tablet=css.slice(css.indexOf('@media(max-width:1000px)'),css.indexOf('@media(max-width:600px)'));
+  assert.match(tablet,/\.csv2-evidence-body\{display:none\}/);
+  assert.match(tablet,/\.csv2-accordion\{display:block;padding:0 48px 40px\}/);
+  assert.match(renderer,/summary\.setAttribute\('aria-controls',`csv2AccordionPanel-/);
+  assert.match(renderer,/panel\.setAttribute\('role','region'\)/);
+  assert.match(renderer,/panel\.setAttribute\('aria-labelledby',summary\.id\)/);
+  assert.match(renderer,/accordion\.querySelectorAll\('\.csv2-accordion-summary'\)\.forEach\(control=>control\.setAttribute\('aria-expanded','false'\)\)/);
+  assert.match(renderer,/evidenceBody\.hidden=expanded;accordion\.hidden=expanded/);
+});

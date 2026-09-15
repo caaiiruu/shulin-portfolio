@@ -85,6 +85,7 @@ body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-t
 .csv2-evidence-frame img{position:absolute;inset:var(--csv2-evidence-inset);display:block;width:calc(100% - 2 * var(--csv2-evidence-inset));height:calc(100% - 2 * var(--csv2-evidence-inset));object-fit:contain}
 .csv2-evidence-caption{margin:14px 0 0;color:var(--csv2-muted);font-size:.875rem;line-height:1.5}
 .csv2-accordion{display:none}
+.csv2-accordion[hidden]{display:none}
 .csv2-lifecycle-model{padding:16px;border:1px solid var(--csv2-line);border-radius:16px;background:#080c14}
 .csv2-lifecycle-states{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .csv2-lifecycle-state{position:relative;min-width:0;padding:14px 10px;border:1px solid var(--csv2-line);border-radius:12px;background:var(--csv2-panel-strong)}
@@ -124,7 +125,17 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-decision-nav{position:static;display:flex;flex-direction:row;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
   .csv2-decision-tab{min-width:220px}
   .csv2-decision-tab:hover{transform:none}
-  .csv2-evidence-body{grid-template-columns:180px minmax(0,1fr)}
+  .csv2-evidence-body{display:none}
+  .csv2-evidence-body[hidden]{display:none}
+  .csv2-accordion{display:block;padding:0 48px 40px}
+  .csv2-accordion-item{border-top:1px solid var(--csv2-line)}
+  .csv2-accordion-item:last-child{border-bottom:1px solid var(--csv2-line)}
+  .csv2-accordion-summary{display:grid;grid-template-columns:28px minmax(0,1fr) 24px;align-items:center;gap:12px;width:100%;padding:20px 8px;border:0;background:transparent;color:var(--csv2-muted);font:600 1rem/1.4 inherit;text-align:left;cursor:pointer}
+  .csv2-accordion-summary[aria-expanded="true"]{color:var(--csv2-text)}
+  .csv2-accordion-summary[aria-expanded="true"] .csv2-icon{transform:rotate(180deg)}
+  .csv2-accordion-index{color:var(--csv2-accent-text);font:600 .75rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .csv2-accordion-panel{padding:0 0 32px}
+  .csv2-accordion-panel[hidden]{display:none}
   .csv2-outcome-grid{grid-template-columns:1fr}
   .csv2-outcome{min-height:0}
   .csv2-outcome p{margin-top:32px}
@@ -148,13 +159,9 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-proof-frame{border-radius:12px}
   .csv2-evidence-frame{--csv2-evidence-inset:10px}
   .csv2-disclosure{padding:16px 22px}
-  .csv2-evidence-body{display:none}
-  .csv2-evidence-body[hidden]{display:none}
-  .csv2-accordion{display:block;padding:0 14px 22px}
-  .csv2-accordion-item{border-top:1px solid var(--csv2-line)}
-  .csv2-accordion-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;padding:18px 8px;border:0;background:transparent;color:var(--csv2-text);font:600 .9375rem/1.35 inherit;text-align:left;cursor:pointer}
-  .csv2-accordion-panel{padding:0 0 20px}
-  .csv2-accordion-panel[hidden]{display:none}
+  .csv2-accordion{padding:0 14px 22px}
+  .csv2-accordion-summary{grid-template-columns:24px minmax(0,1fr) 24px;gap:10px;padding:18px 8px;font-size:.9375rem;line-height:1.35}
+  .csv2-accordion-panel{padding-bottom:20px}
   .csv2-lifecycle-model{width:100%;box-sizing:border-box;padding:18px;overflow:visible}
   .csv2-lifecycle-states{display:flex;flex-direction:column;width:100%;gap:28px}
   .csv2-lifecycle-state{width:100%;box-sizing:border-box;overflow:visible}

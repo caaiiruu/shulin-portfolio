@@ -140,7 +140,7 @@
     const evidenceIndex=node('div','csv2-evidence-index');evidenceIndex.setAttribute('role','tablist');evidenceIndex.setAttribute('aria-label','Supporting evidence');
     const evidenceMedia=node('div','csv2-evidence-media');
     evidenceBody.append(evidenceIndex,evidenceMedia);
-    const accordion=node('div','csv2-accordion');
+    const accordion=node('div','csv2-accordion');accordion.hidden=true;
     evidence.append(disclosure,evidenceBody,accordion);stage.append(evidence);
     layout.append(tabs,stage);decisionsShell.append(head,layout);decisions.append(decisionsShell);
 
@@ -165,9 +165,10 @@
           const next=event.key==='Home'?0:event.key==='End'?last:(index+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1)+decision.supportingAssets.length)%decision.supportingAssets.length;
           renderEvidenceItem(decision,next);evidenceIndex.querySelectorAll('button')[next].focus();
         });
-        const item=node('div','csv2-accordion-item');const summary=node('button','csv2-accordion-summary');summary.type='button';summary.setAttribute('aria-expanded',String(index===0));
-        summary.append(node('span','',label),icon('expand_more'));
-        const panel=node('div','csv2-accordion-panel');panel.hidden=index!==0;panel.append(evidenceVisual(content,assets,id));
+        const item=node('div','csv2-accordion-item');const summary=node('button','csv2-accordion-summary');summary.type='button';summary.id=`csv2AccordionTrigger-${decision.id}-${index}`;summary.setAttribute('aria-expanded',String(index===0));summary.setAttribute('aria-controls',`csv2AccordionPanel-${decision.id}-${index}`);
+        summary.append(node('span','csv2-accordion-index',String(index+1).padStart(2,'0')),node('span','csv2-accordion-title',label),icon('expand_more'));
+        const panel=node('div','csv2-accordion-panel');panel.id=`csv2AccordionPanel-${decision.id}-${index}`;panel.setAttribute('role','region');panel.setAttribute('aria-labelledby',summary.id);panel.hidden=index!==0;
+        const caption=explanatoryCaption(asset,label,decision.title);panel.append(evidenceVisual(content,assets,id));if(caption)panel.append(node('p','csv2-evidence-caption',caption));
         summary.addEventListener('click',()=>{
           const opening=summary.getAttribute('aria-expanded')!=='true';
           accordion.querySelectorAll('.csv2-accordion-summary').forEach(control=>control.setAttribute('aria-expanded','false'));
@@ -184,7 +185,7 @@
       const apply=()=>{
         kicker.textContent=`Decision ${decision.number}`;title.textContent=decision.title;question.textContent=decision.question;direction.textContent=decision.direction;
         const asset=assetRecord(assets,decision.primaryAsset);proofFrame.replaceChildren(imageFor(asset,decision.primaryAsset));
-        buildEvidence(decision);disclosure.setAttribute('aria-expanded','false');disclosureLabel.textContent='Explore supporting evidence';evidenceBody.hidden=true;
+        buildEvidence(decision);disclosure.setAttribute('aria-expanded','false');disclosureLabel.textContent='Explore supporting evidence';evidenceBody.hidden=true;accordion.hidden=true;
         tabs.querySelectorAll('button').forEach((button,buttonIndex)=>{button.setAttribute('aria-selected',String(buttonIndex===index));button.tabIndex=buttonIndex===index?0:-1});
         stage.classList.remove('is-switching');
       };
@@ -203,7 +204,7 @@
     });
     disclosure.addEventListener('click',()=>{
       const expanded=disclosure.getAttribute('aria-expanded')==='true';
-      disclosure.setAttribute('aria-expanded',String(!expanded));evidenceBody.hidden=expanded;
+      disclosure.setAttribute('aria-expanded',String(!expanded));evidenceBody.hidden=expanded;accordion.hidden=expanded;
       disclosureLabel.textContent=expanded?'Explore supporting evidence':'Close supporting evidence';
     });
     renderDecision(0);

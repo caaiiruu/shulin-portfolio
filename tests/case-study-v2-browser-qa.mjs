@@ -59,6 +59,35 @@ try{
       zh:[...document.querySelectorAll('[data-lang-toggle]')].map(button=>({disabled:button.disabled,aria:button.getAttribute('aria-disabled')}))
     }));
     const proofCaptionCount=await page.locator('.csv2-proof-caption').count();
+    const tabs=page.locator('.csv2-decision-tab');
+    const decisionEvidence=[];
+    async function inspectAccordion(decision,{expandSecondary=false,capture=false}={}){
+      const accordion=page.locator('.csv2-accordion:visible');const summaries=accordion.locator('.csv2-accordion-summary');
+      const count=await summaries.count();const defaultFirst=await summaries.nth(0).getAttribute('aria-expanded');
+      const target=summaries.nth(expandSecondary&&count>1?1:0);await target.focus();
+      if(expandSecondary&&count>1){await target.press('Enter');await target.press('Space');await target.press('Space')}else{await target.press('Space');await target.press('Space')}
+      const state=await accordion.evaluate(element=>{
+        const triggers=[...element.querySelectorAll('.csv2-accordion-summary')];const open=triggers.filter(trigger=>trigger.getAttribute('aria-expanded')==='true');
+        const accordionRect=element.getBoundingClientRect();const triggerRect=triggers[0].getBoundingClientRect();const panel=open[0]&&document.getElementById(open[0].getAttribute('aria-controls'));
+        const proof=panel?.querySelector('.csv2-evidence-frame,.csv2-lifecycle-model');const proofRect=proof?.getBoundingClientRect();
+        return{
+          railVisible:document.querySelector('.csv2-evidence-body')?.getClientRects().length>0,
+          accordionVisible:accordionRect.width>0,
+          triggerRatio:triggerRect.width/(proofRect?.width||1),
+          expandedCount:open.length,
+          openIndex:triggers.indexOf(open[0]),
+          proofWidth:proofRect?.width||0,
+          accordionWidth:accordionRect.width,
+          proofContained:Boolean(proofRect&&proofRect.left>=accordionRect.left&&proofRect.right<=accordionRect.right),
+          mediaVisible:Boolean(panel&&panel.getClientRects().length&&proofRect?.width),
+          ariaValid:triggers.every(trigger=>{const controlled=document.getElementById(trigger.getAttribute('aria-controls'));return trigger.id&&controlled?.getAttribute('role')==='region'&&controlled.getAttribute('aria-labelledby')===trigger.id})
+        };
+      });
+      state.decision=decision;state.mode='accordion';state.defaultFirst=defaultFirst;state.focusRetained=await target.evaluate(element=>document.activeElement===element);
+      decisionEvidence.push(state);
+      if(capture)await page.locator('.csv2-evidence').screenshot({path:path.join(output,`daily-hours-871-${decision.toLowerCase().replace(/\s+/g,'-')}.png`)});
+      return state;
+    }
     const initialDisclosure=page.locator('.csv2-disclosure');await initialDisclosure.click();
     const redundantEvidenceCaptions=await page.locator('.csv2-evidence-caption').allTextContents();
     const connectedContext=await page.evaluate(()=>{
@@ -68,14 +97,23 @@ try{
       const frameRect=frame.getBoundingClientRect();const imageRect=image.getBoundingClientRect();
       return{frameWidth:frameRect.width,frameHeight:frameRect.height,imageWidth:imageRect.width,imageHeight:imageRect.height,contained:imageRect.width<=frameRect.width&&imageRect.height<=frameRect.height};
     });
+    let desktopEvidence=null;
+    if(viewport.width<=1000)await inspectAccordion('Project health',{capture:viewport.name==='871'});
+    else desktopEvidence=await page.evaluate(()=>{const rail=document.querySelector('.csv2-evidence-index').getBoundingClientRect();const media=document.querySelector('.csv2-evidence-media').getBoundingClientRect();return{mode:'indexed-explorer',railVisible:rail.width>0,accordionVisible:document.querySelector('.csv2-accordion')?.getClientRects().length>0,sideBySide:rail.right<=media.left,proofWidth:media.width}});
     await initialDisclosure.click();
-    const tabs=page.locator('.csv2-decision-tab');await tabs.nth(1).click();
+    await tabs.nth(1).click();
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Attention');
     const attention=await page.locator('.csv2-decision-title').textContent();
+    const disclosure=page.locator('.csv2-disclosure');await disclosure.click();
+    let interaction;
+    if(viewport.width<=1000)interaction=await inspectAccordion('Attention',{expandSecondary:true,capture:viewport.name==='871'});
+    else{const evidenceTabs=page.locator('.csv2-evidence-index-button');await evidenceTabs.nth(0).press('ArrowRight');interaction={mode:'indexed-explorer',visible:await page.locator('#csv2EvidenceBody').isVisible(),tabs:await evidenceTabs.count(),secondSelected:await evidenceTabs.nth(1).getAttribute('aria-selected'),focusMoved:await evidenceTabs.nth(1).evaluate(element=>document.activeElement===element)}}
+    await disclosure.click();
     await tabs.nth(1).press('ArrowRight');
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Lifecycle');
     const lifecycle=await page.locator('.csv2-decision-title').textContent();
-    await page.locator('.csv2-disclosure').click();
+    await disclosure.click();
+    if(viewport.width<=1000)await inspectAccordion('Lifecycle',{capture:viewport.name==='871'});
     const lifecycleModel=await page.evaluate(()=>{
       const model=[...document.querySelectorAll('.csv2-lifecycle-model')].find(element=>element.getClientRects().length);
       const states=[...model.querySelectorAll('.csv2-lifecycle-state')];
@@ -93,18 +131,6 @@ try{
       };
     });
     await page.locator('.csv2-lifecycle-model:visible').screenshot({path:path.join(output,`daily-hours-lifecycle-${viewport.name}.png`)});
-    await page.locator('.csv2-disclosure').click();
-    await tabs.nth(1).click();
-    await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Attention');
-    const disclosure=page.locator('.csv2-disclosure');await disclosure.click();
-    let interaction;
-    if(viewport.width<=600){
-      const accordions=page.locator('.csv2-accordion-summary');await accordions.nth(1).click();
-      interaction={mode:'accordion',open:await accordions.nth(1).getAttribute('aria-expanded'),first:await accordions.nth(0).getAttribute('aria-expanded'),focusRetained:await accordions.nth(1).evaluate(element=>document.activeElement===element)};
-    }else{
-      const evidenceTabs=page.locator('.csv2-evidence-index-button');await evidenceTabs.nth(0).press('ArrowRight');
-      interaction={mode:'indexed-explorer',visible:await page.locator('#csv2EvidenceBody').isVisible(),tabs:await evidenceTabs.count(),secondSelected:await evidenceTabs.nth(1).getAttribute('aria-selected'),focusMoved:await evidenceTabs.nth(1).evaluate(element=>document.activeElement===element)};
-    }
     await disclosure.click();const evidenceClosed=await disclosure.getAttribute('aria-expanded');
     await tabs.nth(0).click();
     await page.waitForFunction(()=>document.querySelector('.csv2-decision-title')?.textContent==='Project health');
@@ -130,12 +156,14 @@ try{
       footerAfterMain:Boolean(document.querySelector('main + footer'))
     }));
     await page.screenshot({path:path.join(output,`daily-hours-${viewport.name}.png`),fullPage:true});
-    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,redundantEvidenceCaptions,connectedContext,lifecycleModel,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
+    const result={viewport:viewport.name,route:'/work/daily-hours',status:response?.status(),overflow:initial.overflow,consoleErrors:[...consoleErrors,...runtimeErrors],brokenMedia:initial.broken,proofCaptionCount,redundantEvidenceCaptions,connectedContext,desktopEvidence,decisionEvidence,lifecycleModel,interaction,evidenceClosed,cta:{...ctaState,hoverTransform,focusState,keyboardActivated},ending,axeViolations,attention,lifecycle,sections:initial.sections};
     results.push(result);
     const expectedSections=['hero','first-question','the-shift','three-decisions','what-changed','outcomes','next-question','request-demo'];
     const expectedOutcomes=['Live product','~2 days','Continuous iteration'];
     const expectedOutcomeIndices=['01','02','03'];
-    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||redundantEvidenceCaptions.length||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||JSON.stringify(lifecycleModel.states)!==JSON.stringify([['Active','Forecast'],['Completed','Final'],['Billed','Receivable'],['Received','Cash received']])||lifecycleModel.distinction!=='Completed ≠ Billed ≠ Received'||!lifecycleModel.contained||lifecycleModel.clipped.length||!lifecycleModel.distinctionBelow||(viewport.name==='430'&&(lifecycleModel.orientation!=='vertical'||lifecycleModel.connector!=='"↓"'))||(viewport.name!=='430'&&lifecycleModel.orientation!=='horizontal')||evidenceClosed!=='false'||interaction.focusRetained===false||interaction.secondSelected==='false'||interaction.focusMoved===false||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
+    const accordionFailure=viewport.width<=1000&&(decisionEvidence.length!==3||decisionEvidence.some(item=>item.mode!=='accordion'||item.railVisible||!item.accordionVisible||item.triggerRatio<.95||item.expandedCount!==1||item.defaultFirst!=='true'||!item.proofContained||!item.mediaVisible||!item.ariaValid||!item.focusRetained)||(viewport.name==='871'&&decisionEvidence.some(item=>item.proofWidth<=600)));
+    const desktopFailure=viewport.width>1000&&(!desktopEvidence?.railVisible||desktopEvidence.accordionVisible||!desktopEvidence.sideBySide||interaction.mode!=='indexed-explorer'||interaction.secondSelected!=='true'||!interaction.focusMoved);
+    if(result.status!==200||result.overflow>0||result.consoleErrors.length||result.brokenMedia.length||initial.play||initial.zh.some(item=>!item.disabled||item.aria!=='true')||proofCaptionCount!==0||redundantEvidenceCaptions.length||!connectedContext?.contained||Math.abs(connectedContext.frameWidth/connectedContext.frameHeight-36/25)>.03||attention!=='Attention'||lifecycle!=='Lifecycle'||accordionFailure||desktopFailure||JSON.stringify(lifecycleModel.states)!==JSON.stringify([['Active','Forecast'],['Completed','Final'],['Billed','Receivable'],['Received','Cash received']])||lifecycleModel.distinction!=='Completed ≠ Billed ≠ Received'||!lifecycleModel.contained||lifecycleModel.clipped.length||!lifecycleModel.distinctionBelow||(viewport.name==='430'&&(lifecycleModel.orientation!=='vertical'||lifecycleModel.connector!=='"↓"'))||(viewport.name!=='430'&&lifecycleModel.orientation!=='horizontal')||evidenceClosed!=='false'||ctaState.tag!=='A'||!ctaState.href?.startsWith('mailto:r.c.shulin@gmail.com?subject=Daily%20Hours%20demo%20access%20request')||!ctaState.fits||ctaState.labelLines!==1||(viewport.name==='430'&&!ctaState.stacked)||(viewport.name!=='430'&&hoverTransform===ctaState.before)||focusState.outline==='none'||focusState.outlineWidth==='0px'||!keyboardActivated||axeViolations.length||ending.wave!=='none'||ending.legacyContactVisible||ending.redLegacyCta||!ending.footerAfterMain||JSON.stringify(ending.sections)!==JSON.stringify(expectedSections)||JSON.stringify(ending.outcomes)!==JSON.stringify(expectedOutcomes)||JSON.stringify(ending.outcomeIndices.map(item=>item.text))!==JSON.stringify(expectedOutcomeIndices)||ending.outcomeIndices.some(item=>!item.topRight))failures.push(result);
     await context.close();
   }
   for(const id of ['payment','voucher','dbs','booking']){
