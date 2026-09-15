@@ -43,8 +43,8 @@ jobs:
           if(content.publicLocaleMode!=='EN_ONLY_TEMPORARY') throw new Error('public locale mode drift');
           const dh=registry.routes?.['/work/daily-hours'];
           if(!dh||dh.projectId!=='daily-hours'||dh.presentationContract!=='case-study-v2') throw new Error('Daily Hours registry drift');
-          if(JSON.stringify(dh.workProjection?.domainIds)!==JSON.stringify(['operations'])) throw new Error(`Daily Hours Domain classification ${JSON.stringify(dh.workProjection?.domainIds)}`);
-          if(dh.workProjection?.company!=='Independent') throw new Error('Daily Hours public company projection missing');
+          if(dh.publicDiscovery!==true||dh.previewOnly!==false) throw new Error('Daily Hours public discovery drift');
+          if('domainIds' in (dh.workProjection||{})||'company' in (dh.workProjection||{})) throw new Error('Style B metadata leaked into frozen Daily Hours registry');
           NODE
 
       - name: Install build and run regression tests
@@ -125,7 +125,7 @@ jobs:
               const operations=domain.locator('.domain-tab').filter({hasText:/Operational|Operations/i}).first();
               assert(await operations.count()===1,`Domain ${width}: Operations tab missing`);
               await operations.click();
-              await page.waitForTimeout(120);
+              await page.waitForTimeout(160);
               assert(await domain.locator('.domain-project-card-v2[data-project="daily-hours"]').count()===1,`Domain ${width}: Daily Hours missing from Operations`);
               assert(await domain.locator('.domain-project-card-v2[data-project="daily-hours"] .domain-project-card-v2__cta').getAttribute('href')==='/work/daily-hours',`Domain ${width}: Daily Hours route`);
               if(width<=900) assert(await domain.locator('.domain-wheel-v2__control:visible').count()===0,`Domain ${width}: controls visible`);
@@ -139,6 +139,7 @@ jobs:
               assert(await dh.count()===1,`Work ${width}: Daily Hours card missing`);
               assert(await dh.locator('.work-card-v32__button').count()===1,`Work ${width}: Daily Hours not using shared ProjectCard control`);
               assert(await dh.locator('.project-card__meta').count()===1,`Work ${width}: Daily Hours shared card projection missing`);
+              assert((await dh.getAttribute('data-work-categories'))?.split(/\s+/).includes('operations'),`Work ${width}: Daily Hours missing Operations taxonomy`);
               const allCards=work.locator('.work-card-v32[data-project-card-variant]');
               for(let i=0;i<await allCards.count();i++){
                 const card=allCards.nth(i);
