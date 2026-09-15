@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultPresentationContract": "legacy",
+  "routes": {
+    "/work/daily-hours": {
+      "projectId": "daily-hours",
+      "presentationContract": "case-study-v2",
+      "contentOwner": "content/case-studies/daily-hours/content.json",
+      "assetOwner": "content/case-studies/daily-hours/asset-manifest.json",
+      "motionOwner": "content/case-studies/daily-hours/motion-manifest.json",
+      "publicDiscovery": false,
+      "sitemap": false,
+      "previewOnly": true
+    }
+  }
+}

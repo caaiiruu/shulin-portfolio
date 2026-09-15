@@ -1,0 +1,90 @@
+{
+  "identity": "DH-EVIDENCE-1.0",
+  "projectId": "daily-hours",
+  "status": "APPROVED_FOR_PHASE_1_IMPLEMENTATION",
+  "assets": {
+    "daily-hours-hero-static": {
+      "role": "Hero static visual",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-hero-static.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 208136,
+      "sha256": "8ad08d75cfde26cee7e62515e84dcbf21a62babac85f30aa04cae105022907b6",
+      "sourceFilename": "H-final-synthesis-decision.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Daily Hours overview showing capacity, project highlights, business performance, and project health."
+    },
+    "daily-hours-project-health-primary": {
+      "role": "Project Health primary proof",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-project-health-primary.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 186550,
+      "sha256": "b4edbc84d1a1eb1d6801bfab501cb0ef9a6ca88405cd96f63edc483307649b19",
+      "sourceFilename": "1440-en-project-detail.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Project detail view combining project health, forecast margin, effective rate, overtime risk, and work mix."
+    },
+    "daily-hours-project-health-context": {
+      "role": "Project Health connected-context evidence",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-project-health-context.png",
+      "width": 376,
+      "height": 641,
+      "bytes": 40191,
+      "sha256": "5062b880a47350f4a4f6b06ead8d68c14e47b2a70e6cab1e08f32e1de47aa4b3",
+      "sourceFilename": "C-effective-rate-margin-rework.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Efficiency and risk panel connecting progress efficiency, effective rate, overtime risk, and margin risk."
+    },
+    "daily-hours-attention-primary": {
+      "role": "Attention primary proof",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-attention-primary.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 145595,
+      "sha256": "f794ffea5e1b2a20ddd2ebcae4365c61eab75befaa2e2a30868e1b991c0a0e1c",
+      "sourceFilename": "D-project-ranking.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Performance view ranking projects by effective rate."
+    },
+    "daily-hours-attention-type-ranking": {
+      "role": "Attention ranking evidence",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-attention-type-ranking.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 148086,
+      "sha256": "1de287bab5541e512778fa102d36e0bb765132512c1e4c84d44e7b0b8afd741c",
+      "sourceFilename": "E-type-ranking.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Performance view ranking project types by effective rate."
+    },
+    "daily-hours-attention-rework": {
+      "role": "Attention rework evidence",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-attention-rework.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 138827,
+      "sha256": "eb3b13252d56b88c12273522083455b304468c67427194198869d634ad3d935d",
+      "sourceFilename": "F-rework-analysis.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Performance view comparing rework percentage across projects."
+    },
+    "daily-hours-lifecycle-active": {
+      "role": "Lifecycle active-state evidence",
+      "publicPath": "/site/assets/projects/daily-hours/daily-hours-lifecycle-active.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 165643,
+      "sha256": "2cf70aa039f29ea1781e52d1f329fbf8c6727c305240720be2f010df33e1fc2d",
+      "sourceFilename": "A-work-active-project.png",
+      "status": "HUMAN_APPROVED_FOR_PHASE_1",
+      "alt": "Active project workspace connecting tracked work, project health, billing, and upcoming activity."
+    },
+    "daily-hours-lifecycle-model": {
+      "role": "Lifecycle model",
+      "classification": "PRESENTATION_COMPONENT",
+      "externalAssetRequired": false,
+      "status": "HUMAN_APPROVED_FOR_PHASE_1"
+    }
+  }
+}

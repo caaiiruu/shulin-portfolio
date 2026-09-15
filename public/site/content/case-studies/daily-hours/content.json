@@ -1,0 +1,87 @@
+{
+  "identity": "DH-CONTENT-1.0",
+  "projectId": "daily-hours",
+  "presentationContract": "case-study-v2",
+  "localeStatus": {
+    "en": "APPROVED",
+    "zh": "PENDING_HUMAN_APPROVAL"
+  },
+  "seo": {
+    "title": "Daily Hours — Shulin Chou",
+    "description": "An independent freelance project-economics and decision workspace.",
+    "canonical": "https://shulinchou.com/work/daily-hours"
+  },
+  "hero": {
+    "eyebrow": "0→1 Product",
+    "lineOne": "Track work.",
+    "lineTwo": "Decide what’s worth it.",
+    "positioning": "An independent freelance project-economics and decision workspace."
+  },
+  "firstQuestion": {
+    "lineOne": "I could track every hour.",
+    "lineTwo": "But was the project actually healthy?"
+  },
+  "shift": {
+    "problemClose": "The problem wasn’t missing data. It was missing interpretation.",
+    "reframeOne": "Time is an input.",
+    "reframeTwo": "The decision is the product."
+  },
+  "lifecycle": ["Plan", "Work", "Monitor", "Settle", "Learn"],
+  "decisions": [
+    {
+      "id": "project-health",
+      "number": "01",
+      "title": "Project health",
+      "question": "Is this project still worth the effort?",
+      "direction": "Time becomes one signal inside a broader project-health model.",
+      "primaryAsset": "daily-hours-project-health-primary",
+      "supportingAssets": ["daily-hours-project-health-context"]
+    },
+    {
+      "id": "attention",
+      "number": "02",
+      "title": "Attention",
+      "question": "What needs action first?",
+      "direction": "Priority must surface before lower-value reporting detail.",
+      "primaryAsset": "daily-hours-attention-primary",
+      "supportingAssets": ["daily-hours-attention-type-ranking", "daily-hours-attention-rework"]
+    },
+    {
+      "id": "lifecycle",
+      "number": "03",
+      "title": "Lifecycle",
+      "question": "Can I still change the outcome—or am I learning from it?",
+      "direction": "Active → Completed → Billed → Received",
+      "primaryAsset": "daily-hours-lifecycle-active",
+      "supportingAssets": ["daily-hours-lifecycle-model"]
+    }
+  ],
+  "lifecycleModel": {
+    "states": ["Active", "Completed", "Billed", "Received"],
+    "semantics": ["Forecast", "Final", "Receivable", "Cash received"],
+    "label": "Completed ≠ Billed ≠ Received"
+  },
+  "whatChanged": {
+    "lineOne": "Time is an input.",
+    "lineTwo": "The decision is the product."
+  },
+  "outcomes": [
+    {
+      "title": "Project health",
+      "statement": "Time becomes one signal inside a broader project-health model."
+    },
+    {
+      "title": "Attention",
+      "statement": "Priority must surface before lower-value reporting detail."
+    },
+    {
+      "title": "Lifecycle",
+      "statement": "Completed ≠ Billed ≠ Received"
+    }
+  ],
+  "nextQuestion": "What should stay flexible—and what should become a system for other freelancers?",
+  "cta": {
+    "label": "Explore experiments",
+    "href": "/experiments"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "migrationId": "DAILY-HOURS-V2",
+  "phase": "Phase 1 isolated Preview implementation",
+  "status": "LOCAL_VALIDATED_PREVIEW_PENDING",
+  "certifiedProductionBaseline": {
+    "commit": "f0c4ca0a770d7adb1f29d39a2a514c8715e1944e",
+    "tree": "d66980327f1313c4827a50303dccb86330816d01",
+    "deployment": "dpl_2LBWUMectR5hDG8Jkm7xj3eiGRwE"
+  },
+  "sourceIdentity": "freelance-project-operations-tool",
+  "previewRoute": "/work/daily-hours",
+  "publicIACutover": false,
+  "legacyCanonicalProjectCount": 13,
+  "presentationContract": "case-study-v2",
+  "legacyPresentationContract": "legacy",
+  "productionModified": false
+}

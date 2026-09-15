@@ -1,0 +1,13 @@
+{
+  "identity": "DH-MOTION-0.0",
+  "projectId": "daily-hours",
+  "status": "VIDEO_PENDING",
+  "heroFilm": null,
+  "playCta": {
+    "enabled": false
+  },
+  "heroStaticAsset": "daily-hours-hero-static",
+  "reducedMotion": "use approved static hero visual",
+  "autoplay": false,
+  "fakeControls": false
+}

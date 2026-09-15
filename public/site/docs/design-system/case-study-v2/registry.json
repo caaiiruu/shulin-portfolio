@@ -1,0 +1,40 @@
+{
+  "id": "CSV2-1.0",
+  "name": "Case Study Presentation System v2",
+  "status": "APPROVED_FOR_PHASE_1_IMPLEMENTATION",
+  "scope": "Daily Hours Preview pilot only",
+  "presentationContract": "case-study-v2",
+  "defaultPresentationContract": "legacy",
+  "owners": {
+    "runtime": "assets/js/case-study-v2.js",
+    "styles": "assets/css/components/case-study-v2.css",
+    "routeRegistry": "content/project-presentation-registry.json",
+    "content": "content/case-studies/{projectId}/content.json",
+    "assets": "content/case-studies/{projectId}/asset-manifest.json",
+    "motion": "content/case-studies/{projectId}/motion-manifest.json"
+  },
+  "components": [
+    "CSV2Hero",
+    "CSV2Question",
+    "CSV2Shift",
+    "CSV2DecisionSelector",
+    "CSV2DecisionShowcase",
+    "CSV2PrimaryProof",
+    "CSV2EvidenceExplorer",
+    "CSV2LifecycleModel",
+    "CSV2OutcomeSummary",
+    "CSV2ClosingQuestion",
+    "CSV2RelatedCTA"
+  ],
+  "responsiveContracts": {
+    "desktop": 1419,
+    "tablet": 871,
+    "mobile": 430
+  },
+  "localization": {
+    "en": "APPROVED",
+    "zh": "PENDING_HUMAN_APPROVAL",
+    "pendingBehavior": "disabled-accessible-toggle"
+  },
+  "productionRelease": "BLOCKED"
+}
