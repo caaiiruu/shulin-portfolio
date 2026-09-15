@@ -23,39 +23,40 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import base64, re
+          import base64
+          import xml.etree.ElementTree as ET
           from pathlib import Path
 
-          expected = {
+          sources = {
               'payment': Path('public/site/assets/style-b/lead-visuals/payment.svg'),
               'voucher': Path('public/site/assets/style-b/lead-visuals/voucher.svg'),
-              'voucher-center': Path('public/site/assets/style-b/lead-visuals/voucher-center.svg'),
               'game-center': Path('public/site/assets/style-b/lead-visuals/game-center.svg'),
               'dbs': Path('public/site/assets/style-b/lead-visuals/dbs.svg'),
               'booking': Path('public/site/assets/style-b/lead-visuals/booking.svg'),
               'cathay-mortgage-assistant': Path('public/site/assets/style-b/lead-visuals/cathay-mortgage-assistant.svg'),
               'cathay-sit-online-account-opening': Path('public/site/assets/style-b/lead-visuals/cathay-sit-online-account-opening.svg'),
-              'cathay-sit-review-remediation-operations': Path('public/site/assets/style-b/lead-visuals/cathay-sit-review-remediation-operations.svg'),
-              'ctbc-mortgage-self-service-app': Path('public/site/assets/style-b/lead-visuals/ctbc-mortgage-self-service-app.svg'),
               'daily-hours': Path('public/site/assets/style-b/daily-hours-lead-visual.svg'),
           }
           out = Path('public/site/assets/style-b/lead-visuals-webp')
           out.mkdir(parents=True, exist_ok=True)
-          pattern = re.compile(r'data:image/webp;base64,([^\"\']+)')
-          missing = []
-          for project_id, source in expected.items():
+          for project_id, source in sources.items():
               if not source.exists():
-                  missing.append(str(source))
-                  continue
-              match = pattern.search(source.read_text())
-              if not match:
-                  raise SystemExit(f'No WebP payload in {source}')
-              payload = base64.b64decode(match.group(1))
+                  raise SystemExit(f'Missing lead visual source: {source}')
+              root = ET.parse(source).getroot()
+              image = next((node for node in root.iter() if node.tag.endswith('image')), None)
+              if image is None:
+                  raise SystemExit(f'No image node in {source}')
+              href = image.attrib.get('href') or image.attrib.get('{http://www.w3.org/1999/xlink}href') or ''
+              prefix = 'data:image/webp;base64,'
+              if not href.startswith(prefix):
+                  raise SystemExit(f'No WebP data URI in {source}')
+              encoded = ''.join(href[len(prefix):].split())
+              payload = base64.b64decode(encoded, validate=True)
               if payload[:4] != b'RIFF' or payload[8:12] != b'WEBP':
                   raise SystemExit(f'Invalid WebP payload in {source}')
-              (out / f'{project_id}.webp').write_bytes(payload)
-          if missing:
-              raise SystemExit('Missing lead visual sources: ' + ', '.join(missing))
+              target = out / f'{project_id}.webp'
+              target.write_bytes(payload)
+              print(f'{project_id}: {len(payload)} bytes -> {target}')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
