@@ -141,3 +141,8 @@
   .work-index-card__content,.work-index-card--hero .work-index-card__content,.work-index-card--secondary .work-index-card__content,.work-index-card--half .work-index-card__content,.work-index-card--compact .work-index-card__content{--work-card-content-padding:var(--space-5);padding:var(--work-card-content-padding)}
   .work-index-card__cta{margin:var(--space-3) calc(var(--work-card-content-padding) * -1) calc(var(--work-card-content-padding) * -1);padding:var(--space-3) var(--work-card-content-padding)}
 }
+
+/* Human review title-to-metrics breathing room v4 */
+.work-index-card--secondary .work-index-card__content,
+.work-index-card--half .work-index-card__content,
+.work-index-card--compact .work-index-card__content{grid-template-rows:auto auto minmax(var(--space-7),1fr) auto auto}
