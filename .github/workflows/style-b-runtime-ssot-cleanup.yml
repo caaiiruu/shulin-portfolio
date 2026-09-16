@@ -1,0 +1,79 @@
+name: Style B Runtime SSOT Cleanup
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-runtime-ssot-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Keep public manifest runtime-only and centralize brand tints in ProjectCard owner
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const manifestPath='public/site/content/portfolio-asset-manifest.json';
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          const dailyFile='public/site/assets/project-card-leads/daily-hours.jpg';
+          if(!fs.existsSync(dailyFile)) throw new Error('Daily Hours listing JPG missing');
+          manifest.projectCardLeadVisuals={
+            schemaVersion:1,
+            owner:'ProjectCard',
+            purpose:'Runtime-only non-legacy listing projection. Legacy ProjectCards resolve hero asset IDs from canonical portfolio content and asset items.',
+            dailyHours:{
+              projectId:'daily-hours',
+              publicPath:'/site/assets/project-card-leads/daily-hours.jpg',
+              type:'image/jpeg',
+              width:1600,
+              height:900
+            }
+          };
+          delete manifest.items['daily-hours-project-card-lead-v1'];
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+          cat >> public/site/assets/css/components/project-card.css <<'CSS'
+
+/* ProjectCard brand-family surfaces — canonical listing owner. Page owners do not assign tints. */
+:is(
+  .work-card-v32[data-work-index-project="payment"],
+  .work-card-v32[data-work-index-project="voucher"],
+  .work-card-v32[data-work-index-project="voucher-center"],
+  .work-card-v32[data-work-index-project="game-center"],
+  .domain-project-card-v2[data-project="payment"],
+  .domain-project-card-v2[data-project="voucher"],
+  .domain-project-card-v2[data-project="voucher-center"],
+  .domain-project-card-v2[data-project="game-center"]
+){--project-card-tint:rgb(230 239 255)}
+:is(.work-card-v32[data-work-index-project="dbs"],.domain-project-card-v2[data-project="dbs"]){--project-card-tint:rgb(252 232 234)}
+:is(.work-card-v32[data-work-index-project="booking"],.domain-project-card-v2[data-project="booking"]){--project-card-tint:rgb(232 242 255)}
+:is(
+  .work-card-v32[data-work-index-project="cathay-mortgage-assistant"],
+  .work-card-v32[data-work-index-project="cathay-sit-online-account-opening"],
+  .work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"],
+  .domain-project-card-v2[data-project="cathay-mortgage-assistant"],
+  .domain-project-card-v2[data-project="cathay-sit-online-account-opening"],
+  .domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"]
+){--project-card-tint:rgb(228 244 239)}
+:is(.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"],.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"]){--project-card-tint:rgb(226 242 238)}
+:is(.work-card-v32[data-work-index-project="daily-hours"],.domain-project-card-v2[data-project="daily-hours"]){--project-card-tint:rgb(230 237 245)}
+CSS
+
+          rm -f .github/workflows/style-b-runtime-ssot-cleanup.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Keep ProjectCard manifest runtime-only and centralize brand tints'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
