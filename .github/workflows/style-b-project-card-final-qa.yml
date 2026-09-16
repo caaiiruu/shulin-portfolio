@@ -155,8 +155,19 @@ jobs:
                 }
                 const button=cards.first().locator('.work-card-v32__button');
                 const arrow=cards.first().locator('.work-card-v32__action .icon-arrow--right');
-                const before=await arrow.boundingBox();await button.hover();await page.waitForTimeout(180);const after=await arrow.boundingBox();
-                assert(before&&after&&after.x>before.x&&Math.abs(after.y-before.y)<=1,`Work 1419: hover arrow ${JSON.stringify({before,after})}`);
+                const beforeTransform=await arrow.evaluate(el=>getComputedStyle(el).transform);
+                await button.hover();
+                await page.waitForTimeout(180);
+                const afterTransform=await arrow.evaluate(el=>getComputedStyle(el).transform);
+                const parseTranslate=transform=>{
+                  if(!transform||transform==='none')return {x:0,y:0};
+                  const match=transform.match(/^matrix\(([^)]+)\)$/);
+                  if(!match)return {x:NaN,y:NaN};
+                  const values=match[1].split(',').map(Number);
+                  return {x:values[4]||0,y:values[5]||0};
+                };
+                const before=parseTranslate(beforeTransform),after=parseTranslate(afterTransform);
+                assert(Number.isFinite(after.x)&&after.x>before.x&&Math.abs(after.y-before.y)<=0.01,`Work 1419: hover arrow transform ${JSON.stringify({beforeTransform,afterTransform,before,after})}`);
               }
               await work.screenshot({path:path.join(out,`work-${width}.png`)});
 
