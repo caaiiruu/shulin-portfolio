@@ -1,0 +1,109 @@
+name: Style B ProjectCard User-visible QA
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install, build and regression
+        run: |
+          npm run install:ci
+          npm run build
+          npm test
+      - name: Install Chromium
+        working-directory: public/site/qa
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Start static QA server
+        run: |
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/project-card-user-visible.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/site/work.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/project-card-user-visible.log
+          exit 1
+      - name: Verify real detail opening and fallback routes
+        working-directory: public/site/qa
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root=process.env.GITHUB_WORKSPACE;
+          const registry=JSON.parse(fs.readFileSync(path.join(root,'public/site/content/project-presentation-registry.json'),'utf8'));
+          const content=JSON.parse(fs.readFileSync(path.join(root,'public/site/content/portfolio-content.json'),'utf8'));
+          const browser=await chromium.launch({headless:true});
+          const base='http://127.0.0.1:4173';
+          const assert=(v,m)=>{if(!v)throw new Error(m)};
+          const normalized=url=>new URL(url,base).pathname.replace(/\.html$/,'').replace(/^\/site/,'')||'/';
+          const standalone=id=>Object.values(registry.routes||{}).some(entry=>entry.projectId===id&&entry.publicDiscovery===true&&entry.presentationContract!=='legacy');
+          const allIds=[...Object.keys(content.projects||{}),'daily-hours'];
+          for(const id of allIds){
+            const response=await fetch(`${base}/site/work/${id}.html`);
+            assert(response.ok,`${id}: generated fallback document missing`);
+          }
+          for(const width of [1419,871,430]){
+            const context=await browser.newContext({viewport:{width,height:1100},hasTouch:width===430,isMobile:width===430});
+            const page=await context.newPage();
+            const errors=[]; page.on('pageerror',e=>errors.push(e.message)); page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+            await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
+            await page.waitForSelector('.work-index[data-style-b-integrated="true"]');
+            const cards=page.locator('.work-card-v32[data-project-card-variant]');
+            const count=await cards.count();
+            assert(count===14,`Work ${width}: expected 14 cards, got ${count}`);
+            for(let i=0;i<count;i++){
+              const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project');
+              const control=card.locator('.work-card-v32__button');
+              assert(await control.evaluate(el=>el.tagName)==='A',`Work ${width} ${id}: card is not progressive anchor`);
+              const href=await control.getAttribute('href');
+              assert(normalized(href)===`/work/${id}`,`Work ${width} ${id}: wrong fallback href ${href}`);
+              if(standalone(id)){
+                assert(await control.getAttribute('data-project')===null,`Work ${width} ${id}: standalone card leaked legacy owner`);
+                continue;
+              }
+              assert(await control.getAttribute('data-project')===id,`Work ${width} ${id}: legacy enhancement owner missing`);
+              await control.click();
+              await page.waitForSelector('#detailDialog[open]',{timeout:5000});
+              assert(normalized(page.url())===`/work/${id}`,`Work ${width} ${id}: URL did not become canonical route`);
+              const title=(await page.locator('#detailTitle').innerText()).trim();
+              assert(title.length>0,`Work ${width} ${id}: detail title empty`);
+              await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
+              await page.waitForSelector('.work-index[data-style-b-integrated="true"]');
+            }
+            await page.goto(`${base}/site/index.html#domains`,{waitUntil:'networkidle'});
+            await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+            const domain=page.locator('#domains');
+            assert(await domain.locator('.domain-tab').count()===6,`Domain ${width}: six tabs missing`);
+            for(let i=0;i<6;i++){
+              await domain.locator('.domain-tab').nth(i).click(); await page.waitForTimeout(350);
+              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const id=await active.getAttribute('data-project'); const cta=active.locator('.domain-project-card-v2__cta');
+              assert(normalized(await cta.getAttribute('href'))===`/work/${id}`,`Domain ${width} ${id}: CTA fallback href wrong`);
+              if(!standalone(id)){
+                await cta.click();
+                await page.waitForSelector('#detailDialog[open]',{timeout:5000});
+                assert(normalized(page.url())===`/work/${id}`,`Domain ${width} ${id}: detail URL failed`);
+                assert((await page.locator('#detailTitle').innerText()).trim().length>0,`Domain ${width} ${id}: detail title empty`);
+                await page.goto(`${base}/site/index.html#domains`,{waitUntil:'networkidle'});
+                await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+              }
+            }
+            assert(errors.length===0,`Browser errors ${width}: ${JSON.stringify(errors)}`);
+            await context.close();
+          }
+          await browser.close();
+          NODE
