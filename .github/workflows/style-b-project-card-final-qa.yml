@@ -173,6 +173,7 @@ jobs:
               assert(await dh.count()===1,`Work ${width}: Daily Hours absent`);
               const dhMeta=(await dh.locator('.project-card__meta').innerText()).replace(/\s+/g,' ').trim();
               assert(/0→1 PRODUCT/i.test(dhMeta)&&/SHULIN STUDIO/i.test(dhMeta)&&/2026/.test(dhMeta),`Work ${width}: Daily Hours metadata ${dhMeta}`);
+              const workShots=[];
               for(let i=0;i<count;i++){
                 const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project'); const expected=expectedVisual(id); assert(expected,`Work ${width} ${id}: canonical visual missing`);
                 const img=card.locator('.work-card-v32__image-v225'); assert(await img.count()===1,`Work ${width} ${id}: image missing`);
@@ -190,6 +191,10 @@ jobs:
                 assert(normalizePath(href)===`/work/${id}`,`Work ${width} ${id}: whole-card route ${href}`);
                 await card.scrollIntoViewIfNeeded();
                 await waitForImage(img,`Work ${width} ${id}`,{evidenceMode:true});
+                await page.waitForTimeout(80);
+                const shot=`work-card-${width}-${String(i+1).padStart(2,'0')}-${id}.png`;
+                await card.screenshot({path:path.join(out,shot),animations:'disabled'});
+                workShots.push({id,shot});
               }
               await page.evaluate(()=>window.scrollTo(0,0));
               await page.waitForTimeout(250);
@@ -231,7 +236,7 @@ jobs:
                 assert(normalizePath(href)===`/work/${id}`,`Domain ${width} ${id}: CTA route ${href}`);
                 const shot=`domain-${width}-${index+1}.png`; await domain.screenshot({path:path.join(out,shot),animations:'disabled'}); shots.push({id,shot});
               }
-              report[width]={workCards:count,variants,domains:shots,consoleErrors:errors};
+              report[width]={workCards:count,variants,workShots,domains:shots,consoleErrors:errors};
               assert(errors.length===0,`Console errors ${width}: ${JSON.stringify(errors)}`);
               await context.close();
             }
