@@ -31,13 +31,6 @@
   };
   const firstText = (...values) => values.map(scalarText).find(Boolean) || '';
 
-  if (!document.querySelector('link[data-project-card-system="shared-v1"]')) {
-    const systemStyle = document.createElement('link');
-    systemStyle.rel = 'stylesheet';
-    systemStyle.href = '/site/assets/css/components/project-card-system.css';
-    systemStyle.dataset.projectCardSystem = 'shared-v1';
-    document.head.append(systemStyle);
-  }
   if (!document.querySelector('script[data-project-card-media="shared-v1"]')) {
     const mediaScript = document.createElement('script');
     mediaScript.src = '/site/assets/js/project-card-media.js';
