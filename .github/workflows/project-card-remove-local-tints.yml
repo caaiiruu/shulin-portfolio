@@ -1,0 +1,40 @@
+name: ProjectCard Remove Local Tints
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/project-card-remove-local-tints.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Remove page-owned ProjectCard tints
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          files=[Path('public/site/assets/js/work.js'),Path('public/site/assets/js/domain-experience.js')]
+          for p in files:
+              s=p.read_text()
+              if p.name=='work.js':
+                  s=s.replace("  const tintPalette=['rgb(223 235 246)','rgb(231 229 249)','rgb(248 225 214)','rgb(224 241 233)','rgb(245 235 210)','rgb(230 238 225)'];\n  const tintFor=id=>tintPalette[[...id].reduce((sum,char)=>sum+char.charCodeAt(0),0)%tintPalette.length];\n",'')
+                  s=s.replace(";card.style.setProperty('--project-card-tint',tintFor(id));",';')
+              else:
+                  s=s.replace("  const tintPalette = ['rgb(223 235 246)','rgb(231 229 249)','rgb(248 225 214)','rgb(224 241 233)','rgb(245 235 210)','rgb(230 238 225)'];\n  const tintForProject = key => tintPalette[[...key].reduce((sum,char)=>sum+char.charCodeAt(0),0)%tintPalette.length];\n",'')
+                  s=s.replace(";article.style.setProperty('--project-card-tint',tintForProject(key));",';')
+              p.write_text(s)
+          PY
+          rm -f .github/workflows/project-card-remove-local-tints.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Remove page-owned ProjectCard brand tints'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
