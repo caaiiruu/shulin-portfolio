@@ -204,3 +204,11 @@
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(span,strong,h2,dl,dt,dd),
 .domain-project-card-v2[data-project-card-system="shared-v1"],
 .domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}
+
+/* Final shared Domain media contract — must stay after migrated legacy internals. */
+.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__visual{padding:0!important;overflow:hidden;background:var(--project-card-media-surface)!important;background-image:none!important}
+.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__image{display:block!important;width:100%;height:100%;opacity:1!important;object-fit:cover!important;object-position:center}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button,
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(a,span,strong,h2,dl,dt,dd),
+.domain-project-card-v2[data-project-card-system="shared-v1"],
+.domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}
