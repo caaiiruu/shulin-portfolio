@@ -1,0 +1,50 @@
+name: Style B Final QA SSOT Rewire
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-final-qa-ssot-rewire.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rewire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Rewire canonical ProjectCard QA
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const qaPath='.github/workflows/style-b-project-card-final-qa.yml';
+          const assetPath='public/site/content/portfolio-asset-manifest.json';
+          const qa=fs.readFileSync(qaPath,'utf8')
+            .replace("const registry=JSON.parse(fs.readFileSync('public/site/content/project-card-registry.json','utf8'));", "const assetManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));\n          const registry=assetManifest.projectCardLeadVisuals;")
+            .replace("if(registry.leadVisualContract?.canonicalFormat!=='jpg') throw new Error('canonical Lead Visual must be JPG');", "if(registry.canonicalFormat!=='jpg') throw new Error('canonical Lead Visual must be JPG');")
+            .replace("if(registry.leadVisualContract?.assetOwnerDirectory!=='/site/assets/project-card-leads/') throw new Error('Lead Visual owner directory drift');", "if(registry.assetOwnerDirectory!=='/site/assets/project-card-leads/') throw new Error('Lead Visual owner directory drift');")
+            .replace("if(projectCard?.assetRegistry!=='content/project-card-registry.json') throw new Error('ProjectCard asset registry drift');", "if(projectCard?.assetRegistry!=='content/portfolio-asset-manifest.json#projectCardLeadVisuals') throw new Error('ProjectCard asset registry drift');")
+            .replace("const registry=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/project-card-registry.json'),'utf8'));", "const assetManifest=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/portfolio-asset-manifest.json'),'utf8'));\n          const registry=assetManifest.projectCardLeadVisuals;");
+          if(qa.includes('project-card-registry.json')) throw new Error('stale ProjectCard registry reference remains in QA');
+          fs.writeFileSync(qaPath,qa);
+
+          const asset=JSON.parse(fs.readFileSync(assetPath,'utf8'));
+          const pc=asset.projectCardLeadVisuals;
+          if(!pc) throw new Error('projectCardLeadVisuals namespace missing');
+          pc.canonicalFormat='jpg';
+          pc.assetOwnerDirectory='/site/assets/project-card-leads/';
+          fs.writeFileSync(assetPath,JSON.stringify(asset,null,2)+'\n');
+          NODE
+          rm -f .github/workflows/style-b-final-qa-ssot-rewire.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Rewire ProjectCard QA to canonical asset manifest SSOT'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
