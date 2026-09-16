@@ -103,11 +103,31 @@
     .find(({ entry }) => entry.projectId === id && entry.publicDiscovery === true) || null;
   const projectionForProject = id => registryEntryForProject(id)?.entry?.workProjection || null;
   const projectIdFromCard = card => {
+    if (card?.dataset?.workIndexProject) return card.dataset.workIndexProject;
     const control = card.querySelector('.work-card-v32__button');
     if (control?.dataset.project) return control.dataset.project;
     const route = control?.dataset.publicWorkRoute || control?.getAttribute('href');
-    if (route) return REGISTRY.routes?.[route]?.projectId || '';
+    if (route) return REGISTRY.routes?.[route]?.projectId || String(route).split('?')[0].split('#')[0].split('/').filter(Boolean).pop() || '';
     return '';
+  };
+  const canonicalRouteForProject = id => registryEntryForProject(id)?.route || projectionForProject(id)?.route || `/work/${encodeURIComponent(id)}`;
+  const normalizeCardNavigation = (id, control) => {
+    const href = canonicalRouteForProject(id);
+    let link = control;
+    if (control.tagName !== 'A') {
+      link = document.createElement('a');
+      [...control.attributes].forEach(({ name, value }) => {
+        if (name !== 'type' && name !== 'data-project') link.setAttribute(name, value);
+      });
+      link.innerHTML = control.innerHTML;
+      control.replaceWith(link);
+    } else {
+      link.removeAttribute('data-project');
+    }
+    link.setAttribute('href', href);
+    link.dataset.publicWorkRoute = href;
+    link.setAttribute('aria-label', link.getAttribute('aria-label') || `View ${id} case study`);
+    return link;
   };
   const allSourceCards = () => [...sourceGallery.querySelectorAll(':scope > .work-card-v32'), ...(sourceArchive ? [...sourceArchive.querySelectorAll(':scope > .work-card-v32')] : [])]
     .filter((card, index, array) => array.indexOf(card) === index && projectIdFromCard(card));
@@ -188,7 +208,8 @@
   };
 
   const decorateCard = (card, variant) => {
-    const id=projectIdFromCard(card);const project=publicProjects[id]||{};const projection=projectionForProject(id);const control=card.querySelector('.work-card-v32__button');const content=card.querySelector('.work-card-v32__content');if(!id||!control||!content)return null;
+    const id=projectIdFromCard(card);const project=publicProjects[id]||{};const projection=projectionForProject(id);let control=card.querySelector('.work-card-v32__button');const content=card.querySelector('.work-card-v32__content');if(!id||!control||!content)return null;
+    control=normalizeCardNavigation(id,control);
     card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');
     card.classList.remove('work-card-v32--featured','work-card-v32--compact');
     const meta=document.createElement('div');meta.className='project-card__meta';
