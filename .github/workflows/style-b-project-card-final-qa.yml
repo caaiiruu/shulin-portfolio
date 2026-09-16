@@ -68,8 +68,10 @@ jobs:
           if(!assets.projectCardLeadVisuals?.brandTints?.['daily-hours']) throw new Error('Daily Hours canonical ProjectCard brand tint missing');
           const work=fs.readFileSync('public/site/assets/js/work.js','utf8');
           const domain=fs.readFileSync('public/site/assets/js/domain-experience.js','utf8');
+          const home=fs.readFileSync('public/site/assets/js/home.js','utf8');
           const media=fs.readFileSync('public/site/assets/js/project-card-media.js','utf8');
           for(const source of [work,domain]) if(/tintPalette|tintForProject|tintFor\s*=/.test(source)) throw new Error('page-owned brand tint remains');
+          if(/createProjectCard\(key,'domain'\)/.test(home)||/related\?\.replaceChildren\(\.\.\.cards\)/.test(home)) throw new Error('Home parallel Domain ProjectCard renderer remains');
           if(/lead-visuals-webp|style-b\/lead-visuals\//.test(media)) throw new Error('retired Lead Visual runtime path remains');
           if(!media.includes("publicContent?.imagePlan")||!media.includes("projectCardLeadVisuals?.dailyHours")) throw new Error('runtime does not resolve canonical SSOT owners');
           NODE
@@ -126,6 +128,19 @@ jobs:
             const after=getComputedStyle(el,'::after');
             return style.textDecorationLine==='none' && (after.content==='none'||after.display==='none');
           });
+          const waitForImage=async (img,label)=>{
+            const loaded=await img.evaluate(async el=>{
+              if(el.complete&&el.naturalWidth>0)return true;
+              return await new Promise(resolve=>{
+                let settled=false;
+                const finish=value=>{if(settled)return;settled=true;resolve(value)};
+                el.addEventListener('load',()=>finish(el.naturalWidth>0),{once:true});
+                el.addEventListener('error',()=>finish(false),{once:true});
+                setTimeout(()=>finish(el.complete&&el.naturalWidth>0),5000);
+              });
+            });
+            assert(loaded,`${label}: image bytes failed to load`);
+          };
           const report={};
           try{
             for(const width of widths){
@@ -169,7 +184,11 @@ jobs:
                 const control=card.locator('.work-card-v32__button');
                 const href=await control.getAttribute('href'); assert(href,`Work ${width} ${id}: whole-card route missing`);
                 assert(normalizePath(href)===`/work/${id}`,`Work ${width} ${id}: whole-card route ${href}`);
+                await card.scrollIntoViewIfNeeded();
+                await waitForImage(img,`Work ${width} ${id}`);
               }
+              await page.evaluate(()=>window.scrollTo(0,0));
+              await page.waitForTimeout(150);
               await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
               const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
               if(await payment.count()){
@@ -177,9 +196,15 @@ jobs:
                 await Promise.all([page.waitForLoadState('domcontentloaded'),payment.click()]);
                 assert(normalizePath(page.url())===expected,`Work ${width}: whole-card navigation failed`);
               }
-              await page.goto(base+'/site/index.html',{waitUntil:'networkidle'});
-              const domain=page.locator('#domains'); await domain.scrollIntoViewIfNeeded();
+              await page.goto(base+'/site/index.html#domains',{waitUntil:'networkidle'});
+              const domain=page.locator('#domains');
               await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
+              await page.waitForTimeout(350);
+              const domainHeading=domain.locator('h2').first();
+              assert(await domainHeading.count()===1,`Domain ${width}: heading missing`);
+              const headerBox=await page.locator('.site-header').boundingBox();
+              const headingBox=await domainHeading.boundingBox();
+              assert(headerBox&&headingBox&&headingBox.y>=headerBox.y+headerBox.height-1,`Domain ${width}: heading obscured by fixed header`);
               assert(await domain.locator('.domain-tab').count()===6,`Domain ${width}: expected six tabs`);
               const shots=[];
               for(let index=0;index<6;index++){
@@ -193,6 +218,7 @@ jobs:
                 const img=active.locator('.domain-project-card-v2__image');
                 assert(await img.getAttribute('src')===expected,`Domain ${width} ${id}: wrong Lead Visual`);
                 assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
+                await waitForImage(img,`Domain ${width} ${id}`);
                 assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
                 assert(await noUnderline(active.locator('.domain-project-card-v2__cta')),`Domain ${width} ${id}: CTA underline`);
                 const tint=await active.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim()); const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Domain ${width} ${id}: tint ${tint} expected ${expectedTint}`);
