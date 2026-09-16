@@ -69,9 +69,7 @@ jobs:
           let js=fs.readFileSync(path,'utf8');
           const anchor="  const visualForProject = id => {";
           if(!js.includes(anchor)) throw new Error('visual resolver anchor missing');
-          if(!js.includes('const tintForProject')) {
-            js=js.replace(anchor,"  const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';\n\n"+anchor);
-          }
+          if(!js.includes('const tintForProject')) js=js.replace(anchor,"  const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';\n\n"+anchor);
           const workAnchor="    const visual = visualForProject(id);\n    const frame = card.querySelector('.work-artifact');";
           if(!js.includes(workAnchor)) throw new Error('work hydration anchor missing');
           js=js.replace(workAnchor,"    const visual = visualForProject(id);\n    const tint = tintForProject(id);\n    if (tint) card.style.setProperty('--project-card-tint', tint);\n    else card.style.removeProperty('--project-card-tint');\n    const frame = card.querySelector('.work-artifact');");
@@ -79,23 +77,6 @@ jobs:
           if(!js.includes(domainAnchor)) throw new Error('domain hydration anchor missing');
           js=js.replace(domainAnchor,"    const visual = visualForProject(id);\n    const tint = tintForProject(id);\n    if (tint) card.style.setProperty('--project-card-tint', tint);\n    else card.style.removeProperty('--project-card-tint');\n    const frame = card.querySelector('.domain-project-card-v2__visual');");
           fs.writeFileSync(path,js);
-          NODE
-
-      - name: Make final QA read tint expectation from canonical manifest
-        run: |
-          node <<'NODE'
-          const fs=require('fs');
-          const path='.github/workflows/style-b-project-card-final-qa.yml';
-          let text=fs.readFileSync(path,'utf8');
-          const start="          const brandTint=(id)=>{";
-          const end="          const assert=(value,message)=>{if(!value)throw new Error(message)};";
-          const i=text.indexOf(start), j=text.indexOf(end);
-          if(i<0||j<0||j<=i) throw new Error('brandTint QA block not found');
-          text=text.slice(0,i)+"          const brandTint=id=>assets.projectCardLeadVisuals?.brandTints?.[id]||'';\n"+text.slice(j);
-          const staticNeedle="          const daily=assets.projectCardLeadVisuals?.dailyHours;";
-          if(!text.includes(staticNeedle)) throw new Error('static Daily Hours QA anchor missing');
-          text=text.replace(staticNeedle,"          const tints=assets.projectCardLeadVisuals?.brandTints||{};\n          for(const [id] of entries) if(!tints[id]) throw new Error(`${id}: ProjectCard tint missing from canonical manifest`);\n          if(!tints['daily-hours']) throw new Error('daily-hours: ProjectCard tint missing from canonical manifest');\n          const daily=assets.projectCardLeadVisuals?.dailyHours;");
-          fs.writeFileSync(path,text);
           NODE
 
       - name: Commit SSOT repair
