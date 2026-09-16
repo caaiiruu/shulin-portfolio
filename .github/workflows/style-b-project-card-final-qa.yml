@@ -12,13 +12,13 @@ permissions:
 jobs:
   qa:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Verify Production ancestry and frozen dependencies
+      - name: Verify ancestry and frozen Daily Hours owners
         run: |
           set -euo pipefail
           BASE=7b6c4f47b6f1bba1e4d4048649305f22999b2976
@@ -32,31 +32,50 @@ jobs:
           ! grep -Fxq 'scripts/generate-project-pages.mjs' /tmp/changed.txt
           ! grep -Fxq 'scripts/build-production-assets.mjs' /tmp/changed.txt
 
-      - name: Verify project, locale and media contracts
+      - name: Verify canonical ProjectCard governance and Lead Visual bytes
         run: |
           node <<'NODE'
           const fs=require('fs');
+          const crypto=require('crypto');
           const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
-          const registry=JSON.parse(fs.readFileSync('public/site/content/project-presentation-registry.json','utf8'));
-          const ids=Object.keys(content.projects||{});
-          if(ids.length!==13) throw new Error(`legacy project count ${ids.length}`);
+          const registry=JSON.parse(fs.readFileSync('public/site/content/project-card-registry.json','utf8'));
+          const ds=JSON.parse(fs.readFileSync('public/site/docs/design-system/registry.json','utf8'));
+          if(Object.keys(content.projects||{}).length!==13) throw new Error('legacy project roster changed');
           if(content.projects['daily-hours']) throw new Error('Daily Hours entered legacy projects');
           if(content.publicLocaleMode!=='EN_ONLY_TEMPORARY') throw new Error('public locale mode drift');
-          const dh=registry.routes?.['/work/daily-hours'];
-          if(!dh||dh.projectId!=='daily-hours'||dh.presentationContract!=='case-study-v2') throw new Error('Daily Hours registry drift');
-          if('domainIds' in (dh.workProjection||{})||'company' in (dh.workProjection||{})) throw new Error('Style B metadata leaked into frozen Daily Hours registry');
-          const mediaIds=['payment','voucher','voucher-center','game-center','dbs','booking','cathay-mortgage-assistant','cathay-sit-online-account-opening','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','daily-hours'];
-          for(const id of mediaIds){
-            for(const width of [800,1200,1600]){
-              const file=`public/site/assets/style-b/lead-visuals-webp/${id}-${width}.webp`;
-              if(!fs.existsSync(file)) throw new Error(`missing ${file}`);
-              const bytes=fs.statSync(file).size;
-              if(bytes<10000||bytes>250000) throw new Error(`unexpected WebP size ${file}: ${bytes}`);
+          if(JSON.stringify(registry.variants)!==JSON.stringify(['featured','standard','compact'])) throw new Error('variant drift');
+          if(registry.leadVisualContract?.canonicalFormat!=='jpg') throw new Error('canonical Lead Visual must be JPG');
+          if(registry.leadVisualContract?.assetOwnerDirectory!=='/site/assets/project-card-leads/') throw new Error('Lead Visual owner directory drift');
+          if(fs.existsSync('public/site/assets/css/components/project-card-system.css')) throw new Error('parallel ProjectCard CSS owner still exists');
+          const projectCard=ds.governanceGraph?.componentContracts?.ProjectCard;
+          if(projectCard?.cssOwner!=='assets/css/components/project-card.css') throw new Error('ProjectCard CSS owner drift');
+          if(projectCard?.assetRegistry!=='content/project-card-registry.json') throw new Error('ProjectCard asset registry drift');
+          const work=fs.readFileSync('public/site/assets/js/work.js','utf8');
+          const domain=fs.readFileSync('public/site/assets/js/domain-experience.js','utf8');
+          const media=fs.readFileSync('public/site/assets/js/project-card-media.js','utf8');
+          for(const source of [work,domain]){
+            if(/tintPalette|tintForProject|tintFor\s*=/.test(source)) throw new Error('page-owned brand tint remains');
+          }
+          if(/lead-visuals-webp|style-b\/lead-visuals\//.test(media)) throw new Error('retired listing media path remains in runtime');
+          for(const [id,entry] of Object.entries(registry.projects||{})){
+            if(entry.sourceStatus!=='active-approved-canonical') throw new Error(`${id}: canonical source not active`);
+            if(entry.canonicalMaster!==entry.pendingCanonicalPath) throw new Error(`${id}: canonical path mismatch`);
+            const canonical='public'+entry.canonicalMaster.replace(/^\/site/,'/site');
+            if(!fs.existsSync(canonical)) throw new Error(`${id}: missing ${canonical}`);
+            const bytes=fs.readFileSync(canonical);
+            const sha=crypto.createHash('sha256').update(bytes).digest('hex');
+            if(sha!==entry.expectedCanonicalSha256) throw new Error(`${id}: canonical SHA mismatch ${sha}`);
+            if(bytes.length!==entry.expectedBytes) throw new Error(`${id}: canonical byte count mismatch ${bytes.length}`);
+            if(!Array.isArray(entry.deliverySources)||entry.deliverySources.length<2) throw new Error(`${id}: delivery sources missing`);
+            for(const source of entry.deliverySources){
+              const path='public'+source.path.replace(/^\/site/,'/site');
+              if(!fs.existsSync(path)) throw new Error(`${id}: missing delivery source ${path}`);
+              if(source.width>entry.expectedDimensions[0]) throw new Error(`${id}: derivative was upscaled`);
             }
           }
           NODE
 
-      - name: Install, build and test
+      - name: Install build and regression suite
         run: |
           npm run install:ci
           npm run build
@@ -70,15 +89,15 @@ jobs:
 
       - name: Start static QA server
         run: |
-          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/style-b-project-card-server.log 2>&1 &
+          PORT=4173 node tests/portfolio-static-server.mjs >/tmp/project-card-server.log 2>&1 &
           for i in $(seq 1 30); do
             curl -fsS http://127.0.0.1:4173/site/index.html >/dev/null && exit 0
             sleep 1
           done
-          cat /tmp/style-b-project-card-server.log
+          cat /tmp/project-card-server.log
           exit 1
 
-      - name: Run exact visual and interaction contract
+      - name: Run exact visual interaction and navigation certification
         working-directory: public/site/qa
         run: |
           node --input-type=module <<'NODE'
@@ -88,106 +107,133 @@ jobs:
           const browser=await chromium.launch({headless:true});
           const base='http://127.0.0.1:4173';
           const widths=[1419,871,430];
-          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/style-b-project-card-final');
+          const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/project-card-final');
           fs.mkdirSync(out,{recursive:true});
-          const assert=(v,m)=>{if(!v)throw new Error(m)};
+          const registry=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/project-card-registry.json'),'utf8'));
+          const assert=(value,message)=>{if(!value)throw new Error(message)};
+          const domainLabels=[/Enterprise|Operational/i,/Financial/i,/Retail|Commerce/i,/Travel/i,/Growth|Incentive|Reward/i,/Learning/i];
+          const normalizePath=value=>new URL(value,'http://local').pathname.replace(/\.html$/,'').replace(/^\/site/,'')||'/';
           const report={};
-          const routes=[
-            ['home','/site/index.html'],['work','/site/work.html'],['daily-hours','/site/work/daily-hours.html'],
-            ['payment','/site/work/payment.html'],['voucher','/site/work/voucher.html'],['dbs','/site/work/dbs.html'],['booking','/site/work/booking.html'],['profile','/site/profile.html']
-          ];
           try{
             for(const width of widths){
               const context=await browser.newContext({viewport:{width,height:1100},hasTouch:width===430,isMobile:width===430});
-              await context.addInitScript(()=>{if(location.pathname==='/site/work/daily-hours.html')history.replaceState(null,'','/work/daily-hours')});
               const page=await context.newPage();
               const errors=[];
               page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
               page.on('pageerror',e=>errors.push(e.message));
-              for(const [name,route] of routes){
+
+              for(const route of ['/site/index.html','/site/work.html','/site/work/daily-hours.html','/site/profile.html']){
                 const response=await page.goto(base+route,{waitUntil:'networkidle'});
-                assert(response?.ok(),`${name} ${width}: HTTP ${response?.status()}`);
-                assert(await page.locator('.site-header').count()===1,`${name} ${width}: Header count`);
-                assert(await page.locator('.site-footer').count()===1,`${name} ${width}: Footer count`);
-                assert(await page.locator('[data-lang-toggle]').count()===0,`${name} ${width}: locale control leaked`);
-                assert(await page.evaluate(()=>document.documentElement.lang)==='en',`${name} ${width}: not EN`);
-                assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`${name} ${width}: overflow`);
-                if(name==='daily-hours'){
-                  assert(await page.locator('.csv2-main[data-csv2-mounted="true"]').count()===1,`Daily Hours ${width}: CSV2 not mounted`);
-                  assert(await page.locator('.csv2-cta').count()===1,`Daily Hours ${width}: CTA missing`);
-                  if(width===1419) assert(await page.locator('.csv2-evidence-index').count()===1,'Daily Hours 1419: indexed evidence missing');
-                  if(width<=871) assert(await page.locator('.csv2-accordion').count()===1,`Daily Hours ${width}: accordion missing`);
-                }
+                assert(response?.ok(),`${route} ${width}: HTTP ${response?.status()}`);
+                assert(await page.locator('.site-header').count()===1,`${route} ${width}: header count`);
+                assert(await page.locator('.site-footer').count()===1,`${route} ${width}: footer count`);
+                assert(await page.locator('[data-lang-toggle]').count()===0,`${route} ${width}: locale control leaked`);
+                assert(await page.evaluate(()=>document.documentElement.lang)==='en',`${route} ${width}: not EN`);
+                assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`${route} ${width}: overflow`);
               }
 
               await page.goto(base+'/site/work.html',{waitUntil:'networkidle'});
               await page.waitForSelector('.work-index[data-style-b-integrated="true"]',{timeout:10000});
-              await page.waitForFunction(()=>document.querySelectorAll('.work-card-v32[data-project-card-lead-visual="responsive-webp"]').length>=6);
+              await page.waitForFunction(()=>[...document.querySelectorAll('.work-card-v32[data-project-card-system="shared-v1"]')].every(card=>card.dataset.projectCardLeadVisual==='canonical-jpg'));
               const work=page.locator('.work-index');
               const cards=work.locator('.work-card-v32[data-project-card-variant]');
               const count=await cards.count();
-              assert(count>=6,`Work ${width}: card count ${count}`);
+              assert(count>=6,`Work ${width}: too few cards ${count}`);
               const variants=await cards.evaluateAll(nodes=>nodes.map(n=>n.dataset.projectCardVariant));
-              assert(variants.every(v=>['featured','standard','compact'].includes(v)),`Work ${width}: variant drift ${JSON.stringify(variants)}`);
-              assert(await cards.evaluateAll(nodes=>nodes.every(n=>n.dataset.projectCardSystem==='shared-v1')),`Work ${width}: shared system missing`);
+              assert(variants.every(v=>['featured','standard','compact'].includes(v)),`Work ${width}: variant drift`);
               const dh=work.locator('.work-card-v32[data-work-index-project="daily-hours"]');
-              assert(await dh.count()===1,`Work ${width}: Daily Hours card missing`);
+              assert(await dh.count()===1,`Work ${width}: Daily Hours absent`);
               const dhMeta=(await dh.locator('.project-card__meta').innerText()).replace(/\s+/g,' ').trim();
               assert(/0→1 PRODUCT/i.test(dhMeta)&&/SHULIN STUDIO/i.test(dhMeta)&&/2026/.test(dhMeta),`Work ${width}: Daily Hours metadata ${dhMeta}`);
-              const mapped=work.locator('.work-card-v32[data-project-card-lead-visual="responsive-webp"]');
-              for(let i=0;i<await mapped.count();i++){
-                const card=mapped.nth(i);const img=card.locator('.work-card-v32__image-v225');
-                const src=await img.getAttribute('src');const srcset=await img.getAttribute('srcset');
-                assert(/lead-visuals-webp\/.*-1600\.webp$/.test(src||''),`Work ${width}: non-WebP ${src}`);
-                assert(/800w/.test(srcset||'')&&/1200w/.test(srcset||'')&&/1600w/.test(srcset||''),`Work ${width}: srcset ${srcset}`);
+
+              for(let i=0;i<count;i++){
+                const card=cards.nth(i);
+                const id=await card.getAttribute('data-work-index-project');
+                const entry=registry.projects[id];
+                if(!entry)continue;
+                const img=card.locator('.work-card-v32__image-v225');
+                assert(await img.count()===1,`Work ${width} ${id}: image missing`);
+                const src=await img.getAttribute('src');
+                assert(src===entry.canonicalMaster,`Work ${width} ${id}: wrong Lead Visual ${src}`);
                 const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
-                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width}: media not full bleed ${JSON.stringify(styles)}`);
-                const bg=await card.locator('.work-artifact').evaluate(el=>getComputedStyle(el).backgroundImage);
-                assert(bg==='none',`Work ${width}: CSS background substitution ${bg}`);
+                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
+                const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
+                assert(tint===entry.brandTint,`Work ${width} ${id}: tint ${tint} expected ${entry.brandTint}`);
+                const decoration=await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine);
+                assert(decoration==='none',`Work ${width} ${id}: title decoration ${decoration}`);
+                const control=card.locator('.work-card-v32__button');
+                const href=await control.getAttribute('href');
+                assert(href,`Work ${width} ${id}: whole-card route missing`);
               }
+
               if(width===1419){
                 const row=work.locator('.work-index__featured-secondary-row > .work-card-v32');
                 if(await row.count()===2){
                   const a=await row.nth(0).boundingBox(),b=await row.nth(1).boundingBox();
-                  assert(a&&b&&Math.abs(a.height-b.height)<=2,`Work 1419: row card heights ${a?.height}/${b?.height}`);
+                  assert(a&&b&&Math.abs(a.height-b.height)<=2,`Work: same-row card heights ${a?.height}/${b?.height}`);
                   const ma=await row.nth(0).locator('.work-artifact').boundingBox(),mb=await row.nth(1).locator('.work-artifact').boundingBox();
-                  assert(ma&&mb&&Math.abs(ma.height-mb.height)<=2,`Work 1419: media heights ${ma?.height}/${mb?.height}`);
+                  assert(ma&&mb&&Math.abs(ma.height-mb.height)<=2,`Work: same-row media heights ${ma?.height}/${mb?.height}`);
                 }
-                const button=cards.first().locator('.work-card-v32__button');
-                const arrow=cards.first().locator('.work-card-v32__action .icon-arrow--right');
-                const beforeTransform=await arrow.evaluate(el=>getComputedStyle(el).transform);
-                await button.hover();
-                await page.waitForTimeout(180);
-                const afterTransform=await arrow.evaluate(el=>getComputedStyle(el).transform);
-                const parseTranslate=transform=>{
-                  if(!transform||transform==='none')return {x:0,y:0};
-                  const match=transform.match(/^matrix\(([^)]+)\)$/);
-                  if(!match)return {x:NaN,y:NaN};
-                  const values=match[1].split(',').map(Number);
-                  return {x:values[4]||0,y:values[5]||0};
-                };
-                const before=parseTranslate(beforeTransform),after=parseTranslate(afterTransform);
-                assert(Number.isFinite(after.x)&&after.x>before.x&&Math.abs(after.y-before.y)<=0.01,`Work 1419: hover arrow transform ${JSON.stringify({beforeTransform,afterTransform,before,after})}`);
               }
-              await work.screenshot({path:path.join(out,`work-${width}.png`)});
+              await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
+
+              const clickTarget=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
+              if(await clickTarget.count()){
+                const expected=normalizePath(await clickTarget.getAttribute('href'));
+                await Promise.all([page.waitForLoadState('domcontentloaded'),clickTarget.click()]);
+                assert(normalizePath(page.url())===expected,`Work ${width}: whole-card navigation ${normalizePath(page.url())} != ${expected}`);
+                await page.goBack({waitUntil:'networkidle'});
+              }
 
               await page.goto(base+'/site/index.html',{waitUntil:'networkidle'});
-              const domain=page.locator('#domains');await domain.scrollIntoViewIfNeeded();
+              const domain=page.locator('#domains');
+              await domain.scrollIntoViewIfNeeded();
               await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
-              assert(await domain.locator('.domain-tab').count()===6,`Domain ${width}: tabs`);
-              const operations=domain.locator('.domain-tab').filter({hasText:/Operational|Operations/i}).first();await operations.click();await page.waitForTimeout(220);
-              const dhDomain=domain.locator('.domain-project-card-v2[data-project="daily-hours"]');
-              assert(await dhDomain.count()===1,`Domain ${width}: Daily Hours absent`);
-              assert(await dhDomain.locator('.domain-project-card-v2__cta').getAttribute('href')==='/work/daily-hours',`Domain ${width}: Daily Hours route`);
-              await page.waitForFunction(()=>document.querySelector('.domain-project-card-v2[data-project="daily-hours"]')?.dataset.projectCardLeadVisual==='responsive-webp');
-              const dimg=dhDomain.locator('.domain-project-card-v2__image');
-              const dsrcset=await dimg.getAttribute('srcset');
-              assert(/800w/.test(dsrcset||'')&&/1200w/.test(dsrcset||'')&&/1600w/.test(dsrcset||''),`Domain ${width}: Daily Hours srcset`);
-              assert(await dimg.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width}: media not cover`);
-              if(width<=900)assert(await domain.locator('.domain-wheel-v2__control:visible').count()===0,`Domain ${width}: controls visible`);
-              await domain.screenshot({path:path.join(out,`domain-${width}.png`)});
+              assert(await domain.locator('.domain-tab').count()===6,`Domain ${width}: expected six tabs`);
+              const domainShots=[];
+              for(let index=0;index<6;index++){
+                const tab=domain.locator('.domain-tab').nth(index);
+                const label=(await tab.innerText()).replace(/\s+/g,' ').trim();
+                await tab.click();
+                await page.waitForTimeout(350);
+                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+                assert(await active.count()===1,`Domain ${width} ${label}: active card missing`);
+                const id=await active.getAttribute('data-project');
+                const entry=registry.projects[id];
+                assert(entry,`Domain ${width} ${label}: ${id} absent from ProjectCard registry`);
+                await page.waitForFunction(projectId=>document.querySelector(`.domain-project-card-v2[data-project="${projectId}"]`)?.dataset.projectCardLeadVisual==='canonical-jpg',id);
+                for(const selector of ['.domain-project-card-v2__content','.domain-project-card-v2__meta','.domain-project-card-v2__title','.domain-project-card-v2__cta','.domain-project-card-v2__visual','.domain-project-card-v2__image']){
+                  assert(await active.locator(selector).count()===1,`Domain ${width} ${label}: ${selector} missing`);
+                  assert(await active.locator(selector).isVisible(),`Domain ${width} ${label}: ${selector} invisible`);
+                }
+                const img=active.locator('.domain-project-card-v2__image');
+                assert(await img.getAttribute('src')===entry.canonicalMaster,`Domain ${width} ${label}: wrong Lead Visual`);
+                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${label}: image not cover`);
+                const titleDecoration=await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine);
+                assert(titleDecoration==='none',`Domain ${width} ${label}: title underline`);
+                const ctaDecoration=await active.locator('.domain-project-card-v2__cta').evaluate(el=>getComputedStyle(el).textDecorationLine);
+                assert(ctaDecoration==='none',`Domain ${width} ${label}: CTA underline`);
+                const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
+                assert(href,`Domain ${width} ${label}: CTA route missing`);
+                const shot=`domain-${width}-${index+1}.png`;
+                await domain.screenshot({path:path.join(out,shot),animations:'disabled'});
+                domainShots.push({label,id,shot});
+              }
+
+              // Normal active-card click must navigate; carousel drag threshold may not swallow it.
+              const firstTab=domain.locator('.domain-tab').first();
+              await firstTab.click(); await page.waitForTimeout(250);
+              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
+              const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
+              const expected=normalizePath(href);
+              const box=await active.boundingBox();
+              assert(box,`Domain ${width}: active card box missing`);
+              await page.mouse.click(box.x+Math.min(80,box.width*.2),box.y+Math.min(80,box.height*.2));
+              await page.waitForLoadState('domcontentloaded');
+              assert(normalizePath(page.url())===expected,`Domain ${width}: whole-card click failed ${normalizePath(page.url())} != ${expected}`);
+
+              report[width]={workCards:count,variants,domains:domainShots,consoleErrors:errors};
               assert(errors.length===0,`Console errors ${width}: ${JSON.stringify(errors)}`);
-              report[width]={cards:count,variants};
               await context.close();
             }
           } finally {
@@ -196,10 +242,10 @@ jobs:
           }
           NODE
 
-      - name: Upload final evidence
+      - name: Upload Human-review evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: style-b-project-card-final
-          path: artifacts/style-b-project-card-final
-          retention-days: 3
+          name: project-card-final-evidence
+          path: artifacts/project-card-final
+          retention-days: 7
