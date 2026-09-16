@@ -241,8 +241,6 @@
     return candidates.sort((a,b)=>b.tier-a.tier).slice(0,3);
   };
 
-  const tintPalette = ['rgb(223 235 246)','rgb(231 229 249)','rgb(248 225 214)','rgb(224 241 233)','rgb(245 235 210)','rgb(230 238 225)'];
-  const tintForProject = key => tintPalette[[...key].reduce((sum,char)=>sum+char.charCodeAt(0),0)%tintPalette.length];
   const buildVisual = (project,key,projection) => {
     const visual = document.createElement('div');
     visual.className = 'domain-project-card-v2__visual';
@@ -266,7 +264,7 @@
     const projection = projectionForProject(key);
     const article = document.createElement('article');
     article.className='domain-project-card-v2 domain-project-card-v2--large';
-    article.dataset.project=key;article.dataset.projectCardSystem='shared-v1';article.dataset.projectCardVariant='featured';article.style.setProperty('--project-card-tint',tintForProject(key));
+    article.dataset.project=key;article.dataset.projectCardSystem='shared-v1';article.dataset.projectCardVariant='featured';
     const content=document.createElement('div');content.className='domain-project-card-v2__content';
     const meta=document.createElement('div');meta.className='domain-project-card-v2__meta';
     const type=document.createElement('span');type.className='domain-project-card-v2__type';type.textContent=readType(key,project,projection);

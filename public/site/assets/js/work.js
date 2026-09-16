@@ -167,8 +167,6 @@
     return out.sort((a,b)=>b.tier-a.tier).slice(0,3);
   };
 
-  const tintPalette=['rgb(223 235 246)','rgb(231 229 249)','rgb(248 225 214)','rgb(224 241 233)','rgb(245 235 210)','rgb(230 238 225)'];
-  const tintFor=id=>tintPalette[[...id].reduce((sum,char)=>sum+char.charCodeAt(0),0)%tintPalette.length];
   const normalizeCategories = (id, project, card, projection) => {
     const existing=(card.dataset.workCategories||card.dataset.workCategory||'').split(/\s+/).filter(Boolean);
     const set=new Set(['all']);
@@ -191,7 +189,7 @@
 
   const decorateCard = (card, variant) => {
     const id=projectIdFromCard(card);const project=publicProjects[id]||{};const projection=projectionForProject(id);const control=card.querySelector('.work-card-v32__button');const content=card.querySelector('.work-card-v32__content');if(!id||!control||!content)return null;
-    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');card.style.setProperty('--project-card-tint',tintFor(id));
+    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');
     card.classList.remove('work-card-v32--featured','work-card-v32--compact');
     const meta=document.createElement('div');meta.className='project-card__meta';
     const type=document.createElement('span');type.className='project-card__type';type.textContent=readType(id,project,projection);
