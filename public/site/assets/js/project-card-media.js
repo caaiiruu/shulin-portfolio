@@ -22,6 +22,8 @@
     return planned || project?.heroVisualBrief?.assetId || '';
   };
 
+  const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';
+
   const visualForProject = id => {
     if (!assetManifest) return null;
     if (id === 'daily-hours') {
@@ -69,6 +71,9 @@
   const hydrateWorkCard = card => {
     const id = card.dataset.workIndexProject;
     const visual = visualForProject(id);
+    const tint = tintForProject(id);
+    if (tint) card.style.setProperty('--project-card-tint', tint);
+    else card.style.removeProperty('--project-card-tint');
     const frame = card.querySelector('.work-artifact');
     if (!frame) return;
     if (!visual) {
@@ -92,6 +97,9 @@
   const hydrateDomainCard = card => {
     const id = card.dataset.project;
     const visual = visualForProject(id);
+    const tint = tintForProject(id);
+    if (tint) card.style.setProperty('--project-card-tint', tint);
+    else card.style.removeProperty('--project-card-tint');
     const frame = card.querySelector('.domain-project-card-v2__visual');
     if (!frame) return;
     if (!visual) {

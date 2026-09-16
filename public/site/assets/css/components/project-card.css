@@ -212,18 +212,3 @@
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(a,span,strong,h2,dl,dt,dd),
 .domain-project-card-v2[data-project-card-system="shared-v1"],
 .domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}
-
-
-/* ProjectCard brand-family surfaces — canonical listing owner. */
-:is(.work-card-v32[data-work-index-project="payment"],.work-card-v32[data-work-index-project="voucher"],.work-card-v32[data-work-index-project="voucher-center"],.work-card-v32[data-work-index-project="game-center"],.domain-project-card-v2[data-project="payment"],.domain-project-card-v2[data-project="voucher"],.domain-project-card-v2[data-project="voucher-center"],.domain-project-card-v2[data-project="game-center"]){--project-card-tint:rgb(230 239 255)}
-:is(.work-card-v32[data-work-index-project="dbs"],.domain-project-card-v2[data-project="dbs"]){--project-card-tint:rgb(252 232 234)}
-:is(.work-card-v32[data-work-index-project="booking"],.domain-project-card-v2[data-project="booking"]){--project-card-tint:rgb(232 242 255)}
-:is(.work-card-v32[data-work-index-project="cathay-mortgage-assistant"],.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"],.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"],.domain-project-card-v2[data-project="cathay-mortgage-assistant"],.domain-project-card-v2[data-project="cathay-sit-online-account-opening"],.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"]){--project-card-tint:rgb(228 244 239)}
-:is(.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"],.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"]){--project-card-tint:rgb(226 242 238)}
-:is(.work-card-v32[data-work-index-project="daily-hours"],.domain-project-card-v2[data-project="daily-hours"]){--project-card-tint:rgb(230 237 245)}
-
-
-/* ProjectCard extended brand-family surfaces. */
-:is(.work-card-v32[data-work-index-project="booking-taxi-strategy"],.domain-project-card-v2[data-project="booking-taxi-strategy"]){--project-card-tint:rgb(232 242 255)}
-:is(.work-card-v32[data-work-index-project="taishin-p2p-marketplace"],.domain-project-card-v2[data-project="taishin-p2p-marketplace"]){--project-card-tint:rgb(252 232 234)}
-:is(.work-card-v32[data-work-index-project="bandzo"],.domain-project-card-v2[data-project="bandzo"]){--project-card-tint:rgb(237 235 250)}

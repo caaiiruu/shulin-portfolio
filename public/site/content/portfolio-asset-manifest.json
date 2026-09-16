@@ -2255,6 +2255,24 @@
       "type": "image/jpeg",
       "width": 1600,
       "height": 900
+    },
+    "brandTints": {
+      "payment": "rgb(230 239 255)",
+      "voucher": "rgb(230 239 255)",
+      "voucher-center": "rgb(230 239 255)",
+      "game-center": "rgb(230 239 255)",
+      "dbs": "rgb(252 232 234)",
+      "booking": "rgb(232 242 255)",
+      "booking-taxi-pickup-service-strategy": "rgb(232 242 255)",
+      "booking-taxi-strategy": "rgb(232 242 255)",
+      "taishin-p2p-marketplace-platform": "rgb(252 232 234)",
+      "taishin-p2p-marketplace": "rgb(252 232 234)",
+      "cathay-mortgage-assistant": "rgb(228 244 239)",
+      "cathay-sit-online-account-opening": "rgb(228 244 239)",
+      "cathay-sit-review-remediation-operations": "rgb(228 244 239)",
+      "ctbc-mortgage-self-service-app": "rgb(226 242 238)",
+      "bandzo": "rgb(237 235 250)",
+      "daily-hours": "rgb(230 237 245)"
     }
   }
 }
