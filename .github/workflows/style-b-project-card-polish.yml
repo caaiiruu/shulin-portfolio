@@ -1,0 +1,70 @@
+name: Style B ProjectCard Final Polish
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-polish.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Fix canonical arrow orientation and evidence loading
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          css_path=Path('public/site/assets/css/components/project-card-system.css')
+          css=css_path.read_text()
+          old='.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:none;transition:transform var(--motion-base) var(--ease-enter)}'
+          new='.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}'
+          if old not in css and new not in css:
+              raise SystemExit('base Work arrow rule not found')
+          css=css.replace(old,new)
+          old_hover='.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift))}'
+          new_hover='.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))}'
+          if old_hover not in css and new_hover not in css:
+              raise SystemExit('Work hover arrow rule not found')
+          css=css.replace(old_hover,new_hover)
+          old_domain='    transform:translateX(var(--project-card-system-hover-shift))\n  }'
+          new_domain='    transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))\n  }'
+          # Replace the final full-bleed Domain hover rule only; tolerate already-patched state.
+          if old_domain in css:
+              css=css.replace(old_domain,new_domain,1)
+          css_path.write_text(css)
+
+          qa_path=Path('.github/workflows/style-b-project-card-final-qa.yml')
+          qa=qa_path.read_text()
+          anchor="              if(width===1419){\n"
+          load_block="""              for(let i=0;i<await mapped.count();i++){
+                const card=mapped.nth(i);
+                await card.scrollIntoViewIfNeeded();
+                const img=card.locator('.work-card-v32__image-v225');
+                await img.evaluate(async el=>{if(!el.complete)await new Promise(resolve=>el.addEventListener('load',resolve,{once:true}));if(el.decode)await el.decode().catch(()=>{});});
+              }
+              await page.evaluate(()=>window.scrollTo(0,0));
+"""
+          if load_block.strip() not in qa:
+              if anchor not in qa:
+                  raise SystemExit('QA 1419 anchor missing')
+              qa=qa.replace(anchor,load_block+anchor,1)
+          qa_path.write_text(qa)
+          PY
+          rm -f .github/workflows/style-b-project-card-polish.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/css/components/project-card-system.css .github/workflows/style-b-project-card-final-qa.yml .github/workflows/style-b-project-card-polish.yml
+          git diff --check --cached
+          git commit -m 'Polish ProjectCard arrow parity and visual evidence loading'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
