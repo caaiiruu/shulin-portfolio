@@ -444,11 +444,28 @@
           "project-card-cta-gap-mobile"
         ],
         "variants": [
+          "Primary",
+          "Experiment",
+          "Related",
+          "Search",
           "Featured",
           "Standard",
           "Compact"
         ],
         "variantConsumers": {
+          "Primary": [
+            "homepageCards",
+            "workCards"
+          ],
+          "Experiment": [
+            "experimentCards"
+          ],
+          "Related": [
+            "relatedCards"
+          ],
+          "Search": [
+            "searchCards"
+          ],
           "Featured": [
             "homepageCards",
             "workCards",
