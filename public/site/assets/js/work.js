@@ -118,36 +118,19 @@
   };
   const normalizeCardNavigation = (id, control) => {
     const href = canonicalRouteForProject(id);
-    if (!usesStandalonePage(id)) {
-      let button = control;
-      if (control.tagName !== 'BUTTON') {
-        button = document.createElement('button');
-        [...control.attributes].forEach(({ name, value }) => {
-          if (name !== 'href' && name !== 'data-public-work-route') button.setAttribute(name, value);
-        });
-        while (control.firstChild) button.append(control.firstChild);
-        control.replaceWith(button);
-      }
-      button.type = 'button';
-      button.removeAttribute('href');
-      button.dataset.project = id;
-      button.dataset.publicWorkRoute = href;
-      button.setAttribute('aria-label', button.getAttribute('aria-label') || `View ${id} case study`);
-      return button;
-    }
     let link = control;
     if (control.tagName !== 'A') {
       link = document.createElement('a');
       [...control.attributes].forEach(({ name, value }) => {
-        if (name !== 'type' && name !== 'data-project') link.setAttribute(name, value);
+        if (name !== 'type') link.setAttribute(name, value);
       });
       while (control.firstChild) link.append(control.firstChild);
       control.replaceWith(link);
-    } else {
-      link.removeAttribute('data-project');
     }
     link.setAttribute('href', href);
     link.dataset.publicWorkRoute = href;
+    if (usesStandalonePage(id)) link.removeAttribute('data-project');
+    else link.dataset.project = id;
     link.setAttribute('aria-label', link.getAttribute('aria-label') || `View ${id} case study`);
     return link;
   };
