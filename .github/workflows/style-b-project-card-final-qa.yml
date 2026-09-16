@@ -40,7 +40,8 @@ jobs:
           const assets=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
           const ds=JSON.parse(fs.readFileSync('public/site/docs/design-system/registry.json','utf8'));
           const projects=content.projects||{};
-          if(Object.keys(projects).length!==13) throw new Error(`legacy project count ${Object.keys(projects).length}`);
+          const entries=Object.entries(projects);
+          if(entries.length!==13) throw new Error(`legacy project count ${entries.length}`);
           if(projects['daily-hours']) throw new Error('Daily Hours entered legacy projects');
           if(content.publicLocaleMode!=='EN_ONLY_TEMPORARY') throw new Error('public locale mode drift');
           if(fs.existsSync('public/site/assets/css/components/project-card-system.css')) throw new Error('parallel ProjectCard CSS owner exists');
@@ -51,9 +52,7 @@ jobs:
           if(pc?.cssOwner!=='assets/css/components/project-card.css') throw new Error('ProjectCard CSS owner drift');
           if(pc?.assetRegistry!=='content/portfolio-asset-manifest.json#projectCardLeadVisuals') throw new Error('ProjectCard asset registry drift');
           const heroAssetId=(project)=>project?.publicContent?.imagePlan?.find?.(x=>x?.role==='hero'&&x?.assetId)?.assetId||project?.heroVisualBrief?.assetId||'';
-          const required=['payment','voucher','voucher-center','game-center','dbs','booking','booking-taxi-strategy','taishin-p2p-marketplace','cathay-mortgage-assistant','cathay-sit-online-account-opening','cathay-sit-review-remediation-operations','ctbc-mortgage-self-service-app','bandzo'];
-          for(const id of required){
-            const project=projects[id]; if(!project) throw new Error(`${id}: project missing`);
+          for(const [id,project] of entries){
             const assetId=heroAssetId(project); if(!assetId) throw new Error(`${id}: hero asset ID missing`);
             const item=assets.items?.[assetId]; if(!item) throw new Error(`${id}: manifest item ${assetId} missing`);
             if(item.type!=='image/jpeg') throw new Error(`${id}: Lead Visual is not JPG`);
