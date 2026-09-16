@@ -78,3 +78,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Outside-product-work alignment and approved abstract new-experiences treatment. */
+.profile-interests-v39__head>p{justify-self:end;align-self:end}
+.interest-tile-v39__abstract{display:grid;grid-template-columns:repeat(3,auto);align-items:center;justify-content:center;gap:var(--space-3);width:100%;height:100%;min-height:var(--dimension-180px);background:var(--brand-100)}
+.interest-tile-v39__abstract :is(i,b,em){display:block;border:var(--dimension-2px) solid var(--color-text-primary)}
+.interest-tile-v39__abstract i{width:var(--dimension-68px);height:var(--dimension-68px);border-radius:50%;background:var(--color-surface)}
+.interest-tile-v39__abstract b{width:var(--dimension-96px);height:var(--dimension-52px);border-radius:var(--radius-pill);background:var(--portfolio-coral-500)}
+.interest-tile-v39__abstract em{width:var(--dimension-42px);height:var(--dimension-42px);border-radius:50%;background:var(--portfolio-cyan-500)}
+@media(max-width:900px){.profile-interests-v39__head>p{justify-self:start;align-self:auto}}

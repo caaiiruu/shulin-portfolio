@@ -930,11 +930,16 @@ test("projects only individually eligible Experiments into public discovery", ()
   assert.doesNotMatch(html,/http-equiv="refresh"/);
   assert.match(home, /id="homeExperiments" hidden/);
   assert.match(home, /id="homeExperimentRail"/);
+  assert.match(home, /class="experiment-index-v36__all text-cta" href="\/experiments"/);
+  assert.match(html, /class="experiment-index-rail-v36 experiment-index-rail-v36--grid" id="experimentPageRail" role="list"/);
+  assert.doesNotMatch(html, /data-rail-prev="experimentPageRail"|data-rail-next="experimentPageRail"/);
   assert.ok((home.match(/href="\/experiments"/g) ?? []).length >= 2);
   for (const contract of ["dataset.projectCardSystem='shared-v1'", "dataset.projectCardVariant='compact'", "dataset.experimentCardSystem='shared-v1'", "experiment-index-card-v36__visual"]) assert.ok(app.includes(contract), contract);
   assert.match(projectCardMedia, /publicExperiments\[id\]\?\.hero\?\.assetId/);
   assert.match(projectCardMedia, /abstractEvidenceFallback === 'ACTIVE'/);
   assert.match(projectCardMedia, /approved-abstract-evidence/);
+  assert.match(projectCardMedia, /hydrateRelatedCard/);
+  assert.match(projectCardMedia, /detail-related-card-v45__image/);
   assert.doesNotMatch(projectCardMedia, /projectCardLeadVisuals\?\.experiments/);
   assert.match(projectCard, /\.experiment-index-card-v36\[data-experiment-card-system="shared-v1"\]/);
   assert.match(projectCard, /\.experiment-card-abstract\{/);
@@ -968,6 +973,10 @@ test("projects only individually eligible Experiments into public discovery", ()
 
 test("keeps Profile as one truthful, responsive recruitment experience", () => {
   const html = read("profile.html");
+  assert.match(html,/src="\/site\/assets\/profile\/be-your-back-spotify-album-cover.jpg"/);
+  assert.match(html,/interest-tile-v39--new-experiences/);
+  assert.match(html,/data-copy-key="profile.new-experiences-copy"/);
+  assert.doesNotMatch(html,/interest-tile-v39--diving/);
   const base = read("assets/css/base.css");
   const profile = read("assets/css/components/profile-card.css");
   const interests = read("assets/css/components/profile-interest-mosaic.css");
@@ -2341,4 +2350,18 @@ test("R183.8F P3.4B keeps outcomes, framed evidence and history-aware project-op
   assert.ok(ssot.projects.bandzo.canonicalEvidence.items.every(item=>item.presentation==="document"));
   assert.deepEqual(ssot.projects["taishin-p2p-marketplace-platform"].publicContent.decisionEvidence.structuredGroups.map(item=>item.presentation),['natural-ratio','framed','framed','framed']);
   assert.match(app,/const metricSegments=emphasis\?\.sourceSegments\?\.\[lang==='zh'\?'zh':'en'\]\|\|\[\]/);
+});
+
+
+test("approved Weekly and Profile refinement assets stay canonical",()=>{
+  const ssot=JSON.parse(read("content/portfolio-content.json"));
+  const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
+  const profile=read("../../site-source/templates/profile.html");
+  assert.equal(ssot.experiments["weekly-design-session"].hero.assetId,"weekly-design-session-facilitation-hero-public-v1");
+  assert.deepEqual(ssot.experiments["weekly-design-session"].presentationSections.find(section=>section.id==="practice-model").assetIds,["weekly-design-session-practice-evidence-public-v1"]);
+  assert.equal(ssot.profile.interestVisuals.drawing.assetId,"profile-drawing-master-photo-public-v1");
+  assert.equal(ssot.profile.interestVisuals.travel.assetId,"profile-travel-iceland-geothermal-landscape-public-v1");
+  for(const id of ["weekly-design-session-facilitation-hero-public-v1","weekly-design-session-practice-evidence-public-v1","profile-drawing-master-photo-public-v1","profile-travel-iceland-geothermal-landscape-public-v1","profile-be-your-back-spotify-album-cover"]) assert.equal(manifest.items[id].implementationStatus,"real-active");
+  assert.match(profile,/data-asset-id="profile-drawing-master-photo-public-v1"/);
+  assert.match(profile,/data-asset-id="profile-travel-iceland-geothermal-landscape-public-v1"/);
 });

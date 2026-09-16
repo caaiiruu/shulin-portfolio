@@ -31,7 +31,7 @@ test('Human-provided final assets are governed and physically present',()=>{
     const asset=manifest.items[id];
     assert.ok(asset,`${id}: manifest record`);
     if(!id.startsWith('red-dot-2016-')){
-      assert.ok(['R183.8E-experiment-source-assets.zip','Hello-SABAU-R183.8F-human-assets.zip'].includes(asset.sourcePackage));
+      assert.ok(['R183.8E-experiment-source-assets.zip','Hello-SABAU-R183.8F-human-assets.zip','Weekly_Design_Assets_for_Codex.zip'].includes(asset.sourcePackage));
       assert.match(asset.derivativeStatus,/public-safe/);
     }
     assert.ok(fs.existsSync(`public${asset.publicPath.replace(/^\/site/,'/site')}`.replace('public/site','public/site')),`${id}: file exists`);
@@ -73,11 +73,11 @@ test('evidence maturity and claim boundaries remain source-bounded',()=>{
   assert.doesNotMatch(text({summary:all['hello-sabau'].summary,sections:all['hello-sabau'].presentationSections}),/successfully increased tourism|increased revenue|caused talent return/i);
 });
 
-test('Freelance and Weekly remain text-led and do not invent imagery or outcomes',()=>{
-  for(const id of ['freelance-project-operations-tool','weekly-design-session']){
-    assert.equal(all[id].hero,null);
-    assert.equal(all[id].presentationSections.flatMap(section=>section.assetIds||[]).length,0);
-  }
+test('Freelance remains text-led while Weekly uses only its Human-approved evidence',()=>{
+  assert.equal(all['freelance-project-operations-tool'].hero,null);
+  assert.equal(all['freelance-project-operations-tool'].presentationSections.flatMap(section=>section.assetIds||[]).length,0);
+  assert.equal(all['weekly-design-session'].hero.assetId,'weekly-design-session-facilitation-hero-public-v1');
+  assert.deepEqual(all['weekly-design-session'].presentationSections.find(section=>section.id==='practice-model').assetIds,['weekly-design-session-practice-evidence-public-v1']);
   assert.match(text(all['freelance-project-operations-tool']),/18%/);
   assert.doesNotMatch(all['freelance-project-operations-tool'].summary.en,/two-day/i);
   const freelanceBoundary=all['freelance-project-operations-tool'].presentationSections.find(section=>section.id==='delivery-boundary');

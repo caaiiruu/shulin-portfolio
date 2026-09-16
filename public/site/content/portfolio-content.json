@@ -25343,6 +25343,17 @@
       ],
       "projectLinkRule": "Render exactly one key project link per career period.",
       "contentStatus": "approved"
+    },
+    "interestVisuals": {
+      "drawing": {
+        "assetId": "profile-drawing-master-photo-public-v1"
+      },
+      "composing": {
+        "assetId": "profile-be-your-back-spotify-album-cover"
+      },
+      "travel": {
+        "assetId": "profile-travel-iceland-geothermal-landscape-public-v1"
+      }
     }
   },
   "sideProjects": {
@@ -27243,15 +27254,21 @@
         "zh": "僅有質性回饋；不主張效率、凝聚力或組織績效獲得可量測的改善。"
       },
       "deliveryBoundary": "SHIPPED",
-      "assetStatus": "TEXT_EVIDENCE_ACTIVE",
-      "sourceAssetStatus": "HUMAN_SOURCE_ASSET_REQUIRED",
-      "abstractEvidenceFallback": "ACTIVE",
+      "assetStatus": "HUMAN_SOURCE_ACTIVE",
+      "sourceAssetStatus": "HUMAN_SOURCE_ACTIVE",
+      "abstractEvidenceFallback": "RETIRED_2026_09_16",
       "maturity": {
         "en": "Facilitated practice",
         "zh": "由主持人帶領的實踐"
       },
       "releaseEligibility": "READY_PUBLIC",
-      "hero": null,
+      "hero": {
+        "assetId": "weekly-design-session-facilitation-hero-public-v1",
+        "alt": {
+          "en": "A cross-functional team taking part in a facilitated Weekly Design Session beside a shared whiteboard.",
+          "zh": "跨職能團隊在共享白板旁參與 Weekly Design Session 引導活動。"
+        }
+      },
       "presentationSections": [
         {
           "id": "practice-model",
@@ -27263,8 +27280,15 @@
             "en": "Near-weekly sessions combined evidence sharing, collaborative exercises and early critique with Product and Engineering.",
             "zh": "近乎每週的場次，把證據分享、協作練習與早期評議帶進產品與工程合作。"
           },
-          "assetIds": [],
-          "captions": []
+          "assetIds": [
+            "weekly-design-session-practice-evidence-public-v1"
+          ],
+          "captions": [
+            {
+              "en": "Participants work through a facilitated planning exercise using shared prompts and visible evidence.",
+              "zh": "參與者透過共享提示與可見證據，進行由主持人帶領的規劃練習。"
+            }
+          ]
         },
         {
           "id": "participant-signal",
@@ -32139,8 +32163,8 @@
         "zh": "依領域篩選專案"
       },
       "experiments.product-hypotheses-explored-through-small-pr-88adc3b3": {
-        "en": "Product hypotheses explored through small prototypes, visual systems, and behaviour tests.",
-        "zh": "透過小型原型、視覺系統與行為測試探索產品假設。"
+        "en": "Product hypotheses explored through facilitation, small prototypes, and behaviour tests.",
+        "zh": "透過引導、小型原型與行為測試探索產品假設。"
       },
       "experiments.featured-experiment-concept-prototype-832cc107": {
         "en": "Featured experiment · Concept prototype",
@@ -32439,8 +32463,8 @@
         "zh": "讓我持續保持觀察力的小練習。"
       },
       "profile.drawing-composing-travel-and-diving-shape-ho-cd77dd32": {
-        "en": "Drawing, composing, travel, and diving shape how I notice rhythm, context, emotion, and uncertainty.",
-        "zh": "畫畫、作曲、旅行與潛水，影響我觀察節奏、情境、情緒與不確定性的方式。"
+        "en": "Drawing, composing, travel, and new experiences keep my attention tuned to rhythm, context, and surprise.",
+        "zh": "畫畫、作曲、旅行與新體驗，讓我持續留意節奏、情境與意外。"
       },
       "profile.visual-observation-67f74f03": {
         "en": "Visual observation",
@@ -32479,12 +32503,12 @@
         "zh": "旅行"
       },
       "profile.calm-under-uncertainty-1c083a7f": {
-        "en": "Calm under uncertainty",
-        "zh": "在不確定中保持冷靜"
+        "en": "New experiences",
+        "zh": "新體驗"
       },
       "profile.scuba-diving-44c968c5": {
-        "en": "Scuba diving",
-        "zh": "潛水"
+        "en": "Coming up",
+        "zh": "持續嘗試"
       },
       "aria.previous-awarded-explorations-6f2bb154": {
         "en": "Previous awarded explorations",
@@ -32593,6 +32617,18 @@
       "work.try-again-next-step-70f2c906": {
         "en": "Try again · Next step",
         "zh": "再試一次・下一步"
+      },
+      "experiments.ongoing-explorations-outside-core-work": {
+        "en": "Ongoing explorations outside client and product work — small tests, facilitation experiments, and ideas that keep evolving.",
+        "zh": "在客戶與產品工作之外持續進行的探索——包含小型測試、引導實驗，以及持續演進的想法。"
+      },
+      "experiments.see-all-experiments": {
+        "en": "See all experiments",
+        "zh": "查看所有實驗"
+      },
+      "profile.new-experiences-copy": {
+        "en": "I actively seek unfamiliar activities and environments to keep noticing how people adapt, react, and explore.",
+        "zh": "我主動接觸陌生的活動與環境，持續觀察人們如何適應、回應與探索。"
       }
     }
   },

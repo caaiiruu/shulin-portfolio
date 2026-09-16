@@ -454,3 +454,7 @@ html[lang="zh"] .profile-value-v44__grid p {
 .profile-leadership-v81__link{width:100%;justify-content:space-between;text-align:left;font-size:var(--text-sm);line-height:1.4;text-decoration:none}
 @media(max-width:900px){.profile-leadership-v81__grid{grid-template-columns:1fr}}
 @media(max-width:600px){.profile-leadership-v81{padding-block:var(--space-8)}.profile-leadership-v81__item{padding:var(--space-5)}}
+
+
+/* Award navigation follows the shared top-right section-control position. */
+@media(max-width:760px){.profile-side-projects-v34__head{grid-template-columns:minmax(0,1fr) auto;align-items:start}.profile-side-projects-v34__head .rail-controls{grid-column:2;grid-row:1;justify-self:end}}

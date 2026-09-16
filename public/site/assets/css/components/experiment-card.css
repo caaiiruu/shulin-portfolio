@@ -191,3 +191,13 @@
   .experiment-story-v1838e__media{grid-template-columns:1fr}
   .experiment-story-v1838e__section{padding-block:var(--space-7)}
 }
+
+
+/* Full Experiment index; the Homepage remains a concise preview rail. */
+.experiment-index-v36__head-copy{max-width:var(--dimension-54ch);margin-top:var(--space-4);color:var(--color-text-secondary);line-height:1.55}
+.experiment-index-rail-v36--grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--rail-gap);padding-block:var(--space-5) var(--section-space-compact);overflow:visible}
+.experiment-index-rail-v36--grid>*{min-width:0;width:100%;flex:none}
+.experiment-index-v36__all{display:inline-flex;align-items:center;justify-content:space-between;gap:var(--space-3);align-self:end;justify-self:end;min-height:var(--control-height);font-weight:var(--sys-weight-bold)}
+.home-experiments-v1838f .experiment-index-v36__head{grid-template-columns:minmax(0,1fr) auto}
+@media(max-width:900px){.experiment-index-rail-v36--grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.experiment-index-rail-v36--grid{grid-template-columns:1fr}.home-experiments-v1838f .experiment-index-v36__head{grid-template-columns:1fr;gap:var(--space-4)}.experiment-index-v36__all{justify-self:start}}

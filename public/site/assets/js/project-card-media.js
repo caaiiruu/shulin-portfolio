@@ -166,12 +166,35 @@
     }
   };
 
+  const hydrateRelatedCard = card => {
+    const id = card.dataset.project;
+    const visual = visualForProject(id);
+    const frame = card.querySelector('.detail-related-card-v45__visual');
+    if (!frame) return;
+    if (!visual) {
+      clearUnresolvedMedia(card, frame);
+      return;
+    }
+    let img = frame.querySelector('.detail-related-card-v45__image');
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'detail-related-card-v45__image';
+      img.alt = card.querySelector('h3')?.textContent?.trim() || '';
+      frame.replaceChildren(img);
+    }
+    if (applyImage(img, visual, '(max-width: 640px) 88vw, 30vw')) {
+      card.dataset.projectCardLeadVisual = 'canonical-jpg';
+      card.dataset.projectCardAssetId = visual.assetId;
+    }
+  };
+
   const hydrate = () => {
     animationFrame = 0;
     if (!assetManifest) return;
     document.querySelectorAll('.work-card-v32[data-project-card-system="shared-v1"]').forEach(hydrateWorkCard);
     document.querySelectorAll('.domain-project-card-v2[data-project-card-system="shared-v1"]').forEach(hydrateDomainCard);
     document.querySelectorAll('.experiment-index-card-v36[data-experiment-card-system="shared-v1"]').forEach(hydrateExperimentCard);
+    document.querySelectorAll('.detail-related-card-v45[data-project-card-system="shared-v1"][data-project]').forEach(hydrateRelatedCard);
   };
 
   const schedule = () => {

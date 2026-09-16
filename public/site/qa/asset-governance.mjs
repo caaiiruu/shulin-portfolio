@@ -53,6 +53,7 @@ function deriveSlots(value, projectId, location = []) {
 for (const [projectId, project] of Object.entries(content.projects || {})) deriveSlots(project, projectId);
 for (const [projectId, project] of Object.entries({...(content.experiments||{}),...(content.sideProjects||{})})) deriveSlots(project, projectId);
 deriveSlots(content.recognitionRegistry, "profile", ["recognitionRegistry"]);
+deriveSlots(content.profile?.interestVisuals, "profile", ["profile", "interestVisuals"]);
 const derivativeLineageIds = new Set(itemEntries.flatMap(([, record]) => Array.isArray(record.derivedFromAssetIds) ? record.derivedFromAssetIds : []));
 for (const id of derivativeLineageIds) fail(Boolean(items[id]), `Derivative lineage references missing asset ${id}`);
 const governedAssetIds = new Set([...slots.map((slot) => slot.assetId), ...derivativeLineageIds]);

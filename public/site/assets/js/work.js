@@ -155,7 +155,7 @@
   };
   const readType = (id, project, projection) => id === 'daily-hours' ? '0→1 Product' : firstText(projection?.type, project?.infoGrid?.type, project?.type_pair, project?.type, project?.systemClassification?.publicLabel, 'Work');
   const readCompany = (id, project, projection) => id === 'daily-hours' ? 'Shulin Studio' : (projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : ''));
-  const readTitle = (project, projection, id, card) => visibleProjectTitle(firstText(projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, card.querySelector('h2')?.textContent, id));
+  const readTitle = (project, projection, id, card) => visibleProjectTitle(firstText(projection?.cardTitle, projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, card.querySelector('h2')?.textContent, id));
 
   const conciseMetricLabel = label => {
     const text = String(label || '').trim();

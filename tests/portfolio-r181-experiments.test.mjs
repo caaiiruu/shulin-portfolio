@@ -40,7 +40,8 @@ test('truth covers every experiment source package',()=>{
 
 test('R183.8E resolves supplied evidence while preserving text-led projects without invented imagery',()=>{
   assert.equal(all['freelance-project-operations-tool'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
-  assert.equal(all['weekly-design-session'].assetStatus,'TEXT_EVIDENCE_ACTIVE');
+  assert.equal(all['weekly-design-session'].assetStatus,'HUMAN_SOURCE_ACTIVE');
+  assert.equal(all['weekly-design-session'].hero.assetId,'weekly-design-session-facilitation-hero-public-v1');
   for(const id of ['food-testing-workshop','aja-creative-workshop','capture-ideas','aha-creative-toolbox']){
     assert.equal(all[id].assetStatus,'HUMAN_SOURCE_ACTIVE');
     assert.ok(all[id].hero?.assetId);

@@ -1455,6 +1455,13 @@
     for(const rail of [explorationRail,homeExplorationRail].filter(Boolean)){
       clear(rail);
       entries.forEach(([id,item],index)=>rail.append(createExplorationIndexCard(id,item,index)));
+      if(rail===explorationRail){
+        rail.classList.add('experiment-index-rail-v36--grid');
+        rail.removeAttribute('data-rail');
+        rail.removeAttribute('aria-roledescription');
+        rail.setAttribute('role','list');
+        [...rail.children].forEach(card=>card.setAttribute('role','listitem'));
+      }
     }
     const experimentIndex=doc.getElementById('experimentIndex');
     if(experimentIndex)experimentIndex.hidden=!explorationRail?.childElementCount;
@@ -3987,14 +3994,18 @@
       card.append(element('h3','',title),action);
       return card;
     }
+    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant='compact';
     const action=element('span','detail-related-action-v46');
     action.classList.add('text-cta');
     action.append(element('span','related-project-card__action-label',ui("view-case-a62dd0ad")),element('span','related-project-card__action-arrow icon-arrow icon-arrow--right'));
-    card.append(
+    const content=element('div','detail-related-card-v45__content');
+    content.append(
       element('span','detail-related-card-v45__context',context),
       element('h3','',title),
       action
     );
+    const visual=element('div','detail-related-card-v45__visual');visual.dataset.frameRole='project-cover';
+    card.append(content,visual);
     return card;
   }
   function renderRelated(){
@@ -4006,7 +4017,7 @@
       rail.appendChild(card);
     });enhanceCompanyNames(rail);
     doc.querySelector('#detailRelated .kicker')?.remove();
-    safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'&&relatedKey==='voucher'?(lang==='zh'?'探索其他專案':'Explore other projects'):ui("related-work-9e3ba8e3"));
+    safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'?(lang==='zh'?'更多作品':'More works'):(lang==='zh'?'更多實驗':'More experiments'));
     safeText(doc.getElementById('detailRelatedCopy'),'');
     window.refreshHorizontalRails?.();
   }
