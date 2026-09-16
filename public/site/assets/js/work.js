@@ -119,7 +119,7 @@
       [...control.attributes].forEach(({ name, value }) => {
         if (name !== 'type' && name !== 'data-project') link.setAttribute(name, value);
       });
-      link.innerHTML = control.innerHTML;
+      while (control.firstChild) link.append(control.firstChild);
       control.replaceWith(link);
     } else {
       link.removeAttribute('data-project');
