@@ -1,0 +1,110 @@
+name: Style B ProjectCard Tint SSOT Repair
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-tint-ssot-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Move ProjectCard tint data into canonical asset manifest
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const manifestPath='public/site/content/portfolio-asset-manifest.json';
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          if(!manifest.projectCardLeadVisuals) throw new Error('projectCardLeadVisuals namespace missing');
+          manifest.projectCardLeadVisuals.brandTints={
+            'payment':'rgb(230 239 255)',
+            'voucher':'rgb(230 239 255)',
+            'voucher-center':'rgb(230 239 255)',
+            'game-center':'rgb(230 239 255)',
+            'dbs':'rgb(252 232 234)',
+            'booking':'rgb(232 242 255)',
+            'booking-taxi-pickup-service-strategy':'rgb(232 242 255)',
+            'booking-taxi-strategy':'rgb(232 242 255)',
+            'taishin-p2p-marketplace-platform':'rgb(252 232 234)',
+            'taishin-p2p-marketplace':'rgb(252 232 234)',
+            'cathay-mortgage-assistant':'rgb(228 244 239)',
+            'cathay-sit-online-account-opening':'rgb(228 244 239)',
+            'cathay-sit-review-remediation-operations':'rgb(228 244 239)',
+            'ctbc-mortgage-self-service-app':'rgb(226 242 238)',
+            'bandzo':'rgb(237 235 250)',
+            'daily-hours':'rgb(230 237 245)'
+          };
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+      - name: Remove project-specific selectors from shared ProjectCard CSS
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const path='public/site/assets/css/components/project-card.css';
+          let css=fs.readFileSync(path,'utf8');
+          const marker='/* ProjectCard brand-family surfaces — canonical listing owner. */';
+          const index=css.indexOf(marker);
+          if(index<0) throw new Error('brand-family CSS marker missing');
+          css=css.slice(0,index).trimEnd()+'\n';
+          if(/data-(?:work-index-project|project)="(?:payment|voucher|dbs|booking|bandzo|cathay|ctbc|taishin|daily-hours)/i.test(css)) throw new Error('project-specific selector remains in ProjectCard CSS');
+          fs.writeFileSync(path,css);
+          NODE
+
+      - name: Make shared media owner apply manifest tint metadata
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const path='public/site/assets/js/project-card-media.js';
+          let js=fs.readFileSync(path,'utf8');
+          const anchor="  const visualForProject = id => {";
+          if(!js.includes(anchor)) throw new Error('visual resolver anchor missing');
+          if(!js.includes('const tintForProject')) {
+            js=js.replace(anchor,"  const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';\n\n"+anchor);
+          }
+          const workAnchor="    const visual = visualForProject(id);\n    const frame = card.querySelector('.work-artifact');";
+          if(!js.includes(workAnchor)) throw new Error('work hydration anchor missing');
+          js=js.replace(workAnchor,"    const visual = visualForProject(id);\n    const tint = tintForProject(id);\n    if (tint) card.style.setProperty('--project-card-tint', tint);\n    else card.style.removeProperty('--project-card-tint');\n    const frame = card.querySelector('.work-artifact');");
+          const domainAnchor="    const visual = visualForProject(id);\n    const frame = card.querySelector('.domain-project-card-v2__visual');";
+          if(!js.includes(domainAnchor)) throw new Error('domain hydration anchor missing');
+          js=js.replace(domainAnchor,"    const visual = visualForProject(id);\n    const tint = tintForProject(id);\n    if (tint) card.style.setProperty('--project-card-tint', tint);\n    else card.style.removeProperty('--project-card-tint');\n    const frame = card.querySelector('.domain-project-card-v2__visual');");
+          fs.writeFileSync(path,js);
+          NODE
+
+      - name: Make final QA read tint expectation from canonical manifest
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const path='.github/workflows/style-b-project-card-final-qa.yml';
+          let text=fs.readFileSync(path,'utf8');
+          const start="          const brandTint=(id)=>{";
+          const end="          const assert=(value,message)=>{if(!value)throw new Error(message)};";
+          const i=text.indexOf(start), j=text.indexOf(end);
+          if(i<0||j<0||j<=i) throw new Error('brandTint QA block not found');
+          text=text.slice(0,i)+"          const brandTint=id=>assets.projectCardLeadVisuals?.brandTints?.[id]||'';\n"+text.slice(j);
+          const staticNeedle="          const daily=assets.projectCardLeadVisuals?.dailyHours;";
+          if(!text.includes(staticNeedle)) throw new Error('static Daily Hours QA anchor missing');
+          text=text.replace(staticNeedle,"          const tints=assets.projectCardLeadVisuals?.brandTints||{};\n          for(const [id] of entries) if(!tints[id]) throw new Error(`${id}: ProjectCard tint missing from canonical manifest`);\n          if(!tints['daily-hours']) throw new Error('daily-hours: ProjectCard tint missing from canonical manifest');\n          const daily=assets.projectCardLeadVisuals?.dailyHours;");
+          fs.writeFileSync(path,text);
+          NODE
+
+      - name: Commit SSOT repair
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/style-b-project-card-tint-ssot-repair.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Move ProjectCard tints into canonical asset manifest'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
