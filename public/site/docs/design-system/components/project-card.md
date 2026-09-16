@@ -1,22 +1,132 @@
 # Component: ProjectCard
 
-Status: Live / Current production mockup
+Status: Active shared design-system owner
 
-HTML Source: Homepage dynamic renderer and Work page cards
-CSS Owner: `assets/css/components/project-card.css`
-Token Dependencies: card padding, project card media block, control height, surface, elevation
-Variants: Homepage, Work, Search, Domain, Related
-Usage Scope: Homepage, Work, Matcher, Domain, Detail popup
-Allowed Modifications: content fields, representative visual, variant extension
-Forbidden Modifications: hover outlines, page-level spacing overrides, multiple nested links
-Accessibility: whole-card target, pointer cursor, focus-visible, pressed state, concise accessible label
-Responsive Contract: every repeated card family owns an explicit grid/flex structure; paired cards share an action baseline; media height is token-owned at desktop and mobile sizes; CTA alignment never depends on an unrelated outer layout.
-Media Contract: every listing-card media slot renders one stable 16:9 visible frame. Source dimensions never set card height. Images use the shared containment and centered safe-area treatment, shared radius, overflow, surface and fallback behavior. Recommended future source size is 1920 × 1080; minimum acceptable source size is 1600 × 900. Tall or narrow interface captures remain inside this frame without a project-specific wrapper.
-Related Work Contract: every related-work variant uses `--project-card-related-title` and a wider text measure, so mixed Chinese/English titles remain readable without arbitrary word breaking.
-Related Work Content Contract: compact related cards use the canonical `cardTitle`, not the full case-study transformation title. Company is the only supporting metadata; redundant Domain copy is omitted. Title is the primary scan target and the shared View case CTA is the final row; decorative process headers are omitted.
-Work Variant Contract: featured cards use the full media token, horizontal desktop composition, and company plus Domain context. Compact cards use the compact media row, company-only metadata, explicitly reset the general media minimum height, and begin content after a visible boundary; visual content must never overflow into company, title, summary, or CTA. Compact typography is a complete semantic tier rather than a scaled copy of the featured card: 22–26px transformation title, 14px supporting copy, and 14px action on desktop, with readable responsive sizing on narrow screens. Company names are indivisible metadata: they keep max-content width and never wrap in Work, Search, Domain, or Related work cards.
-Work Hierarchy Contract: `workIndex.principalPortfolioArchitecture.featuredOrder` supplies one primary featured project and four supporting compact projects. Every remaining project is rendered through the same ProjectCard owner under More work.
-Domain Variant Contract: company name is an independent high-emphasis text identifier; domain and product context remain on the same metadata row and must not be mistaken for the company.
-Work Interaction Contract: homepage, Work page, Profile timeline, search, domain and related Work cards use the shared `--work-card-hover-*` tokens. Hover is a restrained lift, organic radius, visible border and cyan shadow; the CTA underlines. Do not introduce page-specific Work hover surfaces.
-Experiment Variant Contract: Experiments may carry less copy and the `View exploration` label, but reuse the ProjectCard geometry, border/radius family, spacing rhythm, title family, CTA alignment and 16:9 media contract. A second shell or experiment-owned media ratio is forbidden.
-Search Variant Contract: text-first compact decision filter. Company plus domain reuse the popup metadata grammar (`Company · Domain`) with readable casing; the suffix is grouped with its separator so a wrapped suffix restarts at the metadata block’s left edge. Human-approved Search-only company display projections may replace a legal name without renaming the canonical project record or unrelated surfaces. The approved transformation title remains dominant, and exactly one supporting signal is selected for the current query. Each canonical project owns an explicit default signal and explicit intent overrides; the source may be an approved outcome, research, validation, launch, strategy or verbatim ownership clause. Source changes fail closed; ranking explanations, first-metric inference, ownership rewriting and simultaneous ownership-plus-proof rows are forbidden. Search omits imagery and arbitrary minimum heights, uses one full-card button with a concise accessible name, and reduces the visible action to a directional arrow. Desktop and tablet result rows stretch cards to the tallest content in that row so arrows share a visual baseline; the single-column mobile variant returns to content-driven height. It must not inherit Domain visual or single-card split layout.
+## Ownership
+
+Structure / behavior owner:
+- shared ProjectCard runtime
+
+CSS owner:
+- `public/site/assets/css/components/project-card.css`
+
+Asset / metadata registry:
+- `public/site/content/project-card-registry.json`
+
+Page composition owners:
+- Home: placement / ordering only
+- Domain: carousel / wheel composition only
+- Work: grid / ordering / filtering only
+
+Page owners must not redefine ProjectCard internals.
+
+## Variants
+
+Only these public listing variants are allowed:
+
+- `featured`
+- `standard`
+- `compact`
+
+Variant changes may affect composition density and media allocation, but not create a second card system.
+
+## Internal contract
+
+ProjectCard owns:
+
+- metadata hierarchy
+- title typography
+- metric slot
+- CTA row
+- border / radius
+- internal spacing
+- Lead Visual frame
+- hover / focus behavior
+- responsive internal layout
+- text-decoration reset
+
+Pages own only external placement and composition.
+
+## Lead Visual contract
+
+Lead Visual is registry-first and fail-closed.
+
+Rules:
+
+1. Every project has exactly one approved canonical Lead Visual master.
+2. `public/site/content/project-card-registry.json` is the only ProjectCard asset mapping source.
+3. Home, Domain and Work must use the same canonical project image.
+4. The canonical master is a high-quality JPEG derived from the Human-approved source intake image.
+5. Source images must never be silently replaced with an older repository asset.
+6. Responsive derivatives may be generated for delivery, but derivatives never become SSOT.
+7. Never upscale a low-resolution source to manufacture a larger derivative.
+8. The visible ProjectCard media frame is 16:9 and full-bleed.
+9. Media uses `object-fit: cover` with project-approved focal positioning if needed.
+10. Source dimensions never control card geometry.
+
+## Brand surface contract
+
+The card content surface uses the explicit `brandTint` registered per project.
+
+Brand tint:
+
+- is a soft supporting surface, not a logo-color flood
+- must remain readable with the shared typography tokens
+- is shared across Home / Domain / Work for the same project
+- must not be generated from a project-id hash
+
+## Interaction contract
+
+Desktop fine pointer:
+
+- no whole-card lift
+- no page-specific shadow behavior
+- Lead Visual may use the shared restrained zoom
+- navigation arrow moves on the horizontal axis only
+- CTA text is never underlined
+
+Touch / coarse pointer:
+
+- no sticky hover visual state
+- carousel / disclosure interactions must not activate card hover styling
+
+Keyboard:
+
+- whole-card navigation remains keyboard accessible
+- focus-visible remains explicit
+
+## Navigation contract
+
+Every ProjectCard instance resolves to one canonical public Work route.
+
+Required review path:
+
+Home / Domain / Work → ProjectCard → `/work/{slug}` → browser Back
+
+The whole card and its visible `View case` affordance must resolve to the same destination without nested competing links.
+
+## Responsive contract
+
+Reference widths:
+
+- 1419
+- 871
+- 430
+
+Same-row cards of the same variant must align in outer height and media height where the page composition places them as peers.
+
+## Governance
+
+Forbidden:
+
+- project-specific card renderer
+- page-specific card hover
+- page-specific card typography
+- page-specific card media ratio
+- alternate Lead Visual per page
+- CSS background-image substitution for ProjectCard media
+- duplicate ProjectCard CSS owner
+- old and new ProjectCard systems active together
+- `final`, `latest`, `new`, `fixed`, or version-suffixed asset files acting as SSOT
+
+Any ProjectCard change requires regression checks across Home, Domain, Work and representative case-study routes before Human review.
