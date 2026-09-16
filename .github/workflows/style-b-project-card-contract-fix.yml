@@ -1,0 +1,30 @@
+name: Style B ProjectCard Contract Fix
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-contract-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Apply contract repair
+        run: python3 .github/scripts/style-b-project-card-contract-fix.py
+      - name: Commit contract repair
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/js/work.js .github/workflows/style-b-project-card-final-qa.yml
+          git diff --check --cached
+          git commit -m 'Normalize shared ProjectCard routes and browser contract'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
