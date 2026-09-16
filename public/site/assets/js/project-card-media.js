@@ -1,50 +1,63 @@
 (() => {
   'use strict';
 
-  const REGISTRY_URL = '/site/content/portfolio-asset-manifest.json';
+  const ASSET_MANIFEST_URL = '/site/content/portfolio-asset-manifest.json';
   const variants = Object.freeze(['featured', 'standard', 'compact']);
-  let registry = null;
+  const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};
+  const publicProjects = DATA.publicProjects || DATA.projects || {};
+  let assetManifest = null;
   let animationFrame = 0;
 
-  const projectEntry = id => registry?.projects?.[id] || null;
   const sizesForWorkVariant = variant => variant === 'featured'
     ? '(max-width: 1100px) 100vw, 58vw'
     : variant === 'standard'
       ? '(max-width: 1100px) 100vw, 50vw'
       : '(max-width: 640px) 100vw, 33vw';
 
-  const applyBrandTint = (card, entry) => {
-    if (!card || !entry?.brandTint) return;
-    card.style.setProperty('--project-card-tint', entry.brandTint);
-    card.dataset.projectCardBrandFamily = entry.brandFamily || '';
+  const heroAssetIdForProject = id => {
+    const project = publicProjects[id];
+    const planned = Array.isArray(project?.publicContent?.imagePlan)
+      ? project.publicContent.imagePlan.find(item => item?.role === 'hero' && item?.assetId)?.assetId
+      : '';
+    return planned || project?.heroVisualBrief?.assetId || '';
   };
 
-  const clearUnresolvedMedia = (card, frame, entry) => {
-    applyBrandTint(card, entry);
+  const visualForProject = id => {
+    if (!assetManifest) return null;
+    if (id === 'daily-hours') {
+      const daily = assetManifest.projectCardLeadVisuals?.dailyHours;
+      if (!daily?.publicPath) return null;
+      return {
+        path: daily.publicPath,
+        width: Number(daily.width) || 1600,
+        height: Number(daily.height) || 900,
+        assetId: 'daily-hours-listing-projection'
+      };
+    }
+    const assetId = heroAssetIdForProject(id);
+    const item = assetManifest.items?.[assetId];
+    if (!item?.publicPath || item?.type !== 'image/jpeg') return null;
+    return {
+      path: item.publicPath,
+      width: Number(item.width) || 2048,
+      height: Number(item.height) || 1152,
+      assetId
+    };
+  };
+
+  const clearUnresolvedMedia = (card, frame) => {
     if (!frame) return;
     if (frame.querySelector('img')) frame.replaceChildren();
     card.dataset.projectCardLeadVisual = 'unresolved';
   };
 
-  const applyImage = (img, entry, sizes, priority = false) => {
-    const canonical = entry?.canonicalMaster;
-    if (!img || !canonical) return false;
-    const sources = Array.isArray(entry.deliverySources) ? entry.deliverySources : [];
-    const srcset = sources
-      .filter(source => source?.path && Number(source?.width) > 0)
-      .sort((a,b) => a.width - b.width)
-      .map(source => `${source.path} ${source.width}w`)
-      .join(', ');
-
-    img.src = canonical;
-    if (srcset) img.srcset = srcset;
-    else img.removeAttribute('srcset');
+  const applyImage = (img, visual, sizes, priority = false) => {
+    if (!img || !visual?.path) return false;
+    img.src = visual.path;
+    img.removeAttribute('srcset');
     img.sizes = sizes;
-    const [width, height] = Array.isArray(entry.expectedDimensions) ? entry.expectedDimensions : [];
-    if (width && height) {
-      img.width = width;
-      img.height = height;
-    }
+    img.width = visual.width;
+    img.height = visual.height;
     img.loading = priority ? 'eager' : 'lazy';
     img.decoding = 'async';
     img.fetchPriority = priority ? 'high' : 'auto';
@@ -55,13 +68,11 @@
 
   const hydrateWorkCard = card => {
     const id = card.dataset.workIndexProject;
-    const entry = projectEntry(id);
-    if (!entry) return;
-    applyBrandTint(card, entry);
+    const visual = visualForProject(id);
     const frame = card.querySelector('.work-artifact');
     if (!frame) return;
-    if (!entry.canonicalMaster || entry.sourceStatus !== 'active-approved-canonical') {
-      clearUnresolvedMedia(card, frame, entry);
+    if (!visual) {
+      clearUnresolvedMedia(card, frame);
       return;
     }
     let img = frame.querySelector('.work-card-v32__image-v225');
@@ -72,20 +83,19 @@
       frame.replaceChildren(img);
     }
     const variant = card.dataset.projectCardVariant;
-    if (applyImage(img, entry, sizesForWorkVariant(variant), variant === 'featured')) {
+    if (applyImage(img, visual, sizesForWorkVariant(variant), variant === 'featured')) {
       card.dataset.projectCardLeadVisual = 'canonical-jpg';
+      card.dataset.projectCardAssetId = visual.assetId;
     }
   };
 
   const hydrateDomainCard = card => {
     const id = card.dataset.project;
-    const entry = projectEntry(id);
-    if (!entry) return;
-    applyBrandTint(card, entry);
+    const visual = visualForProject(id);
     const frame = card.querySelector('.domain-project-card-v2__visual');
     if (!frame) return;
-    if (!entry.canonicalMaster || entry.sourceStatus !== 'active-approved-canonical') {
-      clearUnresolvedMedia(card, frame, entry);
+    if (!visual) {
+      clearUnresolvedMedia(card, frame);
       return;
     }
     let img = frame.querySelector('.domain-project-card-v2__image');
@@ -95,14 +105,15 @@
       img.alt = card.querySelector('.domain-project-card-v2__title')?.textContent?.trim() || '';
       frame.replaceChildren(img);
     }
-    if (applyImage(img, entry, '(max-width: 900px) 84vw, 48vw', card.dataset.wheelOffset === '0')) {
+    if (applyImage(img, visual, '(max-width: 900px) 84vw, 48vw', card.dataset.wheelOffset === '0')) {
       card.dataset.projectCardLeadVisual = 'canonical-jpg';
+      card.dataset.projectCardAssetId = visual.assetId;
     }
   };
 
   const hydrate = () => {
     animationFrame = 0;
-    if (!registry) return;
+    if (!assetManifest) return;
     document.querySelectorAll('.work-card-v32[data-project-card-system="shared-v1"]').forEach(hydrateWorkCard);
     document.querySelectorAll('.domain-project-card-v2[data-project-card-system="shared-v1"]').forEach(hydrateDomainCard);
   };
@@ -113,16 +124,13 @@
   };
 
   const start = async () => {
-    const response = await fetch(REGISTRY_URL, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`ProjectCard registry HTTP ${response.status}`);
-    const manifest = await response.json();
-    registry = manifest.projectCardLeadVisuals;
-    if (!registry) throw new Error('ProjectCard Lead Visual registry missing from asset manifest');
-    window.PROJECT_CARD_REGISTRY = Object.freeze(registry);
+    const response = await fetch(ASSET_MANIFEST_URL, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`ProjectCard asset manifest HTTP ${response.status}`);
+    assetManifest = await response.json();
     window.PROJECT_CARD_SYSTEM = Object.freeze({
-      version: registry.version,
+      version: 'shared-v1',
       variants,
-      registryUrl: REGISTRY_URL
+      assetManifestUrl: ASSET_MANIFEST_URL
     });
     schedule();
     new MutationObserver(schedule).observe(document.documentElement, {
