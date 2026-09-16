@@ -1,0 +1,62 @@
+name: Style B ProjectCard Consolidate V2
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-consolidate-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Consolidate ProjectCard ownership
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          project=Path('public/site/assets/css/components/project-card.css')
+          system=Path('public/site/assets/css/components/project-card-system.css')
+          domain=Path('public/site/assets/css/components/domain-experience.css')
+          work=Path('public/site/assets/js/work.js')
+          pc=project.read_text(); sc=system.read_text(); dc=domain.read_text(); wj=work.read_text()
+          marker='/* Shared ProjectCard listing contract — canonical owner for Home / Domain / Work. */'
+          if marker not in pc:
+              moved=sc.replace('/* ProjectCard System — canonical shared listing-card contract for Home / Domain / Work.\n   Variants: featured | standard | compact. Page owners choose composition only. */',marker,1)
+              rules=[]
+              patterns=[r'(?m)^\.domain-experience \.domain-project-card-v2__(?:content|meta|identity|company|year|title|metrics|metric-value|metric-label|cta|cta-arrow|visual|image)[^{]*\{[^{}]*\}\s*$',r'(?m)^\.domain-experience \.domain-project-card-v2[^\n{]* \.domain-project-card-v2__(?:cta-arrow|image)[^{]*\{[^{}]*\}\s*$']
+              for pat in patterns:
+                  rules += [m.group(0) for m in re.finditer(pat,dc)]
+              rules=list(dict.fromkeys(rules))
+              moved += '\n\n/* Domain ProjectCard internals moved here; Domain owns carousel composition only. */\n'+'\n'.join(rules)
+              moved += '\n\n/* Shared card text never inherits editorial link decoration. */\n.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button,\n.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(span,strong,h2,dl,dt,dd),\n.domain-project-card-v2[data-project-card-system="shared-v1"],\n.domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}\n'
+              project.write_text(pc.rstrip()+'\n\n'+moved.strip()+'\n')
+          dc=re.sub(r'(?m)^\s*\.domain-experience \.domain-project-card-v2__(?:content|meta|identity|company|year|title|metrics|metric-value|metric-label|cta|cta-arrow|visual|image)[^{]*\{[^{}]*\}\s*\n?','',dc)
+          dc=re.sub(r'(?m)^\s*\.domain-experience \.domain-project-card-v2[^\n{]* \.domain-project-card-v2__(?:cta-arrow|image)[^{]*\{[^{}]*\}\s*\n?','',dc)
+          domain.write_text(dc)
+          start=wj.find("  if (!document.querySelector('link[data-project-card-system=\"shared-v1\"]')) {")
+          if start!=-1:
+              end=wj.find("  if (!document.querySelector('script[data-project-card-media=\"shared-v1\"]')) {",start)
+              if end==-1: raise SystemExit('media script marker missing')
+              wj=wj[:start]+wj[end:]
+          work.write_text(wj)
+          system.unlink()
+          PY
+          rm -f .github/workflows/style-b-project-card-owner-consolidation.yml
+          rm -f .github/workflows/style-b-project-card-consolidate-v2.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Consolidate listing ProjectCard into canonical owner'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
