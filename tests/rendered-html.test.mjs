@@ -446,8 +446,8 @@ test("renders one accessible Principle Constellation from the migrated SSOT", ()
     for (const retired of ["title", "description", "value", "practiceExample"]) assert.equal(item[retired], undefined);
   }
   for (const contract of ["aria-expanded", "aria-controls", "role','region", "event.key==='Escape'", "root.dataset.activePrinciple", "document.addEventListener('portfolio:language',render)"]) assert.ok(home.includes(contract), contract);
-  assert.match(css, /\.principle-constellation\s*\{[^}]*grid-template-columns:\s*repeat\(2/);
-  assert.match(css, /@media\s*\(max-width:\s*700px\)[\s\S]*?\.principle-constellation::before/);
+  assert.match(css, /\.principle-constellation\s*\{[^}]*grid-template-columns:\s*1fr/);
+  assert.match(css, /\.principle-node__methods\s*\{[^}]*flex-wrap:\s*wrap/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
   assert.doesNotMatch(css, /\.principle-(?:constellation|node)[^{]*\{[^}]*overflow-x\s*:\s*(?:auto|scroll)/s);
 });
@@ -1081,7 +1081,7 @@ test("keeps homepage evidence readable and singly owned across viewports", () =>
     "@media (max-width: 900px)",
     "@media (max-width: 700px)",
     "@media (max-width: 380px)",
-    ".principle-constellation { grid-template-columns: 1fr; }",
+    "grid-template-columns: 1fr",
     "prefers-reduced-motion: reduce",
   ]) assert.ok(evidence.includes(contract), contract);
   assert.match(evidence, /\.experience-orgs-v44__list span\s*\{[^}]*font-size:\s*var\(--text-body\)/s);

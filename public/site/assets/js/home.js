@@ -474,9 +474,9 @@ function mountDesignPrinciples(){
   panel.setAttribute('aria-labelledby',triggerId);
   const how=element('section','principle-node__how');
   how.append(element('span','principle-node__label',localize(labels.howIWork)),element('p','',localize(item.expanded.howIWork)));
-  const diagram=element('ol','principle-node__diagram');
-  (localize(item.diagramLabels)||[]).forEach(label=>diagram.append(element('li','',label)));
-  diagram.setAttribute('aria-label',localize(labels.diagram));
+  const methods=element('ul','principle-node__methods');
+  (localize(item.diagramLabels)||[]).forEach(label=>methods.append(element('li','',label)));
+  methods.setAttribute('aria-label',localize(labels.diagram));
   const practice=element('section','principle-node__practice');
   practice.append(element('span','principle-node__label',localize(labels.practice)),element('strong','',localize(item.expanded.practice.companyProduct)),element('p','',localize(item.expanded.practice.summary)));
   const projectId=item.expanded.practice.projectId;
@@ -486,13 +486,12 @@ function mountDesignPrinciples(){
     cta.appendChild(element('span','icon-arrow icon-arrow--right'));
     practice.appendChild(cta);
   }
-  panel.append(how,diagram,practice);
+  how.append(methods);
+  panel.append(how,practice);
   return panel;
  };
 
  const render=()=>{
-  const compact=window.matchMedia('(max-width: 700px)').matches;
-  const wide=window.matchMedia('(min-width: 901px)').matches;
   root.dataset.activePrinciple=activeId;
   root.classList.toggle('has-active',Boolean(activeId));
   const cards=items.map((item,index)=>{
@@ -514,30 +513,22 @@ function mountDesignPrinciples(){
     if(event.key==='Escape'&&activeId){event.preventDefault();changeActive('',item.id)}
    });
    article.append(trigger);
-   if(expanded&&(compact||wide))article.append(createPanel(item,panelId,triggerId));
+   if(expanded)article.append(createPanel(item,panelId,triggerId));
    return article;
   });
-  const activeItem=items.find(item=>item.id===activeId);
-  const desktopPanel=activeItem&&!compact&&!wide?createPanel(activeItem,`principle-panel-${activeItem.id}`,`principle-trigger-${activeItem.id}`):null;
-  if(desktopPanel)desktopPanel.classList.add('principle-constellation__detail');
-  root.replaceChildren(...cards,...(desktopPanel?[desktopPanel]:[]));
+  root.replaceChildren(...cards);
  };
  const changeActive=(nextId,focusId)=>{
   activeId=nextId;
-  const update=()=>render();
+  const update=()=>{
+   render();
+   if(focusId)document.getElementById(`principle-trigger-${focusId}`)?.focus({preventScroll:true});
+  };
   const transition=!reduceMotion()&&document.startViewTransition?document.startViewTransition(update):null;
   if(!transition)update();
-  (transition?.finished||Promise.resolve()).then(()=>{
-   if(focusId)document.getElementById(`principle-trigger-${focusId}`)?.focus({preventScroll:true});
-  });
  };
  render();
  document.addEventListener('portfolio:language',render);
- let layoutState=window.matchMedia('(max-width: 700px)').matches?'compact':window.matchMedia('(min-width: 901px)').matches?'wide':'medium';
- window.addEventListener('resize',()=>{
-  const nextLayout=window.matchMedia('(max-width: 700px)').matches?'compact':window.matchMedia('(min-width: 901px)').matches?'wide':'medium';
-  if(nextLayout!==layoutState){layoutState=nextLayout;render()}
- });
 }
 mountDesignPrinciples();
 function selectDomain(next){

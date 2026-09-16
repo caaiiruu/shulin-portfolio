@@ -1967,9 +1967,8 @@
       "tokenDependencies": [
         "homepage-evidence-rule-width",
         "homepage-evidence-metric",
-        "homepage-principle-title",
-        "homepage-principle-rail-width",
         "homepage-principle-layout-duration",
+        "disclosure-icon-size",
         "control-height",
         "color-focus",
         "color-surface-subtle",
@@ -1978,18 +1977,16 @@
       "variants": [
         "Experience metrics",
         "Text-first organisation proof",
-        "Principle Constellation",
-        "Wide desktop focus and vertical rail",
-        "Mobile vertical numbered rail"
+        "Compact principle disclosures"
       ],
       "interactionContract": [
         "All four principles remain visible at first glance and represent parallel decision lenses rather than sequential steps",
         "At most one principle is expanded; activating the open principle collapses it and Escape returns to the fully collapsed state",
         "The active stable ID survives language changes because copy is rerendered from the bilingual SSOT without replacing interaction state",
         "Every In practice example resolves its canonical projectId from the SSOT and exposes the shared View case CTA to the existing Project popup",
-        "Wide desktop uses one left focus card and a narrower three-card vertical rail; selecting a rail card exchanges it with the focus card",
-        "Tablet uses a two-column constellation with a full-width detail region; compact viewports use a vertical numbered rail",
-        "Stable card IDs use a 300ms shared layout transition, removed under prefers-reduced-motion",
+        "Every viewport uses one compact vertical disclosure list with stable row geometry",
+        "Expanded How I work content uses the approved method sentence and diagram labels as compact working-method pills",
+        "Stable card IDs use the shared layout transition, removed under prefers-reduced-motion",
         "No carousel, modal, hover-only content, inline style or duplicated per-principle markup",
         "Organisation proof uses two homepage-owned, text-first company groups with no per-company container chrome",
         "Desktop uses a balanced two-column static composition that presents each company once with subtle middle-dot separation; tablet and mobile stack two slowly moving horizontal rails using the same separator grammar",

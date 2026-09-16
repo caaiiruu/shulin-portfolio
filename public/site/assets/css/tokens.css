@@ -166,6 +166,7 @@
   --radius-panel: var(--radius-lg);
   --radius-control: var(--radius-pill);
   --radius-icon: var(--radius-pill);
+  --disclosure-icon-size: var(--dimension-16px);
   --project-media-radius: var(--radius-lg);
   --project-editorial-composite-aspect: var(--ratio-editorial-composite);
   --inline-metric-emphasis-surface: var(--brand-100);

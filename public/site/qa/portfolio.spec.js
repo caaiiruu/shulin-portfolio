@@ -72,21 +72,9 @@ for (const width of [1419,871,430]) {
       await expect(trigger).toHaveAttribute('aria-expanded','true');
       await expect(constellation.locator('.principle-node__panel:visible')).toHaveCount(1);
       const after=await constellation.locator('.principle-node__trigger').nth(index).boundingBox();
-      if(width>700&&width<=900){
-        expect(Math.abs(after.x-before.x)).toBeLessThanOrEqual(1);
-        expect(Math.abs(after.y-before.y)).toBeLessThanOrEqual(1);
-        expect(Math.abs(after.width-before.width)).toBeLessThanOrEqual(1);
-      }
-      if(width>900){
-        const geometry=await constellation.evaluate(container=>({
-          active:container.querySelector('.principle-node.is-active').getBoundingClientRect().toJSON(),
-          side:[...container.querySelectorAll('.principle-node:not(.is-active)')].map(card=>card.getBoundingClientRect().toJSON())
-        }));
-        expect(geometry.side).toHaveLength(3);
-        expect(geometry.side.every(card=>card.x>geometry.active.x&&card.width<geometry.active.width)).toBe(true);
-        expect(geometry.side[0].y).toBeLessThan(geometry.side[1].y);
-        expect(geometry.side[1].y).toBeLessThan(geometry.side[2].y);
-      }
+      expect(Math.abs(after.x-before.x)).toBeLessThanOrEqual(1);
+      expect(Math.abs(after.width-before.width)).toBeLessThanOrEqual(1);
+      await expect(constellation.locator('.principle-node__methods:visible li')).toHaveCount(index===0?5:index===1?4:3);
       await page.keyboard.press('Escape');
       await expect(constellation.locator('.principle-node__panel:visible')).toHaveCount(0);
     }

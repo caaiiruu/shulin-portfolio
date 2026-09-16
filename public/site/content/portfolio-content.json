@@ -30443,16 +30443,16 @@
     ],
     "contentStatus": "approved",
     "sectionTitle": {
-      "en": "Design philosophy & principles",
-      "zh": "設計理念與原則"
+      "en": "Design principles",
+      "zh": "設計原則"
     },
     "sectionEyebrow": {
       "en": "",
       "zh": ""
     },
     "sectionDescription": {
-      "en": "",
-      "zh": ""
+      "en": "How I make decisions.",
+      "zh": "我如何做決策。"
     },
     "interactionLabels": {
       "collapsedCta": {
@@ -31755,12 +31755,12 @@
         "zh": "支持案例"
       },
       "index.design-philosophy-principles-167fcb7c": {
-        "en": "Design philosophy & principles",
-        "zh": "設計理念與原則"
+        "en": "Design principles",
+        "zh": "設計原則"
       },
       "index.four-principles-i-return-to-throughout-every-8d279c08": {
-        "en": "Four principles I return to throughout every project—from framing the problem to shipping a system teams can use.",
-        "zh": "從定義問題到交付團隊能使用的系統，每個專案我都會持續回到這四項原則檢查決策。"
+        "en": "How I make decisions.",
+        "zh": "我如何做決策。"
       },
       "index.playground-e6d970b6": {
         "en": "Playground",
