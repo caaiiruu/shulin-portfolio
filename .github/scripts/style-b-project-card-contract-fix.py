@@ -56,33 +56,3 @@ if old_decorate not in work:
     raise SystemExit('decorateCard block not found')
 work = work.replace(old_decorate, new_decorate, 1)
 work_path.write_text(work)
-
-qa_path = Path('.github/workflows/style-b-project-card-final-qa.yml')
-qa = qa_path.read_text()
-qa = qa.replace("id==='dbs'||id==='taishin-p2p-marketplace'", "id==='dbs'||id==='taishin-p2p-marketplace-platform'")
-qa = qa.replace("id==='booking'||id==='booking-taxi-strategy'", "id==='booking'||id==='booking-taxi-pickup-service-strategy'")
-
-old_work_visual = """                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
-                const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
-"""
-new_work_visual = """                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
-                const geometry=await img.evaluate(el=>{const r=el.getBoundingClientRect();const f=el.parentElement.getBoundingClientRect();return {dx:Math.abs(r.x-f.x),dy:Math.abs(r.y-f.y),dw:Math.abs(r.width-f.width),dh:Math.abs(r.height-f.height)}});
-                assert(Math.max(geometry.dx,geometry.dy,geometry.dw,geometry.dh)<=1,`Work ${width} ${id}: Lead Visual not geometrically full bleed ${JSON.stringify(geometry)}`);
-                const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
-"""
-if old_work_visual not in qa:
-    raise SystemExit('work visual assertion block not found')
-qa = qa.replace(old_work_visual, new_work_visual, 1)
-
-old_domain_visual = """                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
-                assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
-"""
-new_domain_visual = """                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
-                const geometry=await img.evaluate(el=>{const r=el.getBoundingClientRect();const f=el.parentElement.getBoundingClientRect();return {dx:Math.abs(r.x-f.x),dy:Math.abs(r.y-f.y),dw:Math.abs(r.width-f.width),dh:Math.abs(r.height-f.height)}});
-                assert(Math.max(geometry.dx,geometry.dy,geometry.dw,geometry.dh)<=1,`Domain ${width} ${id}: Lead Visual not geometrically full bleed ${JSON.stringify(geometry)}`);
-                assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
-"""
-if old_domain_visual not in qa:
-    raise SystemExit('domain visual assertion block not found')
-qa = qa.replace(old_domain_visual, new_domain_visual, 1)
-qa_path.write_text(qa)
