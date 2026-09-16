@@ -13,7 +13,9 @@
   "items": {
     "red-dot-2016-game-design-winner-public-v1": {
       "id": "red-dot-2016-game-design-winner-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "hello-sabau",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-game-design-winner-public-v1.jpg",
@@ -38,7 +40,9 @@
     },
     "red-dot-2016-packaging-design-winner-public-v1": {
       "id": "red-dot-2016-packaging-design-winner-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "matsu-temple-packaging",
       "type": "image/jpeg",
       "publicPath": "/site/assets/recognition/red-dot-2016-packaging-design-winner-public-v1.jpg",
@@ -1605,7 +1609,9 @@
     },
     "rsa-student-design-awards-competition-public-v1": {
       "id": "rsa-student-design-awards-competition-public-v1",
-      "sharedWith": ["profile"],
+      "sharedWith": [
+        "profile"
+      ],
       "projectId": "capture-ideas",
       "type": "image/jpeg",
       "publicPath": "/site/assets/experiments/capture-ideas/rsa-student-design-awards-competition-public-v1.jpg",
@@ -2239,5 +2245,345 @@
       "gutter",
       "caption geometry"
     ]
+  },
+  "projectCardLeadVisuals": {
+    "schemaVersion": 1,
+    "owner": "portfolio-asset-manifest.json",
+    "componentOwner": "ProjectCard",
+    "variants": [
+      "featured",
+      "standard",
+      "compact"
+    ],
+    "source": "approvedCanonicalMasterOnly",
+    "usage": [
+      "home",
+      "domain",
+      "work"
+    ],
+    "aspectRatio": "16:9",
+    "fit": "cover",
+    "rules": [
+      "Exactly one approved canonical master per project.",
+      "Home, Domain and Work may not choose alternate card imagery.",
+      "Derivative files are generated from the canonical master only.",
+      "No derivative may become a new source of truth.",
+      "Never upscale a canonical master to manufacture a larger derivative.",
+      "Canonical ingestion must match the locked SHA-256 before activation.",
+      "If the approved source binary is unavailable, mapping must remain unresolved rather than falling back silently."
+    ],
+    "projects": {
+      "daily-hours": {
+        "company": "Shulin Studio",
+        "type": "0→1 Product",
+        "year": "2026",
+        "brandFamily": "daily-hours",
+        "brandTint": "rgb(230 237 245)",
+        "sourceIntakeName": "Daily hours.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/daily-hours.jpg",
+        "expectedCanonicalSha256": "15e6a0500ee0a5c009e967882686931c53ca1ffec35d9241bf305254f279c3ef",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 248825,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/daily-hours-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/daily-hours-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/daily-hours.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "payment": {
+        "brandFamily": "fairprice",
+        "brandTint": "rgb(230 239 255)",
+        "sourceIntakeName": "payment.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/payment.jpg",
+        "expectedCanonicalSha256": "42fdba72e930bfeee3f6e0518ca702d41747464011fe505feedf52f3d0a2df47",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 277384,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/payment-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/payment-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/payment.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "voucher": {
+        "brandFamily": "fairprice",
+        "brandTint": "rgb(230 239 255)",
+        "sourceIntakeName": "voucher:offer.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/voucher.jpg",
+        "expectedCanonicalSha256": "6b4d31c222ea72b5da33ca051a42f51dac557ff523a20c6ca2e44b5c35e01918",
+        "expectedDimensions": [
+          1671,
+          941
+        ],
+        "expectedBytes": 319267,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/voucher-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/voucher-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/voucher.jpg",
+            "width": 1671
+          }
+        ]
+      },
+      "voucher-center": {
+        "brandFamily": "fairprice",
+        "brandTint": "rgb(230 239 255)",
+        "sourceIntakeName": "voucher center.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/voucher-center.jpg",
+        "expectedCanonicalSha256": "1e14bdd49a0bc917e475dd864ffab07ccb75e79aa55426478217de56327ad365",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 347216,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/voucher-center-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/voucher-center-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/voucher-center.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "game-center": {
+        "brandFamily": "fairprice",
+        "brandTint": "rgb(230 239 255)",
+        "sourceIntakeName": "Game center.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/game-center.jpg",
+        "expectedCanonicalSha256": "c017885ace3dba3fc5e1bef37b7c3de33bf2c804db351c79c3fa5913ab03b0ec",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 354964,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/game-center-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/game-center-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/game-center.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "dbs": {
+        "brandFamily": "dbs",
+        "brandTint": "rgb(252 232 234)",
+        "sourceIntakeName": "DBS.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/dbs.jpg",
+        "expectedCanonicalSha256": "a2559c7aa82fee47f2381b164157b2482a023c5c330f170bd9e7ad9fbb26bcb5",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 280468,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/dbs-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/dbs-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/dbs.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "booking": {
+        "brandFamily": "booking",
+        "brandTint": "rgb(232 242 255)",
+        "sourceIntakeName": "Booking.com connected trip.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/booking.jpg",
+        "expectedCanonicalSha256": "b12b60dd197c14342d6abbb2ae01791db8175034d882849c63cf63c3c4e92cfd",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 291747,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/booking-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/booking-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/booking.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "cathay-mortgage-assistant": {
+        "brandFamily": "cathay",
+        "brandTint": "rgb(228 244 239)",
+        "sourceIntakeName": "國泰房貸.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-mortgage-assistant.jpg",
+        "expectedCanonicalSha256": "c3cd1e6995bfefff992834147ebf9a4a1681ff14eeb615366aa12f26777cf21d",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 326642,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/cathay-mortgage-assistant-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-mortgage-assistant-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-mortgage-assistant.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "cathay-sit-online-account-opening": {
+        "brandFamily": "cathay",
+        "brandTint": "rgb(228 244 239)",
+        "sourceIntakeName": "國泰投信線上開戶.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-sit-online-account-opening.jpg",
+        "expectedCanonicalSha256": "1d1f7f5844192af4e8f16a4ee87f95a9d79b5509a98971dc782f0c16d5a9299e",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 273260,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-online-account-opening-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-online-account-opening-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-online-account-opening.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "cathay-sit-review-remediation-operations": {
+        "brandFamily": "cathay",
+        "brandTint": "rgb(228 244 239)",
+        "sourceIntakeName": "國泰審件補件.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations.jpg",
+        "expectedCanonicalSha256": "78ba61442a2fb886c769bfb636c4de2b29226dcc740a898b3773321bc4320cde",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 243165,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations.jpg",
+            "width": 1672
+          }
+        ]
+      },
+      "ctbc-mortgage-self-service-app": {
+        "brandFamily": "ctbc",
+        "brandTint": "rgb(229 242 236)",
+        "sourceIntakeName": "中信房貸.png",
+        "pendingCanonicalPath": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app.jpg",
+        "expectedCanonicalSha256": "503a70d375b58848e0bf159274f35acd6fb6eef8a5dc5cf2955bba079525e5e1",
+        "expectedDimensions": [
+          1672,
+          941
+        ],
+        "expectedBytes": 281320,
+        "canonicalMaster": null,
+        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "pendingDeliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app-800.jpg",
+            "width": 800
+          },
+          {
+            "path": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app-1200.jpg",
+            "width": 1200
+          },
+          {
+            "path": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app.jpg",
+            "width": 1672
+          }
+        ]
+      }
+    }
   }
 }

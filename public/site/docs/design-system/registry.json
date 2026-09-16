@@ -487,7 +487,8 @@
           "tests/portfolio-browser-qa.mjs",
           ".github/workflows/style-b-project-card-final-qa.yml"
         ],
-        "assetRegistry": "content/project-card-registry.json"
+        "assetRegistry": "content/portfolio-asset-manifest.json#projectCardLeadVisuals",
+        "assetRegistryRole": "Canonical ProjectCard Lead Visual identity, approved source hash, brand tint and delivery projection"
       },
       "ProjectDetailOverview": {
         "registryComponent": "ProjectDetailOverview",
