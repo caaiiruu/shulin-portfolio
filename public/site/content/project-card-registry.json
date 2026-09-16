@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "owner": "Shared ProjectCard System",
+  "variants": ["featured", "standard", "compact"],
+  "leadVisualContract": {
+    "source": "canonicalMaster",
+    "derivatives": [800, 1200, 1600],
+    "aspectRatio": "16:9",
+    "fit": "cover",
+    "usage": ["home", "domain", "work"],
+    "notes": "One canonical master per project. Page owners must not select alternate project-card imagery."
+  },
+  "projects": {
+    "daily-hours": {
+      "company": "Shulin Studio",
+      "type": "0→1 Product",
+      "year": "2026",
+      "brandTint": "rgb(224 241 233)",
+      "canonicalMaster": "/site/assets/projects/daily-hours/daily-hours-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/daily-hours"
+    },
+    "payment": {
+      "brandTint": "rgb(245 235 210)",
+      "canonicalMaster": "/site/assets/projects/payment/payment-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/payment"
+    },
+    "voucher": {
+      "brandTint": "rgb(223 235 246)",
+      "canonicalMaster": "/site/assets/projects/voucher/voucher-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/voucher"
+    },
+    "voucher-center": {
+      "brandTint": "rgb(223 235 246)",
+      "canonicalMaster": "/site/assets/projects/voucher-center/voucher-center-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/voucher-center"
+    },
+    "game-center": {
+      "brandTint": "rgb(245 235 210)",
+      "canonicalMaster": "/site/assets/projects/game-center/game-center-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/game-center"
+    },
+    "dbs": {
+      "brandTint": "rgb(231 229 249)",
+      "canonicalMaster": "/site/assets/projects/dbs/dbs-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/dbs"
+    },
+    "booking": {
+      "brandTint": "rgb(223 235 246)",
+      "canonicalMaster": "/site/assets/projects/booking/booking-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/booking"
+    },
+    "cathay-mortgage-assistant": {
+      "brandTint": "rgb(224 241 233)",
+      "canonicalMaster": "/site/assets/projects/cathay-mortgage-assistant/cathay-mortgage-assistant-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/cathay-mortgage-assistant"
+    },
+    "cathay-sit-online-account-opening": {
+      "brandTint": "rgb(224 241 233)",
+      "canonicalMaster": "/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/cathay-sit-online-account-opening"
+    },
+    "cathay-sit-review-remediation-operations": {
+      "brandTint": "rgb(248 225 214)",
+      "canonicalMaster": "/site/assets/projects/cathay-sit-review-remediation-operations/cathay-review-remediation-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/cathay-sit-review-remediation-operations"
+    },
+    "ctbc-mortgage-self-service-app": {
+      "brandTint": "rgb(224 241 233)",
+      "canonicalMaster": "/site/assets/projects/ctbc-mortgage-self-service-app/ctbc-mortgage-self-service-lead-visual-canonical.jpg",
+      "derivativeBase": "/site/assets/style-b/lead-visuals-webp/ctbc-mortgage-self-service-app"
+    }
+  }
+}
