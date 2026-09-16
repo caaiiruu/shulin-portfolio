@@ -1,0 +1,116 @@
+name: Style B ProjectCard Browser Contract Repair
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-browser-contract-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Repair browser QA to match canonical link and legacy-dialog contracts
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/style-b-project-card-final-qa.yml')
+          s=p.read_text()
+          old="""                const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
+                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
+                const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
+                const expectedTint=brandTint(id); if(expectedTint) assert(tint===expectedTint,`Work ${width} ${id}: tint ${tint} expected ${expectedTint}`);
+                assert(await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Work ${width} ${id}: title underline`);
+                assert(await card.locator('.work-card-v32__button').getAttribute('href'),`Work ${width} ${id}: whole-card route missing`);
+"""
+          new="""                const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
+                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
+                const geometry=await img.evaluate(el=>{const r=el.getBoundingClientRect();const f=el.parentElement.getBoundingClientRect();return {dx:Math.abs(r.x-f.x),dy:Math.abs(r.y-f.y),dw:Math.abs(r.width-f.width),dh:Math.abs(r.height-f.height)}});
+                assert(Math.max(geometry.dx,geometry.dy,geometry.dw,geometry.dh)<=1,`Work ${width} ${id}: Lead Visual is not geometrically full bleed ${JSON.stringify(geometry)}`);
+                const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
+                const expectedTint=brandTint(id); if(expectedTint) assert(tint===expectedTint,`Work ${width} ${id}: tint ${tint} expected ${expectedTint}`);
+                assert(await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Work ${width} ${id}: title underline`);
+                const control=card.locator('.work-card-v32__button');
+                const href=await control.getAttribute('href'); const projectKey=await control.getAttribute('data-project');
+                assert(Boolean(href||projectKey),`Work ${width} ${id}: neither canonical route nor legacy dialog trigger exists`);
+                const hit=await control.evaluate((el)=>{const c=el.getBoundingClientRect();const p=el.closest('.work-card-v32').getBoundingClientRect();return {dw:Math.abs(c.width-p.width),dh:Math.abs(c.height-p.height)}});
+                assert(hit.dw<=1&&hit.dh<=1,`Work ${width} ${id}: whole-card hit target does not cover card ${JSON.stringify(hit)}`);
+"""
+          if old not in s: raise SystemExit('work-card assertion block not found')
+          s=s.replace(old,new,1)
+          old2="""              await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
+              const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
+              if(await payment.count()){
+                const expected=normalizePath(await payment.getAttribute('href'));
+                await Promise.all([page.waitForLoadState('domcontentloaded'),payment.click()]);
+                assert(normalizePath(page.url())===expected,`Work ${width}: whole-card navigation failed`);
+              }
+"""
+          new2="""              if(width===1419){
+                const row=work.locator('.work-index__featured-secondary-row > .work-card-v32[data-project-card-variant="standard"]');
+                if(await row.count()===2){
+                  const cardHeights=await row.evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().height));
+                  const mediaHeights=await row.locator('.work-artifact').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().height));
+                  assert(Math.abs(cardHeights[0]-cardHeights[1])<=1,`Work 1419: standard-row card heights differ ${cardHeights}`);
+                  assert(Math.abs(mediaHeights[0]-mediaHeights[1])<=1,`Work 1419: standard-row media heights differ ${mediaHeights}`);
+                }
+                const hoverCard=cards.first(); const hoverControl=hoverCard.locator('.work-card-v32__button'); const hoverImage=hoverCard.locator('.work-card-v32__image-v225'); const hoverArrow=hoverCard.locator('.work-card-v32__action .icon-arrow--right');
+                const before=await Promise.all([hoverImage.evaluate(el=>getComputedStyle(el).transform),hoverArrow.evaluate(el=>getComputedStyle(el).transform)]);
+                await hoverControl.hover(); await page.waitForTimeout(250);
+                const after=await Promise.all([hoverImage.evaluate(el=>getComputedStyle(el).transform),hoverArrow.evaluate(el=>getComputedStyle(el).transform)]);
+                assert(after[0]!==before[0],`Work 1419: fine-pointer image zoom did not activate`);
+                assert(after[1]!==before[1],`Work 1419: fine-pointer CTA arrow shift did not activate`);
+              }
+              await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
+              const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
+              if(await payment.count()){
+                const href=await payment.getAttribute('href'); const projectKey=await payment.getAttribute('data-project');
+                if(href){
+                  const expected=normalizePath(href);
+                  await Promise.all([page.waitForLoadState('domcontentloaded'),payment.click()]);
+                  assert(normalizePath(page.url())===expected,`Work ${width}: whole-card route navigation failed`);
+                }else{
+                  assert(projectKey==='payment',`Work ${width}: legacy trigger identity drift ${projectKey}`);
+                  await payment.click();
+                  await page.waitForFunction(()=>document.querySelector('#detailDialog')?.open===true);
+                  assert(await page.locator('#detailDialog[open]').count()===1,`Work ${width}: legacy whole-card dialog did not open`);
+                  await page.keyboard.press('Escape');
+                  await page.waitForFunction(()=>document.querySelector('#detailDialog')?.open!==true);
+                }
+              }
+"""
+          if old2 not in s: raise SystemExit('navigation block not found')
+          s=s.replace(old2,new2,1)
+          old3="""                const img=active.locator('.domain-project-card-v2__image');
+                assert(await img.getAttribute('src')===expected,`Domain ${width} ${id}: wrong Lead Visual`);
+                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
+"""
+          new3="""                const img=active.locator('.domain-project-card-v2__image');
+                assert(await img.getAttribute('src')===expected,`Domain ${width} ${id}: wrong Lead Visual`);
+                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
+                const geometry=await img.evaluate(el=>{const r=el.getBoundingClientRect();const f=el.parentElement.getBoundingClientRect();return {dx:Math.abs(r.x-f.x),dy:Math.abs(r.y-f.y),dw:Math.abs(r.width-f.width),dh:Math.abs(r.height-f.height)}});
+                assert(Math.max(geometry.dx,geometry.dy,geometry.dw,geometry.dh)<=1,`Domain ${width} ${id}: Lead Visual is not geometrically full bleed ${JSON.stringify(geometry)}`);
+"""
+          if old3 not in s: raise SystemExit('domain visual block not found')
+          s=s.replace(old3,new3,1)
+          p.write_text(s)
+          PY
+      - name: Commit browser-contract repair
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/style-b-project-card-browser-contract-repair.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Certify ProjectCard route dialog geometry and hover contracts'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
