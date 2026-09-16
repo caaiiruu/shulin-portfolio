@@ -1,0 +1,57 @@
+name: Style B ProjectCard Registry Sync
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-registry-sync.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Synchronize canonical ProjectCard governance entry
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const p='public/site/docs/design-system/registry.json';
+          const data=JSON.parse(fs.readFileSync(p,'utf8'));
+          const pc=data?.governanceGraph?.componentContracts?.ProjectCard;
+          if(!pc) throw new Error('ProjectCard registry entry missing');
+          pc.cssOwner='assets/css/components/project-card.css';
+          pc.renderOwners=[
+            'assets/js/app.js',
+            'assets/js/home.js',
+            'assets/js/work.js',
+            'assets/js/domain-experience.js',
+            'assets/js/project-card-media.js'
+          ];
+          pc.assetRegistry='content/project-card-registry.json';
+          pc.variants=['Featured','Standard','Compact'];
+          pc.variantConsumers={
+            Featured:['homepageCards','workCards','domainNavigation'],
+            Standard:['workCards','domainNavigation'],
+            Compact:['workCards','searchCards','relatedCards','experimentCards']
+          };
+          pc.consumerGroups=['homepageCards','workCards','experimentCards','searchCards','relatedCards','domainNavigation'];
+          pc.discoveryMarkers=['work-card-v32','domain-project-card-v2','experiment-index-card-v36','related-project-card-v45'];
+          pc.regressionProfiles=['listingCards'];
+          pc.regressionContracts=['tests/design-system-governance.test.mjs','tests/portfolio-browser-qa.mjs','.github/workflows/style-b-project-card-final-qa.yml'];
+          fs.writeFileSync(p,JSON.stringify(data,null,2)+'\n');
+          NODE
+          rm -f .github/workflows/style-b-project-card-registry-sync.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/docs/design-system/registry.json .github/workflows/style-b-project-card-registry-sync.yml
+          git diff --check --cached
+          git commit -m 'Synchronize ProjectCard design-system registry'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
