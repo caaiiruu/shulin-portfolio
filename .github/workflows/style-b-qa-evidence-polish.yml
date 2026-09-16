@@ -1,0 +1,48 @@
+name: Style B QA Evidence Polish
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-qa-evidence-polish.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Load lazy ProjectCard media before evidence capture
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('.github/workflows/style-b-project-card-final-qa.yml')
+          qa=path.read_text()
+          anchor='              if(width===1419){\n'
+          block='''              for(let i=0;i<await mapped.count();i++){
+                const card=mapped.nth(i);
+                await card.scrollIntoViewIfNeeded();
+                const img=card.locator('.work-card-v32__image-v225');
+                await img.evaluate(async el=>{if(!el.complete)await new Promise(resolve=>el.addEventListener('load',resolve,{once:true}));if(el.decode)await el.decode().catch(()=>{});});
+              }
+              await page.evaluate(()=>window.scrollTo(0,0));
+'''
+          if block.strip() not in qa:
+              if anchor not in qa:
+                  raise SystemExit('QA insertion anchor missing')
+              qa=qa.replace(anchor,block+anchor,1)
+          path.write_text(qa)
+          PY
+          rm -f .github/workflows/style-b-qa-evidence-polish.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/style-b-project-card-final-qa.yml .github/workflows/style-b-qa-evidence-polish.yml
+          git diff --check --cached
+          git commit -m 'Load lazy ProjectCard media before visual evidence capture'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
