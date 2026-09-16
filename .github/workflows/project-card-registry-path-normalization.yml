@@ -1,0 +1,44 @@
+name: ProjectCard Registry Path Normalization
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/project-card-registry-path-normalization.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Normalize Lead Visual asset paths
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const p='public/site/content/project-card-registry.json';
+          const data=JSON.parse(fs.readFileSync(p,'utf8'));
+          data.leadVisualContract.assetOwnerDirectory='/site/assets/project-card-leads/';
+          data.leadVisualContract.responsiveWidths=[800,1200];
+          data.leadVisualContract.canonicalWidth='source-width-no-upscale';
+          for(const [id,entry] of Object.entries(data.projects||{})){
+            entry.pendingCanonicalPath=`/site/assets/project-card-leads/${id}.jpg`;
+            entry.pendingDeliverySources=[
+              {path:`/site/assets/project-card-leads/${id}-800.jpg`,width:800},
+              {path:`/site/assets/project-card-leads/${id}-1200.jpg`,width:1200},
+              {path:`/site/assets/project-card-leads/${id}.jpg`,width:(entry.expectedDimensions||[])[0]||1600}
+            ];
+          }
+          fs.writeFileSync(p,JSON.stringify(data,null,2)+'\n');
+          NODE
+          rm -f .github/workflows/project-card-registry-path-normalization.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Normalize ProjectCard Lead Visual asset ownership paths'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
