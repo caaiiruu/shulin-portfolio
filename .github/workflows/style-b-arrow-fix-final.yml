@@ -1,0 +1,40 @@
+name: Style B Arrow Fix Final
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-arrow-fix-final.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Patch arrow direction in shared ProjectCard owner
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('public/site/assets/css/components/project-card-system.css')
+          css=p.read_text()
+          css=css.replace('transform:none;transition:transform var(--motion-base) var(--ease-enter)}','transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}',1)
+          css=css.replace('transform:translateX(var(--project-card-system-hover-shift))}','transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))}',1)
+          marker='.domain-project-card-v2[data-project-card-system="shared-v1"]:hover .domain-project-card-v2__cta-arrow{\n    transform:translateX(var(--project-card-system-hover-shift))\n  }'
+          replacement='.domain-project-card-v2[data-project-card-system="shared-v1"]:hover .domain-project-card-v2__cta-arrow{\n    transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))\n  }'
+          css=css.replace(marker,replacement)
+          p.write_text(css)
+          PY
+          rm -f .github/workflows/style-b-arrow-fix-final.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/css/components/project-card-system.css .github/workflows/style-b-arrow-fix-final.yml
+          git diff --check --cached
+          git commit -m 'Finalize rightward ProjectCard CTA arrow parity'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
