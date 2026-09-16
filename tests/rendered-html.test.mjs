@@ -1595,7 +1595,7 @@ test("Work Voucher card uses the canonical project-cover image owner", () => {
   const css=read("assets/css/components/project-card.css");
   const manifest=JSON.parse(read("content/portfolio-asset-manifest.json"));
   const asset=manifest.items["voucher-hero-incentive-journey-public-v1"];
-  assert.equal(asset.sha256,"4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8");
+  assert.equal(asset.sha256,"f5331961c10a480bd19b084d36503d03acc0cc1d4f92596e34996e6cec14c109");
   assert.equal(asset.implementationStatus,"real-active");
   assert.doesNotMatch(work,/work-artifact--voucher/);
   assert.match(work,/data-frame-role="project-cover"/);

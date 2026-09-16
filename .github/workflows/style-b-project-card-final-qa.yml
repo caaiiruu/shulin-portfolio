@@ -37,6 +37,7 @@ jobs:
         run: |
           node <<'NODE'
           const fs=require('fs');
+          const crypto=require('crypto');
           const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
           const assets=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
           const ds=JSON.parse(fs.readFileSync('public/site/docs/design-system/registry.json','utf8'));
@@ -53,18 +54,24 @@ jobs:
           if(pc?.cssOwner!=='assets/css/components/project-card.css') throw new Error('ProjectCard CSS owner drift');
           if(pc?.assetRegistry!=='content/portfolio-asset-manifest.json#projectCardLeadVisuals') throw new Error('ProjectCard asset registry drift');
           const heroAssetId=(project)=>project?.publicContent?.imagePlan?.find?.(x=>x?.role==='hero'&&x?.assetId)?.assetId||project?.heroVisualBrief?.assetId||'';
+          const verifyFile=(label,item)=>{
+            const file='public'+item.publicPath.replace(/^\/site/,'/site');
+            if(!fs.existsSync(file)) throw new Error(`${label}: file missing ${file}`);
+            const sha=crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+            if(!item.sha256||sha!==item.sha256) throw new Error(`${label}: file SHA256 does not match canonical manifest`);
+          };
           for(const [id,project] of entries){
             const assetId=heroAssetId(project); if(!assetId) throw new Error(`${id}: hero asset ID missing`);
             const item=assets.items?.[assetId]; if(!item) throw new Error(`${id}: manifest item ${assetId} missing`);
             if(item.type!=='image/jpeg') throw new Error(`${id}: Lead Visual is not JPG`);
             if(item.assetStatus!=='production'||item.implementationStatus!=='real-active'||item.replacementRequired!==false) throw new Error(`${id}: Lead Visual not production-approved`);
             if(Number(item.width)<1600||Number(item.height)<900) throw new Error(`${id}: Lead Visual resolution too low ${item.width}x${item.height}`);
-            const file='public'+item.publicPath.replace(/^\/site/,'/site'); if(!fs.existsSync(file)) throw new Error(`${id}: file missing ${file}`);
+            verifyFile(id,item);
             if(!assets.projectCardLeadVisuals?.brandTints?.[id]) throw new Error(`${id}: canonical ProjectCard brand tint missing`);
           }
           const daily=assets.projectCardLeadVisuals?.dailyHours;
-          if(!daily||daily.type!=='image/jpeg'||daily.width!==1600||daily.height!==900) throw new Error('Daily Hours listing JPG projection invalid');
-          if(!fs.existsSync('public'+daily.publicPath.replace(/^\/site/,'/site'))) throw new Error('Daily Hours listing JPG missing');
+          if(!daily||daily.type!=='image/jpeg'||daily.assetStatus!=='production'||daily.implementationStatus!=='real-active'||daily.replacementRequired!==false||Number(daily.width)<1600||Number(daily.height)<900) throw new Error('Daily Hours listing JPG fidelity contract invalid');
+          verifyFile('daily-hours',daily);
           if(!assets.projectCardLeadVisuals?.brandTints?.['daily-hours']) throw new Error('Daily Hours canonical ProjectCard brand tint missing');
           const work=fs.readFileSync('public/site/assets/js/work.js','utf8');
           const domain=fs.readFileSync('public/site/assets/js/domain-experience.js','utf8');
@@ -113,13 +120,13 @@ jobs:
           const content=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/portfolio-content.json'),'utf8'));
           const assets=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/portfolio-asset-manifest.json'),'utf8'));
           const heroAssetId=(project)=>project?.publicContent?.imagePlan?.find?.(x=>x?.role==='hero'&&x?.assetId)?.assetId||project?.heroVisualBrief?.assetId||'';
-          const expectedVisual=(id)=>{
-            if(id==='daily-hours') return assets.projectCardLeadVisuals?.dailyHours?.publicPath||'';
+          const expectedAsset=(id)=>{
+            if(id==='daily-hours') return assets.projectCardLeadVisuals?.dailyHours||null;
             const project=content.projects?.[id];
             if(!project) throw new Error(`${id}: project missing from canonical portfolio-content.json`);
-            const assetId=heroAssetId(project);
-            return assets.items?.[assetId]?.publicPath||'';
+            return assets.items?.[heroAssetId(project)]||null;
           };
+          const expectedVisual=(id)=>expectedAsset(id)?.publicPath||'';
           const brandTint=(id)=>assets.projectCardLeadVisuals?.brandTints?.[id]||'';
           const assert=(value,message)=>{if(!value)throw new Error(message)};
           const normalizePath=value=>new URL(value,'http://local').pathname.replace(/\.html$/,'').replace(/^\/site/,'')||'/';
@@ -142,6 +149,11 @@ jobs:
               });
             },evidenceMode);
             assert(loaded,`${label}: image bytes failed to load`);
+          };
+          const assertIntrinsicMatchesManifest=async(img,id,label)=>{
+            const expected=expectedAsset(id); assert(expected,`${label}: manifest asset missing`);
+            const intrinsic=await img.evaluate(el=>({width:el.naturalWidth,height:el.naturalHeight}));
+            assert(intrinsic.width===Number(expected.width)&&intrinsic.height===Number(expected.height),`${label}: intrinsic ${intrinsic.width}x${intrinsic.height} does not match manifest ${expected.width}x${expected.height}`);
           };
           const report={};
           try{
@@ -191,6 +203,7 @@ jobs:
                 assert(normalizePath(href)===`/work/${id}`,`Work ${width} ${id}: whole-card route ${href}`);
                 await card.scrollIntoViewIfNeeded();
                 await waitForImage(img,`Work ${width} ${id}`,{evidenceMode:true});
+                await assertIntrinsicMatchesManifest(img,id,`Work ${width} ${id}`);
                 await page.waitForTimeout(80);
                 const shot=`work-card-${width}-${String(i+1).padStart(2,'0')}-${id}.png`;
                 await card.screenshot({path:path.join(out,shot),animations:'disabled'});
@@ -229,6 +242,7 @@ jobs:
                 const domainStyles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity,display:getComputedStyle(el).display,visibility:getComputedStyle(el).visibility}));
                 assert(domainStyles.fit==='cover'&&domainStyles.opacity==='1'&&domainStyles.display!=='none'&&domainStyles.visibility==='visible',`Domain ${width} ${id}: media paint contract ${JSON.stringify(domainStyles)}`);
                 await waitForImage(img,`Domain ${width} ${id}`,{evidenceMode:true});
+                await assertIntrinsicMatchesManifest(img,id,`Domain ${width} ${id}`);
                 assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
                 assert(await noUnderline(active.locator('.domain-project-card-v2__cta')),`Domain ${width} ${id}: CTA underline`);
                 const tint=await active.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim()); const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Domain ${width} ${id}: tint ${tint} expected ${expectedTint}`);

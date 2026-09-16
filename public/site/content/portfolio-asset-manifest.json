@@ -76,12 +76,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "cd2e47a58b64e4b0fd8b6cb264ef996959eb9f80216c79542a9bd2e94e7e6146",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "14124e5ca4923c22ad8903a76886b51f6b32b0e1d0c02a5d188c093ee4e456e4",
+      "width": 1672,
+      "height": 941,
       "alt": "Cathay review-remediation operating model shown across connected workflow artifacts.",
       "alt_zh": "國泰審查補件營運模型的串接流程圖。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "cathay-review-process-complexity-public-v1": {
       "id": "cathay-review-process-complexity-public-v1",
@@ -154,12 +156,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "0baae930d225c7fa67222e112afbdab562bb8b7511ad1c270bd6bfd92f8f1ec2",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "e08f17370fa7fab0355548ff29f9e09263ea6a2569d4c77f163ca272acd9a111",
+      "width": 1672,
+      "height": 941,
       "alt": "Voucher Center claim journey shown in the FairPrice mobile experience.",
       "alt_zh": "FairPrice 行動體驗中的 Voucher Center 領取流程。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "gamecenter-hero-shipped-before-after-public-v1": {
       "id": "gamecenter-hero-shipped-before-after-public-v1",
@@ -172,12 +176,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "063b8259d3505d9cb4dfdb9bd2a5995391cf342f1d0f54bb124b010f417ced17",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "7c1034a0a675058893fd09003e221ca2c1970e7c7f0d20372b5e644938e67c23",
+      "width": 1672,
+      "height": 941,
       "alt": "Game Center multi-game discovery experience shown on mobile.",
       "alt_zh": "Game Center 多遊戲探索體驗的手機畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "dbs-project-card-primary-01": {
       "id": "dbs-project-card-primary-01",
@@ -190,12 +196,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "c341df41476b09eddaed779e68bc923587d55067482d1d27bf5e3629040067bf",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "660a32a141cafa66b546af26fa2f24505961f0a828d944dbb15bb58f3e2700cf",
+      "width": 1672,
+      "height": 941,
       "alt": "DBS exception and risk workbench shown across two desktop views.",
       "alt_zh": "DBS 例外與風險工作台的兩個桌面畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "booking-hero-connected-booking-public-v1": {
       "id": "booking-hero-connected-booking-public-v1",
@@ -208,12 +216,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "83a1e6bba227db1c7609d217deae346dcdc3ea419148424986160fb465a71ed6",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "c04815c8513afdb8103e1e3b075ecb90f088f1bb979c624e47fc6b8ebef05e44",
+      "width": 1672,
+      "height": 941,
       "alt": "Booking connected-trip timeline experience shown across mobile and desktop.",
       "alt_zh": "Booking Connected Trip 時間軸體驗的手機與桌面畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "bandzo-hero-guided-practice-public-v1": {
       "id": "bandzo-hero-guided-practice-public-v1",
@@ -288,12 +298,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "db141b4eff5cdcc8f1a07205d07ee2dd9a808f47f417ed6cc1601645881457d7",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "46747ae851aaedd903b415fbfc479b1eeb29a79b9c255d8b1787eba16ea6ce70",
+      "width": 1672,
+      "height": 941,
       "alt": "Cathay mortgage consultation system shown across map and consultation views.",
       "alt_zh": "國泰房貸諮詢系統的地圖與諮詢畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "payment-hero-unified-checkout-public-v1": {
       "id": "payment-hero-unified-checkout-public-v1",
@@ -306,12 +318,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "f68d23dd247f0e85ca1468ca23d01a09951c6d55cd847bd0af6225071dff285f",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "4b54701970ceacb2b5f814053798281ed7f677c2a721bdb74a580dc6ab093e39",
+      "width": 1672,
+      "height": 941,
       "alt": "FairPrice App and self-checkout payment experience across mobile and kiosk screens.",
       "alt_zh": "FairPrice App 與自助結帳付款體驗的手機與機台畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "payment-sco-research-photo-human-approved-v1": {
       "id": "payment-sco-research-photo-human-approved-v1",
@@ -462,12 +476,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "2eb8b6ef4b799dd925fbcea786d6d11641e9c51185a26011e99de33062b6dfd6",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "758e3fdd0bfb288f8395262d1752508cf1f2b54bfbfb48498a16147ae137accd",
+      "width": 1672,
+      "height": 941,
       "alt": "Cathay online account-opening flow shown across four mobile screens.",
       "alt_zh": "國泰線上開戶流程的四個手機畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "ctbc-mortgage-hero-final-flow-public-v1": {
       "id": "ctbc-mortgage-hero-final-flow-public-v1",
@@ -480,12 +496,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "032c45ffacf1549e6bec04c3fe156883870a1a3e1ebd771ce657f671d452cb5c",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "53ab5712e3b41a072873059f4919861df6aaf114a07ae3c0774e86e95580261c",
+      "width": 1672,
+      "height": 941,
       "alt": "CTBC mortgage self-service experience shown across two mobile screens.",
       "alt_zh": "中信房貸自助服務體驗的兩個手機畫面。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "booking-taxi-pickup-overview-source-v1": {
       "id": "booking-taxi-pickup-overview-source-v1",
@@ -1283,12 +1301,14 @@
       "placeholderFallbackAssetId": null,
       "replacementRequired": false,
       "publicBuild": true,
-      "sha256": "4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8",
-      "width": 2048,
-      "height": 1152,
+      "sha256": "f5331961c10a480bd19b084d36503d03acc0cc1d4f92596e34996e6cec14c109",
+      "width": 1672,
+      "height": 941,
       "alt": "Voucher incentive ecosystem shown across three mobile product screens.",
       "alt_zh": "優惠券獎勵生態系在三支行動產品畫面中的呈現。",
-      "projectCardFocalPosition": "center center"
+      "projectCardFocalPosition": "center center",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "voucher-offer-stage-discover-pdp-before-01": {
       "id": "voucher-offer-stage-discover-pdp-before-01",
@@ -2250,11 +2270,20 @@
     "schemaVersion": 1,
     "owner": "ProjectCard",
     "dailyHours": {
+      "id": "daily-hours-listing-projection",
       "projectId": "daily-hours",
       "publicPath": "/site/assets/project-card-leads/daily-hours.jpg",
       "type": "image/jpeg",
-      "width": 1600,
-      "height": 900
+      "aspectRatio": "1672:941",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1672,
+      "height": 941,
+      "sha256": "5b4fb69f613784adec31e17f430f1a1b4826959e309a3146b9f84c576a294dc2",
+      "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
+      "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
     "brandTints": {
       "payment": "rgb(230 239 255)",
