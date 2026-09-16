@@ -22,6 +22,7 @@
     return planned || project?.heroVisualBrief?.assetId || '';
   };
 
+  // Project-specific surface metadata is owned by the canonical asset manifest, not CSS/page owners.
   const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';
 
   const visualForProject = id => {
