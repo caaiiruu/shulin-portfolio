@@ -1,0 +1,1 @@
+Exact-head certification trigger for integration/style-b-project-card-webp-v1 after bot-authored arrow parity commit e41f8909ab817e50ddec0ebcd7d8454886e425b1.
