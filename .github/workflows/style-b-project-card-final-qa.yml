@@ -128,17 +128,19 @@ jobs:
             const after=getComputedStyle(el,'::after');
             return style.textDecorationLine==='none' && (after.content==='none'||after.display==='none');
           });
-          const waitForImage=async (img,label)=>{
-            const loaded=await img.evaluate(async el=>{
+          const waitForImage=async (img,label,{evidenceMode=false}={})=>{
+            const loaded=await img.evaluate(async (el,evidenceMode)=>{
+              if(evidenceMode)el.loading='eager';
+              try{await el.decode()}catch{}
               if(el.complete&&el.naturalWidth>0)return true;
               return await new Promise(resolve=>{
                 let settled=false;
                 const finish=value=>{if(settled)return;settled=true;resolve(value)};
-                el.addEventListener('load',()=>finish(el.naturalWidth>0),{once:true});
+                el.addEventListener('load',async()=>{try{await el.decode()}catch{};finish(el.naturalWidth>0)},{once:true});
                 el.addEventListener('error',()=>finish(false),{once:true});
                 setTimeout(()=>finish(el.complete&&el.naturalWidth>0),5000);
               });
-            });
+            },evidenceMode);
             assert(loaded,`${label}: image bytes failed to load`);
           };
           const report={};
@@ -175,8 +177,10 @@ jobs:
                 const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project'); const expected=expectedVisual(id); assert(expected,`Work ${width} ${id}: canonical visual missing`);
                 const img=card.locator('.work-card-v32__image-v225'); assert(await img.count()===1,`Work ${width} ${id}: image missing`);
                 assert(await img.getAttribute('src')===expected,`Work ${width} ${id}: wrong Lead Visual`);
-                const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
-                assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
+                const runtimeLoading=await img.getAttribute('loading');
+                assert(runtimeLoading==='lazy'||runtimeLoading==='eager',`Work ${width} ${id}: invalid loading contract ${runtimeLoading}`);
+                const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity,display:getComputedStyle(el).display,visibility:getComputedStyle(el).visibility}));
+                assert(styles.fit==='cover'&&styles.opacity==='1'&&styles.display!=='none'&&styles.visibility==='visible',`Work ${width} ${id}: media paint contract ${JSON.stringify(styles)}`);
                 const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
                 const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Work ${width} ${id}: tint ${tint} expected ${expectedTint}`);
                 assert(await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Work ${width} ${id}: title underline`);
@@ -185,10 +189,10 @@ jobs:
                 const href=await control.getAttribute('href'); assert(href,`Work ${width} ${id}: whole-card route missing`);
                 assert(normalizePath(href)===`/work/${id}`,`Work ${width} ${id}: whole-card route ${href}`);
                 await card.scrollIntoViewIfNeeded();
-                await waitForImage(img,`Work ${width} ${id}`);
+                await waitForImage(img,`Work ${width} ${id}`,{evidenceMode:true});
               }
               await page.evaluate(()=>window.scrollTo(0,0));
-              await page.waitForTimeout(150);
+              await page.waitForTimeout(250);
               await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
               const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
               if(await payment.count()){
@@ -217,8 +221,9 @@ jobs:
                 }
                 const img=active.locator('.domain-project-card-v2__image');
                 assert(await img.getAttribute('src')===expected,`Domain ${width} ${id}: wrong Lead Visual`);
-                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
-                await waitForImage(img,`Domain ${width} ${id}`);
+                const domainStyles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity,display:getComputedStyle(el).display,visibility:getComputedStyle(el).visibility}));
+                assert(domainStyles.fit==='cover'&&domainStyles.opacity==='1'&&domainStyles.display!=='none'&&domainStyles.visibility==='visible',`Domain ${width} ${id}: media paint contract ${JSON.stringify(domainStyles)}`);
+                await waitForImage(img,`Domain ${width} ${id}`,{evidenceMode:true});
                 assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
                 assert(await noUnderline(active.locator('.domain-project-card-v2__cta')),`Domain ${width} ${id}: CTA underline`);
                 const tint=await active.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim()); const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Domain ${width} ${id}: tint ${tint} expected ${expectedTint}`);
