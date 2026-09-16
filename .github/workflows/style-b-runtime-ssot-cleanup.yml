@@ -18,46 +18,14 @@ jobs:
         with:
           ref: integration/style-b-project-card-webp-v1
           fetch-depth: 0
-      - name: Clean runtime SSOT
+      - name: Clean ProjectCard runtime SSOT
+        run: node -e "const fs=require('fs');const p='public/site/content/portfolio-asset-manifest.json';const m=JSON.parse(fs.readFileSync(p,'utf8'));if(!fs.existsSync('public/site/assets/project-card-leads/daily-hours.jpg'))throw Error('Daily Hours JPG missing');m.projectCardLeadVisuals={schemaVersion:1,owner:'ProjectCard',dailyHours:{projectId:'daily-hours',publicPath:'/site/assets/project-card-leads/daily-hours.jpg',type:'image/jpeg',width:1600,height:900}};delete m.items['daily-hours-project-card-lead-v1'];fs.writeFileSync(p,JSON.stringify(m,null,2)+'\\n');"
+      - name: Add canonical brand tints
+        env:
+          PROJECT_CARD_TINTS_B64: CgovKiBQcm9qZWN0Q2FyZCBicmFuZC1mYW1pbHkgc3VyZmFjZXMg4oCUIGNhbm9uaWNhbCBsaXN0aW5nIG93bmVyLiAqLwo6aXMoLndvcmstY2FyZC12MzJbZGF0YS13b3JrLWluZGV4LXByb2plY3Q9InBheW1lbnQiXSwud29yay1jYXJkLXYzMltkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0idm91Y2hlciJdLC53b3JrLWNhcmQtdjMyW2RhdGEtd29yay1pbmRleC1wcm9qZWN0PSJ2b3VjaGVyLWNlbnRlciJdLC53b3JrLWNhcmQtdjMyW2RhdGEtd29yay1pbmRleC1wcm9qZWN0PSJnYW1lLWNlbnRlciJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0icGF5bWVudCJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0idm91Y2hlciJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0idm91Y2hlci1jZW50ZXIiXSwuZG9tYWluLXByb2plY3QtY2FyZC12MltkYXRhLXByb2plY3Q9ImdhbWUtY2VudGVyIl0pey0tcHJvamVjdC1jYXJkLXRpbnQ6cmdiKDIzMCAyMzkgMjU1KX0KOmlzKC53b3JrLWNhcmQtdjMyW2RhdGEtd29yay1pbmRleC1wcm9qZWN0PSJkYnMiXSwuZG9tYWluLXByb2plY3QtY2FyZC12MltkYXRhLXByb2plY3Q9ImRicyJdKXstLXByb2plY3QtY2FyZC10aW50OnJnYigyNTIgMjMyIDIzNCl9Cjppcygud29yay1jYXJkLXYzMltkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0iYm9va2luZyJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0iYm9va2luZyJdKXstLXByb2plY3QtY2FyZC10aW50OnJnYigyMzIgMjQyIDI1NSl9Cjppcygud29yay1jYXJkLXYzMltkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0iY2F0aGF5LW1vcnRnYWdlLWFzc2lzdGFudCJdLC53b3JrLWNhcmQtdjMyW2RhdGEtd29yay1pbmRleC1wcm9qZWN0PSJjYXRoYXktc2l0LW9ubGluZS1hY2NvdW50LW9wZW5pbmciXSwud29yay1jYXJkLXYzMltkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0iY2F0aGF5LXNpdC1yZXZpZXctcmVtZWRpYXRpb24tb3BlcmF0aW9ucyJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0iY2F0aGF5LW1vcnRnYWdlLWFzc2lzdGFudCJdLC5kb21haW4tcHJvamVjdC1jYXJkLXYyW2RhdGEtcHJvamVjdD0iY2F0aGF5LXNpdC1vbmxpbmUtYWNjb3VudC1vcGVuaW5nIl0sLmRvbWFpbi1wcm9qZWN0LWNhcmQtdjJbZGF0YS1wcm9qZWN0PSJjYXRoYXktc2l0LXJldmlldy1yZW1lZGlhdGlvbi1vcGVyYXRpb25zIl0pey0tcHJvamVjdC1jYXJkLXRpbnQ6cmdiKDIyOCAyNDQgMjM5KX0KOmlzKC53b3JrLWNhcmQtdjMyW2RhdGEtd29yay1pbmRleC1wcm9qZWN0PSJjdGJjLW1vcnRnYWdlLXNlbGYtc2VydmljZS1hcHAiXSwuZG9tYWluLXByb2plY3QtY2FyZC12MltkYXRhLXByb2plY3Q9ImN0YmMtbW9ydGdhZ2Utc2VsZi1zZXJ2aWNlLWFwcCJdKXstLXByb2plY3QtY2FyZC10aW50OnJnYigyMjYgMjQyIDIzOCl9Cjppcygud29yay1jYXJkLXYzMltkYXRhLXdvcmstaW5kZXgtcHJvamVjdD0iZGFpbHktaG91cnMiXSwuZG9tYWluLXByb2plY3QtY2FyZC12MltkYXRhLXByb2plY3Q9ImRhaWx5LWhvdXJzIl0pey0tcHJvamVjdC1jYXJkLXRpbnQ6cmdiKDIzMCAyMzcgMjQ1KX0K
+        run: node -e "const fs=require('fs');const p='public/site/assets/css/components/project-card.css';let s=fs.readFileSync(p,'utf8');const marker='/* ProjectCard brand-family surfaces — canonical listing owner. */';if(!s.includes(marker)){s+=Buffer.from(process.env.PROJECT_CARD_TINTS_B64,'base64').toString('utf8');fs.writeFileSync(p,s)}"
+      - name: Commit cleanup
         run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          manifest_path = Path('public/site/content/portfolio-asset-manifest.json')
-          manifest = json.loads(manifest_path.read_text())
-          daily_path = Path('public/site/assets/project-card-leads/daily-hours.jpg')
-          if not daily_path.exists():
-              raise SystemExit('Daily Hours JPG missing')
-          manifest['projectCardLeadVisuals'] = {
-              'schemaVersion': 1,
-              'owner': 'ProjectCard',
-              'dailyHours': {
-                  'projectId': 'daily-hours',
-                  'publicPath': '/site/assets/project-card-leads/daily-hours.jpg',
-                  'type': 'image/jpeg',
-                  'width': 1600,
-                  'height': 900
-              }
-          }
-          manifest.get('items', {}).pop('daily-hours-project-card-lead-v1', None)
-          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
-          PY
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('public/site/assets/css/components/project-card.css')
-          css = path.read_text()
-          marker = '/* ProjectCard brand-family surfaces — canonical listing owner. */'
-          if marker not in css:
-              css += '''\n\n/* ProjectCard brand-family surfaces — canonical listing owner. */
-:is(.work-card-v32[data-work-index-project="payment"],.work-card-v32[data-work-index-project="voucher"],.work-card-v32[data-work-index-project="voucher-center"],.work-card-v32[data-work-index-project="game-center"],.domain-project-card-v2[data-project="payment"],.domain-project-card-v2[data-project="voucher"],.domain-project-card-v2[data-project="voucher-center"],.domain-project-card-v2[data-project="game-center"]){--project-card-tint:rgb(230 239 255)}
-:is(.work-card-v32[data-work-index-project="dbs"],.domain-project-card-v2[data-project="dbs"]){--project-card-tint:rgb(252 232 234)}
-:is(.work-card-v32[data-work-index-project="booking"],.domain-project-card-v2[data-project="booking"]){--project-card-tint:rgb(232 242 255)}
-:is(.work-card-v32[data-work-index-project="cathay-mortgage-assistant"],.work-card-v32[data-work-index-project="cathay-sit-online-account-opening"],.work-card-v32[data-work-index-project="cathay-sit-review-remediation-operations"],.domain-project-card-v2[data-project="cathay-mortgage-assistant"],.domain-project-card-v2[data-project="cathay-sit-online-account-opening"],.domain-project-card-v2[data-project="cathay-sit-review-remediation-operations"]){--project-card-tint:rgb(228 244 239)}
-:is(.work-card-v32[data-work-index-project="ctbc-mortgage-self-service-app"],.domain-project-card-v2[data-project="ctbc-mortgage-self-service-app"]){--project-card-tint:rgb(226 242 238)}
-:is(.work-card-v32[data-work-index-project="daily-hours"],.domain-project-card-v2[data-project="daily-hours"]){--project-card-tint:rgb(230 237 245)}
-'''
-              path.write_text(css)
-          PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/site/content/portfolio-asset-manifest.json public/site/assets/css/components/project-card.css
