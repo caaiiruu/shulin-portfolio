@@ -1,0 +1,48 @@
+name: Style B ProjectCard Registry Variant Repair
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-fix-projectcard-registry-variants.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Restore legacy ProjectCard variants and keep Style B variants
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const path='public/site/docs/design-system/registry.json';
+          const registry=JSON.parse(fs.readFileSync(path,'utf8'));
+          const pc=registry.governanceGraph?.componentContracts?.ProjectCard;
+          if(!pc) throw new Error('ProjectCard contract missing');
+          pc.variants=['Primary','Experiment','Related','Search','Featured','Standard','Compact'];
+          pc.variantConsumers={
+            Primary:['homepageCards','workCards'],
+            Experiment:['experimentCards'],
+            Related:['relatedCards'],
+            Search:['searchCards'],
+            Featured:['homepageCards','workCards','domainNavigation'],
+            Standard:['workCards','domainNavigation'],
+            Compact:['workCards','searchCards','relatedCards','experimentCards']
+          };
+          fs.writeFileSync(path,JSON.stringify(registry,null,2)+'\n');
+          NODE
+          rm -f .github/workflows/style-b-fix-projectcard-registry-variants.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Restore legacy and Style B ProjectCard variants'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
