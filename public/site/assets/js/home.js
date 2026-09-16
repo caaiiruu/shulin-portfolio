@@ -474,9 +474,6 @@ function mountDesignPrinciples(){
   panel.setAttribute('aria-labelledby',triggerId);
   const how=element('section','principle-node__how');
   how.append(element('span','principle-node__label',localize(labels.howIWork)),element('p','',localize(item.expanded.howIWork)));
-  const methods=element('ul','principle-node__methods');
-  (localize(item.diagramLabels)||[]).forEach(label=>methods.append(element('li','',label)));
-  methods.setAttribute('aria-label',localize(labels.diagram));
   const practice=element('section','principle-node__practice');
   practice.append(element('span','principle-node__label',localize(labels.practice)),element('strong','',localize(item.expanded.practice.companyProduct)),element('p','',localize(item.expanded.practice.summary)));
   const projectId=item.expanded.practice.projectId;
@@ -486,7 +483,6 @@ function mountDesignPrinciples(){
     cta.appendChild(element('span','icon-arrow icon-arrow--right'));
     practice.appendChild(cta);
   }
-  how.append(methods);
   panel.append(how,practice);
   return panel;
  };

@@ -447,7 +447,8 @@ test("renders one accessible Principle Constellation from the migrated SSOT", ()
   }
   for (const contract of ["aria-expanded", "aria-controls", "role','region", "event.key==='Escape'", "root.dataset.activePrinciple", "document.addEventListener('portfolio:language',render)"]) assert.ok(home.includes(contract), contract);
   assert.match(css, /\.principle-constellation\s*\{[^}]*grid-template-columns:\s*1fr/);
-  assert.match(css, /\.principle-node__methods\s*\{[^}]*flex-wrap:\s*wrap/);
+  assert.doesNotMatch(home, /principle-node__methods|diagramLabels/);
+  assert.doesNotMatch(css, /\.principle-node__methods/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
   assert.doesNotMatch(css, /\.principle-(?:constellation|node)[^{]*\{[^}]*overflow-x\s*:\s*(?:auto|scroll)/s);
 });
@@ -902,7 +903,9 @@ test("projects only individually eligible Experiments into public discovery", ()
   const html = read("experiments.html");
   const base = read("assets/css/base.css");
   const experiment = read("assets/css/components/experiment-card.css");
+  const projectCard = read("assets/css/components/project-card.css");
   const app = read("assets/js/app.js");
+  const projectCardMedia = read("assets/js/project-card-media.js");
   const registry = JSON.parse(read("docs/design-system/registry.json"));
   const entry = registry.components.find((component) => component.component === "ExperimentExperience");
   assert.equal(entry.contentOwner, "content/portfolio-content.json");
@@ -928,6 +931,13 @@ test("projects only individually eligible Experiments into public discovery", ()
   assert.match(home, /id="homeExperiments" hidden/);
   assert.match(home, /id="homeExperimentRail"/);
   assert.ok((home.match(/href="\/experiments"/g) ?? []).length >= 2);
+  for (const contract of ["dataset.projectCardSystem='shared-v1'", "dataset.projectCardVariant='compact'", "dataset.experimentCardSystem='shared-v1'", "experiment-index-card-v36__visual"]) assert.ok(app.includes(contract), contract);
+  assert.match(projectCardMedia, /publicExperiments\[id\]\?\.hero\?\.assetId/);
+  assert.match(projectCardMedia, /abstractEvidenceFallback === 'ACTIVE'/);
+  assert.match(projectCardMedia, /approved-abstract-evidence/);
+  assert.doesNotMatch(projectCardMedia, /projectCardLeadVisuals\?\.experiments/);
+  assert.match(projectCard, /\.experiment-index-card-v36\[data-experiment-card-system="shared-v1"\]/);
+  assert.match(projectCard, /\.experiment-card-abstract\{/);
   for (const contract of [".experiment-feature-card-v32{display:grid", ".experiment-index-card-v36{display:grid", ".quick-view-v51--experiment{grid-template-columns:minmax(0,1fr) minmax(0,1fr)", ".quick-view-v51--experiment>.info-grid-v45{grid-column:2;grid-row:1;grid-template-columns:repeat(2,minmax(0,1fr))", ".experiment-overview-v45__question,.experiment-overview-v45__build{width:100%;max-width:var(--project-detail-reading-max);min-width:0;padding:0;border-radius:0;background:transparent}", ".experiment-story-v1838e__section--recognition{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)", "@media(max-width:560px)", "prefers-reduced-motion:reduce"]) assert.ok(experiment.includes(contract), contract);
   assert.match(app, /releaseVisibility==='DEFERRED_NON_SHIPPING'/);
   assert.match(app, /item\.releaseEligibility==='READY_PUBLIC'/);

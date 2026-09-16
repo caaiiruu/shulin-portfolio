@@ -1985,7 +1985,7 @@
         "The active stable ID survives language changes because copy is rerendered from the bilingual SSOT without replacing interaction state",
         "Every In practice example resolves its canonical projectId from the SSOT and exposes the shared View case CTA to the existing Project popup",
         "Every viewport uses one compact vertical disclosure list with stable row geometry",
-        "Expanded How I work content uses the approved method sentence and diagram labels as compact working-method pills",
+        "Expanded How I work content uses the approved method sentence directly and omits diagram-label pills",
         "Stable card IDs use the shared layout transition, removed under prefers-reduced-motion",
         "No carousel, modal, hover-only content, inline style or duplicated per-principle markup",
         "Organisation proof uses two homepage-owned, text-first company groups with no per-company container chrome",

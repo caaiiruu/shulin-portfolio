@@ -74,7 +74,7 @@ for (const width of [1419,871,430]) {
       const after=await constellation.locator('.principle-node__trigger').nth(index).boundingBox();
       expect(Math.abs(after.x-before.x)).toBeLessThanOrEqual(1);
       expect(Math.abs(after.width-before.width)).toBeLessThanOrEqual(1);
-      await expect(constellation.locator('.principle-node__methods:visible li')).toHaveCount(index===0?5:index===1?4:3);
+      await expect(constellation.locator('.principle-node__methods')).toHaveCount(0);
       await page.keyboard.press('Escape');
       await expect(constellation.locator('.principle-node__panel:visible')).toHaveCount(0);
     }

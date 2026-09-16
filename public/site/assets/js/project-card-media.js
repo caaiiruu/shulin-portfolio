@@ -5,6 +5,7 @@
   const variants = Object.freeze(['featured', 'standard', 'compact']);
   const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};
   const publicProjects = DATA.publicProjects || DATA.projects || {};
+  const publicExperiments = DATA.experiments || {};
   let assetManifest = null;
   let animationFrame = 0;
 
@@ -44,6 +45,19 @@
       path: item.publicPath,
       width: Number(item.width) || 2048,
       height: Number(item.height) || 1152,
+      assetId
+    };
+  };
+
+  const visualForExperiment = id => {
+    if (!assetManifest) return null;
+    const assetId = publicExperiments[id]?.hero?.assetId || '';
+    const item = assetManifest.items?.[assetId];
+    if (!item?.publicPath || !item?.type?.startsWith('image/')) return null;
+    return {
+      path: item.publicPath,
+      width: Number(item.width) || 1600,
+      height: Number(item.height) || 900,
       assetId
     };
   };
@@ -120,11 +134,44 @@
     }
   };
 
+  const hydrateExperimentCard = card => {
+    const id = card.dataset.experiment;
+    const visual = visualForExperiment(id);
+    const frame = card.querySelector('.experiment-index-card-v36__visual');
+    if (!frame) return;
+    if (!visual) {
+      if (publicExperiments[id]?.abstractEvidenceFallback === 'ACTIVE') {
+        const abstract = document.createElement('div');
+        abstract.className = 'experiment-card-abstract';
+        abstract.setAttribute('aria-hidden', 'true');
+        abstract.append(document.createElement('i'), document.createElement('b'), document.createElement('em'));
+        frame.replaceChildren(abstract);
+        card.dataset.projectCardLeadVisual = 'approved-abstract-evidence';
+        card.removeAttribute('data-project-card-asset-id');
+        return;
+      }
+      clearUnresolvedMedia(card, frame);
+      return;
+    }
+    let img = frame.querySelector('.work-card-v32__image-v225');
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'work-card-v32__image-v225';
+      img.alt = card.querySelector('.project-card__title')?.textContent?.trim() || '';
+      frame.replaceChildren(img);
+    }
+    if (applyImage(img, visual, sizesForWorkVariant('compact'))) {
+      card.dataset.projectCardLeadVisual = 'canonical';
+      card.dataset.projectCardAssetId = visual.assetId;
+    }
+  };
+
   const hydrate = () => {
     animationFrame = 0;
     if (!assetManifest) return;
     document.querySelectorAll('.work-card-v32[data-project-card-system="shared-v1"]').forEach(hydrateWorkCard);
     document.querySelectorAll('.domain-project-card-v2[data-project-card-system="shared-v1"]').forEach(hydrateDomainCard);
+    document.querySelectorAll('.experiment-index-card-v36[data-experiment-card-system="shared-v1"]').forEach(hydrateExperimentCard);
   };
 
   const schedule = () => {
@@ -146,7 +193,7 @@
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['data-work-index-project','data-project','data-project-card-system','data-project-card-variant','data-wheel-offset']
+      attributeFilter: ['data-work-index-project','data-project','data-experiment','data-project-card-system','data-project-card-variant','data-experiment-card-system','data-wheel-offset']
     });
   };
 

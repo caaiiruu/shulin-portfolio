@@ -5,7 +5,7 @@
 - Desktop experience metrics support rapid side-by-side comparison.
 - Mobile metrics use a natural vertical reading order without horizontal scrolling.
 - All four principles are visible in the default state and are presented as parallel decision lenses, not a sequence.
-- One shared renderer maps the stable IDs and bilingual `collapsed`, `expanded`, and `diagramLabels` fields from `content/portfolio-content.json`.
+- One shared renderer maps the stable IDs and bilingual `collapsed` and `expanded` fields from `content/portfolio-content.json`; expanded UI uses the approved method statement without rendering diagram-label pills.
 - Only one principle can be expanded at a time. The active trigger collapses itself, and Escape returns the constellation to its fully collapsed state.
 - Language changes rerender copy while preserving the active stable ID.
 - Wide desktop opens the selected principle as the left focus card while the other three form a narrower vertical rail on the right. Selecting a rail card exchanges its position with the focus card.

@@ -1428,14 +1428,26 @@
   const explorationRail=doc.getElementById('experimentPageRail');
   const homeExplorationRail=doc.getElementById('homeExperimentRail');
   function createExplorationIndexCard(id,item,index){
-    const card=element('button','experiment-index-card-v36');
-    card.type='button';card.dataset.experiment=id;card.dataset.experimentPriority=String(index+1);card.dataset.pressable='';
-    const top=element('div','experiment-index-card-v36__top');top.append(element('strong','',localize(item.maturity||item.status)));
-    const body=element('div');body.append(element('h3','',localize(item.title)));
-    const action=element('span','experiment-card-action text-cta',ui("view-experiment-8788e030"));
+    const card=element('article','work-card-v32 experiment-index-card-v36');
+    card.dataset.experiment=id;card.dataset.experimentPriority=String(index+1);card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant='compact';card.dataset.experimentCardSystem='shared-v1';
+    const button=element('button','work-card-v32__button');
+    button.type='button';button.dataset.experiment=id;button.dataset.pressable='';
+    button.setAttribute('aria-label',`${ui("view-experiment-8788e030")}: ${localize(item.title)}`);
+    const content=element('div','work-card-v32__content');
+    const meta=element('div','project-card__meta');
+    meta.append(element('span','project-card__type',localize(item.maturity||item.status)));
+    const identity=element('span','project-card__identity');
+    const period=localize(item.period||item.timeline);
+    if(period)identity.append(element('span','project-card__year',period));
+    meta.append(identity);
+    const title=element('h3','project-card__title',localize(item.title));
+    const metrics=element('dl','project-card__metrics');metrics.dataset.metricCount='0';metrics.setAttribute('aria-hidden','true');metrics.style.setProperty('--project-card-metric-count','1');
+    const action=element('span','work-card-v32__action experiment-card-action text-cta',ui("view-experiment-8788e030"));
     action.dataset.ctaSemantic='navigation';
     action.append(element('span','icon-arrow icon-arrow--right'));
-    card.append(top,body,action);
+    content.append(meta,title,metrics,action);
+    const visual=element('div','work-artifact experiment-index-card-v36__visual');visual.dataset.frameRole='project-cover';
+    button.append(content,visual);card.append(button);
     return card;
   }
   function renderExplorationRail(){

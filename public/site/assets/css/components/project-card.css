@@ -179,6 +179,25 @@
   .work-card-v32[data-project-card-system="shared-v1"] .project-card__metrics{padding-top:0;border-top:0}
 }
 
+/* Shared compact ProjectCard variant used by Experiment listings. */
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"]{display:block;min-height:0;padding:0;overflow:visible;border:0;background:transparent}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__button{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"content" "visual";width:100%;padding:0;text-align:left}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__type{max-width:var(--dimension-32ch)}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__title{max-width:none;margin-top:var(--project-card-system-title-gap);font-size:var(--project-card-compact-title);line-height:1.08}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__identity:empty{display:none}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .experiment-index-card-v36__visual{grid-area:visual;display:grid;width:100%;height:auto;place-items:center;aspect-ratio:var(--project-card-system-media-ratio);overflow:hidden;border-top:var(--dimension-1px) solid var(--color-border);background:var(--accent-100)}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__image-v225{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1);transition:transform var(--motion-base) var(--ease-standard),filter var(--motion-base) var(--ease-standard)}
+.experiment-card-abstract{display:flex;align-items:center;justify-content:center;gap:var(--space-4);width:100%;height:100%;background:var(--brand-100)}
+.experiment-card-abstract :is(i,b,em){display:block;border:var(--dimension-2px) solid var(--color-text-primary)}
+.experiment-card-abstract i{width:var(--dimension-72px);height:var(--dimension-72px);border-radius:50%;background:var(--color-surface)}
+.experiment-card-abstract b{width:var(--dimension-112px);height:var(--dimension-58px);border-radius:var(--radius-pill);background:var(--portfolio-coral-500)}
+.experiment-card-abstract em{width:var(--dimension-48px);height:var(--dimension-48px);border-radius:50%;background:var(--portfolio-cyan-500)}
+@media(hover:hover) and (pointer:fine){
+  .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__image-v225{transform:scale(var(--project-card-system-hover-scale));filter:saturate(1.04)}
+}
+@media(hover:none),(pointer:coarse){.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__image-v225{transform:scale(1);filter:none}}
+@media(prefers-reduced-motion:reduce){.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__image-v225{transition:none}}
+
 
 /* Domain ProjectCard internals moved here; Domain owns carousel composition only. */
 .domain-experience .domain-project-card-v2__content{display:grid;grid-template-rows:auto auto minmax(0,1fr) minmax(var(--space-8),auto) auto;min-width:0;height:100%;padding:var(--domain-card-content-padding);background:var(--project-card-tint)}
