@@ -442,17 +442,12 @@ function renderDomain(shouldReanchor=false){
  solutions?.replaceChildren(...(localize(data.howITypicallyAddressThem)||[]).map(v=>element('li','',v)));
  const solutionHeading=solutions?.closest('.domain-panel-v30')?.querySelector('h4');
  if(solutionHeading)safeText(solutionHeading,localize(domainLabels.howITypicallyAddressThem)|| (ui("how-i-typically-address-them-b8d9f07d")));
+ // ProjectCard internals are owned by the shared ProjectCard runtime.
+ // Home only owns Domain copy/state; domain-experience.js owns carousel composition.
  const related=document.getElementById('relatedProjects');
- const cards=[
-  ...(data.featuredProjectIds||[]).map(key=>createProjectCard(key,'domain')),
-  ...(data.supportingProjectIds||[]).map(key=>createProjectCard(key,'domain')),
-  ...(data.supportingExplorationIds||[]).map(createExplorationCard)
- ];
- related?.replaceChildren(...cards);
- window.refreshHorizontalRails?.();
  const projectPanel=related?.closest('.domain-panel-v30--projects');
  if(projectPanel){
-  projectPanel.hidden=cards.length===0;
+  projectPanel.hidden=false;
   const heading=projectPanel.querySelector('h4');
   if(heading)safeText(heading,ui("related-work-9e3ba8e3"));
  }
