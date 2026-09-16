@@ -1,11 +1,13 @@
 {
-  "version": "1.1",
+  "version": "1.2",
   "owner": "Shared ProjectCard System",
   "status": "governance-only-until-approved-assets-are-ingested",
   "variants": ["featured", "standard", "compact"],
   "leadVisualContract": {
     "source": "approvedCanonicalMasterOnly",
-    "derivatives": [800, 1200, 1600],
+    "delivery": "canonical-jpeg-plus-responsive-derivatives",
+    "canonicalFormat": "jpg",
+    "minimumCanonicalWidth": 1600,
     "aspectRatio": "16:9",
     "fit": "cover",
     "usage": ["home", "domain", "work"],
@@ -14,20 +16,90 @@
       "Home, Domain and Work may not choose alternate card imagery.",
       "Derivative files are generated from the canonical master only.",
       "No derivative may become a new source of truth.",
+      "Never upscale a canonical master to manufacture a larger derivative.",
       "If the approved source binary is unavailable, mapping must remain unresolved rather than falling back silently."
     ]
   },
   "projects": {
-    "daily-hours": {"company":"Shulin Studio","type":"0→1 Product","year":"2026","brandTint":"rgb(224 241 233)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/daily-hours","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "payment": {"brandTint":"rgb(245 235 210)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/payment","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "voucher": {"brandTint":"rgb(223 235 246)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/voucher","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "voucher-center": {"brandTint":"rgb(223 235 246)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/voucher-center","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "game-center": {"brandTint":"rgb(245 235 210)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/game-center","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "dbs": {"brandTint":"rgb(231 229 249)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/dbs","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "booking": {"brandTint":"rgb(223 235 246)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/booking","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "cathay-mortgage-assistant": {"brandTint":"rgb(224 241 233)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/cathay-mortgage-assistant","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "cathay-sit-online-account-opening": {"brandTint":"rgb(224 241 233)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/cathay-sit-online-account-opening","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "cathay-sit-review-remediation-operations": {"brandTint":"rgb(248 225 214)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/cathay-sit-review-remediation-operations","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"},
-    "ctbc-mortgage-self-service-app": {"brandTint":"rgb(224 241 233)","canonicalMaster":null,"sourceStatus":"approved-source-binary-must-be-ingested","currentDerivativeBase":"/site/assets/style-b/lead-visuals-webp/ctbc-mortgage-self-service-app","currentDerivativeStatus":"temporary-do-not-promote-as-ssot"}
+    "daily-hours": {
+      "company": "Shulin Studio",
+      "type": "0→1 Product",
+      "year": "2026",
+      "brandFamily": "daily-hours",
+      "brandTint": "rgb(230 237 245)",
+      "sourceIntakeName": "Daily hours.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "payment": {
+      "brandFamily": "fairprice",
+      "brandTint": "rgb(230 239 255)",
+      "sourceIntakeName": "payment.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "voucher": {
+      "brandFamily": "fairprice",
+      "brandTint": "rgb(230 239 255)",
+      "sourceIntakeName": "voucher:offer.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "voucher-center": {
+      "brandFamily": "fairprice",
+      "brandTint": "rgb(230 239 255)",
+      "sourceIntakeName": "voucher center.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "game-center": {
+      "brandFamily": "fairprice",
+      "brandTint": "rgb(230 239 255)",
+      "sourceIntakeName": "Game center.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "dbs": {
+      "brandFamily": "dbs",
+      "brandTint": "rgb(252 232 234)",
+      "sourceIntakeName": "DBS.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "booking": {
+      "brandFamily": "booking",
+      "brandTint": "rgb(232 242 255)",
+      "sourceIntakeName": "Booking.com connected trip.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "cathay-mortgage-assistant": {
+      "brandFamily": "cathay",
+      "brandTint": "rgb(228 244 239)",
+      "sourceIntakeName": "國泰房貸.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "cathay-sit-online-account-opening": {
+      "brandFamily": "cathay",
+      "brandTint": "rgb(228 244 239)",
+      "sourceIntakeName": "國泰投信線上開戶.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "cathay-sit-review-remediation-operations": {
+      "brandFamily": "cathay",
+      "brandTint": "rgb(228 244 239)",
+      "sourceIntakeName": "國泰審件補件.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    },
+    "ctbc-mortgage-self-service-app": {
+      "brandFamily": "ctbc",
+      "brandTint": "rgb(229 242 236)",
+      "sourceIntakeName": "中信房貸.png",
+      "canonicalMaster": null,
+      "sourceStatus": "approved-source-binary-must-be-ingested"
+    }
   }
 }
