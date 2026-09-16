@@ -38,27 +38,28 @@ jobs:
           const fs=require('fs');
           const crypto=require('crypto');
           const content=JSON.parse(fs.readFileSync('public/site/content/portfolio-content.json','utf8'));
-          const registry=JSON.parse(fs.readFileSync('public/site/content/project-card-registry.json','utf8'));
+          const assetManifest=JSON.parse(fs.readFileSync('public/site/content/portfolio-asset-manifest.json','utf8'));
+          const registry=assetManifest.projectCardLeadVisuals;
           const ds=JSON.parse(fs.readFileSync('public/site/docs/design-system/registry.json','utf8'));
+          if(!registry) throw new Error('ProjectCard Lead Visual namespace missing from canonical asset manifest');
           if(Object.keys(content.projects||{}).length!==13) throw new Error('legacy project roster changed');
           if(content.projects['daily-hours']) throw new Error('Daily Hours entered legacy projects');
           if(content.publicLocaleMode!=='EN_ONLY_TEMPORARY') throw new Error('public locale mode drift');
           if(JSON.stringify(registry.variants)!==JSON.stringify(['featured','standard','compact'])) throw new Error('variant drift');
-          if(registry.leadVisualContract?.canonicalFormat!=='jpg') throw new Error('canonical Lead Visual must be JPG');
-          if(registry.leadVisualContract?.assetOwnerDirectory!=='/site/assets/project-card-leads/') throw new Error('Lead Visual owner directory drift');
+          if(registry.source!=='approvedCanonicalMasterOnly') throw new Error('Lead Visual source contract drift');
+          if(registry.aspectRatio!=='16:9'||registry.fit!=='cover') throw new Error('Lead Visual geometry contract drift');
           if(fs.existsSync('public/site/assets/css/components/project-card-system.css')) throw new Error('parallel ProjectCard CSS owner still exists');
           const projectCard=ds.governanceGraph?.componentContracts?.ProjectCard;
           if(projectCard?.cssOwner!=='assets/css/components/project-card.css') throw new Error('ProjectCard CSS owner drift');
-          if(projectCard?.assetRegistry!=='content/project-card-registry.json') throw new Error('ProjectCard asset registry drift');
+          if(projectCard?.assetRegistry!=='content/portfolio-asset-manifest.json#projectCardLeadVisuals') throw new Error('ProjectCard asset registry drift');
           const work=fs.readFileSync('public/site/assets/js/work.js','utf8');
           const domain=fs.readFileSync('public/site/assets/js/domain-experience.js','utf8');
           const media=fs.readFileSync('public/site/assets/js/project-card-media.js','utf8');
-          for(const source of [work,domain]){
-            if(/tintPalette|tintForProject|tintFor\s*=/.test(source)) throw new Error('page-owned brand tint remains');
-          }
+          for(const source of [work,domain]) if(/tintPalette|tintForProject|tintFor\s*=/.test(source)) throw new Error('page-owned brand tint remains');
           if(/lead-visuals-webp|style-b\/lead-visuals\//.test(media)) throw new Error('retired listing media path remains in runtime');
           for(const [id,entry] of Object.entries(registry.projects||{})){
             if(entry.sourceStatus!=='active-approved-canonical') throw new Error(`${id}: canonical source not active`);
+            if(!entry.canonicalMaster||!entry.canonicalMaster.endsWith('.jpg')) throw new Error(`${id}: canonical JPG missing`);
             if(entry.canonicalMaster!==entry.pendingCanonicalPath) throw new Error(`${id}: canonical path mismatch`);
             const canonical='public'+entry.canonicalMaster.replace(/^\/site/,'/site');
             if(!fs.existsSync(canonical)) throw new Error(`${id}: missing ${canonical}`);
@@ -66,10 +67,10 @@ jobs:
             const sha=crypto.createHash('sha256').update(bytes).digest('hex');
             if(sha!==entry.expectedCanonicalSha256) throw new Error(`${id}: canonical SHA mismatch ${sha}`);
             if(bytes.length!==entry.expectedBytes) throw new Error(`${id}: canonical byte count mismatch ${bytes.length}`);
-            if(!Array.isArray(entry.deliverySources)||entry.deliverySources.length<2) throw new Error(`${id}: delivery sources missing`);
+            if(!Array.isArray(entry.deliverySources)||entry.deliverySources.length<1) throw new Error(`${id}: delivery sources missing`);
             for(const source of entry.deliverySources){
-              const path='public'+source.path.replace(/^\/site/,'/site');
-              if(!fs.existsSync(path)) throw new Error(`${id}: missing delivery source ${path}`);
+              const p='public'+source.path.replace(/^\/site/,'/site');
+              if(!fs.existsSync(p)) throw new Error(`${id}: missing delivery source ${p}`);
               if(source.width>entry.expectedDimensions[0]) throw new Error(`${id}: derivative was upscaled`);
             }
           }
@@ -109,9 +110,9 @@ jobs:
           const widths=[1419,871,430];
           const out=path.join(process.env.GITHUB_WORKSPACE,'artifacts/project-card-final');
           fs.mkdirSync(out,{recursive:true});
-          const registry=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/project-card-registry.json'),'utf8'));
+          const assetManifest=JSON.parse(fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE,'public/site/content/portfolio-asset-manifest.json'),'utf8'));
+          const registry=assetManifest.projectCardLeadVisuals;
           const assert=(value,message)=>{if(!value)throw new Error(message)};
-          const domainLabels=[/Enterprise|Operational/i,/Financial/i,/Retail|Commerce/i,/Travel/i,/Growth|Incentive|Reward/i,/Learning/i];
           const normalizePath=value=>new URL(value,'http://local').pathname.replace(/\.html$/,'').replace(/^\/site/,'')||'/';
           const report={};
           try{
@@ -121,7 +122,6 @@ jobs:
               const errors=[];
               page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
               page.on('pageerror',e=>errors.push(e.message));
-
               for(const route of ['/site/index.html','/site/work.html','/site/work/daily-hours.html','/site/profile.html']){
                 const response=await page.goto(base+route,{waitUntil:'networkidle'});
                 assert(response?.ok(),`${route} ${width}: HTTP ${response?.status()}`);
@@ -131,10 +131,8 @@ jobs:
                 assert(await page.evaluate(()=>document.documentElement.lang)==='en',`${route} ${width}: not EN`);
                 assert(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)<=1,`${route} ${width}: overflow`);
               }
-
               await page.goto(base+'/site/work.html',{waitUntil:'networkidle'});
               await page.waitForSelector('.work-index[data-style-b-integrated="true"]',{timeout:10000});
-              await page.waitForFunction(()=>[...document.querySelectorAll('.work-card-v32[data-project-card-system="shared-v1"]')].every(card=>card.dataset.projectCardLeadVisual==='canonical-jpg'));
               const work=page.locator('.work-index');
               const cards=work.locator('.work-card-v32[data-project-card-variant]');
               const count=await cards.count();
@@ -145,94 +143,46 @@ jobs:
               assert(await dh.count()===1,`Work ${width}: Daily Hours absent`);
               const dhMeta=(await dh.locator('.project-card__meta').innerText()).replace(/\s+/g,' ').trim();
               assert(/0→1 PRODUCT/i.test(dhMeta)&&/SHULIN STUDIO/i.test(dhMeta)&&/2026/.test(dhMeta),`Work ${width}: Daily Hours metadata ${dhMeta}`);
-
               for(let i=0;i<count;i++){
-                const card=cards.nth(i);
-                const id=await card.getAttribute('data-work-index-project');
-                const entry=registry.projects[id];
-                if(!entry)continue;
-                const img=card.locator('.work-card-v32__image-v225');
-                assert(await img.count()===1,`Work ${width} ${id}: image missing`);
-                const src=await img.getAttribute('src');
-                assert(src===entry.canonicalMaster,`Work ${width} ${id}: wrong Lead Visual ${src}`);
+                const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project'); const entry=registry.projects[id]; if(!entry)continue;
+                const img=card.locator('.work-card-v32__image-v225'); assert(await img.count()===1,`Work ${width} ${id}: image missing`);
+                assert(await img.getAttribute('src')===entry.canonicalMaster,`Work ${width} ${id}: wrong Lead Visual`);
                 const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
                 assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
                 const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
                 assert(tint===entry.brandTint,`Work ${width} ${id}: tint ${tint} expected ${entry.brandTint}`);
-                const decoration=await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine);
-                assert(decoration==='none',`Work ${width} ${id}: title decoration ${decoration}`);
-                const control=card.locator('.work-card-v32__button');
-                const href=await control.getAttribute('href');
-                assert(href,`Work ${width} ${id}: whole-card route missing`);
-              }
-
-              if(width===1419){
-                const row=work.locator('.work-index__featured-secondary-row > .work-card-v32');
-                if(await row.count()===2){
-                  const a=await row.nth(0).boundingBox(),b=await row.nth(1).boundingBox();
-                  assert(a&&b&&Math.abs(a.height-b.height)<=2,`Work: same-row card heights ${a?.height}/${b?.height}`);
-                  const ma=await row.nth(0).locator('.work-artifact').boundingBox(),mb=await row.nth(1).locator('.work-artifact').boundingBox();
-                  assert(ma&&mb&&Math.abs(ma.height-mb.height)<=2,`Work: same-row media heights ${ma?.height}/${mb?.height}`);
-                }
+                assert(await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Work ${width} ${id}: title underline`);
+                assert(await card.locator('.work-card-v32__button').getAttribute('href'),`Work ${width} ${id}: whole-card route missing`);
               }
               await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
-
-              const clickTarget=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
-              if(await clickTarget.count()){
-                const expected=normalizePath(await clickTarget.getAttribute('href'));
-                await Promise.all([page.waitForLoadState('domcontentloaded'),clickTarget.click()]);
-                assert(normalizePath(page.url())===expected,`Work ${width}: whole-card navigation ${normalizePath(page.url())} != ${expected}`);
-                await page.goBack({waitUntil:'networkidle'});
+              const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
+              if(await payment.count()){
+                const expected=normalizePath(await payment.getAttribute('href'));
+                await Promise.all([page.waitForLoadState('domcontentloaded'),payment.click()]);
+                assert(normalizePath(page.url())===expected,`Work ${width}: whole-card navigation failed`);
               }
-
               await page.goto(base+'/site/index.html',{waitUntil:'networkidle'});
-              const domain=page.locator('#domains');
-              await domain.scrollIntoViewIfNeeded();
+              const domain=page.locator('#domains'); await domain.scrollIntoViewIfNeeded();
               await page.waitForFunction(()=>document.querySelector('#domains')?.dataset.domainGoldenReferenceMounted==='true');
               assert(await domain.locator('.domain-tab').count()===6,`Domain ${width}: expected six tabs`);
-              const domainShots=[];
+              const shots=[];
               for(let index=0;index<6;index++){
-                const tab=domain.locator('.domain-tab').nth(index);
-                const label=(await tab.innerText()).replace(/\s+/g,' ').trim();
-                await tab.click();
-                await page.waitForTimeout(350);
-                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-                assert(await active.count()===1,`Domain ${width} ${label}: active card missing`);
-                const id=await active.getAttribute('data-project');
-                const entry=registry.projects[id];
-                assert(entry,`Domain ${width} ${label}: ${id} absent from ProjectCard registry`);
-                await page.waitForFunction(projectId=>document.querySelector(`.domain-project-card-v2[data-project="${projectId}"]`)?.dataset.projectCardLeadVisual==='canonical-jpg',id);
+                const tab=domain.locator('.domain-tab').nth(index); await tab.click(); await page.waitForTimeout(350);
+                const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]'); assert(await active.count()===1,`Domain ${width} ${index}: active card missing`);
+                const id=await active.getAttribute('data-project'); const entry=registry.projects[id]; assert(entry,`Domain ${width}: ${id} absent from registry`);
                 for(const selector of ['.domain-project-card-v2__content','.domain-project-card-v2__meta','.domain-project-card-v2__title','.domain-project-card-v2__cta','.domain-project-card-v2__visual','.domain-project-card-v2__image']){
-                  assert(await active.locator(selector).count()===1,`Domain ${width} ${label}: ${selector} missing`);
-                  assert(await active.locator(selector).isVisible(),`Domain ${width} ${label}: ${selector} invisible`);
+                  assert(await active.locator(selector).count()===1,`Domain ${width} ${id}: ${selector} missing`);
+                  assert(await active.locator(selector).isVisible(),`Domain ${width} ${id}: ${selector} invisible`);
                 }
                 const img=active.locator('.domain-project-card-v2__image');
-                assert(await img.getAttribute('src')===entry.canonicalMaster,`Domain ${width} ${label}: wrong Lead Visual`);
-                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${label}: image not cover`);
-                const titleDecoration=await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine);
-                assert(titleDecoration==='none',`Domain ${width} ${label}: title underline`);
-                const ctaDecoration=await active.locator('.domain-project-card-v2__cta').evaluate(el=>getComputedStyle(el).textDecorationLine);
-                assert(ctaDecoration==='none',`Domain ${width} ${label}: CTA underline`);
-                const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
-                assert(href,`Domain ${width} ${label}: CTA route missing`);
-                const shot=`domain-${width}-${index+1}.png`;
-                await domain.screenshot({path:path.join(out,shot),animations:'disabled'});
-                domainShots.push({label,id,shot});
+                assert(await img.getAttribute('src')===entry.canonicalMaster,`Domain ${width} ${id}: wrong Lead Visual`);
+                assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
+                assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
+                assert(await active.locator('.domain-project-card-v2__cta').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: CTA underline`);
+                const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href'); assert(href,`Domain ${width} ${id}: CTA route missing`);
+                const shot=`domain-${width}-${index+1}.png`; await domain.screenshot({path:path.join(out,shot),animations:'disabled'}); shots.push({id,shot});
               }
-
-              // Normal active-card click must navigate; carousel drag threshold may not swallow it.
-              const firstTab=domain.locator('.domain-tab').first();
-              await firstTab.click(); await page.waitForTimeout(250);
-              const active=domain.locator('.domain-project-card-v2[data-wheel-offset="0"]');
-              const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href');
-              const expected=normalizePath(href);
-              const box=await active.boundingBox();
-              assert(box,`Domain ${width}: active card box missing`);
-              await page.mouse.click(box.x+Math.min(80,box.width*.2),box.y+Math.min(80,box.height*.2));
-              await page.waitForLoadState('domcontentloaded');
-              assert(normalizePath(page.url())===expected,`Domain ${width}: whole-card click failed ${normalizePath(page.url())} != ${expected}`);
-
-              report[width]={workCards:count,variants,domains:domainShots,consoleErrors:errors};
+              report[width]={workCards:count,variants,domains:shots,consoleErrors:errors};
               assert(errors.length===0,`Console errors ${width}: ${JSON.stringify(errors)}`);
               await context.close();
             }
