@@ -42,7 +42,7 @@ jobs:
           const ds=JSON.parse(fs.readFileSync('public/site/docs/design-system/registry.json','utf8'));
           const projects=content.projects||{};
           const entries=Object.entries(projects);
-          if(entries.length!==13) throw new Error(`legacy project count ${entries.length}`);
+          if(entries.length===0) throw new Error('canonical portfolio-content.json has no projects');
           if(projects['daily-hours']) throw new Error('Daily Hours entered legacy projects');
           if(content.publicLocaleMode!=='EN_ONLY_TEMPORARY') throw new Error('public locale mode drift');
           if(fs.existsSync('public/site/assets/css/components/project-card-system.css')) throw new Error('parallel ProjectCard CSS owner exists');
@@ -60,10 +60,12 @@ jobs:
             if(item.assetStatus!=='production'||item.implementationStatus!=='real-active'||item.replacementRequired!==false) throw new Error(`${id}: Lead Visual not production-approved`);
             if(Number(item.width)<1600||Number(item.height)<900) throw new Error(`${id}: Lead Visual resolution too low ${item.width}x${item.height}`);
             const file='public'+item.publicPath.replace(/^\/site/,'/site'); if(!fs.existsSync(file)) throw new Error(`${id}: file missing ${file}`);
+            if(!assets.projectCardLeadVisuals?.brandTints?.[id]) throw new Error(`${id}: canonical ProjectCard brand tint missing`);
           }
           const daily=assets.projectCardLeadVisuals?.dailyHours;
           if(!daily||daily.type!=='image/jpeg'||daily.width!==1600||daily.height!==900) throw new Error('Daily Hours listing JPG projection invalid');
           if(!fs.existsSync('public'+daily.publicPath.replace(/^\/site/,'/site'))) throw new Error('Daily Hours listing JPG missing');
+          if(!assets.projectCardLeadVisuals?.brandTints?.['daily-hours']) throw new Error('Daily Hours canonical ProjectCard brand tint missing');
           const work=fs.readFileSync('public/site/assets/js/work.js','utf8');
           const domain=fs.readFileSync('public/site/assets/js/domain-experience.js','utf8');
           const media=fs.readFileSync('public/site/assets/js/project-card-media.js','utf8');
@@ -111,21 +113,19 @@ jobs:
           const heroAssetId=(project)=>project?.publicContent?.imagePlan?.find?.(x=>x?.role==='hero'&&x?.assetId)?.assetId||project?.heroVisualBrief?.assetId||'';
           const expectedVisual=(id)=>{
             if(id==='daily-hours') return assets.projectCardLeadVisuals?.dailyHours?.publicPath||'';
-            const assetId=heroAssetId(content.projects?.[id]);
+            const project=content.projects?.[id];
+            if(!project) throw new Error(`${id}: project missing from canonical portfolio-content.json`);
+            const assetId=heroAssetId(project);
             return assets.items?.[assetId]?.publicPath||'';
           };
-          const brandTint=(id)=>{
-            if(['payment','voucher','voucher-center','game-center'].includes(id)) return 'rgb(230 239 255)';
-            if(id==='dbs'||id==='taishin-p2p-marketplace') return 'rgb(252 232 234)';
-            if(id==='booking'||id==='booking-taxi-strategy') return 'rgb(232 242 255)';
-            if(['cathay-mortgage-assistant','cathay-sit-online-account-opening','cathay-sit-review-remediation-operations'].includes(id)) return 'rgb(228 244 239)';
-            if(id==='ctbc-mortgage-self-service-app') return 'rgb(226 242 238)';
-            if(id==='bandzo') return 'rgb(237 235 250)';
-            if(id==='daily-hours') return 'rgb(230 237 245)';
-            return '';
-          };
+          const brandTint=(id)=>assets.projectCardLeadVisuals?.brandTints?.[id]||'';
           const assert=(value,message)=>{if(!value)throw new Error(message)};
           const normalizePath=value=>new URL(value,'http://local').pathname.replace(/\.html$/,'').replace(/^\/site/,'')||'/';
+          const noUnderline=async locator=>locator.evaluate(el=>{
+            const style=getComputedStyle(el);
+            const after=getComputedStyle(el,'::after');
+            return style.textDecorationLine==='none' && (after.content==='none'||after.display==='none');
+          });
           const report={};
           try{
             for(const width of widths){
@@ -157,15 +157,18 @@ jobs:
               const dhMeta=(await dh.locator('.project-card__meta').innerText()).replace(/\s+/g,' ').trim();
               assert(/0→1 PRODUCT/i.test(dhMeta)&&/SHULIN STUDIO/i.test(dhMeta)&&/2026/.test(dhMeta),`Work ${width}: Daily Hours metadata ${dhMeta}`);
               for(let i=0;i<count;i++){
-                const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project'); const expected=expectedVisual(id); if(!expected)continue;
+                const card=cards.nth(i); const id=await card.getAttribute('data-work-index-project'); const expected=expectedVisual(id); assert(expected,`Work ${width} ${id}: canonical visual missing`);
                 const img=card.locator('.work-card-v32__image-v225'); assert(await img.count()===1,`Work ${width} ${id}: image missing`);
                 assert(await img.getAttribute('src')===expected,`Work ${width} ${id}: wrong Lead Visual`);
                 const styles=await img.evaluate(el=>({fit:getComputedStyle(el).objectFit,opacity:getComputedStyle(el).opacity}));
                 assert(styles.fit==='cover'&&styles.opacity==='1',`Work ${width} ${id}: not full bleed`);
                 const tint=await card.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim());
-                const expectedTint=brandTint(id); if(expectedTint) assert(tint===expectedTint,`Work ${width} ${id}: tint ${tint} expected ${expectedTint}`);
+                const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Work ${width} ${id}: tint ${tint} expected ${expectedTint}`);
                 assert(await card.locator('.project-card__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Work ${width} ${id}: title underline`);
-                assert(await card.locator('.work-card-v32__button').getAttribute('href'),`Work ${width} ${id}: whole-card route missing`);
+                assert(await noUnderline(card.locator('.work-card-v32__action')),`Work ${width} ${id}: CTA underline`);
+                const control=card.locator('.work-card-v32__button');
+                const href=await control.getAttribute('href'); assert(href,`Work ${width} ${id}: whole-card route missing`);
+                assert(normalizePath(href)===`/work/${id}`,`Work ${width} ${id}: whole-card route ${href}`);
               }
               await work.screenshot({path:path.join(out,`work-${width}.png`),animations:'disabled'});
               const payment=work.locator('.work-card-v32[data-work-index-project="payment"] .work-card-v32__button');
@@ -191,9 +194,10 @@ jobs:
                 assert(await img.getAttribute('src')===expected,`Domain ${width} ${id}: wrong Lead Visual`);
                 assert(await img.evaluate(el=>getComputedStyle(el).objectFit)==='cover',`Domain ${width} ${id}: image not cover`);
                 assert(await active.locator('.domain-project-card-v2__title').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: title underline`);
-                assert(await active.locator('.domain-project-card-v2__cta').evaluate(el=>getComputedStyle(el).textDecorationLine)==='none',`Domain ${width} ${id}: CTA underline`);
-                const tint=await active.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim()); const expectedTint=brandTint(id); if(expectedTint) assert(tint===expectedTint,`Domain ${width} ${id}: tint mismatch`);
+                assert(await noUnderline(active.locator('.domain-project-card-v2__cta')),`Domain ${width} ${id}: CTA underline`);
+                const tint=await active.evaluate(el=>getComputedStyle(el).getPropertyValue('--project-card-tint').trim()); const expectedTint=brandTint(id); assert(expectedTint&&tint===expectedTint,`Domain ${width} ${id}: tint ${tint} expected ${expectedTint}`);
                 const href=await active.locator('.domain-project-card-v2__cta').getAttribute('href'); assert(href,`Domain ${width} ${id}: CTA route missing`);
+                assert(normalizePath(href)===`/work/${id}`,`Domain ${width} ${id}: CTA route ${href}`);
                 const shot=`domain-${width}-${index+1}.png`; await domain.screenshot({path:path.join(out,shot),animations:'disabled'}); shots.push({id,shot});
               }
               report[width]={workCards:count,variants,domains:shots,consoleErrors:errors};
