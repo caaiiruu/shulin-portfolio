@@ -2189,6 +2189,24 @@
       "sourcePackage": "Hello-SABAU-R183.8F-human-assets.zip",
       "sourceLineage": "Human provided: originals/IMG_4019.JPG",
       "humanApprovalStatus": "human-authorized-r183.8f"
+    },
+    "daily-hours-project-card-lead-v1": {
+      "id": "daily-hours-project-card-lead-v1",
+      "projectId": "daily-hours",
+      "type": "image/jpeg",
+      "publicPath": "/site/assets/project-card-leads/daily-hours.jpg",
+      "aspectRatio": "1600:900",
+      "assetStatus": "production",
+      "implementationStatus": "real-active",
+      "placeholderFallbackAssetId": null,
+      "replacementRequired": false,
+      "publicBuild": true,
+      "width": 1600,
+      "height": 900,
+      "sha256": "4833dcb46da3785e60eaa11d8e8d97e0c2f0f94b0d21a01b2dfbfb22d0ca8b35",
+      "alt": "Daily Hours project economics and capacity workspace shown on a laptop.",
+      "sourceLineage": "Latest Human-selected Daily Hours contextual Lead Visual, listing-only JPG derivative from the synced 1600px source; no upscale.",
+      "finalUseRole": "Daily Hours ProjectCard Lead Visual"
     }
   },
   "frameSystemContract": {
@@ -2281,14 +2299,14 @@
         "brandTint": "rgb(230 237 245)",
         "sourceIntakeName": "Daily hours.png",
         "pendingCanonicalPath": "/site/assets/project-card-leads/daily-hours.jpg",
-        "expectedCanonicalSha256": "15e6a0500ee0a5c009e967882686931c53ca1ffec35d9241bf305254f279c3ef",
+        "expectedCanonicalSha256": "4833dcb46da3785e60eaa11d8e8d97e0c2f0f94b0d21a01b2dfbfb22d0ca8b35",
         "expectedDimensions": [
-          1672,
-          941
+          1600,
+          900
         ],
-        "expectedBytes": 248825,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 249258,
+        "canonicalMaster": "/site/assets/project-card-leads/daily-hours.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/daily-hours-800.jpg",
@@ -2302,21 +2320,31 @@
             "path": "/site/assets/project-card-leads/daily-hours.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "daily-hours-project-card-lead-v1",
+        "sourceLineage": "Latest Human-selected Daily Hours contextual Lead Visual, listing-only JPG derivative from the synced 1600px source; no upscale.",
+        "deliverySources": [
+          {
+            "path": "/site/assets/project-card-leads/daily-hours.jpg",
+            "width": 1600,
+            "height": 900,
+            "type": "image/jpeg"
+          }
         ]
       },
       "payment": {
         "brandFamily": "fairprice",
         "brandTint": "rgb(230 239 255)",
         "sourceIntakeName": "payment.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/payment.jpg",
-        "expectedCanonicalSha256": "42fdba72e930bfeee3f6e0518ca702d41747464011fe505feedf52f3d0a2df47",
+        "pendingCanonicalPath": "/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg",
+        "expectedCanonicalSha256": "f68d23dd247f0e85ca1468ca23d01a09951c6d55cd847bd0af6225071dff285f",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 277384,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 192884,
+        "canonicalMaster": "/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/payment-800.jpg",
@@ -2330,21 +2358,30 @@
             "path": "/site/assets/project-card-leads/payment.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "payment-hero-unified-checkout-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/payment/payment-lead-visual-app-and-sco-checkout-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "voucher": {
         "brandFamily": "fairprice",
         "brandTint": "rgb(230 239 255)",
         "sourceIntakeName": "voucher:offer.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/voucher.jpg",
-        "expectedCanonicalSha256": "6b4d31c222ea72b5da33ca051a42f51dac557ff523a20c6ca2e44b5c35e01918",
+        "pendingCanonicalPath": "/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg",
+        "expectedCanonicalSha256": "4a486dc375fb84c622940321c4bec2968856b1d8c20c80e69564d5331dd516a8",
         "expectedDimensions": [
-          1671,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 319267,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 224556,
+        "canonicalMaster": "/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/voucher-800.jpg",
@@ -2358,21 +2395,30 @@
             "path": "/site/assets/project-card-leads/voucher.jpg",
             "width": 1671
           }
+        ],
+        "canonicalAssetId": "voucher-hero-incentive-journey-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/voucher/voucher-lead-visual-incentive-ecosystem-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "voucher-center": {
         "brandFamily": "fairprice",
         "brandTint": "rgb(230 239 255)",
         "sourceIntakeName": "voucher center.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/voucher-center.jpg",
-        "expectedCanonicalSha256": "1e14bdd49a0bc917e475dd864ffab07ccb75e79aa55426478217de56327ad365",
+        "pendingCanonicalPath": "/site/assets/projects/voucher-center/voucher-center-lead-visual-claim-journey-public-v1.jpg",
+        "expectedCanonicalSha256": "0baae930d225c7fa67222e112afbdab562bb8b7511ad1c270bd6bfd92f8f1ec2",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 347216,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 122492,
+        "canonicalMaster": "/site/assets/projects/voucher-center/voucher-center-lead-visual-claim-journey-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/voucher-center-800.jpg",
@@ -2386,21 +2432,30 @@
             "path": "/site/assets/project-card-leads/voucher-center.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "voucher-center-hero-centralised-discovery-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/voucher-center/voucher-center-lead-visual-claim-journey-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "game-center": {
         "brandFamily": "fairprice",
         "brandTint": "rgb(230 239 255)",
         "sourceIntakeName": "Game center.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/game-center.jpg",
-        "expectedCanonicalSha256": "c017885ace3dba3fc5e1bef37b7c3de33bf2c804db351c79c3fa5913ab03b0ec",
+        "pendingCanonicalPath": "/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg",
+        "expectedCanonicalSha256": "063b8259d3505d9cb4dfdb9bd2a5995391cf342f1d0f54bb124b010f417ced17",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 354964,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 129562,
+        "canonicalMaster": "/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/game-center-800.jpg",
@@ -2414,21 +2469,30 @@
             "path": "/site/assets/project-card-leads/game-center.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "gamecenter-hero-shipped-before-after-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/game-center/game-center-lead-visual-multi-game-discovery-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "dbs": {
         "brandFamily": "dbs",
         "brandTint": "rgb(252 232 234)",
         "sourceIntakeName": "DBS.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/dbs.jpg",
-        "expectedCanonicalSha256": "a2559c7aa82fee47f2381b164157b2482a023c5c330f170bd9e7ad9fbb26bcb5",
+        "pendingCanonicalPath": "/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg",
+        "expectedCanonicalSha256": "c341df41476b09eddaed779e68bc923587d55067482d1d27bf5e3629040067bf",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 280468,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 163036,
+        "canonicalMaster": "/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/dbs-800.jpg",
@@ -2442,21 +2506,30 @@
             "path": "/site/assets/project-card-leads/dbs.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "dbs-project-card-primary-01",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/dbs/dbs-lead-visual-exception-and-risk-workbench-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "booking": {
         "brandFamily": "booking",
         "brandTint": "rgb(232 242 255)",
         "sourceIntakeName": "Booking.com connected trip.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/booking.jpg",
-        "expectedCanonicalSha256": "b12b60dd197c14342d6abbb2ae01791db8175034d882849c63cf63c3c4e92cfd",
+        "pendingCanonicalPath": "/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg",
+        "expectedCanonicalSha256": "83a1e6bba227db1c7609d217deae346dcdc3ea419148424986160fb465a71ed6",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 291747,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 217493,
+        "canonicalMaster": "/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/booking-800.jpg",
@@ -2470,21 +2543,30 @@
             "path": "/site/assets/project-card-leads/booking.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "booking-hero-connected-booking-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/booking/booking-connected-trip-lead-visual-timeline-experience-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "cathay-mortgage-assistant": {
         "brandFamily": "cathay",
         "brandTint": "rgb(228 244 239)",
         "sourceIntakeName": "國泰房貸.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-mortgage-assistant.jpg",
-        "expectedCanonicalSha256": "c3cd1e6995bfefff992834147ebf9a4a1681ff14eeb615366aa12f26777cf21d",
+        "pendingCanonicalPath": "/site/assets/projects/cathay-mortgage-assistant/cathay-mortgage-assistant-lead-visual-consultation-system-public-v1.jpg",
+        "expectedCanonicalSha256": "db141b4eff5cdcc8f1a07205d07ee2dd9a808f47f417ed6cc1601645881457d7",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 326642,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 264175,
+        "canonicalMaster": "/site/assets/projects/cathay-mortgage-assistant/cathay-mortgage-assistant-lead-visual-consultation-system-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/cathay-mortgage-assistant-800.jpg",
@@ -2498,21 +2580,30 @@
             "path": "/site/assets/project-card-leads/cathay-mortgage-assistant.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "cathay-mortgage-hero-consultation-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/cathay-mortgage-assistant/cathay-mortgage-assistant-lead-visual-consultation-system-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "cathay-sit-online-account-opening": {
         "brandFamily": "cathay",
         "brandTint": "rgb(228 244 239)",
         "sourceIntakeName": "國泰投信線上開戶.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-sit-online-account-opening.jpg",
-        "expectedCanonicalSha256": "1d1f7f5844192af4e8f16a4ee87f95a9d79b5509a98971dc782f0c16d5a9299e",
+        "pendingCanonicalPath": "/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg",
+        "expectedCanonicalSha256": "2eb8b6ef4b799dd925fbcea786d6d11641e9c51185a26011e99de33062b6dfd6",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 273260,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 219603,
+        "canonicalMaster": "/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/cathay-sit-online-account-opening-800.jpg",
@@ -2526,21 +2617,30 @@
             "path": "/site/assets/project-card-leads/cathay-sit-online-account-opening.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "cathay-sit-hero-final-flow-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/cathay-sit-online-account-opening/cathay-online-account-opening-lead-visual-end-to-end-flow-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "cathay-sit-review-remediation-operations": {
         "brandFamily": "cathay",
         "brandTint": "rgb(228 244 239)",
         "sourceIntakeName": "國泰審件補件.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations.jpg",
-        "expectedCanonicalSha256": "78ba61442a2fb886c769bfb636c4de2b29226dcc740a898b3773321bc4320cde",
+        "pendingCanonicalPath": "/site/assets/projects/cathay-sit-review-remediation-operations/cathay-review-remediation-lead-visual-remediation-operating-model-public-v1.jpg",
+        "expectedCanonicalSha256": "cd2e47a58b64e4b0fd8b6cb264ef996959eb9f80216c79542a9bd2e94e7e6146",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 243165,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 161788,
+        "canonicalMaster": "/site/assets/projects/cathay-sit-review-remediation-operations/cathay-review-remediation-lead-visual-remediation-operating-model-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations-800.jpg",
@@ -2554,21 +2654,30 @@
             "path": "/site/assets/project-card-leads/cathay-sit-review-remediation-operations.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "cathay-review-research-operating-baseline-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/cathay-sit-review-remediation-operations/cathay-review-remediation-lead-visual-remediation-operating-model-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       },
       "ctbc-mortgage-self-service-app": {
         "brandFamily": "ctbc",
         "brandTint": "rgb(229 242 236)",
         "sourceIntakeName": "中信房貸.png",
-        "pendingCanonicalPath": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app.jpg",
-        "expectedCanonicalSha256": "503a70d375b58848e0bf159274f35acd6fb6eef8a5dc5cf2955bba079525e5e1",
+        "pendingCanonicalPath": "/site/assets/projects/ctbc-mortgage-self-service-app/ctbc-mortgage-self-service-lead-visual-service-architecture-public-v1.jpg",
+        "expectedCanonicalSha256": "032c45ffacf1549e6bec04c3fe156883870a1a3e1ebd771ce657f671d452cb5c",
         "expectedDimensions": [
-          1672,
-          941
+          2048,
+          1152
         ],
-        "expectedBytes": 281320,
-        "canonicalMaster": null,
-        "sourceStatus": "approved-canonical-binary-locked-pending-ingest",
+        "expectedBytes": 142824,
+        "canonicalMaster": "/site/assets/projects/ctbc-mortgage-self-service-app/ctbc-mortgage-self-service-lead-visual-service-architecture-public-v1.jpg",
+        "sourceStatus": "active-approved-canonical",
         "pendingDeliverySources": [
           {
             "path": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app-800.jpg",
@@ -2582,8 +2691,19 @@
             "path": "/site/assets/project-card-leads/ctbc-mortgage-self-service-app.jpg",
             "width": 1672
           }
+        ],
+        "canonicalAssetId": "ctbc-mortgage-hero-final-flow-public-v1",
+        "deliverySources": [
+          {
+            "path": "/site/assets/projects/ctbc-mortgage-self-service-app/ctbc-mortgage-self-service-lead-visual-service-architecture-public-v1.jpg",
+            "width": 2048,
+            "height": 1152,
+            "type": "image/jpeg"
+          }
         ]
       }
-    }
+    },
+    "canonicalFormat": "jpg",
+    "assetOwnerDirectory": "existing approved project lead assets; Daily Hours listing derivative lives under /site/assets/project-card-leads/"
   }
 }

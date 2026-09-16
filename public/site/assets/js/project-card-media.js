@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const REGISTRY_URL = '/site/content/project-card-registry.json';
+  const REGISTRY_URL = '/site/content/portfolio-asset-manifest.json';
   const variants = Object.freeze(['featured', 'standard', 'compact']);
   let registry = null;
   let animationFrame = 0;
@@ -115,7 +115,9 @@
   const start = async () => {
     const response = await fetch(REGISTRY_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`ProjectCard registry HTTP ${response.status}`);
-    registry = await response.json();
+    const manifest = await response.json();
+    registry = manifest.projectCardLeadVisuals;
+    if (!registry) throw new Error('ProjectCard Lead Visual registry missing from asset manifest');
     window.PROJECT_CARD_REGISTRY = Object.freeze(registry);
     window.PROJECT_CARD_SYSTEM = Object.freeze({
       version: registry.version,
