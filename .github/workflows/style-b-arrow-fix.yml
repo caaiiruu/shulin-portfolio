@@ -1,0 +1,48 @@
+name: Style B Arrow Fix
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-arrow-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Patch shared ProjectCard arrow direction
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('public/site/assets/css/components/project-card-system.css')
+          css=path.read_text()
+          css=css.replace(
+            '.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:none;transition:transform var(--motion-base) var(--ease-enter)}',
+            '.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}'
+          )
+          css=css.replace(
+            '.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift))}',
+            '.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button:hover .work-card-v32__action .icon-arrow--right{transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))}'
+          )
+          css=css.replace(
+            '    transform:translateX(var(--project-card-system-hover-shift))\n  }',
+            '    transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotate-right))\n  }',
+            1
+          )
+          path.write_text(css)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/site/assets/css/components/project-card-system.css
+          git diff --check --cached
+          git diff --cached --quiet && exit 0
+          git commit -m 'Align ProjectCard arrow direction with Domain'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
