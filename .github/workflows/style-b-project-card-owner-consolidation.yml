@@ -1,0 +1,82 @@
+name: Style B ProjectCard Owner Consolidation
+
+on:
+  push:
+    branches:
+      - integration/style-b-project-card-webp-v1
+    paths:
+      - '.github/workflows/style-b-project-card-owner-consolidation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/style-b-project-card-webp-v1
+          fetch-depth: 0
+      - name: Consolidate shared ProjectCard owner
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          project = Path('public/site/assets/css/components/project-card.css')
+          system = Path('public/site/assets/css/components/project-card-system.css')
+          domain = Path('public/site/assets/css/components/domain-experience.css')
+          work = Path('public/site/assets/js/work.js')
+
+          project_css = project.read_text()
+          system_css = system.read_text()
+          domain_css = domain.read_text()
+          work_js = work.read_text()
+
+          marker = '/* Shared ProjectCard listing contract — canonical owner for Home / Domain / Work. */'
+          if marker not in project_css:
+              # Move the current shared listing contract into the canonical ProjectCard owner.
+              moved = system_css.replace('/* ProjectCard System — canonical shared listing-card contract for Home / Domain / Work.\n   Variants: featured | standard | compact. Page owners choose composition only. */', marker, 1)
+
+              # Move Domain card INTERNAL rules only; carousel/positioning stays in Domain owner.
+              inner_rules = []
+              for m in re.finditer(r'(?m)^\.domain-experience \.domain-project-card-v2__(?:content|meta|identity|company|year|title|metrics|metric-value|metric-label|cta|cta-arrow|visual|image)[^{]*\{[^{}]*\}\s*$', domain_css):
+                  inner_rules.append(m.group(0))
+              for m in re.finditer(r'(?m)^\.domain-experience \.domain-project-card-v2[^\n{]* \.domain-project-card-v2__(?:cta-arrow|image)[^{]*\{[^{}]*\}\s*$', domain_css):
+                  inner_rules.append(m.group(0))
+              # Preserve order and remove duplicates.
+              seen=set(); ordered=[]
+              for rule in inner_rules:
+                  if rule not in seen:
+                      seen.add(rule); ordered.append(rule)
+              moved += '\n\n/* Domain ProjectCard internals moved here; Domain owns carousel composition only. */\n' + '\n'.join(ordered)
+
+              # Hard reset link decoration at the whole-card trigger and all shared card copy.
+              moved += '''\n\n/* Shared card text never inherits editorial link decoration. */
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button,
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(span,strong,h2,dl,dt,dd),
+.domain-project-card-v2[data-project-card-system="shared-v1"],
+.domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}\n'''
+              project.write_text(project_css.rstrip() + '\n\n' + moved.strip() + '\n')
+
+          # Remove Domain INTERNAL owners everywhere (including responsive overrides), while preserving outer card/carousel geometry.
+          domain_css = re.sub(r'(?m)^\s*\.domain-experience \.domain-project-card-v2__(?:content|meta|identity|company|year|title|metrics|metric-value|metric-label|cta|cta-arrow|visual|image)[^{]*\{[^{}]*\}\s*\n?', '', domain_css)
+          domain_css = re.sub(r'(?m)^\s*\.domain-experience \.domain-project-card-v2[^\n{]* \.domain-project-card-v2__(?:cta-arrow|image)[^{]*\{[^{}]*\}\s*\n?', '', domain_css)
+          domain.write_text(domain_css)
+
+          # Remove runtime loading of the retired parallel CSS owner.
+          work_js = re.sub(r"\n\s*if \(!document\.querySelector\('link\[data-project-card-system=\\\"shared-v1\\\"\]'\)\) \{.*?\n\s*\}\n", '\n', work_js, count=1, flags=re.S)
+          work.write_text(work_js)
+
+          system.unlink()
+          PY
+
+          rm -f .github/workflows/style-b-project-card-owner-consolidation.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --check --cached
+          git commit -m 'Consolidate listing ProjectCard into canonical owner'
+          git push origin HEAD:integration/style-b-project-card-webp-v1
