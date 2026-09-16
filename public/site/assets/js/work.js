@@ -111,8 +111,30 @@
     return '';
   };
   const canonicalRouteForProject = id => registryEntryForProject(id)?.route || projectionForProject(id)?.route || `/work/${encodeURIComponent(id)}`;
+  const presentationEntryForProject = id => registryEntryForProject(id)?.entry || null;
+  const usesStandalonePage = id => {
+    const entry = presentationEntryForProject(id);
+    return Boolean(entry && entry.presentationContract && entry.presentationContract !== 'legacy');
+  };
   const normalizeCardNavigation = (id, control) => {
     const href = canonicalRouteForProject(id);
+    if (!usesStandalonePage(id)) {
+      let button = control;
+      if (control.tagName !== 'BUTTON') {
+        button = document.createElement('button');
+        [...control.attributes].forEach(({ name, value }) => {
+          if (name !== 'href' && name !== 'data-public-work-route') button.setAttribute(name, value);
+        });
+        while (control.firstChild) button.append(control.firstChild);
+        control.replaceWith(button);
+      }
+      button.type = 'button';
+      button.removeAttribute('href');
+      button.dataset.project = id;
+      button.dataset.publicWorkRoute = href;
+      button.setAttribute('aria-label', button.getAttribute('aria-label') || `View ${id} case study`);
+      return button;
+    }
     let link = control;
     if (control.tagName !== 'A') {
       link = document.createElement('a');
