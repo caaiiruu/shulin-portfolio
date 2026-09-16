@@ -1,4 +1,5 @@
 name: Style B ProjectCard Final QA
+# Exact-head certification for the unified ProjectCard owner.
 
 on:
   push:
