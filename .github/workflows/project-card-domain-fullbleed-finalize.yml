@@ -18,30 +18,15 @@ jobs:
       - name: Finalize Domain shared media contract
         run: |
           set -euo pipefail
-          cat >> public/site/assets/css/components/project-card.css <<'CSS'
-
-/* Final shared Domain media contract — must stay after migrated legacy internals. */
-.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__visual{
-  padding:0!important;
-  overflow:hidden;
-  background:var(--project-card-media-surface)!important;
-  background-image:none!important;
-}
-.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__image{
-  display:block!important;
-  width:100%;
-  height:100%;
-  opacity:1!important;
-  object-fit:cover!important;
-  object-position:center;
-}
-.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button,
-.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(a,span,strong,h2,dl,dt,dd),
-.domain-project-card-v2[data-project-card-system="shared-v1"],
-.domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){
-  text-decoration:none!important;
-}
-CSS
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('public/site/assets/css/components/project-card.css')
+          s=p.read_text()
+          marker='/* Final shared Domain media contract — must stay after migrated legacy internals. */'
+          if marker not in s:
+              block='''\n\n/* Final shared Domain media contract — must stay after migrated legacy internals. */\n.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__visual{padding:0!important;overflow:hidden;background:var(--project-card-media-surface)!important;background-image:none!important}\n.domain-project-card-v2[data-project-card-system="shared-v1"] .domain-project-card-v2__image{display:block!important;width:100%;height:100%;opacity:1!important;object-fit:cover!important;object-position:center}\n.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button,\n.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__button :where(a,span,strong,h2,dl,dt,dd),\n.domain-project-card-v2[data-project-card-system="shared-v1"],\n.domain-project-card-v2[data-project-card-system="shared-v1"] :where(a,span,strong,h3,dl,dt,dd){text-decoration:none!important}\n'''
+              p.write_text(s.rstrip()+block)
+          PY
           rm -f .github/workflows/project-card-domain-fullbleed-finalize.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
