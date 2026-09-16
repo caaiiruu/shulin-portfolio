@@ -14,6 +14,7 @@ test("GA4 has one canonical runtime owner and one initialization path", () => {
   assert.equal(trackedRuntimeOwners.filter((file) => file === "analytics.js").length, 1);
   assert.equal((analytics.match(/window\.gtag\('config',measurementId\)/g) || []).length, 1);
   assert.equal((analytics.match(/window\.__portfolioGa4Initialized=true/g) || []).length, 1);
+  assert.match(analytics, /window\.location\.hostname\.endsWith\('\.vercel\.app'\)\)return/);
   assert.match(analytics, /window\.dataLayer=window\.dataLayer\|\|\[\]/);
   assert.match(analytics, /www\.googletagmanager\.com\/gtag\/js\?id=/);
   assert.match(analytics, /try\{/);

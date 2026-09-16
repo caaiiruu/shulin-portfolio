@@ -1,6 +1,7 @@
 (()=>{
   try{
     const measurementId='G-RSC73N4BPX';
+    if(window.location.hostname.endsWith('.vercel.app'))return;
     window.dataLayer=window.dataLayer||[];
     window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};
     if(window.__portfolioGa4Initialized)return;
