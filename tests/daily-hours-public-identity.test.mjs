@@ -40,7 +40,7 @@ test('Daily Hours is a registry-backed Work projection without becoming legacy p
   assert.equal(Object.keys(content.projects).length,13);
   assert.equal(content.projects['daily-hours'],undefined);
   assert.equal(route.publicDiscovery,true);
-  assert.deepEqual(route.workProjection,{title:'Daily Hours',cardTitle:'Daily Hours — A decision workspace for freelance capacity, pricing, and revenue',type:'0→1 Product',summary:'A freelance project-economics and decision workspace.',route:'/work/daily-hours',period:'2026',filterIds:['zero','operations'],coverAssetId:'daily-hours-hero-static',searchIndexV2:{contentType:'project',canonicalId:'daily-hours',aliases:{en:['Daily Hours']},problemTags:{en:['freelance operations','project economics','decision workspace','0→1 product']},capabilityTags:{en:['project health','project estimation','workload planning']},intentIds:['launch-zero-to-one-product']}});
+  assert.deepEqual(route.workProjection,{title:'Daily Hours',cardTitle:'Track work. Decide what’s worth it.',type:'0→1 Product',summary:'A freelance project-economics and decision workspace.',route:'/work/daily-hours',period:'2026',filterIds:['zero','operations'],coverAssetId:'daily-hours-hero-static',searchIndexV2:{contentType:'project',canonicalId:'daily-hours',aliases:{en:['Daily Hours']},problemTags:{en:['freelance operations','project economics','decision workspace','0→1 product']},capabilityTags:{en:['project health','project estimation','workload planning']},intentIds:['launch-zero-to-one-product']}});
   assert.match(runtime,/caseStudyProjects/);
   assert.match(runtime,/publicProjects:\{\.\.\.projects,\.\.\.caseStudyProjects\}/);
 });

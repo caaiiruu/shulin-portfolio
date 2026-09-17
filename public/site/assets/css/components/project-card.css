@@ -138,7 +138,7 @@
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metric{display:contents}
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metric-value{grid-row:1;align-self:end;margin:0;color:var(--color-text-primary);font-size:var(--sys-type-heading-3);font-weight:var(--sys-weight-heavy);line-height:1}
 .work-card-v32[data-project-card-system="shared-v1"] .project-card__metric-label{grid-row:2;align-self:start;margin:0;color:var(--color-text-secondary);font-size:var(--sys-type-label);line-height:1.25;text-transform:lowercase}
-.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action{grid-row:6;position:relative;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);align-self:stretch;width:100%;min-height:var(--project-card-system-cta-height);margin:0 0 calc(var(--project-card-content-padding) * -1);padding:var(--space-3) 0 var(--project-card-content-padding);background-image:linear-gradient(var(--text-cta-underline),var(--text-cta-underline));background-repeat:no-repeat;background-position:left calc(100% - var(--space-3));background-size:28% var(--dimension-2px);color:var(--color-text-primary);text-decoration:none;transition:background-image var(--motion-fast) var(--ease-standard),background-size var(--motion-base) var(--ease-standard)}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action{grid-row:6;position:relative;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);align-self:stretch;width:100%;min-height:var(--project-card-system-cta-height);margin:0 0 calc(var(--project-card-content-padding) * -1);padding:var(--space-3) 0 var(--project-card-content-padding);background-image:none;background-repeat:no-repeat;background-position:left calc(100% - var(--space-3));background-size:0 var(--dimension-2px);color:var(--color-text-primary);text-decoration:none;transition:background-image var(--motion-fast) var(--ease-standard),background-size var(--motion-base) var(--ease-standard)}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action::before{position:absolute;top:0;left:0;right:0;height:var(--dimension-1px);background:color-mix(in srgb,var(--color-text-primary) 16%,transparent);content:"";pointer-events:none;transition:background-color var(--motion-fast) var(--ease-standard)}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action::after{content:none!important;display:none!important}
 .work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action .icon-arrow--right{transform:rotate(var(--arrow-rotate-right));transition:transform var(--motion-base) var(--ease-enter)}
@@ -252,3 +252,13 @@
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__title{min-height:var(--dimension-112px)}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__metrics{grid-row:3;align-self:end}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__action{grid-row:4;box-sizing:border-box;width:100%;margin-inline:0;padding-inline:0}
+
+/* Final ProjectCard action state: project actions have no resting accent and keep dark content. */
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action,
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action :is(span,.icon-arrow),
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__action,
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__action :is(span,.icon-arrow){color:var(--color-text-primary)!important;opacity:1}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__content,
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__content{grid-template-rows:auto auto minmax(0,1fr) var(--project-card-system-metric-slot) var(--space-3) auto}
+.work-card-v32[data-project-card-system="shared-v1"] .work-card-v32__action,
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__action{align-self:end}

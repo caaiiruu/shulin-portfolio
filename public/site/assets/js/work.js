@@ -123,7 +123,7 @@
     }
     link.setAttribute('href', href);
     link.dataset.publicWorkRoute = href;
-    if (usesStandalonePage(id)) link.removeAttribute('data-project');
+    if (usesStandalonePage(id) && id !== 'daily-hours') link.removeAttribute('data-project');
     else link.dataset.project = id;
     link.setAttribute('aria-label', link.getAttribute('aria-label') || `View ${id} case study`);
     return link;
@@ -232,9 +232,9 @@
       featured.replaceChildren();moreGrid.replaceChildren();
       decorated.forEach((card,index)=>{
         card.dataset.projectCardVariant=index===0?'featured':index<4?'standard':'compact';
-        if(index<2)featured.append(card);
+        if(index<1)featured.append(card);
       });
-      const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';decorated.slice(2,4).forEach(card=>mediumRow.append(card));if(mediumRow.children.length)featured.append(mediumRow);
+      const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';decorated.slice(1,4).forEach(card=>mediumRow.append(card));if(mediumRow.children.length)featured.append(mediumRow);
       decorated.slice(4).forEach(card=>moreGrid.append(card));
       featured.hidden=false;more.hidden=moreGrid.children.length===0;filtered.hidden=true;filtered.replaceChildren();
     };
@@ -243,7 +243,7 @@
       const matches=decorated.filter(card=>card.dataset.workCategories.split(/\s+/).includes(filter));
       filtered.replaceChildren();filtered.dataset.resultCount=String(matches.length);
       matches.forEach((card,index)=>{
-        card.dataset.projectCardVariant=matches.length===1?'featured':matches.length===2?(index===0?'featured':'standard'):'compact';
+        card.dataset.projectCardVariant=matches.length===1?'featured':matches.length===2?'standard':'compact';
         filtered.append(card);
       });
       featured.hidden=true;more.hidden=true;filtered.hidden=false;

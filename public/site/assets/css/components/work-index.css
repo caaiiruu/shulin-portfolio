@@ -7,9 +7,9 @@
 .work-index-filter:active{transform:scale(.98)}
 .work-index-filter:focus-visible{outline:var(--dimension-3px) solid var(--color-focus);outline-offset:var(--dimension-2px)}
 .work-index-filter[aria-pressed="true"]{border-color:var(--sys-color-action-primary);background:var(--sys-color-action-primary);color:var(--sys-color-on-action)}
-.work-index__featured{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--space-6);align-items:stretch}
+.work-index__featured{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-6);align-items:stretch}
 .work-index__featured>.work-card-v32{height:100%}
-.work-index__featured-secondary-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6);grid-column:1/-1;align-items:stretch}
+.work-index__featured-secondary-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-6);grid-column:1/-1;align-items:stretch}
 .work-index__featured-secondary-row>.work-card-v32{height:100%}
 .work-index__more{display:grid;gap:var(--space-5);margin-top:var(--space-3)}
 .work-index__more-head{display:flex;align-items:end;justify-content:space-between;gap:var(--space-4)}
@@ -18,14 +18,14 @@
 .work-index__more-grid>.work-card-v32{height:100%}
 .work-index__filtered-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-6);align-items:stretch}
 .work-index__filtered-results[data-result-count="1"]{grid-template-columns:minmax(0,1fr)}
-.work-index__filtered-results[data-result-count="2"]{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.work-index__filtered-results[data-result-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
 .work-index__filtered-results>.work-card-v32{height:100%;min-width:0}
 .work-index [hidden]{display:none!important}
 @media(max-width:1100px){
   .work-index__featured{grid-template-columns:1fr}
   .work-index__featured-secondary-row,.work-index__more-grid,.work-index__filtered-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
   .work-index__filtered-results[data-result-count="1"]{grid-template-columns:1fr}
-  .work-index__filtered-results[data-result-count="2"]{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+  .work-index__filtered-results[data-result-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:640px){
   .work-index__shell{gap:var(--space-6)}

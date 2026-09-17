@@ -487,6 +487,27 @@ html[lang="zh"] .profile-value-v44__grid p {
 /* Award navigation follows the shared top-right section-control position. */
 @media(max-width:760px){.profile-side-projects-v34__head{grid-template-columns:minmax(0,1fr) auto;align-items:start}.profile-side-projects-v34__head .rail-controls{grid-column:2;grid-row:1;justify-self:end}}
 
-/* Final Profile hero hierarchy: role label supports the primary value panel. */
-.profile-hero-v36__grid{grid-template-columns:minmax(var(--dimension-320px),.72fr) minmax(var(--dimension-520px),1.28fr);align-items:start}
-@media(max-width:900px){.profile-hero-v36__grid{grid-template-columns:1fr}}
+/* Simplified recruiter-first Profile hero and content-driven teammate reviews. */
+.profile-hero-v36__grid{grid-template-columns:minmax(0,1fr) minmax(0,.72fr);align-items:center}
+.profile-hero-v36__copy{max-width:var(--dimension-760px)}
+.profile-hero-v36__summary{max-width:var(--dimension-32ch);font-size:clamp(var(--dimension-1-7rem),var(--dimension-3vw),var(--dimension-3rem));line-height:1.22}
+.profile-hero-v36__meta{display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:center;margin-top:var(--space-7);padding-top:var(--space-5);border-top:var(--dimension-1px) solid var(--color-border)}
+.profile-hero-v36__meta>span{color:var(--color-text-secondary);font-size:var(--text-sm)}
+.profile-hero-v36__actions{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-left:auto}
+.profile-hero-v36__actions a{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--control-height);padding-inline:var(--space-4);border:var(--dimension-1px) solid var(--color-border-strong);border-radius:var(--radius-pill);color:var(--color-text-primary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold);text-decoration:none}
+.profile-hero-v36__portrait{min-width:0;margin:0;overflow:hidden;aspect-ratio:4/5;border-radius:var(--radius-lg);background:var(--color-surface-soft)}
+.profile-hero-v36__portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.profile-hero-v36__portrait[hidden]{display:none}
+.profile-hero-v36__grid:has(.profile-hero-v36__portrait[hidden]){grid-template-columns:minmax(0,var(--dimension-760px))}
+.profile-testimonials-v1{padding-block:var(--section-space);background:var(--color-surface-soft)}
+.profile-testimonials-v1__head{display:grid;gap:var(--space-4);max-width:var(--dimension-680px)}
+.profile-testimonials-v1__viewport{max-width:var(--dimension-960px);margin-top:var(--space-7)}
+.profile-testimonial-v1{padding:clamp(var(--space-6),var(--dimension-5vw),var(--space-9));border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
+.profile-testimonial-v1__quote{max-width:var(--dimension-58ch);margin:0;font-size:clamp(var(--dimension-1-15rem),var(--dimension-2vw),var(--dimension-1-7rem));line-height:1.45;white-space:pre-line;text-wrap:pretty}
+.profile-testimonial-v1__attribution{display:grid;gap:var(--space-1);margin-top:var(--space-6);color:var(--color-text-secondary)}
+.profile-testimonial-v1__attribution strong{color:var(--color-text-primary)}
+.profile-testimonials-v1__controls{display:flex;gap:var(--space-3);align-items:center;margin-top:var(--space-5)}
+.profile-testimonials-v1__controls button{display:grid;width:var(--control-height);height:var(--control-height);place-items:center;border:var(--dimension-1px) solid var(--color-border-strong);border-radius:50%;background:var(--color-surface);color:var(--color-text-primary)}
+@media(max-width:900px){.profile-hero-v36__grid{grid-template-columns:1fr}.profile-hero-v36__portrait{width:min(100%,var(--dimension-520px))}.profile-hero-v36__actions{margin-left:0}}
+@media(max-width:600px){.profile-hero-v36__summary{font-size:var(--dimension-1-7rem)}.profile-hero-v36__meta{align-items:flex-start}.profile-hero-v36__actions{width:100%}.profile-hero-v36__actions a{flex:1 1 auto;justify-content:center}.profile-testimonial-v1{padding:var(--space-5)}}
+@media(prefers-reduced-motion:reduce){.profile-hero-v36::before{animation:none}}

@@ -71,15 +71,15 @@ jobs:
               assert(await control.evaluate(el=>el.tagName)==='A',`Work ${width} ${id}: card is not progressive anchor`);
               const href=await control.getAttribute('href');
               assert(normalized(href)===`/work/${id}`,`Work ${width} ${id}: wrong fallback href ${href}`);
-              if(standalone(id)){
-                assert(await control.getAttribute('data-project')===null,`Work ${width} ${id}: standalone card leaked legacy owner`);
-                continue;
-              }
-              assert(await control.getAttribute('data-project')===id,`Work ${width} ${id}: legacy enhancement owner missing`);
-              await control.click();
-              await page.waitForSelector('#detailDialog[open]',{timeout:5000});
-              assert(normalized(page.url())===`/work/${id}`,`Work ${width} ${id}: URL did not become canonical route`);
-              const title=(await page.locator('#detailTitle').innerText()).trim();
+            if(standalone(id)&&id!=='daily-hours'){
+              assert(await control.getAttribute('data-project')===null,`Work ${width} ${id}: standalone card leaked legacy owner`);
+              continue;
+            }
+            assert(await control.getAttribute('data-project')===id,`Work ${width} ${id}: legacy enhancement owner missing`);
+            await control.click();
+            await page.waitForSelector('#detailDialog[open]',{timeout:5000});
+            assert(normalized(page.url())===`/work/${id}`,`Work ${width} ${id}: URL did not become canonical route`);
+            const title=(await page.locator(id==='daily-hours'?'#detailDialog .csv2-display':'#detailTitle').first().innerText()).trim();
               assert(title.length>0,`Work ${width} ${id}: detail title empty`);
               await page.goto(`${base}/site/work.html`,{waitUntil:'networkidle'});
               await page.waitForSelector('.work-index[data-style-b-integrated="true"]');

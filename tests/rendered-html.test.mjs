@@ -891,8 +891,10 @@ test("uses the SSOT-owned many-to-many Work filter mapping", () => {
   allProjects.forEach((id) => assert.ok(allOnly.has(id) || filters.some((filter) => filter.id !== "all" && filter.projectIds.includes(id)), id));
   assert.deepEqual(
     new Set(filters.find((filter) => filter.id === "zero").projectIds),
-    new Set(["payment", "game-center", "ctbc-mortgage-self-service-app", "bandzo", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant"]),
+    new Set(["payment", "game-center", "ctbc-mortgage-self-service-app", "taishin-p2p-marketplace-platform", "cathay-mortgage-assistant"]),
   );
+  assert.ok(!filters.find((filter) => filter.id === "zero").projectIds.includes("bandzo"));
+  assert.ok(filters.find((filter) => filter.id === "journeys").projectIds.includes("bandzo"));
   assert.match(app, /workFilterIdsForProject/);
   assert.match(app, /dataset\.workCategories/);
   assert.doesNotMatch(app, /function workCategory\(/);
@@ -2365,7 +2367,38 @@ test("approved Weekly and Profile refinement assets stay canonical",()=>{
   assert.deepEqual(ssot.experiments["weekly-design-session"].presentationSections.find(section=>section.id==="practice-model").assetIds,["weekly-design-session-practice-evidence-public-v1"]);
   assert.equal(ssot.profile.interestVisuals.drawing.assetId,"profile-drawing-master-photo-public-v1");
   assert.equal(ssot.profile.interestVisuals.travel.assetId,"profile-travel-iceland-geothermal-landscape-public-v1");
-  for(const id of ["weekly-design-session-facilitation-hero-public-v1","weekly-design-session-practice-evidence-public-v1","profile-drawing-master-photo-public-v1","profile-travel-iceland-geothermal-landscape-public-v1","profile-be-your-back-spotify-album-cover"]) assert.equal(manifest.items[id].implementationStatus,"real-active");
+  for(const id of ["weekly-design-session-facilitation-hero-public-v1","weekly-design-session-practice-evidence-public-v1","profile-portrait-shulin-chou-public-v1","profile-drawing-master-photo-public-v1","profile-travel-iceland-geothermal-landscape-public-v1","profile-be-your-back-spotify-album-cover"]) assert.equal(manifest.items[id].implementationStatus,"real-active");
+  assert.equal(ssot.profile.portrait.assetId,"profile-portrait-shulin-chou-public-v1");
   assert.match(profile,/data-asset-id="profile-drawing-master-photo-public-v1"/);
   assert.match(profile,/data-asset-id="profile-travel-iceland-geothermal-landscape-public-v1"/);
+});
+
+
+test("shared ProjectCards keep dark actions, no resting accent, and bottom-pinned CTA geometry", () => {
+  const css = read("assets/css/components/project-card.css");
+  assert.match(css, /work-card-v32__action\{[^}]*grid-row:6[^}]*align-self:stretch/);
+  assert.match(css, /work-card-v32__action\{[^}]*background-image:none/);
+  assert.match(css, /data-project-card-system="shared-v1"[^}]*work-card-v32__action[^}]*color:var\(--color-text-primary\)!important/);
+  assert.match(css, /data-experiment-card-system="shared-v1"[^}]*work-card-v32__action[^}]*align-self:end/);
+});
+
+test("Profile reviews are SSOT-driven and disable auto-rotation for reduced motion", () => {
+  const data = JSON.parse(read("content/portfolio-content.json"));
+  const app = read("assets/js/app.js");
+  const profile = read("profile.html");
+  assert.ok(Array.isArray(data.profile.testimonials.items));
+  assert.equal(data.profile.testimonials.items.length, 1);
+  assert.equal(data.profile.testimonials.items[0].author.en, "Michelle Tan J.Y.");
+  assert.equal(data.profile.testimonials.items[0].quote.en, "Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!");
+  assert.equal(data.profile.testimonials.items[0].role.en, "Content Designer building systems that scale | AI Platform Governance & Content Evaluation | UX Writing");
+  assert.equal(data.profile.testimonials.items[0].relationship.en, "Michelle worked with Shulin on the same team");
+  assert.equal(data.profile.testimonials.rotationIntervalMs, 7500);
+  assert.match(app, /const testimonialItems=\(\)=>list\(testimonials\?\.items\)/);
+  assert.match(app, /if\(items.length<2\|\|prefersReduced.matches\|\|testimonialPaused\|\|doc.hidden\)return/);
+  assert.match(app, /visibilitychange/);
+  assert.match(app, /mouseenter/);
+  assert.match(app, /focusin/);
+  assert.match(profile, /id="profileTestimonials" hidden/);
+  assert.match(profile, /data-asset-id="profile-portrait-shulin-chou-public-v1"/);
+  assert.doesNotMatch(profile, /Where I add value|profile-value-v44/);
 });

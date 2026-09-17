@@ -121,7 +121,10 @@ function currentComparisonBase() {
   if (process.env.GITHUB_BASE_REF) return `origin/${process.env.GITHUB_BASE_REF}`;
   if (!process.env.GITHUB_EVENT_PATH || !fs.existsSync(process.env.GITHUB_EVENT_PATH)) return null;
   const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
-  if (typeof event.before === "string" && /^[0-9a-f]{40}$/i.test(event.before) && !/^0+$/.test(event.before)) return event.before;
+  if (typeof event.before === "string" && /^[0-9a-f]{40}$/i.test(event.before) && !/^0+$/.test(event.before)) {
+    const available = spawnSync("git", ["cat-file", "-e", `${event.before}^{commit}`]).status === 0;
+    return available ? event.before : git(["rev-parse", "HEAD^"]);
+  }
   return null;
 }
 

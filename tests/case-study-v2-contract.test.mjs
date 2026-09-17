@@ -25,7 +25,7 @@ test('CSV2 is isolated and Daily Hours is its only consumer',()=>{
     publicDiscovery:true,sitemap:true,previewOnly:false,
     legacyExperimentSlugs:['daily-hours'],
     workProjection:{
-      title:'Daily Hours',cardTitle:'Daily Hours — A decision workspace for freelance capacity, pricing, and revenue',type:'0→1 Product',summary:'A freelance project-economics and decision workspace.',
+      title:'Daily Hours',cardTitle:'Track work. Decide what’s worth it.',type:'0→1 Product',summary:'A freelance project-economics and decision workspace.',
       route:'/work/daily-hours',period:'2026',filterIds:['zero','operations'],coverAssetId:'daily-hours-hero-static',
       searchIndexV2:{
         contentType:'project',canonicalId:'daily-hours',aliases:{en:['Daily Hours']},

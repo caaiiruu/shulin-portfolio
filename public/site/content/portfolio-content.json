@@ -24347,7 +24347,6 @@
           "payment",
           "taishin-p2p-marketplace-platform",
           "game-center",
-          "bandzo",
           "cathay-mortgage-assistant",
           "ctbc-mortgage-self-service-app"
         ]
@@ -24399,7 +24398,8 @@
           "booking-taxi-pickup-service-strategy",
           "cathay-mortgage-assistant",
           "ctbc-mortgage-self-service-app",
-          "cathay-sit-online-account-opening"
+          "cathay-sit-online-account-opening",
+          "bandzo"
         ]
       }
     ],
@@ -25337,6 +25337,10 @@
       "projectLinkRule": "Render exactly one key project link per career period.",
       "contentStatus": "approved"
     },
+    "portrait": {
+      "assetId": "profile-portrait-shulin-chou-public-v1",
+      "contentStatus": "human-approved-2026-09-17"
+    },
     "interestVisuals": {
       "drawing": {
         "assetId": "profile-drawing-master-photo-public-v1"
@@ -25347,6 +25351,36 @@
       "travel": {
         "assetId": "profile-travel-iceland-geothermal-landscape-public-v1"
       }
+    },
+    "testimonials": {
+      "eyebrow": {
+        "en": "What teammates say",
+        "zh": "團隊夥伴怎麼說"
+      },
+      "title": {
+        "en": "How it feels to work together.",
+        "zh": "一起工作的感受。"
+      },
+      "rotationIntervalMs": 7500,
+      "items": [
+        {
+          "id": "michelle-tan-jy-fairprice-colleague-review-2026",
+          "quote": {
+            "en": "Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!"
+          },
+          "author": {
+            "en": "Michelle Tan J.Y."
+          },
+          "role": {
+            "en": "Content Designer building systems that scale | AI Platform Governance & Content Evaluation | UX Writing"
+          },
+          "relationship": {
+            "en": "Michelle worked with Shulin on the same team"
+          },
+          "contentStatus": "human-approved-source-2026-09-17"
+        }
+      ],
+      "contentStatus": "human-approved-source-2026-09-17"
     }
   },
   "sideProjects": {
@@ -32634,6 +32668,14 @@
       "aria.shulin-chou-home-65f1cb41": {
         "en": "Shulin Chou — Home",
         "zh": "Shulin Chou — 首頁"
+      },
+      "aria.previous-testimonial-style-b": {
+        "en": "Previous testimonial",
+        "zh": "上一則夥伴評語"
+      },
+      "aria.next-testimonial-style-b": {
+        "en": "Next testimonial",
+        "zh": "下一則夥伴評語"
       }
     }
   },

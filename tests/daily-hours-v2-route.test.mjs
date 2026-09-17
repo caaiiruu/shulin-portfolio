@@ -50,3 +50,18 @@ test('generated runtime contains one V2 registry and no film CTA',()=>{
   assert.match(runtime,/CASE_STUDY_PRESENTATIONS/);
   assert.doesNotMatch(runtime,/Play product film/);
 });
+
+
+test('Daily Hours reuses its canonical renderer inside the shared project dialog',()=>{
+  const runtime=fs.readFileSync('public/site/assets/js/app.js','utf8');
+  const workRuntime=fs.readFileSync('public/site/assets/js/work.js','utf8');
+  assert.match(runtime,/function renderCaseStudyPopup\(projectId\)/);
+  assert.match(runtime,/window\.CASE_STUDY_PRESENTATIONS\?\.\[entry\?\.presentationContract\]/);
+  assert.match(runtime,/CASE_STUDY_CONTENT\?\.\[projectId\]/);
+  assert.match(runtime,/CASE_STUDY_ASSETS\?\.\[projectId\]/);
+  assert.match(runtime,/CASE_STUDY_MOTION\?\.\[projectId\]/);
+  assert.match(runtime,/legacyDialogContent\.hidden=active/);
+  assert.match(runtime,/body\.classList\.remove\('csv2-active'\)/);
+  assert.match(workRuntime,/id !== 'daily-hours'/);
+  assert.match(workRuntime,/link\.dataset\.project = id/);
+});

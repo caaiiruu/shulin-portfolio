@@ -130,3 +130,12 @@
   .detail-dialog-v45[open]::backdrop,.detail-dialog-v45[open] .dialog-scroll,
   .detail-dialog-v45.is-closing::backdrop,.detail-dialog-v45.is-closing .dialog-scroll { animation: none; }
 }
+
+/* case-study-v2 reuses the shared dialog shell; its renderer and content owners stay canonical. */
+.detail-dialog-v45.is-case-study-v2 .dialog-scroll{background:var(--csv2-bg);color:var(--csv2-text)}
+.detail-dialog-v45.is-case-study-v2 .dialog-controls-v67{background:color-mix(in srgb,var(--csv2-bg) 94%,transparent)}
+.detail-dialog-v45.is-case-study-v2 .modal-close{border-color:var(--csv2-line);background:var(--csv2-panel);color:var(--csv2-text)}
+.detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::before,
+.detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::after{background:var(--csv2-text)}
+.detail-dialog-v45.is-case-study-v2 .csv2-cta{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-3);min-height:var(--dimension-52px);padding:var(--space-3) var(--space-5);border:var(--dimension-1px) solid var(--csv2-action);border-radius:var(--radius-md);background:var(--csv2-action);color:#fff;font-weight:var(--sys-weight-bold);white-space:nowrap;text-decoration:none}
+.detail-dialog-v45.is-case-study-v2 .case-study-v2-popup{display:block;width:100%;min-height:100%;margin:0;padding:0}

@@ -1421,41 +1421,47 @@
   }
   renderCareerTimeline();
   doc.addEventListener('portfolio:language',renderCareerTimeline);
-  const leadership=DATA.profile?.designLeadership;
-  const leadershipGrid=doc.getElementById('designLeadershipGrid');
-  function renderDesignLeadership(){
-    if(!leadership||!leadershipGrid)return;
-    safeText(doc.getElementById('designLeadershipTitle'),localize(leadership.title));
-    clear(leadershipGrid);
-    list(leadership.items).forEach((item,index)=>{
-      const card=element('article','profile-leadership-v81__item');
-      card.append(
-        element('span','profile-leadership-v81__number',String(index+1).padStart(2,'0')),
-        element('small','',localize(item.label)),
-        element('p','',localize(item.content))
-      );
-      const links=element('div','profile-leadership-v81__links');
-      list(item.evidenceLinks).slice(0,1).forEach(link=>{
-        const source=link.type==='project'?DATA.projects[link.id]:DATA.experiments[link.id];
-        if(!source)return;
-        const fullTitle=link.type==='project'
-          ?localize(source.cardTitle)||localize(source.title_pair)
-          :localize(source.title);
-        const rawLinkTitle=link.type==='project'?ui("view-case-a62dd0ad"):ui("view-experiment-8788e030");
-        const linkTitle=rawLinkTitle.replace(/\s*[→↗]\s*$/,'');
-        const button=element('button','text-cta profile-leadership-v81__link',linkTitle);
-        button.type='button';button.dataset.pressable='';
-        button.dataset[link.type]=link.id;
-        button.setAttribute('aria-label',`${linkTitle}: ${fullTitle}`);
-        button.appendChild(element('span','icon-arrow icon-arrow--right'));
-        links.appendChild(button);
-      });
-      if(links.childElementCount)card.appendChild(links);
-      leadershipGrid.appendChild(card);
-    });
+  const testimonials=DATA.profile?.testimonials;
+  const testimonialSection=doc.getElementById('profileTestimonials');
+  const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
+  const testimonialControls=doc.getElementById('profileTestimonialsControls');
+  const testimonialCount=doc.getElementById('profileTestimonialsCount');
+  let testimonialIndex=0,testimonialTimer=0,testimonialPaused=false;
+  const testimonialItems=()=>list(testimonials?.items).filter(item=>localize(item.quote)&&localize(item.author));
+  function stopTestimonialRotation(){if(testimonialTimer){window.clearInterval(testimonialTimer);testimonialTimer=0}}
+  function startTestimonialRotation(){
+    stopTestimonialRotation();const items=testimonialItems();
+    if(items.length<2||prefersReduced.matches||testimonialPaused||doc.hidden)return;
+    testimonialTimer=window.setInterval(()=>renderTestimonials((testimonialIndex+1)%items.length),Number(testimonials?.rotationIntervalMs)||7500);
   }
-  renderDesignLeadership();
-  doc.addEventListener('portfolio:language',renderDesignLeadership);
+  function renderTestimonials(nextIndex=testimonialIndex){
+    if(!testimonialSection||!testimonialViewport)return;
+    const items=testimonialItems();testimonialSection.hidden=items.length===0;
+    if(!items.length){clear(testimonialViewport);stopTestimonialRotation();return}
+    testimonialIndex=(nextIndex+items.length)%items.length;const item=items[testimonialIndex];
+    safeText(doc.getElementById('profileTestimonialsEyebrow'),testimonials.eyebrow);
+    safeText(doc.getElementById('profileTestimonialsTitle'),testimonials.title);
+    const article=element('article','profile-testimonial-v1');
+    const quote=element('blockquote','profile-testimonial-v1__quote',localize(item.quote));
+    const attribution=element('footer','profile-testimonial-v1__attribution');
+    attribution.append(element('strong','',localize(item.author)));
+    const context=[localize(item.role),localize(item.relationship),localize(item.company)].filter(Boolean).join(' · ');
+    if(context)attribution.append(element('span','',context));
+    article.append(quote,attribution);testimonialViewport.replaceChildren(article);
+    testimonialControls.hidden=items.length<2;
+    safeText(testimonialCount,`${testimonialIndex+1} / ${items.length}`);
+    startTestimonialRotation();
+  }
+  testimonialControls?.querySelector('[data-testimonial-prev]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex-1));
+  testimonialControls?.querySelector('[data-testimonial-next]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex+1));
+  testimonialSection?.addEventListener('mouseenter',()=>{testimonialPaused=true;stopTestimonialRotation()});
+  testimonialSection?.addEventListener('mouseleave',()=>{testimonialPaused=false;startTestimonialRotation()});
+  testimonialSection?.addEventListener('focusin',()=>{testimonialPaused=true;stopTestimonialRotation()});
+  testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget)){testimonialPaused=false;startTestimonialRotation()}});
+  doc.addEventListener('visibilitychange',()=>doc.hidden?stopTestimonialRotation():startTestimonialRotation());
+  prefersReduced.addEventListener('change',startTestimonialRotation);
+  renderTestimonials();
+  doc.addEventListener('portfolio:language',()=>renderTestimonials(testimonialIndex));
   const explorationRail=doc.getElementById('experimentPageRail');
   const homeExplorationRail=doc.getElementById('homeExperimentRail');
   function createExplorationIndexCard(id,item,index){
@@ -1569,6 +1575,29 @@
   const dialogStatus=doc.getElementById('dialogStatus');
   const dialogScrollRoot=dialog?.querySelector('.dialog-scroll');
   const dialogControls=dialog?.querySelector('.dialog-controls-v67');
+  const legacyDialogContent=dialog?.querySelector('.modal-content-v45');
+  const floatingProjectNav=doc.getElementById('projectSectionNav');
+  let caseStudyPopupHost=null;
+  function restoreLanguageToggles(states){states.forEach(({node,disabled,ariaDisabled,ariaLabel,title,text})=>{node.disabled=disabled;if(ariaDisabled==null)node.removeAttribute('aria-disabled');else node.setAttribute('aria-disabled',ariaDisabled);if(ariaLabel==null)node.removeAttribute('aria-label');else node.setAttribute('aria-label',ariaLabel);if(title==null)node.removeAttribute('title');else node.setAttribute('title',title);node.textContent=text})}
+  function setCaseStudyPopupMode(active){
+    dialog?.classList.toggle('is-case-study-v2',active);
+    if(legacyDialogContent)legacyDialogContent.hidden=active;
+    if(floatingProjectNav)floatingProjectNav.hidden=true;
+    if(!active&&caseStudyPopupHost){caseStudyPopupHost.remove();caseStudyPopupHost=null}
+    if(!active)dialog?.setAttribute('aria-labelledby','detailTitle');
+  }
+  function renderCaseStudyPopup(projectId){
+    const entry=Object.entries(window.PROJECT_PRESENTATION_REGISTRY?.routes||{}).find(([,route])=>route.projectId===projectId)?.[1];
+    const renderer=window.CASE_STUDY_PRESENTATIONS?.[entry?.presentationContract];
+    if(!entry||typeof renderer?.mount!=='function')throw new Error(`Missing popup presentation renderer: ${projectId}`);
+    setCaseStudyPopupMode(true);
+    caseStudyPopupHost=element('main','case-study-v2-popup');caseStudyPopupHost.dataset.caseStudyV2Root=projectId;
+    legacyDialogContent.before(caseStudyPopupHost);
+    const toggleStates=[...doc.querySelectorAll('[data-lang-toggle]')].map(node=>({node,disabled:node.disabled,ariaDisabled:node.getAttribute('aria-disabled'),ariaLabel:node.getAttribute('aria-label'),title:node.getAttribute('title'),text:node.textContent}));
+    renderer.mount({route:entry,content:window.CASE_STUDY_CONTENT?.[projectId],assets:window.CASE_STUDY_ASSETS?.[projectId],motion:window.CASE_STUDY_MOTION?.[projectId]});
+    body.classList.remove('csv2-active');restoreLanguageToggles(toggleStates);
+    const heading=caseStudyPopupHost.querySelector('h1');if(heading){heading.id='detailTitleCaseStudy';heading.tabIndex=-1;dialog.setAttribute('aria-labelledby',heading.id)}
+  }
   const evidenceLightbox=element('dialog','evidence-lightbox-v147');
   evidenceLightbox.setAttribute('aria-modal','true');
   const evidenceLightboxClose=element('button','evidence-lightbox-v147__close','×');
@@ -4064,7 +4093,12 @@
     window.refreshHorizontalRails?.();
   }
   function renderDetail(){
-    if(!currentDetail)return;clearDetailMedia();const isStage=currentDetail.type==='stage';const isProject=currentDetail.type==='project'||currentDetail.type==='initiative'||isStage;const isInitiative=currentDetail.type==='initiative';projectView.hidden=!isProject;experimentView.hidden=isProject;
+    if(!currentDetail)return;
+    const caseStudyProject= currentDetail.type==='project' ? DATA.caseStudyProjects?.[currentDetail.key] : null;
+    if(caseStudyProject?.presentationContract&&caseStudyProject.presentationContract!=='legacy'){
+      clearDetailMedia();renderCaseStudyPopup(currentDetail.key);return;
+    }
+    setCaseStudyPopupMode(false);clearDetailMedia();const isStage=currentDetail.type==='stage';const isProject=currentDetail.type==='project'||currentDetail.type==='initiative'||isStage;const isInitiative=currentDetail.type==='initiative';projectView.hidden=!isProject;experimentView.hidden=isProject;
     const detailCommerce=doc.querySelector('.detail-commerce-v45');if(detailCommerce)detailCommerce.hidden=isStage;const projectValue=doc.querySelector('.project-value-v207');if(projectValue)projectValue.hidden=isStage;
     const overviewContext=doc.querySelector('.project-context-v45--overview');
     if(overviewContext)overviewContext.hidden=!isProject;
@@ -4142,7 +4176,7 @@
   function openDetail(type,key,invoker,parentKey,{restoreHistory=false,restoreScrollTop=null}={}){
     if(type==='project')key=canonicalProjectId(key);
     if(parentKey)parentKey=canonicalProjectId(parentKey);
-    const source=type==='project'?DATA.projects[key]:type==='initiative'?DATA.projects[parentKey]?.initiatives?.[key]:type==='stage'?DATA.projects[parentKey]?.journey_stages?.find(item=>item.id===key):DATA.experiments[key];if(!dialog||!source)return;
+    const source=type==='project'?(DATA.projects[key]||DATA.caseStudyProjects?.[key]):type==='initiative'?DATA.projects[parentKey]?.initiatives?.[key]:type==='stage'?DATA.projects[parentKey]?.journey_stages?.find(item=>item.id===key):DATA.experiments[key];if(!dialog||!source)return;
     const continuesFromOpenDetail=dialog.open&&currentDetail;
     if(continuesFromOpenDetail){
       detailStack.push({
@@ -4229,7 +4263,7 @@
       history.replaceState({detail:{type:'experiment',key:deepLinkedExperiment},scrollTop:0},'',canonicalExperimentUrl(deepLinkedExperiment));
     }
     window.requestAnimationFrame(()=>openDetail('experiment',deepLinkedExperiment,doc.querySelector(`[data-experiment="${deepLinkedExperiment}"]`)));
-  }else if(deepLinkedCase&&DATA.projects[deepLinkedCase]){
+  }else if(deepLinkedCase&&(DATA.projects[deepLinkedCase]||DATA.caseStudyProjects?.[deepLinkedCase])){
     if(requestedDeepLinkedCase!==deepLinkedCase){
       const canonicalUrl=new URL(window.location.href);
       canonicalProjectUrl(deepLinkedCase,canonicalUrl);
@@ -4258,7 +4292,7 @@
     }
     const requestedParent=params.get('case')||projectIdFromPath();
     const parent=canonicalProjectId(requestedParent);
-    if(!parent||!DATA.projects[parent]){
+    if(!parent||!(DATA.projects[parent]||DATA.caseStudyProjects?.[parent])){
       if(dialog?.open)closeDialog({syncHistory:false});
       return;
     }
@@ -4273,7 +4307,7 @@
     else if(!stage&&!initiative&&(currentDetail?.type==='initiative'||currentDetail?.type==='stage')){suppressHistorySync=true;returnToPreviousDetail();suppressHistorySync=false}
     else if(!stage&&!initiative&&(currentDetail?.type!=='project'||currentDetail.key!==parent))openDetail('project',parent,doc.querySelector(`[data-project="${parent}"]`),undefined,restoreOptions);
   });
-  doc.addEventListener('keydown',event=>{if(!dialog?.open)return;if(event.key==='ArrowLeft'){event.preventDefault();doc.getElementById('galleryPrev').click()}if(event.key==='ArrowRight'){event.preventDefault();doc.getElementById('galleryNext').click()}});
+  doc.addEventListener('keydown',event=>{if(!dialog?.open||dialog.classList.contains('is-case-study-v2'))return;if(event.key==='ArrowLeft'){event.preventDefault();doc.getElementById('galleryPrev').click()}if(event.key==='ArrowRight'){event.preventDefault();doc.getElementById('galleryNext').click()}});
   doc.querySelectorAll('img').forEach(image=>{
     if(!image.hasAttribute('width'))image.width=640;
     if(!image.hasAttribute('height'))image.height=420;
