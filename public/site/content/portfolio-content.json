@@ -24318,7 +24318,7 @@
       {
         "id": "all",
         "label": {
-          "en": "All work",
+          "en": "All",
           "zh": "全部"
         },
         "projectIds": [
@@ -24338,10 +24338,49 @@
         ]
       },
       {
-        "id": "incentive",
+        "id": "zero",
         "label": {
-          "en": "Incentive systems",
-          "zh": "獎勵系統"
+          "en": "0→1 launches",
+          "zh": "0→1 上線"
+        },
+        "projectIds": [
+          "payment",
+          "taishin-p2p-marketplace-platform",
+          "game-center",
+          "bandzo",
+          "cathay-mortgage-assistant",
+          "ctbc-mortgage-self-service-app"
+        ]
+      },
+      {
+        "id": "transactions",
+        "label": {
+          "en": "Transactions & checkout",
+          "zh": "交易與結帳"
+        },
+        "projectIds": [
+          "taishin-p2p-marketplace-platform",
+          "payment"
+        ]
+      },
+      {
+        "id": "operations",
+        "label": {
+          "en": "Internal tools & operations",
+          "zh": "內部工具與營運"
+        },
+        "projectIds": [
+          "dbs",
+          "cathay-mortgage-assistant",
+          "cathay-sit-review-remediation-operations",
+          "payment"
+        ]
+      },
+      {
+        "id": "incentives",
+        "label": {
+          "en": "Incentives & engagement",
+          "zh": "獎勵與互動"
         },
         "projectIds": [
           "voucher",
@@ -24350,67 +24389,21 @@
         ]
       },
       {
-        "id": "operations",
+        "id": "journeys",
         "label": {
-          "en": "Operational workflows",
-          "zh": "營運流程"
+          "en": "Multi-step journeys",
+          "zh": "多步驟旅程"
         },
         "projectIds": [
-          "dbs",
-          "taishin-p2p-marketplace-platform",
-          "cathay-mortgage-assistant",
-          "payment",
-          "cathay-sit-online-account-opening",
-          "cathay-sit-review-remediation-operations"
-        ]
-      },
-      {
-        "id": "rollout",
-        "label": {
-          "en": "Multi-market rollout",
-          "zh": "多市場上線"
-        },
-        "projectIds": [
-          "voucher",
-          "dbs",
           "booking",
-          "payment"
-        ]
-      },
-      {
-        "id": "zero",
-        "label": {
-          "en": "0→1 products",
-          "zh": "0→1 產品"
-        },
-        "projectIds": [
-          "payment",
-          "game-center",
+          "booking-taxi-pickup-service-strategy",
+          "cathay-mortgage-assistant",
           "ctbc-mortgage-self-service-app",
-          "bandzo",
-          "taishin-p2p-marketplace-platform",
-          "cathay-mortgage-assistant"
-        ]
-      },
-      {
-        "id": "learning",
-        "label": {
-          "en": "Learning products",
-          "zh": "學習產品"
-        },
-        "projectIds": [
-          "bandzo"
+          "cathay-sit-online-account-opening"
         ]
       }
     ],
-    "filterCoverageExceptions": [
-      {
-        "projectId": "booking-taxi-pickup-service-strategy",
-        "coverage": "all-only",
-        "reason": "The current controlled filters have no truthful category for optimisation and experiment framing inside an existing taxi product; do not misclassify the case as 0→1, rollout or an operational workflow.",
-        "contentStatus": "human-confirmed-r183"
-      }
-    ],
+    "filterCoverageExceptions": [],
     "principalPortfolioArchitecture": {
       "projectCardRequiredSignals": [
         "Transformation",
@@ -25217,8 +25210,8 @@
           "zh": "FairPrice Group"
         },
         "title": {
-          "en": "Product Designer",
-          "zh": "產品設計師"
+          "en": "Senior Product Designer",
+          "zh": "資深產品設計師"
         },
         "employmentType": {
           "en": "",
@@ -25281,16 +25274,16 @@
           "zh": "資深產品設計師"
         },
         "employmentType": {
-          "en": "Contract",
-          "zh": "約聘"
+          "en": "",
+          "zh": ""
         },
         "period": {
           "en": "Nov 2022–Dec 2025",
           "zh": "2022 年 11 月至 2025 年 12 月"
         },
         "location": {
-          "en": "Singapore",
-          "zh": "新加坡"
+          "en": "Remote",
+          "zh": "遠端"
         },
         "keyProjectId": "voucher",
         "focus": {
@@ -32635,8 +32628,8 @@
         "zh": "首席產品設計師"
       },
       "profile.cv-summary-final-polish": {
-        "en": "9+ years designing complex products across fintech, banking, retail, and global travel. I connect customer needs, business rules, and operations from early product direction through production.",
-        "zh": "9 年以上跨金融科技、銀行、零售與全球旅遊領域的複雜產品設計經驗。我從早期產品方向一路連結顧客需求、商業規則與營運，直到產品落地。"
+        "en": "9+ years designing complex digital products across fintech, banking, retail, and global travel. I connect customer needs, business rules, and operations from product direction through shipped outcomes.",
+        "zh": "9 年以上跨金融科技、銀行、零售與全球旅遊領域的複雜數位產品設計經驗。我從產品方向連結顧客需求、商業規則與營運，直到交付成果。"
       },
       "aria.shulin-chou-home-65f1cb41": {
         "en": "Shulin Chou — Home",

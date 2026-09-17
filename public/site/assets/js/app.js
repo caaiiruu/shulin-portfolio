@@ -1469,7 +1469,8 @@
     meta.append(element('span','project-card__type',localize(item.maturity||item.status)));
     const identity=element('span','project-card__identity');
     const period=localize(item.period||item.timeline);
-    if(period)identity.append(element('span','project-card__year',period));
+    const displayYear=String(period).match(/(?:19|20)\d{2}/g)?.at(-1)||period;
+    if(displayYear)identity.append(element('span','project-card__year',displayYear));
     meta.append(identity);
     const title=element('h3','project-card__title',localize(item.title));
     const metrics=element('dl','project-card__metrics');metrics.dataset.metricCount='0';metrics.setAttribute('aria-hidden','true');metrics.style.setProperty('--project-card-metric-count','1');

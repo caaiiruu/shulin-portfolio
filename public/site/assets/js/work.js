@@ -3,13 +3,7 @@
 
   const DATA = window.PORTFOLIO_RUNTIME_DATA || window.PORTFOLIO_DATA || {};
   const REGISTRY = window.PROJECT_PRESENTATION_REGISTRY || {};
-  const PUBLIC_DOMAIN_MEMBERSHIP = Object.freeze({
-    'daily-hours': ['operations']
-  });
-  Object.values(REGISTRY.routes || {}).forEach(entry => {
-    const domainIds = PUBLIC_DOMAIN_MEMBERSHIP[entry?.projectId];
-    if (domainIds && entry?.workProjection) entry.workProjection.domainIds = [...domainIds];
-  });
+  const workFilterRegistry = Array.isArray(DATA.workIndex?.workFilters) ? DATA.workIndex.workFilters : [];
   const language = () => document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
   const localize = value => {
     if (Array.isArray(value)) return value[language() === 'zh' ? 1 : 0] ?? value[0] ?? '';
@@ -192,30 +186,14 @@
     return out.sort((a,b)=>b.tier-a.tier).slice(0,3);
   };
 
-  const normalizeCategories = (id, project, card, projection) => {
-    const existing=(card.dataset.workCategories||card.dataset.workCategory||'').split(/\s+/).filter(Boolean);
-    const set=new Set(['all']);
-    const type=readType(id,project,projection).toLowerCase();
-    existing.forEach(value=>{
-      if(value==='incentive')set.add('incentives');
-      if(value==='operations')set.add('operations');
-      if(value==='rollout')set.add('connected');
-      if(value==='zero')set.add('zero');
-      if(value==='transactions')set.add('transactions');
-    });
-    (projection?.domainIds||[]).forEach(value=>{if(value==='operations')set.add('operations')});
-    (projection?.filterIds||[]).forEach(value=>{if(value==='zero')set.add('zero')});
-    if(type.includes('transaction'))set.add('transactions');
-    if(type.includes('incentive'))set.add('incentives');
-    if(type.includes('internal'))set.add('operations');
-    if(type.includes('0→1')||type.includes('0->1'))set.add('zero');
-    return [...set];
-  };
+  const normalizeCategories = (id,projection) => [...new Set(['all', ...workFilterRegistry
+    .filter(filter => filter.id !== 'all' && Array.isArray(filter.projectIds) && filter.projectIds.includes(id))
+    .map(filter => filter.id), ...(Array.isArray(projection?.filterIds) ? projection.filterIds : [])])];
 
   const decorateCard = (card, variant) => {
     const id=projectIdFromCard(card);const project=publicProjects[id]||{};const projection=projectionForProject(id);let control=card.querySelector('.work-card-v32__button');const content=card.querySelector('.work-card-v32__content');if(!id||!control||!content)return null;
     control=normalizeCardNavigation(id,control);
-    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,project,card,projection).join(' ');
+    card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant=variant;card.dataset.workIndexProject=id;card.dataset.workCategories=normalizeCategories(id,projection).join(' ');
     card.classList.remove('work-card-v32--featured','work-card-v32--compact');
     const meta=document.createElement('div');meta.className='project-card__meta';
     const type=document.createElement('span');type.className='project-card__type';type.textContent=readType(id,project,projection);
@@ -227,11 +205,11 @@
     return card;
   };
 
-  const taxonomy=[['all','All'],['transactions','Transactions'],['operations','Operations'],['incentives','Incentives'],['zero','0→1'],['connected','Connected journeys']];
+  const taxonomy=workFilterRegistry.map(filter=>[filter.id,localize(filter.label)]);
   let activeFilter='all';
-  const applyFilter=root=>{
+  const applyFilter=(root,render)=>{
     root.querySelectorAll('.work-index-filter').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.workIndexFilter===activeFilter)));
-    root.querySelectorAll('.work-card-v32[data-project-card-variant]').forEach(card=>{const cats=card.dataset.workCategories.split(/\s+/).filter(Boolean);card.hidden=activeFilter!=='all'&&!cats.includes(activeFilter)});
+    render(activeFilter);
   };
 
   const build = () => {
@@ -244,16 +222,40 @@
 
     const root=document.createElement('section');root.className='work-index';root.dataset.styleBIntegrated='true';
     const shell=document.createElement('div');shell.className='page-shell work-index__shell';
-    const intro=document.createElement('header');intro.className='work-index__intro';const eyebrow=document.createElement('div');eyebrow.className='work-index__eyebrow';eyebrow.textContent='WORK';const h1=document.createElement('h1');h1.textContent='Systems for complex product problems.';intro.append(eyebrow,h1);
-    const filters=document.createElement('div');filters.className='work-index__filters';filters.setAttribute('role','group');filters.setAttribute('aria-label','Filter work by type');taxonomy.forEach(([id,label])=>{const button=document.createElement('button');button.type='button';button.className='work-index-filter';button.dataset.workIndexFilter=id;button.textContent=label;button.setAttribute('aria-pressed',String(id==='all'));button.addEventListener('click',()=>{activeFilter=id;applyFilter(root)});filters.append(button)});
+    const filters=document.createElement('div');filters.className='work-index__filters';filters.setAttribute('role','group');filters.setAttribute('aria-label','Filter work by type');
 
     const featured=document.createElement('div');featured.className='work-index__featured';
-    if(ordered[0])featured.append(decorateCard(ordered[0],'featured'));
-    if(ordered[1])featured.append(decorateCard(ordered[1],'standard'));
-    const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';ordered.slice(2,4).forEach(card=>mediumRow.append(decorateCard(card,'standard')));if(mediumRow.children.length)featured.append(mediumRow);
-    const moreCards=ordered.slice(4);const more=document.createElement('section');more.className='work-index__more';const moreHead=document.createElement('div');moreHead.className='work-index__more-head';const moreTitle=document.createElement('h2');moreTitle.textContent='More work';moreHead.append(moreTitle);const moreGrid=document.createElement('div');moreGrid.className='work-index__more-grid';moreCards.forEach(card=>moreGrid.append(decorateCard(card,'compact')));more.append(moreHead,moreGrid);
-    shell.append(intro,filters,featured);if(moreCards.length)shell.append(more);root.append(shell);
-    sourceHero?.insertAdjacentElement('beforebegin',root);if(sourceHero)sourceHero.hidden=true;sourceLibrary.hidden=true;applyFilter(root);return true;
+    const filtered=document.createElement('div');filtered.className='work-index__filtered-results';filtered.hidden=true;
+    const more=document.createElement('section');more.className='work-index__more';const moreHead=document.createElement('div');moreHead.className='work-index__more-head';const moreTitle=document.createElement('h2');moreTitle.textContent='More work';moreHead.append(moreTitle);const moreGrid=document.createElement('div');moreGrid.className='work-index__more-grid';more.append(moreHead,moreGrid);
+    const decorated=ordered.map((card,index)=>decorateCard(card,index===0?'featured':index<4?'standard':'compact'));
+    const renderAll=()=>{
+      featured.replaceChildren();moreGrid.replaceChildren();
+      decorated.forEach((card,index)=>{
+        card.dataset.projectCardVariant=index===0?'featured':index<4?'standard':'compact';
+        if(index<2)featured.append(card);
+      });
+      const mediumRow=document.createElement('div');mediumRow.className='work-index__featured-secondary-row';decorated.slice(2,4).forEach(card=>mediumRow.append(card));if(mediumRow.children.length)featured.append(mediumRow);
+      decorated.slice(4).forEach(card=>moreGrid.append(card));
+      featured.hidden=false;more.hidden=moreGrid.children.length===0;filtered.hidden=true;filtered.replaceChildren();
+    };
+    const renderFilter=filter=>{
+      if(filter==='all'){renderAll();return}
+      const matches=decorated.filter(card=>card.dataset.workCategories.split(/\s+/).includes(filter));
+      filtered.replaceChildren();filtered.dataset.resultCount=String(matches.length);
+      matches.forEach((card,index)=>{
+        card.dataset.projectCardVariant=matches.length===1?'featured':matches.length===2?(index===0?'featured':'standard'):'compact';
+        filtered.append(card);
+      });
+      featured.hidden=true;more.hidden=true;filtered.hidden=false;
+    };
+    taxonomy.forEach(([id,label])=>{const button=document.createElement('button');button.type='button';button.className='work-index-filter';button.dataset.workIndexFilter=id;button.textContent=label;button.setAttribute('aria-pressed',String(id==='all'));button.addEventListener('click',()=>{activeFilter=id;applyFilter(root,renderFilter)});filters.append(button)});
+    shell.append(filters,featured,filtered,more);root.append(shell);
+    if(sourceHero){
+      const kicker=sourceHero.querySelector('.kicker');const heading=sourceHero.querySelector('h1');
+      if(kicker)kicker.textContent='WORK';if(heading)heading.textContent='Systems for complex product problems.';
+      sourceHero.hidden=false;sourceHero.insertAdjacentElement('afterend',root);
+    }else sourceLibrary.insertAdjacentElement('beforebegin',root);
+    sourceLibrary.hidden=true;applyFilter(root,renderFilter);return true;
   };
 
   if(!build()){
