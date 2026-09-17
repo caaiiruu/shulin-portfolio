@@ -543,6 +543,41 @@
   text-underline-offset: var(--space-2);
 }
 
+/* SiteChrome retains ownership when a case-study presentation is active. */
+body.csv2-active .site-header.site-header {
+  border-bottom: var(--dimension-1px) solid var(--color-border);
+  background: var(--chrome-header-surface);
+  color: var(--color-text-primary);
+  backdrop-filter: blur(var(--dimension-16px)) saturate(1.15);
+}
+body.csv2-active .site-header.site-header :is(a, button) { color: inherit; }
+body.csv2-active .site-footer.site-footer {
+  margin-top: var(--footer-organic-edge-height);
+  padding: var(--chrome-footer-pad-block-start) 0 var(--chrome-footer-pad-block-end);
+  border-top: 0;
+  background: var(--chrome-footer-surface);
+  color: var(--chrome-footer-text);
+}
+body.csv2-active .site-footer.site-footer::before {
+  content: "";
+}
+body.csv2-active .site-footer.site-footer::after {
+  content: "";
+}
+body.csv2-active .site-footer.site-footer .contact-bar-v42 {
+  display: grid;
+}
+body.csv2-active .site-footer.site-footer .footer-meta-v42 {
+  margin-top: var(--space-7);
+  color: var(--chrome-footer-text-secondary);
+}
+body.csv2-active .site-footer.site-footer .footer-meta-v42 a {
+  color: var(--chrome-footer-text);
+}
+body.csv2-active .site-footer.site-footer .footer-meta-v42 a:hover {
+  color: var(--portfolio-coral-500);
+}
+
 body.is-locked {
   overflow: hidden;
   overscroll-behavior: none;

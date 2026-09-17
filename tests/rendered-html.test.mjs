@@ -935,7 +935,7 @@ test("projects only individually eligible Experiments into public discovery", ()
   assert.match(app, /card\.href='\/experiments'/);
   assert.match(html, /class="experiment-index-rail-v36 experiment-index-rail-v36--grid" id="experimentPageRail" role="list"/);
   assert.doesNotMatch(html, /data-rail-prev="experimentPageRail"|data-rail-next="experimentPageRail"/);
-  assert.ok((home.match(/href="\/experiments"/g) ?? []).length >= 2);
+  assert.ok((app.match(/href="\/experiments"/g) ?? []).length >= 2);
   for (const contract of ["dataset.projectCardSystem='shared-v1'", "dataset.projectCardVariant='compact'", "dataset.experimentCardSystem='shared-v1'", "experiment-index-card-v36__visual"]) assert.ok(app.includes(contract), contract);
   assert.match(projectCardMedia, /publicExperiments\[id\]\?\.hero\?\.assetId/);
   assert.match(projectCardMedia, /abstractEvidenceFallback === 'ACTIVE'/);

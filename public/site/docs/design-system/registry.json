@@ -1309,7 +1309,7 @@
     {
       "component": "SiteChrome",
       "status": "Live / Current Production",
-      "renderSource": "site-source/fragments/site-header.html + site-source/fragments/site-footer.html + assets/js/app.js",
+      "renderSource": "assets/js/app.js#ensureSharedSiteChrome",
       "contentOwner": "content/portfolio-content.json",
       "cssOwner": "assets/css/components/site-chrome.css",
       "tokenDependencies": [

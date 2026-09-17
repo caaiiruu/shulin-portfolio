@@ -1,5 +1,33 @@
 (function(){
   'use strict';
+  function ensureSharedSiteChrome(){
+    const header=document.querySelector('.site-header');
+    if(header&&!header.querySelector('.header-inner')){
+      header.innerHTML='<div class="header-inner"><a data-aria-key="aria.shulin-chou-home-65f1cb41" class="brand" data-pressable="" href="/"><img aria-hidden="true" alt="" class="brand__logo" height="428" src="/site/assets/img/brand/shulin-studio-ss-logo.png" width="433"></a><nav data-aria-key="aria.primary-navigation-2b6c4b27" class="nav"><a data-pressable="" href="/work"><span data-copy-key="index.work-3ce4dcab"></span></a><a data-pressable="" href="/experiments"><span data-copy-key="index.experiment-81b73d30"></span></a><a data-pressable="" href="/profile"><span data-copy-key="index.profile-7295d7e8"></span></a><button class="lang-toggle" data-lang-toggle="" data-pressable="" type="button">中文</button></nav><button aria-controls="mobileMenu" aria-expanded="false" data-aria-key="aria.open-menu-54c1e583" class="menu-toggle" data-pressable="" type="button"><span aria-hidden="true" class="menu-icon"><span></span><span></span></span><span class="sr-only" data-copy-key="index.menu-a9f9aad3"></span></button></div><nav data-aria-key="aria.mobile-navigation-19939deb" class="mobile-menu" id="mobileMenu"><a data-pressable="" href="/work"><span data-copy-key="index.work-3ce4dcab"></span></a><a data-pressable="" href="/experiments"><span data-copy-key="index.experiment-81b73d30"></span></a><a data-pressable="" href="/profile"><span data-copy-key="index.profile-7295d7e8"></span></a><button data-lang-toggle="" data-pressable="" type="button">中文</button></nav>';
+      const path=window.location.pathname.replace(/^\/site/,'').replace(/\.html$/,'').replace(/\/$/,'')||'/';
+      const active=path.startsWith('/work')?'/work':path==='/experiments'?'/experiments':path==='/profile'?'/profile':'';
+      if(active)header.querySelectorAll(`a[href="${active}"]`).forEach(link=>link.setAttribute('aria-current','page'));
+    }
+    const footer=document.querySelector('.site-footer');
+    if(footer&&!footer.querySelector('.contact-bar-v42'))footer.innerHTML='<div class="page-shell contact-bar-v42" data-motion-reveal="section"><h2 data-copy-key="index.have-a-complex-product-problem-5e30de95"></h2><a class="contact-bar-v42__action" data-pressable="" href="mailto:r.c.shulin@gmail.com?subject=Product%20design%20inquiry&amp;body=Problem%3A%0AUsers%3A%0ACurrent%20stage%3A%0AKey%20constraints%3A%0A"><span data-copy-key="index.start-a-conversation-fed9bdee"></span><span aria-hidden="true" class="icon-arrow icon-arrow--up-right"></span></a></div><div class="page-shell footer-meta-v42"><span>© 2026 Shulin Chou</span><nav data-aria-key="aria.footer-614f1e51"><a href="/work"><span data-copy-key="index.work-3ce4dcab"></span></a><a href="/profile"><span data-copy-key="index.profile-7295d7e8"></span></a><a href="#main"><span data-copy-key="index.back-to-top-77c69b87"></span></a></nav></div>';
+  }
+  function hydrateSharedChromeEnglish(){
+    const copy=window.PORTFOLIO_DATA?.localizationRegistry?.staticPageCopy||{};
+    document.querySelectorAll('.site-header [data-copy-key],.site-footer [data-copy-key]').forEach(node=>{const value=copy[node.dataset.copyKey]?.en;if(value)node.textContent=value});
+    document.querySelectorAll('.site-header [data-aria-key],.site-footer [data-aria-key]').forEach(node=>{const value=copy[node.dataset.ariaKey]?.en;if(value)node.setAttribute('aria-label',value)});
+  }
+  function wireStandaloneSiteChrome(){
+    const menu=document.getElementById('mobileMenu');
+    const toggle=document.querySelector('.menu-toggle');
+    if(!menu||!toggle)return;
+    const setOpen=open=>{menu.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close menu':'Open menu');document.body.classList.toggle('is-locked',open)};
+    setOpen(false);
+    toggle.addEventListener('click',()=>setOpen(!menu.classList.contains('is-open')));
+    menu.addEventListener('click',event=>{if(event.target.closest('a'))setOpen(false)});
+    document.addEventListener('click',event=>{if(menu.classList.contains('is-open')&&!event.target.closest('.site-header'))setOpen(false)});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu.classList.contains('is-open')){setOpen(false);toggle.focus()}});
+  }
+  ensureSharedSiteChrome();
   const PUBLIC_LOCALE_MODE=window.PORTFOLIO_DATA?.publicLocaleMode||'BILINGUAL';
   if(PUBLIC_LOCALE_MODE==='EN_ONLY_TEMPORARY'){
     document.documentElement.lang='en';
@@ -23,6 +51,8 @@
   }
   const presentationResolution=resolvePresentationRoute();
   if(presentationResolution.contract!=='legacy'){
+    hydrateSharedChromeEnglish();
+    wireStandaloneSiteChrome();
     const route=presentationResolution.route;
     const projectId=route?.projectId;
     const renderer=window.CASE_STUDY_PRESENTATIONS?.[presentationResolution.contract];
