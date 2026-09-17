@@ -27,6 +27,9 @@
 }
 .work-page-hero-v32 .page-hero-grid{grid-template-columns:minmax(0,1fr)}
 .work-page-hero-v32 .page-hero-grid>div:first-child{max-width:var(--dimension-960px)}
+.page-hero-copy{display:grid;align-content:start;gap:var(--space-4)}
+.page-hero-copy .kicker,.page-hero-copy h1,.page-hero-copy .lead-copy{margin:0}
+.page-hero-copy .lead-copy{max-width:var(--dimension-54ch);color:var(--color-text-secondary);font-size:var(--text-body);line-height:var(--leading-body)}
 .page-hero-grid>*{position:relative;z-index:1;min-width:0}
 .page-hero-grid h1{max-width:var(--dimension-17ch);text-wrap:balance}
 .page-hero-grid>p{

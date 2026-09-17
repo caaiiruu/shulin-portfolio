@@ -32191,8 +32191,8 @@
         "zh": "實驗索引"
       },
       "experiments.different-questions-different-stages-7fbeecfb": {
-        "en": "Different questions. Different stages.",
-        "zh": "不同問題，不同階段。"
+        "en": "Ongoing explorations. Different questions.",
+        "zh": "持續探索，不同問題。"
       },
       "experiments.early-hypothesis-b0ad7c4d": {
         "en": "Early hypothesis",
@@ -32619,8 +32619,8 @@
         "zh": "再試一次・下一步"
       },
       "experiments.ongoing-explorations-outside-core-work": {
-        "en": "Ongoing explorations outside client and product work. Small tests, facilitation experiments, and ideas I keep developing over time.",
-        "zh": "在客戶與產品工作之外持續進行的探索——包含小型測試、引導實驗，以及持續演進的想法。"
+        "en": "Ongoing explorations outside client and product work. Small tests, facilitation experiments, prototypes, and ideas I continue developing over time.",
+        "zh": "在客戶與產品工作之外持續進行的探索，包含小型測試、引導實驗、原型與持續發展的想法。"
       },
       "experiments.see-all-experiments": {
         "en": "See all experiments",
@@ -32633,6 +32633,14 @@
       "profile.principal-product-designer-final-polish": {
         "en": "Principal Product Designer",
         "zh": "首席產品設計師"
+      },
+      "profile.cv-summary-final-polish": {
+        "en": "9+ years designing complex products across fintech, banking, retail, and global travel. I connect customer needs, business rules, and operations from early product direction through production.",
+        "zh": "9 年以上跨金融科技、銀行、零售與全球旅遊領域的複雜產品設計經驗。我從早期產品方向一路連結顧客需求、商業規則與營運，直到產品落地。"
+      },
+      "aria.shulin-chou-home-65f1cb41": {
+        "en": "Shulin Chou — Home",
+        "zh": "Shulin Chou — 首頁"
       }
     }
   },

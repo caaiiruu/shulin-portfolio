@@ -15,15 +15,7 @@
   --csv2-max:1240px;
 }
 body.csv2-active{background:var(--csv2-bg);color:var(--csv2-text)}
-body.csv2-active .site-header{background:rgba(5,7,11,.9);border-color:var(--csv2-line);color:var(--csv2-text);backdrop-filter:blur(16px)}
-body.csv2-active .site-header a,body.csv2-active .site-header button{color:inherit}
 body.csv2-active [data-lang-toggle]:disabled{border:1px solid var(--csv2-line);background:var(--csv2-panel-strong);color:var(--csv2-muted);font-size:.75rem;opacity:1;cursor:not-allowed}
-body.csv2-active .site-footer{margin-top:0;padding:48px 0 32px;border-top:1px solid var(--csv2-line);background:var(--csv2-bg);color:var(--csv2-muted)}
-body.csv2-active .site-footer::before,body.csv2-active .site-footer::after{content:none}
-body.csv2-active .site-footer .contact-bar-v42{display:none}
-body.csv2-active .site-footer .footer-meta-v42{margin-top:0;color:var(--csv2-muted)}
-body.csv2-active .site-footer .footer-meta-v42 a{color:var(--csv2-text)}
-body.csv2-active .site-footer .footer-meta-v42 a:hover{color:var(--csv2-accent-text)}
 .csv2-main{overflow:clip;background:var(--csv2-bg);color:var(--csv2-text)}
 .csv2-shell{width:min(calc(100% - 64px),var(--csv2-max));margin-inline:auto}
 .csv2-section{padding:112px 0;border-top:1px solid var(--csv2-line)}

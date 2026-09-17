@@ -1,13 +1,4 @@
-/* ExperimentExperience — sole production owner for experiment entry cards and experiment-only popup content. */
-.playground-hero-v32{padding-block:var(--section-space-compact)}
-.playground-hero-v32__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(var(--dimension-280px),.46fr);gap:var(--space-7);align-items:center}
-.playground-hero-v32 .lead-copy{max-width:var(--dimension-54ch);margin-top:var(--space-5)}
-.playground-hero-v32__art{position:relative;min-height:var(--dimension-220px)}
-.play-shape{position:absolute;display:block;border:var(--dimension-2px) solid var(--color-text-primary)}
-.play-shape--circle{inset:auto auto var(--space-5) 0;width:var(--dimension-130px);height:var(--dimension-130px);border-radius:50%;background:var(--color-surface)}
-.play-shape--pill{inset:auto auto 0 var(--dimension-90px);width:var(--dimension-180px);height:var(--dimension-90px);border-radius:var(--radius-pill);background:var(--accent-100)}
-.play-shape--small{inset:auto 0 var(--space-8) auto;width:var(--dimension-58px);height:var(--dimension-58px);border-radius:50%;background:var(--brand-100)}
-.play-line{position:absolute;inset:auto var(--space-7) var(--space-8) var(--dimension-210px);height:var(--dimension-2px);background:var(--color-text-primary);transform:rotate(var(--dimension-neg-8deg))}
+/* ExperimentExperience — sole production owner for experiment cards and experiment-only popup content. */
 
 .experiment-feature-v32{padding-bottom:var(--section-space-compact)}
 .poster,.experiment-feature-card-v32,.experiment-index-card-v36{position:relative;min-width:0;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);text-align:left;box-shadow:none;transition:transform var(--motion-fast) var(--ease-standard),box-shadow var(--motion-base) var(--ease-standard),border-color var(--motion-fast) var(--ease-standard),border-radius var(--motion-base) var(--ease-standard),background-color var(--motion-fast) var(--ease-standard)}
@@ -120,7 +111,6 @@
 .experiment-sequence-v45 h3+p{margin-top:var(--space-3);line-height:1.55}
 
 @media(max-width:900px){
-  .playground-hero-v32__grid{grid-template-columns:1fr}.playground-hero-v32__art{display:none}
   .experiment-feature-card-v32{grid-template-columns:1fr}.experiment-feature-card-v32__visual{order:-1;min-height:var(--dimension-240px);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
   .experiment-index-v36__head{grid-template-columns:1fr;gap:var(--space-4);align-items:start}
   .detail-dialog.is-experiment .gallery-stage-v45{min-height:var(--dimension-260px);aspect-ratio:16/9}
@@ -203,8 +193,6 @@
 @media(max-width:560px){.experiment-index-rail-v36--grid{grid-template-columns:1fr}.home-experiments-v1838f .experiment-index-v36__head{grid-template-columns:1fr;gap:var(--space-4)}.experiment-index-v36__all{justify-self:start}}
 
 /* Final Experiment entry composition. */
-.playground-hero-v32__grid{grid-template-columns:minmax(0,var(--dimension-760px));align-items:start}
-.playground-hero-v32 .heading-1{max-width:var(--dimension-16ch)}
 .home-experiments-v1838f .experiment-index-v36__head{grid-template-columns:minmax(0,1fr) auto;align-items:end}
 .experiment-index-v36__controls{align-self:end;margin:0}
 .experiment-index-card-v36--see-all{display:grid;align-self:stretch;min-height:var(--experiment-card-min-block);overflow:hidden;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--ink-950);color:var(--color-text-inverse);text-decoration:none}

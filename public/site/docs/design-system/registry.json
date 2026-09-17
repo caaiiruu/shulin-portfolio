@@ -1309,7 +1309,7 @@
     {
       "component": "SiteChrome",
       "status": "Live / Current Production",
-      "renderSource": "Shared static header and footer templates plus assets/js/app.js",
+      "renderSource": "site-source/fragments/site-header.html + site-source/fragments/site-footer.html + assets/js/app.js",
       "contentOwner": "content/portfolio-content.json",
       "cssOwner": "assets/css/components/site-chrome.css",
       "tokenDependencies": [
@@ -1362,7 +1362,9 @@
         "Homepage",
         "Work",
         "Experiments",
-        "Profile"
+        "Profile",
+        "Project detail routes",
+        "Daily Hours detail"
       ],
       "exclusiveOwner": true
     },

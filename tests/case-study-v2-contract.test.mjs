@@ -82,8 +82,11 @@ test('V2 owners do not leak into the legacy project-detail owner',()=>{
   const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
   assert.doesNotMatch(legacy,/csv2-|case-study-v2/i);
   assert.match(css,/\.csv2-main/);
-  assert.match(css,/body\.csv2-active \.site-footer::before,body\.csv2-active \.site-footer::after\{content:none\}/);
-  assert.match(css,/body\.csv2-active \.site-footer \.contact-bar-v42\{display:none\}/);
+  assert.doesNotMatch(css,/\.site-header|\.site-footer|\.header-inner|\.footer-meta-v42/);
+  const workHtml=fs.readFileSync(path.join(root,'work.html'),'utf8');
+  const dailyHtml=fs.readFileSync(path.join(root,'work/daily-hours.html'),'utf8');
+  const chrome=html=>({header:html.match(/<header\b[\s\S]*?<\/header>/i)?.[0],footer:html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0]});
+  assert.deepEqual(chrome(dailyHtml),chrome(workHtml));
   assert.doesNotMatch(css,/\.csv2-cta-row/);
   assert.match(app,/function resolvePresentationRoute\(/);
   const resolver=app.slice(0,app.indexOf('function pair'));
@@ -93,6 +96,7 @@ test('V2 owners do not leak into the legacy project-detail owner',()=>{
 
 test('Phase 1.1B visual corrections stay inside CSV2 owners',()=>{
   const renderer=fs.readFileSync(path.join(root,'assets/js/case-study-v2.js'),'utf8');
+  assert.match(renderer,/localizationRegistry\?\.staticPageCopy/);
   const css=fs.readFileSync(path.join(root,'assets/css/components/case-study-v2.css'),'utf8');
   assert.doesNotMatch(renderer,/csv2-proof-caption/);
   assert.match(renderer,/node\('span','csv2-outcome-index',String\(index\+1\)\.padStart\(2,'0'\)\)/);

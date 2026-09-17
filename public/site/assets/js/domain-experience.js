@@ -283,7 +283,7 @@
     content.append(meta,title,metricList,cta);article.append(content,buildVisual(project,key,projection));return article;
   };
 
-  let cards=[];let activeIndex=0;let pointerStartX=null;let pointerStartY=null;let pointerId=null;let suppressClickUntil=0;let renderFrame=0;let pendingTab=null;
+  let cards=[];let activeIndex=0;let pointerStartX=null;let pointerStartY=null;let pointerId=null;let pointerCaptureCard=null;let suppressClickUntil=0;let renderFrame=0;let pendingTab=null;
   const shortestOffset=(index,active,total)=>{let offset=index-active;if(offset>total/2)offset-=total;if(offset<-total/2)offset+=total;return offset};
   const syncWheel=()=>cards.forEach((card,index)=>{const offset=shortestOffset(index,activeIndex,cards.length);card.dataset.wheelOffset=String(offset);card.dataset.wheelState=offset===0?'active':Math.abs(offset)===1?'adjacent':Math.abs(offset)===2?'secondary':'hidden';card.setAttribute('aria-hidden',String(Math.abs(offset)>2));card.tabIndex=Math.abs(offset)<=1?0:-1});
   const setActive=index=>{if(!cards.length)return;activeIndex=(index+cards.length)%cards.length;syncWheel()};
@@ -309,9 +309,9 @@
     // detail owner opens the dialog and pushes the canonical /work/{slug} URL.
   });
   related.addEventListener('keydown',event=>{const card=event.target.closest('.domain-project-card-v2');if(!card||event.target.closest('.domain-project-card-v2__cta'))return;if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();step(event.key==='ArrowRight'?1:-1);cards[activeIndex]?.focus({preventScroll:true})}else if(['Enter',' '].includes(event.key)&&cards.indexOf(card)===activeIndex){event.preventDefault();if(usesStandalonePage(card.dataset.project)){window.location.href=routeForProject(card.dataset.project)}else{card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}))}}});
-  related.addEventListener('pointerdown',event=>{if(!event.isPrimary||(event.pointerType==='mouse'&&event.button!==0)||event.target.closest('.domain-wheel-v2__control,.domain-project-card-v2__cta'))return;pointerStartX=event.clientX;pointerStartY=event.clientY;pointerId=event.pointerId;try{related.setPointerCapture?.(event.pointerId)}catch{}});
-  related.addEventListener('pointerup',event=>{if(pointerId===null||event.pointerId!==pointerId||pointerStartX===null||pointerStartY===null)return;const dx=event.clientX-pointerStartX,dy=event.clientY-pointerStartY;try{if(related.hasPointerCapture?.(event.pointerId))related.releasePointerCapture(event.pointerId)}catch{}pointerStartX=pointerStartY=pointerId=null;if(Math.abs(dx)<36||Math.abs(dx)<=Math.abs(dy))return;suppressClickUntil=performance.now()+250;step(dx<0?1:-1)});
-  related.addEventListener('pointercancel',()=>{pointerStartX=pointerStartY=pointerId=null});
+  related.addEventListener('pointerdown',event=>{if(!event.isPrimary||(event.pointerType==='mouse'&&event.button!==0)||event.target.closest('.domain-wheel-v2__control,.domain-project-card-v2__cta'))return;const card=event.target.closest('.domain-project-card-v2');if(!card)return;pointerStartX=event.clientX;pointerStartY=event.clientY;pointerId=event.pointerId;pointerCaptureCard=card;try{card.setPointerCapture?.(event.pointerId)}catch{}});
+  related.addEventListener('pointerup',event=>{if(pointerId===null||event.pointerId!==pointerId||pointerStartX===null||pointerStartY===null)return;const dx=event.clientX-pointerStartX,dy=event.clientY-pointerStartY;try{if(pointerCaptureCard?.hasPointerCapture?.(event.pointerId))pointerCaptureCard.releasePointerCapture(event.pointerId)}catch{}pointerStartX=pointerStartY=pointerId=pointerCaptureCard=null;if(Math.abs(dx)<36||Math.abs(dx)<=Math.abs(dy))return;suppressClickUntil=performance.now()+250;step(dx<0?1:-1)});
+  related.addEventListener('pointercancel',()=>{pointerStartX=pointerStartY=pointerId=pointerCaptureCard=null});
 
   section.querySelectorAll('.domain-tab').forEach(tab=>tab.addEventListener('click',()=>{resetDisclosures();pendingTab=tab;setTimeout(()=>render(tab),0)}));
   document.addEventListener('portfolio:language',()=>{enhanceTabs();resetDisclosures();schedule()});

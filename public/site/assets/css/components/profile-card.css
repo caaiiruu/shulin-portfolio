@@ -24,12 +24,22 @@
 }
 .profile-hero-v36__copy {
   max-width: var(--profile-hero-copy-max);
-  padding-top: var(--space-4);
 }
-.profile-hero-v36__copy h1 {
-  max-width: var(--dimension-12ch);
+.profile-hero-v36__eyebrow {
+  margin: 0;
+  color: var(--color-text-accent);
+  font-size: var(--text-sm);
+  font-weight: var(--sys-weight-bold);
+  letter-spacing: var(--dimension-0-08em);
+  text-transform: uppercase;
+}
+.profile-hero-v36__summary {
+  max-width: var(--dimension-18ch);
   margin-top: var(--space-4);
-  font-size: var(--profile-hero-title);
+  font-size: clamp(var(--dimension-2rem), var(--dimension-3vw), var(--dimension-3-4rem));
+  line-height: 1.08;
+  letter-spacing: var(--dimension-neg--035em);
+  text-wrap: balance;
 }
 .profile-hero-v36__copy em {
   color: var(--accent-600);
@@ -166,7 +176,7 @@ html[lang="zh"] .profile-value-v44__grid p {
 }
 @media(max-width:600px){
   .profile-hero-v36{padding-block:var(--space-7)}
-  .profile-hero-v36__copy h1{max-width:var(--dimension-10ch);font-size:var(--profile-hero-title-mobile);line-height:.98}
+  .profile-hero-v36__summary{max-width:none;font-size:clamp(var(--dimension-1-75rem),var(--dimension-8vw),var(--dimension-2-25rem));line-height:1.12}
   .profile-value-v44{padding:var(--space-5)}
   .profile-value-v44__grid,.profile-value-v44__footer{grid-template-columns:1fr}
   .profile-value-v55__actions{grid-column:auto}
@@ -387,8 +397,10 @@ html[lang="zh"] .profile-value-v44__grid p {
   .profile-hero-v36 {
     padding-block: var(--space-7);
   }
-  .profile-hero-v36__copy h1 {
-    font-size: var(--profile-hero-title-mobile);
+  .profile-hero-v36__copy h1.profile-hero-v36__summary {
+    max-width: none;
+    font-size: clamp(var(--dimension-1-75rem), var(--dimension-8vw), var(--dimension-2-25rem));
+    line-height: 1.12;
   }
   .profile-value-v44 {
     padding: var(--space-5);
@@ -441,7 +453,13 @@ html[lang="zh"] .profile-value-v44__grid p {
 .award-logo-slot--text-only{visibility:hidden}
 .recognition-card-v1838f{font:inherit;cursor:default}
 .recognition-card-v1838f[data-experiment]{width:auto;cursor:pointer}
-.recognition-card-v1838f .experiment-card-action{gap:var(--space-2)}
+.recognition-card-v1838f{grid-template-rows:auto var(--dimension-160px) minmax(var(--dimension-78px),auto) minmax(var(--dimension-48px),1fr) auto;align-content:stretch}
+.recognition-card-v1838f .award-logo-slot{align-self:center;margin-block:0}
+.recognition-card-v1838f h3{align-self:start;margin-top:var(--space-3)}
+.recognition-card-v1838f h3+p{align-self:start;margin-top:var(--space-3)}
+.recognition-card-v1838f .experiment-card-action,.recognition-card-v1838f__status{box-sizing:border-box;align-self:end;width:100%;min-height:var(--dimension-52px);margin-top:var(--space-4);padding-top:var(--space-4);border-top:var(--dimension-1px) solid var(--color-border)}
+.recognition-card-v1838f .experiment-card-action{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)}
+.recognition-card-v1838f .experiment-card-action .icon-arrow{margin-left:auto}
 .recognition-card-v1838f__status{align-self:end;color:var(--color-text-secondary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
 .profile-leadership-v81{padding-block:var(--space-9);background:var(--color-surface-soft)}
 .profile-leadership-v81__head{display:grid;gap:var(--space-4);max-width:var(--profile-hero-copy-max);margin-bottom:var(--space-8)}
@@ -460,7 +478,5 @@ html[lang="zh"] .profile-value-v44__grid p {
 @media(max-width:760px){.profile-side-projects-v34__head{grid-template-columns:minmax(0,1fr) auto;align-items:start}.profile-side-projects-v34__head .rail-controls{grid-column:2;grid-row:1;justify-self:end}}
 
 /* Final Profile hero hierarchy: role label supports the primary value panel. */
-.profile-hero-v36__grid{grid-template-columns:minmax(var(--dimension-180px),.28fr) minmax(var(--dimension-420px),1.72fr)}
-.profile-hero-v36__copy{display:flex;align-items:flex-start;max-width:none;padding-top:var(--space-4)}
-.profile-hero-v36__label{max-width:var(--dimension-16ch);margin:0;color:var(--color-text-primary);font-size:var(--text-lead);font-weight:var(--sys-weight-bold);line-height:1.2}
-@media(max-width:900px){.profile-hero-v36__grid{grid-template-columns:1fr}.profile-hero-v36__copy{padding-top:0}.profile-hero-v36__label{max-width:none}}
+.profile-hero-v36__grid{grid-template-columns:minmax(var(--dimension-320px),.72fr) minmax(var(--dimension-520px),1.28fr);align-items:start}
+@media(max-width:900px){.profile-hero-v36__grid{grid-template-columns:1fr}}

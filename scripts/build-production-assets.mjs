@@ -6,6 +6,7 @@ import { deriveRuntimeVisualSlots, validateRuntimeVisualAssets } from "./visual-
 
 const root = path.resolve("public/site");
 const templateRoot = path.resolve("site-source/templates");
+const fragmentRoot = path.resolve("site-source/fragments");
 const pages = ["index.html", "work.html", "experiments.html", "profile.html"];
 const cssSources = [
   "assets/css/tokens.css",
@@ -48,6 +49,23 @@ const caseStudyV2RegistryOwner = "docs/design-system/case-study-v2/registry.json
 
 function bundle(sources, banner) {
   return `${banner}\n${sources.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n")}`;
+}
+
+const sharedHeader = fs.readFileSync(path.join(fragmentRoot, "site-header.html"), "utf8").trim();
+const sharedFooter = fs.readFileSync(path.join(fragmentRoot, "site-footer.html"), "utf8").trim();
+function renderSharedChrome(html, page) {
+  const active = page.replace(/\.html$/, "");
+  const header = sharedHeader
+    .replaceAll("{{HEADER_MODIFIER}}", active === "index" ? " site-header--hero" : "")
+    .replaceAll("{{WORK_CURRENT}}", active === "work" ? ' aria-current="page"' : "")
+    .replaceAll("{{EXPERIMENTS_CURRENT}}", active === "experiments" ? ' aria-current="page"' : "")
+    .replaceAll("{{PROFILE_CURRENT}}", active === "profile" ? ' aria-current="page"' : "");
+  if (!html.includes("<!-- SHARED_SITE_HEADER -->") || !html.includes("<!-- SHARED_SITE_FOOTER -->")) {
+    throw new Error(`Canonical template must consume shared SiteChrome fragments: ${page}`);
+  }
+  return html
+    .replace("<!-- SHARED_SITE_HEADER -->", header)
+    .replace("<!-- SHARED_SITE_FOOTER -->", sharedFooter);
 }
 
 const searchSelectorPattern = /(?:^|[\s>+~,.#:])(?:matcher(?:-|\b)|match(?:-|\b)|chip-rail\b|chip\b|result-projects\b|no-match(?:-|\b))/;
@@ -249,7 +267,7 @@ function replaceProductionAssets(html, cssFile, jsFile) {
 for (const page of pages) {
   const template = path.join(templateRoot, page);
   if (!fs.existsSync(template)) throw new Error(`Canonical HTML template is missing: ${template}`);
-  fs.copyFileSync(template, path.join(root, page));
+  fs.writeFileSync(path.join(root, page), renderSharedChrome(fs.readFileSync(template, "utf8"), page));
 }
 
 for (const directory of ["assets/css", "assets/js"]) {
