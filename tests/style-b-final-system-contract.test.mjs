@@ -15,6 +15,11 @@ const profileTemplate=read('site-source/templates/profile.html');
 const assetManifest=JSON.parse(read('public/site/content/portfolio-asset-manifest.json'));
 const projectCardMedia=read('public/site/assets/js/project-card-media.js');
 const popupCss=read('public/site/assets/css/components/popup-shell.css');
+const experimentCss=read('public/site/assets/css/components/experiment-card.css');
+const domainCss=read('public/site/assets/css/components/domain-experience.css');
+const supportingCss=read('public/site/assets/css/components/supporting-page-layout.css');
+const workTemplate=read('site-source/templates/work.html');
+const experimentsTemplate=read('site-source/templates/experiments.html');
 const rgb=value=>{const channels=value.match(/\d+(?:\.\d+)?/g)?.slice(0,3).map(Number);assert.equal(channels?.length,3,`unsupported color: ${value}`);return channels};
 const luminance=value=>{const channels=rgb(value).map(channel=>channel/255).map(channel=>channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4);return .2126*channels[0]+.7152*channels[1]+.0722*channels[2]};
 const contrast=(foreground,background)=>{const a=luminance(foreground),b=luminance(background);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
@@ -26,7 +31,7 @@ test('ProjectCard actions keep dark content, neutral dividers, no underline, and
   assert.match(projectCardCss,/color:var\(--color-text-primary\)!important/);
   assert.match(projectCardCss,/\.work-card-v32__action::before\{background:color-mix\(in srgb,var\(--color-text-primary\) 16%,transparent\)!important/);
   assert.match(projectCardCss,/experiment-index-card-v36\[data-experiment-card-system="shared-v1"\][\s\S]*transform:none!important/);
-  assert.match(projectCardCss,/\.icon-arrow\{transform:rotate\(var\(--arrow-rotation,var\(--arrow-rotate-right\)\)\)!important/);
+  assert.match(projectCardCss,/\.icon-arrow\{transform:translateX\(var\(--project-card-system-hover-shift\)\) rotate\(var\(--arrow-rotation,var\(--arrow-rotate-right\)\)\)!important/);
   assert.match(projectCardCss,/\.work-card-v32\[data-project-card-system="shared-v1"\] \.work-card-v32__content[\s\S]*height:100%/);
   assert.match(projectCardCss,/\.work-card-v32__action,[\s\S]*align-self:end/);
 });
@@ -58,6 +63,9 @@ test('Profile reuses approved Hero cloud vectors and presents the portrait organ
   assert.match(profileCss,/clip-path:polygon/);
   assert.doesNotMatch(profileCss,/\.profile-hero-v36__portrait\{[^}]*border-radius/);
   assert.match(profileCss,/@media\(prefers-reduced-motion:reduce\)\{\.profile-hero-v36__cloud\{animation:none/);
+  assert.match(profileCss,/\.profile-hero-v36\{overflow:visible/);
+  assert.match(profileCss,/\.profile-hero-v36__summary\{[^}]*var\(--dimension-2-2rem\)/);
+  assert.match(profileCss,/\.profile-summary-highlight\.is-visible\{ text-decoration-color:var\(--portfolio-coral-500\)\}/);
 });
 
 test('testimonial SSOT renders excerpt plus Name and Company through a progressive carousel',()=>{
@@ -74,6 +82,28 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.match(app,/rotationIntervalMs\)\|\|7500/);
   assert.match(app,/items\.length<2\|\|prefersReduced\.matches\|\|testimonialPaused\|\|doc\.hidden/);
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
+  assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',pauseTestimonialGesture/);
+  assert.match(profileCss,/grid-auto-columns:calc\(var\(--dimension-640px\) - var\(--space-5\)\)/);
+  assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-280px\)/);
+});
+
+test('Experiment cards, final See all entry, and supporting heroes use the final shared contracts',()=>{
+  assert.match(projectCardCss,/data-experiment-card-system="shared-v1"\] \.work-card-v32__content\{min-height:var\(--dimension-220px\)/);
+  assert.match(projectCardCss,/data-experiment-card-system="shared-v1"\] \.project-card__metrics\{display:none\}/);
+  assert.match(app,/const visibleLabel=lang==='zh'\?'查看全部':'See all'/);
+  assert.match(app,/action\.setAttribute\('aria-hidden','true'\)/);
+  assert.match(experimentCss,/experiment-index-card-v36__see-all-content\{display:flex;align-items:center;justify-content:center/);
+  assert.match(experimentCss,/see-all:is\(:hover,:focus-visible\)[^}]*icon-arrow\{transform:translateX/);
+  assert.match(workTemplate,/work-page-hero-v32--work/);
+  assert.doesNotMatch(workTemplate,/page-hero-mark-v45/);
+  assert.match(supportingCss,/\.work-page-hero-v32--work::before\{content:none\}/);
+  assert.match(supportingCss,/\.work-page-hero-v32 \.page-hero-copy>\.kicker\{[^}]*text-transform:uppercase/);
+  assert.match(experimentsTemplate,/class="kicker" data-copy-key="index\.experiment/);
+});
+
+test('shared disclosure icon motion has a reduced-motion override',()=>{
+  assert.match(domainCss,/domain-experience-disclosure__summary::after\{[^}]*transition:/);
+  assert.match(domainCss,/@media\(prefers-reduced-motion:reduce\)[^{]*\{[^}]*domain-experience-disclosure__summary::after\{transition:none\}/);
 });
 
 test('one canonical semantic Project Theme registry resolves every public project and shared popup chrome',()=>{

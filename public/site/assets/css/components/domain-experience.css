@@ -84,4 +84,4 @@
 @media(hover:none),(pointer:coarse){
 .domain-experience .domain-project-card-v2[data-wheel-offset="0"]:hover .domain-project-card-v2__cta-arrow{transform:rotate(var(--arrow-rotate-right))}
 }
-@media(prefers-reduced-motion:reduce){.domain-experience .domain-project-card-v2,.domain-experience .domain-project-card-v2__image,.domain-experience .domain-project-card-v2__cta-arrow,.domain-experience .domain-tab,.domain-experience-disclosure__summary{transition:none}}
+@media(prefers-reduced-motion:reduce){.domain-experience .domain-project-card-v2,.domain-experience .domain-project-card-v2__image,.domain-experience .domain-project-card-v2__cta-arrow,.domain-experience .domain-tab,.domain-experience-disclosure__summary,.domain-experience-disclosure__summary::after{transition:none}}

@@ -246,10 +246,10 @@
 @media(prefers-reduced-motion:reduce){.detail-related-card-v45[data-project-card-system="shared-v1"] .detail-related-card-v45__image{transition:none}}
 
 /* Final shared Experiment ProjectCard geometry. */
-.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__content{grid-template-rows:minmax(var(--dimension-38px),auto) minmax(var(--dimension-112px),auto) minmax(0,1fr) auto}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__content{min-height:var(--dimension-220px);grid-template-rows:minmax(var(--dimension-38px),auto) auto minmax(0,1fr) auto}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__meta{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;width:100%;min-height:var(--dimension-38px)}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__identity{justify-self:end;text-align:right}
-.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__title{min-height:var(--dimension-112px)}
+.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__title{min-height:0}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .project-card__metrics{grid-row:3;align-self:end}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__action{grid-row:4;box-sizing:border-box;width:100%;margin-inline:0;padding-inline:0}
 
@@ -274,4 +274,9 @@
 .detail-related-card-v45[data-project-card-system="shared-v1"] .detail-related-card-v45__content{height:100%}
 .experiment-index-card-v36[data-experiment-card-system="shared-v1"]:is(:hover,:focus-visible),
 .motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36[data-experiment-card-system="shared-v1"]:is(:hover,:focus-visible){transform:none!important}
-:where(.work-card-v32[data-project-card-system="shared-v1"],.experiment-index-card-v36[data-experiment-card-system="shared-v1"],.detail-related-card-v45[data-project-card-system="shared-v1"],.related-project-card-v45):is(:hover,:focus-visible) :where(.work-card-v32__action,.related-project-card__action,.detail-related-action-v46) .icon-arrow{transform:rotate(var(--arrow-rotation,var(--arrow-rotate-right)))!important}
+:where(.work-card-v32[data-project-card-system="shared-v1"],.experiment-index-card-v36[data-experiment-card-system="shared-v1"],.detail-related-card-v45[data-project-card-system="shared-v1"],.related-project-card-v45):is(:hover,:focus-visible) :where(.work-card-v32__action,.related-project-card__action,.detail-related-action-v46) .icon-arrow{transform:translateX(var(--project-card-system-hover-shift)) rotate(var(--arrow-rotation,var(--arrow-rotate-right)))!important}
+@media(max-width:560px){.experiment-index-card-v36[data-experiment-card-system="shared-v1"] .work-card-v32__content{min-height:var(--dimension-220px)}}
+.work-card-v32.experiment-index-card-v36[data-project-card-variant="compact"][data-experiment-card-system="shared-v1"] .work-card-v32__content{min-height:var(--dimension-220px)}
+.work-card-v32.experiment-index-card-v36[data-project-card-variant="compact"][data-experiment-card-system="shared-v1"] .work-card-v32__content{grid-template-rows:auto auto minmax(var(--space-5),1fr) auto}
+.work-card-v32.experiment-index-card-v36[data-project-card-variant="compact"][data-experiment-card-system="shared-v1"] .project-card__metrics{display:none}
+.work-card-v32.experiment-index-card-v36[data-project-card-variant="compact"][data-experiment-card-system="shared-v1"] .work-card-v32__action{grid-row:4}

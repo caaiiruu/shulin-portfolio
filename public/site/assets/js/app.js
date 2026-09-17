@@ -1422,11 +1422,31 @@
   renderCareerTimeline();
   doc.addEventListener('portfolio:language',renderCareerTimeline);
   const testimonials=DATA.profile?.testimonials;
+  const profileSummary=doc.querySelector('.profile-hero-v36__summary');
+  function renderProfileSummaryHighlights(){
+    if(!profileSummary)return;
+    const copy=profileSummary.textContent||'';
+    const phrases=lang==='en'?['complex digital products','customer needs','shipped outcomes']:[];
+    if(!phrases.length||!phrases.every(phrase=>copy.includes(phrase)))return;
+    const expression=new RegExp(`(${phrases.join('|')})`,'g');
+    const fragment=doc.createDocumentFragment();
+    copy.split(expression).filter(Boolean).forEach(part=>{
+      if(!phrases.includes(part)){fragment.append(doc.createTextNode(part));return}
+      fragment.append(element('span','profile-summary-highlight',part));
+    });
+    profileSummary.replaceChildren(fragment);
+    const marks=[...profileSummary.querySelectorAll('.profile-summary-highlight')];
+    if(prefersReduced.matches){marks.forEach(mark=>mark.classList.add('is-visible'));return}
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){marks.forEach(mark=>mark.classList.add('is-visible'));observer.disconnect()}}),{threshold:.45});
+    observer.observe(profileSummary);
+  }
+  renderProfileSummaryHighlights();
+  doc.addEventListener('portfolio:language',renderProfileSummaryHighlights);
   const testimonialSection=doc.getElementById('profileTestimonials');
   const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
   const testimonialControls=doc.getElementById('profileTestimonialsControls');
   const testimonialCount=doc.getElementById('profileTestimonialsCount');
-  let testimonialIndex=0,testimonialTimer=0,testimonialPaused=false;
+  let testimonialIndex=0,testimonialTimer=0,testimonialResumeTimer=0,testimonialPaused=false;
   const testimonialItems=()=>list(testimonials?.items).filter(item=>item.visible!==false&&localize(item.displayQuote||item.quote)&&localize(item.name||item.author)).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
   function stopTestimonialRotation(){if(testimonialTimer){window.clearInterval(testimonialTimer);testimonialTimer=0}}
   function startTestimonialRotation(){
@@ -1457,6 +1477,11 @@
   testimonialControls?.querySelector('[data-testimonial-prev]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex-1));
   testimonialControls?.querySelector('[data-testimonial-next]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex+1));
   testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();renderTestimonials(testimonialIndex+(event.key==='ArrowLeft'?-1:1))}});
+  const pauseTestimonialGesture=()=>{testimonialPaused=true;stopTestimonialRotation();if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer)};
+  const resumeTestimonialGesture=()=>{if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer);testimonialResumeTimer=window.setTimeout(()=>{testimonialPaused=false;startTestimonialRotation()},Number(testimonials?.rotationIntervalMs)||7500)};
+  testimonialViewport?.addEventListener('pointerdown',pauseTestimonialGesture,{passive:true});
+  testimonialViewport?.addEventListener('pointerup',resumeTestimonialGesture,{passive:true});
+  testimonialViewport?.addEventListener('pointercancel',resumeTestimonialGesture,{passive:true});
   testimonialSection?.addEventListener('mouseenter',()=>{testimonialPaused=true;stopTestimonialRotation()});
   testimonialSection?.addEventListener('mouseleave',()=>{testimonialPaused=false;startTestimonialRotation()});
   testimonialSection?.addEventListener('focusin',()=>{testimonialPaused=true;stopTestimonialRotation()});
@@ -1493,11 +1518,13 @@
   }
   function createExperimentSeeAllCard(priority){
     const label=localize(DATA.localizationRegistry?.staticPageCopy?.['experiments.see-all-experiments'])||'See all experiments';
+    const visibleLabel=lang==='zh'?'查看全部':'See all';
     const card=element('a','work-card-v32 experiment-index-card-v36 experiment-index-card-v36--see-all');
     card.href='/experiments';card.dataset.experimentPriority=String(priority);card.dataset.pressable='';card.setAttribute('aria-label',label);
     const content=element('div','experiment-index-card-v36__see-all-content');
-    content.append(element('h3','',label));
-    const action=element('span','work-card-v32__action experiment-card-action text-cta',label);
+    content.append(element('h3','',visibleLabel));
+    const action=element('span','work-card-v32__action experiment-card-action text-cta');
+    action.setAttribute('aria-hidden','true');
     action.append(element('span','icon-arrow icon-arrow--right'));
     content.append(action);card.append(content);
     return card;
