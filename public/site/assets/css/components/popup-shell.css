@@ -26,6 +26,7 @@
 .detail-dialog-v45.is-closing .dialog-scroll { animation: popup-surface-out var(--motion-fast) var(--ease-standard) both; }
 
 .dialog-scroll {
+  position: relative;
   width: 100%;
   height: 100%;
   max-height: none;
@@ -35,6 +36,11 @@
   border-radius: inherit;
   background: var(--color-surface);
 }
+.popup-loading-v1{position:absolute;z-index:18;inset:calc(var(--control-height) + (2 * var(--dialog-control-inset-block))) 0 0;display:grid;grid-template-columns:auto auto;align-content:center;justify-content:center;gap:var(--space-3);min-height:calc(100% - var(--control-height));padding:var(--space-6);background:var(--color-surface);color:var(--color-text-primary)}
+.popup-loading-v1[hidden]{display:none}
+.popup-loading-v1__spinner{width:var(--dimension-24px);height:var(--dimension-24px);border:var(--dimension-2px) solid var(--color-border);border-top-color:var(--portfolio-coral-500);border-radius:50%;animation:popup-loading-spin calc(var(--motion-base) * 3) linear infinite}
+.popup-loading-v1__label{align-self:center;color:var(--color-text-secondary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
+@keyframes popup-loading-spin{to{transform:rotate(1turn)}}
 .detail-dialog-v45{--dialog-floating-navigator-clearance:calc(var(--control-height) + (2 * var(--space-1)) + (2 * var(--dimension-1px)) + var(--space-3) + var(--space-5))}
 .detail-dialog-v45 .dialog-scroll{padding-bottom:calc(var(--dialog-floating-navigator-clearance) + env(safe-area-inset-bottom))}
 .detail-dialog-v45[open] .floating-navigator{bottom:calc(max(var(--space-3),((100dvh - min(var(--dimension-960px),calc(100dvh - var(--dimension-28px)))) / 2) + var(--space-3)) + env(safe-area-inset-bottom))}
@@ -134,6 +140,7 @@
 @media (prefers-reduced-motion: reduce) {
   .detail-dialog-v45[open]::backdrop,.detail-dialog-v45[open] .dialog-scroll,
   .detail-dialog-v45.is-closing::backdrop,.detail-dialog-v45.is-closing .dialog-scroll { animation: none; }
+  .popup-loading-v1__spinner{animation:none}
 }
 
 /* case-study-v2 reuses the shared dialog shell; its renderer and content owners stay canonical. */

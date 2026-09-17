@@ -15,6 +15,7 @@ const profileTemplate=read('site-source/templates/profile.html');
 const assetManifest=JSON.parse(read('public/site/content/portfolio-asset-manifest.json'));
 const projectCardMedia=read('public/site/assets/js/project-card-media.js');
 const popupCss=read('public/site/assets/css/components/popup-shell.css');
+const foundationCss=read('public/site/assets/css/components/foundation.css');
 const experimentCss=read('public/site/assets/css/components/experiment-card.css');
 const domainCss=read('public/site/assets/css/components/domain-experience.css');
 const supportingCss=read('public/site/assets/css/components/supporting-page-layout.css');
@@ -66,6 +67,11 @@ test('Profile reuses approved Hero cloud vectors and presents the portrait organ
   assert.match(profileCss,/\.profile-hero-v36\{overflow:visible/);
   assert.match(profileCss,/\.profile-hero-v36__summary\{[^}]*var\(--dimension-2-2rem\)/);
   assert.match(profileCss,/\.profile-summary-highlight\.is-visible\{ text-decoration-color:var\(--portfolio-coral-500\)\}/);
+  const copy=content.localizationRegistry.staticPageCopy;
+  assert.equal(copy['profile.principal-product-designer-final-polish'].en,'SENIOR PRODUCT DESIGNER');
+  assert.equal(copy['profile.cv-summary-final-polish'].en,'9+ years shaping complex products and services across fintech, banking, retail, and global travel. I connect customer needs, business rules, operations, and real-world constraints from product direction through shipped outcomes.');
+  assert.doesNotMatch(copy['profile.cv-summary-final-polish'].en,/digital products/i);
+  assert.match(app,/const phrases=lang==='en'\?\['product direction through shipped outcomes'\]:\[\]/);
 });
 
 test('testimonial SSOT renders excerpt plus Name and Company through a progressive carousel',()=>{
@@ -84,7 +90,31 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
   assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',pauseTestimonialGesture/);
   assert.match(profileCss,/grid-auto-columns:calc\(var\(--dimension-640px\) - var\(--space-5\)\)/);
-  assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-280px\)/);
+  assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-220px\)/);
+  assert.match(profileCss,/\.profile-testimonial-v1__attribution\{[^}]*text-align:center/);
+  assert.doesNotMatch(app,/profile-testimonial-v1[^\n]*avatar/);
+});
+
+test('compact ProjectCards omit metric dividers and editorial CTAs stay dark',()=>{
+  assert.match(projectCardCss,/data-project-card-variant="secondary"[^\n]*data-project-card-variant="supporting"[^\n]*data-project-card-variant="compact"[^\n]*\.project-card__metrics\{border-top:0\}/);
+  assert.match(foundationCss,/\.text-cta\{[\s\S]*?color:var\(--color-text-primary\)/);
+  assert.match(foundationCss,/\.text-cta:is\(:hover,:focus-visible\)[^\n]*color:var\(--color-text-primary\)/);
+  assert.match(foundationCss,/\.text-cta:hover::after,\.text-cta:focus-visible::after\{\s*background:var\(--text-cta-underline\)/);
+});
+
+test('shared popup shell becomes visible before detail rendering and exposes timing events',()=>{
+  const start=app.indexOf('function openDetail(');
+  const end=app.indexOf("doc.addEventListener('portfolio:project-theme-ready'",start);
+  const source=app.slice(start,end);
+  assert.ok(source.indexOf('dialog.showModal()')<source.indexOf('renderDetail()'));
+  assert.match(source,/setPopupLoading\(true\)/);
+  assert.match(source,/portfolio:detail-shell-visible/);
+  assert.match(source,/portfolio:detail-ready/);
+  assert.match(app,/pointerover[^\n]*prewarmFromTrigger/);
+  assert.match(app,/focusin[^\n]*prewarmFromTrigger/);
+  assert.match(app,/rootMargin:'320px'/);
+  assert.match(popupCss,/\.popup-loading-v1\{/);
+  assert.match(popupCss,/\.popup-loading-v1__spinner\{/);
 });
 
 test('Experiment cards, final See all entry, and supporting heroes use the final shared contracts',()=>{

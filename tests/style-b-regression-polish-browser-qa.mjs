@@ -110,8 +110,8 @@ for(const viewport of viewports){
     const cloud=getComputedStyle(node,'::before');
     return {eyebrow:node.querySelector(".profile-hero-v36__eyebrow")?.textContent.trim(),summary:summary?.textContent.trim(),summaryFont:getComputedStyle(summary).fontSize,startDelta:Math.abs(r(copy).top-r(panel).top),cloudMask:cloud.maskImage||cloud.webkitMaskImage,cloudRadius:cloud.borderRadius,contractPresent:document.querySelector('.career-timeline-v34')?.innerText.includes('CONTRACT'),cardGeometry:cards.map(card=>({top:r(card.querySelector(".experiment-index-card-v36__top")).top,title:r(card.querySelector("h3")).top,actionTop:r(card.querySelector(".experiment-card-action,.recognition-card-v1838f__status")).top,actionWidth:r(card.querySelector(".experiment-card-action,.recognition-card-v1838f__status")).width,cardWidth:r(card).width}))};
   });
-  assert.equal(profile.eyebrow,"Principal Product Designer");
-  assert.equal(profile.summary,"9+ years designing complex digital products across fintech, banking, retail, and global travel. I connect customer needs, business rules, and operations from product direction through shipped outcomes.");
+  assert.equal(profile.eyebrow,"SENIOR PRODUCT DESIGNER");
+  assert.equal(profile.summary,"9+ years shaping complex products and services across fintech, banking, retail, and global travel. I connect customer needs, business rules, operations, and real-world constraints from product direction through shipped outcomes.");
   assert.ok(parseFloat(profile.summaryFont)<=28,`${viewport.name} Profile summary size ${profile.summaryFont}`);
   assert.match(profile.cloudMask,/experience-proof-cloud\.svg/,`${viewport.name} Profile cloud owner`);
   assert.equal(profile.contractPresent,false,`${viewport.name} CONTRACT removed`);

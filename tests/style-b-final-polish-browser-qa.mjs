@@ -136,7 +136,7 @@ for(const viewport of viewports){
     valueHeading:document.querySelector(".profile-value-v44 h2")?.textContent.trim(),
     overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
   }));
-  assert.equal(profile.label,"Principal Product Designer");
+  assert.equal(profile.label,"SENIOR PRODUCT DESIGNER");
   assert.equal(profile.heroH1,"");
   assert.equal(profile.valueHeading,"Where I add value");
   assert.ok(profile.overflow<=1);
