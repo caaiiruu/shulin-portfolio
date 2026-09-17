@@ -22,17 +22,24 @@ test('canonical project paths are owned by the browser route reader', async () =
   assert.match(runtimeSource, /closeDialog\(\{syncHistory:false\}\)/);
 });
 
-test('Daily Hours has one Preview-only Case Study v2 route owner', async () => {
+test('Daily Hours has one public Work projection while its Case Study v2 owners remain frozen', async () => {
   const registry=JSON.parse(await readFile(new URL('../public/site/content/project-presentation-registry.json',import.meta.url),'utf8'));
   assert.equal(registry.defaultPresentationContract,'legacy');
   assert.deepEqual(Object.keys(registry.routes),['/work/daily-hours']);
-  assert.deepEqual(registry.routes['/work/daily-hours'],{
+  const daily=registry.routes['/work/daily-hours'];
+  assert.deepEqual({
+    projectId:daily.projectId,presentationContract:daily.presentationContract,
+    contentOwner:daily.contentOwner,assetOwner:daily.assetOwner,motionOwner:daily.motionOwner,
+    publicDiscovery:daily.publicDiscovery,sitemap:daily.sitemap,previewOnly:daily.previewOnly
+  },{
     projectId:'daily-hours',presentationContract:'case-study-v2',
     contentOwner:'content/case-studies/daily-hours/content.json',
     assetOwner:'content/case-studies/daily-hours/asset-manifest.json',
     motionOwner:'content/case-studies/daily-hours/motion-manifest.json',
-    publicDiscovery:false,sitemap:false,previewOnly:true
+    publicDiscovery:true,sitemap:true,previewOnly:false
   });
+  assert.deepEqual(daily.legacyExperimentSlugs,['daily-hours']);
+  assert.equal(daily.workProjection.route,'/work/daily-hours');
   const generated=await readFile(new URL('../public/site/work/daily-hours.html',import.meta.url),'utf8');
   assert.match(generated,/data-case-study-v2-root="daily-hours"/);
 });

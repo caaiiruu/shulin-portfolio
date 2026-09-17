@@ -20,7 +20,15 @@ const types = {
 const port=Number(process.env.PORT||3000);
 http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, "http://127.0.0.1").pathname);
-  let file = path.resolve(root, `.${pathname}`);
+  const normalized = pathname.replace(/\/$/, "") || "/";
+  const cleanRoutes = {
+    "/": "/site/index.html",
+    "/work": "/site/work.html",
+    "/experiments": "/site/experiments.html",
+    "/profile": "/site/profile.html",
+  };
+  const relative = cleanRoutes[normalized] || (/^\/work\/[a-z0-9-]+$/.test(normalized) ? `/site${normalized}.html` : pathname);
+  let file = path.resolve(root, `.${relative}`);
   if (file.startsWith(root) && (!fs.existsSync(file) || fs.statSync(file).isDirectory())) {
     const htmlFile = `${file}.html`;
     if (htmlFile.startsWith(root) && fs.existsSync(htmlFile)) file = htmlFile;

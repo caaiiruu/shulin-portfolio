@@ -988,3 +988,5 @@
 .structured-evidence-quote figcaption{order:initial}
 @media(max-width:600px){.voucher-r149-foundation__media--group,.structured-evidence-v223__validation-summary-metrics{grid-template-columns:1fr}.voucher-r149-foundation__media--group img{max-height:none}.structured-evidence-v223__validation-summary-metric{grid-template-columns:1fr}}
 .core-system-insight-section :is(.voucher-r149-heading,.voucher-r149-heading h2,.core-system-insight-section__statement){width:min(100%,var(--project-detail-narrative-max));max-width:var(--project-detail-narrative-max)}
+
+.detail-related-v45__head h3{font-size:var(--text-h2)}

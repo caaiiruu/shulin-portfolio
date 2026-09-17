@@ -769,7 +769,7 @@ body.is-locked {
 }
 /* Shared transition loader belongs to site chrome, not the global layout. */
 .portfolio-loader-v59{position:fixed;inset:0;z-index:calc(var(--z-dialog) + 20);display:grid;place-items:center;background:var(--loader-backdrop);opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--motion-fast) var(--ease-standard),visibility 0 linear var(--motion-fast)}
-.portfolio-loader-v59.is-active{opacity:1;visibility:visible;pointer-events:auto;transition-delay:var(--dimension-0ms)}
+.portfolio-loader-v59.is-active{opacity:1;visibility:visible;pointer-events:none;transition-delay:var(--dimension-0ms)}
 .portfolio-loader-v59__panel{display:grid;place-items:start;gap:var(--space-3);width:min(var(--dimension-280px),calc(var(--dimension-100vw) - (var(--space-7) * 2)));padding:var(--space-6);border:0;border-radius:var(--radius-md);background:var(--color-surface);box-shadow:var(--shadow-sm)}
 .portfolio-loader-v59__progress{display:block;width:100%;height:var(--dimension-4px);overflow:hidden;border-radius:var(--radius-pill);background:var(--color-border)}
 .portfolio-loader-v59__progress-bar{display:block;width:42%;height:100%;border-radius:inherit;background:var(--color-text-accent);transform:translateX(-110%)}

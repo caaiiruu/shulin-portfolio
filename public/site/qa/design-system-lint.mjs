@@ -142,7 +142,7 @@ if (!canonicalDecisionEvidenceChain.every((contract) => featuredDecisionSource.i
 if (/\.home-page\s+:is\([^)]*\.principles/.test(editorial)) errors.push("HomepageEvidence: EditorialSection must not override the dark Principles surface");
 if (!homeRuntime.includes("localize(project?.company)") || !homeRuntime.includes("localize(project?.domain_label)")) errors.push("ProjectCard: related cards must render company first and domain second from SSOT");
 if (homeRuntime.includes("localize([p.context,p.context_zh])")) errors.push("ProjectCard: related-card metadata must not repeat the company through legacy context copy");
-if (!app.includes("const context=type==='project'?localize(item.company)")) errors.push("ProjectCard: compact popup-related cards must keep company metadata and omit redundant domain copy");
+if (!app.includes("if(type==='experiment')") || !app.includes("return createExplorationIndexCard(key,item,index<0?0:index)") || !app.includes("const context=localize(item.company)")) errors.push("ProjectCard: related Experiment cards must reuse the shared Experiment ProjectCard while related Work cards keep company metadata");
 if (foundation.includes("#detailContext:has(.company-name-v132){display:grid")) errors.push("ProjectDetailOverview: global foundation must not split header metadata into a nested grid");
 if (!projectDetail.includes(".modal-head-meta-v60{display:flex;align-items:baseline;flex-wrap:nowrap")) errors.push("ProjectDetailOverview: company and context must remain on one baseline row");
 if (!projectDetail.includes(".project-value-v207{display:grid") || !projectDetail.includes(".project-value-v207[data-awaiting-content]")) errors.push("ProjectDetailOverview: the value-I-brought slot must use the canonical governed state");

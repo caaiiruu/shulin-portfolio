@@ -1266,9 +1266,10 @@
       const max=logicalRailMax(rail);
       const anchors=visibleItems.map(item=>Math.min(max,Math.max(0,item.offsetLeft-paddingStart)));
       const current=Math.min(max,Math.max(0,rail.scrollLeft));
+      const snapTolerance=Math.max(2,(parseFloat(getComputedStyle(rail).gap)||0));
       const target=direction>0
-        ? (anchors.find(anchor=>anchor>current+2)??max)
-        : ([...anchors].reverse().find(anchor=>anchor<current-2)??0);
+        ? (anchors.find(anchor=>anchor>current+snapTolerance)??max)
+        : ([...anchors].reverse().find(anchor=>anchor<current-snapTolerance)??0);
       rail.scrollTo({left:target,behavior:prefersReduced.matches?'auto':'smooth'});
     };
     prev?.addEventListener('click',()=>move(-1));
@@ -1450,11 +1451,23 @@
     button.append(content,visual);card.append(button);
     return card;
   }
+  function createExperimentSeeAllCard(priority){
+    const label=localize(DATA.localizationRegistry?.staticPageCopy?.['experiments.see-all-experiments'])||'See all experiments';
+    const card=element('a','work-card-v32 experiment-index-card-v36 experiment-index-card-v36--see-all');
+    card.href='/experiments';card.dataset.experimentPriority=String(priority);card.dataset.pressable='';card.setAttribute('aria-label',label);
+    const content=element('div','experiment-index-card-v36__see-all-content');
+    content.append(element('h3','',label));
+    const action=element('span','work-card-v32__action experiment-card-action text-cta',label);
+    action.append(element('span','icon-arrow icon-arrow--right'));
+    content.append(action);card.append(content);
+    return card;
+  }
   function renderExplorationRail(){
     const entries=Object.entries(DATA.experiments);
     for(const rail of [explorationRail,homeExplorationRail].filter(Boolean)){
       clear(rail);
       entries.forEach(([id,item],index)=>rail.append(createExplorationIndexCard(id,item,index)));
+      if(rail===homeExplorationRail)rail.append(createExperimentSeeAllCard(entries.length+1));
       if(rail===explorationRail){
         rail.classList.add('experiment-index-rail-v36--grid');
         rail.removeAttribute('data-rail');
@@ -3985,15 +3998,13 @@
   }
   function relatedCard(type,key){
     const item=type==='project'?DATA.projects[key]:DATA.experiments[key];
-    const card=element('button',type==='experiment'?'detail-related-card-v45 detail-experiment-card-v101':'detail-related-card-v45');card.type='button';card.dataset[type]=key;
-    const context=type==='project'?localize(item.company):localize(item.category);
-    const title=type==='project'?localize(item.cardTitle)||localize(item.title_pair):localize(item.title);
     if(type==='experiment'){
-      const action=element('span','experiment-card-action text-cta',ui("view-experiment-8788e030"));
-      action.append(element('span','icon-arrow icon-arrow--right'));
-      card.append(element('h3','',title),action);
-      return card;
+      const index=Object.keys(DATA.experiments).indexOf(key);
+      return createExplorationIndexCard(key,item,index<0?0:index);
     }
+    const card=element('button','detail-related-card-v45');card.type='button';card.dataset[type]=key;
+    const context=localize(item.company);
+    const title=localize(item.cardTitle)||localize(item.title_pair);
     card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant='compact';
     const action=element('span','detail-related-action-v46');
     action.classList.add('text-cta');
@@ -4017,7 +4028,7 @@
       rail.appendChild(card);
     });enhanceCompanyNames(rail);
     doc.querySelector('#detailRelated .kicker')?.remove();
-    safeText(doc.getElementById('detailRelatedTitle'),relatedType==='project'?(lang==='zh'?'更多作品':'More works'):(lang==='zh'?'更多實驗':'More experiments'));
+    safeText(doc.getElementById('detailRelatedTitle'),lang==='zh'?'更多作品':'More work');
     safeText(doc.getElementById('detailRelatedCopy'),'');
     window.refreshHorizontalRails?.();
   }

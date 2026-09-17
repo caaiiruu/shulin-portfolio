@@ -32619,7 +32619,7 @@
         "zh": "再試一次・下一步"
       },
       "experiments.ongoing-explorations-outside-core-work": {
-        "en": "Ongoing explorations outside client and product work — small tests, facilitation experiments, and ideas that keep evolving.",
+        "en": "Ongoing explorations outside client and product work. Small tests, facilitation experiments, and ideas I keep developing over time.",
         "zh": "在客戶與產品工作之外持續進行的探索——包含小型測試、引導實驗，以及持續演進的想法。"
       },
       "experiments.see-all-experiments": {
@@ -32629,6 +32629,10 @@
       "profile.new-experiences-copy": {
         "en": "I actively seek unfamiliar activities and environments to keep noticing how people adapt, react, and explore.",
         "zh": "我主動接觸陌生的活動與環境，持續觀察人們如何適應、回應與探索。"
+      },
+      "profile.principal-product-designer-final-polish": {
+        "en": "Principal Product Designer",
+        "zh": "首席產品設計師"
       }
     }
   },

@@ -503,7 +503,9 @@ function mountDesignPrinciples(){
    trigger.dataset.pressable='';
    trigger.setAttribute('aria-expanded',String(expanded));
    trigger.setAttribute('aria-controls',panelId);
-   trigger.append(element('span','principle-node__number',String(item.order).padStart(2,'0')),element('span','principle-node__title',localize(item.collapsed.title)),element('span','principle-node__value',localize(item.collapsed.value)),element('span','principle-node__toggle',expanded?'−':'+'));
+   const heading=element('span','principle-node__heading');
+   heading.append(element('span','principle-node__title',localize(item.collapsed.title)),element('span','principle-node__value',localize(item.collapsed.value)));
+   trigger.append(element('span','principle-node__number',String(item.order).padStart(2,'0')),heading,element('span','principle-node__toggle',expanded?'−':'+'));
    trigger.addEventListener('click',()=>changeActive(expanded?'':item.id,expanded?'':item.id));
    trigger.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&activeId){event.preventDefault();changeActive('',item.id)}

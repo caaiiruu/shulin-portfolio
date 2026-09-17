@@ -69,3 +69,5 @@
 @media(max-width:600px){.rail-heading{align-items:center}.rail-controls{gap:var(--space-1)}:root{--rail-visible-columns:1}.domain-project-list-v30{grid-auto-columns:100%}}
 @media(prefers-reduced-motion:reduce){:is(.project-card-rail,.no-match-project-list-v45,.detail-related-rail-v45,.experiment-index-rail-v36,.profile-side-rail-v34,.playground-grid,.work-filter-v32){scroll-behavior:auto}}
 @media(forced-colors:active){[data-rail]{scrollbar-color:CanvasText Canvas}.rail-button{forced-color-adjust:auto}}
+
+.experiment-index-rail-v36>*:last-child{scroll-snap-align:end}
