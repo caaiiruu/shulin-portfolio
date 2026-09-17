@@ -76,16 +76,6 @@
     });
   }
   function labelSharedChrome(){
-    const staticCopy=window.PORTFOLIO_DATA?.localizationRegistry?.staticPageCopy||{};
-    const copy=key=>staticCopy[key]?.en||'';
-    document.querySelectorAll('.site-header [data-copy-key],.site-footer [data-copy-key]').forEach(element=>{
-      const value=copy(element.dataset.copyKey);
-      if(value)element.textContent=value;
-    });
-    document.querySelectorAll('.site-header [data-aria-key],.site-footer [data-aria-key]').forEach(element=>{
-      const value=copy(element.dataset.ariaKey);
-      if(value)element.setAttribute('aria-label',value);
-    });
     const labels={
       '/work':'Work',
       '/experiments':'Experiments',
