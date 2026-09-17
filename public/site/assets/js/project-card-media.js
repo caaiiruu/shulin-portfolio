@@ -141,7 +141,7 @@
   };
 
   const hydrateExperimentCard = card => {
-    const id = card.dataset.experiment;
+    const id = card.dataset.experimentCardId || card.querySelector('[data-experiment]')?.dataset.experiment;
     const visual = visualForExperiment(id);
     applyTheme(card,'shulin-studio');
     const frame = card.querySelector('.experiment-index-card-v36__visual');

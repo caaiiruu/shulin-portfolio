@@ -2374,11 +2374,12 @@ test("approved Weekly and Profile refinement assets stay canonical",()=>{
 });
 
 
-test("shared ProjectCards keep dark actions, no resting accent, and bottom-pinned CTA geometry", () => {
+test("shared ProjectCards keep semantic actions, no resting accent, and bottom-pinned CTA geometry", () => {
   const css = read("assets/css/components/project-card.css");
   assert.match(css, /work-card-v32__action\{[^}]*grid-row:6[^}]*align-self:stretch/);
   assert.match(css, /work-card-v32__action\{[^}]*background-image:none/);
-  assert.match(css, /data-project-card-system="shared-v1"[^}]*work-card-v32__action[^}]*color:var\(--color-text-primary\)!important/);
+  assert.match(css, /data-project-card-system="shared-v1"[^}]*--project-card-cta-foreground:var\(--project-theme-on-surface,var\(--cta-foreground-on-light\)\)/);
+  assert.match(css, /work-card-v32__action[^}]*color:var\(--project-card-cta-foreground,var\(--cta-foreground-on-light\)\)!important/);
   assert.match(css, /data-experiment-card-system="shared-v1"[^}]*work-card-v32__action[^}]*align-self:end/);
 });
 
@@ -2395,7 +2396,7 @@ test("Profile reviews are SSOT-driven and disable auto-rotation for reduced moti
   assert.ok(data.profile.testimonials.items.every(item=>!item.role&&!item.relationship&&item.visible===true));
   assert.equal(data.profile.testimonials.rotationIntervalMs, 7500);
   assert.match(app, /const testimonialItems=\(\)=>list\(testimonials\?\.items\)/);
-  assert.match(app, /if\(items.length<2\|\|prefersReduced.matches\|\|testimonialPaused\|\|doc.hidden\)return/);
+  assert.match(app, /if\(items.length<2\|\|prefersReduced.matches\|\|testimonialPauseReasons\.size\|\|doc.hidden\)return/);
   assert.match(app, /visibilitychange/);
   assert.match(app, /mouseenter/);
   assert.match(app, /focusin/);

@@ -149,7 +149,8 @@
 /* Shared-card parity: Experiments retain lighter information density while
    using the canonical shell, rhythm, CTA and resting geometry. */
 .experiment-index-card-v36,.motion-ready [data-motion-reveal].is-inview.experiment-index-card-v36{transform:none}
-.experiment-index-card-v36 .experiment-card-action{align-self:end;color:var(--color-text-primary)}
+.experiment-index-card-v36 .experiment-card-action{align-self:end;color:var(--project-card-cta-foreground,var(--cta-foreground-on-light))}
+.experiment-index-card-v36--dark{--project-card-cta-foreground:var(--cta-foreground-on-dark);--text-cta-foreground:var(--cta-foreground-on-dark)}
 
 /* R183.8E evidence-led experiment detail — one shared owner for every maturity archetype. */
 .experiment-hero-v1838e{margin:var(--space-7) 0 0;overflow:hidden;border-radius:var(--project-media-radius);background:var(--color-surface-soft)}
@@ -195,7 +196,7 @@
 /* Final Experiment entry composition. */
 .home-experiments-v1838f .experiment-index-v36__head{grid-template-columns:minmax(0,1fr) auto;align-items:end}
 .experiment-index-v36__controls{align-self:end;margin:0}
-.experiment-index-card-v36--see-all{display:grid;align-self:stretch;min-height:0;overflow:hidden;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--ink-950);color:var(--color-text-inverse);text-decoration:none}
+.experiment-index-card-v36--see-all{--project-card-cta-foreground:var(--cta-foreground-on-dark);--text-cta-foreground:var(--cta-foreground-on-dark);display:grid;align-self:stretch;min-height:0;overflow:hidden;border:var(--dimension-1px) solid var(--color-border);border-radius:var(--radius-lg);background:var(--ink-950);color:var(--color-text-inverse);text-decoration:none}
 .experiment-index-card-v36__see-all-content{display:flex;align-items:center;justify-content:center;gap:var(--space-4);min-height:100%;padding:var(--project-card-system-content-padding);text-align:center}
 .experiment-index-card-v36--see-all h3{max-width:var(--dimension-12ch);margin:0;font-size:var(--project-card-compact-title);line-height:1.08;color:inherit}
 .experiment-index-card-v36--see-all .experiment-card-action{width:auto;min-height:0;margin:0;padding:0;color:inherit}

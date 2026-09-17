@@ -126,7 +126,7 @@ html[lang="zh-Hant"] :where(.kicker,.company-context-v132,[class*="label"]){
   background:var(--text-cta-underline);
   transform:scaleX(1);
 }
-.text-cta:is(:hover,:focus-visible),.text-cta :is(span,.icon-arrow),.text-cta:is(:hover,:focus-visible) :is(span,.icon-arrow){color:var(--color-text-primary)!important}
+.text-cta,.text-cta:is(:hover,:focus-visible),.text-cta :is(span,.icon-arrow),.text-cta:is(:hover,:focus-visible) :is(span,.icon-arrow){color:var(--text-cta-foreground,var(--cta-foreground-on-light))!important}
 :where(button,[role="button"],a[data-pressable]):disabled{
   cursor:not-allowed!important;
   opacity:1!important;

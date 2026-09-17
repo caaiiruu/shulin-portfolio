@@ -1446,12 +1446,13 @@
   const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
   const testimonialControls=doc.getElementById('profileTestimonialsControls');
   const testimonialCount=doc.getElementById('profileTestimonialsCount');
-  let testimonialIndex=0,testimonialTimer=0,testimonialResumeTimer=0,testimonialPaused=false;
+  let testimonialIndex=0,testimonialTimer=0,testimonialResumeTimer=0;
+  const testimonialPauseReasons=new Set();
   const testimonialItems=()=>list(testimonials?.items).filter(item=>item.visible!==false&&localize(item.displayQuote||item.quote)&&localize(item.name||item.author)).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
   function stopTestimonialRotation(){if(testimonialTimer){window.clearInterval(testimonialTimer);testimonialTimer=0}}
   function startTestimonialRotation(){
     stopTestimonialRotation();const items=testimonialItems();
-    if(items.length<2||prefersReduced.matches||testimonialPaused||doc.hidden)return;
+    if(items.length<2||prefersReduced.matches||testimonialPauseReasons.size||doc.hidden)return;
     testimonialTimer=window.setInterval(()=>renderTestimonials((testimonialIndex+1)%items.length),Number(testimonials?.rotationIntervalMs)||7500);
   }
   function renderTestimonials(nextIndex=testimonialIndex,{instant=false}={}){
@@ -1474,18 +1475,20 @@
     requestAnimationFrame(()=>{const target=track.children[testimonialIndex];if(target)testimonialViewport.scrollTo({left:target.offsetLeft,behavior:instant||prefersReduced.matches?'auto':'smooth'})});
     startTestimonialRotation();
   }
-  testimonialControls?.querySelector('[data-testimonial-prev]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex-1));
-  testimonialControls?.querySelector('[data-testimonial-next]')?.addEventListener('click',()=>renderTestimonials(testimonialIndex+1));
-  testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();renderTestimonials(testimonialIndex+(event.key==='ArrowLeft'?-1:1))}});
-  const pauseTestimonialGesture=()=>{testimonialPaused=true;stopTestimonialRotation();if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer)};
-  const resumeTestimonialGesture=()=>{if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer);testimonialPaused=false;startTestimonialRotation()};
+  const setTestimonialPause=(reason,paused)=>{testimonialPauseReasons[paused?'add':'delete'](reason);if(paused)stopTestimonialRotation();else startTestimonialRotation()};
+  const pauseTestimonialManually=()=>{if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer);setTestimonialPause('manual',true);testimonialResumeTimer=window.setTimeout(()=>{testimonialResumeTimer=0;setTestimonialPause('manual',false)},Number(testimonials?.rotationIntervalMs)||7500)};
+  testimonialControls?.querySelector('[data-testimonial-prev]')?.addEventListener('click',()=>{pauseTestimonialManually();renderTestimonials(testimonialIndex-1)});
+  testimonialControls?.querySelector('[data-testimonial-next]')?.addEventListener('click',()=>{pauseTestimonialManually();renderTestimonials(testimonialIndex+1)});
+  testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();pauseTestimonialManually();renderTestimonials(testimonialIndex+(event.key==='ArrowLeft'?-1:1))}});
+  const pauseTestimonialGesture=()=>setTestimonialPause('pointer',true);
+  const resumeTestimonialGesture=()=>{setTestimonialPause('pointer',false);pauseTestimonialManually()};
   testimonialViewport?.addEventListener('pointerdown',pauseTestimonialGesture,{passive:true});
   testimonialViewport?.addEventListener('pointerup',resumeTestimonialGesture,{passive:true});
   testimonialViewport?.addEventListener('pointercancel',resumeTestimonialGesture,{passive:true});
-  testimonialSection?.addEventListener('mouseenter',()=>{testimonialPaused=true;stopTestimonialRotation()});
-  testimonialSection?.addEventListener('mouseleave',()=>{testimonialPaused=false;startTestimonialRotation()});
-  testimonialSection?.addEventListener('focusin',()=>{testimonialPaused=true;stopTestimonialRotation()});
-  testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget)){testimonialPaused=false;startTestimonialRotation()}});
+  testimonialSection?.addEventListener('mouseenter',()=>setTestimonialPause('hover',true));
+  testimonialSection?.addEventListener('mouseleave',()=>setTestimonialPause('hover',false));
+  testimonialSection?.addEventListener('focusin',()=>setTestimonialPause('focus',true));
+  testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget))setTestimonialPause('focus',false)});
   doc.addEventListener('visibilitychange',()=>doc.hidden?stopTestimonialRotation():startTestimonialRotation());
   prefersReduced.addEventListener('change',startTestimonialRotation);
   renderTestimonials(0,{instant:true});
@@ -1494,7 +1497,7 @@
   const homeExplorationRail=doc.getElementById('homeExperimentRail');
   function createExplorationIndexCard(id,item,index){
     const card=element('article','work-card-v32 experiment-index-card-v36');
-    card.dataset.experiment=id;card.dataset.experimentPriority=String(index+1);card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant='compact';card.dataset.experimentCardSystem='shared-v1';
+    card.dataset.experimentCardId=id;card.dataset.experimentPriority=String(index+1);card.dataset.projectCardSystem='shared-v1';card.dataset.projectCardVariant='compact';card.dataset.experimentCardSystem='shared-v1';
     const button=element('button','work-card-v32__button');
     button.type='button';button.dataset.experiment=id;button.dataset.pressable='';
     button.setAttribute('aria-label',`${ui("view-experiment-8788e030")}: ${localize(item.title)}`);
@@ -1520,7 +1523,7 @@
     const label=localize(DATA.localizationRegistry?.staticPageCopy?.['experiments.see-all-experiments'])||'See all experiments';
     const visibleLabel=lang==='zh'?'查看全部':'See all';
     const card=element('a','work-card-v32 experiment-index-card-v36 experiment-index-card-v36--see-all');
-    card.href='/experiments';card.dataset.experimentPriority=String(priority);card.dataset.pressable='';card.setAttribute('aria-label',label);
+    card.href='/experiments';card.dataset.experimentPriority=String(priority);card.dataset.pressable='';card.dataset.projectChrome='dark';card.setAttribute('aria-label',label);
     const content=element('div','experiment-index-card-v36__see-all-content');
     content.append(element('h3','',visibleLabel));
     const action=element('span','work-card-v32__action experiment-card-action text-cta');
@@ -4297,6 +4300,18 @@
     const stage=event.target.closest?.('a[data-stage]');
     if(stage&&event.key===' '){event.preventDefault();stage.click()}
   });
+  // Experiment activation owns the capture phase so a nested media layer,
+  // rail gesture helper, or later bubble listener cannot consume the first tap.
+  // Every Experiment still enters the same shared openDetail pipeline as Work.
+  doc.addEventListener('click',event=>{
+    const experiment=event.target.closest?.('[data-experiment]');
+    if(!experiment)return;
+    event.preventDefault();
+    const key=experiment.dataset.experiment;
+    openDetail('experiment',key,experiment);
+    const url=canonicalExperimentUrl(key);
+    history.pushState({detail:{type:'experiment',key},scrollTop:0},'',url);
+  },true);
   doc.addEventListener('click',event=>{
     const stageLink=event.target.closest('a[data-stage]');
     if(stageLink&&currentDetail?.type==='project')writeParentContext({parentKey:currentDetail.key,anchorStage:stageLink.dataset.stage||'',scrollTop:dialogScrollRoot?.scrollTop||0});
@@ -4314,14 +4329,6 @@
       const nextProjectUrl=canonicalProjectUrl(key);nextProjectUrl.hash='';
       history.pushState({detail:{type:'project',key},scrollTop:0},'',nextProjectUrl);
       return;
-    }
-    const experiment=event.target.closest('[data-experiment]');
-    if(experiment){
-      event.preventDefault();
-      const key=experiment.dataset.experiment;
-      openDetail('experiment',key,experiment);
-      const url=canonicalExperimentUrl(key);
-      history.pushState({detail:{type:'experiment',key},scrollTop:0},'',url);
     }
   });
   function openInitiative(parentKey,key,invoker,direct=false){

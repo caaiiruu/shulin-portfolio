@@ -32731,6 +32731,10 @@
         "en": "Ongoing explorations outside client and product work. Small tests, facilitation experiments, prototypes, and ideas I continue developing over time.",
         "zh": "在客戶與產品工作之外持續進行的探索，包含小型測試、引導實驗、原型與持續發展的想法。"
       },
+      "experiments.more-experiments": {
+        "en": "More experiments",
+        "zh": "更多實驗"
+      },
       "experiments.see-all-experiments": {
         "en": "See all experiments",
         "zh": "查看所有實驗"

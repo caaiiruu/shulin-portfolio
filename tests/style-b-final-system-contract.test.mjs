@@ -25,11 +25,11 @@ const rgb=value=>{const channels=value.match(/\d+(?:\.\d+)?/g)?.slice(0,3).map(N
 const luminance=value=>{const channels=rgb(value).map(channel=>channel/255).map(channel=>channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4);return .2126*channels[0]+.7152*channels[1]+.0722*channels[2]};
 const contrast=(foreground,background)=>{const a=luminance(foreground),b=luminance(background);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
 
-test('ProjectCard actions keep dark content, neutral dividers, no underline, and bottom ownership',()=>{
+test('ProjectCard actions keep semantic content color, neutral dividers, no underline, and bottom ownership',()=>{
   assert.match(projectCardCss,/Final shared ProjectCard action contract/);
   assert.match(projectCardCss,/background-image:none!important/);
   assert.match(projectCardCss,/\.work-card-v32__action::after\{content:none!important/);
-  assert.match(projectCardCss,/color:var\(--color-text-primary\)!important/);
+  assert.match(projectCardCss,/color:var\(--project-card-cta-foreground,var\(--cta-foreground-on-light\)\)!important/);
   assert.match(projectCardCss,/\.work-card-v32__action::before\{background:color-mix\(in srgb,var\(--color-text-primary\) 16%,transparent\)!important/);
   assert.match(projectCardCss,/experiment-index-card-v36\[data-experiment-card-system="shared-v1"\][\s\S]*transform:none!important/);
   assert.match(projectCardCss,/\.icon-arrow\{transform:translateX\(var\(--project-card-system-hover-shift\)\) rotate\(var\(--arrow-rotation,var\(--arrow-rotate-right\)\)\)!important/);
@@ -86,19 +86,20 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.match(app,/items\.forEach\(\(item,index\)=>/);
   assert.match(app,/profile-testimonials-v1__track/);
   assert.match(app,/rotationIntervalMs\)\|\|7500/);
-  assert.match(app,/items\.length<2\|\|prefersReduced\.matches\|\|testimonialPaused\|\|doc\.hidden/);
+  assert.match(app,/items\.length<2\|\|prefersReduced\.matches\|\|testimonialPauseReasons\.size\|\|doc\.hidden/);
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
   assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',pauseTestimonialGesture/);
   assert.match(profileCss,/grid-auto-columns:calc\(var\(--dimension-640px\) - var\(--space-5\)\)/);
-  assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-220px\)/);
+  assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-260px\)/);
   assert.match(profileCss,/\.profile-testimonial-v1__attribution\{[^}]*text-align:center/);
   assert.doesNotMatch(app,/profile-testimonial-v1[^\n]*avatar/);
 });
 
-test('compact ProjectCards omit metric dividers and editorial CTAs stay dark',()=>{
+test('compact ProjectCards omit metric dividers and CTA foreground follows semantic surface context',()=>{
   assert.match(projectCardCss,/data-project-card-variant="secondary"[^\n]*data-project-card-variant="supporting"[^\n]*data-project-card-variant="compact"[^\n]*\.project-card__metrics\{border-top:0\}/);
-  assert.match(foundationCss,/\.text-cta\{[\s\S]*?color:var\(--color-text-primary\)/);
-  assert.match(foundationCss,/\.text-cta:is\(:hover,:focus-visible\)[^\n]*color:var\(--color-text-primary\)/);
+  assert.match(foundationCss,/--text-cta-foreground,var\(--cta-foreground-on-light\)/);
+  assert.match(projectCardCss,/--project-card-cta-foreground:var\(--project-theme-on-surface,var\(--cta-foreground-on-light\)\)/);
+  assert.match(experimentCss,/experiment-index-card-v36--see-all\{--project-card-cta-foreground:var\(--cta-foreground-on-dark\)/);
   assert.match(foundationCss,/\.text-cta:hover::after,\.text-cta:focus-visible::after\{\s*background:var\(--text-cta-underline\)/);
 });
 
@@ -121,6 +122,10 @@ test('Experiment cards, final See all entry, and supporting heroes use the final
   assert.match(projectCardCss,/data-experiment-card-system="shared-v1"\] \.work-card-v32__content\{min-height:var\(--dimension-220px\)/);
   assert.match(projectCardCss,/data-experiment-card-system="shared-v1"\] \.project-card__metrics\{display:none\}/);
   assert.match(app,/const visibleLabel=lang==='zh'\?'查看全部':'See all'/);
+  assert.match(app,/card\.dataset\.projectChrome='dark'/);
+  assert.match(app,/card\.dataset\.experimentCardId=id/);
+  assert.match(app,/doc\.addEventListener\('click',event=>\{\s*const experiment=event\.target\.closest\?\.\('\[data-experiment\]'\)/);
+  assert.match(experimentsTemplate,/data-copy-key="experiments\.more-experiments"/);
   assert.match(app,/action\.setAttribute\('aria-hidden','true'\)/);
   assert.match(experimentCss,/experiment-index-card-v36__see-all-content\{display:flex;align-items:center;justify-content:center/);
   assert.match(experimentCss,/see-all:is\(:hover,:focus-visible\)[^}]*icon-arrow\{transform:translateX/);

@@ -213,6 +213,8 @@
   --static-list-marker: var(--portfolio-cyan-500);
   --text-cta-underline: var(--portfolio-coral-500);
   --text-cta-underline-hover: var(--portfolio-cyan-500);
+  --cta-foreground-on-light: var(--color-text-primary);
+  --cta-foreground-on-dark: var(--color-text-inverse);
   --motion-fast: 160ms;
   --motion-base: 240ms;
   --ease-standard: cubic-bezier(.2, .8, .2, 1);
