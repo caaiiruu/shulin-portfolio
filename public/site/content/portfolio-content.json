@@ -25364,23 +25364,105 @@
       "rotationIntervalMs": 7500,
       "items": [
         {
-          "id": "michelle-tan-jy-fairprice-colleague-review-2026",
+          "id": "sip-khoon-fairprice-complex-systems",
           "quote": {
-            "en": "Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!"
+            "en": "You are truly an amazing designer. You have a remarkable ability to construct (and deconstruct) complex problems/systems and turn them into something simple, clear, and easy to understand. That is a rare skill."
           },
-          "author": {
+          "name": {
+            "en": "Sip Khoon"
+          },
+          "company": {
+            "en": "FairPrice Group"
+          },
+          "visible": true,
+          "order": 1
+        },
+        {
+          "id": "winson-lim-fairprice-fp-pay",
+          "quote": {
+            "en": "FP Pay was one of those moments when the app stopped being just “online” and properly entered the store. Introducing payments into a physical environment is never simple. Still, you made it feel natural and calm (with all the POS constraints), which is exactly what customers need at checkout, fast."
+          },
+          "name": {
+            "en": "Winson Lim"
+          },
+          "company": {
+            "en": "FairPrice Group"
+          },
+          "visible": true,
+          "order": 2
+        },
+        {
+          "id": "yiwen-yeo-dbs-scalable-thinking",
+          "quote": {
+            "en": "Shu-lin is able to think strategically for e.g. when she came up with the design of the configuration UI - she wanted to make sure the design was scalable for future enhancements. So she was forward thinking and her work did not just limit to catering for the request strictly."
+          },
+          "name": {
+            "en": "Yiwen Yeo"
+          },
+          "company": {
+            "en": "DBS"
+          },
+          "visible": true,
+          "order": 3
+        },
+        {
+          "id": "monique-fairprice-collaboration-handoff",
+          "quote": {
+            "en": "One of the things I'm grateful for is how easy and quick it is to collaborate with you and ask you questions. I leave our calls feeling relieved because you addressed all my concerns and can move forward with work. I also would reference your handoff files frequently because it's clear, thorough and super organised."
+          },
+          "name": {
+            "en": "Monique"
+          },
+          "company": {
+            "en": "FairPrice Group"
+          },
+          "visible": true,
+          "order": 4
+        },
+        {
+          "id": "anu-dbs-research-facilitation",
+          "quote": {
+            "en": "Shulin planned and facilitated various workshops and collaborative sessions for Excess Management and SAM projects with users and stakeholders to understand problem areas and brainstorm possible solutions. I was impressed to see how Shulin was able to facilitate all the sessions with tact and especially the work she put post the sessions to appropriately drive insights and share with the wider group including tech teams."
+          },
+          "name": {
+            "en": "Anu"
+          },
+          "company": {
+            "en": "DBS"
+          },
+          "visible": true,
+          "order": 5
+        },
+        {
+          "id": "cory-fairprice-presentation-influence",
+          "quote": {
+            "en": "At work, your presentations are always on point: clear, confident, and assertive, with a voice that really carries your ideas. I'm sure with your skills and experience will take you to something amazing!"
+          },
+          "name": {
+            "en": "Cory"
+          },
+          "company": {
+            "en": "FairPrice Group"
+          },
+          "visible": true,
+          "order": 6
+        },
+        {
+          "id": "michelle-tan-jy-fairprice-collaboration",
+          "quote": {
+            "en": "Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there."
+          },
+          "name": {
             "en": "Michelle Tan J.Y."
           },
-          "role": {
-            "en": "Content Designer building systems that scale | AI Platform Governance & Content Evaluation | UX Writing"
+          "company": {
+            "en": "FairPrice Group"
           },
-          "relationship": {
-            "en": "Michelle worked with Shulin on the same team"
-          },
-          "contentStatus": "human-approved-source-2026-09-17"
+          "visible": true,
+          "order": 7
         }
       ],
-      "contentStatus": "human-approved-source-2026-09-17"
+      "contentStatus": "human-approved-package-2026-09-17"
     }
   },
   "sideProjects": {

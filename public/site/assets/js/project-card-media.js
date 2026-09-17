@@ -23,8 +23,18 @@
     return planned || project?.heroVisualBrief?.assetId || '';
   };
 
-  // Project-specific surface metadata is owned by the canonical asset manifest, not CSS/page owners.
-  const tintForProject = id => assetManifest?.projectCardLeadVisuals?.brandTints?.[id] || '';
+  // The canonical asset manifest owns one semantic theme contract for every shared project surface.
+  const themeForProject = id => assetManifest?.projectCardLeadVisuals?.projectThemes?.[id] || null;
+  const applyTheme = (node, id) => {
+    const theme = themeForProject(id);
+    if (!node || !theme) return false;
+    const properties = {brand:'brand',surface:'surface','surface-subtle':'surfaceSubtle','on-surface':'onSurface',accent:'accent','on-accent':'onAccent','on-chrome':'onChrome',border:'border'};
+    Object.entries(properties).forEach(([token,key])=>node.style.setProperty(`--project-theme-${token}`,theme[key]));
+    node.style.setProperty('--project-card-tint',theme.surface);
+    node.dataset.projectTheme=id;
+    node.dataset.projectChrome=theme.chrome;
+    return true;
+  };
 
   const visualForProject = id => {
     if (!assetManifest) return null;
@@ -86,9 +96,7 @@
   const hydrateWorkCard = card => {
     const id = card.dataset.workIndexProject;
     const visual = visualForProject(id);
-    const tint = tintForProject(id);
-    if (tint) card.style.setProperty('--project-card-tint', tint);
-    else card.style.removeProperty('--project-card-tint');
+    applyTheme(card,id);
     const frame = card.querySelector('.work-artifact');
     if (!frame) return;
     if (!visual) {
@@ -112,9 +120,7 @@
   const hydrateDomainCard = card => {
     const id = card.dataset.project;
     const visual = visualForProject(id);
-    const tint = tintForProject(id);
-    if (tint) card.style.setProperty('--project-card-tint', tint);
-    else card.style.removeProperty('--project-card-tint');
+    applyTheme(card,id);
     const frame = card.querySelector('.domain-project-card-v2__visual');
     if (!frame) return;
     if (!visual) {
@@ -137,6 +143,7 @@
   const hydrateExperimentCard = card => {
     const id = card.dataset.experiment;
     const visual = visualForExperiment(id);
+    applyTheme(card,'shulin-studio');
     const frame = card.querySelector('.experiment-index-card-v36__visual');
     if (!frame) return;
     if (!visual) {
@@ -168,6 +175,7 @@
 
   const hydrateRelatedCard = card => {
     const id = card.dataset.project;
+    applyTheme(card,id);
     const visual = visualForProject(id);
     const frame = card.querySelector('.detail-related-card-v45__visual');
     if (!frame) return;
@@ -209,8 +217,11 @@
     window.PROJECT_CARD_SYSTEM = Object.freeze({
       version: 'shared-v1',
       variants,
-      assetManifestUrl: ASSET_MANIFEST_URL
+      assetManifestUrl: ASSET_MANIFEST_URL,
+      resolveTheme: themeForProject,
+      applyTheme
     });
+    document.dispatchEvent(new CustomEvent('portfolio:project-theme-ready'));
     schedule();
     new MutationObserver(schedule).observe(document.documentElement, {
       childList: true,

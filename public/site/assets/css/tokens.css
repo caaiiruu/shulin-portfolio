@@ -1,4 +1,13 @@
 :root {
+  /* Runtime Project Theme defaults; the canonical registry overrides these per project. */
+  --project-theme-brand:rgb(239 237 232);
+  --project-theme-surface:rgb(239 237 232);
+  --project-theme-surface-subtle:rgb(249 248 245);
+  --project-theme-on-surface:rgb(29 32 33);
+  --project-theme-accent:rgb(29 32 33);
+  --project-theme-on-accent:rgb(255 255 255);
+  --project-theme-on-chrome:rgb(29 32 33);
+  --project-theme-border:rgb(208 204 196);
   /* Primitive scale */
   --space-0: 0;
   --space-1: 4px;

@@ -35,3 +35,12 @@
   .work-index__featured-secondary-row,.work-index__more-grid,.work-index__filtered-results,.work-index__filtered-results[data-result-count="2"]{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){.work-index-filter{transition:none}}
+
+/* Two matches preserve the approved featured + secondary hierarchy. */
+@media(min-width:1101px){
+  .work-index__filtered-results[data-result-count="1"]>[data-filter-result-role="featured"]{width:100%;height:100%}
+  .work-index__filtered-results[data-result-count="1"]>[data-filter-result-role="featured"] .work-card-v32__button{grid-template-columns:minmax(0,.62fr) minmax(0,1fr)}
+  .work-index__filtered-results[data-result-count="2"]{grid-template-columns:minmax(0,1.6fr) minmax(var(--dimension-300px),.68fr);align-items:stretch}
+  .work-index__filtered-results[data-result-count="2"]>[data-filter-result-role="featured"],
+  .work-index__filtered-results[data-result-count="2"]>[data-filter-result-role="secondary"]{height:100%}
+}

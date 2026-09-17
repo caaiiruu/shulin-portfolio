@@ -1,5 +1,9 @@
 /* Popup shell — the sole production owner for dialog surface and navigation. */
 .detail-dialog-v45 {
+  --popup-chrome-surface:color-mix(in srgb,var(--color-surface) 92%,transparent);
+  --popup-chrome-control:color-mix(in srgb,var(--color-surface) 94%,transparent);
+  --popup-chrome-on-surface:var(--project-theme-on-chrome,var(--color-text-primary));
+  --popup-chrome-border:var(--project-theme-border,var(--color-border-strong));
   width: min(var(--dimension-1500px), calc(var(--dimension-100vw) - var(--dimension-32px)));
   max-width: none;
   height: min(var(--dimension-960px), calc(100dvh - var(--dimension-28px)));
@@ -46,7 +50,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   border-bottom: 0;
-  background: color-mix(in srgb, var(--color-surface) 96%, transparent);
+  background: var(--popup-chrome-surface);
   backdrop-filter: blur(var(--dimension-14px)) saturate(1.12);
 }
 .modal-back-v66,.modal-close {
@@ -55,10 +59,10 @@
   margin: 0;
   min-width: var(--control-height);
   min-height: var(--control-height);
-  border: var(--dimension-1px) solid var(--color-border-strong);
+  border: var(--dimension-1px) solid var(--popup-chrome-border);
   border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-text-primary);
+  background: var(--popup-chrome-control);
+  color: var(--popup-chrome-on-surface);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -93,11 +97,12 @@
 .modal-close__label { font-size: var(--text-sm); line-height: 1; }
 .modal-close::before { content: none; }
 .modal-close .modal-close__icon { position:relative;display:block;width:var(--dimension-20px);height:var(--dimension-20px);overflow:hidden;color:transparent; }
-.modal-close .modal-close__icon::before,.modal-close .modal-close__icon::after{content:"";position:absolute;left:50%;top:50%;width:var(--dimension-20px);height:var(--dimension-2px);border-radius:var(--radius-pill);background:currentColor;transform-origin:center;color:var(--color-text-primary)}
+.modal-close .modal-close__icon::before,.modal-close .modal-close__icon::after{content:"";position:absolute;left:50%;top:50%;width:var(--dimension-20px);height:var(--dimension-2px);border-radius:var(--radius-pill);background:currentColor;transform-origin:center;color:var(--popup-chrome-on-surface)}
 .modal-close .modal-close__icon::before{transform:translate(-50%,-50%) rotate(var(--dimension-45deg))}
 .modal-close .modal-close__icon::after{transform:translate(-50%,-50%) rotate(calc(var(--dimension-45deg) * -1))}
 .modal-back-v66:hover,.modal-close:hover { background: var(--color-surface-subtle); border-color: var(--color-text-accent); transform: translateY(var(--dimension-neg-1px)); }
 .modal-back-v66:active,.modal-close:active { transform: translateY(0); }
+.detail-dialog-v45[data-project-chrome="dark"]{--popup-chrome-surface:rgb(18 22 27/.9);--popup-chrome-control:rgb(34 39 46/.92);--popup-chrome-border:rgb(255 255 255/.28);--popup-chrome-on-surface:rgb(255 255 255)}
 
 @keyframes popup-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes popup-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
@@ -133,9 +138,9 @@
 
 /* case-study-v2 reuses the shared dialog shell; its renderer and content owners stay canonical. */
 .detail-dialog-v45.is-case-study-v2 .dialog-scroll{background:var(--csv2-bg);color:var(--csv2-text)}
-.detail-dialog-v45.is-case-study-v2 .dialog-controls-v67{background:color-mix(in srgb,var(--csv2-bg) 94%,transparent)}
-.detail-dialog-v45.is-case-study-v2 .modal-close{border-color:var(--csv2-line);background:var(--csv2-panel);color:var(--csv2-text)}
+.detail-dialog-v45.is-case-study-v2 .dialog-controls-v67{background:var(--popup-chrome-surface)}
+.detail-dialog-v45.is-case-study-v2 .modal-close{border-color:var(--popup-chrome-border);background:var(--popup-chrome-control);color:var(--popup-chrome-on-surface)}
 .detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::before,
-.detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::after{background:var(--csv2-text)}
+.detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::after{background:var(--popup-chrome-on-surface)}
 .detail-dialog-v45.is-case-study-v2 .csv2-cta{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-3);min-height:var(--dimension-52px);padding:var(--space-3) var(--space-5);border:var(--dimension-1px) solid var(--csv2-action);border-radius:var(--radius-md);background:var(--csv2-action);color:#fff;font-weight:var(--sys-weight-bold);white-space:nowrap;text-decoration:none}
 .detail-dialog-v45.is-case-study-v2 .case-study-v2-popup{display:block;width:100%;min-height:100%;margin:0;padding:0}

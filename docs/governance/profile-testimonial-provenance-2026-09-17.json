@@ -1,0 +1,71 @@
+{
+  "package": "Portfolio_Final_Codex_Handoff_2026-09-17.zip",
+  "packageIntegrity": "SHA256SUMS.txt verified 2026-09-17",
+  "publicCollectionPath": "public/site/content/portfolio-content.json#profile.testimonials.items",
+  "publicAttributionContract": "Name · Company",
+  "selectionRule": "Verbatim contiguous excerpts only; public records omit internal source metadata.",
+  "selected": [
+    {
+      "id": "sip-khoon-fairprice-complex-systems",
+      "source": "testimonial_sources/NTUC farewell card(1).pdf",
+      "page": 5,
+      "sourceName": "Sip Khoon",
+      "companyContext": "FairPrice Group farewell card",
+      "theme": "complex systems to clarity"
+    },
+    {
+      "id": "winson-lim-fairprice-fp-pay",
+      "source": "testimonial_sources/Winson feedback to me.PNG",
+      "sourceName": "Winson Lim",
+      "companyContext": "FairPrice Group email; identity and company signature continue in Winson feedback to me 3.PNG",
+      "theme": "shipped product and customer impact"
+    },
+    {
+      "id": "yiwen-yeo-dbs-scalable-thinking",
+      "source": "testimonial_sources/My feedback from stakeholders.png",
+      "sourceName": "Yiwen Yeo",
+      "companyContext": "DBS stakeholder-feedback package",
+      "theme": "strategic and scalable thinking"
+    },
+    {
+      "id": "monique-fairprice-collaboration-handoff",
+      "source": "testimonial_sources/NTUC farewell card(1).pdf",
+      "page": 5,
+      "sourceName": "Monique",
+      "companyContext": "FairPrice Group farewell card",
+      "theme": "collaboration and handoff quality"
+    },
+    {
+      "id": "anu-dbs-research-facilitation",
+      "source": "testimonial_sources/My feedback from Anu (VP-manager).png",
+      "sourceName": "Anu",
+      "companyContext": "DBS manager feedback; source text names DBS Enterprise Design",
+      "theme": "research and facilitation"
+    },
+    {
+      "id": "cory-fairprice-presentation-influence",
+      "source": "testimonial_sources/NTUC farewell card(1).pdf",
+      "page": 4,
+      "sourceName": "Cory",
+      "companyContext": "FairPrice Group farewell card",
+      "theme": "presentation and influence"
+    },
+    {
+      "id": "michelle-tan-jy-fairprice-collaboration",
+      "source": "Human-provided Michelle Tan testimonial screenshot supplied directly in the Codex task",
+      "sourceName": "Michelle Tan J.Y.",
+      "companyContext": "FairPrice Group stated in source",
+      "theme": "collaboration"
+    }
+  ],
+  "inspectedNotSelected": [
+    "testimonial_sources/200K transaction Sep achievement(2).png",
+    "testimonial_sources/Feedback from Pooja.JPG",
+    "testimonial_sources/Kudos the results (1th-30th Aug)(2).png",
+    "testimonial_sources/NPS kudos (1th-17th Aug)(2).png",
+    "testimonial_sources/Team kudo to research sharing(2).png",
+    "testimonial_sources/Team kudos to customer behaviour sharing_Retro kudos(2).jpg",
+    "testimonial_sources/Winson feedback to me 2.PNG",
+    "testimonial_sources/Winson feedback to me 3.PNG"
+  ]
+}

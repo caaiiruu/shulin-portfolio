@@ -149,7 +149,7 @@
   };
   const readType = (id, project, projection) => id === 'daily-hours' ? '0→1 Product' : firstText(projection?.type, project?.infoGrid?.type, project?.type_pair, project?.type, project?.systemClassification?.publicLabel, 'Work');
   const readCompany = (id, project, projection) => id === 'daily-hours' ? 'Shulin Studio' : (projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : ''));
-  const readTitle = (project, projection, id, card) => visibleProjectTitle(firstText(projection?.cardTitle, projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, card.querySelector('h2')?.textContent, id));
+  const readTitle = (project, projection, id, card) => id === 'daily-hours' ? 'Track work. Decide what’s worth it.' : visibleProjectTitle(firstText(projection?.cardTitle, projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, card.querySelector('h2')?.textContent, id));
 
   const conciseMetricLabel = label => {
     const text = String(label || '').trim();
@@ -243,7 +243,8 @@
       const matches=decorated.filter(card=>card.dataset.workCategories.split(/\s+/).includes(filter));
       filtered.replaceChildren();filtered.dataset.resultCount=String(matches.length);
       matches.forEach((card,index)=>{
-        card.dataset.projectCardVariant=matches.length===1?'featured':matches.length===2?'standard':'compact';
+        card.dataset.projectCardVariant=matches.length===1||matches.length===2&&index===0?'featured':matches.length===2?'compact':'standard';
+        card.dataset.filterResultRole=matches.length===1?'featured':matches.length===2?(index===0?'featured':'secondary'):'grid';
         filtered.append(card);
       });
       featured.hidden=true;more.hidden=true;filtered.hidden=false;

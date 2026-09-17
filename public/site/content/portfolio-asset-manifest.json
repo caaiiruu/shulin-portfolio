@@ -2435,23 +2435,22 @@
       "sourceLineage": "Human-approved ProjectCard Lead Visual supplied 2026-09-16; direct JPEG derivative from original PNG at original pixel dimensions; no crop, no upscale, no AI enhancement; JPEG quality 92, 4:4:4.",
       "sourcePackage": "ProjectCard_Codex_Handoff_2026-09-16.zip"
     },
-    "brandTints": {
-      "payment": "rgb(230 239 255)",
-      "voucher": "rgb(230 239 255)",
-      "voucher-center": "rgb(230 239 255)",
-      "game-center": "rgb(230 239 255)",
-      "dbs": "rgb(252 232 234)",
-      "booking": "rgb(232 242 255)",
-      "booking-taxi-pickup-service-strategy": "rgb(232 242 255)",
-      "booking-taxi-strategy": "rgb(232 242 255)",
-      "taishin-p2p-marketplace-platform": "rgb(252 232 234)",
-      "taishin-p2p-marketplace": "rgb(252 232 234)",
-      "cathay-mortgage-assistant": "rgb(228 244 239)",
-      "cathay-sit-online-account-opening": "rgb(228 244 239)",
-      "cathay-sit-review-remediation-operations": "rgb(228 244 239)",
-      "ctbc-mortgage-self-service-app": "rgb(226 242 238)",
-      "bandzo": "rgb(237 235 250)",
-      "daily-hours": "rgb(230 237 245)"
+    "projectThemes": {
+      "payment": { "brand": "rgb(230 239 255)", "surface": "rgb(230 239 255)", "surfaceSubtle": "rgb(245 248 253)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(197 207 220)" },
+      "voucher": { "brand": "rgb(230 239 255)", "surface": "rgb(230 239 255)", "surfaceSubtle": "rgb(245 248 253)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(197 207 220)" },
+      "voucher-center": { "brand": "rgb(230 239 255)", "surface": "rgb(230 239 255)", "surfaceSubtle": "rgb(245 248 253)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(197 207 220)" },
+      "game-center": { "brand": "rgb(230 239 255)", "surface": "rgb(230 239 255)", "surfaceSubtle": "rgb(245 248 253)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(197 207 220)" },
+      "dbs": { "brand": "rgb(252 232 234)", "surface": "rgb(252 232 234)", "surfaceSubtle": "rgb(255 247 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(225 199 202)" },
+      "booking": { "brand": "rgb(232 242 255)", "surface": "rgb(232 242 255)", "surfaceSubtle": "rgb(246 249 254)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(199 211 225)" },
+      "booking-taxi-pickup-service-strategy": { "brand": "rgb(232 242 255)", "surface": "rgb(232 242 255)", "surfaceSubtle": "rgb(246 249 254)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(199 211 225)" },
+      "taishin-p2p-marketplace-platform": { "brand": "rgb(252 232 234)", "surface": "rgb(252 232 234)", "surfaceSubtle": "rgb(255 247 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(225 199 202)" },
+      "cathay-mortgage-assistant": { "brand": "rgb(228 244 239)", "surface": "rgb(228 244 239)", "surfaceSubtle": "rgb(245 250 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(193 214 207)" },
+      "cathay-sit-online-account-opening": { "brand": "rgb(228 244 239)", "surface": "rgb(228 244 239)", "surfaceSubtle": "rgb(245 250 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(193 214 207)" },
+      "cathay-sit-review-remediation-operations": { "brand": "rgb(228 244 239)", "surface": "rgb(228 244 239)", "surfaceSubtle": "rgb(245 250 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(193 214 207)" },
+      "ctbc-mortgage-self-service-app": { "brand": "rgb(226 242 238)", "surface": "rgb(226 242 238)", "surfaceSubtle": "rgb(245 250 248)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(191 212 207)" },
+      "bandzo": { "brand": "rgb(237 235 250)", "surface": "rgb(237 235 250)", "surfaceSubtle": "rgb(248 247 252)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(205 201 222)" },
+      "daily-hours": { "brand": "rgb(230 237 245)", "surface": "rgb(230 237 245)", "surfaceSubtle": "rgb(245 248 251)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "dark", "onChrome": "rgb(255 255 255)", "border": "rgb(198 206 215)" },
+      "shulin-studio": { "brand": "rgb(239 237 232)", "surface": "rgb(239 237 232)", "surfaceSubtle": "rgb(249 248 245)", "onSurface": "rgb(29 32 33)", "accent": "rgb(29 32 33)", "onAccent": "rgb(255 255 255)", "chrome": "light", "onChrome": "rgb(29 32 33)", "border": "rgb(208 204 196)" }
     }
   }
 }

@@ -2387,11 +2387,12 @@ test("Profile reviews are SSOT-driven and disable auto-rotation for reduced moti
   const app = read("assets/js/app.js");
   const profile = read("profile.html");
   assert.ok(Array.isArray(data.profile.testimonials.items));
-  assert.equal(data.profile.testimonials.items.length, 1);
-  assert.equal(data.profile.testimonials.items[0].author.en, "Michelle Tan J.Y.");
-  assert.equal(data.profile.testimonials.items[0].quote.en, "Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!");
-  assert.equal(data.profile.testimonials.items[0].role.en, "Content Designer building systems that scale | AI Platform Governance & Content Evaluation | UX Writing");
-  assert.equal(data.profile.testimonials.items[0].relationship.en, "Michelle worked with Shulin on the same team");
+  assert.equal(data.profile.testimonials.items.length, 7);
+  assert.deepEqual(data.profile.testimonials.items.map(item=>`${item.name.en} · ${item.company.en}`),[
+    "Sip Khoon · FairPrice Group","Winson Lim · FairPrice Group","Yiwen Yeo · DBS","Monique · FairPrice Group","Anu · DBS","Cory · FairPrice Group","Michelle Tan J.Y. · FairPrice Group"
+  ]);
+  assert.equal(data.profile.testimonials.items[0].quote.en, "You are truly an amazing designer. You have a remarkable ability to construct (and deconstruct) complex problems/systems and turn them into something simple, clear, and easy to understand. That is a rare skill.");
+  assert.ok(data.profile.testimonials.items.every(item=>!item.role&&!item.relationship&&item.visible===true));
   assert.equal(data.profile.testimonials.rotationIntervalMs, 7500);
   assert.match(app, /const testimonialItems=\(\)=>list\(testimonials\?\.items\)/);
   assert.match(app, /if\(items.length<2\|\|prefersReduced.matches\|\|testimonialPaused\|\|doc.hidden\)return/);
