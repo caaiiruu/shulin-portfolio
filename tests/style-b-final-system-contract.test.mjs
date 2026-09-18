@@ -103,7 +103,11 @@ test('testimonial SSOT renders full approved content plus Name and Company throu
   assert.doesNotMatch(app,/testimonialPauseReasons|pauseTestimonialManually|setInterval/);
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
   assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',event=>/);
-  assert.match(profileCss,/grid-auto-columns:calc\(var\(--dimension-640px\) - var\(--space-5\)\)/);
+  assert.match(profileCss,/\.profile-testimonials-v1__head\{[^}]*justify-content:center;text-align:center/);
+  assert.match(profileCss,/\.profile-testimonials-v1__carousel\{[^}]*minmax\(0,var\(--dimension-1000px\)\)/);
+  assert.match(profileCss,/\.profile-testimonials-v1__track\{[^}]*grid-auto-columns:100%;gap:0/);
+  assert.match(profileCss,/\.profile-testimonials-v1__controls \[data-testimonial-prev\]\{grid-column:1;grid-row:1\}/);
+  assert.match(profileCss,/\.profile-testimonials-v1__controls \[data-testimonial-next\]\{grid-column:3;grid-row:1\}/);
   assert.match(profileCss,/transition:transform calc\(var\(--motion-base\) \* 2\) cubic-bezier\(\.22,1,\.36,1\)/);
   assert.match(profileCss,/\.profile-testimonials-v1__viewport\{[^}]*overflow:hidden/);
   assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-260px\)/);
