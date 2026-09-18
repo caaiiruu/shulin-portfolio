@@ -1445,12 +1445,12 @@
   const testimonialSection=doc.getElementById('profileTestimonials');
   const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
   const testimonialControls=doc.getElementById('profileTestimonialsControls');
-  let activeIndex=0,testimonialTimer=0,testimonialTrack=null,testimonialStep=0,testimonialMotionToken=0;
+  let activeIndex=0,testimonialTimer=0,testimonialTrack=null,testimonialStep=0,testimonialMotionToken=0,testimonialExpandedId=null;
   let testimonialHovered=false,testimonialFocusWithin=false,testimonialDragging=false,testimonialPointerId=null,testimonialPointerStart=0,testimonialPointerDelta=0;
   const testimonialItems=()=>list(testimonials?.items).filter(item=>item.visible!==false&&localize(item.displayQuote||item.quote)&&localize(item.name||item.author)).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
   const testimonialInterval=()=>Number(testimonials?.rotationIntervalMs)||7500;
-  const testimonialAutoplayEnabled=()=>testimonialItems().length>1&&!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc.hidden&&!prefersReduced.matches;
-  const testimonialQaState=()=>({activeIndex,autoplayEnabled:testimonialAutoplayEnabled(),autoplayTimerActive:Boolean(testimonialTimer),hovered:testimonialHovered,focusWithin:testimonialFocusWithin,dragging:testimonialDragging,documentHidden:doc.hidden,prefersReducedMotion:prefersReduced.matches});
+  const testimonialAutoplayEnabled=()=>testimonialItems().length>1&&!testimonialExpandedId&&!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc.hidden&&!prefersReduced.matches;
+  const testimonialQaState=()=>({activeIndex,expandedId:testimonialExpandedId,autoplayEnabled:testimonialAutoplayEnabled(),autoplayTimerActive:Boolean(testimonialTimer),hovered:testimonialHovered,focusWithin:testimonialFocusWithin,dragging:testimonialDragging,documentHidden:doc.hidden,prefersReducedMotion:prefersReduced.matches});
   window.__portfolioTestimonialQa=testimonialQaState;
   function stopTestimonialRotation(){if(testimonialTimer){window.clearTimeout(testimonialTimer);testimonialTimer=0}}
   function startTestimonialRotation(){
@@ -1458,26 +1458,70 @@
     if(!testimonialAutoplayEnabled())return;
     testimonialTimer=window.setTimeout(()=>{testimonialTimer=0;moveTestimonial(activeIndex+1,{source:'autoplay'})},testimonialInterval());
   }
-  function appendTestimonialQuote(quote,value){
-    let bulletList=null;
+  function appendTestimonialQuote(quote,value,{collapseAfterBullet=0}={}){
+    let bulletList=null,bulletCount=0,hasExtra=false;
     String(value||'').split(/\n{2,}/).map(block=>block.trim()).filter(Boolean).forEach(block=>{
       const bullet=block.match(/^•\s+([^:]+):\s+([\s\S]+)$/);
       if(bullet){
         if(!bulletList){bulletList=element('ul','profile-testimonial-v1__list');quote.append(bulletList)}
+        bulletCount+=1;
         const item=element('li','profile-testimonial-v1__list-item');
         item.append(element('strong','profile-testimonial-v1__bullet-heading',`${bullet[1]}: `),document.createTextNode(bullet[2]));
+        if(collapseAfterBullet>0&&bulletCount>collapseAfterBullet){item.dataset.testimonialExtra='';item.hidden=true;hasExtra=true}
         bulletList.append(item);return;
       }
-      bulletList=null;quote.append(element('p','profile-testimonial-v1__paragraph',block));
+      bulletList=null;
+      const paragraph=element('p','profile-testimonial-v1__paragraph',block);
+      if(collapseAfterBullet>0&&bulletCount>=collapseAfterBullet&&bulletCount>0){paragraph.dataset.testimonialExtra='';paragraph.hidden=true;hasExtra=true}
+      quote.append(paragraph);
     });
+    return hasExtra;
   }
   function createTestimonialCard(item,{clone=false}={}){
     const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||'';article.dataset.testimonialClone=clone?'true':'false';
     if(clone)article.setAttribute('aria-hidden','true');
-    const quote=element('blockquote','profile-testimonial-v1__quote');appendTestimonialQuote(quote,localize(item.displayQuote||item.quote));
+    const quote=element('blockquote','profile-testimonial-v1__quote');
+    const collapseAfterBullet=Math.max(0,Number(item.collapseAfterBullet)||0);
+    const hasExtra=appendTestimonialQuote(quote,localize(item.displayQuote||item.quote),{collapseAfterBullet});
     const attribution=element('footer','profile-testimonial-v1__attribution');
     const identity=[localize(item.name||item.author),localize(item.company)].filter(Boolean).join(' · ');
-    article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote,attribution);return article;
+    article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote);
+    if(hasExtra){
+      const toggle=element('button','profile-testimonial-v1__toggle text-cta',localize(testimonials.expandLabel)||'See more');
+      toggle.type='button';toggle.dataset.testimonialToggle=item.id||'';toggle.setAttribute('aria-expanded','false');
+      if(clone)toggle.tabIndex=-1;
+      article.append(toggle);
+    }
+    article.append(attribution);return article;
+  }
+  function testimonialCardAtPhysicalIndex(physicalIndex){
+    return testimonialTrack?.children?.[physicalIndex]||null;
+  }
+  function syncTestimonialViewportHeight({physicalIndex=activeIndex+1,instant=false}={}){
+    if(!testimonialViewport||!testimonialTrack)return;
+    const card=testimonialCardAtPhysicalIndex(physicalIndex);if(!card)return;
+    testimonialViewport.dataset.heightTransition=instant||prefersReduced.matches?'none':'motion';
+    testimonialViewport.style.height=`${Math.ceil(card.scrollHeight)}px`;
+  }
+  function setTestimonialExpanded(id,expanded){
+    if(!testimonialTrack)return;
+    const card=[...testimonialTrack.querySelectorAll('.profile-testimonial-v1[data-testimonial-clone="false"]')].find(node=>node.dataset.testimonialId===id);
+    if(!card)return;
+    testimonialExpandedId=expanded?id:null;
+    card.querySelectorAll('[data-testimonial-extra]').forEach(node=>{node.hidden=!expanded});
+    const toggle=card.querySelector('[data-testimonial-toggle]');
+    if(toggle){toggle.setAttribute('aria-expanded',expanded?'true':'false');toggle.textContent=expanded?(localize(testimonials.collapseLabel)||'See less'):(localize(testimonials.expandLabel)||'See more')}
+    requestAnimationFrame(()=>syncTestimonialViewportHeight({instant:false}));
+    if(expanded)stopTestimonialRotation();else startTestimonialRotation();
+  }
+  function collapseExpandedTestimonial(){
+    if(!testimonialExpandedId)return;
+    const id=testimonialExpandedId;testimonialExpandedId=null;
+    const card=[...testimonialTrack.querySelectorAll('.profile-testimonial-v1[data-testimonial-clone="false"]')].find(node=>node.dataset.testimonialId===id);
+    if(!card)return;
+    card.querySelectorAll('[data-testimonial-extra]').forEach(node=>{node.hidden=true});
+    const toggle=card.querySelector('[data-testimonial-toggle]');
+    if(toggle){toggle.setAttribute('aria-expanded','false');toggle.textContent=localize(testimonials.expandLabel)||'See more'}
   }
   function measureTestimonialStep(){
     if(!testimonialTrack)return 0;
@@ -1487,6 +1531,7 @@
   function positionTestimonial(physicalIndex,{instant=false,dragOffset=0}={}){
     if(!testimonialTrack)return;
     if(!testimonialStep)measureTestimonialStep();
+    syncTestimonialViewportHeight({physicalIndex,instant});
     testimonialTrack.dataset.transition=instant||prefersReduced.matches?'none':'motion';
     testimonialTrack.style.transform=`translate3d(${-(physicalIndex*testimonialStep)+dragOffset}px,0,0)`;
     testimonialViewport.dataset.activeIndex=String(activeIndex);
@@ -1498,7 +1543,7 @@
   }
   function moveTestimonial(nextIndex,{source='manual'}={}){
     const items=testimonialItems();if(items.length<2||!testimonialTrack)return;
-    stopTestimonialRotation();
+    stopTestimonialRotation();collapseExpandedTestimonial();
     const previous=activeIndex;const normalized=(nextIndex+items.length)%items.length;
     const direction=nextIndex>previous?1:nextIndex<previous?-1:0;
     if(!direction){positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation();return}
@@ -1526,10 +1571,11 @@
     testimonialTrack.append(createTestimonialCard(items[0],{clone:true}));
     testimonialViewport.replaceChildren(testimonialTrack);testimonialViewport.tabIndex=items.length>1?0:-1;
     testimonialControls.hidden=items.length<2;
-    requestAnimationFrame(()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation()});
+    requestAnimationFrame(()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true});syncTestimonialViewportHeight({instant:true});startTestimonialRotation()});
   }
   const bindTestimonialControl=(selector,delta)=>testimonialControls?.querySelector(selector)?.addEventListener('click',event=>{const control=event.currentTarget;moveTestimonial(activeIndex+delta,{source:'button'});if(event.detail>0)requestAnimationFrame(()=>control.blur())});
   bindTestimonialControl('[data-testimonial-prev]',-1);bindTestimonialControl('[data-testimonial-next]',1);
+  testimonialSection?.addEventListener('click',event=>{const toggle=event.target.closest?.('[data-testimonial-toggle]');if(!toggle||toggle.closest('[data-testimonial-clone="true"]'))return;const id=toggle.dataset.testimonialToggle||'';const expanded=toggle.getAttribute('aria-expanded')==='true';setTestimonialExpanded(id,!expanded);if(event.detail>0)requestAnimationFrame(()=>toggle.blur())});
   testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();moveTestimonial(activeIndex+(event.key==='ArrowLeft'?-1:1),{source:'keyboard'})}});
   testimonialViewport?.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button!==0)return;testimonialDragging=true;testimonialPointerId=event.pointerId;testimonialPointerStart=event.clientX;testimonialPointerDelta=0;stopTestimonialRotation();testimonialViewport.setPointerCapture?.(event.pointerId);positionTestimonial(activeIndex+1,{instant:true})});
   testimonialViewport?.addEventListener('pointermove',event=>{if(!testimonialDragging||event.pointerId!==testimonialPointerId)return;testimonialPointerDelta=event.clientX-testimonialPointerStart;positionTestimonial(activeIndex+1,{instant:true,dragOffset:testimonialPointerDelta})});
@@ -1542,7 +1588,7 @@
   testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget)){testimonialFocusWithin=false;startTestimonialRotation()}});
   doc.addEventListener('visibilitychange',()=>doc.hidden?stopTestimonialRotation():startTestimonialRotation());
   prefersReduced.addEventListener('change',()=>{positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation()});
-  window.addEventListener('resize',()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true})});
+  window.addEventListener('resize',()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true});syncTestimonialViewportHeight({instant:true})});
   renderTestimonials(0,{instant:true});
   doc.addEventListener('portfolio:language',()=>renderTestimonials(activeIndex,{instant:true}));
   const explorationRail=doc.getElementById('experimentPageRail');
