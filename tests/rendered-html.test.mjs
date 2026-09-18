@@ -2396,7 +2396,8 @@ test("Profile reviews are SSOT-driven and disable auto-rotation for reduced moti
   assert.ok(data.profile.testimonials.items.every(item=>!item.role&&!item.relationship&&item.visible===true));
   assert.equal(data.profile.testimonials.rotationIntervalMs, 7500);
   assert.match(app, /const testimonialItems=\(\)=>list\(testimonials\?\.items\)/);
-  assert.match(app, /if\(items.length<2\|\|prefersReduced.matches\|\|testimonialPauseReasons\.size\|\|doc.hidden\)return/);
+  assert.match(app, /const testimonialAutoplayEnabled=\(\)=>testimonialItems\(\)\.length>1&&!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc.hidden&&!prefersReduced.matches/);
+  assert.match(app, /window\.__portfolioTestimonialQa=testimonialQaState/);
   assert.match(app, /visibilitychange/);
   assert.match(app, /mouseenter/);
   assert.match(app, /focusin/);

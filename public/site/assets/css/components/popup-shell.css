@@ -151,3 +151,9 @@
 .detail-dialog-v45.is-case-study-v2 .modal-close .modal-close__icon::after{background:var(--popup-chrome-on-surface)}
 .detail-dialog-v45.is-case-study-v2 .csv2-cta{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-3);min-height:var(--dimension-52px);padding:var(--space-3) var(--space-5);border:var(--dimension-1px) solid var(--csv2-action);border-radius:var(--radius-md);background:var(--csv2-action);color:#fff;font-weight:var(--sys-weight-bold);white-space:nowrap;text-decoration:none}
 .detail-dialog-v45.is-case-study-v2 .case-study-v2-popup{display:block;width:100%;min-height:100%;margin:0;padding:0}
+
+/* Daily Hours keeps the canonical Case Study v2 body while its media sequence uses whitespace rather than rules. */
+[data-case-study-v2-root="daily-hours"] .csv2-evidence{padding-top:var(--space-6);border-top:0}
+[data-case-study-v2-root="daily-hours"] .csv2-accordion-item,
+[data-case-study-v2-root="daily-hours"] .csv2-accordion-item:last-child{border-top:0;border-bottom:0}
+[data-case-study-v2-root="daily-hours"] .csv2-accordion-item + .csv2-accordion-item{margin-top:var(--space-4)}

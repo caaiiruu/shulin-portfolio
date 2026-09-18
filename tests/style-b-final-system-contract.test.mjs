@@ -83,18 +83,30 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.equal(content.profile.testimonials.contentStatus,'human-approved-package-2026-09-17');
   assert.match(app,/localize\(item\.displayQuote\|\|item\.quote\)/);
   assert.match(app,/\[localize\(item\.name\|\|item\.author\),localize\(item\.company\)\]\.filter\(Boolean\)\.join\(' · '\)/);
-  assert.match(app,/const orderedItems=items\.map\(\(_,offset\)=>items\[\(testimonialIndex\+offset\)%items\.length\]\)/);
-  assert.match(app,/orderedItems\.forEach\(\(item,index\)=>/);
+  assert.match(app,/let activeIndex=0,testimonialTimer=0/);
+  assert.match(app,/testimonialAutoplayEnabled=.*!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc\.hidden&&!prefersReduced\.matches/);
+  assert.match(app,/window\.__portfolioTestimonialQa=testimonialQaState/);
+  assert.match(app,/moveTestimonial\(activeIndex\+1,\{source:'autoplay'\}\)/);
+  assert.match(app,/translate3d\(/);
   assert.match(app,/profile-testimonials-v1__track/);
   assert.doesNotMatch(profileTemplate,/profileTestimonialsCount/);
   assert.match(app,/rotationIntervalMs\)\|\|7500/);
-  assert.match(app,/items\.length<2\|\|prefersReduced\.matches\|\|testimonialPauseReasons\.size\|\|doc\.hidden/);
+  assert.doesNotMatch(app,/testimonialPauseReasons|pauseTestimonialManually|setInterval/);
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
-  assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',pauseTestimonialGesture/);
+  assert.match(app,/testimonialViewport\?\.addEventListener\('pointerdown',event=>/);
   assert.match(profileCss,/grid-auto-columns:calc\(var\(--dimension-640px\) - var\(--space-5\)\)/);
+  assert.match(profileCss,/transition:transform calc\(var\(--motion-base\) \* 2\) cubic-bezier\(\.22,1,\.36,1\)/);
+  assert.match(profileCss,/\.profile-testimonials-v1__viewport\{[^}]*overflow:hidden/);
   assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-260px\)/);
   assert.match(profileCss,/\.profile-testimonial-v1__attribution\{[^}]*text-align:center/);
   assert.doesNotMatch(app,/profile-testimonial-v1[^\n]*avatar/);
+});
+
+test('Daily Hours media rules are removed in the shared root and Travel uses approved supporting copy',()=>{
+  assert.match(popupCss,/\[data-case-study-v2-root="daily-hours"\] \.csv2-evidence\{[^}]*border-top:0/);
+  assert.match(popupCss,/\[data-case-study-v2-root="daily-hours"\] \.csv2-accordion-item,[\s\S]*border-top:0;border-bottom:0/);
+  assert.match(profileTemplate,/profile\.travel-supporting-copy-final/);
+  assert.equal(content.localizationRegistry.staticPageCopy['profile.travel-supporting-copy-final'].en,'To be continued. More cultures, landscapes, animals, and whatever comes next.');
 });
 
 test('compact ProjectCards omit metric dividers and CTA foreground follows semantic surface context',()=>{

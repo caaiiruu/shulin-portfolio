@@ -1445,54 +1445,93 @@
   const testimonialSection=doc.getElementById('profileTestimonials');
   const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
   const testimonialControls=doc.getElementById('profileTestimonialsControls');
-  let testimonialIndex=0,testimonialTimer=0,testimonialResumeTimer=0;
-  const testimonialPauseReasons=new Set();
+  let activeIndex=0,testimonialTimer=0,testimonialTrack=null,testimonialStep=0,testimonialMotionToken=0;
+  let testimonialHovered=false,testimonialFocusWithin=false,testimonialDragging=false,testimonialPointerId=null,testimonialPointerStart=0,testimonialPointerDelta=0;
   const testimonialItems=()=>list(testimonials?.items).filter(item=>item.visible!==false&&localize(item.displayQuote||item.quote)&&localize(item.name||item.author)).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
-  function stopTestimonialRotation(){if(testimonialTimer){window.clearInterval(testimonialTimer);testimonialTimer=0}}
+  const testimonialInterval=()=>Number(testimonials?.rotationIntervalMs)||7500;
+  const testimonialAutoplayEnabled=()=>testimonialItems().length>1&&!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc.hidden&&!prefersReduced.matches;
+  const testimonialQaState=()=>({activeIndex,autoplayEnabled:testimonialAutoplayEnabled(),autoplayTimerActive:Boolean(testimonialTimer),hovered:testimonialHovered,focusWithin:testimonialFocusWithin,dragging:testimonialDragging,documentHidden:doc.hidden,prefersReducedMotion:prefersReduced.matches});
+  window.__portfolioTestimonialQa=testimonialQaState;
+  function stopTestimonialRotation(){if(testimonialTimer){window.clearTimeout(testimonialTimer);testimonialTimer=0}}
   function startTestimonialRotation(){
-    stopTestimonialRotation();const items=testimonialItems();
-    if(items.length<2||prefersReduced.matches||testimonialPauseReasons.size||doc.hidden)return;
-    testimonialTimer=window.setInterval(()=>renderTestimonials((testimonialIndex+1)%items.length),Number(testimonials?.rotationIntervalMs)||7500);
+    stopTestimonialRotation();
+    if(!testimonialAutoplayEnabled())return;
+    testimonialTimer=window.setTimeout(()=>{testimonialTimer=0;moveTestimonial(activeIndex+1,{source:'autoplay'})},testimonialInterval());
   }
-  function renderTestimonials(nextIndex=testimonialIndex,{instant=false}={}){
+  function createTestimonialCard(item,{clone=false}={}){
+    const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||'';article.dataset.testimonialClone=clone?'true':'false';
+    if(clone)article.setAttribute('aria-hidden','true');
+    const quote=element('blockquote','profile-testimonial-v1__quote',localize(item.displayQuote||item.quote));
+    const attribution=element('footer','profile-testimonial-v1__attribution');
+    const identity=[localize(item.name||item.author),localize(item.company)].filter(Boolean).join(' · ');
+    article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote,attribution);return article;
+  }
+  function measureTestimonialStep(){
+    if(!testimonialTrack)return 0;
+    const card=testimonialTrack.querySelector('.profile-testimonial-v1[data-testimonial-clone="false"]');
+    const style=getComputedStyle(testimonialTrack);testimonialStep=(card?.getBoundingClientRect().width||0)+(parseFloat(style.columnGap)||parseFloat(style.gap)||0);return testimonialStep;
+  }
+  function positionTestimonial(physicalIndex,{instant=false,dragOffset=0}={}){
+    if(!testimonialTrack)return;
+    if(!testimonialStep)measureTestimonialStep();
+    testimonialTrack.dataset.transition=instant||prefersReduced.matches?'none':'motion';
+    testimonialTrack.style.transform=`translate3d(${-(physicalIndex*testimonialStep)+dragOffset}px,0,0)`;
+    testimonialViewport.dataset.activeIndex=String(activeIndex);
+  }
+  function finishTestimonialMotion(token,{snapPhysical=null}={}){
+    if(token!==testimonialMotionToken)return;
+    if(snapPhysical!==null){positionTestimonial(snapPhysical,{instant:true});testimonialTrack?.getBoundingClientRect();}
+    startTestimonialRotation();
+  }
+  function moveTestimonial(nextIndex,{source='manual'}={}){
+    const items=testimonialItems();if(items.length<2||!testimonialTrack)return;
+    stopTestimonialRotation();
+    const previous=activeIndex;const normalized=(nextIndex+items.length)%items.length;
+    const direction=nextIndex>previous?1:nextIndex<previous?-1:0;
+    if(!direction){positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation();return}
+    activeIndex=normalized;testimonialViewport.dataset.lastNavigationSource=source;
+    let physical=activeIndex+1,snapPhysical=null;
+    if(previous===items.length-1&&direction>0&&activeIndex===0){physical=items.length+1;snapPhysical=1}
+    if(previous===0&&direction<0&&activeIndex===items.length-1){physical=0;snapPhysical=items.length}
+    testimonialMotionToken+=1;const token=testimonialMotionToken;
+    positionTestimonial(physical,{instant:prefersReduced.matches});
+    if(prefersReduced.matches){finishTestimonialMotion(token,{snapPhysical});return}
+    let settled=false;const settle=()=>{if(settled)return;settled=true;testimonialTrack?.removeEventListener('transitionend',onEnd);finishTestimonialMotion(token,{snapPhysical})};
+    const onEnd=event=>{if(event.target===testimonialTrack&&event.propertyName==='transform')settle()};
+    testimonialTrack.addEventListener('transitionend',onEnd);window.setTimeout(settle,650);
+  }
+  function renderTestimonials(nextIndex=activeIndex,{instant=false}={}){
     if(!testimonialSection||!testimonialViewport)return;
     const items=testimonialItems();testimonialSection.hidden=items.length===0;
     if(!items.length){clear(testimonialViewport);stopTestimonialRotation();return}
-    testimonialIndex=(nextIndex+items.length)%items.length;
+    activeIndex=(nextIndex+items.length)%items.length;
     safeText(doc.getElementById('profileTestimonialsEyebrow'),testimonials.eyebrow);
     safeText(doc.getElementById('profileTestimonialsTitle'),testimonials.title);
-    const track=element('div','profile-testimonials-v1__track');
-    const orderedItems=items.map((_,offset)=>items[(testimonialIndex+offset)%items.length]);
-    orderedItems.forEach((item,index)=>{
-      const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||String(index);
-      const quote=element('blockquote','profile-testimonial-v1__quote',localize(item.displayQuote||item.quote));
-      const attribution=element('footer','profile-testimonial-v1__attribution');
-      const identity=[localize(item.name||item.author),localize(item.company)].filter(Boolean).join(' · ');
-      article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote,attribution);track.append(article);
-    });
-    testimonialViewport.replaceChildren(track);testimonialViewport.tabIndex=items.length>1?0:-1;
+    testimonialTrack=element('div','profile-testimonials-v1__track');
+    testimonialTrack.append(createTestimonialCard(items.at(-1),{clone:true}));
+    items.forEach(item=>testimonialTrack.append(createTestimonialCard(item)));
+    testimonialTrack.append(createTestimonialCard(items[0],{clone:true}));
+    testimonialViewport.replaceChildren(testimonialTrack);testimonialViewport.tabIndex=items.length>1?0:-1;
     testimonialControls.hidden=items.length<2;
-    requestAnimationFrame(()=>testimonialViewport.scrollTo({left:0,behavior:instant||prefersReduced.matches?'auto':'smooth'}));
-    startTestimonialRotation();
+    requestAnimationFrame(()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation()});
   }
-  const setTestimonialPause=(reason,paused)=>{testimonialPauseReasons[paused?'add':'delete'](reason);if(paused)stopTestimonialRotation();else startTestimonialRotation()};
-  const pauseTestimonialManually=()=>{if(testimonialResumeTimer)window.clearTimeout(testimonialResumeTimer);setTestimonialPause('manual',true);testimonialResumeTimer=window.setTimeout(()=>{testimonialResumeTimer=0;setTestimonialPause('manual',false)},Number(testimonials?.rotationIntervalMs)||7500)};
-  testimonialControls?.querySelector('[data-testimonial-prev]')?.addEventListener('click',()=>{pauseTestimonialManually();renderTestimonials(testimonialIndex-1)});
-  testimonialControls?.querySelector('[data-testimonial-next]')?.addEventListener('click',()=>{pauseTestimonialManually();renderTestimonials(testimonialIndex+1)});
-  testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();pauseTestimonialManually();renderTestimonials(testimonialIndex+(event.key==='ArrowLeft'?-1:1))}});
-  const pauseTestimonialGesture=()=>setTestimonialPause('pointer',true);
-  const resumeTestimonialGesture=()=>{setTestimonialPause('pointer',false);pauseTestimonialManually()};
-  testimonialViewport?.addEventListener('pointerdown',pauseTestimonialGesture,{passive:true});
-  testimonialViewport?.addEventListener('pointerup',resumeTestimonialGesture,{passive:true});
-  testimonialViewport?.addEventListener('pointercancel',resumeTestimonialGesture,{passive:true});
-  testimonialSection?.addEventListener('mouseenter',()=>setTestimonialPause('hover',true));
-  testimonialSection?.addEventListener('mouseleave',()=>setTestimonialPause('hover',false));
-  testimonialSection?.addEventListener('focusin',()=>setTestimonialPause('focus',true));
-  testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget))setTestimonialPause('focus',false)});
+  const bindTestimonialControl=(selector,delta)=>testimonialControls?.querySelector(selector)?.addEventListener('click',event=>{const control=event.currentTarget;moveTestimonial(activeIndex+delta,{source:'button'});if(event.detail>0)requestAnimationFrame(()=>control.blur())});
+  bindTestimonialControl('[data-testimonial-prev]',-1);bindTestimonialControl('[data-testimonial-next]',1);
+  testimonialViewport?.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();moveTestimonial(activeIndex+(event.key==='ArrowLeft'?-1:1),{source:'keyboard'})}});
+  testimonialViewport?.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button!==0)return;testimonialDragging=true;testimonialPointerId=event.pointerId;testimonialPointerStart=event.clientX;testimonialPointerDelta=0;stopTestimonialRotation();testimonialViewport.setPointerCapture?.(event.pointerId);positionTestimonial(activeIndex+1,{instant:true})});
+  testimonialViewport?.addEventListener('pointermove',event=>{if(!testimonialDragging||event.pointerId!==testimonialPointerId)return;testimonialPointerDelta=event.clientX-testimonialPointerStart;positionTestimonial(activeIndex+1,{instant:true,dragOffset:testimonialPointerDelta})});
+  const finishTestimonialGesture=event=>{if(!testimonialDragging||event.pointerId!==testimonialPointerId)return;const delta=testimonialPointerDelta;testimonialDragging=false;testimonialPointerId=null;testimonialPointerDelta=0;if(Math.abs(delta)>=44)moveTestimonial(activeIndex+(delta<0?1:-1),{source:'swipe'});else{testimonialMotionToken+=1;const token=testimonialMotionToken;positionTestimonial(activeIndex+1);window.setTimeout(()=>finishTestimonialMotion(token),550)}if(doc.activeElement===testimonialViewport)testimonialViewport.blur()};
+  testimonialViewport?.addEventListener('pointerup',finishTestimonialGesture);
+  testimonialViewport?.addEventListener('pointercancel',finishTestimonialGesture);
+  testimonialViewport?.addEventListener('mouseenter',()=>{testimonialHovered=true;stopTestimonialRotation()});
+  testimonialViewport?.addEventListener('mouseleave',()=>{testimonialHovered=false;startTestimonialRotation()});
+  testimonialSection?.addEventListener('focusin',()=>{testimonialFocusWithin=true;stopTestimonialRotation()});
+  testimonialSection?.addEventListener('focusout',event=>{if(!testimonialSection.contains(event.relatedTarget)){testimonialFocusWithin=false;startTestimonialRotation()}});
   doc.addEventListener('visibilitychange',()=>doc.hidden?stopTestimonialRotation():startTestimonialRotation());
-  prefersReduced.addEventListener('change',startTestimonialRotation);
+  prefersReduced.addEventListener('change',()=>{positionTestimonial(activeIndex+1,{instant:true});startTestimonialRotation()});
+  window.addEventListener('resize',()=>{measureTestimonialStep();positionTestimonial(activeIndex+1,{instant:true})});
   renderTestimonials(0,{instant:true});
-  doc.addEventListener('portfolio:language',()=>renderTestimonials(testimonialIndex,{instant:true}));
+  doc.addEventListener('portfolio:language',()=>renderTestimonials(activeIndex,{instant:true}));
   const explorationRail=doc.getElementById('experimentPageRail');
   const homeExplorationRail=doc.getElementById('homeExperimentRail');
   function createExplorationIndexCard(id,item,index){
