@@ -71,7 +71,7 @@ test('Profile reuses approved Hero cloud vectors and presents the portrait organ
   assert.equal(copy['profile.principal-product-designer-final-polish'].en,'SENIOR PRODUCT DESIGNER');
   assert.equal(copy['profile.cv-summary-final-polish'].en,'9+ years shaping complex products and services across fintech, banking, retail, and global travel. I connect customer needs, business rules, operations, and real-world constraints from product direction through shipped outcomes.');
   assert.doesNotMatch(copy['profile.cv-summary-final-polish'].en,/digital products/i);
-  assert.match(app,/const phrases=lang==='en'\?\['product direction through shipped outcomes'\]:\[\]/);
+  assert.match(app,/const phrases=lang==='en'\?\['fintech, banking, retail, and global travel'\]:\[\]/);
 });
 
 test('testimonial SSOT renders excerpt plus Name and Company through a progressive carousel',()=>{
@@ -83,8 +83,10 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.equal(content.profile.testimonials.contentStatus,'human-approved-package-2026-09-17');
   assert.match(app,/localize\(item\.displayQuote\|\|item\.quote\)/);
   assert.match(app,/\[localize\(item\.name\|\|item\.author\),localize\(item\.company\)\]\.filter\(Boolean\)\.join\(' · '\)/);
-  assert.match(app,/items\.forEach\(\(item,index\)=>/);
+  assert.match(app,/const orderedItems=items\.map\(\(_,offset\)=>items\[\(testimonialIndex\+offset\)%items\.length\]\)/);
+  assert.match(app,/orderedItems\.forEach\(\(item,index\)=>/);
   assert.match(app,/profile-testimonials-v1__track/);
+  assert.doesNotMatch(profileTemplate,/profileTestimonialsCount/);
   assert.match(app,/rotationIntervalMs\)\|\|7500/);
   assert.match(app,/items\.length<2\|\|prefersReduced\.matches\|\|testimonialPauseReasons\.size\|\|doc\.hidden/);
   assert.match(app,/event\.key==='ArrowLeft'\|\|event\.key==='ArrowRight'/);
@@ -125,7 +127,9 @@ test('Experiment cards, final See all entry, and supporting heroes use the final
   assert.match(app,/card\.dataset\.projectChrome='dark'/);
   assert.match(app,/card\.dataset\.experimentCardId=id/);
   assert.match(app,/doc\.addEventListener\('click',event=>\{\s*const experiment=event\.target\.closest\?\.\('\[data-experiment\]'\)/);
-  assert.match(experimentsTemplate,/data-copy-key="experiments\.more-experiments"/);
+  assert.doesNotMatch(experimentsTemplate,/moreExperimentsTitle|experiments\.more-experiments|experiment-index-v36__head/);
+  assert.match(app,/sharedDetailTitle\.dataset\.detailTitleSystem='shared-v1'/);
+  assert.match(app,/sharedDetailTitle\.dataset\.detailKind=currentDetail\.type==='experiment'\?'experiment':'work'/);
   assert.match(app,/action\.setAttribute\('aria-hidden','true'\)/);
   assert.match(experimentCss,/experiment-index-card-v36__see-all-content\{display:flex;align-items:center;justify-content:center/);
   assert.match(experimentCss,/see-all:is\(:hover,:focus-visible\)[^}]*icon-arrow\{transform:translateX/);

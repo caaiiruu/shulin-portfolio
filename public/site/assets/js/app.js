@@ -1426,7 +1426,7 @@
   function renderProfileSummaryHighlights(){
     if(!profileSummary)return;
     const copy=profileSummary.textContent||'';
-    const phrases=lang==='en'?['product direction through shipped outcomes']:[];
+    const phrases=lang==='en'?['fintech, banking, retail, and global travel']:[];
     if(!phrases.length||!phrases.every(phrase=>copy.includes(phrase)))return;
     const expression=new RegExp(`(${phrases.join('|')})`,'g');
     const fragment=doc.createDocumentFragment();
@@ -1445,7 +1445,6 @@
   const testimonialSection=doc.getElementById('profileTestimonials');
   const testimonialViewport=doc.getElementById('profileTestimonialsViewport');
   const testimonialControls=doc.getElementById('profileTestimonialsControls');
-  const testimonialCount=doc.getElementById('profileTestimonialsCount');
   let testimonialIndex=0,testimonialTimer=0,testimonialResumeTimer=0;
   const testimonialPauseReasons=new Set();
   const testimonialItems=()=>list(testimonials?.items).filter(item=>item.visible!==false&&localize(item.displayQuote||item.quote)&&localize(item.name||item.author)).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
@@ -1463,16 +1462,17 @@
     safeText(doc.getElementById('profileTestimonialsEyebrow'),testimonials.eyebrow);
     safeText(doc.getElementById('profileTestimonialsTitle'),testimonials.title);
     const track=element('div','profile-testimonials-v1__track');
-    items.forEach((item,index)=>{
-      const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||String(index);article.setAttribute('aria-label',`${index+1} / ${items.length}`);
+    const orderedItems=items.map((_,offset)=>items[(testimonialIndex+offset)%items.length]);
+    orderedItems.forEach((item,index)=>{
+      const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||String(index);
       const quote=element('blockquote','profile-testimonial-v1__quote',localize(item.displayQuote||item.quote));
       const attribution=element('footer','profile-testimonial-v1__attribution');
       const identity=[localize(item.name||item.author),localize(item.company)].filter(Boolean).join(' · ');
-      attribution.textContent=identity;article.append(quote,attribution);track.append(article);
+      article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote,attribution);track.append(article);
     });
     testimonialViewport.replaceChildren(track);testimonialViewport.tabIndex=items.length>1?0:-1;
-    testimonialControls.hidden=items.length<2;safeText(testimonialCount,`${testimonialIndex+1} / ${items.length}`);
-    requestAnimationFrame(()=>{const target=track.children[testimonialIndex];if(target)testimonialViewport.scrollTo({left:target.offsetLeft,behavior:instant||prefersReduced.matches?'auto':'smooth'})});
+    testimonialControls.hidden=items.length<2;
+    requestAnimationFrame(()=>testimonialViewport.scrollTo({left:0,behavior:instant||prefersReduced.matches?'auto':'smooth'}));
     startTestimonialRotation();
   }
   const setTestimonialPause=(reason,paused)=>{testimonialPauseReasons[paused?'add':'delete'](reason);if(paused)stopTestimonialRotation();else startTestimonialRotation()};
@@ -4150,6 +4150,8 @@
   }
   function renderDetail(){
     if(!currentDetail)return;
+    const sharedDetailTitle=dialog?.querySelector('.modal-head-v45');
+    if(sharedDetailTitle){sharedDetailTitle.dataset.detailTitleSystem='shared-v1';sharedDetailTitle.dataset.detailKind=currentDetail.type==='experiment'?'experiment':'work'}
     const themedProjectId=currentDetail.type==='project'?currentDetail.key:currentDetail.parentKey;
     if(themedProjectId)window.PROJECT_CARD_SYSTEM?.applyTheme?.(dialog,themedProjectId);
     else window.PROJECT_CARD_SYSTEM?.applyTheme?.(dialog,'shulin-studio');
