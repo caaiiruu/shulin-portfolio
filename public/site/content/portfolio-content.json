@@ -25362,6 +25362,14 @@
         "zh": "一起工作的感受。"
       },
       "rotationIntervalMs": 7500,
+      "expandLabel": {
+        "en": "See more",
+        "zh": "展開更多"
+      },
+      "collapseLabel": {
+        "en": "See less",
+        "zh": "收合"
+      },
       "items": [
         {
           "id": "sip-khoon-fairprice-complex-systems",
@@ -25375,7 +25383,7 @@
             "en": "FairPrice Group"
           },
           "visible": true,
-          "order": 1
+          "order": 2
         },
         {
           "id": "winson-lim-fairprice-fp-pay",
@@ -25389,7 +25397,7 @@
             "en": "FairPrice Group"
           },
           "visible": true,
-          "order": 2
+          "order": 3
         },
         {
           "id": "yiwen-yeo-dbs-scalable-thinking",
@@ -25403,7 +25411,7 @@
             "en": "DBS"
           },
           "visible": true,
-          "order": 3
+          "order": 4
         },
         {
           "id": "monique-fairprice-collaboration-handoff",
@@ -25417,7 +25425,7 @@
             "en": "FairPrice Group"
           },
           "visible": true,
-          "order": 4
+          "order": 5
         },
         {
           "id": "anu-dbs-research-facilitation",
@@ -25431,7 +25439,7 @@
             "en": "DBS"
           },
           "visible": true,
-          "order": 5
+          "order": 6
         },
         {
           "id": "cory-fairprice-presentation-influence",
@@ -25445,7 +25453,7 @@
             "en": "FairPrice Group"
           },
           "visible": true,
-          "order": 6
+          "order": 7
         },
         {
           "id": "michelle-tan-jy-fairprice-collaboration",
@@ -25462,7 +25470,8 @@
             "en": "FairPrice Group"
           },
           "visible": true,
-          "order": 7
+          "collapseAfterBullet": 1,
+          "order": 1
         }
       ],
       "contentStatus": "human-approved-package-2026-09-17"
