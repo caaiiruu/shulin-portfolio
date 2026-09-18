@@ -157,3 +157,4 @@
 [data-case-study-v2-root="daily-hours"] .csv2-accordion-item,
 [data-case-study-v2-root="daily-hours"] .csv2-accordion-item:last-child{border-top:0;border-bottom:0}
 [data-case-study-v2-root="daily-hours"] .csv2-accordion-item + .csv2-accordion-item{margin-top:var(--space-4)}
+[data-case-study-v2-root="daily-hours"] .csv2-demo{border-top:0}

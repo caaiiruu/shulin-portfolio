@@ -10,6 +10,7 @@ const profileCss=read('public/site/assets/css/components/profile-card.css');
 const detailCss=read('public/site/assets/css/components/project-detail-overview.css');
 const app=read('public/site/assets/js/app.js');
 const work=read('public/site/assets/js/work.js');
+const domainExperience=read('public/site/assets/js/domain-experience.js');
 const workCss=read('public/site/assets/css/components/work-index.css');
 const profileTemplate=read('site-source/templates/profile.html');
 const assetManifest=JSON.parse(read('public/site/content/portfolio-asset-manifest.json'));
@@ -52,6 +53,8 @@ test('Daily Hours uses its narrative listing title and one shared popup/direct p
   const route=registry.routes['/work/daily-hours'];
   assert.equal(route.workProjection.cardTitle,'Track work. Decide what’s worth it.');
   assert.equal(route.presentationContract,'case-study-v2');
+  assert.match(domainExperience,/projection\?\.cardTitle, projection\?\.title/);
+  assert.doesNotMatch(domainExperience,/usesStandalonePage\(card\.dataset\.project\)/);
   assert.match(app,/renderCaseStudyPopup\(currentDetail\.key\)/);
   assert.match(app,/DATA\.projects\[key\]\|\|DATA\.caseStudyProjects\?\.\[key\]/);
 });
@@ -80,6 +83,8 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.equal(reviews[0].name.en,'Sip Khoon');
   assert.equal(reviews[0].company.en,'FairPrice Group');
   assert.equal(reviews.at(-1).name.en,'Michelle Tan J.Y.');
+  assert.equal(reviews.at(-1).quote.en,'Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!');
+  assert.equal(reviews.at(-1).displayQuote.en,'Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!');
   assert.equal(content.profile.testimonials.contentStatus,'human-approved-package-2026-09-17');
   assert.match(app,/localize\(item\.displayQuote\|\|item\.quote\)/);
   assert.match(app,/\[localize\(item\.name\|\|item\.author\),localize\(item\.company\)\]\.filter\(Boolean\)\.join\(' · '\)/);
@@ -105,6 +110,7 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
 test('Daily Hours media rules are removed in the shared root and Travel uses approved supporting copy',()=>{
   assert.match(popupCss,/\[data-case-study-v2-root="daily-hours"\] \.csv2-evidence\{[^}]*border-top:0/);
   assert.match(popupCss,/\[data-case-study-v2-root="daily-hours"\] \.csv2-accordion-item,[\s\S]*border-top:0;border-bottom:0/);
+  assert.match(popupCss,/\[data-case-study-v2-root="daily-hours"\] \.csv2-demo\{border-top:0\}/);
   assert.match(profileTemplate,/profile\.travel-supporting-copy-final/);
   assert.equal(content.localizationRegistry.staticPageCopy['profile.travel-supporting-copy-final'].en,'To be continued. More cultures, landscapes, animals, and whatever comes next.');
 });

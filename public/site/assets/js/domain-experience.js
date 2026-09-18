@@ -65,10 +65,6 @@
     const projection = projectionForProject(projectId);
     return project?.publicRoute || projection?.route || `/work/${projectId}`;
   };
-  const usesStandalonePage = projectId => Object.values(REGISTRY.routes || {}).some(entry =>
-    entry?.projectId === projectId && entry?.publicDiscovery === true && entry?.presentationContract && entry.presentationContract !== 'legacy'
-  );
-
   let viewportFrame = 0;
   const syncViewportWidth = () => section.style.setProperty('--domain-viewport-width', `${document.documentElement.clientWidth}px`);
   syncViewportWidth();
@@ -201,7 +197,7 @@
   };
   const readType = (key, project, projection) => key === 'daily-hours' ? '0→1 Product' : firstText(projection?.type, project?.type, project?.infoGrid?.type, project?.type_pair, project?.projectType, project?.project_type, project?.systemClassification?.publicLabel, project?.systemClassification?.label);
   const companyFor = (key, project, projection) => key === 'daily-hours' ? 'Shulin Studio' : (projection?.company || firstText(project?.company) || (project?.presentationContract !== 'legacy' ? 'Independent' : ''));
-  const titleFor = (project, projection, key) => visibleProjectTitle(firstText(projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, key));
+  const titleFor = (project, projection, key) => visibleProjectTitle(firstText(projection?.cardTitle, projection?.title, language() === 'zh' ? project?.transformation_zh : project?.transformation, project?.transformation, project?.title_pair, project?.title, key));
 
   const conciseMetricLabel = label => {
     const text = String(label || '').trim();
@@ -304,11 +300,11 @@
 
   related.addEventListener('click',event=>{
     if(performance.now()<suppressClickUntil){event.preventDefault();event.stopPropagation();return}
-    const card=event.target.closest('.domain-project-card-v2');if(!card)return;const index=cards.indexOf(card);if(index<0)return;if(index!==activeIndex){event.preventDefault();setActive(index);return}if(event.target.closest('.domain-project-card-v2__cta'))return;if(usesStandalonePage(card.dataset.project)){event.preventDefault();window.location.href=routeForProject(card.dataset.project);return}
-    // Legacy ProjectCards deliberately fall through to app.js. The shared legacy
-    // detail owner opens the dialog and pushes the canonical /work/{slug} URL.
+    const card=event.target.closest('.domain-project-card-v2');if(!card)return;const index=cards.indexOf(card);if(index<0)return;if(index!==activeIndex){event.preventDefault();setActive(index);return}if(event.target.closest('.domain-project-card-v2__cta'))return;
+    // Active ProjectCards fall through to app.js. The shared detail owner opens
+    // both legacy and Case Study v2 projects through the popup-first pipeline.
   });
-  related.addEventListener('keydown',event=>{const card=event.target.closest('.domain-project-card-v2');if(!card||event.target.closest('.domain-project-card-v2__cta'))return;if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();step(event.key==='ArrowRight'?1:-1);cards[activeIndex]?.focus({preventScroll:true})}else if(['Enter',' '].includes(event.key)&&cards.indexOf(card)===activeIndex){event.preventDefault();if(usesStandalonePage(card.dataset.project)){window.location.href=routeForProject(card.dataset.project)}else{card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}))}}});
+  related.addEventListener('keydown',event=>{const card=event.target.closest('.domain-project-card-v2');if(!card||event.target.closest('.domain-project-card-v2__cta'))return;if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();step(event.key==='ArrowRight'?1:-1);cards[activeIndex]?.focus({preventScroll:true})}else if(['Enter',' '].includes(event.key)&&cards.indexOf(card)===activeIndex){event.preventDefault();card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}))}});
   related.addEventListener('pointerdown',event=>{if(!event.isPrimary||(event.pointerType==='mouse'&&event.button!==0)||event.target.closest('.domain-wheel-v2__control,.domain-project-card-v2__cta'))return;const card=event.target.closest('.domain-project-card-v2');if(!card)return;pointerStartX=event.clientX;pointerStartY=event.clientY;pointerId=event.pointerId;pointerCaptureCard=card;try{card.setPointerCapture?.(event.pointerId)}catch{}});
   related.addEventListener('pointerup',event=>{if(pointerId===null||event.pointerId!==pointerId||pointerStartX===null||pointerStartY===null)return;const dx=event.clientX-pointerStartX,dy=event.clientY-pointerStartY;try{if(pointerCaptureCard?.hasPointerCapture?.(event.pointerId))pointerCaptureCard.releasePointerCapture(event.pointerId)}catch{}pointerStartX=pointerStartY=pointerId=pointerCaptureCard=null;if(Math.abs(dx)<36||Math.abs(dx)<=Math.abs(dy))return;suppressClickUntil=performance.now()+250;step(dx<0?1:-1)});
   related.addEventListener('pointercancel',()=>{pointerStartX=pointerStartY=pointerId=pointerCaptureCard=null});
