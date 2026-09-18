@@ -758,6 +758,7 @@
   --sys-weight-bold:760;
   --sys-weight-heavy:860;
   --sys-weight-regular:450;
+  --sys-weight-semibold:650;
   /* Semantic typography roles: HTML heading level owns structure; these roles own appearance. */
   --type-page-title:clamp(3.5rem,5vw,4.25rem);
   --type-page-title-compact:clamp(2.25rem,9vw,2.625rem);

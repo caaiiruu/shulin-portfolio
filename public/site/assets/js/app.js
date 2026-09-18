@@ -1458,10 +1458,23 @@
     if(!testimonialAutoplayEnabled())return;
     testimonialTimer=window.setTimeout(()=>{testimonialTimer=0;moveTestimonial(activeIndex+1,{source:'autoplay'})},testimonialInterval());
   }
+  function appendTestimonialQuote(quote,value){
+    let bulletList=null;
+    String(value||'').split(/\n{2,}/).map(block=>block.trim()).filter(Boolean).forEach(block=>{
+      const bullet=block.match(/^•\s+([^:]+):\s+([\s\S]+)$/);
+      if(bullet){
+        if(!bulletList){bulletList=element('ul','profile-testimonial-v1__list');quote.append(bulletList)}
+        const item=element('li','profile-testimonial-v1__list-item');
+        item.append(element('strong','profile-testimonial-v1__bullet-heading',`${bullet[1]}: `),document.createTextNode(bullet[2]));
+        bulletList.append(item);return;
+      }
+      bulletList=null;quote.append(element('p','profile-testimonial-v1__paragraph',block));
+    });
+  }
   function createTestimonialCard(item,{clone=false}={}){
     const article=element('article','profile-testimonial-v1');article.dataset.testimonialId=item.id||'';article.dataset.testimonialClone=clone?'true':'false';
     if(clone)article.setAttribute('aria-hidden','true');
-    const quote=element('blockquote','profile-testimonial-v1__quote',localize(item.displayQuote||item.quote));
+    const quote=element('blockquote','profile-testimonial-v1__quote');appendTestimonialQuote(quote,localize(item.displayQuote||item.quote));
     const attribution=element('footer','profile-testimonial-v1__attribution');
     const identity=[localize(item.name||item.author),localize(item.company)].filter(Boolean).join(' · ');
     article.setAttribute('aria-label',identity);attribution.textContent=identity;article.append(quote,attribution);return article;

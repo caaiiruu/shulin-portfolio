@@ -77,16 +77,20 @@ test('Profile reuses approved Hero cloud vectors and presents the portrait organ
   assert.match(app,/const phrases=lang==='en'\?\['fintech, banking, retail, and global travel'\]:\[\]/);
 });
 
-test('testimonial SSOT renders excerpt plus Name and Company through a progressive carousel',()=>{
+test('testimonial SSOT renders full approved content plus Name and Company through a progressive carousel',()=>{
   const reviews=content.profile.testimonials.items.filter(item=>item.visible!==false);
   assert.equal(reviews.length,7);
   assert.equal(reviews[0].name.en,'Sip Khoon');
   assert.equal(reviews[0].company.en,'FairPrice Group');
   assert.equal(reviews.at(-1).name.en,'Michelle Tan J.Y.');
   assert.equal(reviews.at(-1).quote.en,'Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nKey areas I will always remember from our time together:\n\n• Mentorship & Generosity: She actively takes time to break down complex design concepts and uplift her teammates.\n\n• Collaborative Brainstorming: She brings vocal, well-articulated opinions to the table while staying incredibly open to alternative concepts.\n\n• Adaptability & Content Literacy: She truly values content design and can pivot design flows rapidly when content restructuring changes the user journey.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!');
-  assert.equal(reviews.at(-1).displayQuote.en,'Shulin is an outstanding Product Designer and an invaluable collaborator. Working with her at FairPrice Group was a highlight of my time there.\n\nShulin is a sharp thinker, compelling presenter, and a dream team player. I cannot recommend her highly enough!');
+  assert.equal(reviews.at(-1).displayQuote.en,reviews.at(-1).quote.en);
+  assert.match(reviews.at(-1).displayQuote.en,/• Mentorship & Generosity:/);
+  assert.match(reviews.at(-1).displayQuote.en,/• Collaborative Brainstorming:/);
+  assert.match(reviews.at(-1).displayQuote.en,/• Adaptability & Content Literacy:/);
   assert.equal(content.profile.testimonials.contentStatus,'human-approved-package-2026-09-17');
   assert.match(app,/localize\(item\.displayQuote\|\|item\.quote\)/);
+  assert.match(app,/appendTestimonialQuote\(quote,localize\(item\.displayQuote\|\|item\.quote\)\)/);
   assert.match(app,/\[localize\(item\.name\|\|item\.author\),localize\(item\.company\)\]\.filter\(Boolean\)\.join\(' · '\)/);
   assert.match(app,/let activeIndex=0,testimonialTimer=0/);
   assert.match(app,/testimonialAutoplayEnabled=.*!testimonialHovered&&!testimonialFocusWithin&&!testimonialDragging&&!doc\.hidden&&!prefersReduced\.matches/);
@@ -103,6 +107,12 @@ test('testimonial SSOT renders excerpt plus Name and Company through a progressi
   assert.match(profileCss,/transition:transform calc\(var\(--motion-base\) \* 2\) cubic-bezier\(\.22,1,\.36,1\)/);
   assert.match(profileCss,/\.profile-testimonials-v1__viewport\{[^}]*overflow:hidden/);
   assert.match(profileCss,/\.profile-testimonial-v1\{[^}]*min-height:var\(--dimension-260px\)/);
+  assert.match(profileCss,/\.profile-testimonial-v1__quote\{[^}]*font-size:var\(--dimension-18px\);line-height:1\.5/);
+  assert.match(profileCss,/@media\(max-width:900px\)[^\n]*\.profile-testimonial-v1__quote\{font-size:var\(--dimension-17px\)\}/);
+  assert.match(profileCss,/@media\(max-width:600px\)[^\n]*\.profile-testimonial-v1__quote\{font-size:var\(--dimension-1rem\)\}/);
+  assert.match(profileCss,/\.profile-testimonial-v1__bullet-heading\{font-weight:var\(--sys-weight-semibold\)\}/);
+  assert.doesNotMatch(profileCss,/\.profile-testimonial-v1__quote\{[^}]*line-clamp/);
+  assert.doesNotMatch(profileCss,/\.profile-testimonial-v1__quote\{[^}]*text-overflow:ellipsis/);
   assert.match(profileCss,/\.profile-testimonial-v1__attribution\{[^}]*text-align:center/);
   assert.doesNotMatch(app,/profile-testimonial-v1[^\n]*avatar/);
 });
