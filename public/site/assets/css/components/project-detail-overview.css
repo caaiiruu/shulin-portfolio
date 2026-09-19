@@ -991,3 +991,14 @@
 .core-system-insight-section :is(.voucher-r149-heading,.voucher-r149-heading h2,.core-system-insight-section__statement){width:min(100%,var(--project-detail-narrative-max));max-width:var(--project-detail-narrative-max)}
 
 .detail-related-v45__head h3{font-size:var(--text-h2)}
+
+
+/* Compact popup fail-open: reveal motion may enhance, but must never gate text. */
+@media(max-width:900px){
+  .detail-dialog [data-motion-reveal],
+  .detail-dialog .is-reveal-pending{
+    opacity:1!important;
+    transform:none!important;
+    visibility:visible!important;
+  }
+}
