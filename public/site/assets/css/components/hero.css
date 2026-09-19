@@ -238,7 +238,7 @@ html:lang(zh) .hero__title{max-width:var(--hero-title-measure-zh)}
     width: calc(709.5 * var(--dimension-1px));
     height: calc(390 * var(--dimension-1px));
     inset-inline-start: calc(50% - 312.5 * var(--dimension-1px));
-    inset-block-start: calc(-1 * var(--header-height) + 83 * var(--dimension-1px));
+    inset-block-start: calc(-1 * var(--header-height) + 107 * var(--dimension-1px));
     object-fit: contain;
     transform: none;
   }
