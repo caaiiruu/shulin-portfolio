@@ -464,7 +464,7 @@ html[lang="zh"] .profile-value-v44__grid p {
 .recognition-card-v1838f .experiment-card-action,.recognition-card-v1838f__status{box-sizing:border-box;align-self:end;width:100%;min-height:var(--dimension-52px);margin-top:var(--space-4);padding-top:var(--space-4);border-top:var(--dimension-1px) solid var(--color-border)}
 .recognition-card-v1838f .experiment-card-action{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)}
 .recognition-card-v1838f .experiment-card-action .icon-arrow{margin-left:auto}
-.recognition-card-v1838f__status{align-self:end;color:var(--color-text-secondary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
+.recognition-card-v1838f__status{align-self:end;color:var(--color-text-primary);font-size:var(--text-sm);font-weight:var(--sys-weight-bold)}
 .profile-leadership-v81{padding-block:var(--space-9);background:var(--color-surface-soft)}
 .profile-leadership-v81__head{display:grid;gap:var(--space-4);max-width:var(--profile-hero-copy-max);margin-bottom:var(--space-8)}
 .profile-leadership-v81__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
