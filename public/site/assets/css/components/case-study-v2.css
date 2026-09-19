@@ -178,3 +178,8 @@ body.csv2-active .csv2-cta:hover{background:var(--csv2-action);color:#fff;box-sh
   .csv2-reveal,.csv2-decision-panel,.csv2-icon,.csv2-cta .csv2-icon,.csv2-outcome,.csv2-lifecycle-state::after{transition:none!important;transform:none!important}
   .csv2-reveal{opacity:1}
 }
+
+
+/* Compact touch browsers fail open: case-study content visibility must never
+   depend on IntersectionObserver / dynamic visual viewport timing. */
+@media(max-width:900px){.csv2-reveal{opacity:1!important;transform:none!important}}
