@@ -30,6 +30,16 @@ button:active:not(:disabled),.button:active,.text-button:active{transform:transl
 .motion-ready [data-motion-reveal="card"]:nth-child(3){transition-delay:var(--dimension-90ms)}
 .motion-ready [data-motion-reveal="card"]:nth-child(4){transition-delay:var(--dimension-135ms)}
 
+/* Compact/touch viewports must fail open: motion is enhancement, never a
+   content-visibility gate. This also avoids iOS Safari visual-viewport /
+   IntersectionObserver edge cases leaving sections permanently transparent. */
+@media(max-width:900px){
+  .motion-ready [data-motion-reveal]{
+    opacity:1;
+    transform:none;
+  }
+}
+
 @media(max-width:600px){:root{--section-space:var(--dimension-72px)}}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:var(--dimension-0-01ms)!important;animation-duration:var(--dimension-0-01ms)!important;animation-iteration-count:1!important}
