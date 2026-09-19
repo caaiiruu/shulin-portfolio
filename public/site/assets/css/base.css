@@ -34,9 +34,10 @@ button:active:not(:disabled),.button:active,.text-button:active{transform:transl
    content-visibility gate. This also avoids iOS Safari visual-viewport /
    IntersectionObserver edge cases leaving sections permanently transparent. */
 @media(max-width:900px){
-  .motion-ready [data-motion-reveal]{
-    opacity:1;
-    transform:none;
+  .motion-ready [data-motion-reveal],
+  .csv2-reveal{
+    opacity:1!important;
+    transform:none!important;
   }
 }
 
